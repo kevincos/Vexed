@@ -1,0 +1,12 @@
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\Content\hudFont.xnb
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\VexedEditor.exe
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\VexedEditor.pdb
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\ContentLibrary.dll
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\ContentLibrary.pdb
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\ResolveAssemblyReference.cache
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\WinFormsGraphicsDevice.Properties.Resources.resources
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\GenerateResource.read.1.tlog
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\GenerateResource.write.1.tlog
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\VexedEditor.exe
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\VexedEditor.pdb
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\WinFormsGraphicsDevice.MainForm.resources

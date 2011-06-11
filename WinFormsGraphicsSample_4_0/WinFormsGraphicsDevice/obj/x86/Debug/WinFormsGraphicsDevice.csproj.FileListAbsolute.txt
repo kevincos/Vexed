@@ -1,0 +1,13 @@
+C:\Users\Kevin\Downloads\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\Content\hudFont.xnb
+C:\Users\Kevin\Downloads\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\WinFormsGraphicsDevice.exe
+C:\Users\Kevin\Downloads\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\WinFormsGraphicsDevice.pdb
+C:\Users\Kevin\Downloads\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\ContentLibrary.dll
+C:\Users\Kevin\Downloads\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\ContentLibrary.pdb
+C:\Users\Kevin\Downloads\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Kevin\Downloads\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\WinFormsGraphicsDevice.Properties.Resources.resources
+C:\Users\Kevin\Downloads\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Kevin\Downloads\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Kevin\Downloads\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\WinFormsGraphicsDevice.exe
+C:\Users\Kevin\Downloads\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\WinFormsGraphicsDevice.pdb
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\WinFormsGraphicsDevice.exe
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\WinFormsGraphicsDevice.pdb
