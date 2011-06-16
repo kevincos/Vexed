@@ -50,9 +50,8 @@ namespace WinFormsGraphicsDevice
         float savedPitch = 0;
 
         bool ready = false;
-
-        static float zoomSpeed = .03f;
-
+        bool mouseReady = true;
+                
         public WorldPreviewControl()
         {
             futureTarget = currentTarget = Vector3.Zero;
@@ -201,39 +200,86 @@ namespace WinFormsGraphicsDevice
 
         public VertexPositionColor[] RoomVertexList()
         {
-            Room r;
+            /*Room r;
             if (MainForm.zoomRoom != null)
                 r = MainForm.zoomRoom;
             else
-                r = MainForm.selectedRoom;
+                r = MainForm.selectedRoom;*/
+
             RoomEdgeCount = 0;
-            foreach (Face f in r.faceList)
+            foreach (Sector s in MainForm.world.sectors)
             {
-                foreach (Block b in f.blocks)
+                foreach (Room r in s.rooms)
                 {
-                    foreach (Edge e in b.edges)
+                    foreach (Face f in r.faceList)
                     {
-                        RoomEdgeCount++;
+                        foreach (Block b in f.blocks)
+                        {
+                            foreach (Edge e in b.edges)
+                            {
+                                RoomEdgeCount++;
+                            }
+                        }
                     }
                 }
             }
             VertexPositionColor[] vList = new VertexPositionColor[RoomEdgeCount * 2];
             int currentEdge = 0;
             Color c = Color.Black;
-            foreach (Face f in r.faceList)
+            foreach (Sector s in MainForm.world.sectors)
             {
-                foreach (Block b in f.blocks)
+                foreach (Room r in s.rooms)
                 {
-                    foreach (Edge e in b.edges)
+                    foreach (Face f in r.faceList)
                     {
-                        vList[currentEdge] = new VertexPositionColor(e.start +(.1f*f.normal), c);
-                        vList[currentEdge+1] = new VertexPositionColor(e.end+(.1f*f.normal), c);
-                        currentEdge += 2;
+                        foreach (Block b in f.blocks)
+                        {
+                            foreach (Edge e in b.edges)
+                            {
+                                vList[currentEdge] = new VertexPositionColor(e.start + (.1f * f.normal), c);
+                                vList[currentEdge + 1] = new VertexPositionColor(e.end + (.1f * f.normal), c);
+                                currentEdge += 2;
+                            }
+                        }
                     }
                 }
             }
             return vList;
             
+        }
+
+        public Vector3 GetCoordsFromMouse()
+        {
+            System.Drawing.Point p = this.PointToClient(new System.Drawing.Point(Mouse.GetState().X, Mouse.GetState().Y));
+            Vector2 screenCoords = new Vector2((p.X - this.ClientRectangle.Width / 2) / 10, (p.Y - this.ClientRectangle.Height / 2) / 10);
+            MainForm m = (MainForm)this.Parent.Parent.Parent;
+            screenCoords.X += (int)MainForm.translation.X;
+            screenCoords.Y += (int)MainForm.translation.Y;
+            Vector3 right = Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
+            return MainForm.selectedFace.center + screenCoords.X * right - screenCoords.Y * MainForm.currentUp;
+        }
+
+        public VertexPositionColor[] TargetVertexList()
+        {
+            Color targetColor = Color.White;
+            VertexPositionColor[] vList = null;
+            Vector3 right = Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
+            Vector3 pointer = GetCoordsFromMouse();
+
+            if (MainForm.selectedFace != null)
+            {
+                vList = MainForm.selectedFace.GetTemplate(pointer);
+            }
+
+            if (vList == null)
+            {
+                vList = new VertexPositionColor[4];
+                vList[0] = new VertexPositionColor(pointer + right + .2f * MainForm.selectedFace.normal, targetColor);
+                vList[1] = new VertexPositionColor(pointer - right + +.2f * MainForm.selectedFace.normal, targetColor);
+                vList[2] = new VertexPositionColor(pointer + MainForm.currentUp + .2f * MainForm.selectedFace.normal, targetColor);
+                vList[3] = new VertexPositionColor(pointer - MainForm.currentUp + .2f * MainForm.selectedFace.normal, targetColor);
+            }
+            return vList;
         }
 
         /// <summary>
@@ -264,6 +310,7 @@ namespace WinFormsGraphicsDevice
             savedPitch = currentPitch;
             futureRotate = 0;
             futurePitch = 0;
+            MainForm.translation = Vector2.Zero;
         }
 
         public void ViewWorld()
@@ -275,15 +322,19 @@ namespace WinFormsGraphicsDevice
             futurePitch = savedPitch;
         }
 
-        public void FindFace(Vector3 newNormal)
+        public void FindFace(Vector3 newNormal, Vector3 newUp)
         {
-            foreach (Face f in MainForm.zoomRoom.faceList)
+            if (ready == true && MainForm.zoomRoom!=null)
             {
-                if (f.normal.Equals(newNormal))
+                MainForm.currentUp = futureUp = newUp;
+                foreach (Face f in MainForm.zoomRoom.faceList)
                 {
-                    MainForm.selectedFace = f;
-                    ViewFace(f);
-                    return;
+                    if (f.normal.Equals(newNormal))
+                    {
+                        MainForm.selectedFace = f;
+                        ViewFace(f);
+                        return;
+                    }
                 }
             }
         }
@@ -293,25 +344,25 @@ namespace WinFormsGraphicsDevice
             ready = true;
             if (currentRotate < futureRotate)
             {
-                currentRotate += .001f;
+                currentRotate += MainForm.animateSpeed;
                 ready = false;
                 if (currentRotate > futureRotate) currentRotate = futureRotate;
             }
             if (currentRotate > futureRotate)
             {
-                currentRotate -= .001f;
+                currentRotate -= MainForm.animateSpeed;
                 ready = false;
                 if (currentRotate < futureRotate) currentRotate = futureRotate;
             }
             if (currentPitch < futurePitch)
             {
-                currentPitch += .001f;
+                currentPitch += MainForm.animateSpeed;
                 ready = false;
                 if (currentPitch > futurePitch) currentPitch = futurePitch;
             }
             if (currentPitch > futurePitch)
             {
-                currentPitch -= .001f;
+                currentPitch -= MainForm.animateSpeed;
                 ready = false;
                 if (currentPitch < futurePitch) currentPitch = futurePitch;
             }
@@ -344,111 +395,111 @@ namespace WinFormsGraphicsDevice
             if (currentTarget.X < futureTarget.X)
             {
                 ready = false;
-                currentTarget.X += zoomSpeed;
+                currentTarget.X += MainForm.animateSpeed*30;
                 if (currentTarget.X > futureTarget.X) currentTarget.X = futureTarget.X;
             }
             if (currentTarget.Y < futureTarget.Y)
             {
                 ready = false;
-                currentTarget.Y += zoomSpeed;
+                currentTarget.Y += MainForm.animateSpeed*30;
                 if (currentTarget.Y > futureTarget.Y) currentTarget.Y = futureTarget.Y;
             }
             if (currentTarget.Z < futureTarget.Z)
             {
                 ready = false;
-                currentTarget.Z += zoomSpeed;
+                currentTarget.Z += MainForm.animateSpeed*30;
                 if (currentTarget.Z > futureTarget.Z) currentTarget.Z = futureTarget.Z;
             }
             if (currentTarget.X > futureTarget.X)
             {
                 ready = false;
-                currentTarget.X -= zoomSpeed;
+                currentTarget.X -= MainForm.animateSpeed*30;
                 if (currentTarget.X < futureTarget.X) currentTarget.X = futureTarget.X;
             }
             if (currentTarget.Y > futureTarget.Y)
             {
                 ready = false;
-                currentTarget.Y -= zoomSpeed;
+                currentTarget.Y -= MainForm.animateSpeed*30;
                 if (currentTarget.Y < futureTarget.Y) currentTarget.Y = futureTarget.Y;
             }
             if (currentTarget.Z > futureTarget.Z)
             {
                 ready = false;
-                currentTarget.Z -= zoomSpeed;
+                currentTarget.Z -= MainForm.animateSpeed*30;
                 if (currentTarget.Z < futureTarget.Z) currentTarget.Z = futureTarget.Z;
             }
 
             if (currentCamera.X < futureCamera.X)
             {
                 ready = false;
-                currentCamera.X += zoomSpeed;
+                currentCamera.X += MainForm.animateSpeed*30;
                 if (currentCamera.X > futureCamera.X) currentCamera.X = futureCamera.X;
             }
             if (currentCamera.Y < futureCamera.Y)
             {
                 ready = false;
-                currentCamera.Y += zoomSpeed;
+                currentCamera.Y += MainForm.animateSpeed*30;
                 if (currentCamera.Y > futureCamera.Y) currentCamera.Y = futureCamera.Y;
             }
             if (currentCamera.Z < futureCamera.Z)
             {
                 ready = false;
-                currentCamera.Z += zoomSpeed;
+                currentCamera.Z += MainForm.animateSpeed*30;
                 if (currentCamera.Z > futureCamera.Z) currentCamera.Z = futureCamera.Z;
             }
             if (currentCamera.X > futureCamera.X)
             {
                 ready = false;
-                currentCamera.X -= zoomSpeed;
+                currentCamera.X -= MainForm.animateSpeed*30;
                 if (currentCamera.X < futureCamera.X) currentCamera.X = futureCamera.X;
             }
             if (currentCamera.Y > futureCamera.Y)
             {
                 ready = false;
-                currentCamera.Y -= zoomSpeed;
+                currentCamera.Y -= MainForm.animateSpeed*30;
                 if (currentCamera.Y < futureCamera.Y) currentCamera.Y = futureCamera.Y;
             }
             if (currentCamera.Z > futureCamera.Z)
             {
                 ready = false;
-                currentCamera.Z -= zoomSpeed;
+                currentCamera.Z -= MainForm.animateSpeed*30;
                 if (currentCamera.Z < futureCamera.Z) currentCamera.Z = futureCamera.Z;
             }
 
             if (currentUp.X < futureUp.X)
             {
                 ready = false;
-                currentUp.X += zoomSpeed;
+                currentUp.X += MainForm.animateSpeed*30;
                 if (currentUp.X > futureUp.X) currentUp.X = futureUp.X;
             }
             if (currentUp.Y < futureUp.Y)
             {
                 ready = false;
-                currentUp.Y += zoomSpeed;
+                currentUp.Y += MainForm.animateSpeed*30;
                 if (currentUp.Y > futureUp.Y) currentUp.Y = futureUp.Y;
             }
             if (currentUp.Z < futureUp.Z)
             {
                 ready = false;
-                currentUp.Z += zoomSpeed;
+                currentUp.Z += MainForm.animateSpeed*30;
                 if (currentUp.Z > futureUp.Z) currentUp.Z = futureUp.Z;
             }
             if (currentUp.X > futureUp.X)
             {
                 ready = false;
-                currentUp.X -= zoomSpeed;
+                currentUp.X -= MainForm.animateSpeed*30;
                 if (currentUp.X < futureUp.X) currentUp.X = futureUp.X;
             }
             if (currentUp.Y > futureUp.Y)
             {
                 ready = false;
-                currentUp.Y -= zoomSpeed;
+                currentUp.Y -= MainForm.animateSpeed*30;
                 if (currentUp.Y < futureUp.Y) currentUp.Y = futureUp.Y;
             }
             if (currentUp.Z > futureUp.Z)
             {
                 ready = false;
-                currentUp.Z -= zoomSpeed;
+                currentUp.Z -= MainForm.animateSpeed*30;
                 if (currentUp.Z < futureUp.Z) currentUp.Z = futureUp.Z;
             }  
         }
@@ -466,46 +517,65 @@ namespace WinFormsGraphicsDevice
                 {
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
                     {
-                        futureRotate += .001f;
+                        futureRotate += MainForm.animateSpeed;
                     }
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
                     {
-                        futureRotate -= .001f;
+                        futureRotate -= MainForm.animateSpeed;
                     }
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
                     {
-                        futurePitch += .001f;
+                        futurePitch += MainForm.animateSpeed;
                     }
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
                     {
-                        futurePitch -= .001f;
+                        futurePitch -= MainForm.animateSpeed;
                     }
                 }
-                else if(ready==true)
-                {
+                else if (MainForm.selectedFace != null && ready == true)
+                {                             
+                    Vector3 right = Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
                     {
-                        Vector3 nextNormal = Vector3.Cross(MainForm.selectedFace.normal, MainForm.currentUp);
-                        FindFace(nextNormal);
+                        MainForm.translation += new Vector2(1, 0);
+                        futureTarget += right;
+                        futureCamera += right;
                     }
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
                     {
-                        Vector3 nextNormal = -Vector3.Cross(MainForm.selectedFace.normal, MainForm.currentUp);
-                        FindFace(nextNormal);
+                        MainForm.translation -= new Vector2(1, 0);
+                        futureTarget -= right;
+                        futureCamera -= right;
                     }
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
                     {
-                        Vector3 nextNormal = MainForm.currentUp;
-                        MainForm.currentUp = futureUp = -MainForm.selectedFace.normal;                        
-                        FindFace(nextNormal);                        
+                        MainForm.translation -= new Vector2(0, 1);
+                        futureTarget += MainForm.currentUp;
+                        futureCamera += MainForm.currentUp;
                     }
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
                     {
-                        Vector3 nextNormal = -MainForm.currentUp;
-                        MainForm.currentUp = futureUp = MainForm.selectedFace.normal;
-                        FindFace(nextNormal);
+                        MainForm.translation += new Vector2(0, 1);
+                        futureTarget -= MainForm.currentUp;
+                        futureCamera -= MainForm.currentUp;
                     }
-                }                
+
+                    if (Mouse.GetState().LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+                    {
+                        if (mouseReady == true)
+                        {
+                            if (MainForm.editMode == EditMode.New)
+                            {
+                                MainForm.selectedFace.AddBlock(GetCoordsFromMouse());
+                                mouseReady = false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        mouseReady = true;
+                    }
+                }
 
                 GraphicsDevice.Clear(new Color(40, 40, 40));
 
@@ -530,13 +600,22 @@ namespace WinFormsGraphicsDevice
                 GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                     TriangleVertexList(), 0, TriangleCount);
 
+                
                 GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList,
                      LineVertexList(), 0, LineCount);
 
-                if (MainForm.zoomRoom != null || MainForm.selectedRoom !=null)
+                VertexPositionColor[] roomList = RoomVertexList();
+                if (roomList.Length > 0)
                 {
                     GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList,
-                                  RoomVertexList(), 0, RoomEdgeCount);
+                                    roomList, 0, roomList.Length/2);
+                }
+
+                if (MainForm.selectedFace != null)
+                {
+                    VertexPositionColor[] cursorList = TargetVertexList();
+                    GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList,
+                                  cursorList, 0, cursorList.Length / 2);
                 }
             }
             catch (Exception e)

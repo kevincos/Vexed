@@ -86,6 +86,16 @@ namespace WinFormsGraphicsDevice
 
         }
 
+        void editor_change_speed(object sender, System.EventArgs e)
+        {
+            if (sender == this.speedSlider)
+            {
+                // pc = .03 -> .001
+                // laptop = .15f -> .005
+                animateSpeed = .001f + (.005f* this.speedSlider.Value / this.speedSlider.Maximum);
+            }
+        }
+
         void world_zoom(object sender, System.EventArgs e)
         {
             if (sender == this.sectorView)
@@ -102,6 +112,35 @@ namespace WinFormsGraphicsDevice
                 this.WorldPreviewControl.ViewFace(f);
                 selectedFace = f;
                 currentUp = Vector3.UnitZ;
+            }
+        }
+
+        void room_rotate(object sender, System.EventArgs e)
+        {
+            if (MainForm.zoomRoom != null)
+            {
+                if (sender == this.faceUp)
+                {
+                    Vector3 nextNormal = -MainForm.currentUp;
+                    MainForm.currentUp = MainForm.selectedFace.normal;
+                    this.WorldPreviewControl.FindFace(nextNormal, currentUp);
+                }
+                if (sender == this.faceDown)
+                {
+                    Vector3 nextNormal = MainForm.currentUp;
+                    MainForm.currentUp = -MainForm.selectedFace.normal;
+                    this.WorldPreviewControl.FindFace(nextNormal, currentUp);
+                }
+                if (sender == this.faceLeft)
+                {
+                    Vector3 nextNormal = -Vector3.Cross(MainForm.selectedFace.normal, MainForm.currentUp);
+                    this.WorldPreviewControl.FindFace(nextNormal, currentUp);
+                }
+                if (sender == this.faceRight)
+                {
+                    Vector3 nextNormal = Vector3.Cross(MainForm.selectedFace.normal, MainForm.currentUp);
+                    this.WorldPreviewControl.FindFace(nextNormal, currentUp);
+                }
             }
         }
 
@@ -206,6 +245,18 @@ namespace WinFormsGraphicsDevice
                 s.rooms.Add(r);
                 this.roomDropdown.Items.Add(r.IDString);
                 this.roomDropdown.SelectedIndex = this.roomDropdown.Items.Count - 1;
+            }
+        }
+
+        void room_mode_change(object sender, System.EventArgs e)
+        {
+            if (sender == this.modeDraw)
+            {
+                editMode = EditMode.New;   
+            }
+            if (sender == this.modeLine)
+            {
+                editMode = EditMode.Line;
             }
         }
 

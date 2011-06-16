@@ -29,12 +29,37 @@ namespace WinFormsGraphicsDevice
             color = Color.GreenYellow;
 
             faceList = new Face[6];
-            faceList[0] = new Face(new Vector3(1, 0, 0), new Vector3(centerX+sizeX/2,centerY,centerZ));
-            faceList[1] = new Face(new Vector3(-1, 0, 0), new Vector3(centerX-sizeX / 2, centerY, centerZ));
-            faceList[2] = new Face(new Vector3(0, 1, 0), new Vector3(centerX, centerY+sizeY/2, centerZ));
-            faceList[3] = new Face(new Vector3(0, -1, 0), new Vector3(centerX, centerY-sizeY/2, centerZ));
-            faceList[4] = new Face(new Vector3(0, 0, 1), new Vector3(centerX, centerY, centerZ+sizeZ/2));
-            faceList[5] = new Face(new Vector3(0, 0, -1), new Vector3(centerX, centerY, centerZ-sizeZ/2));
+            faceList[0] = new Face(new Vector3(1, 0, 0), new Vector3[]{
+                new Vector3(centerX + sizeX / 2, centerY - sizeY / 2, centerZ - sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY - sizeY/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY + sizeZ/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY + sizeZ/2, centerZ-sizeZ/2),});
+            faceList[1] = new Face(new Vector3(-1, 0, 0), new Vector3[]{
+                new Vector3(centerX - sizeX / 2, centerY - sizeY / 2, centerZ - sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY - sizeY/2, centerZ+sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY + sizeZ/2, centerZ+sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY + sizeZ/2, centerZ-sizeZ/2),});
+            faceList[2] = new Face(new Vector3(0, 1, 0), new Vector3[]{
+                new Vector3(centerX - sizeX / 2, centerY + sizeY / 2, centerZ - sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY + sizeY/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY + sizeZ/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY + sizeZ/2, centerZ-sizeZ/2),});
+            faceList[3] = new Face(new Vector3(0, -1, 0), new Vector3[]{
+                new Vector3(centerX - sizeX / 2, centerY - sizeY / 2, centerZ - sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY - sizeY/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY - sizeZ/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY - sizeZ/2, centerZ-sizeZ/2),});
+            faceList[4] = new Face(new Vector3(0, 0, 1), new Vector3[]{
+                new Vector3(centerX - sizeX / 2, centerY - sizeY / 2, centerZ + sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY + sizeY/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY + sizeZ/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY - sizeZ/2, centerZ+sizeZ/2),});
+            faceList[5] = new Face(new Vector3(0, 0, -1), new Vector3[]{
+                new Vector3(centerX - sizeX / 2, centerY - sizeY / 2, centerZ - sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY + sizeY/2, centerZ-sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY + sizeZ/2, centerZ-sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY - sizeZ/2, centerZ-sizeZ/2),});
+
         }
 
         public void Move(Vector3 delta)
@@ -44,7 +69,7 @@ namespace WinFormsGraphicsDevice
             centerZ += (int)delta.Z;
             foreach (Face f in faceList)
             {
-                f.Move( delta );
+                f.Move( delta );                
             }
         }
 
@@ -70,10 +95,11 @@ namespace WinFormsGraphicsDevice
                         f.Move(.5f * delta);
                     else
                         f.Move(-.5f * delta);
-                }   
+                }
+                f.Resize(new Vector3(sizeX, sizeY, sizeZ));
             }
         }
-
+        
         public String IDString
         {
             get
