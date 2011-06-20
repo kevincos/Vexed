@@ -1,2 +1,3 @@
 C:\Users\Kevin\Downloads\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\Content\obj\x86\Debug\ResolveAssemblyReference.cache
 E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\Content\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\Content\obj\x86\Debug\ResolveAssemblyReference.cache

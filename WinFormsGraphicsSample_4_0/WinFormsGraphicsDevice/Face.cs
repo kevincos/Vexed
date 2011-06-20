@@ -87,6 +87,53 @@ namespace WinFormsGraphicsDevice
 
         }
 
+        public Edge GetHoverEdge(Vector3 position)
+        {
+            foreach (Block b in blocks)
+            {
+                foreach (Edge e in b.edges)
+                {
+                    if ((position - e.start).Length() < .5f)
+                    {
+                        return e;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public Block GetHoverBlock(Vector3 position)
+        {
+            foreach (Block b in blocks)
+            {
+                foreach (Edge e in b.edges)
+                {
+                    if ((position - e.start).Length() < .5f)
+                    {
+                        return b;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public VertexPositionColor[] GetSelectedLineHighlight(Vector3 position)
+        {
+            Color templateColor = Color.White;
+            
+            VertexPositionColor[] vList = null;
+            
+           Edge e = GetHoverEdge(position);
+            if(e!=null)
+            {
+                if(vList == null)
+                    vList = new VertexPositionColor[2];
+                vList[0] = new VertexPositionColor(e.start + .3f*normal,templateColor);
+                vList[1] = new VertexPositionColor(e.end + .3f*normal, templateColor);               
+            }
+            return vList;
+        }
+
         public bool IsBlockValid(Block b)
         {
             Vector3 result;

@@ -8,7 +8,8 @@ namespace WinFormsGraphicsDevice
     {
         None,
         New,
-        Line
+        Line,
+        LineDrag
     }
 
     partial class MainForm
@@ -19,6 +20,8 @@ namespace WinFormsGraphicsDevice
         public static Room zoomRoom = null;
         public static string currentFileName = null;
         public static Face selectedFace = null;
+        public static Block selectedBlock = null;
+        public static Edge selectedEdge = null;
         public static Vector3 currentUp = Vector3.UnitY;
         public static Vector2 translation = Vector2.Zero;
         public static EditMode editMode = EditMode.None;

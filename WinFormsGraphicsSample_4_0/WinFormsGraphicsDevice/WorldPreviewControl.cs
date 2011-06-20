@@ -248,8 +248,9 @@ namespace WinFormsGraphicsDevice
             
         }
 
-        public Vector3 GetCoordsFromMouse()
+        public Vector3 GetIntCoordsFromMouse()
         {
+            
             System.Drawing.Point p = this.PointToClient(new System.Drawing.Point(Mouse.GetState().X, Mouse.GetState().Y));
             Vector2 screenCoords = new Vector2((p.X - this.ClientRectangle.Width / 2) / 10, (p.Y - this.ClientRectangle.Height / 2) / 10);
             MainForm m = (MainForm)this.Parent.Parent.Parent;
@@ -259,18 +260,38 @@ namespace WinFormsGraphicsDevice
             return MainForm.selectedFace.center + screenCoords.X * right - screenCoords.Y * MainForm.currentUp;
         }
 
+        public Vector3 GetFloatCoordsFromMouse()
+        {
+            System.Drawing.Point p = this.PointToClient(new System.Drawing.Point(Mouse.GetState().X, Mouse.GetState().Y));
+            Vector2 screenCoords = new Vector2((p.X - this.ClientRectangle.Width / 2f) / 10f, (p.Y - this.ClientRectangle.Height / 2f) / 10f);
+            MainForm m = (MainForm)this.Parent.Parent.Parent;
+            screenCoords.X += MainForm.translation.X;
+            screenCoords.Y += MainForm.translation.Y;
+            Vector3 right = Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
+            return MainForm.selectedFace.center + screenCoords.X * right - screenCoords.Y * MainForm.currentUp;
+        }
+
         public VertexPositionColor[] TargetVertexList()
         {
             Color targetColor = Color.White;
             VertexPositionColor[] vList = null;
             Vector3 right = Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
-            Vector3 pointer = GetCoordsFromMouse();
+            Vector3 pointer = Vector3.Zero;
 
             if (MainForm.selectedFace != null)
             {
-                vList = MainForm.selectedFace.GetTemplate(pointer);
+                if (MainForm.editMode == EditMode.New)
+                {
+                    pointer = GetIntCoordsFromMouse();
+                    vList = MainForm.selectedFace.GetTemplate(pointer);
+                }
+                if (MainForm.editMode == EditMode.Line)
+                {
+                    pointer = GetFloatCoordsFromMouse();
+                    vList = MainForm.selectedFace.GetSelectedLineHighlight(pointer);
+                }
             }
-
+            
             if (vList == null)
             {
                 vList = new VertexPositionColor[4];
@@ -566,14 +587,33 @@ namespace WinFormsGraphicsDevice
                         {
                             if (MainForm.editMode == EditMode.New)
                             {
-                                MainForm.selectedFace.AddBlock(GetCoordsFromMouse());
+                                MainForm.selectedFace.AddBlock(GetIntCoordsFromMouse());
                                 mouseReady = false;
                             }
+                            else if (MainForm.editMode == EditMode.Line)
+                            {
+                                Vector3 pointer = GetFloatCoordsFromMouse();
+                                MainForm.selectedBlock = MainForm.selectedFace.GetHoverBlock(pointer);
+                                MainForm.selectedEdge = MainForm.selectedFace.GetHoverEdge(pointer);
+                                if(MainForm.selectedEdge!=null)
+                                    MainForm.editMode = EditMode.LineDrag;
+                                mouseReady = false;
+                            }
+                            else if (MainForm.editMode == EditMode.LineDrag)
+                            {
+                                MainForm.editMode = EditMode.Line;
+                                mouseReady = false;
+                            }
+                            
                         }
                     }
                     else
                     {
                         mouseReady = true;
+                    }
+                    if (MainForm.editMode == EditMode.LineDrag)
+                    {
+                        MainForm.selectedBlock.Resize(GetIntCoordsFromMouse(), MainForm.selectedEdge, MainForm.selectedFace.normal);
                     }
                 }
 
@@ -599,7 +639,6 @@ namespace WinFormsGraphicsDevice
 
                 GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                     TriangleVertexList(), 0, TriangleCount);
-
                 
                 GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList,
                      LineVertexList(), 0, LineCount);
