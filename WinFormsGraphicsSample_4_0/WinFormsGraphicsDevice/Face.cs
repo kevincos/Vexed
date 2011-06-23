@@ -37,6 +37,7 @@ namespace WinFormsGraphicsDevice
             b.edges.Add(new Edge(center+xDir*2,center+xDir*2+yDir*2));
             b.edges.Add(new Edge(center+xDir*2+yDir*2,center+yDir*2));
             b.edges.Add(new Edge(center + yDir * 2, center));
+            b.Init();
             blocks.Add(b);
         }
 
@@ -53,10 +54,10 @@ namespace WinFormsGraphicsDevice
             blocks = new List<Block>();
         }
 
-        public VertexPositionColor[] GetTemplate(Vector3 position)
+        public VertexPositionColor[] GetTemplate(Vector3 position, Vector3 templatePosition)
         {
-            Color templateColor = Color.Black;
-            Block b = new Block();
+            Color templateColor = Color.White;
+            Block b = null;
             VertexPositionColor[] vList = new VertexPositionColor[8];
 
             Vector3 xDir = Vector3.UnitX;
@@ -66,21 +67,27 @@ namespace WinFormsGraphicsDevice
             yDir.Normalize();
             xDir.Normalize();
 
-            b.edges.Add(new Edge(position, position + xDir));
-            b.edges.Add(new Edge(position + xDir, position + xDir + yDir));
-            b.edges.Add(new Edge(position + xDir + yDir, position + yDir));
-            b.edges.Add(new Edge(position + yDir, position));
+            b = GetHoverBlock(position);
+            if (b == null)
+            {
+                templateColor = Color.Black;
+                b = new Block();
+                b.edges.Add(new Edge(templatePosition, templatePosition + xDir));
+                b.edges.Add(new Edge(templatePosition + xDir, templatePosition + xDir + yDir));
+                b.edges.Add(new Edge(templatePosition + xDir + yDir, templatePosition + yDir));
+                b.edges.Add(new Edge(templatePosition + yDir, templatePosition));
+            }
 
             if(IsBlockValid(b))
             {
-                vList[0] = new VertexPositionColor(b.edges[0].start, templateColor);
-                vList[1] = new VertexPositionColor(b.edges[0].end, templateColor);
-                vList[2] = new VertexPositionColor(b.edges[1].start, templateColor);
-                vList[3] = new VertexPositionColor(b.edges[1].end, templateColor);
-                vList[4] = new VertexPositionColor(b.edges[2].start, templateColor);
-                vList[5] = new VertexPositionColor(b.edges[2].end, templateColor);
-                vList[6] = new VertexPositionColor(b.edges[3].start, templateColor);
-                vList[7] = new VertexPositionColor(b.edges[3].end, templateColor);
+                vList[0] = new VertexPositionColor(b.edges[0].start + .2f*normal, templateColor);
+                vList[1] = new VertexPositionColor(b.edges[0].end + .2f * normal, templateColor);
+                vList[2] = new VertexPositionColor(b.edges[1].start + .2f * normal, templateColor);
+                vList[3] = new VertexPositionColor(b.edges[1].end + .2f * normal, templateColor);
+                vList[4] = new VertexPositionColor(b.edges[2].start + .2f * normal, templateColor);
+                vList[5] = new VertexPositionColor(b.edges[2].end + .2f * normal, templateColor);
+                vList[6] = new VertexPositionColor(b.edges[3].start + .2f * normal, templateColor);
+                vList[7] = new VertexPositionColor(b.edges[3].end + .2f * normal, templateColor);
                 return vList;
             }
             return null;
@@ -93,7 +100,30 @@ namespace WinFormsGraphicsDevice
             {
                 foreach (Edge e in b.edges)
                 {
-                    if ((position - e.start).Length() < .5f)
+                    Vector3 v = e.end - e.start;
+                    Vector3 p = position - e.end;
+                    Vector3 n = Vector3.Cross(v, normal);
+                    n.Normalize();
+                    Vector3 u = v;
+                    u.Normalize();
+                    float nCoord = Math.Abs(Vector3.Dot(n, p));
+                    float uCoord = -Vector3.Dot(u, p);
+                    if (nCoord < .2f && uCoord < v.Length() && uCoord > 0)
+                    {
+                        return e;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public Edge GetHoverVertex(Vector3 position)
+        {
+            foreach (Block b in blocks)
+            {
+                foreach (Edge e in b.edges)
+                {                  
+                    if ((e.start-position).Length() < .2f)
                     {
                         return e;
                     }
@@ -106,13 +136,38 @@ namespace WinFormsGraphicsDevice
         {
             foreach (Block b in blocks)
             {
+                Vector3 result;
+                Vector3 prevResult = Vector3.Zero;
+                bool isHoverBlock = true;
+                    
                 foreach (Edge e in b.edges)
                 {
-                    if ((position - e.start).Length() < .5f)
+                    Vector3 v1 = e.start - e.end;
+                    Vector3 v2 = position - e.end;
+                    result = Vector3.Cross(v1, v2);
+                    if (Vector3.Dot(result, prevResult) < 0)
+                        isHoverBlock = false;
+                    prevResult = result;                               
+
+                    Vector3 v = e.end - e.start;
+                    Vector3 p = position - e.end;
+                    Vector3 n = Vector3.Cross(v, normal);
+                    n.Normalize();
+                    Vector3 u = v;
+                    u.Normalize();
+                    float nCoord = Math.Abs(Vector3.Dot(n, p));
+                    float uCoord = -Vector3.Dot(u, p);
+                    if (nCoord < .2f && uCoord < v.Length() && uCoord > 0)
+                    {
+                        return b;
+                    }
+                    if ((e.start - position).Length() < .2f || (e.end - position).Length() < .2f)
                     {
                         return b;
                     }
                 }
+                if (isHoverBlock == true)
+                    return b;
             }
             return null;
         }
@@ -130,6 +185,23 @@ namespace WinFormsGraphicsDevice
                     vList = new VertexPositionColor[2];
                 vList[0] = new VertexPositionColor(e.start + .3f*normal,templateColor);
                 vList[1] = new VertexPositionColor(e.end + .3f*normal, templateColor);               
+            }
+            return vList;
+        }
+
+        public VertexPositionColor[] GetSelectedVertexHighlight(Vector3 position)
+        {
+            Color templateColor = Color.White;
+
+            VertexPositionColor[] vList = null;
+
+            Edge e = GetHoverVertex(position);
+            if (e != null)
+            {
+                if (vList == null)
+                    vList = new VertexPositionColor[2];
+                vList[0] = new VertexPositionColor(e.start, templateColor);
+                vList[1] = new VertexPositionColor(e.start + .3f * normal, templateColor);
             }
             return vList;
         }
@@ -170,8 +242,11 @@ namespace WinFormsGraphicsDevice
             b.edges.Add(new Edge(position + yDir, position));
 
             bool blockOK = IsBlockValid(b);
-            if(blockOK)
+            if (blockOK)
+            {
+                b.Init();
                 blocks.Add(b);
+            }
         }
 
         public void Move(Vector3 delta)

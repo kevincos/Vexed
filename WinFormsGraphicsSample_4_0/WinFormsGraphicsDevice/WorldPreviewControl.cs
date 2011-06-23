@@ -50,7 +50,7 @@ namespace WinFormsGraphicsDevice
         float savedPitch = 0;
 
         bool ready = false;
-        bool mouseReady = true;
+        bool mouseReady = true;        
                 
         public WorldPreviewControl()
         {
@@ -80,8 +80,7 @@ namespace WinFormsGraphicsDevice
             {
                 foreach (Room r in s.rooms)
                 {
-                    //Color col = r.color;
-                    Color col = r.color;
+                    Color col = new Color(40, 40, 40);
                     // Top
                     vList[currentTriangleIndex + 0] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
                     vList[currentTriangleIndex + 1] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
@@ -160,7 +159,7 @@ namespace WinFormsGraphicsDevice
             {
                 foreach (Room r in s.rooms)
                 {
-                    Color lineColor = Color.Black;
+                    Color lineColor = r.color;
                     if (s== MainForm.selectedSector || r == MainForm.selectedRoom)
                         lineColor = Color.White;
                     // Top
@@ -198,14 +197,87 @@ namespace WinFormsGraphicsDevice
 
         }
 
+        public VertexPositionColor[] RoomTriangleList()
+        {
+
+            int fillVertexCount = 0;
+            foreach (Sector s in MainForm.world.sectors)
+            {
+                foreach (Room r in s.rooms)
+                {
+                    foreach (Face f in r.faceList)
+                    {
+                        foreach (Block b in f.blocks)
+                        {
+                            fillVertexCount += 6;
+                            foreach (Edge e in b.edges)
+                            {
+                                if (e.type == EdgeType.Spikes)
+                                {
+                                    int length = (int)(e.end - e.start).Length();
+                                    fillVertexCount += length*6;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            VertexPositionColor[] vList = new VertexPositionColor[fillVertexCount];
+            int currentVertex = 0;
+            Color c = Color.Black;
+            foreach (Sector s in MainForm.world.sectors)
+            {
+                foreach (Room r in s.rooms)
+                {
+                    c = r.color;
+                    foreach (Face f in r.faceList)
+                    {
+                        foreach (Block b in f.blocks)
+                        {
+                            vList[currentVertex] = new VertexPositionColor(b.edges[0].start + (.05f * f.normal), c);
+                            vList[currentVertex + 1] = new VertexPositionColor(b.edges[1].start + (.05f * f.normal), c);
+                            vList[currentVertex + 2] = new VertexPositionColor(b.edges[2].start + (.05f * f.normal), c);
+                            vList[currentVertex + 3] = new VertexPositionColor(b.edges[0].start + (.05f * f.normal), c);
+                            vList[currentVertex + 4] = new VertexPositionColor(b.edges[2].start + (.05f * f.normal), c);
+                            vList[currentVertex + 5] = new VertexPositionColor(b.edges[3].start + (.05f * f.normal), c);
+                            currentVertex += 6;
+
+                            foreach (Edge e in b.edges)
+                            {
+                                if (e.type == EdgeType.Spikes)
+                                {
+                                    Vector3 edgeDir = (e.end -e.start);
+                                    Vector3 edgeNormal = Vector3.Cross(edgeDir, f.normal);
+                                    edgeDir.Normalize();
+                                    edgeNormal.Normalize();
+
+                                    int length = (int)(e.end - e.start).Length();
+                                    float spikeWidth = (e.end-e.start).Length()/(1f*length);
+                                    float spikeHeight = 1f;
+                                    float spikeStart = 0f;
+                                    for (int i = 0; i < length; i++)
+                                    {
+                                        vList[currentVertex] = new VertexPositionColor(e.start + +spikeStart * edgeDir, Color.Gray);
+                                        vList[currentVertex + 1] = new VertexPositionColor(e.start + +spikeStart * edgeDir + .25f * spikeWidth * edgeDir + spikeHeight * edgeNormal, Color.Gray);
+                                        vList[currentVertex + 2] = new VertexPositionColor(e.start + +spikeStart * edgeDir + .5f*spikeWidth * edgeDir, Color.Gray);
+                                        vList[currentVertex + 3] = new VertexPositionColor(e.start + +spikeStart * edgeDir + .5f*spikeWidth * edgeDir, Color.Gray);
+                                        vList[currentVertex + 4] = new VertexPositionColor(e.start + +spikeStart * edgeDir + .75f * spikeWidth * edgeDir + spikeHeight * edgeNormal, Color.Gray);
+                                        vList[currentVertex + 5] = new VertexPositionColor(e.start + +spikeStart * edgeDir + spikeWidth * edgeDir, Color.Gray);
+                                        currentVertex += 6;
+                                        spikeStart+=spikeWidth;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return vList;
+
+        }
+
         public VertexPositionColor[] RoomVertexList()
         {
-            /*Room r;
-            if (MainForm.zoomRoom != null)
-                r = MainForm.zoomRoom;
-            else
-                r = MainForm.selectedRoom;*/
-
             RoomEdgeCount = 0;
             foreach (Sector s in MainForm.world.sectors)
             {
@@ -217,7 +289,14 @@ namespace WinFormsGraphicsDevice
                         {
                             foreach (Edge e in b.edges)
                             {
-                                RoomEdgeCount++;
+                                if ((MainForm.editMode == EditMode.BlockSelect && MainForm.selectedBlock == b) || (MainForm.editMode == EditMode.LineSelect && MainForm.selectedEdge == e))
+                                {
+                                    RoomEdgeCount += 2;
+                                }
+                                else
+                                {
+                                    RoomEdgeCount++;
+                                }
                             }
                         }
                     }
@@ -230,15 +309,33 @@ namespace WinFormsGraphicsDevice
             {
                 foreach (Room r in s.rooms)
                 {
+                    c = r.color;
                     foreach (Face f in r.faceList)
                     {
                         foreach (Block b in f.blocks)
                         {
                             foreach (Edge e in b.edges)
                             {
-                                vList[currentEdge] = new VertexPositionColor(e.start + (.1f * f.normal), c);
-                                vList[currentEdge + 1] = new VertexPositionColor(e.end + (.1f * f.normal), c);
-                                currentEdge += 2;
+                                if ((MainForm.editMode == EditMode.BlockSelect && MainForm.selectedBlock == b) || (MainForm.editMode == EditMode.LineSelect && MainForm.selectedEdge == e))
+                                {
+                                    c = Color.White;
+                                    Vector3 edgeNormal = Vector3.Cross(f.normal, e.end - e.start);
+                                    edgeNormal.Normalize();
+
+                                    vList[currentEdge] = new VertexPositionColor(e.start +(.1f*edgeNormal) + (.1f * f.normal), c);
+                                    vList[currentEdge + 1] = new VertexPositionColor(e.end + (.1f * edgeNormal) + (.1f * f.normal), c);
+                                    vList[currentEdge + 2] = new VertexPositionColor(e.start - (.1f * edgeNormal) + (.1f * f.normal), c);
+                                    vList[currentEdge + 3] = new VertexPositionColor(e.end - (.1f * edgeNormal) + (.1f * f.normal), c);
+                                    
+                                    currentEdge += 4;
+                                }
+                                else if (MainForm.editMode == EditMode.LineSelect)
+                                {
+                                    c = r.color;
+                                    vList[currentEdge] = new VertexPositionColor(e.start + (.1f * f.normal), c);
+                                    vList[currentEdge + 1] = new VertexPositionColor(e.end + (.1f * f.normal), c);
+                                    currentEdge += 2;
+                                }
                             }
                         }
                     }
@@ -271,6 +368,12 @@ namespace WinFormsGraphicsDevice
             return MainForm.selectedFace.center + screenCoords.X * right - screenCoords.Y * MainForm.currentUp;
         }
 
+        public bool MouseInEditArea()
+        {
+            bool result = this.ClientRectangle.Contains(this.PointToClient(new System.Drawing.Point(Mouse.GetState().X, Mouse.GetState().Y)));
+            return result;
+        }
+
         public VertexPositionColor[] TargetVertexList()
         {
             Color targetColor = Color.White;
@@ -280,15 +383,19 @@ namespace WinFormsGraphicsDevice
 
             if (MainForm.selectedFace != null)
             {
-                if (MainForm.editMode == EditMode.New)
+                pointer = GetFloatCoordsFromMouse();
+                if (MainForm.editMode == EditMode.Block)
                 {
-                    pointer = GetIntCoordsFromMouse();
-                    vList = MainForm.selectedFace.GetTemplate(pointer);
+                    Vector3 templatePointer = GetIntCoordsFromMouse();
+                    vList = MainForm.selectedFace.GetTemplate(pointer, templatePointer);
                 }
                 if (MainForm.editMode == EditMode.Line)
                 {
-                    pointer = GetFloatCoordsFromMouse();
                     vList = MainForm.selectedFace.GetSelectedLineHighlight(pointer);
+                }
+                if (MainForm.editMode == EditMode.Point)
+                {
+                    vList = MainForm.selectedFace.GetSelectedVertexHighlight(pointer);
                 }
             }
             
@@ -345,9 +452,10 @@ namespace WinFormsGraphicsDevice
 
         public void FindFace(Vector3 newNormal, Vector3 newUp)
         {
-            if (ready == true && MainForm.zoomRoom!=null)
+            if (MainForm.cameraReady ==true && ready == true && MainForm.zoomRoom!=null)
             {
                 MainForm.currentUp = futureUp = newUp;
+                MainForm.cameraReady = false;
                 foreach (Face f in MainForm.zoomRoom.faceList)
                 {
                     if (f.normal.Equals(newNormal))
@@ -522,7 +630,10 @@ namespace WinFormsGraphicsDevice
                 ready = false;
                 currentUp.Z -= MainForm.animateSpeed*30;
                 if (currentUp.Z < futureUp.Z) currentUp.Z = futureUp.Z;
-            }  
+            }
+            if (ready == true && MainForm.cameraReady == false)
+                MainForm.cameraReady = true;
+
         }
 
         /// <summary>
@@ -553,41 +664,51 @@ namespace WinFormsGraphicsDevice
                         futurePitch -= MainForm.animateSpeed;
                     }
                 }
-                else if (MainForm.selectedFace != null && ready == true)
+                else if (MainForm.selectedFace != null && ready == true && MainForm.cameraReady == true)
                 {                             
                     Vector3 right = Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
                     {
                         MainForm.translation += new Vector2(1, 0);
                         futureTarget += right;
-                        futureCamera += right;
+                        futureCamera += right;                        
                     }
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
                     {
                         MainForm.translation -= new Vector2(1, 0);
                         futureTarget -= right;
-                        futureCamera -= right;
+                        futureCamera -= right;                        
                     }
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
                     {
                         MainForm.translation -= new Vector2(0, 1);
                         futureTarget += MainForm.currentUp;
-                        futureCamera += MainForm.currentUp;
+                        futureCamera += MainForm.currentUp;                        
                     }
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
                     {
                         MainForm.translation += new Vector2(0, 1);
                         futureTarget -= MainForm.currentUp;
-                        futureCamera -= MainForm.currentUp;
+                        futureCamera -= MainForm.currentUp;                        
                     }
 
-                    if (Mouse.GetState().LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+                    if (Mouse.GetState().LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && MouseInEditArea())
                     {
                         if (mouseReady == true)
                         {
-                            if (MainForm.editMode == EditMode.New)
+                            if (MainForm.editMode == EditMode.Block)
                             {
-                                MainForm.selectedFace.AddBlock(GetIntCoordsFromMouse());
+                                Vector3 pointer = GetFloatCoordsFromMouse();
+                                MainForm.selectedBlock = MainForm.selectedFace.GetHoverBlock(pointer);
+                                if (MainForm.selectedBlock == null)
+                                    MainForm.selectedFace.AddBlock(GetIntCoordsFromMouse());
+                                else
+                                    MainForm.editMode = EditMode.BlockDrag;
+                                mouseReady = false;
+                            }
+                            else if (MainForm.editMode == EditMode.BlockDrag)
+                            {
+                                MainForm.editMode = EditMode.Block;
                                 mouseReady = false;
                             }
                             else if (MainForm.editMode == EditMode.Line)
@@ -595,13 +716,42 @@ namespace WinFormsGraphicsDevice
                                 Vector3 pointer = GetFloatCoordsFromMouse();
                                 MainForm.selectedBlock = MainForm.selectedFace.GetHoverBlock(pointer);
                                 MainForm.selectedEdge = MainForm.selectedFace.GetHoverEdge(pointer);
-                                if(MainForm.selectedEdge!=null)
+                                if (MainForm.selectedEdge != null)
                                     MainForm.editMode = EditMode.LineDrag;
+                                mouseReady = false;
+                            }
+                            else if (MainForm.editMode == EditMode.BlockSelect)
+                            {
+                                Vector3 pointer = GetFloatCoordsFromMouse();
+                                MainForm.selectedBlock = MainForm.selectedFace.GetHoverBlock(pointer);
+                                ((MainForm)this.Parent.Parent.Parent).update_element_data();                                
+                                mouseReady = false;
+                            }
+                            else if (MainForm.editMode == EditMode.LineSelect)
+                            {
+                                Vector3 pointer = GetFloatCoordsFromMouse();
+                                MainForm.selectedBlock = MainForm.selectedFace.GetHoverBlock(pointer);
+                                MainForm.selectedEdge = MainForm.selectedFace.GetHoverEdge(pointer);
+                                ((MainForm)this.Parent.Parent.Parent).update_element_data();                                
                                 mouseReady = false;
                             }
                             else if (MainForm.editMode == EditMode.LineDrag)
                             {
                                 MainForm.editMode = EditMode.Line;
+                                mouseReady = false;
+                            }
+                            else if (MainForm.editMode == EditMode.Point)
+                            {
+                                Vector3 pointer = GetFloatCoordsFromMouse();
+                                MainForm.selectedBlock = MainForm.selectedFace.GetHoverBlock(pointer);
+                                MainForm.selectedEdge = MainForm.selectedFace.GetHoverVertex(pointer);
+                                if (MainForm.selectedEdge != null)
+                                    MainForm.editMode = EditMode.PointDrag;
+                                mouseReady = false;
+                            }
+                            else if (MainForm.editMode == EditMode.PointDrag)
+                            {
+                                MainForm.editMode = EditMode.Point;
                                 mouseReady = false;
                             }
                             
@@ -611,13 +761,21 @@ namespace WinFormsGraphicsDevice
                     {
                         mouseReady = true;
                     }
+                    if (MainForm.editMode == EditMode.BlockDrag)
+                    {
+                        MainForm.selectedBlock.Resize(GetIntCoordsFromMouse(), MainForm.selectedEdge, MainForm.selectedFace.normal);
+                    }
                     if (MainForm.editMode == EditMode.LineDrag)
+                    {
+                        MainForm.selectedBlock.Resize(GetIntCoordsFromMouse(), MainForm.selectedEdge, MainForm.selectedFace.normal);
+                    }
+                    if (MainForm.editMode == EditMode.PointDrag)
                     {
                         MainForm.selectedBlock.Resize(GetIntCoordsFromMouse(), MainForm.selectedEdge, MainForm.selectedFace.normal);
                     }
                 }
 
-                GraphicsDevice.Clear(new Color(40, 40, 40));
+                GraphicsDevice.Clear(Color.Black);
 
                 // Set transform matrices.
                 float aspect = GraphicsDevice.Viewport.AspectRatio;
@@ -644,10 +802,14 @@ namespace WinFormsGraphicsDevice
                      LineVertexList(), 0, LineCount);
 
                 VertexPositionColor[] roomList = RoomVertexList();
+                VertexPositionColor[] roomFillList = RoomTriangleList();
                 if (roomList.Length > 0)
                 {
                     GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList,
                                     roomList, 0, roomList.Length/2);
+                    GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                    roomFillList, 0, roomFillList.Length / 3);
+
                 }
 
                 if (MainForm.selectedFace != null)
@@ -659,7 +821,7 @@ namespace WinFormsGraphicsDevice
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                  Console.WriteLine(e);
             }
 
         }

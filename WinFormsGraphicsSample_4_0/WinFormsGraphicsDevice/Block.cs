@@ -8,11 +8,26 @@ namespace WinFormsGraphicsDevice
 {
     public class Block
     {
+        public int id;
+        public String name;
         public List<Edge> edges;
+
+        public List<Behavior> behaviors;
 
         public Block()
         {
+            name = "Block";
+            id = 0;
             edges = new List<Edge>();
+            behaviors = new List<Behavior>();
+        }
+
+        public void Init()
+        {
+            id = IDControl.GetID();
+            foreach (Edge e in edges)
+                e.Init();
+            behaviors.Add(new Behavior());
         }
 
         public void Move(Vector3 delta)
@@ -23,21 +38,66 @@ namespace WinFormsGraphicsDevice
             }
         }
 
+        public String IDString
+        {
+            get
+            {
+                return name + "_" + id;
+            }
+        }
+
         public void Resize(Vector3 mousePos, Edge dragEdge, Vector3 normal)
         {
+            if (MainForm.editMode == EditMode.BlockDrag)
+            {
+                Move(mousePos - edges[0].start);
+                return;
+            }
+
             Vector3 edgeDir = dragEdge.end - dragEdge.start;
             edgeDir.Normalize();
             Vector3 edgeNormal = Vector3.Cross(edgeDir, normal);
             int delta = (int)Vector3.Dot(edgeNormal, mousePos - dragEdge.start);
             Vector3 oldStart = dragEdge.start;
             Vector3 oldEnd = dragEdge.end;
-            foreach (Edge e in edges)
+            if (MainForm.editMode == EditMode.LineDrag)
             {
-                if (e.start == oldStart || e.start == oldEnd)
-                    e.start += delta * edgeNormal;
-                if (e.end == oldStart || e.end == oldEnd)
-                    e.end += delta * edgeNormal;      
+                foreach (Edge e in edges)
+                {
+                    if (e.start == oldStart || e.start == oldEnd)
+                        e.start += delta * edgeNormal;
+                    if (e.end == oldStart || e.end == oldEnd)
+                        e.end += delta * edgeNormal;
+                }
             }
+            int newX = (int)mousePos.X;
+            int newY = (int)mousePos.Y;
+            int newZ = (int)mousePos.Z;
+            if (MainForm.editMode == EditMode.PointDrag)
+            {
+                foreach (Edge e in edges)
+                {
+                    if (e.start == oldStart)
+                    {
+                        e.start = new Vector3(newX, newY, newZ);
+                    }
+                    if (e.end == oldStart)
+                    {
+                        e.end = new Vector3(newX,newY, newZ);
+                    }
+                    
+                }
+            }
+        }
+
+        public Behavior FindBehaviorByIDString(String idString)
+        {
+            foreach (Behavior b in behaviors)
+            {
+                if (b.IDString == idString)
+                    return b;
+            }
+            return null;
         }
     }
 }

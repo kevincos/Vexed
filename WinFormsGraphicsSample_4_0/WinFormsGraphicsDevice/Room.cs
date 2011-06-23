@@ -18,7 +18,7 @@ namespace WinFormsGraphicsDevice
 
         public Room()
         {
-            name = "UnnamedRoom";
+            name = "Room";
             id = IDControl.GetID();
             centerX = 0;
             centerY = 0;

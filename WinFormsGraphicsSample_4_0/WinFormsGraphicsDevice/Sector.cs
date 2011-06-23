@@ -13,7 +13,7 @@ namespace WinFormsGraphicsDevice
 
         public Sector()
         {
-            name = "UnnamedSector";
+            name = "Sector";
             id = IDControl.GetID();
             rooms = new List<Room>();
         }
