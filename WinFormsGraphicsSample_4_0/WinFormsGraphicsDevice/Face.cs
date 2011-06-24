@@ -12,6 +12,7 @@ namespace WinFormsGraphicsDevice
         public Vector3 normal;        
         public Vector3 center;
         public List<Block> blocks;
+        public List<Doodad> doodads;
         public Vector3[] vertices;
 
         public Face()
@@ -39,6 +40,8 @@ namespace WinFormsGraphicsDevice
             b.edges.Add(new Edge(center + yDir * 2, center));
             b.Init();
             blocks.Add(b);
+
+            doodads = new List<Doodad>();
         }
 
         public Face(Vector3 normal, Vector3[] pointList)
@@ -52,6 +55,7 @@ namespace WinFormsGraphicsDevice
             this.center = this.center / 4;
 
             blocks = new List<Block>();
+            doodads = new List<Doodad>();
         }
 
         public VertexPositionColor[] GetTemplate(Vector3 position, Vector3 templatePosition)
@@ -69,7 +73,7 @@ namespace WinFormsGraphicsDevice
 
             b = GetHoverBlock(position);
             if (b == null)
-            {
+            {                
                 templateColor = Color.Black;
                 b = new Block();
                 b.edges.Add(new Edge(templatePosition, templatePosition + xDir));
@@ -132,6 +136,16 @@ namespace WinFormsGraphicsDevice
             return null;
         }
 
+        public Doodad GetHoverDoodad(Vector3 position)
+        {
+            foreach (Doodad d in doodads)
+            {
+                if ((position - d.position).Length() < .3f)
+                    return d;
+            }
+            return null;
+        }
+
         public Block GetHoverBlock(Vector3 position)
         {
             foreach (Block b in blocks)
@@ -170,6 +184,44 @@ namespace WinFormsGraphicsDevice
                     return b;
             }
             return null;
+        }
+
+        public VertexPositionColor[] GetSelectedDoodadHighlight(Vector3 position)
+        {
+            
+            VertexPositionColor[] vList = null;
+            Doodad d = GetHoverDoodad(position);
+            if (d == null)
+            {
+                Color templateColor = Color.Blue;
+                Vector3 lockPosition = new Vector3((int)position.X, (int)position.Y, (int)position.Z);                                               
+                Vector3 up = .5f * MainForm.currentUp;
+                Vector3 left = .5f * Vector3.Cross(MainForm.currentUp, normal);
+                lockPosition += up + left + .4f*normal;
+
+                Block testBlock = new Block();
+                testBlock.edges.Add(new Edge(lockPosition - up, lockPosition + left));
+                testBlock.edges.Add(new Edge(lockPosition + left, lockPosition + up));
+                testBlock.edges.Add(new Edge(lockPosition + up, lockPosition - left));
+                testBlock.edges.Add(new Edge(lockPosition - left, lockPosition - up));
+                if(IsBlockValid(testBlock))
+                {
+                    vList = new VertexPositionColor[10];
+                    vList[0] = new VertexPositionColor(lockPosition - up, templateColor);
+                    vList[1] = new VertexPositionColor(lockPosition + left, templateColor);
+                    vList[2] = new VertexPositionColor(lockPosition + left, templateColor);
+                    vList[3] = new VertexPositionColor(lockPosition + up, templateColor);
+                    vList[4] = new VertexPositionColor(lockPosition + up, templateColor);
+                    vList[5] = new VertexPositionColor(lockPosition - left, templateColor);
+                    vList[6] = new VertexPositionColor(lockPosition - left, templateColor);
+                    vList[7] = new VertexPositionColor(lockPosition - up, templateColor);
+                    vList[8] = new VertexPositionColor(lockPosition + up, templateColor);
+                    vList[9] = new VertexPositionColor(lockPosition, templateColor);
+                }
+            
+            }
+
+            return vList;
         }
 
         public VertexPositionColor[] GetSelectedLineHighlight(Vector3 position)

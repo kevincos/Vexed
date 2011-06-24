@@ -14,7 +14,9 @@ namespace WinFormsGraphicsDevice
         Point,
         PointDrag,
         LineSelect,
-        BlockSelect
+        BlockSelect,
+        Doodad,
+        DoodadDrag
     }
 
     public enum EdgeType
@@ -28,11 +30,12 @@ namespace WinFormsGraphicsDevice
     }
 
     partial class MainForm
-    {
+    {        
         public static World world;
         public static Room selectedRoom = null;
         public static Sector selectedSector = null;
         public static Room zoomRoom = null;
+        public static Doodad selectedDoodad = null;
         public static string currentFileName = null;
         public static Face selectedFace = null;
         public static Block selectedBlock = null;
@@ -127,6 +130,7 @@ namespace WinFormsGraphicsDevice
             this.modePoint = new System.Windows.Forms.RadioButton();
             this.modeEdgeSelect = new System.Windows.Forms.RadioButton();
             this.modeBlockSelect = new System.Windows.Forms.RadioButton();
+            this.modeDoodad = new System.Windows.Forms.RadioButton();
             this.speedSlider = new System.Windows.Forms.TrackBar();
             this.elementGroup = new System.Windows.Forms.GroupBox();
             this.elementNameField = new System.Windows.Forms.TextBox();
@@ -134,22 +138,28 @@ namespace WinFormsGraphicsDevice
             this.elementBehaviorDropdown = new System.Windows.Forms.ComboBox();
             this.elementBehaviorAdd = new System.Windows.Forms.Button();
             this.behaviorNameField = new System.Windows.Forms.TextBox();
-            this.edgeToggle = new System.Windows.Forms.CheckBox();
-            this.edgePrimaryValue = new System.Windows.Forms.TextBox();
-            this.edgeSecondaryValue = new System.Windows.Forms.TextBox();
-            this.edgeOffset = new System.Windows.Forms.TextBox();
-            this.edgePeriod = new System.Windows.Forms.TextBox();
-            this.edgeDuration = new System.Windows.Forms.TextBox();
-            this.edgeNextBehavior = new System.Windows.Forms.TextBox();
-            this.blockPropertiesGroup = new System.Windows.Forms.GroupBox();
-            this.blockDuration = new System.Windows.Forms.TextBox();
-            this.blockPeriod = new System.Windows.Forms.TextBox();
-            this.blockNextBehavior = new System.Windows.Forms.TextBox();
-            this.blockOffset = new System.Windows.Forms.TextBox();
-            this.blockToggle = new System.Windows.Forms.CheckBox();
-            this.blockDestinationX = new System.Windows.Forms.TextBox();
-            this.blockDestinationY = new System.Windows.Forms.TextBox();
-            this.blockDestinationZ = new System.Windows.Forms.TextBox();
+            
+            this.behaviorPrimaryValue = new System.Windows.Forms.TextBox();
+            this.behaviorSecondaryValue = new System.Windows.Forms.TextBox();
+            this.behaviorPropertiesGroup = new System.Windows.Forms.GroupBox();
+            this.behaviorDuration = new System.Windows.Forms.TextBox();
+            this.behaviorPeriod = new System.Windows.Forms.TextBox();
+            this.behaviorNextBehavior = new System.Windows.Forms.TextBox();
+            this.behaviorOffset = new System.Windows.Forms.TextBox();
+            this.behaviorToggle = new System.Windows.Forms.CheckBox();
+            this.behaviorDestinationX = new System.Windows.Forms.TextBox();
+            this.behaviorDestinationY = new System.Windows.Forms.TextBox();
+            this.behaviorDestinationZ = new System.Windows.Forms.TextBox();
+
+            this.doodadPropertiesGroup = new System.Windows.Forms.GroupBox();
+            this.doodadFixed = new System.Windows.Forms.CheckBox();
+            this.doodadAbilityDropdown = new System.Windows.Forms.ComboBox();
+            this.doodadActivationCost = new System.Windows.Forms.TextBox();
+            this.doodadExpectedBehavior = new System.Windows.Forms.TextBox();
+            this.doodadTarget = new System.Windows.Forms.TextBox();
+            this.doodadTargetBehavior = new System.Windows.Forms.TextBox();
+            this.doodadTypeDropdown = new System.Windows.Forms.ComboBox();            
+
             this.viewControlsGroup = new System.Windows.Forms.GroupBox();
             this.WorldPreviewControl = new WinFormsGraphicsDevice.WorldPreviewControl();
             this.edgePropertiesGroup = new System.Windows.Forms.GroupBox();
@@ -183,7 +193,8 @@ namespace WinFormsGraphicsDevice
             this.splitContainer1.Panel1.Controls.Add(this.viewControlsGroup);
             this.splitContainer1.Panel1.Controls.Add(this.elementGroup);
             this.splitContainer1.Panel1.Controls.Add(this.edgePropertiesGroup);
-            this.splitContainer1.Panel1.Controls.Add(this.blockPropertiesGroup);
+            this.splitContainer1.Panel1.Controls.Add(this.doodadPropertiesGroup);
+            this.splitContainer1.Panel1.Controls.Add(this.behaviorPropertiesGroup);
             this.splitContainer1.Panel1.Controls.Add(this.debug1);
             this.splitContainer1.Panel1.Controls.Add(this.debug2);
             this.splitContainer1.Panel1.Controls.Add(this.debug3);
@@ -252,9 +263,9 @@ namespace WinFormsGraphicsDevice
             this.sectorGroup.Controls.Add(this.sectorNameField);
             this.sectorGroup.Controls.Add(this.sectorDelete);
             this.sectorGroup.Controls.Add(this.sectorView);
-            this.sectorGroup.Location = new System.Drawing.Point(10, 100);
+            this.sectorGroup.Location = new System.Drawing.Point(10, 85);
             this.sectorGroup.Name = "sectorGroup";
-            this.sectorGroup.Size = new System.Drawing.Size(300, 150);
+            this.sectorGroup.Size = new System.Drawing.Size(300, 100);
             this.sectorGroup.TabIndex = 4;
             this.sectorGroup.TabStop = false;
             this.sectorGroup.MouseLeave += new System.EventHandler(this.world_mouse_leave);
@@ -290,7 +301,7 @@ namespace WinFormsGraphicsDevice
             // 
             // sectorDelete
             // 
-            this.sectorDelete.Location = new System.Drawing.Point(10, 120);
+            this.sectorDelete.Location = new System.Drawing.Point(10, 70);
             this.sectorDelete.Name = "sectorDelete";
             this.sectorDelete.Size = new System.Drawing.Size(60, 25);
             this.sectorDelete.TabIndex = 5;
@@ -298,7 +309,7 @@ namespace WinFormsGraphicsDevice
             // 
             // sectorView
             // 
-            this.sectorView.Location = new System.Drawing.Point(220, 120);
+            this.sectorView.Location = new System.Drawing.Point(220, 70);
             this.sectorView.Name = "sectorView";
             this.sectorView.Size = new System.Drawing.Size(60, 25);
             this.sectorView.TabIndex = 6;
@@ -310,8 +321,8 @@ namespace WinFormsGraphicsDevice
             //
             // elemenetProperties Group
             //
-            this.elementGroup.Location = new System.Drawing.Point(10, 570);
-            this.elementGroup.Size = new System.Drawing.Size(220, 200);
+            this.elementGroup.Location = new System.Drawing.Point(10, 470);
+            this.elementGroup.Size = new System.Drawing.Size(220, 120);
             this.elementGroup.Visible = false;
             this.elementNameField.Location = new System.Drawing.Point(10, 10);
             this.elementNameField.Size = new System.Drawing.Size(100, 20);
@@ -333,29 +344,75 @@ namespace WinFormsGraphicsDevice
             this.behaviorNameField.Size = new System.Drawing.Size(200, 20);
             this.behaviorNameField.TextChanged += new System.EventHandler(this.world_rename);
 
-            this.edgePropertiesGroup.Location = new System.Drawing.Point(230, 580);
-            this.edgePropertiesGroup.Size = new System.Drawing.Size(150, 300);
+            this.edgePropertiesGroup.Location = new System.Drawing.Point(10, 580);
+            this.edgePropertiesGroup.Size = new System.Drawing.Size(220, 300);
             this.edgePropertiesGroup.Controls.Add(this.edgeTypeDropdown);
-            this.edgePropertiesGroup.Controls.Add(this.edgeNextBehavior);
-            this.edgePropertiesGroup.Controls.Add(this.edgeToggle);
-            this.edgePropertiesGroup.Controls.Add(this.edgePrimaryValue);
-            this.edgePropertiesGroup.Controls.Add(this.edgeSecondaryValue);
-            this.edgePropertiesGroup.Controls.Add(this.edgeOffset);
-            this.edgePropertiesGroup.Controls.Add(this.edgePeriod);
-            this.edgePropertiesGroup.Controls.Add(this.edgeDuration);
             this.edgePropertiesGroup.Visible = false;
-            this.blockPropertiesGroup.Location = new System.Drawing.Point(230, 580);
-            this.blockPropertiesGroup.Size = new System.Drawing.Size(110, 300);
-            this.blockPropertiesGroup.Controls.Add(this.blockToggle);
-            this.blockPropertiesGroup.Controls.Add(this.blockNextBehavior);
-            this.blockPropertiesGroup.Controls.Add(this.blockDuration);
-            this.blockPropertiesGroup.Controls.Add(this.blockOffset);
-            this.blockPropertiesGroup.Controls.Add(this.blockPeriod);
-            this.blockPropertiesGroup.Controls.Add(this.blockDestinationX);
-            this.blockPropertiesGroup.Controls.Add(this.blockDestinationY);
-            this.blockPropertiesGroup.Controls.Add(this.blockDestinationZ);
-            this.blockPropertiesGroup.Visible = false;
-            
+            this.behaviorPropertiesGroup.Location = new System.Drawing.Point(230, 470);
+            this.behaviorPropertiesGroup.Size = new System.Drawing.Size(110, 300);
+            this.behaviorPropertiesGroup.Controls.Add(this.behaviorToggle);
+            this.behaviorPropertiesGroup.Controls.Add(this.behaviorNextBehavior);
+            this.behaviorPropertiesGroup.Controls.Add(this.behaviorDuration);
+            this.behaviorPropertiesGroup.Controls.Add(this.behaviorOffset);
+            this.behaviorPropertiesGroup.Controls.Add(this.behaviorPeriod);
+            this.behaviorPropertiesGroup.Controls.Add(this.behaviorDestinationX);
+            this.behaviorPropertiesGroup.Controls.Add(this.behaviorDestinationY);
+            this.behaviorPropertiesGroup.Controls.Add(this.behaviorDestinationZ);
+            this.behaviorPropertiesGroup.Controls.Add(this.behaviorPrimaryValue);
+            this.behaviorPropertiesGroup.Controls.Add(this.behaviorSecondaryValue);
+            this.behaviorPropertiesGroup.Visible = false;
+
+            this.doodadPropertiesGroup.Location = new System.Drawing.Point(10, 580);
+            this.doodadPropertiesGroup.Size = new System.Drawing.Size(300, 300);
+            this.doodadPropertiesGroup.Visible = false;
+            this.doodadPropertiesGroup.Controls.Add(this.doodadAbilityDropdown);
+            this.doodadPropertiesGroup.Controls.Add(this.doodadTypeDropdown);
+            this.doodadPropertiesGroup.Controls.Add(this.doodadActivationCost);
+            this.doodadPropertiesGroup.Controls.Add(this.doodadExpectedBehavior);
+            this.doodadPropertiesGroup.Controls.Add(this.doodadFixed);
+            this.doodadPropertiesGroup.Controls.Add(this.doodadTargetBehavior);
+            this.doodadPropertiesGroup.Controls.Add(this.doodadTarget);
+
+            this.doodadTypeDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 20; i++)
+            {
+                this.doodadTypeDropdown.Items.Add((DoodadType)i);
+            }
+            this.doodadTypeDropdown.Location = new System.Drawing.Point(10, 10);
+            this.doodadTypeDropdown.Size = new System.Drawing.Size(180, 20);
+            this.doodadTypeDropdown.SelectedIndex = (int)DoodadType.PowerOrb;
+            this.doodadTypeDropdown.SelectedIndexChanged += new System.EventHandler(this.doodad_change);
+
+            this.doodadAbilityDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 15; i++)
+            {
+                this.doodadAbilityDropdown.Items.Add((AbilityType)i);
+            }
+            this.doodadAbilityDropdown.Location = new System.Drawing.Point(10, 40);
+            this.doodadAbilityDropdown.Size = new System.Drawing.Size(180, 20);
+            this.doodadAbilityDropdown.SelectedIndex = (int)AbilityType.DoubleJump;
+            this.doodadAbilityDropdown.SelectedIndexChanged += new System.EventHandler(this.doodad_change);
+
+            this.doodadActivationCost.Location = new System.Drawing.Point(10, 65);
+            this.doodadActivationCost.Size = new System.Drawing.Size(80, 20);
+            this.doodadActivationCost.TextChanged+= new System.EventHandler(this.doodad_change);
+
+            this.doodadFixed.Location = new System.Drawing.Point(100, 65);
+            this.doodadFixed.Text = "Fixed";
+            this.doodadFixed.Checked = true;
+            this.doodadFixed.CheckedChanged += new System.EventHandler(this.doodad_change);
+
+            this.doodadTarget.Location = new System.Drawing.Point(10, 90);
+            this.doodadTarget.Size = new System.Drawing.Size(180, 20);
+            this.doodadTarget.TextChanged += new System.EventHandler(this.doodad_change);
+
+            this.doodadExpectedBehavior.Location = new System.Drawing.Point(10, 115);
+            this.doodadExpectedBehavior.Size = new System.Drawing.Size(180, 20);
+            this.doodadExpectedBehavior.TextChanged += new System.EventHandler(this.doodad_change);
+
+            this.doodadTargetBehavior.Location = new System.Drawing.Point(10, 140);
+            this.doodadTargetBehavior.Size = new System.Drawing.Size(180, 20);
+            this.doodadTargetBehavior.TextChanged += new System.EventHandler(this.doodad_change);
 
             this.edgeTypeDropdown.Location = new System.Drawing.Point(10, 10);
             this.edgeTypeDropdown.Size = new System.Drawing.Size(90, 20);
@@ -363,54 +420,37 @@ namespace WinFormsGraphicsDevice
             this.edgeTypeDropdown.Items.AddRange(new object[]{EdgeType.Normal, EdgeType.Spikes, EdgeType.Bounce, EdgeType.ConveyorBelt, EdgeType.Ice, EdgeType.Electric});
             this.edgeTypeDropdown.SelectedIndexChanged+=new System.EventHandler(this.edge_change);
 
-            this.edgeToggle.Location = new System.Drawing.Point(10, 30);
-            this.edgeToggle.Text = "On";
-            this.edgeToggle.CheckedChanged += new System.EventHandler(this.properties_data_change);
-            this.edgeToggle.Checked = true;
-            this.edgePeriod.Location = new System.Drawing.Point(10, 50);
-            this.edgePeriod.Text = "Period";
-            this.edgePeriod.TextChanged += new System.EventHandler(this.properties_data_change);
-            this.edgeOffset.Location = new System.Drawing.Point(10, 70);
-            this.edgeOffset.Text = "Offset";
-            this.edgeOffset.TextChanged += new System.EventHandler(this.properties_data_change);
-            this.edgeDuration.Location = new System.Drawing.Point(10, 90);
-            this.edgeDuration.Text = "Duration";
-            this.edgeDuration.TextChanged += new System.EventHandler(this.properties_data_change);
-            this.edgeNextBehavior.Location = new System.Drawing.Point(10, 110);
-            this.edgeNextBehavior.Text = "Next Behavior ID";
-            this.edgeNextBehavior.TextChanged += new System.EventHandler(this.properties_data_change);
-            this.edgePrimaryValue.Location = new System.Drawing.Point(10, 130);
-            this.edgePrimaryValue.Text = "Primary Value";
-            this.edgePrimaryValue.TextChanged += new System.EventHandler(this.properties_data_change);
-            this.edgeSecondaryValue.Location = new System.Drawing.Point(10, 150);
-            this.edgeSecondaryValue.Text = "Secondary Value";
-            this.edgeSecondaryValue.TextChanged += new System.EventHandler(this.properties_data_change);
-
-            this.blockToggle.Location = new System.Drawing.Point(10, 10);
-            this.blockToggle.Text = "On";
-            this.blockToggle.CheckedChanged += new System.EventHandler(this.properties_data_change);
-            this.blockToggle.Checked = true;
-            this.blockPeriod.Location = new System.Drawing.Point(10, 30);
-            this.blockPeriod.Text = "Period";
-            this.blockPeriod.TextChanged+=new System.EventHandler(this.properties_data_change);
-            this.blockOffset.Location = new System.Drawing.Point(10, 50);
-            this.blockOffset.Text = "Offset";
-            this.blockOffset.TextChanged += new System.EventHandler(this.properties_data_change);
-            this.blockDuration.Location = new System.Drawing.Point(10, 70);
-            this.blockDuration.Text = "Duration";
-            this.blockDuration.TextChanged += new System.EventHandler(this.properties_data_change);
-            this.blockNextBehavior.Location = new System.Drawing.Point(10, 90);
-            this.blockNextBehavior.Text = "Next Behavior ID";
-            this.blockNextBehavior.TextChanged += new System.EventHandler(this.properties_data_change);
-            this.blockDestinationX.Location = new System.Drawing.Point(10, 110);
-            this.blockDestinationX.Size = new System.Drawing.Size(30, 20);
-            this.blockDestinationX.TextChanged += new System.EventHandler(this.properties_data_change);
-            this.blockDestinationY.Location = new System.Drawing.Point(45, 110);
-            this.blockDestinationY.Size = new System.Drawing.Size(30, 20);
-            this.blockDestinationY.TextChanged += new System.EventHandler(this.properties_data_change);
-            this.blockDestinationZ.Location = new System.Drawing.Point(80, 110);
-            this.blockDestinationZ.Size = new System.Drawing.Size(30, 20);
-            this.blockDestinationZ.TextChanged += new System.EventHandler(this.properties_data_change);
+            this.behaviorPrimaryValue.Location = new System.Drawing.Point(10, 130);
+            this.behaviorPrimaryValue.Text = "Primary Value";
+            this.behaviorPrimaryValue.TextChanged += new System.EventHandler(this.properties_data_change);
+            this.behaviorSecondaryValue.Location = new System.Drawing.Point(10, 150);
+            this.behaviorSecondaryValue.Text = "Secondary Value";
+            this.behaviorSecondaryValue.TextChanged += new System.EventHandler(this.properties_data_change);
+            this.behaviorToggle.Location = new System.Drawing.Point(10, 10);
+            this.behaviorToggle.Text = "On";
+            this.behaviorToggle.CheckedChanged += new System.EventHandler(this.properties_data_change);
+            this.behaviorToggle.Checked = true;
+            this.behaviorPeriod.Location = new System.Drawing.Point(10, 30);
+            this.behaviorPeriod.Text = "Period";
+            this.behaviorPeriod.TextChanged+=new System.EventHandler(this.properties_data_change);
+            this.behaviorOffset.Location = new System.Drawing.Point(10, 50);
+            this.behaviorOffset.Text = "Offset";
+            this.behaviorOffset.TextChanged += new System.EventHandler(this.properties_data_change);
+            this.behaviorDuration.Location = new System.Drawing.Point(10, 70);
+            this.behaviorDuration.Text = "Duration";
+            this.behaviorDuration.TextChanged += new System.EventHandler(this.properties_data_change);
+            this.behaviorNextBehavior.Location = new System.Drawing.Point(10, 90);
+            this.behaviorNextBehavior.Text = "Next Behavior ID";
+            this.behaviorNextBehavior.TextChanged += new System.EventHandler(this.properties_data_change);
+            this.behaviorDestinationX.Location = new System.Drawing.Point(10, 110);
+            this.behaviorDestinationX.Size = new System.Drawing.Size(30, 20);
+            this.behaviorDestinationX.TextChanged += new System.EventHandler(this.properties_data_change);
+            this.behaviorDestinationY.Location = new System.Drawing.Point(45, 110);
+            this.behaviorDestinationY.Size = new System.Drawing.Size(30, 20);
+            this.behaviorDestinationY.TextChanged += new System.EventHandler(this.properties_data_change);
+            this.behaviorDestinationZ.Location = new System.Drawing.Point(80, 110);
+            this.behaviorDestinationZ.Size = new System.Drawing.Size(30, 20);
+            this.behaviorDestinationZ.TextChanged += new System.EventHandler(this.properties_data_change);
             
             
             // element properties
@@ -458,9 +498,9 @@ namespace WinFormsGraphicsDevice
             this.roomGroup.Controls.Add(this.roomSizeZDown);
             this.roomGroup.Controls.Add(this.roomEdit);
             this.roomGroup.Controls.Add(this.roomDelete);
-            this.roomGroup.Location = new System.Drawing.Point(10, 250);
+            this.roomGroup.Location = new System.Drawing.Point(10, 180);
             this.roomGroup.Name = "roomGroup";
-            this.roomGroup.Size = new System.Drawing.Size(300, 200);
+            this.roomGroup.Size = new System.Drawing.Size(300, 170);
             this.roomGroup.TabIndex = 5;
             this.roomGroup.TabStop = false;
             this.roomGroup.MouseLeave += new System.EventHandler(this.world_mouse_leave);
@@ -742,7 +782,7 @@ namespace WinFormsGraphicsDevice
             // 
             // roomEdit
             // 
-            this.roomEdit.Location = new System.Drawing.Point(210, 170);
+            this.roomEdit.Location = new System.Drawing.Point(210, 140);
             this.roomEdit.Name = "roomEdit";
             this.roomEdit.Size = new System.Drawing.Size(80, 25);
             this.roomEdit.TabIndex = 32;
@@ -751,7 +791,7 @@ namespace WinFormsGraphicsDevice
             // 
             // roomDelete
             // 
-            this.roomDelete.Location = new System.Drawing.Point(10, 170);
+            this.roomDelete.Location = new System.Drawing.Point(10, 140);
             this.roomDelete.Name = "roomDelete";
             this.roomDelete.Size = new System.Drawing.Size(60, 25);
             this.roomDelete.TabIndex = 33;
@@ -775,7 +815,7 @@ namespace WinFormsGraphicsDevice
             this.faceRight.Size = new System.Drawing.Size(40, 20);
             this.faceRight.Click += new System.EventHandler(this.room_rotate);
 
-            this.viewControlsGroup.Location = new System.Drawing.Point(10, 450);
+            this.viewControlsGroup.Location = new System.Drawing.Point(10, 350);
             this.viewControlsGroup.Size = new System.Drawing.Size(260, 120);
             this.viewControlsGroup.Controls.Add(this.faceDown);
             this.viewControlsGroup.Controls.Add(this.faceLeft);
@@ -786,6 +826,7 @@ namespace WinFormsGraphicsDevice
             this.viewControlsGroup.Controls.Add(this.modePoint);
             this.viewControlsGroup.Controls.Add(this.modeBlockSelect);
             this.viewControlsGroup.Controls.Add(this.modeEdgeSelect);
+            this.viewControlsGroup.Controls.Add(this.modeDoodad);
 
             #endregion
 
@@ -795,21 +836,24 @@ namespace WinFormsGraphicsDevice
             //
 
             this.modeDraw.Location = new System.Drawing.Point(150, 10);
-            this.modeDraw.Text = "Block Draw Mode";
+            this.modeDraw.Text = "Block Draw";
             this.modeDraw.Click += new System.EventHandler(room_mode_change);
             this.modeDraw.PerformClick();
             this.modeLine.Location = new System.Drawing.Point(150, 30);
-            this.modeLine.Text = "Line Draw Mode";
+            this.modeLine.Text = "Line Draw";
             this.modeLine.Click += new System.EventHandler(room_mode_change);
             this.modePoint.Location = new System.Drawing.Point(150, 50);
-            this.modePoint.Text = "Point Draw Mode";
+            this.modePoint.Text = "Point Draw";
             this.modePoint.Click += new System.EventHandler(room_mode_change);
             this.modeEdgeSelect.Location = new System.Drawing.Point(150, 70);
-            this.modeEdgeSelect.Text = "Edge Select Mode";
+            this.modeEdgeSelect.Text = "Edge Select";
             this.modeEdgeSelect.Click += new System.EventHandler(room_mode_change);
             this.modeBlockSelect.Location = new System.Drawing.Point(150, 90);
-            this.modeBlockSelect.Text = "Block Select Mode";
+            this.modeBlockSelect.Text = "Block Select";
             this.modeBlockSelect.Click += new System.EventHandler(room_mode_change);
+            this.modeDoodad.Location = new System.Drawing.Point(80, 90);
+            this.modeDoodad.Text = "Doodad";
+            this.modeDoodad.Click += new System.EventHandler(room_mode_change);
             #endregion 
 
 
@@ -876,6 +920,7 @@ namespace WinFormsGraphicsDevice
         private System.Windows.Forms.RadioButton modePoint;
         private System.Windows.Forms.RadioButton modeBlockSelect;
         private System.Windows.Forms.RadioButton modeEdgeSelect;
+        private System.Windows.Forms.RadioButton modeDoodad;
 
         private System.Windows.Forms.GroupBox elementGroup;
         private System.Windows.Forms.TextBox elementNameField;
@@ -883,24 +928,30 @@ namespace WinFormsGraphicsDevice
         private System.Windows.Forms.ComboBox elementBehaviorDropdown;
         private System.Windows.Forms.Button elementBehaviorAdd;
         private System.Windows.Forms.TextBox behaviorNameField;
+
         private System.Windows.Forms.GroupBox edgePropertiesGroup;
-        private System.Windows.Forms.ComboBox edgeTypeDropdown;        
-        private System.Windows.Forms.CheckBox edgeToggle;
-        private System.Windows.Forms.TextBox edgeOffset;
-        private System.Windows.Forms.TextBox edgePeriod;
-        private System.Windows.Forms.TextBox edgeDuration;
-        private System.Windows.Forms.TextBox edgePrimaryValue;
-        private System.Windows.Forms.TextBox edgeSecondaryValue;
-        private System.Windows.Forms.TextBox edgeNextBehavior;
-        private System.Windows.Forms.GroupBox blockPropertiesGroup;
-        private System.Windows.Forms.CheckBox blockToggle;
-        private System.Windows.Forms.TextBox blockOffset;
-        private System.Windows.Forms.TextBox blockPeriod;
-        private System.Windows.Forms.TextBox blockDuration;
-        private System.Windows.Forms.TextBox blockNextBehavior;
-        private System.Windows.Forms.TextBox blockDestinationX;
-        private System.Windows.Forms.TextBox blockDestinationY;
-        private System.Windows.Forms.TextBox blockDestinationZ;
+        private System.Windows.Forms.ComboBox edgeTypeDropdown;
+
+        private System.Windows.Forms.GroupBox doodadPropertiesGroup;
+        private System.Windows.Forms.ComboBox doodadTypeDropdown;
+        private System.Windows.Forms.ComboBox doodadAbilityDropdown;
+        private System.Windows.Forms.CheckBox doodadFixed;
+        private System.Windows.Forms.TextBox doodadActivationCost;
+        private System.Windows.Forms.TextBox doodadTarget;
+        private System.Windows.Forms.TextBox doodadExpectedBehavior;
+        private System.Windows.Forms.TextBox doodadTargetBehavior;
+
+        private System.Windows.Forms.GroupBox behaviorPropertiesGroup;
+        private System.Windows.Forms.CheckBox behaviorToggle;
+        private System.Windows.Forms.TextBox behaviorOffset;
+        private System.Windows.Forms.TextBox behaviorPeriod;
+        private System.Windows.Forms.TextBox behaviorDuration;
+        private System.Windows.Forms.TextBox behaviorNextBehavior;
+        private System.Windows.Forms.TextBox behaviorDestinationX;
+        private System.Windows.Forms.TextBox behaviorDestinationY;
+        private System.Windows.Forms.TextBox behaviorDestinationZ;
+        private System.Windows.Forms.TextBox behaviorPrimaryValue;
+        private System.Windows.Forms.TextBox behaviorSecondaryValue;
         
         private System.Windows.Forms.GroupBox sectorGroup;
         private System.Windows.Forms.ComboBox sectorDropdown;

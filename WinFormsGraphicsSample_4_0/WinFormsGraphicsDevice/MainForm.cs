@@ -265,16 +265,50 @@ namespace WinFormsGraphicsDevice
                     this.elementBehaviorDropdown.Items.Add(b.IDString);
                     this.elementBehaviorDropdown.SelectedIndex = this.elementBehaviorDropdown.Items.Count - 1;
                 }
+                if (MainForm.editMode == EditMode.Doodad)
+                {
+                    Doodad d = MainForm.selectedDoodad;
+                    Behavior b = new Behavior();
+                    d.behaviors.Add(b);
+                    this.elementBehaviorDropdown.Items.Add(b.IDString);
+                    this.elementBehaviorDropdown.SelectedIndex = this.elementBehaviorDropdown.Items.Count - 1;
+
+                }
             }
         }
 
         public void update_element_data()
         {
-            if (selectedEdge != null && MainForm.editMode == EditMode.LineSelect)
+            if (selectedDoodad != null && MainForm.editMode == EditMode.Doodad)
+            {
+                this.elementGroup.Visible = true;
+                this.edgePropertiesGroup.Visible = false;
+                this.behaviorPropertiesGroup.Visible = true;
+                this.doodadPropertiesGroup.Visible = true;
+                this.elementNameField.Text = selectedDoodad.name;
+                this.elementIDField.Text = selectedDoodad.IDString;
+                this.elementBehaviorDropdown.Items.Clear();
+                foreach (Behavior b in selectedDoodad.behaviors)
+                {
+                    this.elementBehaviorDropdown.Items.Add(b.IDString);
+                }
+                this.elementBehaviorDropdown.SelectedIndex = 0;
+                this.behaviorNameField.Text = selectedDoodad.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]).name;
+
+                this.doodadAbilityDropdown.SelectedIndex = (int)selectedDoodad.ability;
+                this.doodadTypeDropdown.SelectedIndex = (int)selectedDoodad.type;
+                this.doodadFixed.Checked = selectedDoodad.fixedPosition;
+                this.doodadTarget.Text = selectedDoodad.targetObject;
+                this.doodadTargetBehavior.Text = selectedDoodad.targetBehavior;
+                this.doodadExpectedBehavior.Text = selectedDoodad.expectBehavior;
+                this.doodadActivationCost.Text = selectedDoodad.activationCost.ToString();
+            }
+            else if (selectedEdge != null && MainForm.editMode == EditMode.LineSelect)
             {
                 this.elementGroup.Visible = true;
                 this.edgePropertiesGroup.Visible = true;
-                this.blockPropertiesGroup.Visible = false;
+                this.behaviorPropertiesGroup.Visible = true;
+                this.doodadPropertiesGroup.Visible = false;
                 this.elementNameField.Text = selectedEdge.name;
                 this.elementIDField.Text = selectedEdge.IDString;
                 this.elementBehaviorDropdown.Items.Clear();
@@ -290,7 +324,8 @@ namespace WinFormsGraphicsDevice
             {
                 this.elementGroup.Visible = true;
                 this.edgePropertiesGroup.Visible = false;
-                this.blockPropertiesGroup.Visible = true;
+                this.behaviorPropertiesGroup.Visible = true;
+                this.doodadPropertiesGroup.Visible = false;
                 this.elementNameField.Text = selectedBlock.name;
                 this.elementIDField.Text = selectedBlock.IDString;
                 this.elementBehaviorDropdown.Items.Clear();
@@ -305,7 +340,8 @@ namespace WinFormsGraphicsDevice
             {
                 this.edgePropertiesGroup.Visible = false;
                 this.elementGroup.Visible = false;
-                this.blockPropertiesGroup.Visible = false;
+                this.behaviorPropertiesGroup.Visible = false;
+                this.doodadPropertiesGroup.Visible = false;
             }
         }
 
@@ -321,32 +357,25 @@ namespace WinFormsGraphicsDevice
                 {
                     update_behavior_data(MainForm.selectedEdge.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]));
                 }
+                if (editMode == EditMode.Doodad)
+                {
+                    update_behavior_data(MainForm.selectedDoodad.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]));
+                }
             }
         }
 
         public void update_behavior_data(Behavior b)
         {
-            if (MainForm.editMode == EditMode.LineSelect)
-            {
-                this.edgeToggle.Checked = b.toggle;
-                this.edgePrimaryValue.Text = b.primaryValue.ToString();
-                this.edgeSecondaryValue.Text = b.secondaryValue.ToString();
-                this.edgeOffset.Text = b.offset.ToString();
-                this.edgePeriod.Text = b.period.ToString();
-                this.edgeDuration.Text = b.duration.ToString();
-                this.edgeNextBehavior.Text = b.nextBehavior;
-            }
-            if (MainForm.editMode == EditMode.BlockSelect)
-            {
-                this.blockToggle.Checked = b.toggle;
-                this.blockOffset.Text = b.offset.ToString();
-                this.blockPeriod.Text = b.period.ToString();
-                this.blockDuration.Text = b.duration.ToString();
-                this.blockDestinationX.Text = b.destination.X.ToString();
-                this.blockDestinationY.Text = b.destination.Y.ToString();
-                this.blockDestinationZ.Text = b.destination.Z.ToString();
-                this.blockNextBehavior.Text = b.nextBehavior;
-            }
+            this.behaviorToggle.Checked = b.toggle;
+            this.behaviorPrimaryValue.Text = b.primaryValue.ToString();
+            this.behaviorSecondaryValue.Text = b.secondaryValue.ToString();
+            this.behaviorOffset.Text = b.offset.ToString();
+            this.behaviorPeriod.Text = b.period.ToString();
+            this.behaviorDuration.Text = b.duration.ToString();
+            this.behaviorNextBehavior.Text = b.nextBehavior;
+            this.behaviorDestinationX.Text = b.destination.X.ToString();
+            this.behaviorDestinationY.Text = b.destination.Y.ToString();
+            this.behaviorDestinationZ.Text = b.destination.Z.ToString();
         }
 
         void room_mode_change(object sender, System.EventArgs e)
@@ -370,6 +399,10 @@ namespace WinFormsGraphicsDevice
             if (sender == this.modeBlockSelect)
             {
                 editMode = EditMode.BlockSelect;
+            }
+            if (sender == this.modeDoodad)
+            {
+                editMode = EditMode.Doodad;
             }
         }
 
@@ -445,6 +478,42 @@ namespace WinFormsGraphicsDevice
             }
         }
 
+        void doodad_change(object sender, System.EventArgs e)
+        {
+            if (sender == this.doodadFixed)
+            {
+                selectedDoodad.fixedPosition = this.doodadFixed.Checked;
+                if (this.doodadFixed.Checked)
+                    this.doodadFixed.Text = "Fixed";
+                else
+                    this.doodadFixed.Text = "Free";
+            }
+            if (sender == this.doodadTypeDropdown)
+            {
+                selectedDoodad.type = (DoodadType)this.doodadTypeDropdown.SelectedIndex;
+            }
+            if (sender == this.doodadAbilityDropdown)
+            {
+                selectedDoodad.ability = (AbilityType)this.doodadAbilityDropdown.SelectedIndex;
+            }
+            if (sender == this.doodadActivationCost)
+            {
+                selectedDoodad.activationCost = System.Convert.ToInt32(this.doodadActivationCost.Text);
+            }
+            if (sender == this.doodadExpectedBehavior)
+            {
+                selectedDoodad.expectBehavior = this.doodadExpectedBehavior.Text;
+            }
+            if (sender == this.doodadTarget)
+            {
+                selectedDoodad.targetObject = this.doodadTarget.Text;
+            }
+            if (sender == this.doodadTargetBehavior)
+            {
+                selectedDoodad.targetBehavior = this.doodadTargetBehavior.Text;
+            }
+        }
+
         void world_rename(object sender, System.EventArgs e)
         {
             if (sender == this.sectorNameField)
@@ -474,6 +543,12 @@ namespace WinFormsGraphicsDevice
                     edge.name = this.elementNameField.Text;
                     this.elementIDField.Text = edge.IDString;
                 }
+                if (MainForm.editMode == EditMode.Doodad)
+                {
+                    Doodad d = MainForm.selectedDoodad;
+                    d.name = this.elementNameField.Text;
+                    this.elementIDField.Text = d.IDString;
+                }
             }
             if (sender == this.behaviorNameField)
             {
@@ -486,6 +561,12 @@ namespace WinFormsGraphicsDevice
                 if (MainForm.editMode == EditMode.LineSelect)
                 {
                     Behavior b = MainForm.selectedEdge.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
+                    b.name = this.behaviorNameField.Text;
+                    this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex] = b.IDString;
+                }
+                if (MainForm.editMode == EditMode.Doodad)
+                {
+                    Behavior b = MainForm.selectedDoodad.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
                     b.name = this.behaviorNameField.Text;
                     this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex] = b.IDString;
                 }
@@ -555,73 +636,49 @@ namespace WinFormsGraphicsDevice
 
             try
             {
-                if (sender == this.blockToggle)
+                if (sender == this.behaviorToggle)
                 {
-                    b.toggle = this.blockToggle.Checked;
-                    if (this.blockToggle.Checked)
-                        this.blockToggle.Text = "On";
+                    b.toggle = this.behaviorToggle.Checked;
+                    if (this.behaviorToggle.Checked)
+                        this.behaviorToggle.Text = "On";
                     else
-                        this.blockToggle.Text = "Off";
+                        this.behaviorToggle.Text = "Off";
                 }
-                if (sender == this.edgeToggle)
+                if (sender == this.behaviorOffset)
                 {
-                    b.toggle = this.edgeToggle.Checked;
-                    if (this.edgeToggle.Checked)
-                        this.edgeToggle.Text = "On";
-                    else
-                        this.edgeToggle.Text = "Off";
+                    b.offset = System.Convert.ToInt32(this.behaviorOffset.Text);
                 }
-                if (sender == this.edgeOffset)
+                if (sender == this.behaviorPeriod)
                 {
-                    b.offset = System.Convert.ToInt32(this.edgeOffset.Text);
+                    b.period = System.Convert.ToInt32(this.behaviorPeriod.Text);
                 }
-                if (sender == this.edgePeriod)
+                if (sender == this.behaviorDuration)
                 {
-                    b.period = System.Convert.ToInt32(this.edgePeriod.Text);
+                    b.duration = System.Convert.ToInt32(this.behaviorDuration.Text);
                 }
-                if (sender == this.edgeDuration)
+                if (sender == this.behaviorNextBehavior)
                 {
-                    b.duration = System.Convert.ToInt32(this.edgeDuration.Text);
+                    b.nextBehavior = this.behaviorNextBehavior.Text;
                 }
-                if (sender == this.blockPeriod)
+                if (sender == this.behaviorPrimaryValue)
                 {
-                    b.period = System.Convert.ToInt32(this.blockPeriod.Text);
+                    b.primaryValue = System.Convert.ToInt32(this.behaviorPrimaryValue.Text);
                 }
-                if (sender == this.blockDuration)
+                if (sender == this.behaviorSecondaryValue)
                 {
-                    b.duration = System.Convert.ToInt32(this.blockDuration.Text);
+                    b.secondaryValue = System.Convert.ToInt32(this.behaviorSecondaryValue.Text);
                 }
-                if (sender == this.blockOffset)
+                if (sender == this.behaviorDestinationX)
                 {
-                    b.offset = System.Convert.ToInt32(this.blockOffset.Text);
+                    b.destination.X = System.Convert.ToInt32(this.behaviorDestinationX.Text);
                 }
-                if (sender == this.edgeNextBehavior)
+                if (sender == this.behaviorDestinationY)
                 {
-                    b.nextBehavior = this.edgeNextBehavior.Text;
+                    b.destination.Y = System.Convert.ToInt32(this.behaviorDestinationY.Text);
                 }
-                if (sender == this.blockNextBehavior)
+                if (sender == this.behaviorDestinationZ)
                 {
-                    b.nextBehavior = this.blockNextBehavior.Text;
-                }
-                if (sender == this.edgePrimaryValue)
-                {
-                    b.primaryValue = System.Convert.ToInt32(this.edgePrimaryValue.Text);
-                }
-                if (sender == this.edgeSecondaryValue)
-                {
-                    b.secondaryValue = System.Convert.ToInt32(this.edgeSecondaryValue.Text);
-                }
-                if (sender == this.blockDestinationX)
-                {
-                    b.destination.X = System.Convert.ToInt32(this.blockDestinationX.Text);
-                }
-                if (sender == this.blockDestinationY)
-                {
-                    b.destination.Y = System.Convert.ToInt32(this.blockDestinationY.Text);
-                }
-                if (sender == this.blockDestinationZ)
-                {
-                    b.destination.Z = System.Convert.ToInt32(this.blockDestinationZ.Text);
+                    b.destination.Z = System.Convert.ToInt32(this.behaviorDestinationZ.Text);
                 }
             }
             catch

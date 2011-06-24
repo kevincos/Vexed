@@ -197,6 +197,57 @@ namespace WinFormsGraphicsDevice
 
         }
 
+        public VertexPositionColor[] DoodadVertexList()
+        {
+            int doodadVertexCount = 0;
+            foreach (Sector s in MainForm.world.sectors)
+            {
+                foreach (Room r in s.rooms)
+                {
+                    foreach (Face f in r.faceList)
+                    {
+                        foreach (Doodad d in f.doodads)
+                        {
+                            doodadVertexCount += 10;
+                        }
+                    }
+                }
+            }
+            VertexPositionColor[] vList = new VertexPositionColor[doodadVertexCount];
+            int currentVertex = 0;
+            Color c = Color.Orange;
+            foreach (Sector s in MainForm.world.sectors)
+            {
+                foreach (Room r in s.rooms)
+                {
+                    foreach (Face f in r.faceList)
+                    {
+                        foreach (Doodad d in f.doodads)
+                        {
+                            if (MainForm.selectedDoodad == d)
+                                c = Color.White;
+                            else
+                                c = Color.Orange;
+                            Vector3 up = .5f * d.up;
+                            Vector3 left = .5f * Vector3.Cross(d.up, MainForm.selectedFace.normal);
+                            vList[currentVertex] = new VertexPositionColor(d.position - up, c);
+                            vList[currentVertex+1] = new VertexPositionColor(d.position + left, c);
+                            vList[currentVertex+2] = new VertexPositionColor(d.position + left, c);
+                            vList[currentVertex+3] = new VertexPositionColor(d.position + up, c);
+                            vList[currentVertex+4] = new VertexPositionColor(d.position + up, c);
+                            vList[currentVertex+5] = new VertexPositionColor(d.position - left, c);
+                            vList[currentVertex+6] = new VertexPositionColor(d.position - left, c);
+                            vList[currentVertex+7] = new VertexPositionColor(d.position - up, c);
+                            vList[currentVertex + 8] = new VertexPositionColor(d.position + up, c);
+                            vList[currentVertex + 9] = new VertexPositionColor(d.position, c);
+                            currentVertex += 10;
+                        }
+                    }
+                }
+            }
+            return vList;
+        }
+
         public VertexPositionColor[] RoomTriangleList()
         {
 
@@ -384,16 +435,26 @@ namespace WinFormsGraphicsDevice
             if (MainForm.selectedFace != null)
             {
                 pointer = GetFloatCoordsFromMouse();
-                if (MainForm.editMode == EditMode.Block)
+
+                if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift) || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftControl))
+                {
+                    vList = null;
+                }
+                else if (MainForm.editMode == EditMode.Doodad)
+                {
+                    Vector3 templatePointer = GetIntCoordsFromMouse();
+                    vList = MainForm.selectedFace.GetSelectedDoodadHighlight(pointer);
+                }
+                else if (MainForm.editMode == EditMode.Block)
                 {
                     Vector3 templatePointer = GetIntCoordsFromMouse();
                     vList = MainForm.selectedFace.GetTemplate(pointer, templatePointer);
                 }
-                if (MainForm.editMode == EditMode.Line)
+                else if (MainForm.editMode == EditMode.Line)
                 {
                     vList = MainForm.selectedFace.GetSelectedLineHighlight(pointer);
                 }
-                if (MainForm.editMode == EditMode.Point)
+                else if (MainForm.editMode == EditMode.Point)
                 {
                     vList = MainForm.selectedFace.GetSelectedVertexHighlight(pointer);
                 }
@@ -754,6 +815,41 @@ namespace WinFormsGraphicsDevice
                                 MainForm.editMode = EditMode.Point;
                                 mouseReady = false;
                             }
+                            else if (MainForm.editMode == EditMode.Doodad && Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftControl))
+                            {
+                                Vector3 pointer = GetFloatCoordsFromMouse();
+                                MainForm.selectedBlock = null;
+                                MainForm.selectedEdge = null;
+                                MainForm.selectedDoodad = MainForm.selectedFace.GetHoverDoodad(pointer);
+                                ((MainForm)this.Parent.Parent.Parent).update_element_data();  
+                                mouseReady = false;
+                            }
+                            else if (MainForm.editMode == EditMode.Doodad)
+                            {
+                                Vector3 pointer = GetFloatCoordsFromMouse();
+                                MainForm.selectedDoodad = MainForm.selectedFace.GetHoverDoodad(pointer);
+                                if (MainForm.selectedDoodad == null)
+                                {
+                                    Vector3 lockPosition = new Vector3((int)pointer.X, (int)pointer.Y, (int)pointer.Z);
+                                    Vector3 up = .5f * MainForm.currentUp;
+                                    Vector3 left = .5f * Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
+                                    lockPosition += up + left;
+                                    Doodad d = new Doodad();
+                                    d.position = lockPosition;
+                                    d.up = MainForm.currentUp;
+                                    MainForm.selectedFace.doodads.Add(d);
+                                }
+                                else
+                                {
+                                    MainForm.editMode = EditMode.DoodadDrag;
+                                }
+                                mouseReady = false;
+                            }
+                            else if (MainForm.editMode == EditMode.DoodadDrag)
+                            {
+                                MainForm.editMode = EditMode.Doodad;
+                                mouseReady = false;
+                            }
                             
                         }
                     }
@@ -772,6 +868,15 @@ namespace WinFormsGraphicsDevice
                     if (MainForm.editMode == EditMode.PointDrag)
                     {
                         MainForm.selectedBlock.Resize(GetIntCoordsFromMouse(), MainForm.selectedEdge, MainForm.selectedFace.normal);
+                    }
+                    if (MainForm.editMode == EditMode.DoodadDrag)
+                    {
+                        Vector3 pointer = GetFloatCoordsFromMouse();
+                        Vector3 lockPosition = new Vector3((int)pointer.X, (int)pointer.Y, (int)pointer.Z);
+                        Vector3 up = .5f * MainForm.currentUp;
+                        Vector3 left = .5f * Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
+                        lockPosition += up + left;
+                        MainForm.selectedDoodad.position = lockPosition;
                     }
                 }
 
@@ -810,6 +915,12 @@ namespace WinFormsGraphicsDevice
                     GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                                     roomFillList, 0, roomFillList.Length / 3);
 
+                }
+                VertexPositionColor[] doodadList = DoodadVertexList();
+                if (doodadList.Length > 0)
+                {
+                    GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList,
+                                    doodadList, 0, doodadList.Length / 2);                    
                 }
 
                 if (MainForm.selectedFace != null)
