@@ -248,6 +248,53 @@ namespace WinFormsGraphicsDevice
             return vList;
         }
 
+        public VertexPositionColor[] MonsterVertexList()
+        {
+            int monsterVertexCount = 0;
+            foreach (Sector s in MainForm.world.sectors)
+            {
+                foreach (Room r in s.rooms)
+                {
+                    foreach (Face f in r.faceList)
+                    {
+                        foreach (Monster m in f.monsters)
+                        {
+                            monsterVertexCount += 10;
+                        }
+                    }
+                }
+            }
+            VertexPositionColor[] vList = new VertexPositionColor[monsterVertexCount];
+            int currentVertex = 0;
+            Color c = Color.Red;
+            foreach (Sector s in MainForm.world.sectors)
+            {
+                foreach (Room r in s.rooms)
+                {
+                    foreach (Face f in r.faceList)
+                    {
+                        foreach (Monster m in f.monsters)
+                        {
+                            if (MainForm.selectedMonster == m)
+                                c = Color.White;
+                            else
+                                c = Color.Red;
+                            Vector3 up = .5f * m.up;
+                            Vector3 left = .5f * Vector3.Cross(m.up, MainForm.selectedFace.normal);
+                            vList[currentVertex] = new VertexPositionColor(m.position - up - left, c);
+                            vList[currentVertex + 1] = new VertexPositionColor(m.position +up + left, c);
+                            vList[currentVertex + 2] = new VertexPositionColor(m.position -up + left, c);
+                            vList[currentVertex + 3] = new VertexPositionColor(m.position +up - left, c);
+                            vList[currentVertex + 4] = new VertexPositionColor(m.position + up, c);
+                            vList[currentVertex + 5] = new VertexPositionColor(m.position, c);
+                            currentVertex += 6;
+                        }
+                    }
+                }
+            }
+            return vList;
+        }
+
         public VertexPositionColor[] RoomTriangleList()
         {
 
@@ -444,6 +491,11 @@ namespace WinFormsGraphicsDevice
                 {
                     Vector3 templatePointer = GetIntCoordsFromMouse();
                     vList = MainForm.selectedFace.GetSelectedDoodadHighlight(pointer);
+                }
+                else if (MainForm.editMode == EditMode.Monster)
+                {
+                    Vector3 templatePointer = GetIntCoordsFromMouse();
+                    vList = MainForm.selectedFace.GetSelectedMonsterHighlight(pointer);
                 }
                 else if (MainForm.editMode == EditMode.Block)
                 {
@@ -821,6 +873,7 @@ namespace WinFormsGraphicsDevice
                                 MainForm.selectedBlock = null;
                                 MainForm.selectedEdge = null;
                                 MainForm.selectedDoodad = MainForm.selectedFace.GetHoverDoodad(pointer);
+                                MainForm.selectedMonster = null;
                                 ((MainForm)this.Parent.Parent.Parent).update_element_data();  
                                 mouseReady = false;
                             }
@@ -850,6 +903,42 @@ namespace WinFormsGraphicsDevice
                                 MainForm.editMode = EditMode.Doodad;
                                 mouseReady = false;
                             }
+                            else if (MainForm.editMode == EditMode.Monster && Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftControl))
+                            {
+                                Vector3 pointer = GetFloatCoordsFromMouse();
+                                MainForm.selectedBlock = null;
+                                MainForm.selectedEdge = null;
+                                MainForm.selectedDoodad = null;
+                                MainForm.selectedMonster = MainForm.selectedFace.GetHoverMonster(pointer);
+                                ((MainForm)this.Parent.Parent.Parent).update_element_data();
+                                mouseReady = false;
+                            }
+                            else if (MainForm.editMode == EditMode.Monster)
+                            {
+                                Vector3 pointer = GetFloatCoordsFromMouse();
+                                MainForm.selectedMonster = MainForm.selectedFace.GetHoverMonster(pointer);
+                                if (MainForm.selectedMonster == null)
+                                {
+                                    Vector3 lockPosition = new Vector3((int)pointer.X, (int)pointer.Y, (int)pointer.Z);
+                                    Vector3 up = .5f * MainForm.currentUp;
+                                    Vector3 left = .5f * Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
+                                    lockPosition += up + left;
+                                    Monster m = new Monster();
+                                    m.position = lockPosition;
+                                    m.up = MainForm.currentUp;
+                                    MainForm.selectedFace.monsters.Add(m);
+                                }
+                                else
+                                {
+                                    MainForm.editMode = EditMode.MonsterDrag;
+                                }
+                                mouseReady = false;
+                            }
+                            else if (MainForm.editMode == EditMode.MonsterDrag)
+                            {
+                                MainForm.editMode = EditMode.Monster;
+                                mouseReady = false;
+                            }
                             
                         }
                     }
@@ -877,6 +966,15 @@ namespace WinFormsGraphicsDevice
                         Vector3 left = .5f * Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
                         lockPosition += up + left;
                         MainForm.selectedDoodad.position = lockPosition;
+                    }
+                    if (MainForm.editMode == EditMode.MonsterDrag)
+                    {
+                        Vector3 pointer = GetFloatCoordsFromMouse();
+                        Vector3 lockPosition = new Vector3((int)pointer.X, (int)pointer.Y, (int)pointer.Z);
+                        Vector3 up = .5f * MainForm.currentUp;
+                        Vector3 left = .5f * Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
+                        lockPosition += up + left;
+                        MainForm.selectedMonster.position = lockPosition;
                     }
                 }
 
@@ -921,6 +1019,12 @@ namespace WinFormsGraphicsDevice
                 {
                     GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList,
                                     doodadList, 0, doodadList.Length / 2);                    
+                }
+                VertexPositionColor[] monsterList = MonsterVertexList();
+                if (monsterList.Length > 0)
+                {
+                    GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList,
+                                    monsterList, 0, monsterList.Length / 2);
                 }
 
                 if (MainForm.selectedFace != null)

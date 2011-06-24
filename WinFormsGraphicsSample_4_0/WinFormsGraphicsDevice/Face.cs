@@ -13,6 +13,7 @@ namespace WinFormsGraphicsDevice
         public Vector3 center;
         public List<Block> blocks;
         public List<Doodad> doodads;
+        public List<Monster> monsters;
         public Vector3[] vertices;
 
         public Face()
@@ -42,6 +43,7 @@ namespace WinFormsGraphicsDevice
             blocks.Add(b);
 
             doodads = new List<Doodad>();
+            monsters = new List<Monster>();
         }
 
         public Face(Vector3 normal, Vector3[] pointList)
@@ -56,6 +58,7 @@ namespace WinFormsGraphicsDevice
 
             blocks = new List<Block>();
             doodads = new List<Doodad>();
+            monsters = new List<Monster>();
         }
 
         public VertexPositionColor[] GetTemplate(Vector3 position, Vector3 templatePosition)
@@ -146,6 +149,16 @@ namespace WinFormsGraphicsDevice
             return null;
         }
 
+        public Monster GetHoverMonster(Vector3 position)
+        {
+            foreach (Monster m in monsters)
+            {
+                if ((position - m.position).Length() < .3f)
+                    return m;
+            }
+            return null;
+        }
+
         public Block GetHoverBlock(Vector3 position)
         {
             foreach (Block b in blocks)
@@ -219,6 +232,40 @@ namespace WinFormsGraphicsDevice
                     vList[9] = new VertexPositionColor(lockPosition, templateColor);
                 }
             
+            }
+
+            return vList;
+        }
+
+        public VertexPositionColor[] GetSelectedMonsterHighlight(Vector3 position)
+        {
+
+            VertexPositionColor[] vList = null;
+            Monster m = GetHoverMonster(position);
+            if (m == null)
+            {
+                Color templateColor = Color.Yellow;
+                Vector3 lockPosition = new Vector3((int)position.X, (int)position.Y, (int)position.Z);
+                Vector3 up = .5f * MainForm.currentUp;
+                Vector3 left = .5f * Vector3.Cross(MainForm.currentUp, normal);
+                lockPosition += up + left + .4f * normal;
+
+                Block testBlock = new Block();
+                testBlock.edges.Add(new Edge(lockPosition - up, lockPosition + left));
+                testBlock.edges.Add(new Edge(lockPosition + left, lockPosition + up));
+                testBlock.edges.Add(new Edge(lockPosition + up, lockPosition - left));
+                testBlock.edges.Add(new Edge(lockPosition - left, lockPosition - up));
+                if (IsBlockValid(testBlock))
+                {
+                    vList = new VertexPositionColor[6];
+                    vList[0] = new VertexPositionColor(lockPosition - up - left, templateColor);
+                    vList[1] = new VertexPositionColor(lockPosition + up + left, templateColor);
+                    vList[2] = new VertexPositionColor(lockPosition - up + left, templateColor);
+                    vList[3] = new VertexPositionColor(lockPosition + up - left, templateColor);
+                    vList[4] = new VertexPositionColor(lockPosition + up, templateColor);
+                    vList[5] = new VertexPositionColor(lockPosition, templateColor);
+                }
+
             }
 
             return vList;

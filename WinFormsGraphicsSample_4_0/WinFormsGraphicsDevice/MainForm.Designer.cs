@@ -16,17 +16,9 @@ namespace WinFormsGraphicsDevice
         LineSelect,
         BlockSelect,
         Doodad,
-        DoodadDrag
-    }
-
-    public enum EdgeType
-    {
-        Normal =0,
-        Spikes =1,
-        Ice =2,
-        ConveyorBelt =3,
-        Bounce =4,
-        Electric=5
+        DoodadDrag,
+        Monster,
+        MonsterDrag
     }
 
     partial class MainForm
@@ -36,6 +28,7 @@ namespace WinFormsGraphicsDevice
         public static Sector selectedSector = null;
         public static Room zoomRoom = null;
         public static Doodad selectedDoodad = null;
+        public static Monster selectedMonster = null;
         public static string currentFileName = null;
         public static Face selectedFace = null;
         public static Block selectedBlock = null;
@@ -131,6 +124,7 @@ namespace WinFormsGraphicsDevice
             this.modeEdgeSelect = new System.Windows.Forms.RadioButton();
             this.modeBlockSelect = new System.Windows.Forms.RadioButton();
             this.modeDoodad = new System.Windows.Forms.RadioButton();
+            this.modeMonster = new System.Windows.Forms.RadioButton();
             this.speedSlider = new System.Windows.Forms.TrackBar();
             this.elementGroup = new System.Windows.Forms.GroupBox();
             this.elementNameField = new System.Windows.Forms.TextBox();
@@ -158,7 +152,15 @@ namespace WinFormsGraphicsDevice
             this.doodadExpectedBehavior = new System.Windows.Forms.TextBox();
             this.doodadTarget = new System.Windows.Forms.TextBox();
             this.doodadTargetBehavior = new System.Windows.Forms.TextBox();
-            this.doodadTypeDropdown = new System.Windows.Forms.ComboBox();            
+            this.doodadTypeDropdown = new System.Windows.Forms.ComboBox();
+
+            this.monsterPropertiesGroup = new System.Windows.Forms.GroupBox();
+            this.monsterFixedPath = new System.Windows.Forms.CheckBox();
+            this.monsterMovementDropdown = new System.Windows.Forms.ComboBox();
+            this.monsterArmorDropdown = new System.Windows.Forms.ComboBox();
+            this.monsterWeaponDropdown = new System.Windows.Forms.ComboBox();
+            this.monsterAIDropdown = new System.Windows.Forms.ComboBox();
+            this.monsterWaypointID = new System.Windows.Forms.TextBox();
 
             this.viewControlsGroup = new System.Windows.Forms.GroupBox();
             this.WorldPreviewControl = new WinFormsGraphicsDevice.WorldPreviewControl();
@@ -194,6 +196,7 @@ namespace WinFormsGraphicsDevice
             this.splitContainer1.Panel1.Controls.Add(this.elementGroup);
             this.splitContainer1.Panel1.Controls.Add(this.edgePropertiesGroup);
             this.splitContainer1.Panel1.Controls.Add(this.doodadPropertiesGroup);
+            this.splitContainer1.Panel1.Controls.Add(this.monsterPropertiesGroup);
             this.splitContainer1.Panel1.Controls.Add(this.behaviorPropertiesGroup);
             this.splitContainer1.Panel1.Controls.Add(this.debug1);
             this.splitContainer1.Panel1.Controls.Add(this.debug2);
@@ -362,6 +365,64 @@ namespace WinFormsGraphicsDevice
             this.behaviorPropertiesGroup.Controls.Add(this.behaviorSecondaryValue);
             this.behaviorPropertiesGroup.Visible = false;
 
+            this.monsterPropertiesGroup.Location = new System.Drawing.Point(10, 580);
+            this.monsterPropertiesGroup.Size = new System.Drawing.Size(300, 300);
+            this.monsterPropertiesGroup.Visible = false;
+            this.monsterPropertiesGroup.Controls.Add(this.monsterMovementDropdown);
+            this.monsterPropertiesGroup.Controls.Add(this.monsterArmorDropdown);
+            this.monsterPropertiesGroup.Controls.Add(this.monsterWeaponDropdown);
+            this.monsterPropertiesGroup.Controls.Add(this.monsterAIDropdown);
+            this.monsterPropertiesGroup.Controls.Add(this.monsterFixedPath);
+            this.monsterPropertiesGroup.Controls.Add(this.monsterWaypointID);
+
+            this.monsterMovementDropdown.Location = new System.Drawing.Point(10, 10);
+            this.monsterMovementDropdown.Size = new System.Drawing.Size(180, 20);
+            this.monsterMovementDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 5; i++ )
+            {
+                this.monsterMovementDropdown.Items.Add((MovementType)i);
+            }
+            this.monsterMovementDropdown.SelectedIndex = 0;
+            this.monsterMovementDropdown.SelectedIndexChanged += new System.EventHandler(this.monster_change);
+
+            this.monsterArmorDropdown.Location = new System.Drawing.Point(10, 35);
+            this.monsterArmorDropdown.Size = new System.Drawing.Size(180, 20);
+            this.monsterArmorDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 4; i++)
+            {
+                this.monsterArmorDropdown.Items.Add((ArmorType)i);
+            }
+            this.monsterArmorDropdown.SelectedIndex = 0;
+            this.monsterArmorDropdown.SelectedIndexChanged += new System.EventHandler(this.monster_change);
+
+            this.monsterWeaponDropdown.Location = new System.Drawing.Point(10, 60);
+            this.monsterWeaponDropdown.Size = new System.Drawing.Size(180, 20);
+            this.monsterWeaponDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 6; i++)
+            {
+                this.monsterWeaponDropdown.Items.Add((GunType)i);
+            }
+            this.monsterWeaponDropdown.SelectedIndex = 0;
+            this.monsterWeaponDropdown.SelectedIndexChanged += new System.EventHandler(this.monster_change);
+
+            this.monsterAIDropdown.Location = new System.Drawing.Point(10, 85);
+            this.monsterAIDropdown.Size = new System.Drawing.Size(180, 20);
+            this.monsterAIDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 4; i++)
+            {
+                this.monsterAIDropdown.Items.Add((AIType)i);
+            }
+            this.monsterAIDropdown.SelectedIndex = 0;
+            this.monsterAIDropdown.SelectedIndexChanged += new System.EventHandler(this.monster_change);
+
+            this.monsterFixedPath.Location = new System.Drawing.Point(200, 95);
+            this.monsterFixedPath.Text = "Fixed Path";
+            this.monsterFixedPath.CheckedChanged += new System.EventHandler(this.monster_change);
+
+            this.monsterWaypointID.Location = new System.Drawing.Point(10, 110);
+            this.monsterWaypointID.Size = new System.Drawing.Size(180, 20);
+            this.monsterWaypointID.TextChanged += new System.EventHandler(this.monster_change);
+
             this.doodadPropertiesGroup.Location = new System.Drawing.Point(10, 580);
             this.doodadPropertiesGroup.Size = new System.Drawing.Size(300, 300);
             this.doodadPropertiesGroup.Visible = false;
@@ -374,7 +435,7 @@ namespace WinFormsGraphicsDevice
             this.doodadPropertiesGroup.Controls.Add(this.doodadTarget);
 
             this.doodadTypeDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 23; i++)
             {
                 this.doodadTypeDropdown.Items.Add((DoodadType)i);
             }
@@ -827,6 +888,7 @@ namespace WinFormsGraphicsDevice
             this.viewControlsGroup.Controls.Add(this.modeBlockSelect);
             this.viewControlsGroup.Controls.Add(this.modeEdgeSelect);
             this.viewControlsGroup.Controls.Add(this.modeDoodad);
+            this.viewControlsGroup.Controls.Add(this.modeMonster);
 
             #endregion
 
@@ -854,6 +916,9 @@ namespace WinFormsGraphicsDevice
             this.modeDoodad.Location = new System.Drawing.Point(80, 90);
             this.modeDoodad.Text = "Doodad";
             this.modeDoodad.Click += new System.EventHandler(room_mode_change);
+            this.modeMonster.Location = new System.Drawing.Point(10, 90);
+            this.modeMonster.Text = "Monster";
+            this.modeMonster.Click += new System.EventHandler(room_mode_change);
             #endregion 
 
 
@@ -921,6 +986,7 @@ namespace WinFormsGraphicsDevice
         private System.Windows.Forms.RadioButton modeBlockSelect;
         private System.Windows.Forms.RadioButton modeEdgeSelect;
         private System.Windows.Forms.RadioButton modeDoodad;
+        private System.Windows.Forms.RadioButton modeMonster;
 
         private System.Windows.Forms.GroupBox elementGroup;
         private System.Windows.Forms.TextBox elementNameField;
@@ -940,6 +1006,14 @@ namespace WinFormsGraphicsDevice
         private System.Windows.Forms.TextBox doodadTarget;
         private System.Windows.Forms.TextBox doodadExpectedBehavior;
         private System.Windows.Forms.TextBox doodadTargetBehavior;
+
+        private System.Windows.Forms.GroupBox monsterPropertiesGroup;
+        private System.Windows.Forms.ComboBox monsterMovementDropdown;
+        private System.Windows.Forms.ComboBox monsterArmorDropdown;
+        private System.Windows.Forms.ComboBox monsterWeaponDropdown;
+        private System.Windows.Forms.ComboBox monsterAIDropdown;
+        private System.Windows.Forms.CheckBox monsterFixedPath;
+        private System.Windows.Forms.TextBox monsterWaypointID;
 
         private System.Windows.Forms.GroupBox behaviorPropertiesGroup;
         private System.Windows.Forms.CheckBox behaviorToggle;

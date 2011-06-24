@@ -6,6 +6,17 @@ using Microsoft.Xna.Framework;
 
 namespace WinFormsGraphicsDevice
 {
+    public enum EdgeType
+    {
+        Normal = 0,
+        Spikes = 1,
+        Ice = 2,
+        ConveyorBelt = 3,
+        Bounce = 4,
+        Electric = 5,
+        Magnet = 6
+    }
+
     public class Edge
     {
         public int id;

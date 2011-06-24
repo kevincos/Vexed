@@ -272,14 +272,33 @@ namespace WinFormsGraphicsDevice
                     d.behaviors.Add(b);
                     this.elementBehaviorDropdown.Items.Add(b.IDString);
                     this.elementBehaviorDropdown.SelectedIndex = this.elementBehaviorDropdown.Items.Count - 1;
-
                 }
             }
         }
 
         public void update_element_data()
         {
-            if (selectedDoodad != null && MainForm.editMode == EditMode.Doodad)
+            if (selectedMonster != null && MainForm.editMode == EditMode.Monster)
+            {
+                this.elementGroup.Visible = true;
+                this.edgePropertiesGroup.Visible = false;
+                this.behaviorPropertiesGroup.Visible = false;
+                this.doodadPropertiesGroup.Visible = false;
+                this.monsterPropertiesGroup.Visible = true;
+                
+                this.elementNameField.Text = selectedMonster.name;
+                this.elementIDField.Text = selectedMonster.IDString;
+                this.elementBehaviorDropdown.Items.Clear();
+                this.behaviorNameField.Text = "";
+
+                this.monsterMovementDropdown.SelectedIndex = (int)selectedMonster.movement;
+                this.monsterArmorDropdown.SelectedIndex = (int)selectedMonster.armor;
+                this.monsterAIDropdown.SelectedIndex = (int)selectedMonster.behavior;
+                this.monsterWeaponDropdown.SelectedIndex = (int)selectedMonster.weapon;
+                this.monsterWaypointID.Text = selectedMonster.waypointId;
+                this.monsterFixedPath.Checked = selectedMonster.fixedPath;
+            }
+            else if (selectedDoodad != null && MainForm.editMode == EditMode.Doodad)
             {
                 this.elementGroup.Visible = true;
                 this.edgePropertiesGroup.Visible = false;
@@ -342,6 +361,7 @@ namespace WinFormsGraphicsDevice
                 this.elementGroup.Visible = false;
                 this.behaviorPropertiesGroup.Visible = false;
                 this.doodadPropertiesGroup.Visible = false;
+                this.monsterPropertiesGroup.Visible = false;
             }
         }
 
@@ -403,6 +423,10 @@ namespace WinFormsGraphicsDevice
             if (sender == this.modeDoodad)
             {
                 editMode = EditMode.Doodad;
+            }
+            if (sender == this.modeMonster)
+            {
+                editMode = EditMode.Monster;
             }
         }
 
@@ -478,6 +502,34 @@ namespace WinFormsGraphicsDevice
             }
         }
 
+        void monster_change(object sender, System.EventArgs e)
+        {
+            if (sender == this.monsterFixedPath)
+            {
+                selectedMonster.fixedPath = this.monsterFixedPath.Checked;
+            }
+            if (sender == this.monsterWaypointID)
+            {
+                selectedMonster.waypointId = this.monsterWaypointID.Text;
+            }
+            if (sender == this.monsterMovementDropdown)
+            {
+                selectedMonster.movement = (MovementType)this.monsterMovementDropdown.SelectedIndex;
+            }
+            if (sender == this.monsterArmorDropdown)
+            {
+                selectedMonster.armor = (ArmorType)this.monsterArmorDropdown.SelectedIndex;
+            }
+            if (sender == this.monsterAIDropdown)
+            {
+                selectedMonster.behavior = (AIType)this.monsterAIDropdown.SelectedIndex;
+            }
+            if (sender == this.monsterWeaponDropdown)
+            {
+                selectedMonster.weapon = (GunType)this.monsterWeaponDropdown.SelectedIndex;
+            }
+        }
+
         void doodad_change(object sender, System.EventArgs e)
         {
             if (sender == this.doodadFixed)
@@ -548,6 +600,12 @@ namespace WinFormsGraphicsDevice
                     Doodad d = MainForm.selectedDoodad;
                     d.name = this.elementNameField.Text;
                     this.elementIDField.Text = d.IDString;
+                }
+                if (MainForm.editMode == EditMode.Monster)
+                {
+                    Monster m = MainForm.selectedMonster;
+                    m.name = this.elementNameField.Text;
+                    this.elementIDField.Text = m.IDString;
                 }
             }
             if (sender == this.behaviorNameField)

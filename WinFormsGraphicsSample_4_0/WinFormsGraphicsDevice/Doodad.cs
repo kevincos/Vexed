@@ -8,8 +8,8 @@ namespace WinFormsGraphicsDevice
 {
     public enum DoodadType
     {
-        Checkpoint = 0,
-        Warp = 1,
+        SaveStation = 0,
+        WarpStation = 1,
         JumpStation = 2,
         SwitchStation = 3,
         UpgradeStation = 4,        
@@ -28,7 +28,9 @@ namespace WinFormsGraphicsDevice
         Button = 17,
         BridgeGate = 18,
         ItemBlock = 19,
-
+        PlayerSpawn = 20,
+        Checkpoint = 21,
+        Waypoint = 22
     }
 
     public enum AbilityType
@@ -71,6 +73,7 @@ namespace WinFormsGraphicsDevice
             id = IDControl.GetID();
             behaviors = new List<Behavior>();
             behaviors.Add(new Behavior());
+            type = DoodadType.PowerOrb;
         }
 
         public String IDString
