@@ -35,6 +35,46 @@ namespace WinFormsGraphicsDevice
             editor_clear(null, null);
         }
 
+        void editor_undo(object sender, System.EventArgs e)
+        {
+            if (undoWorld != null)
+            {
+                world = undoWorld;
+                foreach (Sector s in world.sectors)
+                {
+                    foreach (Room r in s.rooms)
+                    {
+                        foreach (Face f in r.faceList)
+                        {
+                            if (selectedFace != null && f.center == selectedFace.center && f.normal == selectedFace.normal)
+                                selectedFace = f;
+                            foreach (Monster m in f.monsters)
+                            {
+                                if (selectedMonster != null && m.id == selectedMonster.id)
+                                    selectedMonster = m;
+                            }
+                            foreach (Doodad d in f.doodads)
+                            {
+                                if (selectedDoodad != null && d.id == selectedDoodad.id)
+                                    selectedDoodad = d;
+                            }
+                            foreach (Block b in f.blocks)
+                            {
+                                if (selectedBlock != null && b.id == selectedBlock.id)
+                                    selectedBlock = b;
+                                foreach (Edge edge in b.edges)
+                                {
+                                    if (selectedEdge != null && edge.id == selectedEdge.id)
+                                        selectedEdge = edge;
+                                }
+                            }
+                        }
+                    }
+                }
+                undoWorld = null;                
+            }
+        }
+
         void editor_clear(object sender, System.EventArgs e)
         {
             currentFileName = null;
@@ -140,6 +180,16 @@ namespace WinFormsGraphicsDevice
                 {
                     Vector3 nextNormal = Vector3.Cross(MainForm.selectedFace.normal, MainForm.currentUp);
                     this.WorldPreviewControl.FindFace(nextNormal, currentUp);
+                }
+                if (sender == this.faceClockwise)
+                {
+                    MainForm.currentUp = -Vector3.Cross(MainForm.selectedFace.normal, MainForm.currentUp);
+                    this.WorldPreviewControl.FindFace(MainForm.selectedFace.normal, currentUp);
+                }
+                if (sender == this.faceCounterClockwise)
+                {
+                    MainForm.currentUp = Vector3.Cross(MainForm.selectedFace.normal, MainForm.currentUp);
+                    this.WorldPreviewControl.FindFace(MainForm.selectedFace.normal, currentUp);
                 }
             }
         }
@@ -248,7 +298,7 @@ namespace WinFormsGraphicsDevice
             }
             if (sender == this.elementBehaviorAdd)
             {
-                if (MainForm.editMode == EditMode.BlockSelect)
+                if (MainForm.editMode == EditMode.Block)
                 {
                     Block block = MainForm.selectedBlock;
                     Behavior b = new Behavior();
@@ -257,7 +307,7 @@ namespace WinFormsGraphicsDevice
                     this.elementBehaviorDropdown.SelectedIndex = this.elementBehaviorDropdown.Items.Count - 1;
 
                 }
-                if (MainForm.editMode == EditMode.LineSelect)
+                if (MainForm.editMode == EditMode.Line)
                 {
                     Edge edge = MainForm.selectedEdge;
                     Behavior b = new Behavior();
@@ -276,6 +326,106 @@ namespace WinFormsGraphicsDevice
             }
         }
 
+        void world_delete(object sender, System.EventArgs e)
+        {
+            if (sender == this.sectorDelete)
+            {
+                if (world.sectors.Count > 1)
+                {
+                    undoWorld = new World(world);
+                    Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
+                    world.sectors.Remove(s);
+                    this.sectorDropdown.Items.RemoveAt(this.sectorDropdown.SelectedIndex);
+                    this.sectorDropdown.SelectedIndex = 0;
+                }
+            }
+            if (sender == this.roomDelete)
+            {
+                Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
+                if (s.rooms.Count > 1)
+                {
+                    undoWorld = new World(world);
+                    Room r = s.FindRoomByIDString((string)this.roomDropdown.Items[this.roomDropdown.SelectedIndex]);
+                    s.rooms.Remove(r);
+                    this.roomDropdown.Items.RemoveAt(this.roomDropdown.SelectedIndex);
+                    this.roomDropdown.SelectedIndex = 0;
+                }
+            }
+            if (sender == this.elementBehaviorDelete)
+            {
+                Behavior b = null;
+                if (this.elementBehaviorDropdown.Items.Count > 1)
+                {
+                    if (editMode == EditMode.Block)
+                    {
+                        undoWorld = new World(world);
+                        b = selectedBlock.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
+                        selectedBlock.behaviors.Remove(b);
+                        this.elementBehaviorDropdown.Items.RemoveAt(this.elementBehaviorDropdown.SelectedIndex);
+                        this.elementBehaviorDropdown.SelectedIndex = 0;
+                    }
+                    if (editMode == EditMode.Line)
+                    {
+                        undoWorld = new World(world);
+                        b = selectedEdge.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
+                        selectedEdge.behaviors.Remove(b);
+                        this.elementBehaviorDropdown.Items.RemoveAt(this.elementBehaviorDropdown.SelectedIndex);
+                        this.elementBehaviorDropdown.SelectedIndex = 0;
+                    }
+                    if (editMode == EditMode.Doodad)
+                    {
+                        undoWorld = new World(world);
+                        b = selectedDoodad.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
+                        selectedDoodad.behaviors.Remove(b);
+                        this.elementBehaviorDropdown.Items.RemoveAt(this.elementBehaviorDropdown.SelectedIndex);
+                        this.elementBehaviorDropdown.SelectedIndex = 0;
+                    }
+                }
+            }
+            if (sender == this.elementDelete)
+            {
+                if (editMode == EditMode.Monster)
+                {
+                    undoWorld = new World(world);
+                    selectedFace.monsters.Remove(selectedMonster);
+                }
+                if (editMode == EditMode.Block)
+                {
+                    undoWorld = new World(world);
+                    selectedFace.blocks.Remove(selectedBlock);
+                }
+                if (editMode == EditMode.Doodad)
+                {
+                    undoWorld = new World(world);
+                    selectedFace.doodads.Remove(selectedDoodad);
+                }
+            }
+        }
+
+        public void set_mode()
+        {
+            if (editMode == EditMode.Monster)
+            {
+                this.modeMonster.Checked = true;
+            }
+            if (editMode == EditMode.Block)
+            {
+                this.modeDraw.Checked = true;
+            }
+            if (editMode == EditMode.Line)
+            {
+                this.modeLine.Checked = true;
+            }
+            if (editMode == EditMode.Doodad)
+            {
+                this.modeDoodad.Checked = true;
+            }
+            if (editMode == EditMode.Point)
+            {
+                this.modePoint.Checked = true;
+            }
+        }
+
         public void update_element_data()
         {
             if (selectedMonster != null && MainForm.editMode == EditMode.Monster)
@@ -285,6 +435,7 @@ namespace WinFormsGraphicsDevice
                 this.behaviorPropertiesGroup.Visible = false;
                 this.doodadPropertiesGroup.Visible = false;
                 this.monsterPropertiesGroup.Visible = true;
+                this.blockPropertiesGroup.Visible = false;
                 
                 this.elementNameField.Text = selectedMonster.name;
                 this.elementIDField.Text = selectedMonster.IDString;
@@ -304,6 +455,7 @@ namespace WinFormsGraphicsDevice
                 this.edgePropertiesGroup.Visible = false;
                 this.behaviorPropertiesGroup.Visible = true;
                 this.doodadPropertiesGroup.Visible = true;
+                this.blockPropertiesGroup.Visible = false;
                 this.elementNameField.Text = selectedDoodad.name;
                 this.elementIDField.Text = selectedDoodad.IDString;
                 this.elementBehaviorDropdown.Items.Clear();
@@ -322,12 +474,13 @@ namespace WinFormsGraphicsDevice
                 this.doodadExpectedBehavior.Text = selectedDoodad.expectBehavior;
                 this.doodadActivationCost.Text = selectedDoodad.activationCost.ToString();
             }
-            else if (selectedEdge != null && MainForm.editMode == EditMode.LineSelect)
+            else if (selectedEdge != null && MainForm.editMode == EditMode.Line)
             {
                 this.elementGroup.Visible = true;
                 this.edgePropertiesGroup.Visible = true;
                 this.behaviorPropertiesGroup.Visible = true;
                 this.doodadPropertiesGroup.Visible = false;
+                this.blockPropertiesGroup.Visible = false;
                 this.elementNameField.Text = selectedEdge.name;
                 this.elementIDField.Text = selectedEdge.IDString;
                 this.elementBehaviorDropdown.Items.Clear();
@@ -339,12 +492,16 @@ namespace WinFormsGraphicsDevice
                 this.elementBehaviorDropdown.SelectedIndex = 0;
                 this.behaviorNameField.Text = selectedEdge.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]).name;
             }
-            else if (selectedBlock != null && MainForm.editMode == EditMode.BlockSelect)
+            else if (selectedBlock != null && MainForm.editMode == EditMode.Block)
             {
                 this.elementGroup.Visible = true;
                 this.edgePropertiesGroup.Visible = false;
                 this.behaviorPropertiesGroup.Visible = true;
                 this.doodadPropertiesGroup.Visible = false;
+                this.blockPropertiesGroup.Visible = true;
+                this.blockColorR.Text = selectedBlock.color.R.ToString();
+                this.blockColorG.Text = selectedBlock.color.G.ToString();
+                this.blockColorB.Text = selectedBlock.color.B.ToString();
                 this.elementNameField.Text = selectedBlock.name;
                 this.elementIDField.Text = selectedBlock.IDString;
                 this.elementBehaviorDropdown.Items.Clear();
@@ -362,6 +519,7 @@ namespace WinFormsGraphicsDevice
                 this.behaviorPropertiesGroup.Visible = false;
                 this.doodadPropertiesGroup.Visible = false;
                 this.monsterPropertiesGroup.Visible = false;
+                this.blockPropertiesGroup.Visible = false;
             }
         }
 
@@ -369,11 +527,11 @@ namespace WinFormsGraphicsDevice
         {
             if (sender == elementBehaviorDropdown)
             {
-                if (editMode == EditMode.BlockSelect)
+                if (editMode == EditMode.Block)
                 {
                     update_behavior_data(MainForm.selectedBlock.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]));                    
                 }
-                if (editMode == EditMode.LineSelect)
+                if (editMode == EditMode.Line)
                 {
                     update_behavior_data(MainForm.selectedEdge.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]));
                 }
@@ -411,15 +569,7 @@ namespace WinFormsGraphicsDevice
             if (sender == this.modePoint)
             {
                 editMode = EditMode.Point;
-            }
-            if (sender == this.modeEdgeSelect)
-            {
-                editMode = EditMode.LineSelect;
-            }
-            if (sender == this.modeBlockSelect)
-            {
-                editMode = EditMode.BlockSelect;
-            }
+            }            
             if (sender == this.modeDoodad)
             {
                 editMode = EditMode.Doodad;
@@ -502,68 +652,97 @@ namespace WinFormsGraphicsDevice
             }
         }
 
+        void block_change(object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (sender == this.blockColorR)
+                {
+                    selectedBlock.color.R = System.Convert.ToByte(this.blockColorR.Text);
+                }
+                if (sender == this.blockColorG)
+                {
+                    selectedBlock.color.G = System.Convert.ToByte(this.blockColorG.Text);
+                }
+                if (sender == this.blockColorB)
+                {
+                    selectedBlock.color.B = System.Convert.ToByte(this.blockColorB.Text);
+                }
+            }
+            catch { }
+        }
+
         void monster_change(object sender, System.EventArgs e)
         {
-            if (sender == this.monsterFixedPath)
+            try
             {
-                selectedMonster.fixedPath = this.monsterFixedPath.Checked;
+
+                if (sender == this.monsterFixedPath)
+                {
+                    selectedMonster.fixedPath = this.monsterFixedPath.Checked;
+                }
+                if (sender == this.monsterWaypointID)
+                {
+                    selectedMonster.waypointId = this.monsterWaypointID.Text;
+                }
+                if (sender == this.monsterMovementDropdown)
+                {
+                    selectedMonster.movement = (MovementType)this.monsterMovementDropdown.SelectedIndex;
+                }
+                if (sender == this.monsterArmorDropdown)
+                {
+                    selectedMonster.armor = (ArmorType)this.monsterArmorDropdown.SelectedIndex;
+                }
+                if (sender == this.monsterAIDropdown)
+                {
+                    selectedMonster.behavior = (AIType)this.monsterAIDropdown.SelectedIndex;
+                }
+                if (sender == this.monsterWeaponDropdown)
+                {
+                    selectedMonster.weapon = (GunType)this.monsterWeaponDropdown.SelectedIndex;
+                }
             }
-            if (sender == this.monsterWaypointID)
-            {
-                selectedMonster.waypointId = this.monsterWaypointID.Text;
-            }
-            if (sender == this.monsterMovementDropdown)
-            {
-                selectedMonster.movement = (MovementType)this.monsterMovementDropdown.SelectedIndex;
-            }
-            if (sender == this.monsterArmorDropdown)
-            {
-                selectedMonster.armor = (ArmorType)this.monsterArmorDropdown.SelectedIndex;
-            }
-            if (sender == this.monsterAIDropdown)
-            {
-                selectedMonster.behavior = (AIType)this.monsterAIDropdown.SelectedIndex;
-            }
-            if (sender == this.monsterWeaponDropdown)
-            {
-                selectedMonster.weapon = (GunType)this.monsterWeaponDropdown.SelectedIndex;
-            }
+            catch { }
         }
 
         void doodad_change(object sender, System.EventArgs e)
         {
-            if (sender == this.doodadFixed)
+            try
             {
-                selectedDoodad.fixedPosition = this.doodadFixed.Checked;
-                if (this.doodadFixed.Checked)
-                    this.doodadFixed.Text = "Fixed";
-                else
-                    this.doodadFixed.Text = "Free";
+                if (sender == this.doodadFixed)
+                {
+                    selectedDoodad.fixedPosition = this.doodadFixed.Checked;
+                    if (this.doodadFixed.Checked)
+                        this.doodadFixed.Text = "Fixed";
+                    else
+                        this.doodadFixed.Text = "Free";
+                }
+                if (sender == this.doodadTypeDropdown)
+                {
+                    selectedDoodad.type = (DoodadType)this.doodadTypeDropdown.SelectedIndex;
+                }
+                if (sender == this.doodadAbilityDropdown)
+                {
+                    selectedDoodad.ability = (AbilityType)this.doodadAbilityDropdown.SelectedIndex;
+                }
+                if (sender == this.doodadActivationCost)
+                {
+                    selectedDoodad.activationCost = System.Convert.ToInt32(this.doodadActivationCost.Text);
+                }
+                if (sender == this.doodadExpectedBehavior)
+                {
+                    selectedDoodad.expectBehavior = this.doodadExpectedBehavior.Text;
+                }
+                if (sender == this.doodadTarget)
+                {
+                    selectedDoodad.targetObject = this.doodadTarget.Text;
+                }
+                if (sender == this.doodadTargetBehavior)
+                {
+                    selectedDoodad.targetBehavior = this.doodadTargetBehavior.Text;
+                }
             }
-            if (sender == this.doodadTypeDropdown)
-            {
-                selectedDoodad.type = (DoodadType)this.doodadTypeDropdown.SelectedIndex;
-            }
-            if (sender == this.doodadAbilityDropdown)
-            {
-                selectedDoodad.ability = (AbilityType)this.doodadAbilityDropdown.SelectedIndex;
-            }
-            if (sender == this.doodadActivationCost)
-            {
-                selectedDoodad.activationCost = System.Convert.ToInt32(this.doodadActivationCost.Text);
-            }
-            if (sender == this.doodadExpectedBehavior)
-            {
-                selectedDoodad.expectBehavior = this.doodadExpectedBehavior.Text;
-            }
-            if (sender == this.doodadTarget)
-            {
-                selectedDoodad.targetObject = this.doodadTarget.Text;
-            }
-            if (sender == this.doodadTargetBehavior)
-            {
-                selectedDoodad.targetBehavior = this.doodadTargetBehavior.Text;
-            }
+            catch { }
         }
 
         void world_rename(object sender, System.EventArgs e)
@@ -583,13 +762,13 @@ namespace WinFormsGraphicsDevice
             }
             if (sender == this.elementNameField)
             {
-                if (MainForm.editMode == EditMode.BlockSelect)
+                if (MainForm.editMode == EditMode.Block)
                 {
                     Block b = MainForm.selectedBlock;
                     b.name = this.elementNameField.Text;
                     this.elementIDField.Text = b.IDString;
                 }
-                if (MainForm.editMode == EditMode.LineSelect)
+                if (MainForm.editMode == EditMode.Line)
                 {
                     Edge edge = MainForm.selectedEdge;
                     edge.name = this.elementNameField.Text;
@@ -610,13 +789,13 @@ namespace WinFormsGraphicsDevice
             }
             if (sender == this.behaviorNameField)
             {
-                if (MainForm.editMode == EditMode.BlockSelect)
+                if (MainForm.editMode == EditMode.Block)
                 {
                     Behavior b = MainForm.selectedBlock.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
                     b.name = this.behaviorNameField.Text;
                     this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex] = b.IDString;
                 }
-                if (MainForm.editMode == EditMode.LineSelect)
+                if (MainForm.editMode == EditMode.Line)
                 {
                     Behavior b = MainForm.selectedEdge.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
                     b.name = this.behaviorNameField.Text;
@@ -683,13 +862,17 @@ namespace WinFormsGraphicsDevice
         void properties_data_change(object sender, System.EventArgs e)
         {
             Behavior b = null;
-            if (MainForm.editMode == EditMode.BlockSelect)
+            if (MainForm.editMode == EditMode.Block)
             {
                 b = MainForm.selectedBlock.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
             }
-            if (MainForm.editMode == EditMode.LineSelect)
+            if (MainForm.editMode == EditMode.Line)
             {
                 b = MainForm.selectedEdge.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
+            }
+            if (MainForm.editMode == EditMode.Doodad)
+            {
+                b = MainForm.selectedDoodad.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
             }
 
             try

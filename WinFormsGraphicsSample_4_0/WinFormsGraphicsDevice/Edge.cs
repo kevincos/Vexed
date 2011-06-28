@@ -35,6 +35,20 @@ namespace WinFormsGraphicsDevice
             behaviors = new List<Behavior>();
         }
 
+        public Edge(Edge e)
+        {
+            id = e.id;
+            name = e.name;
+            start = e.start;
+            end = e.end;
+            type = e.type;
+            behaviors = new List<Behavior>();
+            foreach (Behavior b in e.behaviors)
+            {
+                behaviors.Add(new Behavior(b));
+            }
+        }
+
         public void Init()
         {
             id = IDControl.GetID();            

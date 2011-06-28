@@ -59,6 +59,12 @@ namespace WinFormsGraphicsDevice
             futureUp = currentUp = new Vector3(0, 0, 1);
         }
 
+        public bool FaceNotBlocking(Face f)
+        {
+            return (MainForm.selectedFace == null || Vector3.Dot(MainForm.selectedFace.normal, f.center - MainForm.selectedFace.center) < 1);
+        }
+
+
         public static int TriangleCount;
         public static int LineCount;
         public static int RoomEdgeCount;
@@ -70,7 +76,13 @@ namespace WinFormsGraphicsDevice
             {
                 foreach (Room r in s.rooms)
                 {
-                    TriangleCount+=12;
+                    foreach (Face f in r.faceList)
+                    {
+                        if (FaceNotBlocking(f))
+                        {
+                            TriangleCount += 2;
+                        }
+                    }
                 }
             }
             VertexPositionColor[] vList = new VertexPositionColor[TriangleCount*3];
@@ -81,61 +93,19 @@ namespace WinFormsGraphicsDevice
                 foreach (Room r in s.rooms)
                 {
                     Color col = new Color(40, 40, 40);
-                    // Top
-                    vList[currentTriangleIndex + 0] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 1] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 2] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-
-                    vList[currentTriangleIndex + 3] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 4] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 5] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-
-                    // Bottom
-                    vList[currentTriangleIndex + 6] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 7] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 8] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-
-                    vList[currentTriangleIndex + 9] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 10] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 11] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-
-                    // Left
-                    vList[currentTriangleIndex + 12] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 13] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 14] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-
-                    vList[currentTriangleIndex + 15] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 16] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 17] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-
-                    // Right
-                    vList[currentTriangleIndex + 18] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 19] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 20] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-
-                    vList[currentTriangleIndex + 21] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 22] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 23] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-
-
-                    // Back
-                    vList[currentTriangleIndex + 24] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 25] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 26] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-
-                    vList[currentTriangleIndex + 27] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 28] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 29] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-
-                    // Front
-                    vList[currentTriangleIndex + 30] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 31] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 32] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-
-                    vList[currentTriangleIndex + 33] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 34] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), col);
-                    vList[currentTriangleIndex + 35] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), col);
-                    currentTriangleIndex += 36;
+                    foreach (Face f in r.faceList)
+                    {
+                        if (FaceNotBlocking(f))
+                        {
+                            vList[currentTriangleIndex + 0] = new VertexPositionColor(f.vertices[0], col);
+                            vList[currentTriangleIndex + 1] = new VertexPositionColor(f.vertices[1], col);
+                            vList[currentTriangleIndex + 2] = new VertexPositionColor(f.vertices[2], col);
+                            vList[currentTriangleIndex + 3] = new VertexPositionColor(f.vertices[0], col);
+                            vList[currentTriangleIndex + 4] = new VertexPositionColor(f.vertices[2], col);
+                            vList[currentTriangleIndex + 5] = new VertexPositionColor(f.vertices[3], col);
+                            currentTriangleIndex += 6;
+                        }
+                    }                    
                 }
             }
 
@@ -150,7 +120,13 @@ namespace WinFormsGraphicsDevice
             {
                 foreach (Room r in s.rooms)
                 {
-                    LineCount += 12;
+                    foreach (Face f in r.faceList)
+                    {
+                        if (FaceNotBlocking(f))
+                        {
+                            LineCount += 4;
+                        }
+                    }
                 }
             }
             VertexPositionColor[] vList = new VertexPositionColor[LineCount * 2];
@@ -162,34 +138,21 @@ namespace WinFormsGraphicsDevice
                     Color lineColor = r.color;
                     if (s== MainForm.selectedSector || r == MainForm.selectedRoom)
                         lineColor = Color.White;
-                    // Top
-                    vList[currentLineIndex + 0] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 1] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 2] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 3] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 4] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 5] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 6] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 7] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), lineColor);
-                    // Bottom
-                    vList[currentLineIndex + 8] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 9] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 10] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 11] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 12] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 13] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 14] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 15] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), lineColor);
-                    // Sides
-                    vList[currentLineIndex + 16] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 17] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 18] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 19] = new VertexPositionColor(new Vector3(r.centerX - r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 20] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ - r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 21] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY + r.sizeY / 2, r.centerZ + r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 22] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ - r.sizeZ / 2), lineColor);
-                    vList[currentLineIndex + 23] = new VertexPositionColor(new Vector3(r.centerX + r.sizeX / 2, r.centerY - r.sizeY / 2, r.centerZ + r.sizeZ / 2), lineColor);
-                    currentLineIndex += 24;
+                    foreach (Face f in r.faceList)
+                    {
+                        if (FaceNotBlocking(f))
+                        {
+                            vList[currentLineIndex + 0] = new VertexPositionColor(f.vertices[0], lineColor);
+                            vList[currentLineIndex + 1] = new VertexPositionColor(f.vertices[1], lineColor);
+                            vList[currentLineIndex + 2] = new VertexPositionColor(f.vertices[1], lineColor);
+                            vList[currentLineIndex + 3] = new VertexPositionColor(f.vertices[2], lineColor);
+                            vList[currentLineIndex + 4] = new VertexPositionColor(f.vertices[2], lineColor);
+                            vList[currentLineIndex + 5] = new VertexPositionColor(f.vertices[3], lineColor);
+                            vList[currentLineIndex + 6] = new VertexPositionColor(f.vertices[3], lineColor);
+                            vList[currentLineIndex + 7] = new VertexPositionColor(f.vertices[0], lineColor);
+                            currentLineIndex += 8;
+                        }
+                    }
                 }
             }
 
@@ -206,9 +169,12 @@ namespace WinFormsGraphicsDevice
                 {
                     foreach (Face f in r.faceList)
                     {
-                        foreach (Doodad d in f.doodads)
+                        if (FaceNotBlocking(f))
                         {
-                            doodadVertexCount += 10;
+                            foreach (Doodad d in f.doodads)
+                            {
+                                doodadVertexCount += 10;
+                            }
                         }
                     }
                 }
@@ -222,25 +188,28 @@ namespace WinFormsGraphicsDevice
                 {
                     foreach (Face f in r.faceList)
                     {
-                        foreach (Doodad d in f.doodads)
+                        if (FaceNotBlocking(f))
                         {
-                            if (MainForm.selectedDoodad == d)
-                                c = Color.White;
-                            else
-                                c = Color.Orange;
-                            Vector3 up = .5f * d.up;
-                            Vector3 left = .5f * Vector3.Cross(d.up, MainForm.selectedFace.normal);
-                            vList[currentVertex] = new VertexPositionColor(d.position - up, c);
-                            vList[currentVertex+1] = new VertexPositionColor(d.position + left, c);
-                            vList[currentVertex+2] = new VertexPositionColor(d.position + left, c);
-                            vList[currentVertex+3] = new VertexPositionColor(d.position + up, c);
-                            vList[currentVertex+4] = new VertexPositionColor(d.position + up, c);
-                            vList[currentVertex+5] = new VertexPositionColor(d.position - left, c);
-                            vList[currentVertex+6] = new VertexPositionColor(d.position - left, c);
-                            vList[currentVertex+7] = new VertexPositionColor(d.position - up, c);
-                            vList[currentVertex + 8] = new VertexPositionColor(d.position + up, c);
-                            vList[currentVertex + 9] = new VertexPositionColor(d.position, c);
-                            currentVertex += 10;
+                            foreach (Doodad d in f.doodads)
+                            {
+                                if (MainForm.selectedDoodad == d)
+                                    c = Color.White;
+                                else
+                                    c = Color.Orange;
+                                Vector3 up = .5f * d.up;
+                                Vector3 left = .5f * Vector3.Cross(d.up, MainForm.selectedFace.normal);
+                                vList[currentVertex] = new VertexPositionColor(d.position - up, c);
+                                vList[currentVertex + 1] = new VertexPositionColor(d.position + left, c);
+                                vList[currentVertex + 2] = new VertexPositionColor(d.position + left, c);
+                                vList[currentVertex + 3] = new VertexPositionColor(d.position + up, c);
+                                vList[currentVertex + 4] = new VertexPositionColor(d.position + up, c);
+                                vList[currentVertex + 5] = new VertexPositionColor(d.position - left, c);
+                                vList[currentVertex + 6] = new VertexPositionColor(d.position - left, c);
+                                vList[currentVertex + 7] = new VertexPositionColor(d.position - up, c);
+                                vList[currentVertex + 8] = new VertexPositionColor(d.position + up, c);
+                                vList[currentVertex + 9] = new VertexPositionColor(d.position, c);
+                                currentVertex += 10;
+                            }
                         }
                     }
                 }
@@ -257,9 +226,12 @@ namespace WinFormsGraphicsDevice
                 {
                     foreach (Face f in r.faceList)
                     {
-                        foreach (Monster m in f.monsters)
+                        if (FaceNotBlocking(f))
                         {
-                            monsterVertexCount += 10;
+                            foreach (Monster m in f.monsters)
+                            {
+                                monsterVertexCount += 10;
+                            }
                         }
                     }
                 }
@@ -273,21 +245,24 @@ namespace WinFormsGraphicsDevice
                 {
                     foreach (Face f in r.faceList)
                     {
-                        foreach (Monster m in f.monsters)
+                        if (FaceNotBlocking(f))
                         {
-                            if (MainForm.selectedMonster == m)
-                                c = Color.White;
-                            else
-                                c = Color.Red;
-                            Vector3 up = .5f * m.up;
-                            Vector3 left = .5f * Vector3.Cross(m.up, MainForm.selectedFace.normal);
-                            vList[currentVertex] = new VertexPositionColor(m.position - up - left, c);
-                            vList[currentVertex + 1] = new VertexPositionColor(m.position +up + left, c);
-                            vList[currentVertex + 2] = new VertexPositionColor(m.position -up + left, c);
-                            vList[currentVertex + 3] = new VertexPositionColor(m.position +up - left, c);
-                            vList[currentVertex + 4] = new VertexPositionColor(m.position + up, c);
-                            vList[currentVertex + 5] = new VertexPositionColor(m.position, c);
-                            currentVertex += 6;
+                            foreach (Monster m in f.monsters)
+                            {
+                                if (MainForm.selectedMonster == m)
+                                    c = Color.White;
+                                else
+                                    c = Color.Red;
+                                Vector3 up = .5f * m.up;
+                                Vector3 left = .5f * Vector3.Cross(m.up, MainForm.selectedFace.normal);
+                                vList[currentVertex] = new VertexPositionColor(m.position - up - left, c);
+                                vList[currentVertex + 1] = new VertexPositionColor(m.position + up + left, c);
+                                vList[currentVertex + 2] = new VertexPositionColor(m.position - up + left, c);
+                                vList[currentVertex + 3] = new VertexPositionColor(m.position + up - left, c);
+                                vList[currentVertex + 4] = new VertexPositionColor(m.position + up, c);
+                                vList[currentVertex + 5] = new VertexPositionColor(m.position, c);
+                                currentVertex += 6;
+                            }
                         }
                     }
                 }
@@ -305,15 +280,21 @@ namespace WinFormsGraphicsDevice
                 {
                     foreach (Face f in r.faceList)
                     {
-                        foreach (Block b in f.blocks)
+                        if (FaceNotBlocking(f))
                         {
-                            fillVertexCount += 6;
-                            foreach (Edge e in b.edges)
+                            if (MainForm.selectedFace == null || Vector3.Dot(MainForm.selectedFace.normal, f.center - MainForm.selectedFace.center) < 1)
                             {
-                                if (e.type == EdgeType.Spikes)
+                                foreach (Block b in f.blocks)
                                 {
-                                    int length = (int)(e.end - e.start).Length();
-                                    fillVertexCount += length*6;
+                                    fillVertexCount += 6;
+                                    foreach (Edge e in b.edges)
+                                    {
+                                        if (e.type == EdgeType.Spikes)
+                                        {
+                                            int length = (int)(e.end - e.start).Length();
+                                            fillVertexCount += length * 6;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -330,39 +311,46 @@ namespace WinFormsGraphicsDevice
                     c = r.color;
                     foreach (Face f in r.faceList)
                     {
-                        foreach (Block b in f.blocks)
+                        if (FaceNotBlocking(f))
                         {
-                            vList[currentVertex] = new VertexPositionColor(b.edges[0].start + (.05f * f.normal), c);
-                            vList[currentVertex + 1] = new VertexPositionColor(b.edges[1].start + (.05f * f.normal), c);
-                            vList[currentVertex + 2] = new VertexPositionColor(b.edges[2].start + (.05f * f.normal), c);
-                            vList[currentVertex + 3] = new VertexPositionColor(b.edges[0].start + (.05f * f.normal), c);
-                            vList[currentVertex + 4] = new VertexPositionColor(b.edges[2].start + (.05f * f.normal), c);
-                            vList[currentVertex + 5] = new VertexPositionColor(b.edges[3].start + (.05f * f.normal), c);
-                            currentVertex += 6;
-
-                            foreach (Edge e in b.edges)
+                            foreach (Block b in f.blocks)
                             {
-                                if (e.type == EdgeType.Spikes)
-                                {
-                                    Vector3 edgeDir = (e.end -e.start);
-                                    Vector3 edgeNormal = Vector3.Cross(edgeDir, f.normal);
-                                    edgeDir.Normalize();
-                                    edgeNormal.Normalize();
+                                if (b.color != Color.Black)
+                                    c = b.color;
+                                else
+                                    c = r.color;
+                                vList[currentVertex] = new VertexPositionColor(b.edges[0].start + (.05f * f.normal), c);
+                                vList[currentVertex + 1] = new VertexPositionColor(b.edges[1].start + (.05f * f.normal), c);
+                                vList[currentVertex + 2] = new VertexPositionColor(b.edges[2].start + (.05f * f.normal), c);
+                                vList[currentVertex + 3] = new VertexPositionColor(b.edges[0].start + (.05f * f.normal), c);
+                                vList[currentVertex + 4] = new VertexPositionColor(b.edges[2].start + (.05f * f.normal), c);
+                                vList[currentVertex + 5] = new VertexPositionColor(b.edges[3].start + (.05f * f.normal), c);
+                                currentVertex += 6;
 
-                                    int length = (int)(e.end - e.start).Length();
-                                    float spikeWidth = (e.end-e.start).Length()/(1f*length);
-                                    float spikeHeight = 1f;
-                                    float spikeStart = 0f;
-                                    for (int i = 0; i < length; i++)
+                                foreach (Edge e in b.edges)
+                                {
+                                    if (e.type == EdgeType.Spikes)
                                     {
-                                        vList[currentVertex] = new VertexPositionColor(e.start + +spikeStart * edgeDir, Color.Gray);
-                                        vList[currentVertex + 1] = new VertexPositionColor(e.start + +spikeStart * edgeDir + .25f * spikeWidth * edgeDir + spikeHeight * edgeNormal, Color.Gray);
-                                        vList[currentVertex + 2] = new VertexPositionColor(e.start + +spikeStart * edgeDir + .5f*spikeWidth * edgeDir, Color.Gray);
-                                        vList[currentVertex + 3] = new VertexPositionColor(e.start + +spikeStart * edgeDir + .5f*spikeWidth * edgeDir, Color.Gray);
-                                        vList[currentVertex + 4] = new VertexPositionColor(e.start + +spikeStart * edgeDir + .75f * spikeWidth * edgeDir + spikeHeight * edgeNormal, Color.Gray);
-                                        vList[currentVertex + 5] = new VertexPositionColor(e.start + +spikeStart * edgeDir + spikeWidth * edgeDir, Color.Gray);
-                                        currentVertex += 6;
-                                        spikeStart+=spikeWidth;
+                                        Vector3 edgeDir = (e.end - e.start);
+                                        Vector3 edgeNormal = Vector3.Cross(edgeDir, f.normal);
+                                        edgeDir.Normalize();
+                                        edgeNormal.Normalize();
+
+                                        int length = (int)(e.end - e.start).Length();
+                                        float spikeWidth = (e.end - e.start).Length() / (1f * length);
+                                        float spikeHeight = 1f;
+                                        float spikeStart = 0f;
+                                        for (int i = 0; i < length; i++)
+                                        {
+                                            vList[currentVertex] = new VertexPositionColor(e.start + +spikeStart * edgeDir, Color.Gray);
+                                            vList[currentVertex + 1] = new VertexPositionColor(e.start + +spikeStart * edgeDir + .25f * spikeWidth * edgeDir + spikeHeight * edgeNormal, Color.Gray);
+                                            vList[currentVertex + 2] = new VertexPositionColor(e.start + +spikeStart * edgeDir + .5f * spikeWidth * edgeDir, Color.Gray);
+                                            vList[currentVertex + 3] = new VertexPositionColor(e.start + +spikeStart * edgeDir + .5f * spikeWidth * edgeDir, Color.Gray);
+                                            vList[currentVertex + 4] = new VertexPositionColor(e.start + +spikeStart * edgeDir + .75f * spikeWidth * edgeDir + spikeHeight * edgeNormal, Color.Gray);
+                                            vList[currentVertex + 5] = new VertexPositionColor(e.start + +spikeStart * edgeDir + spikeWidth * edgeDir, Color.Gray);
+                                            currentVertex += 6;
+                                            spikeStart += spikeWidth;
+                                        }
                                     }
                                 }
                             }
@@ -383,17 +371,20 @@ namespace WinFormsGraphicsDevice
                 {
                     foreach (Face f in r.faceList)
                     {
-                        foreach (Block b in f.blocks)
+                        if (FaceNotBlocking(f))
                         {
-                            foreach (Edge e in b.edges)
+                            foreach (Block b in f.blocks)
                             {
-                                if ((MainForm.editMode == EditMode.BlockSelect && MainForm.selectedBlock == b) || (MainForm.editMode == EditMode.LineSelect && MainForm.selectedEdge == e))
+                                foreach (Edge e in b.edges)
                                 {
-                                    RoomEdgeCount += 2;
-                                }
-                                else
-                                {
-                                    RoomEdgeCount++;
+                                    if ((MainForm.editMode == EditMode.Block && MainForm.selectedBlock == b) || (MainForm.editMode == EditMode.Line && MainForm.selectedEdge == e))
+                                    {
+                                        RoomEdgeCount += 2;
+                                    }
+                                    else
+                                    {
+                                        RoomEdgeCount++;
+                                    }
                                 }
                             }
                         }
@@ -410,29 +401,32 @@ namespace WinFormsGraphicsDevice
                     c = r.color;
                     foreach (Face f in r.faceList)
                     {
-                        foreach (Block b in f.blocks)
+                        if (FaceNotBlocking(f))
                         {
-                            foreach (Edge e in b.edges)
+                            foreach (Block b in f.blocks)
                             {
-                                if ((MainForm.editMode == EditMode.BlockSelect && MainForm.selectedBlock == b) || (MainForm.editMode == EditMode.LineSelect && MainForm.selectedEdge == e))
+                                foreach (Edge e in b.edges)
                                 {
-                                    c = Color.White;
-                                    Vector3 edgeNormal = Vector3.Cross(f.normal, e.end - e.start);
-                                    edgeNormal.Normalize();
+                                    if ((MainForm.editMode == EditMode.Block && MainForm.selectedBlock == b) || (MainForm.editMode == EditMode.Line && MainForm.selectedEdge == e))
+                                    {
+                                        c = Color.White;
+                                        Vector3 edgeNormal = Vector3.Cross(f.normal, e.end - e.start);
+                                        edgeNormal.Normalize();
 
-                                    vList[currentEdge] = new VertexPositionColor(e.start +(.1f*edgeNormal) + (.1f * f.normal), c);
-                                    vList[currentEdge + 1] = new VertexPositionColor(e.end + (.1f * edgeNormal) + (.1f * f.normal), c);
-                                    vList[currentEdge + 2] = new VertexPositionColor(e.start - (.1f * edgeNormal) + (.1f * f.normal), c);
-                                    vList[currentEdge + 3] = new VertexPositionColor(e.end - (.1f * edgeNormal) + (.1f * f.normal), c);
-                                    
-                                    currentEdge += 4;
-                                }
-                                else if (MainForm.editMode == EditMode.LineSelect)
-                                {
-                                    c = r.color;
-                                    vList[currentEdge] = new VertexPositionColor(e.start + (.1f * f.normal), c);
-                                    vList[currentEdge + 1] = new VertexPositionColor(e.end + (.1f * f.normal), c);
-                                    currentEdge += 2;
+                                        vList[currentEdge] = new VertexPositionColor(e.start + (.1f * edgeNormal) + (.1f * f.normal), c);
+                                        vList[currentEdge + 1] = new VertexPositionColor(e.end + (.1f * edgeNormal) + (.1f * f.normal), c);
+                                        vList[currentEdge + 2] = new VertexPositionColor(e.start - (.1f * edgeNormal) + (.1f * f.normal), c);
+                                        vList[currentEdge + 3] = new VertexPositionColor(e.end - (.1f * edgeNormal) + (.1f * f.normal), c);
+
+                                        currentEdge += 4;
+                                    }
+                                    else if (MainForm.editMode == EditMode.Line)
+                                    {
+                                        c = r.color;
+                                        vList[currentEdge] = new VertexPositionColor(e.start + (.1f * f.normal), c);
+                                        vList[currentEdge + 1] = new VertexPositionColor(e.end + (.1f * f.normal), c);
+                                        currentEdge += 2;
+                                    }
                                 }
                             }
                         }
@@ -780,6 +774,31 @@ namespace WinFormsGraphicsDevice
                 else if (MainForm.selectedFace != null && ready == true && MainForm.cameraReady == true)
                 {                             
                     Vector3 right = Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
+                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D1))
+                    {
+                        MainForm.editMode = EditMode.Block;
+                        ((MainForm)this.Parent.Parent.Parent).set_mode();
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D2))
+                    {
+                        MainForm.editMode = EditMode.Line;
+                        ((MainForm)this.Parent.Parent.Parent).set_mode();
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D3))
+                    {
+                        MainForm.editMode = EditMode.Point;
+                        ((MainForm)this.Parent.Parent.Parent).set_mode();
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D4))
+                    {
+                        MainForm.editMode = EditMode.Doodad;
+                        ((MainForm)this.Parent.Parent.Parent).set_mode();
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D5))
+                    {
+                        MainForm.editMode = EditMode.Monster;
+                        ((MainForm)this.Parent.Parent.Parent).set_mode();
+                    }
                     if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
                     {
                         MainForm.translation += new Vector2(1, 0);
@@ -807,9 +826,16 @@ namespace WinFormsGraphicsDevice
 
                     if (Mouse.GetState().LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && MouseInEditArea())
                     {
-                        if (mouseReady == true)
+                        if (mouseReady == true && ((MainForm)this.Parent.Parent.Parent).ContainsFocus==true)
                         {
-                            if (MainForm.editMode == EditMode.Block)
+                            if (MainForm.editMode == EditMode.Block && Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftControl))
+                            {
+                                Vector3 pointer = GetFloatCoordsFromMouse();
+                                MainForm.selectedBlock = MainForm.selectedFace.GetHoverBlock(pointer);
+                                ((MainForm)this.Parent.Parent.Parent).update_element_data();                                
+                                mouseReady = false;
+                            }
+                            else if (MainForm.editMode == EditMode.Block)
                             {
                                 Vector3 pointer = GetFloatCoordsFromMouse();
                                 MainForm.selectedBlock = MainForm.selectedFace.GetHoverBlock(pointer);
@@ -824,6 +850,14 @@ namespace WinFormsGraphicsDevice
                                 MainForm.editMode = EditMode.Block;
                                 mouseReady = false;
                             }
+                            else if (MainForm.editMode == EditMode.Line && Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftControl))
+                            {
+                                Vector3 pointer = GetFloatCoordsFromMouse();
+                                MainForm.selectedBlock = MainForm.selectedFace.GetHoverBlock(pointer);
+                                MainForm.selectedEdge = MainForm.selectedFace.GetHoverEdge(pointer);
+                                ((MainForm)this.Parent.Parent.Parent).update_element_data();
+                                mouseReady = false;
+                            }
                             else if (MainForm.editMode == EditMode.Line)
                             {
                                 Vector3 pointer = GetFloatCoordsFromMouse();
@@ -831,21 +865,6 @@ namespace WinFormsGraphicsDevice
                                 MainForm.selectedEdge = MainForm.selectedFace.GetHoverEdge(pointer);
                                 if (MainForm.selectedEdge != null)
                                     MainForm.editMode = EditMode.LineDrag;
-                                mouseReady = false;
-                            }
-                            else if (MainForm.editMode == EditMode.BlockSelect)
-                            {
-                                Vector3 pointer = GetFloatCoordsFromMouse();
-                                MainForm.selectedBlock = MainForm.selectedFace.GetHoverBlock(pointer);
-                                ((MainForm)this.Parent.Parent.Parent).update_element_data();                                
-                                mouseReady = false;
-                            }
-                            else if (MainForm.editMode == EditMode.LineSelect)
-                            {
-                                Vector3 pointer = GetFloatCoordsFromMouse();
-                                MainForm.selectedBlock = MainForm.selectedFace.GetHoverBlock(pointer);
-                                MainForm.selectedEdge = MainForm.selectedFace.GetHoverEdge(pointer);
-                                ((MainForm)this.Parent.Parent.Parent).update_element_data();                                
                                 mouseReady = false;
                             }
                             else if (MainForm.editMode == EditMode.LineDrag)

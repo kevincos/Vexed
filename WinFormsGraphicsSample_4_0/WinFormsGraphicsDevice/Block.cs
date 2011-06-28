@@ -13,13 +13,32 @@ namespace WinFormsGraphicsDevice
         public List<Edge> edges;
 
         public List<Behavior> behaviors;
+        public Color color;
 
         public Block()
         {
+            color = Color.Black;
             name = "Block";
             id = 0;
             edges = new List<Edge>();
             behaviors = new List<Behavior>();
+        }
+
+        public Block(Block b)
+        {
+            id = b.id;
+            name = b.name;
+            color = b.color;
+            edges = new List<Edge>();
+            behaviors = new List<Behavior>();
+            foreach (Edge e in b.edges)
+            {
+                edges.Add(new Edge(e));
+            }
+            foreach (Behavior be in b.behaviors)
+            {
+                behaviors.Add(new Behavior(be));
+            }
         }
 
         public void Init()

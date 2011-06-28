@@ -16,6 +16,16 @@ namespace WinFormsGraphicsDevice
             sectors = new List<Sector>();
         }
 
+        public World(World w)
+        {
+            id = w.id;
+            sectors = new List<Sector>();
+            foreach (Sector s in w.sectors)
+            {
+                sectors.Add(new Sector(s));
+            }
+        }
+
         public Sector FindSectorByIDString(string idString)
         {
             foreach(Sector s in sectors)

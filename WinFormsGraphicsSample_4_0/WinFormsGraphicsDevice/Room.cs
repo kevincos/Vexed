@@ -62,6 +62,24 @@ namespace WinFormsGraphicsDevice
 
         }
 
+        public Room(Room r)
+        {
+            id = r.id;
+            name = r.name;
+            centerX = r.centerX;
+            centerY = r.centerY;
+            centerZ = r.centerZ;
+            sizeX = r.sizeX;
+            sizeY = r.sizeY;
+            sizeZ = r.sizeZ;
+            color = r.color;
+            faceList = new Face[6];
+            for (int i = 0; i < 6; i++)
+            {
+                faceList[i] = new Face(r.faceList[i]);
+            }
+        }
+
         public void Move(Vector3 delta)
         {
             centerX += (int)delta.X;

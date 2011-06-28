@@ -76,6 +76,26 @@ namespace WinFormsGraphicsDevice
             type = DoodadType.PowerOrb;
         }
 
+        public Doodad(Doodad d)
+        {
+            name = d.name;
+            id = d.id;
+            position = d.position;
+            up = d.up;
+            activationCost = d.activationCost;
+            targetBehavior = d.targetBehavior;
+            targetObject = d.targetObject;
+            expectBehavior = d.expectBehavior;
+            fixedPosition = d.fixedPosition;
+            type = d.type;
+            ability = d.ability;
+            behaviors = new List<Behavior>();
+            foreach (Behavior b in d.behaviors)
+            {
+                behaviors.Add(new Behavior(b));
+            }
+        }
+
         public String IDString
         {
             get

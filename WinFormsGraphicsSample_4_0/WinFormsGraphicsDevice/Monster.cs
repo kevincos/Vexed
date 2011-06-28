@@ -60,6 +60,20 @@ namespace WinFormsGraphicsDevice
             id = IDControl.GetID();            
         }
 
+        public Monster(Monster m)
+        {
+            name = m.name;
+            id = m.id;
+            position = m.position;
+            up = m.up;
+            fixedPath = m.fixedPath;
+            waypointId = m.waypointId;
+            movement = m.movement;
+            armor = m.armor;
+            weapon = m.weapon;
+            behavior = m.behavior;
+        }
+
         public String IDString
         {
             get

@@ -20,6 +20,33 @@ namespace WinFormsGraphicsDevice
         {
         }
 
+        public Face(Face f)
+        {
+            normal = f.normal;
+            center = f.center;
+            blocks = new List<Block>();
+            doodads = new List<Doodad>();
+            monsters = new List<Monster>();
+            vertices = new Vector3[f.vertices.Length];
+            for (int i = 0; i < f.vertices.Length; i++)
+            {
+                vertices[i] = f.vertices[i];
+            }
+            foreach (Monster m in f.monsters)
+            {
+                monsters.Add(new Monster(m));
+            }
+            foreach (Doodad d in f.doodads)
+            {
+                doodads.Add(new Doodad(d));
+            }
+            foreach (Block b in f.blocks)
+            {
+                blocks.Add(new Block(b));
+            }
+
+        }
+
         public Face(Vector3 normal, Vector3 center)
         {
             this.normal = normal;
@@ -73,6 +100,8 @@ namespace WinFormsGraphicsDevice
             Vector3 yDir = Vector3.Cross(normal, xDir);
             yDir.Normalize();
             xDir.Normalize();
+            xDir = 2f * xDir;
+            yDir = 2f * yDir;
 
             b = GetHoverBlock(position);
             if (b == null)
@@ -264,6 +293,7 @@ namespace WinFormsGraphicsDevice
                     vList[3] = new VertexPositionColor(lockPosition + up - left, templateColor);
                     vList[4] = new VertexPositionColor(lockPosition + up, templateColor);
                     vList[5] = new VertexPositionColor(lockPosition, templateColor);
+ 
                 }
 
             }
@@ -334,6 +364,8 @@ namespace WinFormsGraphicsDevice
             Vector3 yDir = Vector3.Cross(normal, xDir);
             yDir.Normalize();
             xDir.Normalize();
+            xDir = 2f * xDir;
+            yDir = 2f * yDir;
 
             b.edges.Add(new Edge(position, position + xDir));
             b.edges.Add(new Edge(position + xDir, position + xDir + yDir));

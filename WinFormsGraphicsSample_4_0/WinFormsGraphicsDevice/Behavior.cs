@@ -25,6 +25,20 @@ namespace WinFormsGraphicsDevice
             id = IDControl.GetID();
         }
 
+        public Behavior(Behavior b)
+        {
+            id = b.id;
+            name = b.name;
+            offset = b.offset;
+            duration = b.duration;
+            period = b.period;
+            destination = b.destination;
+            primaryValue = b.primaryValue;
+            secondaryValue = b.secondaryValue;
+            toggle = b.toggle;
+            nextBehavior = b.nextBehavior;
+        }
+
         public String IDString
         {
             get
