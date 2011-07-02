@@ -1,28 +1,12 @@
 using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
+using VexedLib;
 
 namespace WinFormsGraphicsDevice
 {
-    public enum EditMode
-    {
-        None,
-        Block,
-        BlockDrag,
-        Line,
-        LineDrag,
-        Point,
-        PointDrag,
-        LineSelect,
-        BlockSelect,
-        Doodad,
-        DoodadDrag,
-        Monster,
-        MonsterDrag
-    }
-
     partial class MainForm
-    {        
+    {                
         public static World world;
         public static World undoWorld;
         public static Room selectedRoom = null;

@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
+using VexedLib;
 #endregion
 
 namespace WinFormsGraphicsDevice
@@ -141,6 +142,14 @@ namespace WinFormsGraphicsDevice
             if (sender == this.sectorView)
             {
                 this.WorldPreviewControl.ViewWorld();
+                selectedBlock = null;
+                selectedFace = null;
+                selectedEdge = null;
+                this.behaviorPropertiesGroup.Visible = false;
+                this.edgePropertiesGroup.Visible = false;
+                this.blockPropertiesGroup.Visible = false;
+                this.monsterPropertiesGroup.Visible = false;
+                this.doodadPropertiesGroup.Visible = false;
                 zoomRoom = null;
             }
             else
@@ -819,27 +828,27 @@ namespace WinFormsGraphicsDevice
             {
                 if (sender == this.roomCenterX)
                 {
-                    r.centerX = System.Convert.ToInt32(this.roomCenterX.Text);
+                    r.Move(new Vector3(System.Convert.ToInt32(this.roomCenterX.Text)- r.centerX,0,0));
                 }
                 if (sender == this.roomCenterY)
                 {
-                    r.centerY = System.Convert.ToInt32(this.roomCenterY.Text);
+                    r.Move(new Vector3(0,System.Convert.ToInt32(this.roomCenterY.Text) - r.centerY, 0));                    
                 }
                 if (sender == this.roomCenterZ)
                 {
-                    r.centerZ = System.Convert.ToInt32(this.roomCenterZ.Text);
+                    r.Move(new Vector3(0,0,System.Convert.ToInt32(this.roomCenterZ.Text) - r.centerZ));                    
                 }
                 if (sender == this.roomSizeX)
                 {
-                    r.sizeX = System.Convert.ToInt32(this.roomSizeX.Text);
+                    r.Resize(new Vector3(System.Convert.ToInt32(this.roomSizeX.Text) - r.sizeX, 0, 0));                    
                 }
                 if (sender == this.roomSizeY)
                 {
-                    r.sizeY = System.Convert.ToInt32(this.roomSizeY.Text);
+                    r.Resize(new Vector3(0, System.Convert.ToInt32(this.roomSizeY.Text) - r.sizeY, 0));
                 }
                 if (sender == this.roomSizeZ)
                 {
-                    r.sizeZ = System.Convert.ToInt32(this.roomSizeZ.Text);
+                    r.Resize(new Vector3(0, 0, System.Convert.ToInt32(this.roomSizeZ.Text) - r.sizeZ));                    
                 }
                 if (sender == this.roomColorR)
                 {

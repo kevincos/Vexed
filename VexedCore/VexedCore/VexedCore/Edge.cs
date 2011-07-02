@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+
+namespace VexedCore
+{
+    public class Edge
+    {
+        public Vertex start;
+        public Vertex end;
+
+        public Edge(VexedLib.Edge xmlEdge, Vector3 normal)
+        {
+            start = new Vertex(xmlEdge.start, normal, Vector3.Zero);
+            end = new Vertex(xmlEdge.end, normal, Vector3.Zero);
+        }
+    }
+}

@@ -22,3 +22,5 @@ C:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\
 C:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\WinFormsGraphicsDevice.Properties.Resources.resources
 C:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\GenerateResource.read.1.tlog
 C:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\obj\x86\Debug\GenerateResource.write.1.tlog
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\VexedLib.dll
+E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\VexedLib.pdb

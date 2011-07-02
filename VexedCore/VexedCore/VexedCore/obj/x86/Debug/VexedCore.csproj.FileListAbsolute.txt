@@ -1,0 +1,9 @@
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\VexedCore.exe
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\VexedCore.pdb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\obj\x86\Debug\ResolveAssemblyReference.cache
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\obj\x86\Debug\VexedCore.exe
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\obj\x86\Debug\VexedCore.pdb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\VexedLib.dll
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\VexedLib.pdb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Font.xnb

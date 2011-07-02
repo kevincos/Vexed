@@ -18,6 +18,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using VexedLib;
 #endregion
 
 namespace WinFormsGraphicsDevice
@@ -197,7 +198,7 @@ namespace WinFormsGraphicsDevice
                                 else
                                     c = Color.Orange;
                                 Vector3 up = .5f * d.up;
-                                Vector3 left = .5f * Vector3.Cross(d.up, MainForm.selectedFace.normal);
+                                Vector3 left = .5f * Vector3.Cross(d.up, f.normal);
                                 vList[currentVertex] = new VertexPositionColor(d.position - up, c);
                                 vList[currentVertex + 1] = new VertexPositionColor(d.position + left, c);
                                 vList[currentVertex + 2] = new VertexPositionColor(d.position + left, c);
@@ -484,12 +485,12 @@ namespace WinFormsGraphicsDevice
                 else if (MainForm.editMode == EditMode.Doodad)
                 {
                     Vector3 templatePointer = GetIntCoordsFromMouse();
-                    vList = MainForm.selectedFace.GetSelectedDoodadHighlight(pointer);
+                    vList = MainForm.selectedFace.GetSelectedDoodadHighlight(pointer, MainForm.currentUp);
                 }
                 else if (MainForm.editMode == EditMode.Monster)
                 {
                     Vector3 templatePointer = GetIntCoordsFromMouse();
-                    vList = MainForm.selectedFace.GetSelectedMonsterHighlight(pointer);
+                    vList = MainForm.selectedFace.GetSelectedMonsterHighlight(pointer, MainForm.currentUp);
                 }
                 else if (MainForm.editMode == EditMode.Block)
                 {
@@ -774,27 +775,27 @@ namespace WinFormsGraphicsDevice
                 else if (MainForm.selectedFace != null && ready == true && MainForm.cameraReady == true)
                 {                             
                     Vector3 right = Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
-                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D1))
+                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F1))
                     {
                         MainForm.editMode = EditMode.Block;
                         ((MainForm)this.Parent.Parent.Parent).set_mode();
                     }
-                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D2))
+                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F2))
                     {
                         MainForm.editMode = EditMode.Line;
                         ((MainForm)this.Parent.Parent.Parent).set_mode();
                     }
-                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D3))
+                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F3))
                     {
                         MainForm.editMode = EditMode.Point;
                         ((MainForm)this.Parent.Parent.Parent).set_mode();
                     }
-                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D4))
+                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F4))
                     {
                         MainForm.editMode = EditMode.Doodad;
                         ((MainForm)this.Parent.Parent.Parent).set_mode();
                     }
-                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D5))
+                    if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F5))
                     {
                         MainForm.editMode = EditMode.Monster;
                         ((MainForm)this.Parent.Parent.Parent).set_mode();
@@ -967,15 +968,15 @@ namespace WinFormsGraphicsDevice
                     }
                     if (MainForm.editMode == EditMode.BlockDrag)
                     {
-                        MainForm.selectedBlock.Resize(GetIntCoordsFromMouse(), MainForm.selectedEdge, MainForm.selectedFace.normal);
+                        MainForm.selectedBlock.Resize(GetIntCoordsFromMouse(), MainForm.selectedEdge, MainForm.selectedFace.normal, MainForm.editMode);
                     }
                     if (MainForm.editMode == EditMode.LineDrag)
                     {
-                        MainForm.selectedBlock.Resize(GetIntCoordsFromMouse(), MainForm.selectedEdge, MainForm.selectedFace.normal);
+                        MainForm.selectedBlock.Resize(GetIntCoordsFromMouse(), MainForm.selectedEdge, MainForm.selectedFace.normal, MainForm.editMode);
                     }
                     if (MainForm.editMode == EditMode.PointDrag)
                     {
-                        MainForm.selectedBlock.Resize(GetIntCoordsFromMouse(), MainForm.selectedEdge, MainForm.selectedFace.normal);
+                        MainForm.selectedBlock.Resize(GetIntCoordsFromMouse(), MainForm.selectedEdge, MainForm.selectedFace.normal, MainForm.editMode);
                     }
                     if (MainForm.editMode == EditMode.DoodadDrag)
                     {
