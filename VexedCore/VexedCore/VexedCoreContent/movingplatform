@@ -819,11 +819,11 @@
                     </Behavior>
                   </behaviors>
                   <color>
-                    <R>50</R>
-                    <G>50</G>
+                    <R>255</R>
+                    <G>100</G>
                     <B>0</B>
                     <A>255</A>
-                    <PackedValue>4278202930</PackedValue>
+                    <PackedValue>4278215935</PackedValue>
                   </color>
                 </Block>
               </blocks>
@@ -846,6 +846,21 @@
                   <type>PlayerSpawn</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
+                    <Behavior>
+                      <id>33</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
                     <Behavior>
                       <id>33</id>
                       <name>Behavior</name>
@@ -4395,11 +4410,11 @@
                     </Behavior>
                   </behaviors>
                   <color>
-                    <R>0</R>
-                    <G>50</G>
-                    <B>50</B>
+                    <R>255</R>
+                    <G>255</G>
+                    <B>0</B>
                     <A>255</A>
-                    <PackedValue>4281479680</PackedValue>
+                    <PackedValue>4278255615</PackedValue>
                   </color>
                 </Block>
               </blocks>
