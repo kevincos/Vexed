@@ -20,6 +20,7 @@ namespace VexedCore
         {
             edges = new List<Edge>();
             behaviors = new List<Behavior>();
+            color = xmlBlock.color;
         }
 
         public int UpdateBehavior(GameTime gameTime)
@@ -80,5 +81,6 @@ namespace VexedCore
 
         public Behavior currentBehavior = null;        
         public int currentTime = 0;
+        public Color color;
     }
 }

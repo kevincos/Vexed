@@ -25,6 +25,7 @@ namespace VexedCore
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            
             Content.RootDirectory = "Content";
         }
 
@@ -38,14 +39,13 @@ namespace VexedCore
         {
             // TODO: Add your initialization logic here
             graphicsDevice = GraphicsDevice;
+            
+            //world = LevelLoader.Load("C:\\Users\\Kevin\\Desktop\\test\\spikeelevator");
+            //world = LevelLoader.Load("C:\\Users\\Kevin\\Desktop\\test\\spiral");
             //world = LevelLoader.Load("C:\\Users\\Kevin\\Desktop\\test\\movingplatform");
-            world = LevelLoader.Load("C:\\Users\\Kevin\\Desktop\\test\\spikeelevator");
+            world = LevelLoader.Load("C:\\Users\\Kevin\\Desktop\\test\\awesome");
+            
             Components.Add(new FrameRateCounter(this));
-            /*graphics.IsFullScreen = true;
-            graphics.PreferredBackBufferWidth = 1024;
-            graphics.PreferredBackBufferHeight = 768;
-            Window.BeginScreenDeviceChange(true);
-            Window.EndScreenDeviceChange(Window.ScreenDeviceName, 1024, 768);*/
             base.Initialize();
         }
 

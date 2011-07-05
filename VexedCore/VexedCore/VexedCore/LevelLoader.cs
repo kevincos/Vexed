@@ -4,6 +4,13 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace VexedCore
 {
@@ -26,6 +33,9 @@ namespace VexedCore
                         foreach (VexedLib.Block xmlBlock in xmlFace.blocks)
                         {
                             Block newBlock = new Block(xmlBlock);
+                            if (newBlock.color == Color.Black)
+                                newBlock.color = xmlRoom.color;
+
                             foreach (VexedLib.Edge xmlEdge in xmlBlock.edges)
                             {
                                 Edge newEdge = new Edge(xmlEdge, xmlFace.normal);

@@ -16,13 +16,15 @@ namespace VexedCore
     {
         public Vector3 position;
         public Vector3 normal;
+        public Vector3 direction;
         public Vector3 velocity;
 
-        public Vertex(Vector3 pos, Vector3 n, Vector3 vel)
+        public Vertex(Vector3 pos, Vector3 n, Vector3 vel, Vector3 dir)
         {
             position = pos;
             normal = n;
             velocity = vel;
+            direction = dir;
         }
     }
 }

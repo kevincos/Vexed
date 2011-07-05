@@ -19,8 +19,12 @@ namespace VexedCore
 
         public Edge(VexedLib.Edge xmlEdge, Vector3 normal)
         {
-            start = new Vertex(xmlEdge.start, normal, Vector3.Zero);
-            end = new Vertex(xmlEdge.end, normal, Vector3.Zero);
+            start = new Vertex(xmlEdge.start, normal, Vector3.Zero, xmlEdge.end - xmlEdge.start);
+            end = new Vertex(xmlEdge.end, normal, Vector3.Zero, xmlEdge.start - xmlEdge.end);
+            start.direction.Normalize();
+            end.direction.Normalize();
+            start.normal.Normalize();
+            end.normal.Normalize();
         }
     }
 }
