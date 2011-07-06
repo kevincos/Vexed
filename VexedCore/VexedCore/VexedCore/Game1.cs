@@ -16,11 +16,19 @@ namespace VexedCore
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        public static Room world;
+        public static List<Room> roomList;
 
         public GraphicsDeviceManager graphics;
         public static GraphicsDevice graphicsDevice;
         SpriteBatch spriteBatch;
+        public BasicEffect effect = null;
+
+        Vector3 currentTarget = Vector3.Zero;
+        Vector3 currentCamera = new Vector3(30, 30, 30);
+        Vector3 currentUp = new Vector3(0, 0, 1);
+        float currentRotate = 0;
+        float currentPitch = 0;
+
 
         public Game1()
         {
@@ -39,11 +47,13 @@ namespace VexedCore
         {
             // TODO: Add your initialization logic here
             graphicsDevice = GraphicsDevice;
+
             
-            //world = LevelLoader.Load("C:\\Users\\Kevin\\Desktop\\test\\spikeelevator");
-            //world = LevelLoader.Load("C:\\Users\\Kevin\\Desktop\\test\\spiral");
-            //world = LevelLoader.Load("C:\\Users\\Kevin\\Desktop\\test\\movingplatform");
-            world = LevelLoader.Load("C:\\Users\\Kevin\\Desktop\\test\\awesome");
+            roomList = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\spikeelevator");
+            //world = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\spiral");
+            
+            //roomList = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\movingplatform");
+            //world = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\awesome");
             
             Components.Add(new FrameRateCounter(this));
             base.Initialize();
@@ -82,7 +92,8 @@ namespace VexedCore
                 this.Exit();
 
             // TODO: Add your update logic here
-            world.Update(gameTime);
+            foreach(Room r in roomList)
+                r.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -95,9 +106,50 @@ namespace VexedCore
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            world.Draw(gameTime);
-            // TODO: Add your drawing code here            
+            Game1.graphicsDevice.Clear(Color.Black);
+            Game1.graphicsDevice.BlendState = BlendState.Opaque;
+            Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
 
+            if (effect == null)
+            {
+                effect = new BasicEffect(Game1.graphicsDevice);
+                effect.VertexColorEnabled = true;
+            }
+
+            // Set transform matrices.
+            float aspect = Game1.graphicsDevice.Viewport.AspectRatio;
+
+            //effect.World = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
+            effect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
+
+            effect.View = Matrix.CreateLookAt(currentCamera,
+                                              currentTarget,
+                                              currentUp);
+
+            effect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
+            effect.LightingEnabled = true;
+            effect.Alpha = 1f;
+            effect.SpecularPower = 0.1f;
+            effect.AmbientLightColor = new Vector3(.7f, .7f, .7f);
+            effect.DiffuseColor = new Vector3(1, 1, 1);
+            effect.SpecularColor = new Vector3(0, 1f, 1f);
+            effect.DirectionalLight0.Enabled = true;
+            effect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-5, -3, -1));
+            effect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
+            effect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
+
+
+            // Set renderstates.
+            Game1.graphicsDevice.RasterizerState = RasterizerState.CullNone;
+
+            // Draw the triangle.
+            effect.CurrentTechnique.Passes[0].Apply();
+
+            foreach (Room r in roomList)
+            {
+                r.Draw(gameTime);
+            }
+            
             base.Draw(gameTime);
         }
     }

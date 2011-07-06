@@ -16,18 +16,18 @@ namespace VexedCore
 {
     class LevelLoader
     {
-        public static Room Load(String filename)
+        public static List<Room> Load(String filename)
         {
+            List<Room> roomList = new List<Room>();
             FileStream stream = new FileStream(filename, FileMode.Open);
             XmlSerializer serializer = new XmlSerializer(typeof(VexedLib.World));
             VexedLib.World world = (VexedLib.World)serializer.Deserialize(stream);
-
-            Room testRoom = null;
+            
             foreach (VexedLib.Sector xmlSector in world.sectors)
             {
                 foreach (VexedLib.Room xmlRoom in xmlSector.rooms)
                 {
-                    testRoom = new Room(xmlRoom);
+                    Room testRoom = new Room(xmlRoom);
                     foreach (VexedLib.Face xmlFace in xmlRoom.faceList)
                     {
                         foreach (VexedLib.Block xmlBlock in xmlFace.blocks)
@@ -50,10 +50,11 @@ namespace VexedCore
                             testRoom.blocks.Add(newBlock);
                         }
                     }
+                    roomList.Add(testRoom);
                 }
             }
 
-            return testRoom;
+            return roomList;
         }
     }
 }

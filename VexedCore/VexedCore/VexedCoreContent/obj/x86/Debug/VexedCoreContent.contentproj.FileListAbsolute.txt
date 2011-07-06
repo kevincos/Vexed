@@ -1,1 +1,2 @@
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCoreContent\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCoreContent\obj\x86\Debug\ResolveAssemblyReference.cache

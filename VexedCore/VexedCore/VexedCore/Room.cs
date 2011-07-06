@@ -16,7 +16,7 @@ namespace VexedCore
     {
         public Vector3 center;
         public Vector3 size;
-        public BasicEffect effect = null;
+        
 
         public List<Block> blocks;
 
@@ -98,46 +98,42 @@ namespace VexedCore
         public VertexPositionColorNormal GenerateVertex(Vector3 position, Color color, Vector3 normal, float distanceModifier)
         {
             Vector3 modifier = Vector3.Zero;
-            if (position.X == size.X / 2)
+            Vector3 relPosition = position - center;
+            if (relPosition.X > size.X / 2 - 1)
             {
-                modifier.X += distanceModifier;
+                modifier.X += distanceModifier * (relPosition.X - size.X/2 + 1);
             }
-            if (position.X == -size.X / 2)
+            if (relPosition.X < -size.X / 2 +1)
             {
-                modifier.X -= distanceModifier;
+                modifier.X += distanceModifier * (relPosition.X + size.X / 2 - 1);
             }
-            if (position.Y == size.Y / 2)
+            if (relPosition.Y > size.Y / 2 -1)
             {
-                modifier.Y += distanceModifier;
+                modifier.Y += distanceModifier * (relPosition.Y - size.Y / 2 + 1); ;
             }
-            if (position.Y == -size.Y / 2)
+            if (relPosition.Y < -size.Y / 2 +1)
             {
-                modifier.Y -= distanceModifier;
+                modifier.Y += distanceModifier * (relPosition.Y + size.Y / 2 - 1);
             }
-            if (position.Z == size.Z / 2)
+            if (relPosition.Z > size.Z / 2 - 1)
             {
-                modifier.Z += distanceModifier;
+                modifier.Z += distanceModifier * (relPosition.Z - size.Z / 2 + 1); ;
             }
-            if (position.Z == -size.Z / 2)
+            if (relPosition.Z < -size.Z / 2 + 1)
             {
-                modifier.Z -= distanceModifier;
+                modifier.Z += distanceModifier * (relPosition.Z + size.Z / 2 - 1);
             }
             return new VertexPositionColorNormal(position + modifier, color, normal);
         }
 
         public void Draw(GameTime gameTime)
-        {
-            Vector3 currentTarget = Vector3.Zero;
-            Vector3 currentCamera = new Vector3(30, 30, 30);
-            Vector3 currentUp = new Vector3(0, 0, 1);
-            float currentRotate = 0;
-            float currentPitch = 0;
-
+        {            
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
 
 
             Color interiorColor = new Color(40, 40, 40);
-            // posX
+            
+#region innerBlock
             triangleList.Add(GenerateVertex(center + new Vector3(size.X/2, size.Y/2, size.Z/2), interiorColor, Vector3.UnitX, -.5f));
             triangleList.Add(GenerateVertex(center + new Vector3(size.X/2, -size.Y/2, size.Z/2), interiorColor, Vector3.UnitX, -.5f));
             triangleList.Add(GenerateVertex(center + new Vector3(size.X/2, size.Y/2, -size.Z/2), interiorColor, Vector3.UnitX, -.5f));
@@ -177,9 +173,9 @@ namespace VexedCore
             triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
             triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
             triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-            
-            
-            
+#endregion
+
+
             foreach (Block b in blocks)
             {
                 Color c = b.color;
@@ -277,46 +273,8 @@ namespace VexedCore
                 }
             }
 
-            if (effect == null)
-            {
-                effect = new BasicEffect(Game1.graphicsDevice);
-                effect.VertexColorEnabled = true;
-            }
             
-            Game1.graphicsDevice.Clear(Color.Black);
-            Game1.graphicsDevice.BlendState = BlendState.Opaque;
-            Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
-            //RenderTarget2D target = new RenderTarget2D(Game1.graphicsDevice, Game1.graphicsDevice.PresentationParameters.BackBufferWidth, Game1.graphicsDevice.PresentationParameters.BackBufferHeight);
-            //Game1.graphicsDevice.SetRenderTarget(target);            
-
-            // Set transform matrices.
-            float aspect = Game1.graphicsDevice.Viewport.AspectRatio;
-
-            //effect.World = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
-            effect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
-
-            effect.View = Matrix.CreateLookAt(currentCamera,
-                                              currentTarget,
-                                              currentUp);
-
-            effect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
-            effect.LightingEnabled = true;
-            effect.Alpha = 1f;
-            effect.SpecularPower = 0.1f;
-            effect.AmbientLightColor = new Vector3(.7f, .7f, .7f);
-            effect.DiffuseColor = new Vector3(1, 1, 1);
-            effect.SpecularColor = new Vector3(0, 1f, 1f);
-            effect.DirectionalLight0.Enabled = true;
-            effect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-4, -1, -1));
-            effect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
-            effect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();            
-
-
-            // Set renderstates.
-            Game1.graphicsDevice.RasterizerState = RasterizerState.CullNone;            
-
-            // Draw the triangle.
-            effect.CurrentTechnique.Passes[0].Apply();            
+            
 
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                 triangleList.ToArray(), 0, triangleList.Count / 3, VertexPositionColorNormal.VertexDeclaration);            
