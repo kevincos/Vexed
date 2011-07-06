@@ -114,6 +114,7 @@
     <Compile Include="Block.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BloomComponent.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="FrameRateCounter.cs" />

@@ -10,6 +10,33 @@
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Font.xnb</Output>
       <Time>2011-07-01T17:55:34.1430129-07:00</Time>
     </Item>
+    <Item>
+      <Source>BloomCombine.fx</Source>
+      <Name>BloomCombine</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomCombine.xnb</Output>
+      <Time>2011-07-05T17:25:10.7172229-07:00</Time>
+    </Item>
+    <Item>
+      <Source>BloomExtract.fx</Source>
+      <Name>BloomExtract</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomExtract.xnb</Output>
+      <Time>2011-07-05T17:25:10.7772264-07:00</Time>
+    </Item>
+    <Item>
+      <Source>GaussianBlur.fx</Source>
+      <Name>GaussianBlur</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\GaussianBlur.xnb</Output>
+      <Time>2011-07-05T17:25:15.0584712-07:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

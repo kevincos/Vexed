@@ -16,3 +16,6 @@ C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\obj\x86\Debug\ResolveAssembl
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\obj\x86\Debug\VexedCore.exe
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\obj\x86\Debug\VexedCore.pdb
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomCombine.xnb
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomExtract.xnb
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\GaussianBlur.xnb

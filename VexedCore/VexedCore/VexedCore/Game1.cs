@@ -20,6 +20,7 @@ namespace VexedCore
 
         public GraphicsDeviceManager graphics;
         public static GraphicsDevice graphicsDevice;
+        public static BloomComponent bloom;
         SpriteBatch spriteBatch;
         public BasicEffect effect = null;
 
@@ -33,8 +34,9 @@ namespace VexedCore
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            
+            bloom = new BloomComponent(this);
             Content.RootDirectory = "Content";
+
         }
 
         /// <summary>
@@ -49,13 +51,15 @@ namespace VexedCore
             graphicsDevice = GraphicsDevice;
 
             
-            roomList = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\spikeelevator");
-            //world = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\spiral");
+            //roomList = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\spikeelevator");
+            //roomList = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\spiral");
             
             //roomList = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\movingplatform");
-            //world = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\awesome");
+            roomList = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\awesome");
             
             Components.Add(new FrameRateCounter(this));
+            //Components.Add(bloom);
+            bloom.Settings = BloomSettings.PresetSettings[0];
             base.Initialize();
         }
 
@@ -104,6 +108,8 @@ namespace VexedCore
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            //bloom.BeginDraw();
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             Game1.graphicsDevice.Clear(Color.Black);
