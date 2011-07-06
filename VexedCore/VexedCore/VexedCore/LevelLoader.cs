@@ -19,7 +19,9 @@ namespace VexedCore
         public static List<Room> Load(String filename)
         {
             List<Room> roomList = new List<Room>();
-            FileStream stream = new FileStream(filename, FileMode.Open);
+            //FileStream stream = new FileStream(filename, FileMode.Open);
+            
+            Stream stream = TitleContainer.OpenStream(filename);
             XmlSerializer serializer = new XmlSerializer(typeof(VexedLib.World));
             VexedLib.World world = (VexedLib.World)serializer.Deserialize(stream);
             

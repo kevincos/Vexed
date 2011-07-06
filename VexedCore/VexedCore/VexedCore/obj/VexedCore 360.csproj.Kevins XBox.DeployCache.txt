@@ -1,0 +1,27 @@
+e7416b4bbd544c1bb40495ac7f0e40de
+0
+Kevins XBox
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\
+129543901540000000
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\GameThumbnail.png
+2011-07-02T00:55:34.0250061Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\VexedCore.exe
+2011-07-06T01:47:39.5282787Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\VexedLib.dll
+2011-07-06T01:41:10.5350296Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\BloomCombine.xnb
+2011-07-06T01:40:10.7376094Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\BloomExtract.xnb
+2011-07-06T01:40:10.7466099Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Font.xnb
+2011-07-06T01:40:10.5966013Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\GaussianBlur.xnb
+2011-07-06T01:40:10.7716113Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\LevelData\awesome
+2011-07-06T01:35:56.9790952Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\LevelData\movingplatform
+2011-07-06T01:35:56.9890958Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\LevelData\spikeelevator
+2011-07-06T01:35:57.0130972Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\LevelData\spiral
+2011-07-06T01:35:57.0250979Z

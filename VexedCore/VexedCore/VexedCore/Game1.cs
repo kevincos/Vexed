@@ -34,6 +34,8 @@ namespace VexedCore
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferMultiSampling = true;            
+            
             bloom = new BloomComponent(this);
             Content.RootDirectory = "Content";
 
@@ -50,12 +52,12 @@ namespace VexedCore
             // TODO: Add your initialization logic here
             graphicsDevice = GraphicsDevice;
 
+
+            roomList = LevelLoader.Load("LevelData\\spikeelevator");
+            //roomList = LevelLoader.Load("LevelData\\spiral");
             
-            //roomList = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\spikeelevator");
-            //roomList = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\spiral");
-            
-            //roomList = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\movingplatform");
-            roomList = LevelLoader.Load("C:\\git_projects\\Vexed\\VexedCore\\VexedCore\\VexedCoreContent\\awesome");
+            //roomList = LevelLoader.Load("LevelData\\movingplatform");
+            //roomList = LevelLoader.Load("LevelData\\awesome");
             
             Components.Add(new FrameRateCounter(this));
             //Components.Add(bloom);
@@ -108,13 +110,12 @@ namespace VexedCore
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            //bloom.BeginDraw();
-
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            //bloom.BeginDraw();            
+            
             Game1.graphicsDevice.Clear(Color.Black);
             Game1.graphicsDevice.BlendState = BlendState.Opaque;
             Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
+            
 
             if (effect == null)
             {

@@ -134,8 +134,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VexedCoreContent\VexedCoreContent.contentproj">
-      <Name>VexedCoreContent</Name>
+      <Name>VexedCoreContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{16B984F3-7F40-4729-9655-1B50558EEE1F}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +165,20 @@
       <ProductName>Microsoft XNA Framework Redistributable 4.0</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LevelData\awesome">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="LevelData\movingplatform">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="LevelData\spikeelevator">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="LevelData\spiral">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
