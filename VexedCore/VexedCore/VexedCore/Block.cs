@@ -16,11 +16,29 @@ namespace VexedCore
     {
         bool nextBehavior;
 
+        public Block()
+        {
+            edges = new List<Edge>();
+        }
+
         public Block(VexedLib.Block xmlBlock)
         {
             edges = new List<Edge>();
             behaviors = new List<Behavior>();
             color = xmlBlock.color;
+        }
+
+        public Block(List<Vertex> vList, Room r, Vector3 n, Vector3 u)
+        {
+            Vector3 anchor = r.center + Math.Abs(Vector3.Dot(r.size/2,n))*n;
+            edges = new List<Edge>();
+            for (int i = 0; i < 4; i++)
+            {                
+                Edge newEdge = new Edge();
+                newEdge.start = vList[i].Unfold(r, n, u);
+                newEdge.end = vList[(i+1)%4].Unfold(r, n, u);
+                edges.Add(newEdge);
+            }
         }
 
         public int UpdateBehavior(GameTime gameTime)

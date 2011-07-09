@@ -17,6 +17,12 @@ namespace VexedCore
         public Vertex start;
         public Vertex end;
 
+        public Edge()
+        {
+            start = new Vertex();
+            end = new Vertex();
+        }
+
         public Edge(VexedLib.Edge xmlEdge, Vector3 normal)
         {
             start = new Vertex(xmlEdge.start, normal, Vector3.Zero, xmlEdge.end - xmlEdge.start);

@@ -16,22 +16,41 @@ namespace VexedCore
 {
     class LevelLoader
     {
-        public static List<Room> Load(String filename)
+        public static void Load(String filename)
         {
-            List<Room> roomList = new List<Room>();
+            Game1.roomList = new List<Room>();
+            Game1.player = new Player();
+            
             //FileStream stream = new FileStream(filename, FileMode.Open);
             
             Stream stream = TitleContainer.OpenStream(filename);
             XmlSerializer serializer = new XmlSerializer(typeof(VexedLib.World));
-            VexedLib.World world = (VexedLib.World)serializer.Deserialize(stream);
-            
+
+            #region initialLoad
+            VexedLib.World world = (VexedLib.World)serializer.Deserialize(stream);            
             foreach (VexedLib.Sector xmlSector in world.sectors)
             {
                 foreach (VexedLib.Room xmlRoom in xmlSector.rooms)
                 {
-                    Room testRoom = new Room(xmlRoom);
+                    Room newRoom = new Room(xmlRoom);
                     foreach (VexedLib.Face xmlFace in xmlRoom.faceList)
                     {
+                        foreach (VexedLib.Doodad xmlDoodad in xmlFace.doodads)
+                        {
+                            if (xmlDoodad.type == VexedLib.DoodadType.PlayerSpawn)
+                            {
+                                Game1.player.center = new Vertex(xmlDoodad.position, xmlFace.normal, Vector3.Zero, xmlDoodad.up);                                
+                                Game1.player.currentRoom = newRoom;
+                            }
+                            if (xmlDoodad.type == VexedLib.DoodadType.JumpPad)
+                            {
+                                newRoom.jumpPads.Add(new JumpPad(xmlDoodad.position, xmlFace.normal));
+                            }
+                            if (xmlDoodad.type == VexedLib.DoodadType.BridgeGate)
+                            {
+                                newRoom.bridges.Add(new Bridge(xmlDoodad.position, xmlFace.normal, xmlDoodad.up, xmlDoodad.IDString, xmlDoodad.targetObject));
+                            }
+                        }
                         foreach (VexedLib.Block xmlBlock in xmlFace.blocks)
                         {
                             Block newBlock = new Block(xmlBlock);
@@ -49,14 +68,51 @@ namespace VexedCore
                                 newBlock.behaviors.Add(newBehavior);
                             }
                             newBlock.UpdateBehavior();
-                            testRoom.blocks.Add(newBlock);
+                            newRoom.blocks.Add(newBlock);
                         }
                     }
-                    roomList.Add(testRoom);
+                    Game1.roomList.Add(newRoom);
                 }
             }
+            #endregion
 
-            return roomList;
+            #region fix extra doodad data
+            foreach (Room r in Game1.roomList)
+            {
+                foreach (Bridge b in r.bridges)
+                {
+                    foreach (Room destinationRoom in Game1.roomList)
+                    {
+                        foreach (Bridge destinationBridge in destinationRoom.bridges)
+                        {
+                            if (destinationBridge.id == b.targetId)
+                            {
+                                b.targetRoom = destinationRoom;
+                                b.targetBridge = destinationBridge;
+                            }
+                        }
+                    }
+                }
+                foreach (JumpPad j in r.jumpPads)
+                {                    
+                    float baseLineValue = Vector3.Dot(j.position.position, j.position.normal);
+                    float minPosValue = 0;
+                    foreach (Room destinationRoom in Game1.roomList)
+                    {
+                        float roomSize = Math.Abs(Vector3.Dot(destinationRoom.size / 2, j.position.normal));
+                        float roomValue = Vector3.Dot(destinationRoom.center - roomSize * j.position.normal, j.position.normal);
+                        if (roomValue > baseLineValue)
+                        {
+                            if (minPosValue == 0 || roomValue < minPosValue)
+                            {
+                                minPosValue = roomValue;
+                                j.targetRoom = destinationRoom;
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
         }
     }
 }

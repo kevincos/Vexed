@@ -3,6 +3,8 @@ Content\BloomCombine.xnb
 Content\BloomExtract.xnb
 Content\GaussianBlur.xnb
 LevelData\awesome
+LevelData\debug
 LevelData\movingplatform
 LevelData\spikeelevator
 LevelData\spiral
+LevelData\spiral2

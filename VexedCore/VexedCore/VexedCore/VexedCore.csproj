@@ -119,7 +119,10 @@
     <Compile Include="Engine.cs" />
     <Compile Include="FrameRateCounter.cs" />
     <Compile Include="GraphicsUtils.cs" />
+    <Compile Include="Doodad.cs" />
     <Compile Include="LevelLoader.cs" />
+    <Compile Include="Physics.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
@@ -170,6 +173,9 @@
     <None Include="LevelData\awesome">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="LevelData\debug">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="LevelData\movingplatform">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -177,6 +183,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="LevelData\spiral">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="LevelData\spiral2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

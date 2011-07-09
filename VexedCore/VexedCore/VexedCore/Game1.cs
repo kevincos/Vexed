@@ -17,6 +17,7 @@ namespace VexedCore
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         public static List<Room> roomList;
+        public static Player player;
 
         public GraphicsDeviceManager graphics;
         public static GraphicsDevice graphicsDevice;
@@ -29,6 +30,8 @@ namespace VexedCore
         Vector3 currentUp = new Vector3(0, 0, 1);
         float currentRotate = 0;
         float currentPitch = 0;
+        public static float controlStickTrigger = .25f;
+        public static PlayerIndex activePlayer = PlayerIndex.One;
 
 
         public Game1()
@@ -53,11 +56,12 @@ namespace VexedCore
             graphicsDevice = GraphicsDevice;
 
 
-            roomList = LevelLoader.Load("LevelData\\spikeelevator");
-            //roomList = LevelLoader.Load("LevelData\\spiral");
+            LevelLoader.Load("LevelData\\spikeelevator");
+            //LevelLoader.Load("LevelData\\spiral2");
             
-            //roomList = LevelLoader.Load("LevelData\\movingplatform");
-            //roomList = LevelLoader.Load("LevelData\\awesome");
+            //LevelLoader.Load("LevelData\\movingplatform");
+            //LevelLoader.Load("LevelData\\awesome");
+            //LevelLoader.Load("LevelData\\debug");
             
             Components.Add(new FrameRateCounter(this));
             //Components.Add(bloom);
@@ -94,12 +98,21 @@ namespace VexedCore
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape) || GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape) || GamePad.GetState(activePlayer).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+
+
+
+            
+            player.Update(gameTime);
+            
 
             // TODO: Add your update logic here
             foreach(Room r in roomList)
                 r.Update(gameTime);
+
+            Physics.CollisionCheck(player.currentRoom, player, gameTime);
+            
 
             base.Update(gameTime);
         }
@@ -129,9 +142,10 @@ namespace VexedCore
             //effect.World = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
             effect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
 
-            effect.View = Matrix.CreateLookAt(currentCamera,
+            /*effect.View = Matrix.CreateLookAt(currentCamera,
                                               currentTarget,
-                                              currentUp);
+                                              currentUp);*/
+            effect.View = Matrix.CreateLookAt(player.cameraPos, player.cameraTarget, player.cameraUp);
 
             effect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
             effect.LightingEnabled = true;
@@ -156,7 +170,9 @@ namespace VexedCore
             {
                 r.Draw(gameTime);
             }
-            
+            player.Draw(gameTime);
+            //physics.DebugDraw(player.currentRoom, player.center.normal, player.center.direction);
+
             base.Draw(gameTime);
         }
     }

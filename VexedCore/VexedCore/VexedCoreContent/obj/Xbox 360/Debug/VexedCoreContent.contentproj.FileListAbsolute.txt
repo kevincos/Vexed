@@ -1,1 +1,2 @@
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCoreContent\obj\Xbox 360\Debug\ResolveAssemblyReference.cache
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCoreContent\obj\Xbox 360\Debug\ResolveAssemblyReference.cache

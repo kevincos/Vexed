@@ -186,6 +186,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>14</id>
@@ -337,6 +344,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>24</id>
@@ -488,6 +502,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>34</id>
@@ -639,6 +660,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>44</id>
@@ -790,6 +818,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>54</id>
@@ -941,6 +976,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>64</id>
@@ -1092,6 +1134,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>74</id>
@@ -1243,6 +1292,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>84</id>
@@ -1394,6 +1450,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>94</id>
@@ -1545,6 +1608,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>104</id>
@@ -1696,6 +1766,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>114</id>
@@ -1847,6 +1924,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>124</id>
@@ -1998,6 +2082,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>134</id>
@@ -2149,6 +2240,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>144</id>
@@ -2300,6 +2398,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>82</id>
@@ -2451,6 +2556,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>92</id>
@@ -2602,6 +2714,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>102</id>
@@ -2753,6 +2872,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>97</id>
@@ -2905,8 +3031,242 @@
                       <nextBehavior />
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
+                </Block>
+                <Block>
+                  <id>220</id>
+                  <name>Block</name>
+                  <edges>
+                    <Edge>
+                      <id>221</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>15</X>
+                        <Y>7</Y>
+                        <Z>0</Z>
+                      </start>
+                      <end>
+                        <X>15</X>
+                        <Y>9</Y>
+                        <Z>2</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>222</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>223</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>15</X>
+                        <Y>9</Y>
+                        <Z>2</Z>
+                      </start>
+                      <end>
+                        <X>15</X>
+                        <Y>7</Y>
+                        <Z>4</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>224</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>225</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>15</X>
+                        <Y>7</Y>
+                        <Z>4</Z>
+                      </start>
+                      <end>
+                        <X>15</X>
+                        <Y>5</Y>
+                        <Z>2</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>226</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>227</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>15</X>
+                        <Y>5</Y>
+                        <Z>2</Z>
+                      </start>
+                      <end>
+                        <X>15</X>
+                        <Y>7</Y>
+                        <Z>0</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>228</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                  </edges>
+                  <behaviors>
+                    <Behavior>
+                      <id>229</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                  </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
               </blocks>
+              <doodads>
+                <Doodad>
+                  <id>217</id>
+                  <name>Doodad</name>
+                  <position>
+                    <X>15</X>
+                    <Y>-11.5</Y>
+                    <Z>4.5</Z>
+                  </position>
+                  <up>
+                    <X>0</X>
+                    <Y>0</Y>
+                    <Z>1</Z>
+                  </up>
+                  <activationCost>0</activationCost>
+                  <fixedPosition>false</fixedPosition>
+                  <type>PlayerSpawn</type>
+                  <ability>DoubleJump</ability>
+                  <behaviors>
+                    <Behavior>
+                      <id>108</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
+                      <id>103</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
+                      <id>218</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                      <nextBehavior />
+                    </Behavior>
+                  </behaviors>
+                </Doodad>
+              </doodads>
+              <monsters />
               <vertices>
                 <Vector3>
                   <X>15</X>
@@ -2942,6 +3302,8 @@
                 <Z>0</Z>
               </center>
               <blocks />
+              <doodads />
+              <monsters />
               <vertices>
                 <Vector3>
                   <X>-15</X>
@@ -3127,6 +3489,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>112</id>
@@ -3279,6 +3648,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>122</id>
@@ -3430,6 +3806,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>117</id>
@@ -3581,6 +3964,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>127</id>
@@ -3732,6 +4122,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>137</id>
@@ -3883,6 +4280,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>147</id>
@@ -4034,6 +4438,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>157</id>
@@ -4185,6 +4596,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>167</id>
@@ -4336,6 +4754,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>323</id>
@@ -4487,6 +4912,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>333</id>
@@ -4638,6 +5070,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>343</id>
@@ -4789,8 +5228,17 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
               </blocks>
+              <doodads />
+              <monsters />
               <vertices>
                 <Vector3>
                   <X>15</X>
@@ -4825,7 +5273,679 @@
                 <Y>-15</Y>
                 <Z>0</Z>
               </center>
-              <blocks />
+              <blocks>
+                <Block>
+                  <id>226</id>
+                  <name>Block</name>
+                  <edges>
+                    <Edge>
+                      <id>227</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>-10</X>
+                        <Y>-15</Y>
+                        <Z>-1</Z>
+                      </start>
+                      <end>
+                        <X>-1</X>
+                        <Y>-15</Y>
+                        <Z>-1</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>228</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>229</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>-1</X>
+                        <Y>-15</Y>
+                        <Z>-1</Z>
+                      </start>
+                      <end>
+                        <X>-1</X>
+                        <Y>-15</Y>
+                        <Z>1</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>230</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>231</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>-1</X>
+                        <Y>-15</Y>
+                        <Z>1</Z>
+                      </start>
+                      <end>
+                        <X>-10</X>
+                        <Y>-15</Y>
+                        <Z>1</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>232</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>233</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>-10</X>
+                        <Y>-15</Y>
+                        <Z>1</Z>
+                      </start>
+                      <end>
+                        <X>-10</X>
+                        <Y>-15</Y>
+                        <Z>-1</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>234</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                  </edges>
+                  <behaviors>
+                    <Behavior>
+                      <id>235</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                  </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
+                </Block>
+                <Block>
+                  <id>236</id>
+                  <name>Block</name>
+                  <edges>
+                    <Edge>
+                      <id>237</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>1</X>
+                        <Y>-15</Y>
+                        <Z>1</Z>
+                      </start>
+                      <end>
+                        <X>6</X>
+                        <Y>-15</Y>
+                        <Z>1</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>238</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>239</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>6</X>
+                        <Y>-15</Y>
+                        <Z>1</Z>
+                      </start>
+                      <end>
+                        <X>6</X>
+                        <Y>-15</Y>
+                        <Z>3</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>240</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>241</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>6</X>
+                        <Y>-15</Y>
+                        <Z>3</Z>
+                      </start>
+                      <end>
+                        <X>1</X>
+                        <Y>-15</Y>
+                        <Z>3</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>242</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>243</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>1</X>
+                        <Y>-15</Y>
+                        <Z>3</Z>
+                      </start>
+                      <end>
+                        <X>1</X>
+                        <Y>-15</Y>
+                        <Z>1</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>244</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                  </edges>
+                  <behaviors>
+                    <Behavior>
+                      <id>245</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                  </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
+                </Block>
+                <Block>
+                  <id>246</id>
+                  <name>Block</name>
+                  <edges>
+                    <Edge>
+                      <id>247</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>-3</X>
+                        <Y>-15</Y>
+                        <Z>-3</Z>
+                      </start>
+                      <end>
+                        <X>6</X>
+                        <Y>-15</Y>
+                        <Z>-3</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>248</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>249</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>6</X>
+                        <Y>-15</Y>
+                        <Z>-3</Z>
+                      </start>
+                      <end>
+                        <X>6</X>
+                        <Y>-15</Y>
+                        <Z>-1</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>250</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>251</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>6</X>
+                        <Y>-15</Y>
+                        <Z>-1</Z>
+                      </start>
+                      <end>
+                        <X>-3</X>
+                        <Y>-15</Y>
+                        <Z>-1</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>252</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>253</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>-3</X>
+                        <Y>-15</Y>
+                        <Z>-1</Z>
+                      </start>
+                      <end>
+                        <X>-3</X>
+                        <Y>-15</Y>
+                        <Z>-3</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>254</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                  </edges>
+                  <behaviors>
+                    <Behavior>
+                      <id>255</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                  </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
+                </Block>
+                <Block>
+                  <id>258</id>
+                  <name>Block</name>
+                  <edges>
+                    <Edge>
+                      <id>259</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>11</X>
+                        <Y>-15</Y>
+                        <Z>-6</Z>
+                      </start>
+                      <end>
+                        <X>13</X>
+                        <Y>-15</Y>
+                        <Z>-3</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>260</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>261</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>13</X>
+                        <Y>-15</Y>
+                        <Z>-3</Z>
+                      </start>
+                      <end>
+                        <X>11</X>
+                        <Y>-15</Y>
+                        <Z>0</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>262</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>263</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>11</X>
+                        <Y>-15</Y>
+                        <Z>0</Z>
+                      </start>
+                      <end>
+                        <X>9</X>
+                        <Y>-15</Y>
+                        <Z>-3</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>264</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>265</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>9</X>
+                        <Y>-15</Y>
+                        <Z>-3</Z>
+                      </start>
+                      <end>
+                        <X>11</X>
+                        <Y>-15</Y>
+                        <Z>-6</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>266</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                  </edges>
+                  <behaviors>
+                    <Behavior>
+                      <id>267</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                  </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
+                </Block>
+              </blocks>
+              <doodads>
+                <Doodad>
+                  <id>256</id>
+                  <name>Doodad</name>
+                  <position>
+                    <X>1.5</X>
+                    <Y>-15</Y>
+                    <Z>-0.5</Z>
+                  </position>
+                  <up>
+                    <X>0</X>
+                    <Y>0</Y>
+                    <Z>1</Z>
+                  </up>
+                  <activationCost>0</activationCost>
+                  <fixedPosition>false</fixedPosition>
+                  <type>PlayerSpawn</type>
+                  <ability>DoubleJump</ability>
+                  <behaviors>
+                    <Behavior>
+                      <id>257</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                      <nextBehavior />
+                    </Behavior>
+                  </behaviors>
+                </Doodad>
+              </doodads>
+              <monsters />
               <vertices>
                 <Vector3>
                   <X>15</X>
@@ -5011,6 +6131,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>172</id>
@@ -5162,6 +6289,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>182</id>
@@ -5313,6 +6447,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>192</id>
@@ -5464,6 +6605,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>202</id>
@@ -5615,6 +6763,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>212</id>
@@ -5766,6 +6921,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>222</id>
@@ -5917,6 +7079,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>197</id>
@@ -6068,6 +7237,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>207</id>
@@ -6219,6 +7395,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>217</id>
@@ -6370,6 +7553,13 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
                 <Block>
                   <id>227</id>
@@ -6521,8 +7711,17 @@
                       <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
                 </Block>
               </blocks>
+              <doodads />
+              <monsters />
               <vertices>
                 <Vector3>
                   <X>15</X>
@@ -6558,6 +7757,8 @@
                 <Z>-10</Z>
               </center>
               <blocks />
+              <doodads />
+              <monsters />
               <vertices>
                 <Vector3>
                   <X>15</X>

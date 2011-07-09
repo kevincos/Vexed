@@ -1684,7 +1684,59 @@
                   </color>
                 </Block>
               </blocks>
-              <doodads />
+              <doodads>
+                <Doodad>
+                  <id>151</id>
+                  <name>Doodad</name>
+                  <position>
+                    <X>10</X>
+                    <Y>-19.5</Y>
+                    <Z>-4.5</Z>
+                  </position>
+                  <up>
+                    <X>0</X>
+                    <Y>0</Y>
+                    <Z>1</Z>
+                  </up>
+                  <activationCost>0</activationCost>
+                  <fixedPosition>false</fixedPosition>
+                  <type>PlayerSpawn</type>
+                  <ability>DoubleJump</ability>
+                  <behaviors>
+                    <Behavior>
+                      <id>62</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
+                      <id>152</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                      <nextBehavior />
+                    </Behavior>
+                  </behaviors>
+                </Doodad>
+              </doodads>
               <monsters />
               <vertices>
                 <Vector3>
@@ -3740,12 +3792,12 @@
                       <name>Edge</name>
                       <start>
                         <X>-2</X>
-                        <Y>-55</Y>
+                        <Y>-54</Y>
                         <Z>10</Z>
                       </start>
                       <end>
                         <X>3</X>
-                        <Y>-55</Y>
+                        <Y>-54</Y>
                         <Z>10</Z>
                       </end>
                       <type>Normal</type>
@@ -3772,12 +3824,12 @@
                       <name>Edge</name>
                       <start>
                         <X>3</X>
-                        <Y>-55</Y>
+                        <Y>-54</Y>
                         <Z>10</Z>
                       </start>
                       <end>
                         <X>-2</X>
-                        <Y>-46</Y>
+                        <Y>-45</Y>
                         <Z>10</Z>
                       </end>
                       <type>Normal</type>
@@ -3804,12 +3856,12 @@
                       <name>Edge</name>
                       <start>
                         <X>-2</X>
-                        <Y>-46</Y>
+                        <Y>-45</Y>
                         <Z>10</Z>
                       </start>
                       <end>
                         <X>-2</X>
-                        <Y>-46</Y>
+                        <Y>-45</Y>
                         <Z>10</Z>
                       </end>
                       <type>Normal</type>
@@ -3836,12 +3888,12 @@
                       <name>Edge</name>
                       <start>
                         <X>-2</X>
-                        <Y>-46</Y>
+                        <Y>-45</Y>
                         <Z>10</Z>
                       </start>
                       <end>
                         <X>-2</X>
-                        <Y>-55</Y>
+                        <Y>-54</Y>
                         <Z>10</Z>
                       </end>
                       <type>Normal</type>
