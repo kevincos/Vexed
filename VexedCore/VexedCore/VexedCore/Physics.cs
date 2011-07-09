@@ -125,7 +125,34 @@ namespace VexedCore
                     Vector3 projectionNormal = -Vector3.Cross(p.center.normal, blockVertexList[(i+1)%blockVertexList.Count()] - blockVertexList[i]);
                     projectionNormal.Normalize();
                     float separatorValue = Vector3.Dot(projectionNormal, blockVertexList[i]);
+
                     
+                    // Iterate over player points
+                    float maxPointDistance = 0;
+                    for(int j =0 ;j < playerVertexList.Count(); j++)
+                    {
+                        float pointValue = Vector3.Dot(projectionNormal, playerVertexList[j]);
+                        float delta = separatorValue - pointValue;
+                        if (j == 0 || delta > maxPointDistance)
+                            maxPointDistance = delta;                        
+                    }
+                    if (maxPointDistance > 0)
+                    {
+                        if (minProjectionNormal == Vector3.Zero || (minProjectionNormal != Vector3.Zero && maxPointDistance < minProjectionValue))
+                        {
+                            minProjectionNormal = projectionNormal;
+                            minProjectionValue = maxPointDistance;
+                        }
+                    }
+                    else
+                    {
+                        minProjectionNormal = Vector3.Zero;
+                        minProjectionValue = 0;
+                        collision_free = true;
+                        break;
+                    }
+
+                    /*
                     // Iterate over player points
                     bool possible_collision = false;
                     for(int j =0 ;j < playerVertexList.Count(); j++)
@@ -149,7 +176,7 @@ namespace VexedCore
                         minProjectionValue = 0;
                         collision_free = true;
                         break;
-                    }
+                    }*/
                 }
                                
 

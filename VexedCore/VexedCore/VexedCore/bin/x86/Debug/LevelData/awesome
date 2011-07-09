@@ -3233,6 +3233,21 @@
                       <toggle>false</toggle>
                     </Behavior>
                     <Behavior>
+                      <id>108</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
                       <id>103</id>
                       <name>Behavior</name>
                       <offset>0</offset>
@@ -5907,44 +5922,7 @@
                   </color>
                 </Block>
               </blocks>
-              <doodads>
-                <Doodad>
-                  <id>256</id>
-                  <name>Doodad</name>
-                  <position>
-                    <X>1.5</X>
-                    <Y>-15</Y>
-                    <Z>-0.5</Z>
-                  </position>
-                  <up>
-                    <X>0</X>
-                    <Y>0</Y>
-                    <Z>1</Z>
-                  </up>
-                  <activationCost>0</activationCost>
-                  <fixedPosition>false</fixedPosition>
-                  <type>PlayerSpawn</type>
-                  <ability>DoubleJump</ability>
-                  <behaviors>
-                    <Behavior>
-                      <id>257</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                      <nextBehavior />
-                    </Behavior>
-                  </behaviors>
-                </Doodad>
-              </doodads>
+              <doodads />
               <monsters />
               <vertices>
                 <Vector3>

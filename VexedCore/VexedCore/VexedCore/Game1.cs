@@ -60,7 +60,7 @@ namespace VexedCore
             //LevelLoader.Load("LevelData\\spiral2");
             
             //LevelLoader.Load("LevelData\\movingplatform");
-            //LevelLoader.Load("LevelData\\awesome");
+            LevelLoader.Load("LevelData\\awesome");
             //LevelLoader.Load("LevelData\\debug");
             
             Components.Add(new FrameRateCounter(this));
