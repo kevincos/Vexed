@@ -32,4 +32,28 @@ namespace VexedCore
             Normal = n;            
         }
     }
+
+    public struct VertexPositionColorNormalTexture
+    {
+        public Vector3 Position;
+        public Color Color;
+        public Vector3 Normal;
+        public Vector2 TextureCoordinates;
+
+        public readonly static VertexDeclaration VertexDeclaration = new VertexDeclaration
+        (
+            new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
+            new VertexElement(sizeof(float) * 3, VertexElementFormat.Color, VertexElementUsage.Color, 0),
+            new VertexElement(sizeof(float) * 3 + 4, VertexElementFormat.Vector3, VertexElementUsage.Normal, 0),
+            new VertexElement(sizeof(float) * 6 + 4, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0)
+        );
+
+        public VertexPositionColorNormalTexture(Vector3 p, Color c, Vector3 n, Vector2 t)
+        {
+            Color = c;
+            Position = p;
+            Normal = n;
+            TextureCoordinates = t;
+        }
+    }
 }

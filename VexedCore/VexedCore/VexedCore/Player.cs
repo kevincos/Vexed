@@ -30,9 +30,48 @@ namespace VexedCore
         public Vector3 jumpCameraSource;
         public Vector3 jumpPosition;
         public Vector3 jumpNormal;
+        public Vector3 platformVelocity;
         public Room jumpRoom;
         public int jumpMaxTime = 1000;
         public int jumpTime = 0;
+        public bool leftWall = false;
+        public bool rightWall = false;
+
+        public static Texture2D characterTexture;
+        
+        public float walkSpeed = .001f;
+        public float airSpeed = .0005f;
+        public float jumpSpeed = .026f;
+        public float wallJumpSpeed = .01f;
+        public float maxHorizSpeed = .01f;
+        public float maxVertSpeed = .025f;
+        public float gravityAcceleration = .001f;
+        private bool _grounded = false;
+        public int groundTolerance = 100;
+        public int groundCounter = 0;
+
+        public bool grounded
+        {
+            get
+            {
+                return _grounded;
+            }
+            set
+            {
+                _grounded = value;
+                if(_grounded == true)
+                    groundCounter = 0;
+            }
+        }
+
+        public bool walking
+        {
+            get
+            {
+                Vector2 stick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Left;
+                return (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Right) || stick.X != 0) && grounded == true;
+            }
+        }
 
         public Vector3 cameraPos
         {
@@ -80,41 +119,100 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
-            
-
+            groundCounter += gameTime.ElapsedGameTime.Milliseconds;
+            if (groundCounter > groundTolerance)
+            {
+                groundCounter = groundTolerance;
+                grounded = false;
+            }
             Vector2 stick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Left;
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             
             if (state == State.Normal)
             {
                 #region normal update
+                float upMagnitude = 0;
+                float rightMagnitude = 0;
+                    
                 center.Update(currentRoom, gameTime.ElapsedGameTime.Milliseconds);
                 jumpRecovery -= gameTime.ElapsedGameTime.Milliseconds;
                 if (jumpRecovery < 0) jumpRecovery = 0;
                 Vector3 up = center.direction;
                 Vector3 right = Vector3.Cross(up, center.normal);
-            
-                if (Keyboard.GetState().IsKeyDown(Keys.Left) || stick.X < -Game1.controlStickTrigger)
+
+                if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
-                    center.velocity -= .001f * right;
+                    if (grounded == true)
+                        center.velocity -= walkSpeed * right;
+                    else
+                        center.velocity -= airSpeed * right;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Right) || stick.X > Game1.controlStickTrigger)
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
-                    center.velocity += .001f * right;
+                    if (grounded == true)
+                        center.velocity += walkSpeed * right;                    
+                    else
+                        center.velocity += airSpeed * right;
+                }
+                if (Math.Abs(stick.X) > 0)
+                {
+                    if (grounded == true)
+                        center.velocity += walkSpeed * stick.X * right;
+                    else
+                        center.velocity += airSpeed * stick.X * right;
                 }
                 if ((gamePadState.IsButtonDown(Buttons.A) || Keyboard.GetState().IsKeyDown(Keys.Space)) && jumpRecovery == 0)
                 {
-                    center.velocity += .01f * up;
-                    jumpRecovery = 500;
+                    upMagnitude = Vector3.Dot(up, center.velocity);
+                    rightMagnitude = Vector3.Dot(right, center.velocity);
+                        
+                    if (grounded)
+                    {
+                        if (upMagnitude < jumpSpeed)
+                        {
+                            center.velocity += (jumpSpeed - upMagnitude) * up;
+                            jumpRecovery = 500;
+                        }
+                    }
+                    else if (leftWall)
+                    {
+                        if (upMagnitude < jumpSpeed)
+                            center.velocity += (jumpSpeed - upMagnitude) * up;                                                    
+                        if(rightMagnitude < wallJumpSpeed)
+                            center.velocity += (wallJumpSpeed - rightMagnitude) * right;
+                        jumpRecovery = 500;
+                        
+                    }
+                    else if (rightWall)
+                    {
+                        if (upMagnitude < jumpSpeed)
+                            center.velocity += (jumpSpeed - upMagnitude) * up;
+                        if (rightMagnitude > -wallJumpSpeed)
+                            center.velocity -= (wallJumpSpeed + rightMagnitude) * right;                         
+                        jumpRecovery = 500;
+                    }
                 }
+                
+                center.velocity -= gravityAcceleration * up;
 
-                center.velocity += .001f * stick.X * right;
-                center.velocity -= .0002f * up;
-
-                if (center.velocity.Length() > .02f)
+                upMagnitude = Vector3.Dot(up, center.velocity);
+                rightMagnitude = Vector3.Dot(right, center.velocity - platformVelocity);
+                    
+                if (upMagnitude > maxVertSpeed)
                 {
-                    center.velocity.Normalize();
-                    center.velocity = center.velocity * .02f;
+                    center.velocity -= (upMagnitude - maxVertSpeed) * up;
+                }
+                if (upMagnitude < -maxVertSpeed)
+                {
+                    center.velocity -= (maxVertSpeed + upMagnitude) * up;
+                }
+                if (rightMagnitude > maxHorizSpeed)
+                {
+                    center.velocity -= (rightMagnitude - maxHorizSpeed) * right;
+                }
+                if (rightMagnitude < -maxHorizSpeed)
+                {
+                    center.velocity -= (maxHorizSpeed + rightMagnitude) * right;
                 }
 
                 if (gamePadState.IsButtonDown(Buttons.X) || Keyboard.GetState().IsKeyDown(Keys.LeftShift))
@@ -173,9 +271,10 @@ namespace VexedCore
             }
         }
 
-        public void Draw(GameTime gameTime)
+        public void DrawTexture(GameTime gameTime)
         {
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
+            List<VertexPositionColorNormalTexture> textureTriangleList = new List<VertexPositionColorNormalTexture>();
             List<Vertex> rectVertexList = new List<Vertex>();
             Vector3 up = center.direction;
             Vector3 right = Vector3.Cross(up, center.normal);            
@@ -188,8 +287,50 @@ namespace VexedCore
                 v.Update(currentRoom, 1);
             }
 
-            currentRoom.AddBlockToTriangleList(rectVertexList, Color.White, .2f, triangleList);
+            currentRoom.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList);
 
+
+            VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
+            if (state == State.Jump || state == State.BridgeJump)
+            {
+                for (int i = 0; i < textureTriangleList.Count(); i++)
+                {
+                    triangleArray[i].Position += jumpPosition - center.position;
+                }
+            }
+
+            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration); 
+            
+        }        
+
+        public void Draw(GameTime gameTime)
+        {
+            List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
+            List<VertexPositionColorNormalTexture> textureTriangleList = new List<VertexPositionColorNormalTexture>();
+            List<Vertex> rectVertexList = new List<Vertex>();
+            Vector3 up = center.direction;
+            Vector3 right = Vector3.Cross(up, center.normal);            
+            rectVertexList.Add(new Vertex(center.position, center.normal, +.5f * up + .5f * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, +.5f * up - .5f * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, -.5f * up - .5f * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, -.5f * up + .5f * right, center.direction));
+            foreach (Vertex v in rectVertexList)
+            {
+                v.Update(currentRoom, 1);
+            }
+
+
+            if(grounded == true)
+                currentRoom.AddBlockToTriangleList(rectVertexList, Color.White, .2f, triangleList);
+            else if (leftWall == true)
+                currentRoom.AddBlockToTriangleList(rectVertexList, Color.Blue, .2f, triangleList);
+            else if (rightWall == true)
+                currentRoom.AddBlockToTriangleList(rectVertexList, Color.Green, .2f, triangleList);
+            else
+                currentRoom.AddBlockToTriangleList(rectVertexList, Color.Brown, .2f, triangleList);
+
+            
             VertexPositionColorNormal[] triangleArray = triangleList.ToArray();
             if (state == State.Jump || state == State.BridgeJump)
             {
@@ -200,7 +341,7 @@ namespace VexedCore
             }
 
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                triangleArray, 0, triangleList.Count / 3, VertexPositionColorNormal.VertexDeclaration);     
+                triangleArray, 0, triangleList.Count / 3, VertexPositionColorNormal.VertexDeclaration);
             
         }
 

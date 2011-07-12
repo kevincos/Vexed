@@ -2,3 +2,4 @@ Content\Font.xnb
 Content\BloomCombine.xnb
 Content\BloomExtract.xnb
 Content\GaussianBlur.xnb
+Content\character.xnb

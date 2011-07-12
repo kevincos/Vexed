@@ -32,3 +32,4 @@ E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomE
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\GaussianBlur.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\LevelData\spiral2
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\LevelData\debug
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\character.xnb

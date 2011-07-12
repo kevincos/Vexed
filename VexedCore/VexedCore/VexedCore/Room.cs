@@ -103,6 +103,71 @@ namespace VexedCore
             return new VertexPositionColorNormal(RaisedPosition(position, distanceModifier, 1f), color, normal);
         }
 
+        public VertexPositionColorNormalTexture GenerateTexturedVertex(Vector3 position, Vector2 texCoord, Vector3 normal, float distanceModifier)
+        {
+            return new VertexPositionColorNormalTexture(RaisedPosition(position, distanceModifier, 1f), Color.White, normal, texCoord);
+        }
+
+        public void AddSpikesToTriangleList(Edge e, float depth, List<VertexPositionColorNormal> triangeList)
+        {
+            Vector3 edgeDir = e.end.position - e.start.position;
+            int numSpikes = 2*(int)edgeDir.Length();
+            float spikeHeight = .75f;
+            float spikeWidth = edgeDir.Length() / numSpikes;
+            Vector3 edgeNormal = Vector3.Cross(e.end.position -e.start.position, e.start.normal);
+            edgeNormal.Normalize();
+            edgeDir.Normalize();
+            Color spikeColor = Color.LightGray;
+            for (int i = 0; i < numSpikes; i++)
+            {
+                Vector3 spikeStart = e.start.position + i * spikeWidth * edgeDir;
+                Vector3 spikeEnd = e.start.position + (i+1) * spikeWidth * edgeDir;
+                Vector3 spikePoint = .5f * (spikeStart + spikeEnd) + spikeHeight * edgeNormal;
+
+                
+                triangeList.Add(GenerateVertex(spikeStart, spikeColor, e.start.normal,depth));
+                triangeList.Add(GenerateVertex(spikeEnd, spikeColor, e.start.normal, depth));
+                triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
+
+                triangeList.Add(GenerateVertex(spikeStart, spikeColor, -e.start.normal, 0));
+                triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -e.start.normal, 0));
+                triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
+
+                triangeList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, depth));
+                triangeList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, 0));
+                triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
+
+                triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, depth));
+                triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, 0));
+                triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth/2));
+
+                if (i < numSpikes - 1)
+                {
+                    spikeStart = e.start.position + (.5f + i) * spikeWidth * edgeDir;
+                    spikeEnd = e.start.position + (i + 1.5f) * spikeWidth * edgeDir;
+                    spikePoint = .5f * (spikeStart + spikeEnd) + spikeHeight * edgeNormal;
+
+                    triangeList.Add(GenerateVertex(spikeStart, spikeColor, e.start.normal, 0));
+                    triangeList.Add(GenerateVertex(spikeEnd, spikeColor, e.start.normal, 0));
+                    triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, -depth / 2));
+
+                    triangeList.Add(GenerateVertex(spikeStart, spikeColor, -e.start.normal, -depth));
+                    triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -e.start.normal, -depth));
+                    triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, -depth / 2));
+
+                    triangeList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, 0));
+                    triangeList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, -depth));
+                    triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, -depth / 2));
+
+                    triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, 0));
+                    triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, -depth));
+                    triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, -depth / 2));
+                }
+                
+            }
+            
+        }
+
         public void AddBlockToTriangleList(List<Vertex> vList, Color c, float depth, List<VertexPositionColorNormal> triangleList)
         {
             List<Vertex> points = new List<Vertex>();
@@ -194,6 +259,68 @@ namespace VexedCore
 
         }
 
+        public void AddTextureToTriangleList(List<Vertex> vList, Color c, float depth, List<VertexPositionColorNormalTexture> triangleList)
+        {
+            List<Vertex> points = new List<Vertex>();
+            List<Vector2> pointsTexCoords = new List<Vector2>();
+            int jointVertexIndex = 0;
+            int count = 0;
+
+            List<Vector2> texCoords = new List<Vector2>();
+            texCoords.Add(new Vector2(0, 0));
+            texCoords.Add(new Vector2(1,0));
+            texCoords.Add(new Vector2(1,1));
+            texCoords.Add(new Vector2(0,1));
+
+            for (int i = 0; i < 4; i++)
+            {
+                points.Add(vList[i]);
+                pointsTexCoords.Add(texCoords[i]);
+                count++;
+                if (vList[i].normal != vList[(i + 1) % 4].normal)
+                {
+                    // corner edge case
+                    Vector3 fullEdge = vList[(i + 1) % 4].position - vList[i].position;
+                    Vector3 currentComponent = Vector3.Dot(vList[(i + 1) % 4].normal, fullEdge) * vList[(i + 1) % 4].normal;
+                    Vector3 nextComponent = Vector3.Dot(vList[i].normal, fullEdge) * vList[i].normal;
+                    Vector3 constantComponent = Vector3.Dot(Vector3.Cross(vList[(i + 1) % 4].normal, vList[i].normal), fullEdge) * Vector3.Cross(vList[(i + 1) % 4].normal, vList[i].normal);
+                    float currentPercent = currentComponent.Length() / (currentComponent.Length() + nextComponent.Length());
+
+                    Vector3 midPoint = vList[i].position + currentComponent + currentPercent * constantComponent;
+                    points.Add(new Vertex(midPoint, Vector3.Zero, Vector3.Zero, Vector3.Zero));
+                    pointsTexCoords.Add((1-currentPercent) * texCoords[i] + currentPercent * texCoords[(i + 1) % 4]);
+                    jointVertexIndex = count;
+                    count++;
+                }
+            }
+
+            if (points.Count == 4)
+            {
+                triangleList.Add(GenerateTexturedVertex(vList[0].position,texCoords[0], vList[0].normal, depth));
+                triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], vList[1].normal, depth));
+                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], vList[2].normal, depth));
+
+                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], vList[0].normal, depth));
+                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], vList[2].normal, depth));
+                triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], vList[3].normal, depth));
+
+            }
+            else
+            {
+                for (int i = 1; i < 5; i++)
+                {
+                    Vector3 normal = points[(jointVertexIndex + i) % 6].normal;
+                    if (normal == Vector3.Zero)
+                        normal = points[(jointVertexIndex + i + 1) % 6].normal;
+                    triangleList.Add(GenerateTexturedVertex(points[jointVertexIndex].position, pointsTexCoords[jointVertexIndex], normal, depth));
+                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i) % 6].position, pointsTexCoords[(jointVertexIndex + i) % 6], normal, depth));
+                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i + 1) % 6].position, pointsTexCoords[(jointVertexIndex + i + 1) % 6], normal, depth));
+                }
+            }
+
+        }
+
+
         public void Draw(GameTime gameTime)
         {            
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
@@ -253,6 +380,12 @@ namespace VexedCore
                 vList.Add(b.edges[2].start);
                 vList.Add(b.edges[3].start);
                 AddBlockToTriangleList(vList, b.color, .5f, triangleList);
+
+                foreach (Edge e in b.edges)
+                {
+                    if(e.type == VexedLib.EdgeType.Spikes)
+                        AddSpikesToTriangleList(e, .5f, triangleList);
+                }
             }
             #endregion
 

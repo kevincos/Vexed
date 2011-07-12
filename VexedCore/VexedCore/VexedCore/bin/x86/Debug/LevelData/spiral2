@@ -1749,7 +1749,58 @@
                       <toggle>false</toggle>
                     </Behavior>
                     <Behavior>
+                      <id>62</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
                       <id>152</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                      <nextBehavior />
+                    </Behavior>
+                  </behaviors>
+                </Doodad>
+                <Doodad>
+                  <id>157</id>
+                  <name>Doodad</name>
+                  <position>
+                    <X>10</X>
+                    <Y>-52.5</Y>
+                    <Z>-4.5</Z>
+                  </position>
+                  <up>
+                    <X>0</X>
+                    <Y>-1</Y>
+                    <Z>0</Z>
+                  </up>
+                  <activationCost>0</activationCost>
+                  <fixedPosition>false</fixedPosition>
+                  <type>PlayerSpawn</type>
+                  <ability>DoubleJump</ability>
+                  <behaviors>
+                    <Behavior>
+                      <id>158</id>
                       <name>Behavior</name>
                       <offset>0</offset>
                       <duration>0</duration>

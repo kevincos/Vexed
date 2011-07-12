@@ -56,7 +56,10 @@ namespace VexedCore
             else if (Vector3.Dot(normal, n) == 0)
             {
                 Vector3 badComponent = Vector3.Dot(n, position - anchor) * n;
+                Vector3 badVelComponent = Vector3.Dot(n, velocity) * n;
+                float badVelLength = Vector3.Dot(n, velocity);
                 v.position = position - badComponent + badComponent.Length() * normal;
+                v.velocity = velocity - badVelComponent - badVelLength * normal;
                 v.normal = n;
             }
             else

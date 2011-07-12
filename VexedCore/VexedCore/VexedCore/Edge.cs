@@ -17,20 +17,26 @@ namespace VexedCore
         public Vertex start;
         public Vertex end;
 
+        public VexedLib.EdgeType type;
+
         public Edge()
         {
             start = new Vertex();
             end = new Vertex();
+            type = VexedLib.EdgeType.Normal;
         }
 
         public Edge(VexedLib.Edge xmlEdge, Vector3 normal)
         {
             start = new Vertex(xmlEdge.start, normal, Vector3.Zero, xmlEdge.end - xmlEdge.start);
             end = new Vertex(xmlEdge.end, normal, Vector3.Zero, xmlEdge.start - xmlEdge.end);
+            
             start.direction.Normalize();
             end.direction.Normalize();
             start.normal.Normalize();
             end.normal.Normalize();
+
+            type = xmlEdge.type;
         }
     }
 }

@@ -37,6 +37,18 @@
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\GaussianBlur.xnb</Output>
       <Time>2011-07-06T12:32:50.1577888-07:00</Time>
     </Item>
+    <Item>
+      <Source>character.png</Source>
+      <Name>character</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor">255, 0, 0, 255</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\character.xnb</Output>
+      <Time>2011-07-11T18:29:39.7136638-07:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

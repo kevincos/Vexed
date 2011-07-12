@@ -24,6 +24,7 @@ namespace VexedCore
         public static BloomComponent bloom;
         SpriteBatch spriteBatch;
         public BasicEffect effect = null;
+        public BasicEffect playerTextureEffect = null;
 
         Vector3 currentTarget = Vector3.Zero;
         Vector3 currentCamera = new Vector3(30, 30, 30);
@@ -60,11 +61,11 @@ namespace VexedCore
             //LevelLoader.Load("LevelData\\spiral2");
             
             //LevelLoader.Load("LevelData\\movingplatform");
-            LevelLoader.Load("LevelData\\awesome");
+            //LevelLoader.Load("LevelData\\awesome");
             //LevelLoader.Load("LevelData\\debug");
             
             Components.Add(new FrameRateCounter(this));
-            //Components.Add(bloom);
+            Components.Add(bloom);
             bloom.Settings = BloomSettings.PresetSettings[0];
             base.Initialize();
         }
@@ -77,7 +78,7 @@ namespace VexedCore
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            Player.characterTexture = Content.Load<Texture2D>("character");
             // TODO: use this.Content to load your game content here
         }
 
@@ -123,7 +124,7 @@ namespace VexedCore
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            //bloom.BeginDraw();            
+            bloom.BeginDraw();            
             
             Game1.graphicsDevice.Clear(Color.Black);
             Game1.graphicsDevice.BlendState = BlendState.Opaque;
@@ -135,18 +136,17 @@ namespace VexedCore
                 effect = new BasicEffect(Game1.graphicsDevice);
                 effect.VertexColorEnabled = true;
             }
+            if (playerTextureEffect == null)
+            {
+                playerTextureEffect = new BasicEffect(Game1.graphicsDevice);
+                playerTextureEffect.VertexColorEnabled = true;
+            }
 
             // Set transform matrices.
             float aspect = Game1.graphicsDevice.Viewport.AspectRatio;
 
-            //effect.World = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
             effect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
-
-            /*effect.View = Matrix.CreateLookAt(currentCamera,
-                                              currentTarget,
-                                              currentUp);*/
             effect.View = Matrix.CreateLookAt(player.cameraPos, player.cameraTarget, player.cameraUp);
-
             effect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
             effect.LightingEnabled = true;
             effect.Alpha = 1f;
@@ -159,19 +159,40 @@ namespace VexedCore
             effect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
             effect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
 
+            playerTextureEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
+            playerTextureEffect.View = Matrix.CreateLookAt(player.cameraPos, player.cameraTarget, player.cameraUp);
+            playerTextureEffect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
+            playerTextureEffect.LightingEnabled = true;
+            playerTextureEffect.Alpha = 1f;
+            playerTextureEffect.SpecularPower = 0.1f;
+            playerTextureEffect.AmbientLightColor = new Vector3(.7f, .7f, .7f);
+            playerTextureEffect.DiffuseColor = new Vector3(1, 1, 1);
+            playerTextureEffect.SpecularColor = new Vector3(0, 1f, 1f);
+            playerTextureEffect.DirectionalLight0.Enabled = true;
+            playerTextureEffect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-5, -3, -1));
+            playerTextureEffect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
+            playerTextureEffect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
+            playerTextureEffect.TextureEnabled = true;
+            playerTextureEffect.Texture = Player.characterTexture;
+            
 
             // Set renderstates.
             Game1.graphicsDevice.RasterizerState = RasterizerState.CullNone;
+            Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
+            
 
-            // Draw the triangle.
+            
             effect.CurrentTechnique.Passes[0].Apply();
 
             foreach (Room r in roomList)
             {
                 r.Draw(gameTime);
             }
-            player.Draw(gameTime);
-            //physics.DebugDraw(player.currentRoom, player.center.normal, player.center.direction);
+            //player.Draw(gameTime);
+            //Physics.DebugDraw(player.currentRoom, player.center.normal, player.center.direction);
+
+            playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            player.DrawTexture(gameTime);
 
             base.Draw(gameTime);
         }

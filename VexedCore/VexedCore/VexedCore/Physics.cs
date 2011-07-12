@@ -24,7 +24,8 @@ namespace VexedCore
                 foreach (Edge e in b.edges)
                 {
                     points.Add(e.start);
-                    if (e.start.normal != e.end.normal)                        
+                    //if (e.start.normal != e.end.normal)                        
+                    if(e.start.normal != e.end.normal && (e.start.normal != normal && e.end.normal != normal))
                     {
                         Vector3 fullEdge = e.end.position - e.start.position;
                         Vector3 currentComponent = Vector3.Dot(e.end.normal, fullEdge) * e.end.normal;
@@ -76,71 +77,86 @@ namespace VexedCore
                 //Draw projection Normals
                 for (int i = 0; i < 4; i++)
                 {
-                    triangleList.Add(new VertexPositionColorNormal(b.edges[i].start.position, Color.Red, normal));
+                    /*triangleList.Add(new VertexPositionColorNormal(b.edges[i].start.position, Color.Red, normal));
                     triangleList.Add(new VertexPositionColorNormal(b.edges[i].end.position, Color.Red, normal));
                     Vector3 projectionNormal = -Vector3.Cross(normal, b.edges[i].end.position - b.edges[i].start.position);
                     projectionNormal.Normalize();
                     triangleList.Add(new VertexPositionColorNormal(projectionNormal + .5f * (b.edges[i].end.position + b.edges[i].start.position), Color.Red, normal));
+                     */                    
+                    Vector3 velocityNormal = b.edges[i].start.velocity;                    
+                    velocityNormal.Normalize();
+                    Vector3 sideNormal = Vector3.Cross(velocityNormal, normal);
+                    triangleList.Add(new VertexPositionColorNormal(b.edges[i].start.position + .2f*sideNormal, Color.Red, normal));
+                    triangleList.Add(new VertexPositionColorNormal(b.edges[i].start.position - .2f *sideNormal, Color.Red, normal));
+                    triangleList.Add(new VertexPositionColorNormal(b.edges[i].start.position + velocityNormal, Color.Red, normal));
                 }
+                
             }
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                 triangleList.ToArray(), 0, triangleList.Count / 3, VertexPositionColorNormal.VertexDeclaration);
         }
 
-        public static void CollisionCheck(Room r, Player p, GameTime gameTime)
+        public static Vector3 Collide(List<Vector3> itemVertexList, List<Vector3> blockVertexList, Vector3 normal)
         {
-            List<Block> unfoldedBlocks = Physics.BlockUnfold(r, p.center.normal, p.center.direction);
-            List<Vector3> playerVertexList = new List<Vector3>();
-            Vector3 up = p.center.direction;
-            Vector3 right = Vector3.Cross(up, p.center.normal);
+            Vector3 minProjectionNormal = Vector3.Zero;
+            float minProjectionValue = 0;
+            bool collision_free = false;
 
-
-            playerVertexList.Add(p.center.position + .5f * up + .5f * right);            
-            playerVertexList.Add(p.center.position + .5f * up - .5f * right);
-            playerVertexList.Add(p.center.position - .5f * up - .5f * right);            
-            playerVertexList.Add(p.center.position - .5f * up + .5f * right);
-
-            List<Vector3> contributions = new List<Vector3>();
-            Vector3 totalPlayerProjection = Vector3.Zero;
-            int totalPlayerContributions = 0;
-
-            foreach (Block b in unfoldedBlocks)
+            for (int i = 0; i < blockVertexList.Count(); i++) // Iterate over block edges
             {
-                // if block intesects with rectVertexList
-                List<Vector3> blockVertexList = new List<Vector3>();
-                foreach (Edge e in b.edges)
-                {
-                    if(e.start.position != e.end.position)
-                        blockVertexList.Add(e.start.position);
-                }                
-                
-                Vector3 minProjectionNormal = Vector3.Zero;
-                float minProjectionValue = 0f;
-                bool collision_free = false;
-                bool second_pass = false;
+                Vector3 projectionNormal = -Vector3.Cross(normal, blockVertexList[(i + 1) % blockVertexList.Count()] - blockVertexList[i]);
+                projectionNormal.Normalize();
+                float separatorValue = Vector3.Dot(projectionNormal, blockVertexList[i]);
 
-                // Block -> Player
-                for(int i = 0; i < blockVertexList.Count(); i++) // Iterate over block edges
+                // Iterate over player points
+                float maxPointDistance = 0;
+                for (int j = 0; j < itemVertexList.Count(); j++)
                 {
-                    Vector3 projectionNormal = -Vector3.Cross(p.center.normal, blockVertexList[(i+1)%blockVertexList.Count()] - blockVertexList[i]);
+                    float pointValue = Vector3.Dot(projectionNormal, itemVertexList[j]);
+                    float delta = separatorValue - pointValue;
+                    if (j == 0 || delta > maxPointDistance)
+                        maxPointDistance = delta;
+                }
+                if (maxPointDistance > 0)
+                {
+                    if (minProjectionNormal == Vector3.Zero || (minProjectionNormal != Vector3.Zero && maxPointDistance < minProjectionValue))
+                    {
+                        minProjectionNormal = projectionNormal;
+                        minProjectionValue = maxPointDistance;
+                    }
+                }
+                else
+                {
+                    minProjectionNormal = Vector3.Zero;
+                    minProjectionValue = 0;
+                    collision_free = true;
+                    break;
+                }
+            }
+
+            // Player -> Block
+            if (collision_free == false)
+            {
+                for (int i = 0; i < itemVertexList.Count(); i++) // Iterate over block edges
+                {
+                    Vector3 projectionNormal = -Vector3.Cross(normal, itemVertexList[(i + 1) % itemVertexList.Count()] - itemVertexList[i]);
                     projectionNormal.Normalize();
-                    float separatorValue = Vector3.Dot(projectionNormal, blockVertexList[i]);
+                    float separatorValue = Vector3.Dot(projectionNormal, itemVertexList[i]);
 
-                    
                     // Iterate over player points
                     float maxPointDistance = 0;
-                    for(int j =0 ;j < playerVertexList.Count(); j++)
+                    for (int j = 0; j < blockVertexList.Count(); j++)
                     {
-                        float pointValue = Vector3.Dot(projectionNormal, playerVertexList[j]);
+                        float pointValue = Vector3.Dot(projectionNormal, blockVertexList[j]);
                         float delta = separatorValue - pointValue;
                         if (j == 0 || delta > maxPointDistance)
-                            maxPointDistance = delta;                        
+                            maxPointDistance = delta;
                     }
                     if (maxPointDistance > 0)
                     {
                         if (minProjectionNormal == Vector3.Zero || (minProjectionNormal != Vector3.Zero && maxPointDistance < minProjectionValue))
                         {
-                            minProjectionNormal = projectionNormal;
+                            minProjectionNormal = -projectionNormal;
                             minProjectionValue = maxPointDistance;
                         }
                     }
@@ -151,59 +167,174 @@ namespace VexedCore
                         collision_free = true;
                         break;
                     }
+                }
+            }
+            return minProjectionNormal * minProjectionValue;
+        }
 
-                    /*
-                    // Iterate over player points
-                    bool possible_collision = false;
-                    for(int j =0 ;j < playerVertexList.Count(); j++)
+        /* Test for collision between player and blocks, and adjust player's position and velocity accordingly.
+         * There's some tricky order of operations here that is explained inline*/
+        public static void CollisionCheck(Room r, Player p, GameTime gameTime)
+        {
+            // Variables used for entire collision test method.
+            List<Block> unfoldedBlocks = Physics.BlockUnfold(r, p.center.normal, p.center.direction);
+            List<Vector3> playerVertexList = new List<Vector3>();
+            List<Vector3> playerGroundBox = new List<Vector3>();
+            List<Vector3> playerLeftBox = new List<Vector3>();
+            List<Vector3> playerRightBox = new List<Vector3>();
+            Vector3 up = p.center.direction;
+            Vector3 right = Vector3.Cross(up, p.center.normal);
+
+            /* Stores the result of friction calculations, to be applied at the END of the function. Must be done at the end
+             * because during the algorithm, it isn't fully determined what the player's state is, and friction is only applied
+             * in certain cases. Specifically, it isn't known if the player has landed on the ground until the algorithm completes.
+             */
+             
+            Vector3 frictionAdjustment = Vector3.Zero;            
+            
+            /* Perform the basic algorithm several times, each time taking only the most powerful contribution. I'm assuming for now
+             * that it is EXTREMELY unlikely for the player to have meaningful collisions simultaneously with > 3 blocks.
+             * The purpose of this is that sometimes two collisions will be detected, but only one needs to be resolved. For example,
+             * if two blocks are adjacent to one another such that their edges form a single, straight edge, we only need (and want)
+             * to use the projection from one of them*/
+            for (int attempt = 0; attempt < 2; attempt++)
+            {
+                List<Vector3> projectionList = new List<Vector3>();
+                List<Vector3> relVelList = new List<Vector3>();
+
+                playerVertexList = new List<Vector3>();
+                playerVertexList.Add(p.center.position + .5f * up + .5f * right);
+                playerVertexList.Add(p.center.position + .5f * up - .5f * right);
+                playerVertexList.Add(p.center.position - .5f * up - .5f * right);
+                playerVertexList.Add(p.center.position - .5f * up + .5f * right);
+
+                foreach (Block b in unfoldedBlocks)
+                {
+                    // if block intesects with rectVertexList
+                    List<Vector3> blockVertexList = new List<Vector3>();
+                    foreach (Edge e in b.edges)
                     {
-                        float pointValue = Vector3.Dot(projectionNormal, playerVertexList[j]);
-                        float delta = separatorValue - pointValue;
-                        if(delta > 0)
+                        if (e.start.position != e.end.position)
+                            blockVertexList.Add(e.start.position);
+                    }
+
+                    // Actual collision detection between two polygons happens here.
+                    Vector3 projection = Collide(playerVertexList, blockVertexList, p.center.normal);
+
+                    if (projection.Length() > 0f)
+                    {
+                        // If a collision is found, save the necessary data and continue.
+                        projectionList.Add(projection);
+                        relVelList.Add(b.edges[0].start.velocity);   
+                    }
+                }
+
+                // Compute the most powerful collision and resolve it.
+                Vector3 maxProjection = Vector3.Zero;
+                Vector3 relVel = Vector3.Zero;
+                for (int i = 0; i < projectionList.Count(); i++)
+                {
+                    if (projectionList[i].Length() > maxProjection.Length())
+                    {
+                        maxProjection = projectionList[i];
+                        relVel = relVelList[i];
+                    }
+                }
+                if (maxProjection != Vector3.Zero)
+                {
+                    Vector3 projectionDirection = maxProjection / maxProjection.Length();
+
+                    float badVelocityComponent = Vector3.Dot(projectionDirection, p.center.velocity - relVel);
+                    
+                    //if (badVelocityComponent < -0.01f)
+                    if (badVelocityComponent < -0.0f)
+                        p.center.velocity -= badVelocityComponent * projectionDirection;
+
+                    float projectionUpComponent = Vector3.Dot(projectionDirection, p.center.direction);
+                    if (projectionUpComponent > 0)
+                    {
+                        Vector3 frictionDirection = Vector3.Cross(Vector3.Dot(projectionDirection, p.center.direction) * p.center.direction, p.center.normal);
+
+                        float frictionVelocityComponent = Vector3.Dot(frictionDirection, p.center.velocity - relVel);
+
+                        if (Math.Abs(frictionVelocityComponent) < .02f)
                         {
-                            possible_collision = true;
-                            if(minProjectionNormal == Vector3.Zero || (minProjectionNormal != Vector3.Zero && delta < minProjectionValue))
-                            {
-                                minProjectionNormal = projectionNormal;
-                                minProjectionValue = delta;
-                            }
+                            frictionAdjustment -= frictionVelocityComponent * frictionDirection;
+                        }
+                        else if (frictionVelocityComponent > 0)
+                        {
+                            frictionAdjustment -= .02f * frictionDirection;
+                        }
+                        else
+                        {
+                            frictionAdjustment += .02f * frictionDirection;
                         }
                     }
-                    // If no points cross the separator, no collision is taking place. Reset projectionNormal
-                    if (possible_collision == false)
-                    {
-                        minProjectionNormal = Vector3.Zero;
-                        minProjectionValue = 0;
-                        collision_free = true;
-                        break;
-                    }*/
-                }
-                               
 
-                if (collision_free == false)
-                {
-                    totalPlayerProjection += minProjectionNormal * minProjectionValue;
-                    totalPlayerContributions++;
-                    contributions.Add(minProjectionNormal * minProjectionValue);
-
+                    p.center.position += maxProjection;
                 }
+                else
+                    break;
             }
 
-            if (totalPlayerContributions > 0)
+            // Now that player position is stabilized, use the special rects to detect if it is grounded
+            // or prepped for a wall jump.
+
+            playerGroundBox.Add(p.center.position + .5f * right);
+            playerGroundBox.Add(p.center.position - .5f * right);
+            playerGroundBox.Add(p.center.position - .6f * up - .5f * right);
+            playerGroundBox.Add(p.center.position - .6f * up + .5f * right);
+            playerLeftBox.Add(p.center.position);
+            playerLeftBox.Add(p.center.position - .6f * right);
+            playerLeftBox.Add(p.center.position - .4f * up - .6f * right);
+            playerLeftBox.Add(p.center.position - .4f * up);
+            playerRightBox.Add(p.center.position + .6f * right);
+            playerRightBox.Add(p.center.position);
+            playerRightBox.Add(p.center.position - .4f * up);
+            playerRightBox.Add(p.center.position - .4f * up + .6f * right);
+
+            p.leftWall = false;
+            p.rightWall = false;
+
+            p.platformVelocity = Vector3.Zero;
+            foreach (Block b in unfoldedBlocks)
             {
-                totalPlayerProjection = totalPlayerProjection / totalPlayerContributions;
+                // if block intesects with rectVertexList
+                List<Vector3> blockVertexList = new List<Vector3>();
+                foreach (Edge e in b.edges)
+                {
+                    if (e.start.position != e.end.position)
+                        blockVertexList.Add(e.start.position);
+                }
 
-                Vector3 projectionDirection = totalPlayerProjection / totalPlayerProjection.Length();
+                Vector3 groundProjection = Collide(playerGroundBox, blockVertexList, p.center.normal);
+                Vector3 leftProjection = Collide(playerLeftBox, blockVertexList, p.center.normal);
+                Vector3 rightProjection = Collide(playerRightBox, blockVertexList, p.center.normal);
 
-                float badVelocityComponent = Vector3.Dot(projectionDirection, p.center.velocity);
-                if(badVelocityComponent < 0)
-                    p.center.velocity -= badVelocityComponent * projectionDirection;
-                
-                p.center.position += totalPlayerProjection;// / totalPlayerContributions;
+
+                if (Vector3.Dot(groundProjection, up) > 0)
+                {
+                    p.grounded = true;
+                    p.platformVelocity = b.edges[0].start.velocity;
+                }
+                if (Vector3.Dot(leftProjection, right) > 0)
+                {
+                    p.leftWall = true;
+                }
+                if (Vector3.Dot(rightProjection, -right) != 0)
+                {
+                    p.rightWall = true;
+                }
             }
 
+            // Now that we know if the player is grounded or not, we can use the walking property to determine whether or
+            // not we should apply friction.
+            if (!p.walking)
+                p.center.velocity += frictionAdjustment;
 
+            p.center.Update(r, 0);
 
+            // Test and activate doodads.
             foreach (JumpPad j in r.jumpPads)
             {
                 if ((j.position.position - p.center.position).Length() < .5f)
