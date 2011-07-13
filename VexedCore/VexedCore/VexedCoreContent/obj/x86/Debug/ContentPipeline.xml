@@ -38,16 +38,67 @@
       <Time>2011-07-06T12:32:50.1577888-07:00</Time>
     </Item>
     <Item>
-      <Source>character.png</Source>
-      <Name>character</Name>
+      <Source>p_fall.png</Source>
+      <Name>p_fall</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="ColorKeyColor">255, 0, 0, 255</Data>
-      </Parameters>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\character.xnb</Output>
-      <Time>2011-07-11T18:29:39.7136638-07:00</Time>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_fall.xnb</Output>
+      <Time>2011-07-13T11:34:34.532002-07:00</Time>
+    </Item>
+    <Item>
+      <Source>p_neutral.png</Source>
+      <Name>p_neutral</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_neutral.xnb</Output>
+      <Time>2011-07-13T11:24:20.6160444-07:00</Time>
+    </Item>
+    <Item>
+      <Source>p_walljump.png</Source>
+      <Name>p_walljump</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_walljump.xnb</Output>
+      <Time>2011-07-13T11:44:11.2311436-07:00</Time>
+    </Item>
+    <Item>
+      <Source>p_run2.png</Source>
+      <Name>p_run2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run2.xnb</Output>
+      <Time>2011-07-13T12:20:54.33865-07:00</Time>
+    </Item>
+    <Item>
+      <Source>p_run1.png</Source>
+      <Name>p_run1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run1.xnb</Output>
+      <Time>2011-07-13T12:21:06.4522411-07:00</Time>
+    </Item>
+    <Item>
+      <Source>p_run3.png</Source>
+      <Name>p_run3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run3.xnb</Output>
+      <Time>2011-07-13T12:45:31.1887167-07:00</Time>
+    </Item>
+    <Item>
+      <Source>p_run4.png</Source>
+      <Name>p_run4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run4.xnb</Output>
+      <Time>2011-07-13T12:46:40.7501112-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

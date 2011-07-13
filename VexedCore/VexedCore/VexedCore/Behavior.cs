@@ -18,6 +18,10 @@ namespace VexedCore
         public String nextBehavior;
         public Vector3 destination;
         public int duration;
+        public int offSet;
+        public int period;
+        public int primaryValue;
+        public int secondaryValue;
 
         public Behavior(VexedLib.Behavior xmlBehavior)
         {
@@ -25,6 +29,10 @@ namespace VexedCore
             destination = xmlBehavior.destination;
             duration = xmlBehavior.duration;
             nextBehavior = xmlBehavior.nextBehavior;
+            primaryValue = xmlBehavior.primaryValue;
+            secondaryValue = xmlBehavior.secondaryValue;
+            offSet = xmlBehavior.offset;
+            period = xmlBehavior.period;
         }
     }
 }

@@ -14,6 +14,8 @@ namespace VexedCore
 {
     public class Room
     {
+        public static bool drawInnerBlock = false;
+
         public Vector3 center;
         public Vector3 size;
         
@@ -40,6 +42,7 @@ namespace VexedCore
                 {
                     e.start.Update(this, blockUpdateTime);
                     e.end.Update(this, blockUpdateTime);
+                    e.UpdateBehavior(gameTime);
                 }
             }
         }
@@ -108,64 +111,180 @@ namespace VexedCore
             return new VertexPositionColorNormalTexture(RaisedPosition(position, distanceModifier, 1f), Color.White, normal, texCoord);
         }
 
+        public void AddStripToTriangleListHelper(Vertex start, Vertex end, float depth, EdgeProperties properties, List<VertexPositionColorNormal> triangleList)
+        {
+            Vector3 edgeDir = end.position - start.position;
+            Vector3 edgeNormal = Vector3.Cross(end.position - start.position, start.normal);
+            edgeNormal.Normalize();
+            edgeDir.Normalize();
+            Color baseColor = Color.White;
+            if(properties.type == VexedLib.EdgeType.Ice)
+                baseColor = Color.White;
+            if (properties.type == VexedLib.EdgeType.Magnet)
+                baseColor = Color.Gray;
+            if (properties.type == VexedLib.EdgeType.Bounce)
+                baseColor = Color.Magenta;
+            if (properties.type == VexedLib.EdgeType.Electric)
+            {
+                if (properties.primaryValue == 0)
+                    baseColor = new Color(40, 40, 40);
+                else
+                    baseColor = Color.Yellow;
+            }
+            if (properties.type == VexedLib.EdgeType.ConveyorBelt)
+                baseColor = Color.DarkGray;
+
+            if (properties.type != VexedLib.EdgeType.Spikes)
+            {
+                triangleList.Add(GenerateVertex(start.position, baseColor, start.normal, depth + .001f));
+                triangleList.Add(GenerateVertex(start.position - .5f * edgeNormal, baseColor, start.normal, depth + .001f));
+                triangleList.Add(GenerateVertex(end.position, baseColor, start.normal, depth + .001f));
+
+                triangleList.Add(GenerateVertex(end.position, baseColor, start.normal, depth + .001f));
+                triangleList.Add(GenerateVertex(start.position - .5f * edgeNormal, baseColor, start.normal, depth + .001f));
+                triangleList.Add(GenerateVertex(end.position - .5f * edgeNormal, baseColor, start.normal, depth + .001f));
+
+                triangleList.Add(GenerateVertex(start.position + .001f * edgeNormal, baseColor, start.normal, depth));
+                triangleList.Add(GenerateVertex(start.position + .001f * edgeNormal, baseColor, start.normal, -depth));
+                triangleList.Add(GenerateVertex(end.position + .001f * edgeNormal, baseColor, start.normal, depth));
+
+                triangleList.Add(GenerateVertex(end.position + .001f * edgeNormal, baseColor, start.normal, -depth));
+                triangleList.Add(GenerateVertex(start.position + .001f * edgeNormal, baseColor, start.normal, -depth));
+                triangleList.Add(GenerateVertex(end.position + .001f * edgeNormal, baseColor, start.normal, depth));
+            }
+            if (properties.type == VexedLib.EdgeType.Spikes)
+            {
+                int numSpikes = 2 * (int)(end.position - start.position).Length();
+                float spikeHeight = .75f;
+                float spikeWidth = (end.position - start.position).Length() / numSpikes;
+                Color spikeColor = Color.LightGray;
+                for (int i = 0; i < numSpikes; i++)
+                {
+                    Vector3 spikeStart = start.position + i * spikeWidth * edgeDir;
+                    Vector3 spikeEnd = start.position + (i + 1) * spikeWidth * edgeDir;
+                    Vector3 spikePoint = .5f * (spikeStart + spikeEnd) + spikeHeight * edgeNormal;
+
+                    triangleList.Add(GenerateVertex(spikeStart, spikeColor, start.normal, depth));
+                    triangleList.Add(GenerateVertex(spikeEnd, spikeColor, start.normal, depth));
+                    triangleList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
+
+                    triangleList.Add(GenerateVertex(spikeStart, spikeColor, -start.normal, 0));
+                    triangleList.Add(GenerateVertex(spikeEnd, spikeColor, -start.normal, 0));
+                    triangleList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
+
+                    triangleList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, depth));
+                    triangleList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, 0));
+                    triangleList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
+
+                    triangleList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, depth));
+                    triangleList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, 0));
+                    triangleList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
+                }
+            
+            }
+            if (properties.type == VexedLib.EdgeType.ConveyorBelt)
+            {
+                int numSegments = (int)(end.position - start.position).Length();
+                float segmentWidth = (end.position - start.position).Length() / numSegments;
+                float arrowWidth = 0;
+                if (properties.primaryValue > 0)
+                    arrowWidth = -.5f;
+                if (properties.primaryValue < 0)
+                    arrowWidth = .5f;
+
+
+                for (int i = 1; i < numSegments; i++)
+                {
+                    triangleList.Add(GenerateVertex(start.position + i * segmentWidth * edgeDir, Color.Yellow, start.normal, depth + .002f));
+                    triangleList.Add(GenerateVertex(start.position + i * segmentWidth * edgeDir - .5f * edgeNormal, Color.Yellow, start.normal, depth + .002f));
+                    triangleList.Add(GenerateVertex(start.position + arrowWidth * edgeDir + i * segmentWidth * edgeDir - .25f * edgeNormal, Color.Yellow, start.normal, depth + .002f));
+                }
+            }            
+        }
+
+        public void AddStripToTriangleList(Edge e, float depth, List<VertexPositionColorNormal> triangleList)
+        {
+            if (e.start.normal != e.end.normal)
+            {
+                Vector3 fullEdge = e.end.position - e.start.position;
+                Vector3 currentComponent = Vector3.Dot(e.end.normal, fullEdge) * e.end.normal;
+                Vector3 nextComponent = Vector3.Dot(e.start.normal, fullEdge) * e.start.normal;
+                Vector3 constantComponent = Vector3.Dot(Vector3.Cross(e.end.normal, e.start.normal), fullEdge) * Vector3.Cross(e.end.normal, e.start.normal);
+                float currentPercent = currentComponent.Length() / (currentComponent.Length() + nextComponent.Length());
+
+                Vector3 midPoint = e.start.position + currentComponent + currentPercent * constantComponent;
+
+                AddStripToTriangleListHelper(e.start, new Vertex(midPoint, e.start.normal, e.start.velocity, e.start.direction), depth, e.properties, triangleList);
+                AddStripToTriangleListHelper(new Vertex(midPoint, e.end.normal, e.end.velocity, e.end.direction), e.end, depth, e.properties, triangleList);
+            }
+            else
+                AddStripToTriangleListHelper(e.start, e.end, depth, e.properties, triangleList);
+
+        }
+
         public void AddSpikesToTriangleList(Edge e, float depth, List<VertexPositionColorNormal> triangeList)
         {
             Vector3 edgeDir = e.end.position - e.start.position;
-            int numSpikes = 2*(int)edgeDir.Length();
+            int numSpikes = 2 * (int)edgeDir.Length();
             float spikeHeight = .75f;
             float spikeWidth = edgeDir.Length() / numSpikes;
-            Vector3 edgeNormal = Vector3.Cross(e.end.position -e.start.position, e.start.normal);
+            Vector3 edgeNormal = Vector3.Cross(e.end.position - e.start.position, e.start.normal);
             edgeNormal.Normalize();
             edgeDir.Normalize();
             Color spikeColor = Color.LightGray;
-            for (int i = 0; i < numSpikes; i++)
+
+            if (e.start.velocity != Vector3.Zero)
             {
-                Vector3 spikeStart = e.start.position + i * spikeWidth * edgeDir;
-                Vector3 spikeEnd = e.start.position + (i+1) * spikeWidth * edgeDir;
-                Vector3 spikePoint = .5f * (spikeStart + spikeEnd) + spikeHeight * edgeNormal;
-
-                
-                triangeList.Add(GenerateVertex(spikeStart, spikeColor, e.start.normal,depth));
-                triangeList.Add(GenerateVertex(spikeEnd, spikeColor, e.start.normal, depth));
-                triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
-
-                triangeList.Add(GenerateVertex(spikeStart, spikeColor, -e.start.normal, 0));
-                triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -e.start.normal, 0));
-                triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
-
-                triangeList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, depth));
-                triangeList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, 0));
-                triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
-
-                triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, depth));
-                triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, 0));
-                triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth/2));
-
-                if (i < numSpikes - 1)
-                {
-                    spikeStart = e.start.position + (.5f + i) * spikeWidth * edgeDir;
-                    spikeEnd = e.start.position + (i + 1.5f) * spikeWidth * edgeDir;
-                    spikePoint = .5f * (spikeStart + spikeEnd) + spikeHeight * edgeNormal;
-
-                    triangeList.Add(GenerateVertex(spikeStart, spikeColor, e.start.normal, 0));
-                    triangeList.Add(GenerateVertex(spikeEnd, spikeColor, e.start.normal, 0));
-                    triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, -depth / 2));
-
-                    triangeList.Add(GenerateVertex(spikeStart, spikeColor, -e.start.normal, -depth));
-                    triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -e.start.normal, -depth));
-                    triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, -depth / 2));
-
-                    triangeList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, 0));
-                    triangeList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, -depth));
-                    triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, -depth / 2));
-
-                    triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, 0));
-                    triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, -depth));
-                    triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, -depth / 2));
-                }
-                
+                AddStripToTriangleList(e, depth, triangeList);
             }
-            
+            else
+            {
+                for (int i = 0; i < numSpikes; i++)
+                {
+                    Vector3 spikeStart = e.start.position + i * spikeWidth * edgeDir;
+                    Vector3 spikeEnd = e.start.position + (i + 1) * spikeWidth * edgeDir;
+                    Vector3 spikePoint = .5f * (spikeStart + spikeEnd) + spikeHeight * edgeNormal;
+
+                    triangeList.Add(GenerateVertex(spikeStart, spikeColor, e.start.normal, depth));
+                    triangeList.Add(GenerateVertex(spikeEnd, spikeColor, e.start.normal, depth));
+                    triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
+
+                    triangeList.Add(GenerateVertex(spikeStart, spikeColor, -e.start.normal, 0));
+                    triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -e.start.normal, 0));
+                    triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
+
+                    triangeList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, depth));
+                    triangeList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, 0));
+                    triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
+
+                    triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, depth));
+                    triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, 0));
+                    triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, depth / 2));
+
+                    if (i < numSpikes - 1)
+                    {
+                        spikeStart = e.start.position + (.5f + i) * spikeWidth * edgeDir;
+                        spikeEnd = e.start.position + (i + 1.5f) * spikeWidth * edgeDir;
+                        spikePoint = .5f * (spikeStart + spikeEnd) + spikeHeight * edgeNormal;
+
+                        triangeList.Add(GenerateVertex(spikeStart, spikeColor, e.start.normal, 0));
+                        triangeList.Add(GenerateVertex(spikeEnd, spikeColor, e.start.normal, 0));
+                        triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, -depth / 2));
+
+                        triangeList.Add(GenerateVertex(spikeStart, spikeColor, -e.start.normal, -depth));
+                        triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -e.start.normal, -depth));
+                        triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, -depth / 2));
+
+                        triangeList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, 0));
+                        triangeList.Add(GenerateVertex(spikeStart, spikeColor, edgeDir, -depth));
+                        triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, -depth / 2));
+
+                        triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, 0));
+                        triangeList.Add(GenerateVertex(spikeEnd, spikeColor, -edgeDir, -depth));
+                        triangeList.Add(GenerateVertex(spikePoint, spikeColor, edgeNormal, -depth / 2));
+                    }
+                }
+            }
         }
 
         public void AddBlockToTriangleList(List<Vertex> vList, Color c, float depth, List<VertexPositionColorNormal> triangleList)
@@ -259,7 +378,7 @@ namespace VexedCore
 
         }
 
-        public void AddTextureToTriangleList(List<Vertex> vList, Color c, float depth, List<VertexPositionColorNormalTexture> triangleList)
+        public void AddTextureToTriangleList(List<Vertex> vList, Color c, float depth, List<VertexPositionColorNormalTexture> triangleList, bool flipHorizontal)
         {
             List<Vertex> points = new List<Vertex>();
             List<Vector2> pointsTexCoords = new List<Vector2>();
@@ -267,10 +386,20 @@ namespace VexedCore
             int count = 0;
 
             List<Vector2> texCoords = new List<Vector2>();
-            texCoords.Add(new Vector2(0, 0));
-            texCoords.Add(new Vector2(1,0));
-            texCoords.Add(new Vector2(1,1));
-            texCoords.Add(new Vector2(0,1));
+            if (flipHorizontal == false)
+            {
+                texCoords.Add(new Vector2(.125f, 0));
+                texCoords.Add(new Vector2(.875f, 0));
+                texCoords.Add(new Vector2(.875f, 1));
+                texCoords.Add(new Vector2(.125f, 1));
+            }
+            else
+            {
+                texCoords.Add(new Vector2(.875f, 0));
+                texCoords.Add(new Vector2(.125f, 0));
+                texCoords.Add(new Vector2(.125f, 1));
+                texCoords.Add(new Vector2(.875f, 1));
+            }
 
             for (int i = 0; i < 4; i++)
             {
@@ -329,47 +458,52 @@ namespace VexedCore
 
             Color interiorColor = new Color(40, 40, 40);
             
+            
             #region innerBlock
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X/2, size.Y/2, size.Z/2), interiorColor, Vector3.UnitX, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X/2, -size.Y/2, size.Z/2), interiorColor, Vector3.UnitX, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X/2, size.Y/2, -size.Z/2), interiorColor, Vector3.UnitX, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X/2, size.Y/2, -size.Z/2), interiorColor, Vector3.UnitX, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X/2, -size.Y/2, size.Z/2), interiorColor, Vector3.UnitX, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X/2, -size.Y/2, -size.Z/2), interiorColor, Vector3.UnitX, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, size.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+            if (drawInnerBlock == true)
+            {
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitX, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitX, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, Vector3.UnitX, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, Vector3.UnitX, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitX, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, Vector3.UnitX, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, size.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
 
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
 
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, size.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
 
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-            triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                triangleList.Add(GenerateVertex(center + new Vector3(-size.X / 2, -size.Y / 2, -size.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+            }
             #endregion
+            
 
             #region Blocks
             foreach (Block b in blocks)
@@ -383,8 +517,10 @@ namespace VexedCore
 
                 foreach (Edge e in b.edges)
                 {
-                    if(e.type == VexedLib.EdgeType.Spikes)
+                    if (e.properties.type == VexedLib.EdgeType.Spikes)
                         AddSpikesToTriangleList(e, .5f, triangleList);
+                    else if (e.properties.type != VexedLib.EdgeType.Normal)
+                        AddStripToTriangleList(e, .5f, triangleList);
                 }
             }
             #endregion
@@ -393,8 +529,9 @@ namespace VexedCore
             foreach (JumpPad j in jumpPads)
             {
                 Vector3 up = Vector3.UnitX;
-                if (up == j.position.normal)
+                if (Vector3.Dot(j.position.normal, up) != 0)
                     up = Vector3.UnitY;
+
                 Vector3 right = Vector3.Cross(up, j.position.normal);
                 List<Vertex> vList = new List<Vertex>();
                 vList.Add(new Vertex(j.position, +.5f * up + .5f * right));
@@ -409,7 +546,7 @@ namespace VexedCore
             foreach (Bridge b in bridges)
             {
                 Vector3 up = Vector3.UnitX;
-                if (up == b.position.normal)
+                if (Vector3.Dot(b.position.normal, up) != 0)
                     up = Vector3.UnitY;
                 Vector3 right = Vector3.Cross(up, b.position.normal);
                 List<Vertex> vList = new List<Vertex>();

@@ -19,9 +19,9 @@ namespace VexedCore
 
         public Room targetRoom;        
 
-        public JumpPad(Vector3 position, Vector3 normal)
+        public JumpPad(Vector3 position, Vector3 normal, Vector3 up)
         {
-            this.position = new Vertex(position, normal,Vector3.Zero, Vector3.Zero);
+            this.position = new Vertex(position, normal,Vector3.Zero, up);
         }
     }
 

@@ -11,7 +11,8 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 namespace VexedCore
-{
+{    
+    
     class Physics
     {
         public static List<Block> BlockUnfold(Room r, Vector3 normal, Vector3 up)
@@ -21,9 +22,13 @@ namespace VexedCore
             foreach (Block b in r.blocks)
             {
                 List<Vertex> points = new List<Vertex>();
-                foreach (Edge e in b.edges)
+                List<EdgeProperties> edgeTypes = new List<EdgeProperties>();
+                
+                for(int i = 0; i < b.edges.Count; i++)
                 {
+                    Edge e = b.edges[i];
                     points.Add(e.start);
+                    edgeTypes.Add(e.properties);
                     //if (e.start.normal != e.end.normal)                        
                     if(e.start.normal != e.end.normal && (e.start.normal != normal && e.end.normal != normal))
                     {
@@ -35,12 +40,15 @@ namespace VexedCore
 
                         Vector3 midPoint = e.start.position + currentComponent + currentPercent * constantComponent;
                         points.Add(new Vertex(midPoint, e.start.normal, e.start.velocity, e.start.direction));
-                        points.Add(new Vertex(midPoint, e.end.normal, e.end.velocity, e.end.direction));                        
+                        edgeTypes.Add(e.properties);
+                        points.Add(new Vertex(midPoint, e.end.normal, e.end.velocity, e.end.direction));
+                        edgeTypes.Add(b.edges[(i + 1) % b.edges.Count].properties);
+                     
                     }
                 }
                 if (points.Count == 4)
                 {
-                    unfoldedBlockList.Add(new Block(points, r, normal, up));
+                    unfoldedBlockList.Add(new Block(points, edgeTypes, r, normal, up));
                 }
                 else
                 {
@@ -54,8 +62,8 @@ namespace VexedCore
                         else
                             vList2.Add(points[i]);
                     }
-                    unfoldedBlockList.Add(new Block(vList1, r, normal, up));
-                    unfoldedBlockList.Add(new Block(vList2, r, normal, up));
+                    unfoldedBlockList.Add(new Block(vList1, edgeTypes, r, normal, up));
+                    unfoldedBlockList.Add(new Block(vList2, edgeTypes, r, normal, up));
                 }
             }
             return unfoldedBlockList;
@@ -201,12 +209,13 @@ namespace VexedCore
             {
                 List<Vector3> projectionList = new List<Vector3>();
                 List<Vector3> relVelList = new List<Vector3>();
+                List<EdgeProperties> edgePropertiesList = new List<EdgeProperties>();
 
                 playerVertexList = new List<Vector3>();
-                playerVertexList.Add(p.center.position + .5f * up + .5f * right);
-                playerVertexList.Add(p.center.position + .5f * up - .5f * right);
-                playerVertexList.Add(p.center.position - .5f * up - .5f * right);
-                playerVertexList.Add(p.center.position - .5f * up + .5f * right);
+                playerVertexList.Add(p.center.position + p.playerHalfHeight * up + p.playerHalfWidth * right);
+                playerVertexList.Add(p.center.position + p.playerHalfHeight * up - p.playerHalfWidth * right);
+                playerVertexList.Add(p.center.position - p.playerHalfHeight * up - p.playerHalfWidth * right);
+                playerVertexList.Add(p.center.position - p.playerHalfHeight * up + p.playerHalfWidth * right);
 
                 foreach (Block b in unfoldedBlocks)
                 {
@@ -225,37 +234,70 @@ namespace VexedCore
                     {
                         // If a collision is found, save the necessary data and continue.
                         projectionList.Add(projection);
-                        relVelList.Add(b.edges[0].start.velocity);   
+                        relVelList.Add(b.edges[0].start.velocity);
+                        EdgeProperties properties = new EdgeProperties();
+                        properties.type = VexedLib.EdgeType.Normal;
+                        foreach (Edge e in b.edges)
+                        {
+                            Vector3 edgeNormal = Vector3.Cross(e.start.normal, e.start.position - e.end.position);
+                            edgeNormal.Normalize();
+                            Vector3 projectionNormal = projection / projection.Length();
+                            float result = Vector3.Dot(edgeNormal, projectionNormal);
+                            if (result == 1)
+                            {
+                                properties = e.properties;
+                            }
+                        }
+                        edgePropertiesList.Add(properties);
+
                     }
                 }
 
                 // Compute the most powerful collision and resolve it.
                 Vector3 maxProjection = Vector3.Zero;
                 Vector3 relVel = Vector3.Zero;
+                EdgeProperties edgeProperties = null;
                 for (int i = 0; i < projectionList.Count(); i++)
                 {
                     if (projectionList[i].Length() > maxProjection.Length())
                     {
                         maxProjection = projectionList[i];
                         relVel = relVelList[i];
+                        edgeProperties = edgePropertiesList[i];
                     }
                 }
                 if (maxProjection != Vector3.Zero)
                 {
                     Vector3 projectionDirection = maxProjection / maxProjection.Length();
+                    //Vector3 frictionDirection = Vector3.Cross(Vector3.Dot(projectionDirection, p.center.direction) * p.center.direction, p.center.normal);
+                    Vector3 frictionDirection = Vector3.Cross(projectionDirection, p.center.normal);
+
+                    if(edgeProperties.type == VexedLib.EdgeType.ConveyorBelt)
+                    {
+                        relVel += .001f*edgeProperties.primaryValue * frictionDirection;
+                    }
 
                     float badVelocityComponent = Vector3.Dot(projectionDirection, p.center.velocity - relVel);
-                    
-                    //if (badVelocityComponent < -0.01f)
+                                        
                     if (badVelocityComponent < -0.0f)
-                        p.center.velocity -= badVelocityComponent * projectionDirection;
+                    {
+                        if (edgeProperties.type == VexedLib.EdgeType.Bounce)
+                        {
+                            p.center.velocity -= badVelocityComponent * projectionDirection;
+                            p.center.velocity += p.jumpSpeed * projectionDirection;
+                        }
+                        else
+                        {
+                            p.center.velocity -= badVelocityComponent * projectionDirection;
+                        }
+                    }
 
                     float projectionUpComponent = Vector3.Dot(projectionDirection, p.center.direction);
                     if (projectionUpComponent > 0)
                     {
-                        Vector3 frictionDirection = Vector3.Cross(Vector3.Dot(projectionDirection, p.center.direction) * p.center.direction, p.center.normal);
-
+                        
                         float frictionVelocityComponent = Vector3.Dot(frictionDirection, p.center.velocity - relVel);
+
 
                         if (Math.Abs(frictionVelocityComponent) < .02f)
                         {
@@ -269,6 +311,8 @@ namespace VexedCore
                         {
                             frictionAdjustment += .02f * frictionDirection;
                         }
+                        if (edgeProperties.type == VexedLib.EdgeType.Ice || edgeProperties.type == VexedLib.EdgeType.Bounce)
+                            frictionAdjustment = Vector3.Zero;
                     }
 
                     p.center.position += maxProjection;
@@ -280,18 +324,18 @@ namespace VexedCore
             // Now that player position is stabilized, use the special rects to detect if it is grounded
             // or prepped for a wall jump.
 
-            playerGroundBox.Add(p.center.position + .5f * right);
-            playerGroundBox.Add(p.center.position - .5f * right);
-            playerGroundBox.Add(p.center.position - .6f * up - .5f * right);
-            playerGroundBox.Add(p.center.position - .6f * up + .5f * right);
+            playerGroundBox.Add(p.center.position + p.playerHalfWidth * right);
+            playerGroundBox.Add(p.center.position - p.playerHalfWidth * right);
+            playerGroundBox.Add(p.center.position - (p.playerHalfHeight + .1f) * up - p.playerHalfWidth * right);
+            playerGroundBox.Add(p.center.position - (p.playerHalfHeight + .1f) * up + p.playerHalfWidth * right);
             playerLeftBox.Add(p.center.position);
-            playerLeftBox.Add(p.center.position - .6f * right);
-            playerLeftBox.Add(p.center.position - .4f * up - .6f * right);
-            playerLeftBox.Add(p.center.position - .4f * up);
-            playerRightBox.Add(p.center.position + .6f * right);
+            playerLeftBox.Add(p.center.position - (p.playerHalfWidth + .1f) * right);
+            playerLeftBox.Add(p.center.position - (p.playerHalfHeight - .1f) * up - (p.playerHalfWidth + .1f) * right);
+            playerLeftBox.Add(p.center.position - (p.playerHalfHeight - .1f) * up);
+            playerRightBox.Add(p.center.position + (p.playerHalfWidth + .1f) * right);
             playerRightBox.Add(p.center.position);
-            playerRightBox.Add(p.center.position - .4f * up);
-            playerRightBox.Add(p.center.position - .4f * up + .6f * right);
+            playerRightBox.Add(p.center.position - (p.playerHalfHeight - .1f) * up);
+            playerRightBox.Add(p.center.position - (p.playerHalfHeight - .1f) * up + (p.playerHalfWidth + .1f) * right);
 
             p.leftWall = false;
             p.rightWall = false;
@@ -315,15 +359,69 @@ namespace VexedCore
                 if (Vector3.Dot(groundProjection, up) > 0)
                 {
                     p.grounded = true;
+                    EdgeProperties properties = new EdgeProperties();
+                    foreach (Edge e in b.edges)
+                    {
+                        Vector3 edgeNormal = Vector3.Cross(e.start.normal, e.start.position - e.end.position);
+                        edgeNormal.Normalize();
+                        Vector3 projectionNormal = groundProjection / groundProjection.Length();
+                        float result = Vector3.Dot(edgeNormal, projectionNormal);
+                        if (result == 1)
+                        {
+                            properties = e.properties;
+                        }
+                    }
                     p.platformVelocity = b.edges[0].start.velocity;
+                    if (properties.type == VexedLib.EdgeType.ConveyorBelt)
+                    {
+                        Vector3 lateralDirection = Vector3.Cross(groundProjection, p.center.normal);
+                        lateralDirection.Normalize();
+                        p.platformVelocity += .001f * properties.primaryValue * lateralDirection;
+                    }
                 }
                 if (Vector3.Dot(leftProjection, right) > 0)
                 {
                     p.leftWall = true;
+                    EdgeProperties properties = new EdgeProperties();                    
+                    foreach (Edge e in b.edges)
+                    {
+                        Vector3 edgeNormal = Vector3.Cross(e.start.normal, e.start.position - e.end.position);
+                        edgeNormal.Normalize();
+                        Vector3 projectionNormal = leftProjection / leftProjection.Length();
+                        float result = Vector3.Dot(edgeNormal, projectionNormal);
+                        if (result == 1)
+                        {
+                            properties = e.properties;
+                        }
+                    }
+                    p.platformVelocity = b.edges[0].start.velocity;
+                    if (properties.type == VexedLib.EdgeType.Magnet)
+                    {
+                        p.state = State.Spin;
+                        p.spinUp = leftProjection / leftProjection.Length();
+                    }
                 }
                 if (Vector3.Dot(rightProjection, -right) != 0)
                 {
                     p.rightWall = true;
+                    EdgeProperties properties = new EdgeProperties();
+                    foreach (Edge e in b.edges)
+                    {
+                        Vector3 edgeNormal = Vector3.Cross(e.start.normal, e.start.position - e.end.position);
+                        edgeNormal.Normalize();
+                        Vector3 projectionNormal = rightProjection / rightProjection.Length();
+                        float result = Vector3.Dot(edgeNormal, projectionNormal);
+                        if (result == 1)
+                        {
+                            properties = e.properties;
+                        }
+                    }
+                    p.platformVelocity = b.edges[0].start.velocity;
+                    if (properties.type == VexedLib.EdgeType.Magnet)
+                    {
+                        p.state = State.Spin;
+                        p.spinUp = rightProjection / rightProjection.Length();
+                    }
                 }
             }
 

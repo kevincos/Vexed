@@ -44,7 +44,7 @@ namespace VexedCore
                             }
                             if (xmlDoodad.type == VexedLib.DoodadType.JumpPad)
                             {
-                                newRoom.jumpPads.Add(new JumpPad(xmlDoodad.position, xmlFace.normal));
+                                newRoom.jumpPads.Add(new JumpPad(xmlDoodad.position, xmlFace.normal, xmlDoodad.up));
                             }
                             if (xmlDoodad.type == VexedLib.DoodadType.BridgeGate)
                             {
@@ -60,7 +60,12 @@ namespace VexedCore
                             foreach (VexedLib.Edge xmlEdge in xmlBlock.edges)
                             {
                                 Edge newEdge = new Edge(xmlEdge, xmlFace.normal);
-                                newBlock.edges.Add(newEdge);
+                                foreach (VexedLib.Behavior xmlBehavior in xmlEdge.behaviors)
+                                {
+                                    newEdge.behaviors.Add(new Behavior(xmlBehavior));
+                                }
+                                newEdge.UpdateBehavior();
+                                newBlock.edges.Add(newEdge);                                
                             }
                             foreach (VexedLib.Behavior xmlBehavior in xmlBlock.behaviors)
                             {
@@ -105,8 +110,20 @@ namespace VexedCore
                         {
                             if (minPosValue == 0 || roomValue < minPosValue)
                             {
-                                minPosValue = roomValue;
-                                j.targetRoom = destinationRoom;
+                                // Verify that line crosses cube
+                                Vector3 right = Vector3.Cross(j.position.normal, j.position.direction);
+                                float upValue = Vector3.Dot(j.position.position, j.position.direction);
+                                float rightValue = Vector3.Dot(j.position.position, right);
+                                float upSize = Math.Abs(Vector3.Dot(destinationRoom.size, j.position.direction));
+                                float rightSize = Math.Abs(Vector3.Dot(destinationRoom.size, right));
+                                float upCenter = Vector3.Dot(destinationRoom.center, j.position.direction);
+                                float rightCenter = Vector3.Dot(destinationRoom.center, right);
+
+                                if (!(upValue > upCenter + upSize || upValue < upCenter - upSize || rightValue > rightCenter + rightSize || rightValue < rightCenter - rightSize))
+                                {
+                                    minPosValue = roomValue;
+                                    j.targetRoom = destinationRoom;    
+                                }
                             }
                         }
                     }

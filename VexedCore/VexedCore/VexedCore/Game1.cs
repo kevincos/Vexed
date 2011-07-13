@@ -78,7 +78,13 @@ namespace VexedCore
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Player.characterTexture = Content.Load<Texture2D>("character");
+            Player.neutralTexture = Content.Load<Texture2D>("p_neutral");
+            Player.fallTexture = Content.Load<Texture2D>("p_fall");
+            Player.wallJumpTexture = Content.Load<Texture2D>("p_walljump");
+            Player.runTexture2 = Content.Load<Texture2D>("p_run2");
+            Player.runTexture1 = Content.Load<Texture2D>("p_run1");
+            Player.runTexture3 = Content.Load<Texture2D>("p_run3");
+            Player.runTexture4 = Content.Load<Texture2D>("p_run4");
             // TODO: use this.Content to load your game content here
         }
 
@@ -173,7 +179,7 @@ namespace VexedCore
             playerTextureEffect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
             playerTextureEffect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
             playerTextureEffect.TextureEnabled = true;
-            playerTextureEffect.Texture = Player.characterTexture;
+            playerTextureEffect.Texture = player.currentTexture;
             
 
             // Set renderstates.

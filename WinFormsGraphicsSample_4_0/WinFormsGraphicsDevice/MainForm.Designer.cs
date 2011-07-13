@@ -543,7 +543,10 @@ namespace WinFormsGraphicsDevice
             this.edgeTypeDropdown.Location = new System.Drawing.Point(10, 10);
             this.edgeTypeDropdown.Size = new System.Drawing.Size(90, 20);
             this.edgeTypeDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.edgeTypeDropdown.Items.AddRange(new object[]{EdgeType.Normal, EdgeType.Spikes, EdgeType.Bounce, EdgeType.ConveyorBelt, EdgeType.Ice, EdgeType.Electric});
+            for (int i = 0; i < 7; i++)
+            {
+                this.edgeTypeDropdown.Items.Add((EdgeType)i);
+            }
             this.edgeTypeDropdown.SelectedIndexChanged+=new System.EventHandler(this.edge_change);
 
             #region behaviorProperties

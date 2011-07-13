@@ -2,4 +2,10 @@ Content\Font.xnb
 Content\BloomCombine.xnb
 Content\BloomExtract.xnb
 Content\GaussianBlur.xnb
-Content\character.xnb
+Content\p_fall.xnb
+Content\p_neutral.xnb
+Content\p_walljump.xnb
+Content\p_run2.xnb
+Content\p_run1.xnb
+Content\p_run3.xnb
+Content\p_run4.xnb

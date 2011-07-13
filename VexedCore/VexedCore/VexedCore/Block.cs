@@ -28,7 +28,7 @@ namespace VexedCore
             color = xmlBlock.color;
         }
 
-        public Block(List<Vertex> vList, Room r, Vector3 n, Vector3 u)
+        public Block(List<Vertex> vList, List<EdgeProperties> edgePropertiesList, Room r, Vector3 n, Vector3 u)
         {
             Vector3 anchor = r.center + Math.Abs(Vector3.Dot(r.size/2,n))*n;
             edges = new List<Edge>();
@@ -37,6 +37,7 @@ namespace VexedCore
                 Edge newEdge = new Edge();
                 newEdge.start = vList[i].Unfold(r, n, u);
                 newEdge.end = vList[(i+1)%4].Unfold(r, n, u);
+                newEdge.properties = edgePropertiesList[i];
                 edges.Add(newEdge);
             }
         }

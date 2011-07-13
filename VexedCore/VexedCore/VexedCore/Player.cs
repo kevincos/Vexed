@@ -16,7 +16,8 @@ namespace VexedCore
     {
         Normal,
         Jump,
-        BridgeJump
+        BridgeJump,
+        Spin
     }
     public class Player
     {
@@ -31,13 +32,26 @@ namespace VexedCore
         public Vector3 jumpPosition;
         public Vector3 jumpNormal;
         public Vector3 platformVelocity;
+        public Vector3 spinUp;
         public Room jumpRoom;
+        public int spinMaxTime = 200;
+        public int spinTime = 0;
         public int jumpMaxTime = 1000;
         public int jumpTime = 0;
+        public int walkTime = 0;
+        public int walkMaxTime = 800;
         public bool leftWall = false;
         public bool rightWall = false;
+        public float playerHalfWidth = .35f;
+        public float playerHalfHeight = .5f;
 
-        public static Texture2D characterTexture;
+        public static Texture2D neutralTexture;
+        public static Texture2D fallTexture;
+        public static Texture2D wallJumpTexture;
+        public static Texture2D runTexture1;
+        public static Texture2D runTexture2;
+        public static Texture2D runTexture3;
+        public static Texture2D runTexture4;
         
         public float walkSpeed = .001f;
         public float airSpeed = .0005f;
@@ -49,6 +63,36 @@ namespace VexedCore
         private bool _grounded = false;
         public int groundTolerance = 100;
         public int groundCounter = 0;
+        public int faceDirection = 0;
+        public float baseCameraDistance = 6f;
+
+        public Texture2D currentTexture
+        {
+            get
+            {
+                if (state != State.Normal)
+                    return fallTexture;
+                if (walking == true)
+                {
+                    if (walkTime > 3 * walkMaxTime / 4)
+                        return runTexture4;
+                    else if (walkTime > walkMaxTime / 2)
+                        return runTexture2;
+                    else if (walkTime > walkMaxTime / 4)
+                        return runTexture3;
+                    else
+                        return runTexture1;
+                }
+                else if (grounded == true)
+                    return neutralTexture;
+                else if ((leftWall == true && faceDirection < 0) || (rightWall == true && faceDirection > 0))
+                    return wallJumpTexture;
+                else if (faceDirection != 0)
+                    return runTexture2;
+                else
+                    return fallTexture;
+            }
+        }
 
         public bool grounded
         {
@@ -77,9 +121,9 @@ namespace VexedCore
         {
             get
             {
-                if (state == State.Normal)
+                if (state == State.Normal || state == State.Spin)
                 {
-                    return currentRoom.RaisedPosition(center.position, 16, 6f);
+                    return currentRoom.RaisedPosition(center.position, baseCameraDistance, 6f);
                 }
                 if (state == State.BridgeJump)
                 {
@@ -101,7 +145,14 @@ namespace VexedCore
         {
             get
             {
-                return currentRoom.AdjustedUp(center.position, center.direction, center.normal, 1f);
+                if (state == State.Spin)
+                {
+                    Vector3 oldUp = currentRoom.AdjustedUp(center.position, center.direction, center.normal, 1f);
+                    Vector3 newUp = currentRoom.AdjustedUp(center.position, spinUp, center.normal, 1f);
+                    return ((spinMaxTime - spinTime) * oldUp + spinTime * newUp) / spinMaxTime;
+                }
+                else
+                    return currentRoom.AdjustedUp(center.position, center.direction, center.normal, 1f);
             }
         }
 
@@ -109,7 +160,7 @@ namespace VexedCore
         {
             get
             {
-                if (state == State.Normal)
+                if (state == State.Normal || state == State.Spin)
                     return center.position;
                 else
                     return jumpPosition;
@@ -133,15 +184,21 @@ namespace VexedCore
                 #region normal update
                 float upMagnitude = 0;
                 float rightMagnitude = 0;
-                    
+
+                walkTime += gameTime.ElapsedGameTime.Milliseconds;
+                if (walkTime > walkMaxTime) walkTime -= walkMaxTime;
                 center.Update(currentRoom, gameTime.ElapsedGameTime.Milliseconds);
                 jumpRecovery -= gameTime.ElapsedGameTime.Milliseconds;
                 if (jumpRecovery < 0) jumpRecovery = 0;
                 Vector3 up = center.direction;
                 Vector3 right = Vector3.Cross(up, center.normal);
 
+                if (grounded == true)
+                    faceDirection = 0;
+
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
+                    faceDirection = -1;
                     if (grounded == true)
                         center.velocity -= walkSpeed * right;
                     else
@@ -149,6 +206,7 @@ namespace VexedCore
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
+                    faceDirection = 1;
                     if (grounded == true)
                         center.velocity += walkSpeed * right;                    
                     else
@@ -160,6 +218,8 @@ namespace VexedCore
                         center.velocity += walkSpeed * stick.X * right;
                     else
                         center.velocity += airSpeed * stick.X * right;
+                    if (stick.X > 0) faceDirection = 1;
+                    if (stick.X < 0) faceDirection = -1;
                 }
                 if ((gamePadState.IsButtonDown(Buttons.A) || Keyboard.GetState().IsKeyDown(Keys.Space)) && jumpRecovery == 0)
                 {
@@ -174,8 +234,9 @@ namespace VexedCore
                             jumpRecovery = 500;
                         }
                     }
-                    else if (leftWall)
+                    else if (leftWall && faceDirection < 0)
                     {
+                        faceDirection = 1;
                         if (upMagnitude < jumpSpeed)
                             center.velocity += (jumpSpeed - upMagnitude) * up;                                                    
                         if(rightMagnitude < wallJumpSpeed)
@@ -183,8 +244,9 @@ namespace VexedCore
                         jumpRecovery = 500;
                         
                     }
-                    else if (rightWall)
+                    else if (rightWall && faceDirection > 0)
                     {
+                        faceDirection = -1;
                         if (upMagnitude < jumpSpeed)
                             center.velocity += (jumpSpeed - upMagnitude) * up;
                         if (rightMagnitude > -wallJumpSpeed)
@@ -248,6 +310,7 @@ namespace VexedCore
                             jumpTime = 0;
                             state = State.BridgeJump;
                             center.velocity = Vector3.Zero;
+                            faceDirection = 0;
                             b.active = false;
                         }
                     }
@@ -264,10 +327,23 @@ namespace VexedCore
                 {
                     center.normal = jumpNormal;
                     center.position = jumpDestination;
+                    center.velocity = Vector3.Zero;
+                    faceDirection = 0;
                     state = State.Normal;
                     currentRoom = jumpRoom;                    
                 }
 
+            }
+            if (state == State.Spin)
+            {
+                spinTime += gameTime.ElapsedGameTime.Milliseconds;
+                if (spinTime > spinMaxTime)
+                {
+                    spinTime = 0;
+                    center.direction = spinUp;
+                    state = State.Normal;
+
+                }
             }
         }
 
@@ -277,17 +353,22 @@ namespace VexedCore
             List<VertexPositionColorNormalTexture> textureTriangleList = new List<VertexPositionColorNormalTexture>();
             List<Vertex> rectVertexList = new List<Vertex>();
             Vector3 up = center.direction;
-            Vector3 right = Vector3.Cross(up, center.normal);            
-            rectVertexList.Add(new Vertex(center.position, center.normal, +.5f * up + .5f * right, center.direction));
-            rectVertexList.Add(new Vertex(center.position, center.normal, +.5f * up - .5f * right, center.direction));
-            rectVertexList.Add(new Vertex(center.position, center.normal, -.5f * up - .5f * right, center.direction));
-            rectVertexList.Add(new Vertex(center.position, center.normal, -.5f * up + .5f * right, center.direction));
+            if (state == State.Spin)
+            {
+                up = ((spinMaxTime - spinTime) * center.direction + spinTime * spinUp) / spinMaxTime;
+                up.Normalize();
+            }
+            Vector3 right = Vector3.Cross(up, center.normal);
+            rectVertexList.Add(new Vertex(center.position, center.normal, +playerHalfHeight * up + playerHalfWidth * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, +playerHalfHeight * up - playerHalfWidth * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up - playerHalfWidth * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up + playerHalfWidth * right, center.direction));
             foreach (Vertex v in rectVertexList)
             {
                 v.Update(currentRoom, 1);
             }
 
-            currentRoom.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList);
+            currentRoom.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList,(faceDirection > 0));
 
 
             VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
@@ -311,10 +392,10 @@ namespace VexedCore
             List<Vertex> rectVertexList = new List<Vertex>();
             Vector3 up = center.direction;
             Vector3 right = Vector3.Cross(up, center.normal);            
-            rectVertexList.Add(new Vertex(center.position, center.normal, +.5f * up + .5f * right, center.direction));
-            rectVertexList.Add(new Vertex(center.position, center.normal, +.5f * up - .5f * right, center.direction));
-            rectVertexList.Add(new Vertex(center.position, center.normal, -.5f * up - .5f * right, center.direction));
-            rectVertexList.Add(new Vertex(center.position, center.normal, -.5f * up + .5f * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, +playerHalfHeight * up + playerHalfWidth * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, +playerHalfHeight * up - playerHalfWidth * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up - playerHalfWidth * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up + playerHalfWidth * right, center.direction));
             foreach (Vertex v in rectVertexList)
             {
                 v.Update(currentRoom, 1);
