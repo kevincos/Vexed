@@ -34,9 +34,19 @@ namespace VexedCore
         public static float controlStickTrigger = .25f;
         public static PlayerIndex activePlayer = PlayerIndex.One;
 
+        public static List<VertexPositionColorNormal> staticOpaqueObjects;
+        public static List<VertexPositionColorNormal> dynamicOpaqueObjects;
+        public static List<VertexPositionColorNormalTexture> texturedObjects;
+        public static List<VertexPositionColorNormal> staticTranslucentObjects;
+        public static bool staticObjectsInitialized = false;
 
         public Game1()
         {
+            staticOpaqueObjects = new List<VertexPositionColorNormal>();
+            dynamicOpaqueObjects = new List<VertexPositionColorNormal>();
+            texturedObjects = new List<VertexPositionColorNormalTexture>();
+            staticTranslucentObjects = new List<VertexPositionColorNormal>();
+
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferMultiSampling = true;            
             
@@ -108,7 +118,18 @@ namespace VexedCore
             if (Keyboard.GetState().IsKeyDown(Keys.Escape) || GamePad.GetState(activePlayer).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-
+            if (Keyboard.GetState().IsKeyDown(Keys.D1))
+            {
+                Room.innerBlockMode = 0;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D2))
+            {
+                Room.innerBlockMode = 1;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D3))
+            {
+                Room.innerBlockMode = 2;
+            }
 
             
             player.Update(gameTime);
@@ -130,10 +151,16 @@ namespace VexedCore
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            Game1.staticTranslucentObjects = new List<VertexPositionColorNormal>();
+            Game1.dynamicOpaqueObjects = new List<VertexPositionColorNormal>();
+            if(Game1.staticOpaqueObjects == null)
+                Game1.staticOpaqueObjects = new List<VertexPositionColorNormal>();
+            Game1.texturedObjects = new List<VertexPositionColorNormalTexture>();
+
             bloom.BeginDraw();            
             
             Game1.graphicsDevice.Clear(Color.Black);
-            Game1.graphicsDevice.BlendState = BlendState.Opaque;
+            Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
             Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
             
 
@@ -197,10 +224,24 @@ namespace VexedCore
             //player.Draw(gameTime);
             //Physics.DebugDraw(player.currentRoom, player.center.normal, player.center.direction);
 
+            if (Room.innerBlockMode > 0)
+            {
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    Game1.staticTranslucentObjects.ToArray(), 0, staticTranslucentObjects.Count / 3, VertexPositionColorNormal.VertexDeclaration);
+            }
+
+            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                Game1.staticOpaqueObjects.ToArray(), 0, staticOpaqueObjects.Count / 3, VertexPositionColorNormal.VertexDeclaration);
+
+
             playerTextureEffect.CurrentTechnique.Passes[0].Apply();
             player.DrawTexture(gameTime);
 
+                  
+
             base.Draw(gameTime);
+
+            Game1.staticObjectsInitialized = true;
         }
     }
 }

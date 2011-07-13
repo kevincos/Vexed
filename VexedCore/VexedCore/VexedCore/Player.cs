@@ -64,7 +64,7 @@ namespace VexedCore
         public int groundTolerance = 100;
         public int groundCounter = 0;
         public int faceDirection = 0;
-        public float baseCameraDistance = 6f;
+        public float baseCameraDistance = 8f;
 
         public Texture2D currentTexture
         {

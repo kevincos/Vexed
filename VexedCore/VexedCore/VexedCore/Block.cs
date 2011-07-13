@@ -14,6 +14,7 @@ namespace VexedCore
 {
     public class Block
     {
+        public bool staticObject = true;
         bool nextBehavior;
 
         public Block()

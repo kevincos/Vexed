@@ -69,6 +69,8 @@ namespace VexedCore
                             }
                             foreach (VexedLib.Behavior xmlBehavior in xmlBlock.behaviors)
                             {
+                                if (xmlBehavior.destination != Vector3.Zero)
+                                    newBlock.staticObject = false;
                                 Behavior newBehavior = new Behavior(xmlBehavior);
                                 newBlock.behaviors.Add(newBehavior);
                             }
