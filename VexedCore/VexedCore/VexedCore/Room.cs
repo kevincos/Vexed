@@ -457,54 +457,68 @@ namespace VexedCore
             
 
             Color interiorColor = new Color(20, 20, 20);
-
-            if(innerBlockMode == 2)
-                interiorColor.A = 180;
+            
+            if (innerBlockMode == 2)
+                interiorColor.A = 150;
             
             
             #region innerBlock
             Vector3 adjustedSize = new Vector3(size.X - .1f, size.Y - .1f, size.Z - .1f);
             if (innerBlockMode > 0)
-            {                
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+            {
+                List<VertexPositionColorNormal> translucentTriangleList = new List<VertexPositionColorNormal>();
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
 
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
 
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
 
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-                Game1.staticTranslucentObjects.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                for (int i = 0; i < translucentTriangleList.Count(); i+=6)
+                {
+                    TrasnparentSquare t = new TrasnparentSquare(translucentTriangleList[i], translucentTriangleList[i + 1], translucentTriangleList[i + 2], translucentTriangleList[i+3], translucentTriangleList[i + 4], translucentTriangleList[i + 5]);
+                    Game1.staticTranslucentObjects.Add(t);
+                }
             }
             #endregion
             
@@ -521,27 +535,21 @@ namespace VexedCore
                 if (b.staticObject == false)
                 {
                     AddBlockToTriangleList(vList, b.color, .5f, triangleList);
-
-                    foreach (Edge e in b.edges)
-                    {
-                        if (e.properties.type == VexedLib.EdgeType.Spikes)
-                            AddSpikesToTriangleList(e, .5f, triangleList);
-                        else if (e.properties.type != VexedLib.EdgeType.Normal)
-                            AddStripToTriangleList(e, .5f, triangleList);
-                    }
                 }
                 else if(Game1.staticObjectsInitialized == false)
                 {
                     AddBlockToTriangleList(vList, b.color, .5f, Game1.staticOpaqueObjects);
-
-                    foreach (Edge e in b.edges)
-                    {
-                        if (e.properties.type == VexedLib.EdgeType.Spikes)
-                            AddSpikesToTriangleList(e, .5f, Game1.staticOpaqueObjects);
-                        else if (e.properties.type != VexedLib.EdgeType.Normal)
-                            AddStripToTriangleList(e, .5f, Game1.staticOpaqueObjects);
-                    }
                 }
+
+                foreach (Edge e in b.edges)
+                {
+                    if (e.properties.type == VexedLib.EdgeType.Spikes)
+                        AddSpikesToTriangleList(e, .5f, triangleList);
+                    else if (e.properties.type != VexedLib.EdgeType.Normal)
+                        AddStripToTriangleList(e, .5f, triangleList);
+                }
+                
+                
             }
             #endregion
 

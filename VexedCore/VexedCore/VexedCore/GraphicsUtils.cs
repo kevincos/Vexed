@@ -56,4 +56,46 @@ namespace VexedCore
             TextureCoordinates = t;
         }
     }
+
+    public class TrasnparentSquare
+    {
+        public VertexPositionColorNormal v1;
+        public VertexPositionColorNormal v2;
+        public VertexPositionColorNormal v3;
+        public VertexPositionColorNormal v4;
+        public VertexPositionColorNormal v5;
+        public VertexPositionColorNormal v6;
+        
+        public Vector3 averagePos;
+
+        public TrasnparentSquare(VertexPositionColorNormal v1, VertexPositionColorNormal v2, VertexPositionColorNormal v3,VertexPositionColorNormal v4, VertexPositionColorNormal v5, VertexPositionColorNormal v6)
+        {
+            this.v1 = v1;
+            this.v2 = v2;
+            this.v3 = v3;
+            this.v4 = v4;
+            this.v5 = v5;
+            this.v6 = v6;
+            averagePos = (v1.Position + v2.Position + v3.Position + v4.Position + v5.Position + v6.Position) / 6;
+        }
+    }
+
+    public class FaceSorter : Comparer<TrasnparentSquare>
+    {
+        Vector3 unit = Vector3.Zero;
+        public FaceSorter(Vector3 unit)
+        {
+            this.unit = unit;
+            this.unit.Normalize();
+        }
+        // Compares by Length, Height, and Width.
+        public override int Compare(TrasnparentSquare t1, TrasnparentSquare t2)
+        {
+            float t1Center = Vector3.Dot(t1.averagePos, unit);
+            float t2Center = Vector3.Dot(t2.averagePos, unit);
+            return -t1Center.CompareTo(t2Center);            
+        }
+
+    }    
+
 }

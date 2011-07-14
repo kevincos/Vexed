@@ -1021,6 +1021,21 @@
                       <toggle>false</toggle>
                     </Behavior>
                     <Behavior>
+                      <id>29</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
                       <id>170</id>
                       <name>Behavior</name>
                       <offset>0</offset>
@@ -1070,6 +1085,21 @@
                   <type>JumpPad</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
+                    <Behavior>
+                      <id>54</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
                     <Behavior>
                       <id>53</id>
                       <name>Behavior</name>
@@ -3447,6 +3477,21 @@
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>
+                      <id>136</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
                       <id>134</id>
                       <name>Behavior</name>
                       <offset>0</offset>
@@ -4898,6 +4943,21 @@
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>
+                      <id>192</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
                       <id>189</id>
                       <name>Behavior</name>
                       <offset>0</offset>
@@ -5412,6 +5472,21 @@
                   <type>JumpPad</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
+                    <Behavior>
+                      <id>227</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
                     <Behavior>
                       <id>223</id>
                       <name>Behavior</name>
@@ -9797,6 +9872,21 @@
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>
+                      <id>374</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
                       <id>369</id>
                       <name>Behavior</name>
                       <offset>0</offset>
@@ -12542,7 +12632,44 @@
                   </color>
                 </Block>
               </blocks>
-              <doodads />
+              <doodads>
+                <Doodad>
+                  <id>1283</id>
+                  <name>Doodad</name>
+                  <position>
+                    <X>0</X>
+                    <Y>34.5</Y>
+                    <Z>2.5</Z>
+                  </position>
+                  <up>
+                    <X>0</X>
+                    <Y>0</Y>
+                    <Z>1</Z>
+                  </up>
+                  <activationCost>0</activationCost>
+                  <fixedPosition>false</fixedPosition>
+                  <type>PlayerSpawn</type>
+                  <ability>DoubleJump</ability>
+                  <behaviors>
+                    <Behavior>
+                      <id>1284</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                      <nextBehavior />
+                    </Behavior>
+                  </behaviors>
+                </Doodad>
+              </doodads>
               <monsters />
               <vertices>
                 <Vector3>
@@ -13902,6 +14029,21 @@
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>
+                      <id>511</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
                       <id>1435</id>
                       <name>Behavior</name>
                       <offset>0</offset>
@@ -14607,6 +14749,21 @@
                   <type>JumpPad</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
+                    <Behavior>
+                      <id>534</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
                     <Behavior>
                       <id>525</id>
                       <name>Behavior</name>
@@ -17005,6 +17162,21 @@
                   <type>BridgeGate</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
+                    <Behavior>
+                      <id>620</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
                     <Behavior>
                       <id>610</id>
                       <name>Behavior</name>
@@ -24298,6 +24470,21 @@
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>
+                      <id>856</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
                       <id>845</id>
                       <name>Behavior</name>
                       <offset>0</offset>
@@ -24525,206 +24712,6 @@
                   </behaviors>
                 </Doodad>
                 <Doodad>
-                  <id>685</id>
-                  <name>Doodad</name>
-                  <position>
-                    <X>40</X>
-                    <Y>-0.5</Y>
-                    <Z>1.5</Z>
-                  </position>
-                  <up>
-                    <X>0</X>
-                    <Y>0</Y>
-                    <Z>1</Z>
-                  </up>
-                  <activationCost>0</activationCost>
-                  <fixedPosition>false</fixedPosition>
-                  <type>PlayerSpawn</type>
-                  <ability>DoubleJump</ability>
-                  <behaviors>
-                    <Behavior>
-                      <id>861</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>852</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>843</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>834</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>825</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>816</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>807</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>801</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>776</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>706</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>696</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>686</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                  </behaviors>
-                </Doodad>
-                <Doodad>
                   <id>971</id>
                   <name>CyanGate</name>
                   <position>
@@ -24743,6 +24730,21 @@
                   <type>BridgeGate</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
+                    <Behavior>
+                      <id>887</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
                     <Behavior>
                       <id>874</id>
                       <name>Behavior</name>
@@ -25682,6 +25684,21 @@
                   <type>JumpPad</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
+                    <Behavior>
+                      <id>920</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
                     <Behavior>
                       <id>1437</id>
                       <name>Behavior</name>
@@ -28541,6 +28558,21 @@
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>
+                      <id>1009</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
                       <id>992</id>
                       <name>Behavior</name>
                       <offset>0</offset>
@@ -28633,7 +28665,7 @@
                   </behaviors>
                 </Doodad>
                 <Doodad>
-                  <id>985</id>
+                  <id>1287</id>
                   <name>Doodad</name>
                   <position>
                     <X>40</X>
@@ -28651,7 +28683,7 @@
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>
-                      <id>999</id>
+                      <id>1288</id>
                       <name>Behavior</name>
                       <offset>0</offset>
                       <duration>0</duration>
@@ -28664,67 +28696,6 @@
                       <primaryValue>0</primaryValue>
                       <secondaryValue>0</secondaryValue>
                       <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>987</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>975</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>963</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>986</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                      <nextBehavior />
                     </Behavior>
                   </behaviors>
                 </Doodad>
@@ -34451,6 +34422,21 @@
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>
+                      <id>1195</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                    <Behavior>
                       <id>1433</id>
                       <name>Behavior</name>
                       <offset>0</offset>
@@ -34485,6 +34471,21 @@
                   <type>JumpPad</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
+                    <Behavior>
+                      <id>1198</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
                     <Behavior>
                       <id>1439</id>
                       <name>Behavior</name>
@@ -37110,44 +37111,7 @@
                   </color>
                 </Block>
               </blocks>
-              <doodads>
-                <Doodad>
-                  <id>1170</id>
-                  <name>Doodad</name>
-                  <position>
-                    <X>41.5</X>
-                    <Y>61.5</Y>
-                    <Z>-5</Z>
-                  </position>
-                  <up>
-                    <X>1</X>
-                    <Y>0</Y>
-                    <Z>0</Z>
-                  </up>
-                  <activationCost>0</activationCost>
-                  <fixedPosition>false</fixedPosition>
-                  <type>PlayerSpawn</type>
-                  <ability>DoubleJump</ability>
-                  <behaviors>
-                    <Behavior>
-                      <id>1171</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                      <nextBehavior />
-                    </Behavior>
-                  </behaviors>
-                </Doodad>
-              </doodads>
+              <doodads />
               <monsters />
               <vertices>
                 <Vector3>

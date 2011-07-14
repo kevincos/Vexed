@@ -25,6 +25,7 @@ namespace VexedCore
         SpriteBatch spriteBatch;
         public BasicEffect effect = null;
         public BasicEffect playerTextureEffect = null;
+        public BasicEffect skyBoxEffect = null;
 
         Vector3 currentTarget = Vector3.Zero;
         Vector3 currentCamera = new Vector3(30, 30, 30);
@@ -37,7 +38,7 @@ namespace VexedCore
         public static List<VertexPositionColorNormal> staticOpaqueObjects;
         public static List<VertexPositionColorNormal> dynamicOpaqueObjects;
         public static List<VertexPositionColorNormalTexture> texturedObjects;
-        public static List<VertexPositionColorNormal> staticTranslucentObjects;
+        public static List<TrasnparentSquare> staticTranslucentObjects;
         public static bool staticObjectsInitialized = false;
 
         public Game1()
@@ -45,7 +46,7 @@ namespace VexedCore
             staticOpaqueObjects = new List<VertexPositionColorNormal>();
             dynamicOpaqueObjects = new List<VertexPositionColorNormal>();
             texturedObjects = new List<VertexPositionColorNormalTexture>();
-            staticTranslucentObjects = new List<VertexPositionColorNormal>();
+            staticTranslucentObjects = new List<TrasnparentSquare>();
 
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferMultiSampling = true;            
@@ -95,6 +96,14 @@ namespace VexedCore
             Player.runTexture1 = Content.Load<Texture2D>("p_run1");
             Player.runTexture3 = Content.Load<Texture2D>("p_run3");
             Player.runTexture4 = Content.Load<Texture2D>("p_run4");
+            Skybox.skyBoxTextures = new Texture2D[6];
+            Skybox.skyBoxTextures[0] = Content.Load<Texture2D>("skybox_right");
+            Skybox.skyBoxTextures[1] = Content.Load<Texture2D>("skybox_left");
+            Skybox.skyBoxTextures[2] = Content.Load<Texture2D>("skybox_front");
+            Skybox.skyBoxTextures[3] = Content.Load<Texture2D>("skybox_back");
+            Skybox.skyBoxTextures[4] = Content.Load<Texture2D>("skybox_bottom");
+            Skybox.skyBoxTextures[5] = Content.Load<Texture2D>("skybox_top");
+            
             // TODO: use this.Content to load your game content here
         }
 
@@ -151,7 +160,7 @@ namespace VexedCore
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            Game1.staticTranslucentObjects = new List<VertexPositionColorNormal>();
+            Game1.staticTranslucentObjects = new List<TrasnparentSquare>();
             Game1.dynamicOpaqueObjects = new List<VertexPositionColorNormal>();
             if(Game1.staticOpaqueObjects == null)
                 Game1.staticOpaqueObjects = new List<VertexPositionColorNormal>();
@@ -168,11 +177,9 @@ namespace VexedCore
             {
                 effect = new BasicEffect(Game1.graphicsDevice);
                 effect.VertexColorEnabled = true;
-            }
-            if (playerTextureEffect == null)
-            {
                 playerTextureEffect = new BasicEffect(Game1.graphicsDevice);
                 playerTextureEffect.VertexColorEnabled = true;
+                Skybox.Init();
             }
 
             // Set transform matrices.
@@ -188,7 +195,7 @@ namespace VexedCore
             effect.DiffuseColor = new Vector3(1, 1, 1);
             effect.SpecularColor = new Vector3(0, 1f, 1f);
             effect.DirectionalLight0.Enabled = true;
-            effect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-5, -3, -1));
+            effect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-10, -5, -1));            
             effect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
             effect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
 
@@ -201,20 +208,25 @@ namespace VexedCore
             playerTextureEffect.AmbientLightColor = new Vector3(.7f, .7f, .7f);
             playerTextureEffect.DiffuseColor = new Vector3(1, 1, 1);
             playerTextureEffect.SpecularColor = new Vector3(0, 1f, 1f);
-            playerTextureEffect.DirectionalLight0.Enabled = true;
-            playerTextureEffect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-5, -3, -1));
+            playerTextureEffect.DirectionalLight0.Enabled = true;            
+            playerTextureEffect.DirectionalLight0.Direction = Vector3.Normalize(player.cameraTarget - player.cameraPos);            
             playerTextureEffect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
             playerTextureEffect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
             playerTextureEffect.TextureEnabled = true;
             playerTextureEffect.Texture = player.currentTexture;
-            
 
+            
+            
             // Set renderstates.
             Game1.graphicsDevice.RasterizerState = RasterizerState.CullNone;
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
-            
 
-            
+            Game1.graphicsDevice.DepthStencilState = DepthStencilState.None;
+            Game1.graphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
+            Skybox.Draw(player);
+
+            Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
+
             effect.CurrentTechnique.Passes[0].Apply();
 
             foreach (Room r in roomList)
@@ -222,17 +234,32 @@ namespace VexedCore
                 r.Draw(gameTime);
             }
             //player.Draw(gameTime);
-            //Physics.DebugDraw(player.currentRoom, player.center.normal, player.center.direction);
-
-            if (Room.innerBlockMode > 0)
-            {
-                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                    Game1.staticTranslucentObjects.ToArray(), 0, staticTranslucentObjects.Count / 3, VertexPositionColorNormal.VertexDeclaration);
-            }
+            //Physics.DebugDraw(player.currentRoom, player.center.normal, player.center.direction);            
 
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                 Game1.staticOpaqueObjects.ToArray(), 0, staticOpaqueObjects.Count / 3, VertexPositionColorNormal.VertexDeclaration);
 
+
+            if (Room.innerBlockMode > 0)
+            {
+                // Sort Triangles
+                staticTranslucentObjects.Sort(new FaceSorter(player.cameraTarget - player.cameraPos));
+                
+                List<VertexPositionColorNormal> translucentList = new List<VertexPositionColorNormal>();
+                for (int i = 0; i < staticTranslucentObjects.Count; i++)
+                {
+                    translucentList.Add(staticTranslucentObjects[i].v1);
+                    translucentList.Add(staticTranslucentObjects[i].v2);
+                    translucentList.Add(staticTranslucentObjects[i].v3);
+                    translucentList.Add(staticTranslucentObjects[i].v4);
+                    translucentList.Add(staticTranslucentObjects[i].v5);
+                    translucentList.Add(staticTranslucentObjects[i].v6);
+                }
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    translucentList.ToArray(), 0, translucentList.Count / 3, VertexPositionColorNormal.VertexDeclaration);
+            }
+
+            
 
             playerTextureEffect.CurrentTechnique.Passes[0].Apply();
             player.DrawTexture(gameTime);

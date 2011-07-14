@@ -80,7 +80,7 @@ namespace VexedCore
                 }
                 properties.primaryValue = currentBehavior.primaryValue;
                 properties.secondaryValue = currentBehavior.secondaryValue;
-                currentTime = gameTime.ElapsedGameTime.Milliseconds;
+                currentTime = 0;
                 nextBehavior = false;
                 return gameTime.ElapsedGameTime.Milliseconds;
             }

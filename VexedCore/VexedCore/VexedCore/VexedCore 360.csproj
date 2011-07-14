@@ -84,6 +84,7 @@
     <Compile Include="Room.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Skybox.cs" />
     <Compile Include="Vertex.cs" />
   </ItemGroup>
   <ItemGroup>

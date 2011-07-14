@@ -287,8 +287,8 @@ namespace VexedCore
                             float roomSize = Math.Abs(Vector3.Dot(jumpRoom.size / 2, center.normal));
                             jumpSource = center.position;
                             jumpDestination = center.position + Vector3.Dot(jumpRoom.center - center.position - roomSize * center.normal, center.normal) * center.normal;
-                            jumpCameraSource = currentRoom.RaisedPosition(jumpSource, 16, 6f);
-                            jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, 16, 6f);
+                            jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
+                            jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
                             state = State.Jump;
                             center.velocity = Vector3.Zero;
                             jumpTime = 0;
@@ -303,8 +303,8 @@ namespace VexedCore
                             jumpRoom = b.targetRoom;
                             jumpSource = center.position;
                             jumpDestination = b.targetBridge.position.position;
-                            jumpCameraSource = currentRoom.RaisedPosition(jumpSource, 16, 6f);
-                            jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, 16, 6f);
+                            jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
+                            jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
                             
                             jumpNormal = center.normal;
                             jumpTime = 0;
