@@ -123,6 +123,13 @@ namespace VexedCore
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // Profiling help
+            if (Keyboard.GetState().IsKeyDown(Keys.PageUp))
+                System.Threading.Thread.Sleep(1);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.PageDown))
+                return;
+
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape) || GamePad.GetState(activePlayer).Buttons.Back == ButtonState.Pressed)
                 this.Exit();

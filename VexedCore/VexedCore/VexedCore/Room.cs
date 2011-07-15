@@ -14,7 +14,7 @@ namespace VexedCore
 {
     public class Room
     {
-        public static int innerBlockMode = 0;
+        public static int innerBlockMode = 2;
 
         public Vector3 center;
         public Vector3 size;
@@ -23,6 +23,15 @@ namespace VexedCore
         public List<Block> blocks;
         public List<JumpPad> jumpPads;
         public List<Bridge> bridges;
+        public List<Doodad> doodads;        
+        
+        public Room()
+        {
+            blocks = new List<Block>();
+            jumpPads = new List<JumpPad>();
+            bridges = new List<Bridge>();
+            doodads = new List<Doodad>();            
+        }
 
         public Room(VexedLib.Room xmlRoom)
         {
@@ -31,6 +40,7 @@ namespace VexedCore
             blocks = new List<Block>();
             jumpPads = new List<JumpPad>();
             bridges = new List<Bridge>();
+            doodads = new List<Doodad>();            
         }
         
         public void Update(GameTime gameTime)
@@ -43,7 +53,11 @@ namespace VexedCore
                     e.start.Update(this, blockUpdateTime);
                     e.end.Update(this, blockUpdateTime);
                     e.UpdateBehavior(gameTime);
-                }
+                }                
+            }
+            foreach (Doodad d in doodads)
+            {
+                d.UpdateBehavior(gameTime);
             }
         }
 
@@ -556,41 +570,23 @@ namespace VexedCore
             #region Doodads
             foreach (JumpPad j in jumpPads)
             {
-                Vector3 up = Vector3.UnitX;
-                if (Vector3.Dot(j.position.normal, up) != 0)
-                    up = Vector3.UnitY;
-
-                Vector3 right = Vector3.Cross(up, j.position.normal);
-                List<Vertex> vList = new List<Vertex>();
-                vList.Add(new Vertex(j.position, +.5f * up + .5f * right));
-                vList.Add(new Vertex(j.position, +.5f * up - .5f * right));
-                vList.Add(new Vertex(j.position, -.5f * up - .5f * right));
-                vList.Add(new Vertex(j.position, -.5f * up + .5f * right));
-                if(j.active == true)
-                    AddBlockToTriangleList(vList, Color.Yellow, .1f, triangleList);
-                else
-                    AddBlockToTriangleList(vList, Color.HotPink, .1f, triangleList);
+                j.Draw(this, triangleList);
             }
             foreach (Bridge b in bridges)
             {
-                Vector3 up = Vector3.UnitX;
-                if (Vector3.Dot(b.position.normal, up) != 0)
-                    up = Vector3.UnitY;
-                Vector3 right = Vector3.Cross(up, b.position.normal);
-                List<Vertex> vList = new List<Vertex>();
-                vList.Add(new Vertex(b.position, +.5f * up + .5f * right));
-                vList.Add(new Vertex(b.position, +.5f * up - .5f * right));
-                vList.Add(new Vertex(b.position, -.5f * up - .5f * right));
-                vList.Add(new Vertex(b.position, -.5f * up + .5f * right));
-                if (b.active == true)
-                    AddBlockToTriangleList(vList, Color.Blue, .1f, triangleList);
-                else
-                    AddBlockToTriangleList(vList, Color.Green, .1f, triangleList);
+                b.Draw(this, triangleList);
+            }
+            foreach (Doodad b in doodads)
+            {
+                b.Draw(this, triangleList);
             }
             #endregion
 
-            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                triangleList.ToArray(), 0, triangleList.Count / 3, VertexPositionColorNormal.VertexDeclaration);            
+            if (triangleList.Count > 0)
+            {
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    triangleList.ToArray(), 0, triangleList.Count / 3, VertexPositionColorNormal.VertexDeclaration);
+            }
         }
     }
 }

@@ -71,8 +71,7 @@ namespace WinFormsGraphicsDevice
         {
             name = "Doodad";
             id = IDControl.GetID();
-            behaviors = new List<Behavior>();
-            behaviors.Add(new Behavior());
+            behaviors = new List<Behavior>();            
             type = DoodadType.PowerOrb;
         }
 

@@ -3061,66 +3061,6 @@
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>
-                      <id>108</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>108</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>108</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>103</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
                       <id>218</id>
                       <name>Behavior</name>
                       <offset>0</offset>

@@ -52,14 +52,18 @@ namespace VexedCore
                 v.normal = normal;
                 v.position = position;
                 v.velocity = velocity;
+                v.direction = direction;
             }
             else if (Vector3.Dot(normal, n) == 0)
             {
                 Vector3 badComponent = Vector3.Dot(n, position - anchor) * n;
                 Vector3 badVelComponent = Vector3.Dot(n, velocity) * n;
+                Vector3 badDirComponent = Vector3.Dot(n, direction) * n;
                 float badVelLength = Vector3.Dot(n, velocity);
+                float badDirLength = Vector3.Dot(n, direction);
                 v.position = position - badComponent + badComponent.Length() * normal;
                 v.velocity = velocity - badVelComponent - badVelLength * normal;
+                v.direction = direction - badDirComponent - badDirLength * normal;
                 v.normal = n;
             }
             else

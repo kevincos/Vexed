@@ -41,7 +41,11 @@ namespace VexedCore
                             {
                                 Game1.player.center = new Vertex(xmlDoodad.position, xmlFace.normal, Vector3.Zero, xmlDoodad.up);                                
                                 Game1.player.currentRoom = newRoom;
+                                Game1.player.respawnCenter = new Vertex(xmlDoodad.position, xmlFace.normal, Vector3.Zero, xmlDoodad.up);
+                                Game1.player.respawnPoint = new Doodad(VexedLib.DoodadType.Checkpoint, xmlDoodad.position, xmlFace.normal, xmlDoodad.up);
+                                Game1.player.respawnPoint.targetRoom = newRoom;
                             }
+                            Doodad newDoodad = null;
                             if (xmlDoodad.type == VexedLib.DoodadType.JumpPad)
                             {
                                 newRoom.jumpPads.Add(new JumpPad(xmlDoodad.position, xmlFace.normal, xmlDoodad.up));
@@ -49,6 +53,44 @@ namespace VexedCore
                             if (xmlDoodad.type == VexedLib.DoodadType.BridgeGate)
                             {
                                 newRoom.bridges.Add(new Bridge(xmlDoodad.position, xmlFace.normal, xmlDoodad.up, xmlDoodad.IDString, xmlDoodad.targetObject));
+                            }
+                            if (xmlDoodad.type == VexedLib.DoodadType.Brick)
+                            {
+                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
+                            }
+                            if (xmlDoodad.type == VexedLib.DoodadType.Beam)
+                            {
+                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
+                            }
+                            if (xmlDoodad.type == VexedLib.DoodadType.Door)
+                            {
+                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
+                            }
+                            if (xmlDoodad.type == VexedLib.DoodadType.Crate)
+                            {
+                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
+                            }
+                            if (xmlDoodad.type == VexedLib.DoodadType.SpikeBall)
+                            {
+                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
+                            }
+                            if (xmlDoodad.type == VexedLib.DoodadType.WallSwitch)
+                            {
+                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
+                            }
+                            if (xmlDoodad.type == VexedLib.DoodadType.Checkpoint)
+                            {
+                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
+                            }
+                            if (newDoodad != null)
+                            {
+                                foreach (VexedLib.Behavior xmlBehavior in xmlDoodad.behaviors)
+                                {
+                                    Behavior newBehavior = new Behavior(xmlBehavior);
+                                    newDoodad.behaviors.Add(newBehavior);
+                                }
+                                newDoodad.UpdateBehavior();
+                                newRoom.doodads.Add(newDoodad);
                             }
                         }
                         foreach (VexedLib.Block xmlBlock in xmlFace.blocks)
@@ -128,6 +170,20 @@ namespace VexedCore
                                 }
                             }
                         }
+                    }
+                }
+                foreach (Doodad d in r.doodads)
+                {
+                    foreach (Doodad dTarget in r.doodads)
+                    {
+                        if (dTarget.id == d.targetObject)
+                        {
+                            d.targetDoodad = dTarget;
+                        }
+                    }
+                    if (d.type == VexedLib.DoodadType.Checkpoint)
+                    {
+                        d.targetRoom = r;
                     }
                 }
             }

@@ -908,6 +908,7 @@ namespace WinFormsGraphicsDevice
                                     Vector3 left = .5f * Vector3.Cross(MainForm.currentUp, MainForm.selectedFace.normal);
                                     lockPosition += up + left;
                                     Doodad d = new Doodad();
+                                    d.Init();
                                     d.position = lockPosition;
                                     d.up = MainForm.currentUp;
                                     MainForm.selectedFace.doodads.Add(d);

@@ -66,6 +66,10 @@ namespace VexedCore
         public int faceDirection = 0;
         public float baseCameraDistance = 8f;
 
+        public Doodad respawnPoint;
+        public Vertex respawnCenter;
+        public bool dead = false;
+
         public Texture2D currentTexture
         {
             get
@@ -167,9 +171,18 @@ namespace VexedCore
             }
         }
 
+        public void Respawn()
+        {
+            currentRoom = respawnPoint.targetRoom;
+            state = State.Normal;
+            center = new Vertex(respawnCenter.position, respawnCenter.normal, respawnCenter.velocity, respawnCenter.direction);
+            dead = false;
+        }
 
         public void Update(GameTime gameTime)
         {
+            if (dead == true)
+                Respawn();
             groundCounter += gameTime.ElapsedGameTime.Milliseconds;
             if (groundCounter > groundTolerance)
             {
@@ -254,6 +267,10 @@ namespace VexedCore
                         jumpRecovery = 500;
                     }
                 }
+                if((gamePadState.IsButtonDown(Buttons.B)))
+                {
+                    Respawn();
+                }
                 
                 center.velocity -= gravityAcceleration * up;
 
@@ -313,7 +330,7 @@ namespace VexedCore
                             faceDirection = 0;
                             b.active = false;
                         }
-                    }
+                    }                   
                 }
                 #endregion
             }

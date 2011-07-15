@@ -71,9 +71,13 @@ namespace VexedLib
         {
             name = "Doodad";
             id = IDControl.GetID();
-            behaviors = new List<Behavior>();
-            behaviors.Add(new Behavior());
+            behaviors = new List<Behavior>();            
             type = DoodadType.PowerOrb;
+        }
+
+        public void Init()
+        {
+            behaviors.Add(new Behavior());
         }
 
         public Doodad(Doodad d)

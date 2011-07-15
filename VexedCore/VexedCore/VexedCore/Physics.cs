@@ -14,11 +14,15 @@ namespace VexedCore
 {    
     
     class Physics
-    {
-        public static List<Block> BlockUnfold(Room r, Vector3 normal, Vector3 up)
+    {        
+        public static Room BlockUnfold(Room r, Vector3 normal, Vector3 up)
         {
-            List<Block> unfoldedBlockList = new List<Block>();
-            
+            Room unfoldedRoom = new Room();
+            foreach (Doodad d in r.doodads)
+            {
+                Doodad unfoldedDoodad = new Doodad(d, r, normal, up);
+                unfoldedRoom.doodads.Add(unfoldedDoodad);
+            }
             foreach (Block b in r.blocks)
             {
                 List<Vertex> points = new List<Vertex>();
@@ -48,7 +52,7 @@ namespace VexedCore
                 }
                 if (points.Count == 4)
                 {
-                    unfoldedBlockList.Add(new Block(points, edgeTypes, r, normal, up));
+                    unfoldedRoom.blocks.Add(new Block(points, edgeTypes, r, normal, up));
                 }
                 else
                 {
@@ -62,17 +66,17 @@ namespace VexedCore
                         else
                             vList2.Add(points[i]);
                     }
-                    unfoldedBlockList.Add(new Block(vList1, edgeTypes, r, normal, up));
-                    unfoldedBlockList.Add(new Block(vList2, edgeTypes, r, normal, up));
+                    unfoldedRoom.blocks.Add(new Block(vList1, edgeTypes, r, normal, up));
+                    unfoldedRoom.blocks.Add(new Block(vList2, edgeTypes, r, normal, up));
                 }
             }
-            return unfoldedBlockList;
+            return unfoldedRoom;
         }
 
         public static void DebugDraw(Room r, Vector3 normal, Vector3 up)
         {
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
-            List<Block> debugList = Physics.BlockUnfold(r, normal, up);
+            List<Block> debugList = Physics.BlockUnfold(r, normal, up).blocks;
             foreach (Block b in debugList)
             {
                 List<Vertex> vList = new List<Vertex>();
@@ -185,7 +189,7 @@ namespace VexedCore
         public static void CollisionCheck(Room r, Player p, GameTime gameTime)
         {
             // Variables used for entire collision test method.
-            List<Block> unfoldedBlocks = Physics.BlockUnfold(r, p.center.normal, p.center.direction);
+            Room unfoldedRoom = Physics.BlockUnfold(r, p.center.normal, p.center.direction);
             List<Vector3> playerVertexList = new List<Vector3>();
             List<Vector3> playerGroundBox = new List<Vector3>();
             List<Vector3> playerLeftBox = new List<Vector3>();
@@ -217,8 +221,9 @@ namespace VexedCore
                 playerVertexList.Add(p.center.position - p.playerHalfHeight * up - p.playerHalfWidth * right);
                 playerVertexList.Add(p.center.position - p.playerHalfHeight * up + p.playerHalfWidth * right);
 
-                foreach (Block b in unfoldedBlocks)
+                foreach (Block b in unfoldedRoom.blocks)
                 {
+                    #region blockCollision
                     // if block intesects with rectVertexList
                     List<Vector3> blockVertexList = new List<Vector3>();
                     foreach (Edge e in b.edges)
@@ -229,7 +234,7 @@ namespace VexedCore
 
                     // Actual collision detection between two polygons happens here.
                     Vector3 projection = Collide(playerVertexList, blockVertexList, p.center.normal);
-
+                    
                     if (projection.Length() > 0f)
                     {
                         // If a collision is found, save the necessary data and continue.
@@ -249,8 +254,38 @@ namespace VexedCore
                             }
                         }
                         edgePropertiesList.Add(properties);
-
                     }
+                    #endregion
+                }
+
+                foreach (Doodad b in unfoldedRoom.doodads)
+                {
+                    #region doodadCollision
+                    if (b.hasCollisionRect)
+                    {
+                        // if block intesects with rectVertexList
+                        List<Vector3> brickVertexList = new List<Vector3>();
+
+                        brickVertexList.Add(b.position.position + b.up + b.right);
+                        brickVertexList.Add(b.position.position + b.up + b.left);
+                        brickVertexList.Add(b.position.position + b.down + b.left);
+                        brickVertexList.Add(b.position.position + b.down + b.right);
+
+
+                        // Actual collision detection between two polygons happens here.
+                        Vector3 projection = Collide(playerVertexList, brickVertexList, p.center.normal);
+
+                        if (projection.Length() > 0f)
+                        {
+                            // If a collision is found, save the necessary data and continue.
+                            projectionList.Add(projection);
+                            relVelList.Add(b.position.velocity);
+                            EdgeProperties properties = new EdgeProperties();
+                            properties.type = VexedLib.EdgeType.Normal;
+                            edgePropertiesList.Add(properties);
+                        }
+                    }
+                    #endregion
                 }
 
                 // Compute the most powerful collision and resolve it.
@@ -316,6 +351,11 @@ namespace VexedCore
                     }
 
                     p.center.position += maxProjection;
+
+                    if (edgeProperties.type == VexedLib.EdgeType.Spikes || (edgeProperties.type == VexedLib.EdgeType.Electric && edgeProperties.primaryValue > 0))
+                    {
+                        p.dead = true;
+                    }
                 }
                 else
                     break;
@@ -341,7 +381,7 @@ namespace VexedCore
             p.rightWall = false;
 
             p.platformVelocity = Vector3.Zero;
-            foreach (Block b in unfoldedBlocks)
+            foreach (Block b in unfoldedRoom.blocks)
             {
                 // if block intesects with rectVertexList
                 List<Vector3> blockVertexList = new List<Vector3>();
@@ -424,6 +464,38 @@ namespace VexedCore
                     }
                 }
             }
+            
+            foreach (Doodad b in unfoldedRoom.doodads)
+            {
+                // if block intesects with rectVertexList
+                List<Vector3> brickVertexList = new List<Vector3>();
+                
+                brickVertexList.Add(b.position.position + b.up + b.right);
+                brickVertexList.Add(b.position.position + b.up + b.left);
+                brickVertexList.Add(b.position.position + b.down + b.left);
+                brickVertexList.Add(b.position.position + b.down + b.right);
+
+                Vector3 groundProjection = Collide(playerGroundBox, brickVertexList, p.center.normal);
+                Vector3 leftProjection = Collide(playerLeftBox, brickVertexList, p.center.normal);
+                Vector3 rightProjection = Collide(playerRightBox, brickVertexList, p.center.normal);
+
+
+                if (Vector3.Dot(groundProjection, up) > 0)
+                {
+                    p.grounded = true;
+                    p.platformVelocity = b.position.velocity;
+                }
+                if (Vector3.Dot(leftProjection, right) > 0)
+                {
+                    p.leftWall = true;
+                    p.platformVelocity = b.position.velocity;
+                }
+                if (Vector3.Dot(rightProjection, -right) != 0)
+                {
+                    p.rightWall = true;
+                    p.platformVelocity = b.position.velocity;                    
+                }
+            }
 
             // Now that we know if the player is grounded or not, we can use the walking property to determine whether or
             // not we should apply friction.
@@ -447,6 +519,36 @@ namespace VexedCore
                     b.active = true;
                 else
                     b.active = false;
+            }
+
+            foreach (Doodad d in r.doodads)
+            {
+                if (d == p.respawnPoint)
+                    d.active = true;
+                else
+                    d.active = false;
+                if ((d.position.position - p.center.position).Length() < d.triggerDistance)
+                {
+                    if (d.type == VexedLib.DoodadType.Checkpoint)
+                    {
+                        p.respawnPoint = d;
+                        p.respawnCenter = new Vertex(d.position.position, p.center.normal, Vector3.Zero, p.center.direction);
+
+                    }
+                    if(d.targetDoodad != null)
+                    {
+                        if (d.targetDoodad.currentBehavior.id == d.expectedBehavior)
+                        {
+                            foreach (Behavior b in d.targetDoodad.behaviors)
+                            {
+                                if (b.id == d.targetBehavior)
+                                {
+                                    d.targetDoodad.SetBehavior(b);
+                                }
+                            }
+                        }                        
+                    }
+                }
             }
 
         }

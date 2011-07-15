@@ -22,6 +22,7 @@ namespace VexedCore
         public int period;
         public int primaryValue;
         public int secondaryValue;
+        public bool toggle;
 
         public Behavior(VexedLib.Behavior xmlBehavior)
         {
@@ -33,6 +34,7 @@ namespace VexedCore
             secondaryValue = xmlBehavior.secondaryValue;
             offSet = xmlBehavior.offset;
             period = xmlBehavior.period;
+            toggle = xmlBehavior.toggle;
         }
     }
 }
