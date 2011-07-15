@@ -154,6 +154,15 @@
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_top.xnb</Output>
       <Time>2010-07-03T10:46:42-07:00</Time>
     </Item>
+    <Item>
+      <Source>plate_texture.png</Source>
+      <Name>plate_texture</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\plate_texture.xnb</Output>
+      <Time>2011-07-15T11:33:51.5491248-07:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

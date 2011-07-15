@@ -65,6 +65,7 @@ namespace VexedCore
         public int groundCounter = 0;
         public int faceDirection = 0;
         public float baseCameraDistance = 8f;
+        public int orbsCollected = 0;
 
         public Doodad respawnPoint;
         public Vertex respawnCenter;

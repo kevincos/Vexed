@@ -49,8 +49,14 @@ namespace VexedCore
             staticTranslucentObjects = new List<TrasnparentSquare>();
 
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferMultiSampling = true;            
+            graphics.PreferMultiSampling = true;
             
+                //graphics.IsFullScreen = true;
+                //graphics.PreferredBackBufferWidth = 1920;
+                //graphics.PreferredBackBufferHeight = 1080;
+                
+
+
             bloom = new BloomComponent(this);
             Content.RootDirectory = "Content";
 
@@ -65,8 +71,7 @@ namespace VexedCore
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            graphicsDevice = GraphicsDevice;
-
+            graphicsDevice = GraphicsDevice;            
 
             LevelLoader.Load("LevelData\\spikeelevator");
             //LevelLoader.Load("LevelData\\spiral2");
@@ -89,6 +94,7 @@ namespace VexedCore
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            Room.blockTexture = Content.Load<Texture2D>("plate_texture");
             Player.neutralTexture = Content.Load<Texture2D>("p_neutral");
             Player.fallTexture = Content.Load<Texture2D>("p_fall");
             Player.wallJumpTexture = Content.Load<Texture2D>("p_walljump");
@@ -134,19 +140,6 @@ namespace VexedCore
             if (Keyboard.GetState().IsKeyDown(Keys.Escape) || GamePad.GetState(activePlayer).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D1))
-            {
-                Room.innerBlockMode = 0;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.D2))
-            {
-                Room.innerBlockMode = 1;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.D3))
-            {
-                Room.innerBlockMode = 2;
-            }
-
             
             player.Update(gameTime);
             
@@ -184,6 +177,8 @@ namespace VexedCore
             {
                 effect = new BasicEffect(Game1.graphicsDevice);
                 effect.VertexColorEnabled = true;
+                //effect.TextureEnabled = true;
+                effect.Texture = Room.blockTexture;
                 playerTextureEffect = new BasicEffect(Game1.graphicsDevice);
                 playerTextureEffect.VertexColorEnabled = true;
                 Skybox.Init();

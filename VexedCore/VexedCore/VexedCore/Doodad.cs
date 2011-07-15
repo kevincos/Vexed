@@ -80,7 +80,7 @@ namespace VexedCore
     public class Doodad
     {
         public Vertex position;
-        public bool active = true;
+        public bool active = false;
         public string id = "";
         public string targetBehavior ="";
         public string targetObject = "";
@@ -94,12 +94,14 @@ namespace VexedCore
         public bool behaviorStarted = false;
         public bool toggleOn = true;
         public Doodad targetDoodad = null;
-        public Room targetRoom = null;
+        public Room targetRoom = null;        
 
         public Color baseColor
         {
             get
             {
+                if (type == VexedLib.DoodadType.PowerOrb)
+                    return Color.Gold;
                 if (type == VexedLib.DoodadType.Brick)
                     return Color.Brown;
                 if (type == VexedLib.DoodadType.Door)
@@ -117,7 +119,7 @@ namespace VexedCore
         {
             get
             {
-                if (type == VexedLib.DoodadType.Checkpoint)
+                if (type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb)
                     return Color.Yellow;
                 else
                     return Color.DarkGray;
@@ -138,7 +140,17 @@ namespace VexedCore
         {
             get
             {
-                if (type == VexedLib.DoodadType.WallSwitch || type == VexedLib.DoodadType.Checkpoint)
+                if (type == VexedLib.DoodadType.WallSwitch || type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb)
+                    return false;
+                return true;
+            }
+        }
+
+        public bool shouldRender
+        {
+            get
+            {
+                if(type == VexedLib.DoodadType.PowerOrb && active == false)
                     return false;
                 return true;
             }
@@ -203,8 +215,8 @@ namespace VexedCore
         public float halfWidth
         {
             get
-            {
-                if (type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam)
+            {                
+                if (type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam || type == VexedLib.DoodadType.PowerOrb)
                     return .1f;
                 if (type == VexedLib.DoodadType.WallSwitch)
                     return .25f;
@@ -215,6 +227,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.PowerOrb)
+                    return .1f;
                 return .5f;
             }
         }
@@ -224,7 +238,7 @@ namespace VexedCore
             {
                 if (type == VexedLib.DoodadType.WallSwitch)
                     return .25f;
-                if (type == VexedLib.DoodadType.Checkpoint)
+                if (type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb)
                     return .1f;
                 return .5f;
             }
@@ -241,6 +255,9 @@ namespace VexedCore
             this.position = new Vertex(xmlDoodad.position, normal, Vector3.Zero, xmlDoodad.up);
             behaviors = new List<Behavior>();
             currentBehavior = null;
+
+            if (type == VexedLib.DoodadType.PowerOrb)
+                active = true;
         }
 
         public Doodad(VexedLib.DoodadType type, Vector3 position, Vector3 normal, Vector3 direction)
@@ -261,15 +278,18 @@ namespace VexedCore
 
         public void Draw(Room currentRoom, List<VertexPositionColorNormal> triangleList)
         {
-            List<Vertex> vList = new List<Vertex>();
-            vList.Add(new Vertex(position, up + right));
-            vList.Add(new Vertex(position, up +left));
-            vList.Add(new Vertex(position, down +left));
-            vList.Add(new Vertex(position, down + right));
-            if(active)
-                currentRoom.AddBlockToTriangleList(vList, activeColor, depth, triangleList);            
-            else
-                currentRoom.AddBlockToTriangleList(vList, baseColor, depth, triangleList);            
+            if (shouldRender == true)
+            {
+                List<Vertex> vList = new List<Vertex>();
+                vList.Add(new Vertex(position, up + right));
+                vList.Add(new Vertex(position, up + left));
+                vList.Add(new Vertex(position, down + left));
+                vList.Add(new Vertex(position, down + right));
+                if (active)
+                    currentRoom.AddBlockToTriangleList(vList, activeColor, depth, triangleList);
+                else
+                    currentRoom.AddBlockToTriangleList(vList, baseColor, depth, triangleList);
+            }
         }
 
 

@@ -18,7 +18,8 @@ namespace VexedCore
 
         public Vector3 center;
         public Vector3 size;
-        
+
+        public static Texture2D blockTexture;
 
         public List<Block> blocks;
         public List<JumpPad> jumpPads;

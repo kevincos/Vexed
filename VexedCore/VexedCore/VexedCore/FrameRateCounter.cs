@@ -63,12 +63,18 @@ namespace VexedCore
 
             string fps = string.Format("fps: {0}", frameRate);
 
+            string score = "Score: " + Game1.player.orbsCollected;
+
             spriteBatch.Begin();
 
             spriteBatch.DrawString(spriteFont, fps, new Vector2(33, 33), Color.Black);
             spriteBatch.DrawString(spriteFont, fps, new Vector2(32, 32), Color.White);
 
-            spriteBatch.End();
+            spriteBatch.DrawString(spriteFont, score, new Vector2(33, 53), Color.Black);
+            spriteBatch.DrawString(spriteFont, score, new Vector2(32, 52), Color.White);
+
+
+            spriteBatch.End();            
         }
     }
 }

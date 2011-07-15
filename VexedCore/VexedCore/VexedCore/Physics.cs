@@ -467,33 +467,36 @@ namespace VexedCore
             
             foreach (Doodad b in unfoldedRoom.doodads)
             {
-                // if block intesects with rectVertexList
-                List<Vector3> brickVertexList = new List<Vector3>();
-                
-                brickVertexList.Add(b.position.position + b.up + b.right);
-                brickVertexList.Add(b.position.position + b.up + b.left);
-                brickVertexList.Add(b.position.position + b.down + b.left);
-                brickVertexList.Add(b.position.position + b.down + b.right);
-
-                Vector3 groundProjection = Collide(playerGroundBox, brickVertexList, p.center.normal);
-                Vector3 leftProjection = Collide(playerLeftBox, brickVertexList, p.center.normal);
-                Vector3 rightProjection = Collide(playerRightBox, brickVertexList, p.center.normal);
-
-
-                if (Vector3.Dot(groundProjection, up) > 0)
+                if (b.hasCollisionRect)
                 {
-                    p.grounded = true;
-                    p.platformVelocity = b.position.velocity;
-                }
-                if (Vector3.Dot(leftProjection, right) > 0)
-                {
-                    p.leftWall = true;
-                    p.platformVelocity = b.position.velocity;
-                }
-                if (Vector3.Dot(rightProjection, -right) != 0)
-                {
-                    p.rightWall = true;
-                    p.platformVelocity = b.position.velocity;                    
+                    // if block intesects with rectVertexList
+                    List<Vector3> brickVertexList = new List<Vector3>();
+
+                    brickVertexList.Add(b.position.position + b.up + b.right);
+                    brickVertexList.Add(b.position.position + b.up + b.left);
+                    brickVertexList.Add(b.position.position + b.down + b.left);
+                    brickVertexList.Add(b.position.position + b.down + b.right);
+
+                    Vector3 groundProjection = Collide(playerGroundBox, brickVertexList, p.center.normal);
+                    Vector3 leftProjection = Collide(playerLeftBox, brickVertexList, p.center.normal);
+                    Vector3 rightProjection = Collide(playerRightBox, brickVertexList, p.center.normal);
+
+
+                    if (Vector3.Dot(groundProjection, up) > 0)
+                    {
+                        p.grounded = true;
+                        p.platformVelocity = b.position.velocity;
+                    }
+                    if (Vector3.Dot(leftProjection, right) > 0)
+                    {
+                        p.leftWall = true;
+                        p.platformVelocity = b.position.velocity;
+                    }
+                    if (Vector3.Dot(rightProjection, -right) != 0)
+                    {
+                        p.rightWall = true;
+                        p.platformVelocity = b.position.velocity;
+                    }
                 }
             }
 
@@ -523,12 +526,23 @@ namespace VexedCore
 
             foreach (Doodad d in r.doodads)
             {
-                if (d == p.respawnPoint)
-                    d.active = true;
-                else
-                    d.active = false;
+                if (d.type == VexedLib.DoodadType.Checkpoint)
+                {
+                    if (d == p.respawnPoint)
+                        d.active = true;
+                    else
+                        d.active = false;
+                }
                 if ((d.position.position - p.center.position).Length() < d.triggerDistance)
                 {
+                    if (d.type == VexedLib.DoodadType.PowerOrb)
+                    {
+                        if(d.active == true)
+                        {
+                            d.active = false;
+                            p.orbsCollected++;
+                        }
+                    }
                     if (d.type == VexedLib.DoodadType.Checkpoint)
                     {
                         p.respawnPoint = d;

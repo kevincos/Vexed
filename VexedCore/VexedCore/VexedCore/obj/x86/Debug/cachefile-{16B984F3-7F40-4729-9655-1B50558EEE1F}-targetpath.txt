@@ -15,3 +15,4 @@ Content\skybox_front.xnb
 Content\skybox_left.xnb
 Content\skybox_right.xnb
 Content\skybox_top.xnb
+Content\plate_texture.xnb

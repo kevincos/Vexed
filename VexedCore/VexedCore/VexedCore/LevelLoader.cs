@@ -82,6 +82,10 @@ namespace VexedCore
                             {
                                 newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
                             }
+                            if (xmlDoodad.type == VexedLib.DoodadType.PowerOrb)
+                            {
+                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
+                            }
                             if (newDoodad != null)
                             {
                                 foreach (VexedLib.Behavior xmlBehavior in xmlDoodad.behaviors)
