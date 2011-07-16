@@ -75,7 +75,7 @@ namespace VexedCore
 
         public static void DebugDraw(Room r, Vector3 normal, Vector3 up)
         {
-            List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
+            List<VertexPositionColorNormalTexture> triangleList = new List<VertexPositionColorNormalTexture>();
             List<Block> debugList = Physics.BlockUnfold(r, normal, up).blocks;
             foreach (Block b in debugList)
             {
@@ -98,9 +98,9 @@ namespace VexedCore
                     Vector3 velocityNormal = b.edges[i].start.velocity;                    
                     velocityNormal.Normalize();
                     Vector3 sideNormal = Vector3.Cross(velocityNormal, normal);
-                    triangleList.Add(new VertexPositionColorNormal(b.edges[i].start.position + .2f*sideNormal, Color.Red, normal));
-                    triangleList.Add(new VertexPositionColorNormal(b.edges[i].start.position - .2f *sideNormal, Color.Red, normal));
-                    triangleList.Add(new VertexPositionColorNormal(b.edges[i].start.position + velocityNormal, Color.Red, normal));
+                    triangleList.Add(new VertexPositionColorNormalTexture(b.edges[i].start.position + .2f * sideNormal, Color.Red, normal, new Vector2(0,0)));
+                    triangleList.Add(new VertexPositionColorNormalTexture(b.edges[i].start.position - .2f * sideNormal, Color.Red, normal, new Vector2(0, 0)));
+                    triangleList.Add(new VertexPositionColorNormalTexture(b.edges[i].start.position + velocityNormal, Color.Red, normal, new Vector2(0, 0)));
                 }
                 
             }
@@ -564,6 +564,162 @@ namespace VexedCore
                     }
                 }
             }
+            #region doodadCollisionDetection
+            List<Vector3> doodadVertexList;
+            foreach(Doodad d in unfoldedRoom.doodads)
+            {
+                if (d.freeMotion == true)
+                {
+                    for (int attempt = 0; attempt < 2; attempt++)
+                    {
+                        List<Vector3> projectionList = new List<Vector3>();
+                        List<Vector3> relVelList = new List<Vector3>();
+                        List<EdgeProperties> edgePropertiesList = new List<EdgeProperties>();
+
+                        doodadVertexList = new List<Vector3>();
+                        doodadVertexList.Add(d.position.position + d.up + d.right);
+                        doodadVertexList.Add(d.position.position + d.up + d.left);
+                        doodadVertexList.Add(d.position.position + d.down + d.left);
+                        doodadVertexList.Add(d.position.position + d.down + d.right);
+
+                        foreach (Block b in unfoldedRoom.blocks)
+                        {
+                            #region blockCollision
+                            // if block intesects with rectVertexList
+                            List<Vector3> blockVertexList = new List<Vector3>();
+                            foreach (Edge e in b.edges)
+                            {
+                                if (e.start.position != e.end.position)
+                                    blockVertexList.Add(e.start.position);
+                            }
+
+                            // Actual collision detection between two polygons happens here.
+                            Vector3 projection = Collide(doodadVertexList, blockVertexList, p.center.normal);
+
+                            if (projection.Length() > 0f)
+                            {
+                                // If a collision is found, save the necessary data and continue.
+                                projectionList.Add(projection);
+                                relVelList.Add(b.edges[0].start.velocity);
+                                EdgeProperties properties = new EdgeProperties();
+                                properties.type = VexedLib.EdgeType.Normal;
+                                foreach (Edge e in b.edges)
+                                {
+                                    Vector3 edgeNormal = Vector3.Cross(e.start.normal, e.start.position - e.end.position);
+                                    edgeNormal.Normalize();
+                                    Vector3 projectionNormal = projection / projection.Length();
+                                    float result = Vector3.Dot(edgeNormal, projectionNormal);
+                                    if (result == 1)
+                                    {
+                                        properties = e.properties;
+                                    }
+                                }
+                                edgePropertiesList.Add(properties);
+                            }
+                            #endregion
+                        }
+
+                        foreach (Doodad b in unfoldedRoom.doodads)
+                        {
+                            #region doodadCollision
+                            if (b.hasCollisionRect && b != d)
+                            {
+                                // if block intesects with rectVertexList
+                                List<Vector3> brickVertexList = new List<Vector3>();
+
+                                brickVertexList.Add(b.position.position + b.up + b.right);
+                                brickVertexList.Add(b.position.position + b.up + b.left);
+                                brickVertexList.Add(b.position.position + b.down + b.left);
+                                brickVertexList.Add(b.position.position + b.down + b.right);
+
+
+                                // Actual collision detection between two polygons happens here.
+                                Vector3 projection = Collide(doodadVertexList, brickVertexList, p.center.normal);
+
+                                if (projection.Length() > 0f)
+                                {
+                                    // If a collision is found, save the necessary data and continue.
+                                    projectionList.Add(projection);
+                                    relVelList.Add(b.position.velocity);
+                                    EdgeProperties properties = new EdgeProperties();
+                                    properties.type = VexedLib.EdgeType.Normal;
+                                    edgePropertiesList.Add(properties);
+                                }
+                            }
+                            #endregion
+                        }
+
+                        // Compute the most powerful collision and resolve it.
+                        Vector3 maxProjection = Vector3.Zero;
+                        Vector3 relVel = Vector3.Zero;
+                        EdgeProperties edgeProperties = null;
+                        for (int i = 0; i < projectionList.Count(); i++)
+                        {
+                            if (projectionList[i].Length() > maxProjection.Length())
+                            {
+                                maxProjection = projectionList[i];
+                                relVel = relVelList[i];
+                                edgeProperties = edgePropertiesList[i];
+                            }
+                        }
+                        if (maxProjection != Vector3.Zero)
+                        {
+
+                            Vector3 projectionDirection = maxProjection / maxProjection.Length();
+                            Vector3 frictionDirection = Vector3.Cross(projectionDirection, d.position.normal);
+
+                            if (edgeProperties.type == VexedLib.EdgeType.ConveyorBelt)
+                            {
+                                relVel += .001f * edgeProperties.primaryValue * frictionDirection;
+                            }
+
+                            float badVelocityComponent = Vector3.Dot(projectionDirection, d.srcDoodad.position.velocity - relVel);
+
+                            if (badVelocityComponent < -0.0f)
+                            {
+                                if (edgeProperties.type == VexedLib.EdgeType.Bounce)
+                                {
+                                    d.srcDoodad.position.velocity -= badVelocityComponent * projectionDirection;
+                                    d.srcDoodad.position.velocity += p.jumpSpeed * projectionDirection;
+                                }
+                                else
+                                {
+                                    d.srcDoodad.position.velocity -= badVelocityComponent * projectionDirection;
+                                }
+                            }
+
+                            /*float projectionUpComponent = Vector3.Dot(projectionDirection, p.center.direction);
+                            if (projectionUpComponent > 0)
+                            {
+
+                                float frictionVelocityComponent = Vector3.Dot(frictionDirection, p.center.velocity - relVel);
+
+
+                                if (Math.Abs(frictionVelocityComponent) < .02f)
+                                {
+                                    frictionAdjustment -= frictionVelocityComponent * frictionDirection;
+                                }
+                                else if (frictionVelocityComponent > 0)
+                                {
+                                    frictionAdjustment -= .02f * frictionDirection;
+                                }
+                                else
+                                {
+                                    frictionAdjustment += .02f * frictionDirection;
+                                }
+                                if (edgeProperties.type == VexedLib.EdgeType.Ice || edgeProperties.type == VexedLib.EdgeType.Bounce)
+                                    frictionAdjustment = Vector3.Zero;
+                            }*/
+
+                            d.srcDoodad.position.position += maxProjection;
+
+                        }
+                        else
+                            break;
+                    }
+                }
+            }
+            #endregion
 
         }
 

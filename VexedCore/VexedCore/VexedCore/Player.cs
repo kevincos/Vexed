@@ -64,7 +64,7 @@ namespace VexedCore
         public int groundTolerance = 100;
         public int groundCounter = 0;
         public int faceDirection = 0;
-        public float baseCameraDistance = 8f;
+        public float baseCameraDistance = 12f;
         public int orbsCollected = 0;
 
         public Doodad respawnPoint;
@@ -405,7 +405,7 @@ namespace VexedCore
 
         public void Draw(GameTime gameTime)
         {
-            List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
+            List<VertexPositionColorNormalTexture> triangleList = new List<VertexPositionColorNormalTexture>();
             List<VertexPositionColorNormalTexture> textureTriangleList = new List<VertexPositionColorNormalTexture>();
             List<Vertex> rectVertexList = new List<Vertex>();
             Vector3 up = center.direction;
@@ -429,8 +429,8 @@ namespace VexedCore
             else
                 currentRoom.AddBlockToTriangleList(rectVertexList, Color.Brown, .2f, triangleList);
 
-            
-            VertexPositionColorNormal[] triangleArray = triangleList.ToArray();
+
+            VertexPositionColorNormalTexture[] triangleArray = triangleList.ToArray();
             if (state == State.Jump || state == State.BridgeJump)
             {
                 for (int i = 0; i < triangleArray.Count(); i++)
@@ -440,7 +440,7 @@ namespace VexedCore
             }
 
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                triangleArray, 0, triangleList.Count / 3, VertexPositionColorNormal.VertexDeclaration);
+                triangleArray, 0, triangleList.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
             
         }
 

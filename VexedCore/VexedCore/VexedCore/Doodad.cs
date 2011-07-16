@@ -24,7 +24,7 @@ namespace VexedCore
             this.position = new Vertex(position, normal,Vector3.Zero, up);
         }
 
-        public void Draw(Room currentRoom, List<VertexPositionColorNormal> triangleList)
+        public void Draw(Room currentRoom, List<VertexPositionColorNormalTexture> triangleList)
         {
             Vector3 up = Vector3.UnitX;
             if (Vector3.Dot(position.normal, up) != 0)
@@ -59,7 +59,7 @@ namespace VexedCore
             this.position = new Vertex(position, normal, Vector3.Zero, direction);
         }
 
-        public void Draw(Room currentRoom, List<VertexPositionColorNormal> triangleList)
+        public void Draw(Room currentRoom, List<VertexPositionColorNormalTexture> triangleList)
         {
             Vector3 up = Vector3.UnitX;
             if (Vector3.Dot(position.normal, up) != 0)
@@ -94,7 +94,9 @@ namespace VexedCore
         public bool behaviorStarted = false;
         public bool toggleOn = true;
         public Doodad targetDoodad = null;
-        public Room targetRoom = null;        
+        public Room targetRoom = null;
+
+        public Doodad srcDoodad = null;
 
         public Color baseColor
         {
@@ -153,6 +155,16 @@ namespace VexedCore
                 if(type == VexedLib.DoodadType.PowerOrb && active == false)
                     return false;
                 return true;
+            }
+        }
+
+        public bool freeMotion
+        {
+            get
+            {
+                if (type == VexedLib.DoodadType.Crate || type == VexedLib.DoodadType.SpikeBall)
+                    return true;
+                return false;
             }
         }
 
@@ -274,9 +286,10 @@ namespace VexedCore
             type = d.type;
             toggleOn = d.toggleOn;
             targetDoodad = d.targetDoodad;
+            srcDoodad = d;
         }
 
-        public void Draw(Room currentRoom, List<VertexPositionColorNormal> triangleList)
+        public void Draw(Room currentRoom, List<VertexPositionColorNormalTexture> triangleList)
         {
             if (shouldRender == true)
             {
