@@ -98,6 +98,53 @@ namespace VexedCore
 
         public Doodad srcDoodad = null;
 
+        public float boundingBoxTop;
+        public float boundingBoxBottom;
+        public float boundingBoxLeft;
+        public float boundingBoxRight;
+
+        public void UpdateBoundingBox(Vector3 playerUp, Vector3 playerRight)
+        {
+            float x1, x2, x3, x4 = 0;
+            float y1, y2, y3, y4 = 0;
+            x1 = Vector3.Dot(playerRight, position.position + up);
+            x2 = Vector3.Dot(playerRight, position.position + down);
+            x3 = Vector3.Dot(playerRight, position.position + left);
+            x4 = Vector3.Dot(playerRight, position.position + right);
+            y1 = Vector3.Dot(playerUp, position.position + up);
+            y2 = Vector3.Dot(playerUp, position.position + down);
+            y3 = Vector3.Dot(playerUp, position.position + left);
+            y4 = Vector3.Dot(playerUp, position.position + right);
+            boundingBoxLeft = x1;
+            if (x2 < boundingBoxLeft)
+                boundingBoxLeft = x2;
+            if (x3 < boundingBoxLeft)
+                boundingBoxLeft = x3;
+            if (x4 < boundingBoxLeft)
+                boundingBoxLeft = x4;
+            boundingBoxRight = x1;
+            if (x2 > boundingBoxRight)
+                boundingBoxRight = x2;
+            if (x3 > boundingBoxRight)
+                boundingBoxRight = x3;
+            if (x4 > boundingBoxRight)
+                boundingBoxRight = x4;
+            boundingBoxTop = y1;
+            if (y2 > boundingBoxTop)
+                boundingBoxTop = y2;
+            if (y3 > boundingBoxTop)
+                boundingBoxTop = y3;
+            if (y4 > boundingBoxTop)
+                boundingBoxTop = y4;
+            boundingBoxBottom = y1;
+            if (y2 < boundingBoxBottom)
+                boundingBoxBottom = y2;
+            if (y3 < boundingBoxBottom)
+                boundingBoxBottom = y3;
+            if (y4 < boundingBoxBottom)
+                boundingBoxBottom = y4;
+        }
+
         public Color baseColor
         {
             get

@@ -51,10 +51,15 @@ namespace VexedCore
 
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferMultiSampling = true;
-            
+
+#if XBOX
+                graphics.PreferredBackBufferWidth = 1280;
+                graphics.PreferredBackBufferHeight = 720;
+#endif
                 //graphics.IsFullScreen = true;
                 //graphics.PreferredBackBufferWidth = 1024;
                 //graphics.PreferredBackBufferHeight = 768;
+
                 
 
 
@@ -147,6 +152,7 @@ namespace VexedCore
             // TODO: Add your update logic here
             foreach(Room r in roomList)
                 r.Update(gameTime);
+            //player.currentRoom.Update(gameTime);
 
             player.Update(gameTime);
             
@@ -254,9 +260,13 @@ namespace VexedCore
             {
                 r.Draw(gameTime);
             }
-            //player.Draw(gameTime);
             //Physics.DebugDraw(player.currentRoom, player.center.normal, player.center.direction);            
 
+            if (dynamicOpaqueObjects.Count > 0)
+            {
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    Game1.dynamicOpaqueObjects.ToArray(), 0, dynamicOpaqueObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
             if (staticOpaqueObjects.Count > 0)
             {
                 Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,

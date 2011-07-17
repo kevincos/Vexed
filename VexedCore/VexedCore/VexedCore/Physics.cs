@@ -17,6 +17,7 @@ namespace VexedCore
     {        
         public static Room BlockUnfold(Room r, Vector3 normal, Vector3 up)
         {
+            Vector3 right = Vector3.Cross(up, normal);
             Room unfoldedRoom = new Room();
             foreach (Doodad d in r.doodads)
             {
@@ -33,7 +34,6 @@ namespace VexedCore
                     Edge e = b.edges[i];
                     points.Add(e.start);
                     edgeTypes.Add(e.properties);
-                    //if (e.start.normal != e.end.normal)                        
                     if(e.start.normal != e.end.normal && (e.start.normal != normal && e.end.normal != normal))
                     {
                         Vector3 fullEdge = e.end.position - e.start.position;
@@ -69,6 +69,14 @@ namespace VexedCore
                     unfoldedRoom.blocks.Add(new Block(vList1, edgeTypes, r, normal, up));
                     unfoldedRoom.blocks.Add(new Block(vList2, edgeTypes, r, normal, up));
                 }
+            }
+            foreach (Block b in unfoldedRoom.blocks)
+            {
+                b.UpdateBoundingBox(up, right);
+            }
+            foreach (Doodad d in unfoldedRoom.doodads)
+            {
+                d.UpdateBoundingBox(up, right);
             }
             return unfoldedRoom;
         }
@@ -109,7 +117,7 @@ namespace VexedCore
         }
 
         public static Vector3 Collide(List<Vector3> itemVertexList, List<Vector3> blockVertexList, Vector3 normal)
-        {
+        {            
             Vector3 minProjectionNormal = Vector3.Zero;
             float minProjectionValue = 0;
             bool collision_free = false;
@@ -182,6 +190,7 @@ namespace VexedCore
                 }
             }
             return minProjectionNormal * minProjectionValue;
+            //return Vector3.Zero;
         }
 
         /* Test for collision between player and blocks, and adjust player's position and velocity accordingly.
@@ -202,27 +211,39 @@ namespace VexedCore
              * in certain cases. Specifically, it isn't known if the player has landed on the ground until the algorithm completes.
              */
              
-            Vector3 frictionAdjustment = Vector3.Zero;            
-            
+
+            Vector3 frictionAdjustment = Vector3.Zero;
             /* Perform the basic algorithm several times, each time taking only the most powerful contribution. I'm assuming for now
              * that it is EXTREMELY unlikely for the player to have meaningful collisions simultaneously with > 3 blocks.
              * The purpose of this is that sometimes two collisions will be detected, but only one needs to be resolved. For example,
              * if two blocks are adjacent to one another such that their edges form a single, straight edge, we only need (and want)
              * to use the projection from one of them*/
+            
+            #region player-block collision
+
+            
+
             for (int attempt = 0; attempt < 2; attempt++)
             {
-                List<Vector3> projectionList = new List<Vector3>();
-                List<Vector3> relVelList = new List<Vector3>();
-                List<EdgeProperties> edgePropertiesList = new List<EdgeProperties>();
-
                 playerVertexList = new List<Vector3>();
                 playerVertexList.Add(p.center.position + p.playerHalfHeight * up + p.playerHalfWidth * right);
                 playerVertexList.Add(p.center.position + p.playerHalfHeight * up - p.playerHalfWidth * right);
                 playerVertexList.Add(p.center.position - p.playerHalfHeight * up - p.playerHalfWidth * right);
                 playerVertexList.Add(p.center.position - p.playerHalfHeight * up + p.playerHalfWidth * right);
+                p.UpdateBoundingBox();
+            
+                List<Vector3> projectionList = new List<Vector3>();
+                List<Vector3> relVelList = new List<Vector3>();
+                List<EdgeProperties> edgePropertiesList = new List<EdgeProperties>();
 
                 foreach (Block b in unfoldedRoom.blocks)
                 {
+                    if (p.boundingBoxBottom > b.boundingBoxTop ||
+                        p.boundingBoxTop < b.boundingBoxBottom ||
+                        p.boundingBoxLeft > b.boundingBoxRight ||
+                        p.boundingBoxRight < b.boundingBoxLeft)
+                        continue;
+
                     #region blockCollision
                     // if block intesects with rectVertexList
                     List<Vector3> blockVertexList = new List<Vector3>();
@@ -260,6 +281,11 @@ namespace VexedCore
 
                 foreach (Doodad b in unfoldedRoom.doodads)
                 {
+                    if (p.boundingBoxBottom > b.boundingBoxTop ||
+                        p.boundingBoxTop < b.boundingBoxBottom ||
+                        p.boundingBoxLeft > b.boundingBoxRight ||
+                        p.boundingBoxRight < b.boundingBoxLeft)
+                        continue;
                     #region doodadCollision
                     if (b.hasCollisionRect)
                     {
@@ -383,6 +409,11 @@ namespace VexedCore
             p.platformVelocity = Vector3.Zero;
             foreach (Block b in unfoldedRoom.blocks)
             {
+                if (p.boundingBoxBottom > b.boundingBoxTop + 1 ||
+                        p.boundingBoxTop < b.boundingBoxBottom - 1 ||
+                        p.boundingBoxLeft > b.boundingBoxRight +1||
+                        p.boundingBoxRight < b.boundingBoxLeft - 1)
+                    continue;
                 // if block intesects with rectVertexList
                 List<Vector3> blockVertexList = new List<Vector3>();
                 foreach (Edge e in b.edges)
@@ -469,6 +500,11 @@ namespace VexedCore
             {
                 if (b.hasCollisionRect)
                 {
+                    if (p.boundingBoxBottom > b.boundingBoxTop ||
+                        p.boundingBoxTop < b.boundingBoxBottom ||
+                        p.boundingBoxLeft > b.boundingBoxRight ||
+                        p.boundingBoxRight < b.boundingBoxLeft)
+                        continue;
                     // if block intesects with rectVertexList
                     List<Vector3> brickVertexList = new List<Vector3>();
 
@@ -506,7 +542,11 @@ namespace VexedCore
                 p.center.velocity += frictionAdjustment;
 
             p.center.Update(r, 0);
-
+            #endregion
+            
+            
+            
+            #region doodad-activation
             // Test and activate doodads.
             foreach (JumpPad j in r.jumpPads)
             {
@@ -564,6 +604,8 @@ namespace VexedCore
                     }
                 }
             }
+            #endregion
+            
             #region doodadCollisionDetection
             List<Vector3> doodadVertexList;
             foreach(Doodad d in unfoldedRoom.doodads)
@@ -582,9 +624,14 @@ namespace VexedCore
                         doodadVertexList.Add(d.position.position + d.up + d.left);
                         doodadVertexList.Add(d.position.position + d.down + d.left);
                         doodadVertexList.Add(d.position.position + d.down + d.right);
-
+                        d.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
                         foreach (Block b in unfoldedRoom.blocks)
-                        {
+                        {                            
+                            if (d.boundingBoxBottom > b.boundingBoxTop ||
+                                d.boundingBoxTop < b.boundingBoxBottom ||
+                                d.boundingBoxLeft > b.boundingBoxRight ||
+                                d.boundingBoxRight < b.boundingBoxLeft)
+                                continue;
                             #region blockCollision
                             // if block intesects with rectVertexList
                             List<Vector3> blockVertexList = new List<Vector3>();
@@ -622,9 +669,16 @@ namespace VexedCore
 
                         foreach (Doodad b in unfoldedRoom.doodads)
                         {
+                            b.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+                                
                             #region doodadCollision
                             if (b.hasCollisionRect && b != d)
                             {
+                                if (d.boundingBoxBottom > b.boundingBoxTop ||
+                                    d.boundingBoxTop < b.boundingBoxBottom ||
+                                    d.boundingBoxLeft > b.boundingBoxRight ||
+                                    d.boundingBoxRight < b.boundingBoxLeft)
+                                        continue;
                                 // if block intesects with rectVertexList
                                 List<Vector3> brickVertexList = new List<Vector3>();
 
@@ -726,7 +780,7 @@ namespace VexedCore
                 }
             }
             #endregion
-
+            
         }
 
     }

@@ -16,6 +16,10 @@ namespace VexedCore
     {
         public bool staticObject = true;
         bool nextBehavior;
+        public float boundingBoxTop = 0;
+        public float boundingBoxLeft = 0;
+        public float boundingBoxRight = 0;
+        public float boundingBoxBottom = 0;
 
         public Block()
         {
@@ -27,6 +31,27 @@ namespace VexedCore
             edges = new List<Edge>();
             behaviors = new List<Behavior>();
             color = xmlBlock.color;
+        }
+
+        public void UpdateBoundingBox(Vector3 up, Vector3 right)
+        {
+            boundingBoxBottom = Vector3.Dot(up, edges[0].start.position);
+            boundingBoxTop = Vector3.Dot(up, edges[0].start.position);
+            boundingBoxLeft = Vector3.Dot(right, edges[0].start.position);
+            boundingBoxRight = Vector3.Dot(right, edges[0].start.position);
+            for (int i = 1; i < edges.Count; i++)
+            {
+                float y = Vector3.Dot(up, edges[i].start.position);
+                float x = Vector3.Dot(right, edges[i].start.position);
+                if (x < boundingBoxLeft)
+                    boundingBoxLeft = x;                
+                if (x > boundingBoxRight)
+                    boundingBoxRight = x;
+                if (y < boundingBoxBottom)
+                    boundingBoxBottom = y;
+                if (y > boundingBoxTop)
+                    boundingBoxTop = y;
+            }
         }
 
         public Block(List<Vertex> vList, List<EdgeProperties> edgePropertiesList, Room r, Vector3 n, Vector3 u)

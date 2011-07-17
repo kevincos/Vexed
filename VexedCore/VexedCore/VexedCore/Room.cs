@@ -511,8 +511,8 @@ namespace VexedCore
 
         public void Draw(GameTime gameTime)
         {
-            List<VertexPositionColorNormalTexture> triangleList = new List<VertexPositionColorNormalTexture>();
-
+            //List<VertexPositionColorNormalTexture> triangleList = new List<VertexPositionColorNormalTexture>();
+            
             
 
             Color interiorColor = new Color(20, 20, 20);
@@ -593,7 +593,7 @@ namespace VexedCore
 
                 if (b.staticObject == false)
                 {
-                    AddBlockToTriangleList(vList, b.color, .5f, triangleList);
+                    AddBlockToTriangleList(vList, b.color, .5f, Game1.dynamicOpaqueObjects);
                 }
                 else if(Game1.staticObjectsInitialized == false)
                 {
@@ -603,9 +603,9 @@ namespace VexedCore
                 foreach (Edge e in b.edges)
                 {
                     if (e.properties.type == VexedLib.EdgeType.Spikes)
-                        AddSpikesToTriangleList(e, .5f, triangleList);
+                        AddSpikesToTriangleList(e, .5f, Game1.dynamicOpaqueObjects);
                     else if (e.properties.type != VexedLib.EdgeType.Normal)
-                        AddStripToTriangleList(e, .5f, triangleList);
+                        AddStripToTriangleList(e, .5f, Game1.dynamicOpaqueObjects);
                 }
                 
                 
@@ -615,23 +615,17 @@ namespace VexedCore
             #region Doodads
             foreach (JumpPad j in jumpPads)
             {
-                j.Draw(this, triangleList);
+                j.Draw(this, Game1.dynamicOpaqueObjects);
             }
             foreach (Bridge b in bridges)
             {
-                b.Draw(this, triangleList);
+                b.Draw(this, Game1.dynamicOpaqueObjects);
             }
             foreach (Doodad b in doodads)
             {
-                b.Draw(this, triangleList);
+                b.Draw(this, Game1.dynamicOpaqueObjects);
             }
             #endregion
-
-            if (triangleList.Count > 0)
-            {
-                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                    triangleList.ToArray(), 0, triangleList.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-            }
         }
     }
 }

@@ -71,6 +71,23 @@ namespace VexedCore
         public Vertex respawnCenter;
         public bool dead = false;
 
+        public float boundingBoxTop;
+        public float boundingBoxBottom;
+        public float boundingBoxLeft;
+        public float boundingBoxRight;
+
+        public void UpdateBoundingBox()
+        {
+            Vector3 up = center.direction;
+            Vector3 right = Vector3.Cross(up, center.normal);
+            float centerX = Vector3.Dot(right, center.position);
+            float centerY = Vector3.Dot(up, center.position);
+            boundingBoxBottom = centerY - playerHalfHeight;
+            boundingBoxTop = centerY + playerHalfHeight;
+            boundingBoxLeft = centerX - playerHalfWidth;
+            boundingBoxRight = centerX + playerHalfWidth;            
+        }
+        
         public Texture2D currentTexture
         {
             get
