@@ -570,8 +570,9 @@ namespace VexedCore
             {
                 if (d.freeMotion == true)
                 {
+                    frictionAdjustment = Vector3.Zero;
                     for (int attempt = 0; attempt < 2; attempt++)
-                    {
+                    {                        
                         List<Vector3> projectionList = new List<Vector3>();
                         List<Vector3> relVelList = new List<Vector3>();
                         List<EdgeProperties> edgePropertiesList = new List<EdgeProperties>();
@@ -666,33 +667,35 @@ namespace VexedCore
                         {
 
                             Vector3 projectionDirection = maxProjection / maxProjection.Length();
-                            Vector3 frictionDirection = Vector3.Cross(projectionDirection, d.position.normal);
-
+                            Vector3 frictionDirection = Vector3.Cross(projectionDirection, d.position.normal);                            
                             if (edgeProperties.type == VexedLib.EdgeType.ConveyorBelt)
                             {
                                 relVel += .001f * edgeProperties.primaryValue * frictionDirection;
                             }
 
                             float badVelocityComponent = Vector3.Dot(projectionDirection, d.srcDoodad.position.velocity - relVel);
-
+                            
                             if (badVelocityComponent < -0.0f)
                             {
                                 if (edgeProperties.type == VexedLib.EdgeType.Bounce)
                                 {
                                     d.srcDoodad.position.velocity -= badVelocityComponent * projectionDirection;
                                     d.srcDoodad.position.velocity += p.jumpSpeed * projectionDirection;
+                                    d.position.velocity -= badVelocityComponent * projectionDirection;
+                                    d.position.velocity += p.jumpSpeed * projectionDirection;
                                 }
                                 else
                                 {
                                     d.srcDoodad.position.velocity -= badVelocityComponent * projectionDirection;
+                                    d.position.velocity -= badVelocityComponent * projectionDirection;
                                 }
                             }
 
-                            /*float projectionUpComponent = Vector3.Dot(projectionDirection, p.center.direction);
+                            float projectionUpComponent = Vector3.Dot(projectionDirection, p.center.direction);
                             if (projectionUpComponent > 0)
                             {
 
-                                float frictionVelocityComponent = Vector3.Dot(frictionDirection, p.center.velocity - relVel);
+                                float frictionVelocityComponent = Vector3.Dot(frictionDirection, d.position.velocity - relVel);
 
 
                                 if (Math.Abs(frictionVelocityComponent) < .02f)
@@ -709,9 +712,12 @@ namespace VexedCore
                                 }
                                 if (edgeProperties.type == VexedLib.EdgeType.Ice || edgeProperties.type == VexedLib.EdgeType.Bounce)
                                     frictionAdjustment = Vector3.Zero;
-                            }*/
+                            }
 
                             d.srcDoodad.position.position += maxProjection;
+                            d.position.position += maxProjection;
+                            d.srcDoodad.position.velocity += frictionAdjustment;
+                            d.position.velocity += frictionAdjustment;
 
                         }
                         else

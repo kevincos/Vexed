@@ -187,21 +187,25 @@ namespace VexedCore
             
             if (properties.type != VexedLib.EdgeType.Spikes)
             {
-                triangleList.Add(GenerateTexturedVertex(start.position,blankTexCoords[1], baseColor, start.normal, depth + .001f));
-                triangleList.Add(GenerateTexturedVertex(start.position - .5f * edgeNormal,blankTexCoords[1], baseColor, start.normal, depth + .001f));
-                triangleList.Add(GenerateTexturedVertex(end.position,blankTexCoords[1], baseColor, start.normal, depth + .001f));
+                float epsilon = .01f;
 
-                triangleList.Add(GenerateTexturedVertex(end.position,blankTexCoords[1], baseColor, start.normal, depth + .001f));
-                triangleList.Add(GenerateTexturedVertex(start.position - .5f * edgeNormal,blankTexCoords[1], baseColor, start.normal, depth + .001f));
-                triangleList.Add(GenerateTexturedVertex(end.position - .5f * edgeNormal,blankTexCoords[1], baseColor, start.normal, depth + .001f));
+                //side
+                triangleList.Add(GenerateTexturedVertex(start.position + epsilon * edgeNormal, blankTexCoords[1], baseColor, start.normal, depth + epsilon));
+                triangleList.Add(GenerateTexturedVertex(start.position - .5f * edgeNormal, blankTexCoords[1], baseColor, start.normal, depth + epsilon));
+                triangleList.Add(GenerateTexturedVertex(end.position + epsilon * edgeNormal, blankTexCoords[1], baseColor, start.normal, depth + epsilon));
 
-                triangleList.Add(GenerateTexturedVertex(start.position + .001f * edgeNormal,blankTexCoords[1], baseColor, edgeNormal, depth));
-                triangleList.Add(GenerateTexturedVertex(start.position + .001f * edgeNormal,blankTexCoords[1], baseColor, edgeNormal, -depth));
-                triangleList.Add(GenerateTexturedVertex(end.position + .001f * edgeNormal,blankTexCoords[1], baseColor, edgeNormal, depth));
+                triangleList.Add(GenerateTexturedVertex(end.position + epsilon * edgeNormal, blankTexCoords[1], baseColor, start.normal, depth + epsilon));
+                triangleList.Add(GenerateTexturedVertex(start.position - .5f * edgeNormal, blankTexCoords[1], baseColor, start.normal, depth + epsilon));
+                triangleList.Add(GenerateTexturedVertex(end.position - .5f * edgeNormal, blankTexCoords[1], baseColor, start.normal, depth + epsilon));
 
-                triangleList.Add(GenerateTexturedVertex(end.position + .001f * edgeNormal,blankTexCoords[1], baseColor, edgeNormal, -depth));
-                triangleList.Add(GenerateTexturedVertex(start.position + .001f * edgeNormal,blankTexCoords[1], baseColor, edgeNormal, -depth));
-                triangleList.Add(GenerateTexturedVertex(end.position + .001f * edgeNormal,blankTexCoords[1], baseColor, edgeNormal, depth));
+                //top
+                triangleList.Add(GenerateTexturedVertex(start.position + epsilon * edgeNormal, blankTexCoords[1], baseColor, edgeNormal, depth + epsilon));
+                triangleList.Add(GenerateTexturedVertex(start.position + epsilon * edgeNormal, blankTexCoords[1], baseColor, edgeNormal, -depth));
+                triangleList.Add(GenerateTexturedVertex(end.position + epsilon * edgeNormal, blankTexCoords[1], baseColor, edgeNormal, depth + epsilon));
+
+                triangleList.Add(GenerateTexturedVertex(end.position + epsilon * edgeNormal, blankTexCoords[1], baseColor, edgeNormal, -depth));
+                triangleList.Add(GenerateTexturedVertex(start.position + epsilon * edgeNormal, blankTexCoords[1], baseColor, edgeNormal, -depth));
+                triangleList.Add(GenerateTexturedVertex(end.position + epsilon * edgeNormal, blankTexCoords[1], baseColor, edgeNormal, depth + epsilon));
             }
             if (properties.type == VexedLib.EdgeType.Spikes)
             {

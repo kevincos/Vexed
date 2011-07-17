@@ -52,9 +52,9 @@ namespace VexedCore
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferMultiSampling = true;
             
-                /*graphics.IsFullScreen = true;
-                graphics.PreferredBackBufferWidth = 1920;
-                graphics.PreferredBackBufferHeight = 1080;*/
+                //graphics.IsFullScreen = true;
+                //graphics.PreferredBackBufferWidth = 1024;
+                //graphics.PreferredBackBufferHeight = 768;
                 
 
 
@@ -142,12 +142,14 @@ namespace VexedCore
                 this.Exit();
 
             
-            player.Update(gameTime);
             
 
             // TODO: Add your update logic here
             foreach(Room r in roomList)
                 r.Update(gameTime);
+
+            player.Update(gameTime);
+            
 
             Physics.CollisionCheck(player.currentRoom, player, gameTime);
             
@@ -255,8 +257,11 @@ namespace VexedCore
             //player.Draw(gameTime);
             //Physics.DebugDraw(player.currentRoom, player.center.normal, player.center.direction);            
 
-            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                Game1.staticOpaqueObjects.ToArray(), 0, staticOpaqueObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            if (staticOpaqueObjects.Count > 0)
+            {
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    Game1.staticOpaqueObjects.ToArray(), 0, staticOpaqueObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
 
 
             if (Room.innerBlockMode > 0)
@@ -275,8 +280,11 @@ namespace VexedCore
                     translucentList.Add(staticTranslucentObjects[i].v5);
                     translucentList.Add(staticTranslucentObjects[i].v6);
                 }
-                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                    translucentList.ToArray(), 0, translucentList.Count / 3, VertexPositionColorNormal.VertexDeclaration);
+                if (translucentList.Count > 0)
+                {
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        translucentList.ToArray(), 0, translucentList.Count / 3, VertexPositionColorNormal.VertexDeclaration);
+                }
             }
 
             
