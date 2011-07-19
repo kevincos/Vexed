@@ -189,6 +189,22 @@ namespace VexedCore
             }
         }
 
+        public Vector3 up
+        {
+            get
+            {
+                return center.direction;
+            }
+        }
+
+        public Vector3 right
+        {
+            get
+            {
+                return Vector3.Cross(center.direction, center.normal);
+            }
+        }
+
         public void Respawn()
         {
             currentRoom = respawnPoint.targetRoom;
@@ -382,6 +398,33 @@ namespace VexedCore
             }
         }
 
+        public List<Vector3> GetCollisionRect()
+        {
+            List<Vector3> playerVertexList = new List<Vector3>();
+            playerVertexList.Add(center.position + playerHalfHeight * up + playerHalfWidth * right);
+            playerVertexList.Add(center.position + playerHalfHeight * up - playerHalfWidth * right);
+            playerVertexList.Add(center.position - playerHalfHeight * up - playerHalfWidth * right);
+            playerVertexList.Add(center.position - playerHalfHeight * up + playerHalfWidth * right);
+            UpdateBoundingBox();
+            return playerVertexList;
+        }
+
+        public bool CollisionFirstPass(Block b)
+        {
+            return (boundingBoxBottom > b.boundingBoxTop ||
+                        boundingBoxTop < b.boundingBoxBottom ||
+                        boundingBoxLeft > b.boundingBoxRight ||
+                        boundingBoxRight < b.boundingBoxLeft);
+        }
+
+        public bool CollisionFirstPass(Doodad d)
+        {
+            return (boundingBoxBottom > d.boundingBoxTop ||
+                        boundingBoxTop < d.boundingBoxBottom ||
+                        boundingBoxLeft > d.boundingBoxRight ||
+                        boundingBoxRight < d.boundingBoxLeft);
+        }
+
         public void DrawTexture(GameTime gameTime)
         {
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
@@ -403,7 +446,23 @@ namespace VexedCore
                 v.Update(currentRoom, 1);
             }
 
-            currentRoom.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList,(faceDirection > 0));
+            List<Vector2> texCoords = new List<Vector2>();
+            if (faceDirection < 0)
+            {
+                texCoords.Add(new Vector2(.125f, 0));
+                texCoords.Add(new Vector2(.875f, 0));
+                texCoords.Add(new Vector2(.875f, 1));
+                texCoords.Add(new Vector2(.125f, 1));
+            }
+            else
+            {
+                texCoords.Add(new Vector2(.875f, 0));
+                texCoords.Add(new Vector2(.125f, 0));
+                texCoords.Add(new Vector2(.125f, 1));
+                texCoords.Add(new Vector2(.875f, 1));
+            }
+
+            currentRoom.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList, texCoords);
 
 
             VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();

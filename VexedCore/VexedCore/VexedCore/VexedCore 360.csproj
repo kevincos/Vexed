@@ -70,12 +70,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BloomComponent.cs" />
+    <Compile Include="Collidable.cs" />
     <Compile Include="Doodad.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="FrameRateCounter.cs" />
     <Compile Include="GraphicsUtils.cs" />
     <Compile Include="LevelLoader.cs" />
+    <Compile Include="Monster.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

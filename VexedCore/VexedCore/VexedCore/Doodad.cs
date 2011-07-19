@@ -189,7 +189,7 @@ namespace VexedCore
         {
             get
             {
-                if (type == VexedLib.DoodadType.WallSwitch || type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb)
+                if (type == VexedLib.DoodadType.Waypoint || type == VexedLib.DoodadType.WallSwitch || type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb)
                     return false;
                 return true;
             }
@@ -199,6 +199,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.Waypoint)
+                    return false;
                 if(type == VexedLib.DoodadType.PowerOrb && active == false)
                     return false;
                 return true;
@@ -334,6 +336,83 @@ namespace VexedCore
             toggleOn = d.toggleOn;
             targetDoodad = d.targetDoodad;
             srcDoodad = d;
+        }
+
+        public void AdjustVertex(Vector3 pos, Vector3 vel, Vector3 normal, Vector3 playerUp)
+        {
+            Vector3 playerRight = Vector3.Cross(playerUp, normal);
+            if (position.normal == normal)
+            {
+                position.position += pos;
+                position.velocity += vel;
+            }
+            else if (position.normal == -normal)
+            {
+                float badVelComponent = Vector3.Dot(playerUp, vel);
+                float badPosComponent = Vector3.Dot(playerUp, pos);
+                position.position += pos - 2* badPosComponent * playerUp;
+                position.velocity += vel - 2* badVelComponent * playerUp;
+            }
+            else if (position.normal == playerUp)
+            {
+                float badVelComponent = Vector3.Dot(playerUp, vel);
+                float badPosComponent = Vector3.Dot(playerUp, pos);
+                position.position += pos - badPosComponent * playerUp + badPosComponent * -normal;
+                position.velocity += vel - badVelComponent * playerUp + badVelComponent * -normal;
+            }
+            else if (position.normal == -playerUp)
+            {
+                float badVelComponent = Vector3.Dot(playerUp, vel);
+                float badPosComponent = Vector3.Dot(playerUp, pos);
+                position.position += pos - badPosComponent * playerUp + badPosComponent * normal;
+                position.velocity += vel - badVelComponent * playerUp + badVelComponent * normal;
+            }
+            else if (position.normal == playerRight)
+            {
+                float badVelComponent = Vector3.Dot(playerRight, vel);
+                float badPosComponent = Vector3.Dot(playerRight, pos);
+                position.position += pos - badPosComponent * playerRight + badPosComponent * -normal;
+                position.velocity += vel - badVelComponent * playerRight + badVelComponent * -normal;
+            }
+            else if (position.normal == -playerRight)
+            {                
+                float badVelComponent = Vector3.Dot(playerRight, vel);
+                float badPosComponent = Vector3.Dot(playerRight, pos);
+                position.position += pos - badPosComponent * playerRight + badPosComponent * normal;
+                position.velocity += vel - badVelComponent * playerRight + badVelComponent * normal;
+            }
+            else
+            {
+                position.velocity = Vector3.Zero;
+            }            
+        }
+
+        public List<Vector3> GetCollisionRect()
+        {
+            List<Vector3> doodadVertexList = new List<Vector3>();
+
+            doodadVertexList.Add(position.position + up + right);
+            doodadVertexList.Add(position.position + up + left);
+            doodadVertexList.Add(position.position + down + left);
+            doodadVertexList.Add(position.position + down + right);
+            
+            return doodadVertexList;
+        }
+
+        public bool CollisionFirstPass(Block b)
+        {
+            return (boundingBoxBottom > b.boundingBoxTop ||
+                        boundingBoxTop < b.boundingBoxBottom ||
+                        boundingBoxLeft > b.boundingBoxRight ||
+                        boundingBoxRight < b.boundingBoxLeft);
+        }
+
+        public bool CollisionFirstPass(Doodad d)
+        {
+            return (boundingBoxBottom > d.boundingBoxTop ||
+                        boundingBoxTop < d.boundingBoxBottom ||
+                        boundingBoxLeft > d.boundingBoxRight ||
+                        boundingBoxRight < d.boundingBoxLeft);
         }
 
         public void Draw(Room currentRoom, List<VertexPositionColorNormalTexture> triangleList)

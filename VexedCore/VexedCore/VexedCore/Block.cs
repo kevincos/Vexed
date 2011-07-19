@@ -68,6 +68,40 @@ namespace VexedCore
             }
         }
 
+        public List<Vector3> GetCollisionRect()
+        {
+            List<Vector3> blockVertexList = new List<Vector3>();
+            foreach (Edge e in edges)
+            {
+                if (e.start.position != e.end.position)
+                    blockVertexList.Add(e.start.position);
+            }
+            return blockVertexList;
+        }
+
+        public Vector3 GetVelocity()
+        {
+            return edges[0].start.velocity;
+        }
+
+        public EdgeProperties GetProperties(Vector3 projection)
+        {
+            EdgeProperties properties = new EdgeProperties();
+            properties.type = VexedLib.EdgeType.Normal;
+            foreach (Edge e in edges)
+            {
+                Vector3 edgeNormal = Vector3.Cross(e.start.normal, e.start.position - e.end.position);
+                edgeNormal.Normalize();
+                Vector3 projectionNormal = projection / projection.Length();
+                float result = Vector3.Dot(edgeNormal, projectionNormal);
+                if (result == 1)
+                {
+                    properties = e.properties;
+                }
+            }
+            return properties;
+        }
+
         public int UpdateBehavior(GameTime gameTime)
         {
             if (nextBehavior == true)

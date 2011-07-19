@@ -28,6 +28,7 @@ namespace VexedCore
         public List<JumpPad> jumpPads;
         public List<Bridge> bridges;
         public List<Doodad> doodads;
+        public List<Monster> monsters;
 
         static Room()
         {
@@ -48,7 +49,8 @@ namespace VexedCore
             blocks = new List<Block>();
             jumpPads = new List<JumpPad>();
             bridges = new List<Bridge>();
-            doodads = new List<Doodad>();            
+            doodads = new List<Doodad>();
+            monsters = new List<Monster>();
         }
 
         public Room(VexedLib.Room xmlRoom)
@@ -58,7 +60,8 @@ namespace VexedCore
             blocks = new List<Block>();
             jumpPads = new List<JumpPad>();
             bridges = new List<Bridge>();
-            doodads = new List<Doodad>();            
+            doodads = new List<Doodad>();
+            monsters = new List<Monster>();
         }
         
         public void Update(GameTime gameTime)
@@ -73,28 +76,56 @@ namespace VexedCore
                     e.UpdateBehavior(gameTime);
                 }                
             }
-            foreach (Doodad d in doodads)
+
+            if (this == Game1.player.currentRoom)
             {
-                if (d.freeMotion && Vector3.Dot(Game1.player.center.direction, d.position.normal) == 0 && Vector3.Dot(Game1.player.center.normal, d.position.normal) >= 0)
+                foreach (Doodad d in doodads)
                 {
-                    if (Vector3.Dot(Game1.player.center.direction, d.position.normal) == 0)
+                    if (d.freeMotion)
                     {
                         d.position.Update(this, gameTime.ElapsedGameTime.Milliseconds);
-
-                        d.position.velocity -= Game1.player.gravityAcceleration * Game1.player.center.direction;
-
-                        if (d.position.velocity.Length() > Game1.player.maxVertSpeed)
+                        Vector3 gravityDirection = Game1.player.center.direction;
+                        if (d.position.normal == Game1.player.center.direction)
                         {
-                            d.position.velocity.Normalize();
-                            d.position.velocity *= Game1.player.maxVertSpeed;
+                            gravityDirection = -Game1.player.center.normal;
                         }
+                        else if (d.position.normal == -Game1.player.center.direction)
+                        {
+                            gravityDirection = Game1.player.center.normal;
+                        }
+
+                        d.position.velocity -= Game1.player.gravityAcceleration * gravityDirection;
+
+                        Vector3 up = d.position.direction;
+                        Vector3 right = Vector3.Cross(d.position.direction, d.position.normal);
+
+                        float upMagnitude = Vector3.Dot(up, d.position.velocity);
+                        float rightMagnitude = Vector3.Dot(right, d.position.velocity);
+                        float maxSpeed = Game1.player.maxVertSpeed / 2;
+                        if (upMagnitude > maxSpeed)
+                        {
+                            d.position.velocity -= (upMagnitude - maxSpeed) * up;
+                        }
+                        if (upMagnitude < -maxSpeed)
+                        {
+                            d.position.velocity -= (maxSpeed + upMagnitude) * up;
+                        }
+                        if (rightMagnitude > maxSpeed)
+                        {
+                            d.position.velocity -= (rightMagnitude - maxSpeed) * right;
+                        }
+                        if (rightMagnitude < -maxSpeed)
+                        {
+                            d.position.velocity -= (maxSpeed + rightMagnitude) * right;
+                        }
+
                     }
+                    else
+                    {
+                        d.position.velocity = Vector3.Zero;
+                    }
+                    d.UpdateBehavior(gameTime);
                 }
-                else
-                {
-                    d.position.velocity = Vector3.Zero;
-                }
-                d.UpdateBehavior(gameTime);
             }
         }
 
@@ -437,28 +468,12 @@ namespace VexedCore
 
         }
 
-        public void AddTextureToTriangleList(List<Vertex> vList, Color c, float depth, List<VertexPositionColorNormalTexture> triangleList, bool flipHorizontal)
+        public void AddTextureToTriangleList(List<Vertex> vList, Color c, float depth, List<VertexPositionColorNormalTexture> triangleList, List<Vector2> texCoords)
         {
             List<Vertex> points = new List<Vertex>();
             List<Vector2> pointsTexCoords = new List<Vector2>();
             int jointVertexIndex = 0;
             int count = 0;
-
-            List<Vector2> texCoords = new List<Vector2>();
-            if (flipHorizontal == false)
-            {
-                texCoords.Add(new Vector2(.125f, 0));
-                texCoords.Add(new Vector2(.875f, 0));
-                texCoords.Add(new Vector2(.875f, 1));
-                texCoords.Add(new Vector2(.125f, 1));
-            }
-            else
-            {
-                texCoords.Add(new Vector2(.875f, 0));
-                texCoords.Add(new Vector2(.125f, 0));
-                texCoords.Add(new Vector2(.125f, 1));
-                texCoords.Add(new Vector2(.875f, 1));
-            }
 
             for (int i = 0; i < 4; i++)
             {
@@ -508,13 +523,24 @@ namespace VexedCore
 
         }
 
+        public void DrawMonsters()
+        {
+            foreach (Monster m in monsters)
+            {
+                m.Draw(this);
+            }
+        }
+
+        public void UpdateMonsters(GameTime gameTime)
+        {
+            foreach (Monster m in monsters)
+            {
+                m.Update(gameTime);
+            }
+        }
 
         public void Draw(GameTime gameTime)
         {
-            //List<VertexPositionColorNormalTexture> triangleList = new List<VertexPositionColorNormalTexture>();
-            
-            
-
             Color interiorColor = new Color(20, 20, 20);
             
             if (innerBlockMode == 2)
@@ -627,5 +653,6 @@ namespace VexedCore
             }
             #endregion
         }
+
     }
 }

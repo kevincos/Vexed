@@ -14,7 +14,7 @@ namespace VexedCore
 {
     public class EdgeProperties
     {
-        public VexedLib.EdgeType type;
+        public VexedLib.EdgeType type = VexedLib.EdgeType.Normal;
         public int primaryValue =0;
         public int secondaryValue =0;
     }

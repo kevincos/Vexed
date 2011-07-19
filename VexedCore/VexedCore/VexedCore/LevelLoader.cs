@@ -35,8 +35,14 @@ namespace VexedCore
                     Room newRoom = new Room(xmlRoom);
                     foreach (VexedLib.Face xmlFace in xmlRoom.faceList)
                     {
+                        foreach (VexedLib.Monster xmlMonster in xmlFace.monsters)
+                        {
+                            newRoom.monsters.Add(new Monster(xmlMonster, xmlFace.normal));
+                        }
                         foreach (VexedLib.Doodad xmlDoodad in xmlFace.doodads)
                         {
+                            Doodad newDoodad = null;
+                            
                             if (xmlDoodad.type == VexedLib.DoodadType.PlayerSpawn)
                             {
                                 Game1.player.center = new Vertex(xmlDoodad.position, xmlFace.normal, Vector3.Zero, xmlDoodad.up);                                
@@ -45,47 +51,19 @@ namespace VexedCore
                                 Game1.player.respawnPoint = new Doodad(VexedLib.DoodadType.Checkpoint, xmlDoodad.position, xmlFace.normal, xmlDoodad.up);
                                 Game1.player.respawnPoint.targetRoom = newRoom;
                             }
-                            Doodad newDoodad = null;
-                            if (xmlDoodad.type == VexedLib.DoodadType.JumpPad)
+                            else if (xmlDoodad.type == VexedLib.DoodadType.JumpPad)
                             {
                                 newRoom.jumpPads.Add(new JumpPad(xmlDoodad.position, xmlFace.normal, xmlDoodad.up));
                             }
-                            if (xmlDoodad.type == VexedLib.DoodadType.BridgeGate)
+                            else if (xmlDoodad.type == VexedLib.DoodadType.BridgeGate)
                             {
                                 newRoom.bridges.Add(new Bridge(xmlDoodad.position, xmlFace.normal, xmlDoodad.up, xmlDoodad.IDString, xmlDoodad.targetObject));
                             }
-                            if (xmlDoodad.type == VexedLib.DoodadType.Brick)
+                            else
                             {
                                 newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
                             }
-                            if (xmlDoodad.type == VexedLib.DoodadType.Beam)
-                            {
-                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
-                            }
-                            if (xmlDoodad.type == VexedLib.DoodadType.Door)
-                            {
-                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
-                            }
-                            if (xmlDoodad.type == VexedLib.DoodadType.Crate)
-                            {
-                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
-                            }
-                            if (xmlDoodad.type == VexedLib.DoodadType.SpikeBall)
-                            {
-                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
-                            }
-                            if (xmlDoodad.type == VexedLib.DoodadType.WallSwitch)
-                            {
-                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
-                            }
-                            if (xmlDoodad.type == VexedLib.DoodadType.Checkpoint)
-                            {
-                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
-                            }
-                            if (xmlDoodad.type == VexedLib.DoodadType.PowerOrb)
-                            {
-                                newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
-                            }
+                            
                             if (newDoodad != null)
                             {
                                 foreach (VexedLib.Behavior xmlBehavior in xmlDoodad.behaviors)
@@ -188,6 +166,34 @@ namespace VexedCore
                     if (d.type == VexedLib.DoodadType.Checkpoint)
                     {
                         d.targetRoom = r;
+                    }
+                }
+                foreach (Monster m in r.monsters)
+                {
+                    if (m.aiType == VexedLib.AIType.Waypoint)
+                    {
+                        String nextWaypoint = m.firstWaypoint;
+                        while (nextWaypoint != "")
+                        {
+                            foreach (Doodad d in r.doodads)
+                            {
+                                if (d.id == nextWaypoint)
+                                {
+                                    if (m.waypoints.Contains(d.position.position))
+                                    {
+                                        nextWaypoint = "";
+                                        m.waypointLoop = true;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        m.waypoints.Add(d.position.position);
+                                        nextWaypoint = d.targetObject;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

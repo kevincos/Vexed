@@ -47,6 +47,7 @@ namespace VexedCore
         {
             Vector3 anchor = r.center + Math.Abs(Vector3.Dot(r.size / 2, n)) * n;
             Vertex v = new Vertex();
+
             if (normal == n)
             {
                 v.normal = normal;
@@ -71,7 +72,12 @@ namespace VexedCore
                 Vector3 upAnchor = r.center + Math.Abs(Vector3.Dot(r.size / 2, u)) * u;
                 Vector3 badComponent = Vector3.Dot(u, position - upAnchor) * u;
                 Vector3 gapComponent = Vector3.Dot(r.size, n) * n;
+                float badVelLength = Vector3.Dot(u, velocity);
+                float badDirLength = Vector3.Dot(u, direction);
                 v.position = position - 2 * badComponent + gapComponent.Length() * n + gapComponent.Length() * u;
+                v.velocity = velocity - 2*badVelLength * u;
+                v.direction = direction - 2*badDirLength * u;
+
                 v.normal = n;
             }
             return v;
@@ -132,6 +138,7 @@ namespace VexedCore
                 
                 direction = direction - oldDirection + newDirection;
             }
+
         }
     }
 }
