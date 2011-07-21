@@ -105,7 +105,7 @@ namespace VexedCore
                 vList.Add(b.edges[1].start);
                 vList.Add(b.edges[2].start);
                 vList.Add(b.edges[3].start);
-                r.AddBlockToTriangleList(vList, Color.Yellow, 0f, triangleList);
+                r.AddBlockToTriangleList(vList, Color.Yellow, 0f, Room.plateTexCoords, triangleList);
                  
                 //Draw projection Normals
                 for (int i = 0; i < 4; i++)
@@ -658,6 +658,32 @@ namespace VexedCore
                     }
                     else
                         break;
+                }
+
+                List<Vector3> monsterGroundBox = m.GetGroundCollisionRect();
+                List<Vector3> monsterForwardGroundBox = m.GetForwardGroundCollisionRect();
+
+                m.srcMonster.groundProjection = Vector3.Zero;
+                m.srcMonster.forwardGroundProjection = Vector3.Zero;
+                foreach (Block b in unfoldedRoom.blocks)
+                {
+                    if (m.boundingBoxBottom > b.boundingBoxTop + 1 ||
+                            m.boundingBoxTop < b.boundingBoxBottom - 1 ||
+                            m.boundingBoxLeft > b.boundingBoxRight + 1 ||
+                            m.boundingBoxRight < b.boundingBoxLeft - 1)
+                        continue;
+                    // if block intesects with rectVertexList
+                    List<Vector3> blockVertexList = b.GetCollisionRect();
+
+                    Vector3 groundProjection = Collide(monsterGroundBox, blockVertexList, p.center.normal);
+                    Vector3 forwardGroundProjection = Collide(monsterForwardGroundBox, blockVertexList, p.center.normal);
+                    //if(m.position.velocity == Vector3.Zero)
+                        //forwardGroundProjection = groundProjection;
+
+                    if(forwardGroundProjection != Vector3.Zero)
+                        m.srcMonster.forwardGroundProjection = Monster.AdjustVector(forwardGroundProjection, m.srcMonster.position.normal, p.center.normal, p.center.direction, true);
+                    if (groundProjection != Vector3.Zero)
+                        m.srcMonster.groundProjection = Monster.AdjustVector(groundProjection, m.srcMonster.position.normal, p.center.normal, p.center.direction, true);
                 }
             }
 

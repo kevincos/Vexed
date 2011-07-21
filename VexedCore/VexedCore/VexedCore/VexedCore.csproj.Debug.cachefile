@@ -17,6 +17,16 @@ Content\skybox_right.xnb
 Content\skybox_top.xnb
 Content\plate_texture.xnb
 Content\m_body.xnb
+Content\CartoonEffect.xnb
+Content\PostprocessEffect.xnb
+Content\m_body_detail.xnb
+Content\p_fall_detail.xnb
+Content\p_neutral_detail.xnb
+Content\p_run1_detail.xnb
+Content\p_run2_detail.xnb
+Content\p_run3_detail.xnb
+Content\p_run4_detail.xnb
+Content\p_walljump_detail.xnb
 LevelData\awesome
 LevelData\debug
 LevelData\movingplatform

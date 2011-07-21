@@ -52,6 +52,13 @@ namespace VexedCore
         public static Texture2D runTexture2;
         public static Texture2D runTexture3;
         public static Texture2D runTexture4;
+        public static Texture2D neutralTexture_detail;
+        public static Texture2D fallTexture_detail;
+        public static Texture2D wallJumpTexture_detail;
+        public static Texture2D runTexture1_detail;
+        public static Texture2D runTexture2_detail;
+        public static Texture2D runTexture3_detail;
+        public static Texture2D runTexture4_detail;
         
         public float walkSpeed = .001f;
         public float airSpeed = .0005f;
@@ -64,7 +71,7 @@ namespace VexedCore
         public int groundTolerance = 100;
         public int groundCounter = 0;
         public int faceDirection = 0;
-        public float baseCameraDistance = 12f;
+        public float baseCameraDistance = 6;
         public int orbsCollected = 0;
 
         public Doodad respawnPoint;
@@ -92,27 +99,54 @@ namespace VexedCore
         {
             get
             {
-                if (state != State.Normal)
-                    return fallTexture;
-                if (walking == true)
+                if (Game1.detailTextures)
                 {
-                    if (walkTime > 3 * walkMaxTime / 4)
-                        return runTexture4;
-                    else if (walkTime > walkMaxTime / 2)
-                        return runTexture2;
-                    else if (walkTime > walkMaxTime / 4)
-                        return runTexture3;
+                    if (state != State.Normal)
+                        return fallTexture_detail;
+                    if (walking == true)
+                    {
+                        if (walkTime > 3 * walkMaxTime / 4)
+                            return runTexture4_detail;
+                        else if (walkTime > walkMaxTime / 2)
+                            return runTexture2_detail;
+                        else if (walkTime > walkMaxTime / 4)
+                            return runTexture3_detail;
+                        else
+                            return runTexture1_detail;
+                    }
+                    else if (grounded == true)
+                        return neutralTexture_detail;
+                    else if ((leftWall == true && faceDirection < 0) || (rightWall == true && faceDirection > 0))
+                        return wallJumpTexture_detail;
+                    else if (faceDirection != 0)
+                        return runTexture2_detail;
                     else
-                        return runTexture1;
+                        return fallTexture_detail;
                 }
-                else if (grounded == true)
-                    return neutralTexture;
-                else if ((leftWall == true && faceDirection < 0) || (rightWall == true && faceDirection > 0))
-                    return wallJumpTexture;
-                else if (faceDirection != 0)
-                    return runTexture2;
                 else
-                    return fallTexture;
+                {
+                    if (state != State.Normal)
+                        return fallTexture;
+                    if (walking == true)
+                    {
+                        if (walkTime > 3 * walkMaxTime / 4)
+                            return runTexture4;
+                        else if (walkTime > walkMaxTime / 2)
+                            return runTexture2;
+                        else if (walkTime > walkMaxTime / 4)
+                            return runTexture3;
+                        else
+                            return runTexture1;
+                    }
+                    else if (grounded == true)
+                        return neutralTexture;
+                    else if ((leftWall == true && faceDirection < 0) || (rightWall == true && faceDirection > 0))
+                        return wallJumpTexture;
+                    else if (faceDirection != 0)
+                        return runTexture2;
+                    else
+                        return fallTexture;
+                }
             }
         }
 
@@ -393,7 +427,6 @@ namespace VexedCore
                     spinTime = 0;
                     center.direction = spinUp;
                     state = State.Normal;
-
                 }
             }
         }
@@ -425,7 +458,7 @@ namespace VexedCore
                         boundingBoxRight < d.boundingBoxLeft);
         }
 
-        public void DrawTexture(GameTime gameTime)
+        public void DrawTexture()
         {
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
             List<VertexPositionColorNormalTexture> textureTriangleList = new List<VertexPositionColorNormalTexture>();
@@ -447,22 +480,13 @@ namespace VexedCore
             }
 
             List<Vector2> texCoords = new List<Vector2>();
-            if (faceDirection < 0)
-            {
-                texCoords.Add(new Vector2(.125f, 0));
-                texCoords.Add(new Vector2(.875f, 0));
-                texCoords.Add(new Vector2(.875f, 1));
-                texCoords.Add(new Vector2(.125f, 1));
-            }
-            else
-            {
-                texCoords.Add(new Vector2(.875f, 0));
-                texCoords.Add(new Vector2(.125f, 0));
-                texCoords.Add(new Vector2(.125f, 1));
-                texCoords.Add(new Vector2(.875f, 1));
-            }
+            texCoords.Add(new Vector2(.125f, 0));
+            texCoords.Add(new Vector2(.875f, 0));
+            texCoords.Add(new Vector2(.875f, 1));
+            texCoords.Add(new Vector2(.125f, 1));
 
-            currentRoom.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList, texCoords);
+
+            currentRoom.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList, texCoords, faceDirection > 0);
 
 
             VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
@@ -478,47 +502,7 @@ namespace VexedCore
                 triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration); 
             
         }        
-
-        public void Draw(GameTime gameTime)
-        {
-            List<VertexPositionColorNormalTexture> triangleList = new List<VertexPositionColorNormalTexture>();
-            List<VertexPositionColorNormalTexture> textureTriangleList = new List<VertexPositionColorNormalTexture>();
-            List<Vertex> rectVertexList = new List<Vertex>();
-            Vector3 up = center.direction;
-            Vector3 right = Vector3.Cross(up, center.normal);            
-            rectVertexList.Add(new Vertex(center.position, center.normal, +playerHalfHeight * up + playerHalfWidth * right, center.direction));
-            rectVertexList.Add(new Vertex(center.position, center.normal, +playerHalfHeight * up - playerHalfWidth * right, center.direction));
-            rectVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up - playerHalfWidth * right, center.direction));
-            rectVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up + playerHalfWidth * right, center.direction));
-            foreach (Vertex v in rectVertexList)
-            {
-                v.Update(currentRoom, 1);
-            }
-
-
-            if(grounded == true)
-                currentRoom.AddBlockToTriangleList(rectVertexList, Color.White, .2f, triangleList);
-            else if (leftWall == true)
-                currentRoom.AddBlockToTriangleList(rectVertexList, Color.Blue, .2f, triangleList);
-            else if (rightWall == true)
-                currentRoom.AddBlockToTriangleList(rectVertexList, Color.Green, .2f, triangleList);
-            else
-                currentRoom.AddBlockToTriangleList(rectVertexList, Color.Brown, .2f, triangleList);
-
-
-            VertexPositionColorNormalTexture[] triangleArray = triangleList.ToArray();
-            if (state == State.Jump || state == State.BridgeJump)
-            {
-                for (int i = 0; i < triangleArray.Count(); i++)
-                {
-                    triangleArray[i].Position += jumpPosition - center.position;
-                }
-            }
-
-            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                triangleArray, 0, triangleList.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-            
-        }
+        
 
     }
 }

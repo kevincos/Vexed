@@ -37,9 +37,9 @@ namespace VexedCore
             vList.Add(new Vertex(position, -.5f * up - .5f * right));
             vList.Add(new Vertex(position, -.5f * up + .5f * right));
             if (active == true)
-                currentRoom.AddBlockToTriangleList(vList, Color.Yellow, .1f, triangleList);
+                currentRoom.AddBlockToTriangleList(vList, Color.Yellow, .1f, Room.plateTexCoords,triangleList);
             else
-                currentRoom.AddBlockToTriangleList(vList, Color.HotPink, .1f, triangleList);
+                currentRoom.AddBlockToTriangleList(vList, Color.HotPink, .1f, Room.plateTexCoords,triangleList);
         }
     }
 
@@ -71,9 +71,9 @@ namespace VexedCore
             vList.Add(new Vertex(position, -.5f * up - .5f * right));
             vList.Add(new Vertex(position, -.5f * up + .5f * right));
             if (active == true)
-                currentRoom.AddBlockToTriangleList(vList, Color.Blue, .1f, triangleList);
+                currentRoom.AddBlockToTriangleList(vList, Color.Blue, .1f, Room.plateTexCoords,triangleList);
             else
-                currentRoom.AddBlockToTriangleList(vList, Color.Green, .1f, triangleList);
+                currentRoom.AddBlockToTriangleList(vList, Color.Green, .1f, Room.plateTexCoords, triangleList);
         }
     }
 
@@ -425,9 +425,9 @@ namespace VexedCore
                 vList.Add(new Vertex(position, down + left));
                 vList.Add(new Vertex(position, down + right));
                 if (active)
-                    currentRoom.AddBlockToTriangleList(vList, activeColor, depth, triangleList);
+                    currentRoom.AddBlockToTriangleList(vList, activeColor, depth, Room.plateTexCoords, triangleList);
                 else
-                    currentRoom.AddBlockToTriangleList(vList, baseColor, depth, triangleList);
+                    currentRoom.AddBlockToTriangleList(vList, baseColor, depth, Room.plateTexCoords, triangleList);
             }
         }
 

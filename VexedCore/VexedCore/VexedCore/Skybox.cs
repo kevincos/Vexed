@@ -30,6 +30,9 @@ namespace VexedCore
 
         public static void Draw(Player player)
         {
+
+            Game1.graphicsDevice.DepthStencilState = DepthStencilState.None;
+            Game1.graphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
             for (int i = 0; i < 6; i++)
             {
                 skyBoxEffects[i].World = Matrix.Identity;

@@ -27,6 +27,8 @@ namespace VexedCore
         public BasicEffect translucentEffect = null;
         public AlphaTestEffect playerTextureEffect = null;
         public BasicEffect skyBoxEffect = null;
+        public Effect cartoonEffect = null;
+        Effect postprocessEffect = null;
 
         Vector3 currentTarget = Vector3.Zero;
         Vector3 currentCamera = new Vector3(30, 30, 30);
@@ -42,6 +44,16 @@ namespace VexedCore
         public static List<TrasnparentSquare> staticTranslucentObjects;
         public static bool staticObjectsInitialized = false;
 
+        RenderTarget2D sceneRenderTarget;
+        RenderTarget2D normalDepthRenderTarget;
+        NonPhotoRealisticSettings Settings
+        {
+            get { return NonPhotoRealisticSettings.PresetSettings[settingsIndex]; }
+        }
+        int settingsIndex = 0;
+
+        public static bool detailTextures = false;
+
         public Game1()
         {
             staticOpaqueObjects = new List<VertexPositionColorNormalTexture>();
@@ -56,14 +68,14 @@ namespace VexedCore
                 graphics.PreferredBackBufferWidth = 1280;
                 graphics.PreferredBackBufferHeight = 720;
 #endif
-                /*graphics.IsFullScreen = true;
-                graphics.PreferredBackBufferWidth = 1024;
-                graphics.PreferredBackBufferHeight = 768;*/
+                //graphics.IsFullScreen = true;
+                //graphics.PreferredBackBufferWidth = 1920;
+                //graphics.PreferredBackBufferHeight = 1080;
 
                 
 
 
-            bloom = new BloomComponent(this);
+            //bloom = new BloomComponent(this);
             Content.RootDirectory = "Content";
 
         }
@@ -87,8 +99,8 @@ namespace VexedCore
             //LevelLoader.Load("LevelData\\debug");
             
             Components.Add(new FrameRateCounter(this));
-            Components.Add(bloom);
-            bloom.Settings = BloomSettings.PresetSettings[0];
+            //Components.Add(bloom);
+            //bloom.Settings = BloomSettings.PresetSettings[0];
             
             base.Initialize();
             
@@ -127,6 +139,8 @@ namespace VexedCore
             
             Skybox.Init();
 
+            Monster.InitTexCoords();
+
         }
 
         /// <summary>
@@ -137,6 +151,8 @@ namespace VexedCore
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            cartoonEffect = Content.Load<Effect>("CartoonEffect");
+            postprocessEffect = Content.Load<Effect>("PostprocessEffect");
             Room.blockTexture = Content.Load<Texture2D>("plate_texture");
             Player.neutralTexture = Content.Load<Texture2D>("p_neutral");
             Player.fallTexture = Content.Load<Texture2D>("p_fall");
@@ -145,7 +161,15 @@ namespace VexedCore
             Player.runTexture1 = Content.Load<Texture2D>("p_run1");
             Player.runTexture3 = Content.Load<Texture2D>("p_run3");
             Player.runTexture4 = Content.Load<Texture2D>("p_run4");
+            Player.neutralTexture_detail = Content.Load<Texture2D>("p_neutral_detail");
+            Player.fallTexture_detail = Content.Load<Texture2D>("p_fall_detail");
+            Player.wallJumpTexture_detail = Content.Load<Texture2D>("p_walljump_detail");
+            Player.runTexture2_detail = Content.Load<Texture2D>("p_run2_detail");
+            Player.runTexture1_detail = Content.Load<Texture2D>("p_run1_detail");
+            Player.runTexture3_detail = Content.Load<Texture2D>("p_run3_detail");
+            Player.runTexture4_detail = Content.Load<Texture2D>("p_run4_detail");
             Monster.monsterTexture = Content.Load<Texture2D>("m_body");
+            Monster.monsterTextureDetail = Content.Load<Texture2D>("m_body_detail");
             Skybox.skyBoxTextures = new Texture2D[6];
             Skybox.skyBoxTextures[0] = Content.Load<Texture2D>("skybox_right");
             Skybox.skyBoxTextures[1] = Content.Load<Texture2D>("skybox_left");
@@ -153,7 +177,16 @@ namespace VexedCore
             Skybox.skyBoxTextures[3] = Content.Load<Texture2D>("skybox_back");
             Skybox.skyBoxTextures[4] = Content.Load<Texture2D>("skybox_bottom");
             Skybox.skyBoxTextures[5] = Content.Load<Texture2D>("skybox_top");
-            
+
+            PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
+
+            sceneRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+                                                   pp.BackBufferWidth, pp.BackBufferHeight, false,
+                                                   pp.BackBufferFormat, pp.DepthStencilFormat);
+
+            normalDepthRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+                                                         pp.BackBufferWidth, pp.BackBufferHeight, false,
+                                                         pp.BackBufferFormat, pp.DepthStencilFormat);
             // TODO: use this.Content to load your game content here
         }
 
@@ -163,7 +196,17 @@ namespace VexedCore
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            if (sceneRenderTarget != null)
+            {
+                sceneRenderTarget.Dispose();
+                sceneRenderTarget = null;
+            }
+
+            if (normalDepthRenderTarget != null)
+            {
+                normalDepthRenderTarget.Dispose();
+                normalDepthRenderTarget = null;
+            }
         }
 
         /// <summary>
@@ -179,6 +222,40 @@ namespace VexedCore
 
             if (Keyboard.GetState().IsKeyDown(Keys.PageDown))
                 return;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.D1))
+            {
+                settingsIndex = 0;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D2))
+            {
+                settingsIndex = 1;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D3))
+            {
+                settingsIndex = 2;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D4))
+            {
+                settingsIndex = 3;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D5))
+            {
+                settingsIndex = 4;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D6))
+            {
+                settingsIndex = 5;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.D7))
+            {
+                detailTextures = false;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D8))
+            {
+                detailTextures = true;
+            }
 
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape) || GamePad.GetState(activePlayer).Buttons.Back == ButtonState.Pressed)
@@ -202,6 +279,59 @@ namespace VexedCore
             base.Update(gameTime);
         }
 
+
+        public void DrawScene()
+        {
+            Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
+            effect.CurrentTechnique.Passes[0].Apply();
+            if (staticOpaqueObjects.Count > 0)
+            {
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    Game1.staticOpaqueObjects.ToArray(), 0, staticOpaqueObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
+            if (dynamicOpaqueObjects.Count > 0)
+            {
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    Game1.dynamicOpaqueObjects.ToArray(), 0, dynamicOpaqueObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
+            Game1.graphicsDevice.BlendState = BlendState.Opaque;
+            if(detailTextures)
+                playerTextureEffect.Texture = Monster.monsterTextureDetail;
+            else
+                playerTextureEffect.Texture = Monster.monsterTexture;
+            playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            Game1.player.currentRoom.DrawMonsters();
+
+            Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
+
+            if (Room.innerBlockMode > 0)
+            {
+                translucentEffect.CurrentTechnique.Passes[0].Apply();
+                // Sort Triangles
+                staticTranslucentObjects.Sort(new FaceSorter(player.cameraTarget - player.cameraPos));
+
+                List<VertexPositionColorNormal> translucentList = new List<VertexPositionColorNormal>();
+                for (int i = 0; i < staticTranslucentObjects.Count; i++)
+                {
+                    translucentList.Add(staticTranslucentObjects[i].v1);
+                    translucentList.Add(staticTranslucentObjects[i].v2);
+                    translucentList.Add(staticTranslucentObjects[i].v3);
+                    translucentList.Add(staticTranslucentObjects[i].v4);
+                    translucentList.Add(staticTranslucentObjects[i].v5);
+                    translucentList.Add(staticTranslucentObjects[i].v6);
+                }
+                if (translucentList.Count > 0)
+                {
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        translucentList.ToArray(), 0, translucentList.Count / 3, VertexPositionColorNormal.VertexDeclaration);
+                }
+            }
+
+            playerTextureEffect.Texture = player.currentTexture;
+            playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            player.DrawTexture();
+        }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -214,9 +344,9 @@ namespace VexedCore
                 Game1.staticOpaqueObjects = new List<VertexPositionColorNormalTexture>();
             Game1.texturedObjects = new List<VertexPositionColorNormalTexture>();
 
-            bloom.BeginDraw();            
+            //bloom.BeginDraw();            
             
-            Game1.graphicsDevice.Clear(Color.Black);
+            //Game1.graphicsDevice.Clear(Color.Black);
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
             Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;   
 
@@ -239,77 +369,113 @@ namespace VexedCore
             
 
             
-            
             // Set renderstates.
             Game1.graphicsDevice.RasterizerState = RasterizerState.CullNone;
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
-
-            Game1.graphicsDevice.DepthStencilState = DepthStencilState.None;
-            Game1.graphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
-            Skybox.Draw(player);
-
-            Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-            effect.CurrentTechnique.Passes[0].Apply();
 
             foreach (Room r in roomList)
             {
                 r.Draw(gameTime);
             }
-            //Physics.DebugDraw(player.currentRoom, player.center.normal, player.center.direction);            
 
-            if (dynamicOpaqueObjects.Count > 0)
+
+
+            if (Settings.EnableEdgeDetect)
             {
-                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                    Game1.dynamicOpaqueObjects.ToArray(), 0, dynamicOpaqueObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                Game1.graphicsDevice.SetRenderTarget(normalDepthRenderTarget);
+
+                Game1.graphicsDevice.Clear(Color.Black);
+
+
+                DrawScene();
             }
-            if (staticOpaqueObjects.Count > 0)
-            {
-                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                    Game1.staticOpaqueObjects.ToArray(), 0, staticOpaqueObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-            }
-
-            Game1.graphicsDevice.BlendState = BlendState.Opaque;
-            playerTextureEffect.Texture = Monster.monsterTexture;
-            playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-            Game1.player.currentRoom.DrawMonsters();
-
-            Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
-
-            if (Room.innerBlockMode > 0)
-            {
-                translucentEffect.CurrentTechnique.Passes[0].Apply();
-                // Sort Triangles
-                staticTranslucentObjects.Sort(new FaceSorter(player.cameraTarget - player.cameraPos));
-                
-                List<VertexPositionColorNormal> translucentList = new List<VertexPositionColorNormal>();
-                for (int i = 0; i < staticTranslucentObjects.Count; i++)
-                {
-                    translucentList.Add(staticTranslucentObjects[i].v1);
-                    translucentList.Add(staticTranslucentObjects[i].v2);
-                    translucentList.Add(staticTranslucentObjects[i].v3);
-                    translucentList.Add(staticTranslucentObjects[i].v4);
-                    translucentList.Add(staticTranslucentObjects[i].v5);
-                    translucentList.Add(staticTranslucentObjects[i].v6);
-                }
-                if (translucentList.Count > 0)
-                {
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        translucentList.ToArray(), 0, translucentList.Count / 3, VertexPositionColorNormal.VertexDeclaration);
-                }
-            }
-
 
             
-            playerTextureEffect.Texture = player.currentTexture;
-            playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-            player.DrawTexture(gameTime);
 
-                  
 
+            if (Settings.EnableEdgeDetect || Settings.EnableSketch)
+                Game1.graphicsDevice.SetRenderTarget(sceneRenderTarget);
+            else
+                Game1.graphicsDevice.SetRenderTarget(null);
+
+            Game1.graphicsDevice.Clear(Color.White);
+
+
+            Skybox.Draw(player);
+            DrawScene();
+
+
+
+            // Run the postprocessing filter over the scene that we just rendered.
+            if (Settings.EnableEdgeDetect || Settings.EnableSketch)
+            {
+                Game1.graphicsDevice.SetRenderTarget(null);
+
+                ApplyPostprocess();
+            }
+            
             base.Draw(gameTime);
 
             Game1.staticObjectsInitialized = true;
+        }
+
+        /// <summary>
+        /// Helper applies the edge detection and pencil sketch postprocess effect.
+        /// </summary>
+        void ApplyPostprocess()
+        {
+            EffectParameterCollection parameters = postprocessEffect.Parameters;
+            string effectTechniqueName;
+
+            // Set effect parameters controlling the pencil sketch effect.
+            if (Settings.EnableSketch)
+            {
+                parameters["SketchThreshold"].SetValue(Settings.SketchThreshold);
+                parameters["SketchBrightness"].SetValue(Settings.SketchBrightness);
+                //parameters["SketchJitter"].SetValue(sketchJitter);
+                //parameters["SketchTexture"].SetValue(sketchTexture);
+            }
+
+            // Set effect parameters controlling the edge detection effect.
+            if (Settings.EnableEdgeDetect)
+            {
+                Vector2 resolution = new Vector2(sceneRenderTarget.Width,
+                                                 sceneRenderTarget.Height);
+
+                Texture2D normalDepthTexture = normalDepthRenderTarget;
+
+                parameters["EdgeWidth"].SetValue(Settings.EdgeWidth);
+                parameters["EdgeIntensity"].SetValue(Settings.EdgeIntensity);
+                parameters["ScreenResolution"].SetValue(resolution);
+                parameters["NormalDepthTexture"].SetValue(normalDepthTexture);
+
+                // Choose which effect technique to use.
+                if (Settings.EnableSketch)
+                {
+                    if (Settings.SketchInColor)
+                        effectTechniqueName = "EdgeDetectColorSketch";
+                    else
+                        effectTechniqueName = "EdgeDetectMonoSketch";
+                }
+                else
+                    effectTechniqueName = "EdgeDetect";
+            }
+            else
+            {
+                // If edge detection is off, just pick one of the sketch techniques.
+                if (Settings.SketchInColor)
+                    effectTechniqueName = "ColorSketch";
+                else
+                    effectTechniqueName = "MonoSketch";
+            }
+
+            // Activate the appropriate effect technique.
+            postprocessEffect.CurrentTechnique = postprocessEffect.Techniques[effectTechniqueName];
+
+            // Draw a fullscreen sprite to apply the postprocessing effect.
+            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, postprocessEffect);
+            spriteBatch.Draw(sceneRenderTarget, Vector2.Zero, Color.White);
+            spriteBatch.End();
         }
     }
 }

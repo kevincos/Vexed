@@ -15,6 +15,7 @@ namespace VexedCore
     public class Monster
     {
         public static Texture2D monsterTexture;
+        public static Texture2D monsterTextureDetail;
         public Vertex position;
         public string firstWaypoint;
         public List<Vector3> waypoints;
@@ -25,8 +26,51 @@ namespace VexedCore
         public VexedLib.MovementType moveType;
         public VexedLib.ArmorType armorType;
         public VexedLib.GunType gunType;
-
+        public Vector3 groundProjection;
+        public Vector3 forwardGroundProjection;
+        public bool jumping = false;
+        public int jumpCooldown = 0;
+        public int jumpTime = 0;
+        public Vector3 spinUp;
+        public int spinMaxTime = 400;
+        public int spinTime = 0;
+        public bool rightFacing = false;
         public Monster srcMonster;
+
+        public static List<Vector2> bodyTexCoords;
+        public static List<Vector2> eyesTexCoords;
+        public static List<Vector2> fullArmorTexCoords;
+        public static List<Vector2> topArmorTexCoords;
+        public static List<Vector2> frontArmorTexCoords;
+        public static List<Vector2> treadsTexCoords;
+        public static List<Vector2> spiderTexCoords;
+        public static List<Vector2> legsTexCoords;
+
+        public static int texGridCount = 8;
+        
+        public static List<Vector2> LoadTexCoords(int x, int y)
+        {
+            float texWidth = 1f / texGridCount;
+            List<Vector2> texCoords = new List<Vector2>();
+            texCoords.Add(new Vector2((x + 1) * texWidth, y * texWidth));
+            texCoords.Add(new Vector2(x * texWidth, y * texWidth));
+            texCoords.Add(new Vector2(x * texWidth, (y + 1) * texWidth));
+            texCoords.Add(new Vector2((x + 1) * texWidth, (y + 1) * texWidth));
+            
+            return texCoords;
+        }
+
+        public static void InitTexCoords()
+        {
+            bodyTexCoords = LoadTexCoords(0, 0);
+            fullArmorTexCoords = LoadTexCoords(1, 0);
+            topArmorTexCoords = LoadTexCoords(2, 0);
+            frontArmorTexCoords = LoadTexCoords(3, 0);
+            eyesTexCoords = LoadTexCoords(4, 0);
+            treadsTexCoords = LoadTexCoords(0, 2);
+            spiderTexCoords = LoadTexCoords(0, 1);
+            legsTexCoords = LoadTexCoords(0, 3);            
+        }
 
         public Monster(VexedLib.Monster xmlMonster, Vector3 normal)
         {
@@ -43,6 +87,7 @@ namespace VexedCore
         {
             position = m.position.Unfold(r,n,u);
             srcMonster = m;
+            rightFacing = m.rightFacing;
         }
 
         public float acceleration
@@ -65,14 +110,28 @@ namespace VexedCore
         {
             get
             {
-                return position.direction;
+                if (spinUp == Vector3.Zero)
+                    return position.direction;
+                else
+                {
+                    Vector3 tempUp = (spinUp * spinTime + position.direction * (spinMaxTime - spinTime)) / (1f * spinMaxTime);
+                    tempUp.Normalize();
+                    return tempUp;
+                }
             }
         }
         public Vector3 rightUnit
         {
             get
             {
-                return Vector3.Cross(position.direction, position.normal);
+                if (spinUp == Vector3.Zero)
+                    return Vector3.Cross(position.direction, position.normal);
+                else
+                {
+                    Vector3 tempUp = Vector3.Cross((spinUp * spinTime + position.direction * (spinMaxTime - spinTime)) / (1f * spinMaxTime), position.normal);
+                    tempUp.Normalize();
+                    return tempUp;
+                }
             }
         }
         public Vector3 right
@@ -108,14 +167,14 @@ namespace VexedCore
         {
             get
             {
-                return .5f;
+                return .6f;
             }
         }
         public float halfHeight
         {
             get
             {
-                return .5f;
+                return .6f;
             }
         }
         public float depth
@@ -129,6 +188,7 @@ namespace VexedCore
         public void Update(GameTime gameTime)
         {
             position.Update(Game1.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds);
+            
             Vector3 direction = Vector3.Zero;
             if (aiType == VexedLib.AIType.Waypoint)
             {
@@ -173,12 +233,161 @@ namespace VexedCore
             {
                 direction = -rightUnit;
             }
-            position.velocity += acceleration * direction;
-            if (position.velocity.Length() > maxSpeed)
+
+
+            if (moveType == VexedLib.MovementType.Tank)
             {
-                position.velocity.Normalize();
-                position.velocity *= maxSpeed;
+                if (groundProjection != Vector3.Zero)
+                {
+                    Vector3 groundDirection = groundProjection / groundProjection.Length();
+                    direction -= Vector3.Dot(groundDirection, direction) * groundDirection;
+
+                    position.velocity += acceleration * direction;                    
+                }
+                if (Vector3.Dot(rightUnit, position.velocity) > 0)
+                    rightFacing = true;
+                if (Vector3.Dot(rightUnit, position.velocity) < 0)
+                    rightFacing = false;
+
+                AdjustVertex(Vector3.Zero, -1.5f * acceleration * Game1.player.center.direction, Game1.player.center.normal, Game1.player.center.direction, false);
+                if (forwardGroundProjection == Vector3.Zero && Vector3.Dot(groundProjection, Monster.AdjustVector(Game1.player.center.direction, position.normal, Game1.player.center.normal, Game1.player.center.direction, false))>0f)
+                {
+                    position.velocity = Vector3.Zero;
+                }
+                if (position.velocity.Length() > maxSpeed)
+                {
+                    position.velocity.Normalize();
+                    position.velocity *= maxSpeed;
+                }
             }
+            else if (moveType == VexedLib.MovementType.Spider)
+            {                
+                if (groundProjection != Vector3.Zero)
+                {
+                    position.velocity += acceleration * direction;
+                    Vector3 groundDirection = groundProjection / groundProjection.Length();
+                    position.velocity -= Vector3.Dot(groundDirection, position.velocity) * groundDirection;
+                }
+                else
+                {
+                    AdjustVertex(Vector3.Zero, -1.5f * acceleration * Game1.player.center.direction, Game1.player.center.normal, Game1.player.center.direction, false);
+                }
+
+                if (Vector3.Dot(rightUnit, position.velocity) > 0)
+                    rightFacing = true;
+                if (Vector3.Dot(rightUnit, position.velocity) < 0)
+                    rightFacing = false;
+
+                if (forwardGroundProjection == Vector3.Zero && groundProjection != Vector3.Zero)
+                {
+                    position.velocity = Vector3.Zero;
+                }
+                if (position.velocity.Length() > maxSpeed)
+                {
+                    position.velocity.Normalize();
+                    position.velocity *= maxSpeed;
+                }
+            }
+            else if (moveType == VexedLib.MovementType.Jump)
+            {
+                if (Vector3.Dot(rightUnit, position.velocity) > 0)
+                    rightFacing = true;
+                if (Vector3.Dot(rightUnit, position.velocity) < 0)
+                    rightFacing = false;
+
+                if (spinUp != Vector3.Zero)
+                    groundProjection = Vector3.Zero;
+                if (position.direction != Monster.AdjustVector(Game1.player.center.direction, position.normal, Game1.player.center.normal, Game1.player.center.direction, false))
+                {
+                    spinUp = Monster.AdjustVector(Game1.player.center.direction, position.normal, Game1.player.center.normal, Game1.player.center.direction, false);
+                }
+                if (spinUp != Vector3.Zero)
+                {
+                    spinTime += gameTime.ElapsedGameTime.Milliseconds;
+                    if (spinTime > spinMaxTime)
+                    {
+                        spinTime = 0;
+                        position.direction = spinUp;
+                        spinUp = Vector3.Zero;
+                    }
+                }
+
+                if (groundProjection != Vector3.Zero)
+                {
+                    jumpCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+                    if (jumpCooldown < 0) jumpCooldown = 0;
+
+                    if (jumpTime > 10)
+                    {
+                        jumpTime = 0;
+                        jumping = false;
+                    }
+                    if (jumping == true)
+                        jumpTime += gameTime.ElapsedGameTime.Milliseconds;
+                }
+                else
+                {
+                    AdjustVertex(Vector3.Zero, -1.5f * acceleration * Game1.player.center.direction, Game1.player.center.normal, Game1.player.center.direction, false);
+                }
+                if (groundProjection != Vector3.Zero && jumping == false)
+                {
+                    position.velocity = Vector3.Zero;
+                }
+                if (groundProjection != Vector3.Zero && jumpCooldown == 0)
+                {
+                    jumpCooldown = 500;
+                    jumping = true;
+                    position.velocity += 30 * acceleration * position.direction;
+                    position.velocity += 30 * acceleration * direction;
+                }
+
+                if (jumping == false)
+                {
+                    if (position.velocity.Length() > maxSpeed)
+                    {
+                        position.velocity.Normalize();
+                        position.velocity *= maxSpeed;
+                    }
+                }
+                else
+                {
+                    if (position.velocity.Length() > 2*maxSpeed)
+                    {
+                        position.velocity.Normalize();
+                        position.velocity *= 2*maxSpeed;
+                    }
+
+                }
+            }
+            else if (moveType == VexedLib.MovementType.Hover)
+            {
+                if (Vector3.Dot(rightUnit, position.velocity) > 0)
+                    rightFacing = true;
+                if (Vector3.Dot(rightUnit, position.velocity) < 0)
+                    rightFacing = false;
+
+                if (position.direction != Monster.AdjustVector(Game1.player.center.direction, position.normal, Game1.player.center.normal, Game1.player.center.direction, false))
+                {
+                    spinUp = Monster.AdjustVector(Game1.player.center.direction, position.normal, Game1.player.center.normal, Game1.player.center.direction, false);
+                }
+                if (spinUp != Vector3.Zero)
+                {
+                    spinTime += gameTime.ElapsedGameTime.Milliseconds;
+                    if (spinTime > spinMaxTime)
+                    {
+                        spinTime = 0;
+                        position.direction = spinUp;
+                        spinUp = Vector3.Zero;
+                    }
+                }
+
+                position.velocity += acceleration * direction;
+                if (position.velocity.Length() > maxSpeed)
+                {
+                    position.velocity.Normalize();
+                    position.velocity *= maxSpeed;
+                }
+            }        
         }
 
         public List<Vector3> GetCollisionRect()
@@ -189,6 +398,42 @@ namespace VexedCore
             doodadVertexList.Add(position.position + up + left);
             doodadVertexList.Add(position.position + down + left);
             doodadVertexList.Add(position.position + down + right);
+
+            return doodadVertexList;
+        }
+
+        public List<Vector3> GetGroundCollisionRect()
+        {
+            List<Vector3> doodadVertexList = new List<Vector3>();
+
+            doodadVertexList.Add(position.position + right);
+            doodadVertexList.Add(position.position + left);
+            doodadVertexList.Add(position.position + 1.1f*down + left);
+            doodadVertexList.Add(position.position + 1.1f*down + right);
+
+            return doodadVertexList;
+        }
+
+        public List<Vector3> GetForwardGroundCollisionRect()
+        {
+            List<Vector3> doodadVertexList = new List<Vector3>();
+            Vector3 forward = Vector3.Zero;
+            
+            
+            if (rightFacing == false)
+            {
+                forward = -.75f * right;
+            }
+            else if (Vector3.Dot(right, position.velocity) > 0)
+            {
+                forward = .75f * right;
+            }
+            forward+= Vector3.Dot(position.velocity, forward) * forward;
+
+            doodadVertexList.Add(position.position + right/4f + forward);
+            doodadVertexList.Add(position.position + left / 4f + forward);
+            doodadVertexList.Add(position.position + 1.1f * down + left / 4f + forward);
+            doodadVertexList.Add(position.position + 1.1f * down + right/4f + forward);
 
             return doodadVertexList;
         }
@@ -257,10 +502,16 @@ namespace VexedCore
                 boundingBoxBottom = y4;
         }
 
+
         public void AdjustVertex(Vector3 pos, Vector3 vel, Vector3 normal, Vector3 playerUp)
         {
+            AdjustVertex(pos, vel, normal, playerUp, true);
+        }
+
+        public void AdjustVertex(Vector3 pos, Vector3 vel, Vector3 normal, Vector3 playerUp, bool fold)
+        {
             Vector3 playerRight = Vector3.Cross(playerUp, normal);
-            if (position.normal == normal)
+            if (position.normal == normal || (position.normal == -normal && fold==false))
             {
                 position.position += pos;
                 position.velocity += vel;
@@ -270,7 +521,7 @@ namespace VexedCore
                 float badVelComponent = Vector3.Dot(playerUp, vel);
                 float badPosComponent = Vector3.Dot(playerUp, pos);
                 position.position += pos - 2 * badPosComponent * playerUp;
-                position.velocity += vel - 2 * badVelComponent * playerUp;
+                position.velocity += vel - 2 * badVelComponent * playerUp;                
             }
             else if (position.normal == playerUp)
             {
@@ -306,6 +557,42 @@ namespace VexedCore
             }
         }
 
+
+        public static Vector3 AdjustVector(Vector3 input, Vector3 targetNormal, Vector3 playerNnormal, Vector3 playerUp, bool fold)
+        {
+            Vector3 playerRight = Vector3.Cross(playerUp, playerNnormal);
+            if (targetNormal == playerNnormal || (targetNormal == -playerNnormal && fold == false))
+            {
+                return input;
+            }
+            else if (targetNormal == -playerNnormal)
+            {
+                float badVelComponent = Vector3.Dot(playerUp, input);
+                return input - 2 * badVelComponent * playerUp;
+            }
+            else if (targetNormal == playerUp)
+            {
+                float badVelComponent = Vector3.Dot(playerUp, input);
+                return input - badVelComponent * playerUp + badVelComponent * -playerNnormal;
+            }
+            else if (targetNormal == -playerUp)
+            {
+                float badVelComponent = Vector3.Dot(playerUp, input);
+                return input - badVelComponent * playerUp + badVelComponent * playerNnormal;
+            }
+            else if (targetNormal == playerRight)
+            {
+                float badVelComponent = Vector3.Dot(playerRight, input);
+                return input - badVelComponent * playerRight + badVelComponent * -playerNnormal;
+            }
+            else if (targetNormal == -playerRight)
+            {
+                float badVelComponent = Vector3.Dot(playerRight, input);
+                return input - badVelComponent * playerRight + badVelComponent * playerNnormal;
+            }
+            return Vector3.Zero;
+        }
+
         public void Draw(Room r)
         {
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
@@ -320,14 +607,29 @@ namespace VexedCore
             {
                 v.Update(Game1.player.currentRoom, 1);
             }
-            List<Vector2> texCoords = new List<Vector2>();
-            texCoords.Add(new Vector2(0, 0));
-            texCoords.Add(new Vector2(1, 0));
-            texCoords.Add(new Vector2(1, 1));
-            texCoords.Add(new Vector2(0, 1));
-            r.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList, texCoords);
 
+            if (moveType == VexedLib.MovementType.Tank)
+                r.AddTextureToTriangleList(rectVertexList, Color.White, .2f, textureTriangleList, treadsTexCoords, rightFacing);
+            else if (moveType == VexedLib.MovementType.Spider)
+                r.AddTextureToTriangleList(rectVertexList, Color.White, .2f, textureTriangleList, spiderTexCoords, rightFacing);
+            else if (moveType == VexedLib.MovementType.Jump)
+                r.AddTextureToTriangleList(rectVertexList, Color.White, .2f, textureTriangleList, legsTexCoords, rightFacing);
 
+            r.AddTextureToTriangleList(rectVertexList, Color.Red, .3f, textureTriangleList, bodyTexCoords, rightFacing);
+            if (armorType == VexedLib.ArmorType.Full)
+                r.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList, fullArmorTexCoords, rightFacing);
+            if (armorType == VexedLib.ArmorType.Top)
+                r.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList, topArmorTexCoords, rightFacing);
+            if (armorType == VexedLib.ArmorType.Shield)
+                r.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList, frontArmorTexCoords, rightFacing);
+            r.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList, eyesTexCoords, rightFacing);
+            if(moveType == VexedLib.MovementType.Tank)
+                r.AddTextureToTriangleList(rectVertexList, Color.White, .4f, textureTriangleList, treadsTexCoords, rightFacing);
+            else if (moveType == VexedLib.MovementType.Spider)
+                r.AddTextureToTriangleList(rectVertexList, Color.White, .4f, textureTriangleList, spiderTexCoords, rightFacing);
+            else if (moveType == VexedLib.MovementType.Jump)
+                r.AddTextureToTriangleList(rectVertexList, Color.White, .4f, textureTriangleList, legsTexCoords, rightFacing);
+            
             VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                 triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
