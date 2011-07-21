@@ -2,6 +2,8 @@ Content\Font.xnb
 Content\BloomCombine.xnb
 Content\BloomExtract.xnb
 Content\GaussianBlur.xnb
+Content\CartoonEffect.xnb
+Content\PostprocessEffect.xnb
 Content\p_fall.xnb
 Content\p_neutral.xnb
 Content\p_walljump.xnb
@@ -17,8 +19,6 @@ Content\skybox_right.xnb
 Content\skybox_top.xnb
 Content\plate_texture.xnb
 Content\m_body.xnb
-Content\CartoonEffect.xnb
-Content\PostprocessEffect.xnb
 Content\m_body_detail.xnb
 Content\p_fall_detail.xnb
 Content\p_neutral_detail.xnb
