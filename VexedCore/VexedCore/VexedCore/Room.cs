@@ -588,6 +588,7 @@ namespace VexedCore
         public void AddBlockToTriangleList2(List<Vertex> vList, Color c, float depth, List<VertexPositionColorNormalTexture> triangleList)
         {
             AddBlockSidesToTriangleList(vList, c, depth, Room.blankTexCoords, triangleList);
+            
             List<Vertex> points = new List<Vertex>();
             List<Vector2> pointsTexCoords = new List<Vector2>();
             
@@ -620,9 +621,26 @@ namespace VexedCore
 
             for (int i = 0; i < 4; i++)
             {
-                fullPointList.Add(new Vertex(vList[i], Vector3.Zero));
+                Vector3 incomingDirection = vList[(i+3)%4].direction;
+                /*fullPointList.Add(new Vertex(vList[i], Vector3.Zero));
                 fullPointList.Add(new Vertex(vList[i], -.5f * Vector3.Cross(vList[i].direction, vList[i].normal)));
                 fullPointList.Add(new Vertex(vList[i], .5f * vList[i].direction - .5f * Vector3.Cross(vList[i].direction, vList[i].normal)));
+                fullPointList.Add(new Vertex(vList[i], .5f * vList[i].direction));*/
+                if (vList[(i + 3) % 4].normal != vList[i].normal)
+                {
+                    Vector3 fullEdge = vList[(i + 3) % 4].position - vList[i].position;
+                    Vector3 currentComponent = Vector3.Dot(vList[(i + 3) % 4].normal, fullEdge) * vList[(i + 3) % 4].normal;
+                    Vector3 nextComponent = Vector3.Dot(vList[i].normal, fullEdge) * vList[i].normal;
+                    Vector3 constantComponent = Vector3.Dot(Vector3.Cross(vList[(i + 3) % 4].normal, vList[i].normal), fullEdge) * Vector3.Cross(vList[(i + 3) % 4].normal, vList[i].normal);
+                    float currentPercent = currentComponent.Length() / (currentComponent.Length() + nextComponent.Length());
+                    Vector3 midPoint = vList[i].position + currentComponent + currentPercent * constantComponent;
+                    incomingDirection = vList[i].position - midPoint;
+                    incomingDirection.Normalize();
+                }                                
+                //Vector3 incomingDirection = vList[(i+3)%4].direction);
+                fullPointList.Add(new Vertex(vList[i], Vector3.Zero));
+                fullPointList.Add(new Vertex(vList[i], -.5f * incomingDirection));
+                fullPointList.Add(new Vertex(vList[i], .5f * vList[i].direction - .5f * incomingDirection));
                 fullPointList.Add(new Vertex(vList[i], .5f * vList[i].direction));
             }
             for (int i = 0; i < 16; i++)

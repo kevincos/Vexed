@@ -50,9 +50,9 @@ namespace VexedCore
         {
             get { return NonPhotoRealisticSettings.PresetSettings[settingsIndex]; }
         }
-        int settingsIndex = 0;
+        int settingsIndex = 5;
 
-        public static bool detailTextures = false;
+        public static bool detailTextures = true;
 
         public Game1()
         {
@@ -432,8 +432,6 @@ namespace VexedCore
             {
                 parameters["SketchThreshold"].SetValue(Settings.SketchThreshold);
                 parameters["SketchBrightness"].SetValue(Settings.SketchBrightness);
-                //parameters["SketchJitter"].SetValue(sketchJitter);
-                //parameters["SketchTexture"].SetValue(sketchTexture);
             }
 
             // Set effect parameters controlling the edge detection effect.

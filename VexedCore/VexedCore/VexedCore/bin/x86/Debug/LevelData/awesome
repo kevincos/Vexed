@@ -2258,12 +2258,12 @@
                       <name>Edge</name>
                       <start>
                         <X>15</X>
-                        <Y>-1</Y>
+                        <Y>-3</Y>
                         <Z>0</Z>
                       </start>
                       <end>
                         <X>15</X>
-                        <Y>-1</Y>
+                        <Y>-3</Y>
                         <Z>4</Z>
                       </end>
                       <type>Normal</type>
@@ -2290,7 +2290,7 @@
                       <name>Edge</name>
                       <start>
                         <X>15</X>
-                        <Y>-1</Y>
+                        <Y>-3</Y>
                         <Z>4</Z>
                       </start>
                       <end>
@@ -2359,7 +2359,7 @@
                       </start>
                       <end>
                         <X>15</X>
-                        <Y>-1</Y>
+                        <Y>-3</Y>
                         <Z>0</Z>
                       </end>
                       <type>Normal</type>
@@ -2408,322 +2408,6 @@
                   </color>
                 </Block>
                 <Block>
-                  <id>82</id>
-                  <name>Block</name>
-                  <edges>
-                    <Edge>
-                      <id>83</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>15</X>
-                        <Y>-1</Y>
-                        <Z>-2</Z>
-                      </start>
-                      <end>
-                        <X>15</X>
-                        <Y>-1</Y>
-                        <Z>0</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>84</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>85</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>15</X>
-                        <Y>-1</Y>
-                        <Z>0</Z>
-                      </start>
-                      <end>
-                        <X>15</X>
-                        <Y>-3</Y>
-                        <Z>0</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>86</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>87</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>15</X>
-                        <Y>-3</Y>
-                        <Z>0</Z>
-                      </start>
-                      <end>
-                        <X>15</X>
-                        <Y>-3</Y>
-                        <Z>-2</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>88</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>89</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>15</X>
-                        <Y>-3</Y>
-                        <Z>-2</Z>
-                      </start>
-                      <end>
-                        <X>15</X>
-                        <Y>-1</Y>
-                        <Z>-2</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>90</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                  </edges>
-                  <behaviors>
-                    <Behavior>
-                      <id>91</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                  </behaviors>
-                  <color>
-                    <R>0</R>
-                    <G>0</G>
-                    <B>0</B>
-                    <A>255</A>
-                    <PackedValue>4278190080</PackedValue>
-                  </color>
-                </Block>
-                <Block>
-                  <id>92</id>
-                  <name>Block</name>
-                  <edges>
-                    <Edge>
-                      <id>93</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>15</X>
-                        <Y>5</Y>
-                        <Z>-2</Z>
-                      </start>
-                      <end>
-                        <X>15</X>
-                        <Y>5</Y>
-                        <Z>-2</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>94</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>95</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>15</X>
-                        <Y>5</Y>
-                        <Z>-2</Z>
-                      </start>
-                      <end>
-                        <X>15</X>
-                        <Y>-1</Y>
-                        <Z>4</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>96</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>97</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>15</X>
-                        <Y>-1</Y>
-                        <Z>4</Z>
-                      </start>
-                      <end>
-                        <X>15</X>
-                        <Y>-1</Y>
-                        <Z>-2</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>98</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>99</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>15</X>
-                        <Y>-1</Y>
-                        <Z>-2</Z>
-                      </start>
-                      <end>
-                        <X>15</X>
-                        <Y>5</Y>
-                        <Z>-2</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>100</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                  </edges>
-                  <behaviors>
-                    <Behavior>
-                      <id>101</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                  </behaviors>
-                  <color>
-                    <R>0</R>
-                    <G>0</G>
-                    <B>0</B>
-                    <A>255</A>
-                    <PackedValue>4278190080</PackedValue>
-                  </color>
-                </Block>
-                <Block>
                   <id>102</id>
                   <name>Block</name>
                   <edges>
@@ -2732,12 +2416,12 @@
                       <name>Edge</name>
                       <start>
                         <X>15</X>
-                        <Y>5</Y>
+                        <Y>3</Y>
                         <Z>-7</Z>
                       </start>
                       <end>
                         <X>15</X>
-                        <Y>5</Y>
+                        <Y>3</Y>
                         <Z>-2</Z>
                       </end>
                       <type>Normal</type>
@@ -2764,7 +2448,7 @@
                       <name>Edge</name>
                       <start>
                         <X>15</X>
-                        <Y>5</Y>
+                        <Y>3</Y>
                         <Z>-2</Z>
                       </start>
                       <end>
@@ -2833,7 +2517,7 @@
                       </start>
                       <end>
                         <X>15</X>
-                        <Y>5</Y>
+                        <Y>3</Y>
                         <Z>-7</Z>
                       </end>
                       <type>Normal</type>
@@ -2882,26 +2566,26 @@
                   </color>
                 </Block>
                 <Block>
-                  <id>97</id>
+                  <id>309</id>
                   <name>Block</name>
                   <edges>
                     <Edge>
-                      <id>98</id>
+                      <id>310</id>
                       <name>Edge</name>
                       <start>
                         <X>15</X>
-                        <Y>10</Y>
-                        <Z>-7</Z>
+                        <Y>5</Y>
+                        <Z>-2</Z>
                       </start>
                       <end>
                         <X>15</X>
-                        <Y>10</Y>
-                        <Z>-7</Z>
+                        <Y>-1</Y>
+                        <Z>4</Z>
                       </end>
                       <type>Normal</type>
                       <behaviors>
                         <Behavior>
-                          <id>99</id>
+                          <id>311</id>
                           <name>Behavior</name>
                           <offset>0</offset>
                           <duration>0</duration>
@@ -2918,12 +2602,76 @@
                       </behaviors>
                     </Edge>
                     <Edge>
-                      <id>100</id>
+                      <id>312</id>
                       <name>Edge</name>
                       <start>
                         <X>15</X>
-                        <Y>10</Y>
-                        <Z>-7</Z>
+                        <Y>-1</Y>
+                        <Z>4</Z>
+                      </start>
+                      <end>
+                        <X>15</X>
+                        <Y>-3</Y>
+                        <Z>4</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>313</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>314</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>15</X>
+                        <Y>-3</Y>
+                        <Z>4</Z>
+                      </start>
+                      <end>
+                        <X>15</X>
+                        <Y>-3</Y>
+                        <Z>-2</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>315</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>316</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>15</X>
+                        <Y>-3</Y>
+                        <Z>-2</Z>
                       </start>
                       <end>
                         <X>15</X>
@@ -2933,71 +2681,7 @@
                       <type>Normal</type>
                       <behaviors>
                         <Behavior>
-                          <id>101</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>102</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>15</X>
-                        <Y>5</Y>
-                        <Z>-2</Z>
-                      </start>
-                      <end>
-                        <X>15</X>
-                        <Y>5</Y>
-                        <Z>-7</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>103</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>104</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>15</X>
-                        <Y>5</Y>
-                        <Z>-7</Z>
-                      </start>
-                      <end>
-                        <X>15</X>
-                        <Y>10</Y>
-                        <Z>-7</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>105</id>
+                          <id>317</id>
                           <name>Behavior</name>
                           <offset>0</offset>
                           <duration>0</duration>
@@ -3016,7 +2700,7 @@
                   </edges>
                   <behaviors>
                     <Behavior>
-                      <id>106</id>
+                      <id>318</id>
                       <name>Behavior</name>
                       <offset>0</offset>
                       <duration>0</duration>
@@ -3029,7 +2713,164 @@
                       <primaryValue>0</primaryValue>
                       <secondaryValue>0</secondaryValue>
                       <toggle>false</toggle>
-                      <nextBehavior />
+                    </Behavior>
+                  </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
+                </Block>
+                <Block>
+                  <id>319</id>
+                  <name>Block</name>
+                  <edges>
+                    <Edge>
+                      <id>320</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>15</X>
+                        <Y>10</Y>
+                        <Z>-7</Z>
+                      </start>
+                      <end>
+                        <X>15</X>
+                        <Y>5</Y>
+                        <Z>-2</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>321</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>322</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>15</X>
+                        <Y>5</Y>
+                        <Z>-2</Z>
+                      </start>
+                      <end>
+                        <X>15</X>
+                        <Y>3</Y>
+                        <Z>-2</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>323</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>324</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>15</X>
+                        <Y>3</Y>
+                        <Z>-2</Z>
+                      </start>
+                      <end>
+                        <X>15</X>
+                        <Y>3</Y>
+                        <Z>-7</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>325</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>326</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>15</X>
+                        <Y>3</Y>
+                        <Z>-7</Z>
+                      </start>
+                      <end>
+                        <X>15</X>
+                        <Y>10</Y>
+                        <Z>-7</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>327</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                  </edges>
+                  <behaviors>
+                    <Behavior>
+                      <id>328</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
                   <color>
@@ -3079,7 +2920,27 @@
                   </behaviors>
                 </Doodad>
               </doodads>
-              <monsters />
+              <monsters>
+                <Monster>
+                  <id>350</id>
+                  <name>Monster</name>
+                  <position>
+                    <X>15</X>
+                    <Y>13.5</Y>
+                    <Z>-5.5</Z>
+                  </position>
+                  <up>
+                    <X>-0</X>
+                    <Y>0</Y>
+                    <Z>1</Z>
+                  </up>
+                  <fixedPath>false</fixedPath>
+                  <movement>Hover</movement>
+                  <armor>Full</armor>
+                  <weapon>None</weapon>
+                  <behavior>Stationary</behavior>
+                </Monster>
+              </monsters>
               <vertices>
                 <Vector3>
                   <X>15</X>
@@ -4465,7 +4326,7 @@
                       <end>
                         <X>10</X>
                         <Y>15</Y>
-                        <Z>6</Z>
+                        <Z>8</Z>
                       </end>
                       <type>Normal</type>
                       <behaviors>
@@ -4492,12 +4353,12 @@
                       <start>
                         <X>10</X>
                         <Y>15</Y>
-                        <Z>6</Z>
+                        <Z>8</Z>
                       </start>
                       <end>
                         <X>3</X>
                         <Y>15</Y>
-                        <Z>6</Z>
+                        <Z>8</Z>
                       </end>
                       <type>Normal</type>
                       <behaviors>
@@ -4524,7 +4385,7 @@
                       <start>
                         <X>3</X>
                         <Y>15</Y>
-                        <Z>6</Z>
+                        <Z>8</Z>
                       </start>
                       <end>
                         <X>3</X>
@@ -4554,164 +4415,6 @@
                   <behaviors>
                     <Behavior>
                       <id>136</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                  </behaviors>
-                  <color>
-                    <R>0</R>
-                    <G>0</G>
-                    <B>0</B>
-                    <A>255</A>
-                    <PackedValue>4278190080</PackedValue>
-                  </color>
-                </Block>
-                <Block>
-                  <id>137</id>
-                  <name>Block</name>
-                  <edges>
-                    <Edge>
-                      <id>138</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>3</X>
-                        <Y>15</Y>
-                        <Z>6</Z>
-                      </start>
-                      <end>
-                        <X>10</X>
-                        <Y>15</Y>
-                        <Z>6</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>139</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>140</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>10</X>
-                        <Y>15</Y>
-                        <Z>6</Z>
-                      </start>
-                      <end>
-                        <X>10</X>
-                        <Y>15</Y>
-                        <Z>-1</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>141</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>142</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>10</X>
-                        <Y>15</Y>
-                        <Z>-1</Z>
-                      </start>
-                      <end>
-                        <X>3</X>
-                        <Y>15</Y>
-                        <Z>6</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>143</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>144</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>3</X>
-                        <Y>15</Y>
-                        <Z>6</Z>
-                      </start>
-                      <end>
-                        <X>3</X>
-                        <Y>15</Y>
-                        <Z>6</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>145</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                  </edges>
-                  <behaviors>
-                    <Behavior>
-                      <id>146</id>
                       <name>Behavior</name>
                       <offset>0</offset>
                       <duration>0</duration>
@@ -5682,9 +5385,187 @@
                     <PackedValue>4278190080</PackedValue>
                   </color>
                 </Block>
+                <Block>
+                  <id>329</id>
+                  <name>Block</name>
+                  <edges>
+                    <Edge>
+                      <id>330</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>3</X>
+                        <Y>15</Y>
+                        <Z>8</Z>
+                      </start>
+                      <end>
+                        <X>10</X>
+                        <Y>15</Y>
+                        <Z>8</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>331</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>332</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>10</X>
+                        <Y>15</Y>
+                        <Z>8</Z>
+                      </start>
+                      <end>
+                        <X>10</X>
+                        <Y>15</Y>
+                        <Z>-1</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>333</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>334</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>10</X>
+                        <Y>15</Y>
+                        <Z>-1</Z>
+                      </start>
+                      <end>
+                        <X>3</X>
+                        <Y>15</Y>
+                        <Z>6</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>335</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>336</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>3</X>
+                        <Y>15</Y>
+                        <Z>6</Z>
+                      </start>
+                      <end>
+                        <X>3</X>
+                        <Y>15</Y>
+                        <Z>8</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>337</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                  </edges>
+                  <behaviors>
+                    <Behavior>
+                      <id>338</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                  </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
+                </Block>
               </blocks>
               <doodads />
-              <monsters />
+              <monsters>
+                <Monster>
+                  <id>349</id>
+                  <name>Monster</name>
+                  <position>
+                    <X>13.5</X>
+                    <Y>15</Y>
+                    <Z>-1.5</Z>
+                  </position>
+                  <up>
+                    <X>0</X>
+                    <Y>-0</Y>
+                    <Z>-1</Z>
+                  </up>
+                  <fixedPath>false</fixedPath>
+                  <movement>Spider</movement>
+                  <armor>None</armor>
+                  <weapon>None</weapon>
+                  <behavior>Stationary</behavior>
+                </Monster>
+              </monsters>
               <vertices>
                 <Vector3>
                   <X>15</X>
@@ -7700,7 +7581,7 @@
                       </start>
                       <end>
                         <X>3</X>
-                        <Y>4</Y>
+                        <Y>1</Y>
                         <Z>10</Z>
                       </end>
                       <type>Normal</type>
@@ -7727,12 +7608,12 @@
                       <name>Edge</name>
                       <start>
                         <X>3</X>
-                        <Y>4</Y>
+                        <Y>1</Y>
                         <Z>10</Z>
                       </start>
                       <end>
                         <X>-2</X>
-                        <Y>4</Y>
+                        <Y>1</Y>
                         <Z>10</Z>
                       </end>
                       <type>Normal</type>
@@ -7759,7 +7640,7 @@
                       <name>Edge</name>
                       <start>
                         <X>-2</X>
-                        <Y>4</Y>
+                        <Y>1</Y>
                         <Z>10</Z>
                       </start>
                       <end>
@@ -7826,7 +7707,7 @@
                       </start>
                       <end>
                         <X>-2</X>
-                        <Y>-2</Y>
+                        <Y>-7</Y>
                         <Z>10</Z>
                       </end>
                       <type>Normal</type>
@@ -7853,7 +7734,7 @@
                       <name>Edge</name>
                       <start>
                         <X>-2</X>
-                        <Y>-2</Y>
+                        <Y>-7</Y>
                         <Z>10</Z>
                       </start>
                       <end>
@@ -7948,164 +7829,6 @@
                   <behaviors>
                     <Behavior>
                       <id>221</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                  </behaviors>
-                  <color>
-                    <R>0</R>
-                    <G>0</G>
-                    <B>0</B>
-                    <A>255</A>
-                    <PackedValue>4278190080</PackedValue>
-                  </color>
-                </Block>
-                <Block>
-                  <id>222</id>
-                  <name>Block</name>
-                  <edges>
-                    <Edge>
-                      <id>223</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>-2</X>
-                        <Y>-7</Y>
-                        <Z>10</Z>
-                      </start>
-                      <end>
-                        <X>-2</X>
-                        <Y>-7</Y>
-                        <Z>10</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>224</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>225</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>-2</X>
-                        <Y>-7</Y>
-                        <Z>10</Z>
-                      </start>
-                      <end>
-                        <X>-2</X>
-                        <Y>-2</Y>
-                        <Z>10</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>226</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>227</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>-2</X>
-                        <Y>-2</Y>
-                        <Z>10</Z>
-                      </start>
-                      <end>
-                        <X>-8</X>
-                        <Y>-2</Y>
-                        <Z>10</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>228</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>229</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>-8</X>
-                        <Y>-2</Y>
-                        <Z>10</Z>
-                      </start>
-                      <end>
-                        <X>-2</X>
-                        <Y>-7</Y>
-                        <Z>10</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>230</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                  </edges>
-                  <behaviors>
-                    <Behavior>
-                      <id>231</id>
                       <name>Behavior</name>
                       <offset>0</offset>
                       <duration>0</duration>
@@ -8603,26 +8326,26 @@
                   </color>
                 </Block>
                 <Block>
-                  <id>227</id>
+                  <id>339</id>
                   <name>Block</name>
                   <edges>
                     <Edge>
-                      <id>228</id>
+                      <id>340</id>
                       <name>Edge</name>
                       <start>
                         <X>-2</X>
-                        <Y>4</Y>
+                        <Y>1</Y>
                         <Z>10</Z>
                       </start>
                       <end>
                         <X>3</X>
-                        <Y>4</Y>
+                        <Y>1</Y>
                         <Z>10</Z>
                       </end>
                       <type>Normal</type>
                       <behaviors>
                         <Behavior>
-                          <id>229</id>
+                          <id>341</id>
                           <name>Behavior</name>
                           <offset>0</offset>
                           <duration>0</duration>
@@ -8639,22 +8362,22 @@
                       </behaviors>
                     </Edge>
                     <Edge>
-                      <id>230</id>
+                      <id>342</id>
                       <name>Edge</name>
                       <start>
                         <X>3</X>
-                        <Y>4</Y>
+                        <Y>1</Y>
                         <Z>10</Z>
                       </start>
                       <end>
                         <X>3</X>
-                        <Y>7</Y>
+                        <Y>5</Y>
                         <Z>10</Z>
                       </end>
                       <type>Normal</type>
                       <behaviors>
                         <Behavior>
-                          <id>231</id>
+                          <id>343</id>
                           <name>Behavior</name>
                           <offset>0</offset>
                           <duration>0</duration>
@@ -8671,54 +8394,54 @@
                       </behaviors>
                     </Edge>
                     <Edge>
-                      <id>232</id>
+                      <id>344</id>
                       <name>Edge</name>
                       <start>
                         <X>3</X>
-                        <Y>7</Y>
-                        <Z>10</Z>
-                      </start>
-                      <end>
-                        <X>3</X>
-                        <Y>7</Y>
-                        <Z>10</Z>
-                      </end>
-                      <type>Normal</type>
-                      <behaviors>
-                        <Behavior>
-                          <id>233</id>
-                          <name>Behavior</name>
-                          <offset>0</offset>
-                          <duration>0</duration>
-                          <period>0</period>
-                          <destination>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
-                          </destination>
-                          <primaryValue>0</primaryValue>
-                          <secondaryValue>0</secondaryValue>
-                          <toggle>false</toggle>
-                        </Behavior>
-                      </behaviors>
-                    </Edge>
-                    <Edge>
-                      <id>234</id>
-                      <name>Edge</name>
-                      <start>
-                        <X>3</X>
-                        <Y>7</Y>
+                        <Y>5</Y>
                         <Z>10</Z>
                       </start>
                       <end>
                         <X>-2</X>
-                        <Y>4</Y>
+                        <Y>3</Y>
                         <Z>10</Z>
                       </end>
                       <type>Normal</type>
                       <behaviors>
                         <Behavior>
-                          <id>235</id>
+                          <id>345</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>346</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>-2</X>
+                        <Y>3</Y>
+                        <Z>10</Z>
+                      </start>
+                      <end>
+                        <X>-2</X>
+                        <Y>1</Y>
+                        <Z>10</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>347</id>
                           <name>Behavior</name>
                           <offset>0</offset>
                           <duration>0</duration>
@@ -8737,7 +8460,7 @@
                   </edges>
                   <behaviors>
                     <Behavior>
-                      <id>236</id>
+                      <id>348</id>
                       <name>Behavior</name>
                       <offset>0</offset>
                       <duration>0</duration>

@@ -16,11 +16,11 @@
           <sizeY>14</sizeY>
           <sizeZ>10</sizeZ>
           <color>
-            <R>255</R>
-            <G>255</G>
-            <B>255</B>
+            <R>242</R>
+            <G>99</G>
+            <B>47</B>
             <A>255</A>
-            <PackedValue>4294967295</PackedValue>
+            <PackedValue>4281295858</PackedValue>
           </color>
           <faceList>
             <Face>
