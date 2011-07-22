@@ -227,7 +227,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run1_detail.xnb</Output>
-      <Time>2011-07-20T16:49:05.4006489-07:00</Time>
+      <Time>2011-07-22T13:39:59.936897-07:00</Time>
     </Item>
     <Item>
       <Source>p_run2_detail.png</Source>
@@ -236,7 +236,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run2_detail.xnb</Output>
-      <Time>2011-07-20T16:49:09.0068249-07:00</Time>
+      <Time>2011-07-22T13:39:50.2484242-07:00</Time>
     </Item>
     <Item>
       <Source>p_run3_detail.png</Source>
@@ -272,7 +272,16 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\projectiles.xnb</Output>
-      <Time>2011-07-21T19:49:35.2608857-07:00</Time>
+      <Time>2011-07-22T15:52:54.096017-07:00</Time>
+    </Item>
+    <Item>
+      <Source>p_texture.png</Source>
+      <Name>p_texture</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture.xnb</Output>
+      <Time>2011-07-22T15:13:17.3090354-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

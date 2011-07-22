@@ -28,3 +28,4 @@ Content\p_run3_detail.xnb
 Content\p_run4_detail.xnb
 Content\p_walljump_detail.xnb
 Content\projectiles.xnb
+Content\p_texture.xnb

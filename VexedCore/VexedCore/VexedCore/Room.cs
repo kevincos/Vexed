@@ -789,6 +789,13 @@ namespace VexedCore
             {
                 m.Update(gameTime);
             }
+            for (int i = monsters.Count() - 1; i >= 0; i--)
+            {
+                if (monsters[i].dead == true)
+                {
+                    monsters.Remove(monsters[i]);
+                }
+            }
             foreach (Projectile p in projectiles)
             {
                 p.Update(gameTime);

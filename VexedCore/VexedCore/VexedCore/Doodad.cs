@@ -189,6 +189,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.Brick && active == true)
+                    return false;
                 if (type == VexedLib.DoodadType.Waypoint || type == VexedLib.DoodadType.WallSwitch || type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb)
                     return false;
                 return true;
@@ -199,6 +201,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.Brick && active == true)
+                    return false;
                 if (type == VexedLib.DoodadType.Waypoint)
                     return false;
                 if(type == VexedLib.DoodadType.PowerOrb && active == false)
@@ -335,6 +339,7 @@ namespace VexedCore
             type = d.type;
             toggleOn = d.toggleOn;
             targetDoodad = d.targetDoodad;
+            active = d.active;
             srcDoodad = d;
         }
 

@@ -119,6 +119,9 @@ namespace VexedCore
             }
         }
 
+        public bool dead;
+        public Vector3 impactVector = Vector3.Zero;
+
         public float acceleration
         {
             get
@@ -223,6 +226,22 @@ namespace VexedCore
             if (fireCooldown < 0)
                 fireCooldown = 0;
 
+
+            if (impactVector != Vector3.Zero && armorType != VexedLib.ArmorType.Full)
+            {
+                impactVector.Normalize();
+                if(armorType == VexedLib.ArmorType.None)                           
+                    dead = true;
+                if (armorType == VexedLib.ArmorType.Top && Vector3.Dot(impactVector, position.direction) > .5f)
+                    dead = true;
+                if (rightFacing == true && armorType == VexedLib.ArmorType.Shield && Vector3.Dot(impactVector, rightUnit) > 0)
+                    dead = true;
+                if (rightFacing == false && armorType == VexedLib.ArmorType.Shield && Vector3.Dot(impactVector, -rightUnit) > 0)
+                    dead = true;
+                impactVector = Vector3.Zero;
+            }
+
+
             position.Update(Game1.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds);
             
             Vector3 direction = Vector3.Zero;
@@ -322,21 +341,21 @@ namespace VexedCore
                 fireCooldown = fireTime;
                 if (gunType == VexedLib.GunType.Blaster || gunType == VexedLib.GunType.Repeater)
                 {
-                    Game1.player.currentRoom.projectiles.Add(new Projectile(ProjectileType.Plasma, position.position + gunLine, -projectileVelocity, position.normal, projectileVelocity));
+                    Game1.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity));
                 }
                 if (gunType == VexedLib.GunType.Beam)
                 {
-                    Game1.player.currentRoom.projectiles.Add(new Projectile(ProjectileType.Laser, position.position + gunLine, -projectileVelocity, position.normal, projectileVelocity));
+                    Game1.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Laser, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity));
                 }
                 if (gunType == VexedLib.GunType.Missile)
                 {
-                    Game1.player.currentRoom.projectiles.Add(new Projectile(ProjectileType.Missile, position.position + gunLine, -projectileVelocity, position.normal, projectileVelocity));
+                    Game1.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Missile, position.position + gunLine, position.velocity, position.normal, projectileVelocity));
                 }
                 if (gunType == VexedLib.GunType.Spread)
                 {
-                    Game1.player.currentRoom.projectiles.Add(new Projectile(ProjectileType.Plasma, position.position + gunLine, -position.velocity, position.normal, projectileVelocity + .5f * gunNormal));
-                    Game1.player.currentRoom.projectiles.Add(new Projectile(ProjectileType.Plasma, position.position + gunLine, -position.velocity, position.normal, projectileVelocity - .5f * gunNormal));
-                    Game1.player.currentRoom.projectiles.Add(new Projectile(ProjectileType.Plasma, position.position + gunLine, -position.velocity, position.normal, projectileVelocity));
+                    Game1.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity + .5f * gunNormal));
+                    Game1.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity - .5f * gunNormal));
+                    Game1.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity));
                 }
 
             }
@@ -347,9 +366,12 @@ namespace VexedCore
                 if (groundProjection != Vector3.Zero)
                 {
                     Vector3 groundDirection = groundProjection / groundProjection.Length();
-                    direction -= Vector3.Dot(groundDirection, direction) * groundDirection;
+                    if (Vector3.Dot(groundDirection, position.direction) == 1f)
+                    {
+                        direction -= Vector3.Dot(groundDirection, direction) * groundDirection;
 
-                    position.velocity += acceleration * direction;                    
+                        position.velocity += acceleration * direction;
+                    }
                 }
 
                 if (directionChangeCooldown == 0)
@@ -586,6 +608,14 @@ namespace VexedCore
                         boundingBoxTop < d.boundingBoxBottom ||
                         boundingBoxLeft > d.boundingBoxRight ||
                         boundingBoxRight < d.boundingBoxLeft);
+        }
+
+        public bool CollisionFirstPass(Projectile p)
+        {
+            return (boundingBoxBottom > p.boundingBoxTop ||
+                        boundingBoxTop < p.boundingBoxBottom ||
+                        boundingBoxLeft > p.boundingBoxRight ||
+                        boundingBoxRight < p.boundingBoxLeft);
         }
 
 

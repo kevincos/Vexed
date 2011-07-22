@@ -367,7 +367,43 @@ namespace VexedCore
                 else
                     break;
             }
-                
+
+
+            List<Vector3> pVertexList = p.GetCollisionRect();
+            foreach (Projectile s in unfoldedRoom.projectiles)
+            {
+                if (s.srcProjectile.active == true && s.srcProjectile.exploding == false)
+                {
+                    if (s.srcProjectile.srcMonster == null && (s.srcProjectile.type == ProjectileType.Missile || s.srcProjectile.type == ProjectileType.Bomb))
+                        continue;
+                    s.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+                    if (p.CollisionFirstPass(s) == false)
+                    {
+                        List<Vector3> projectileVertexList = s.GetCollisionRect();
+                        Vector3 projection = Collide(pVertexList, projectileVertexList, Game1.player.center.normal);
+                        if (projection != Vector3.Zero)
+                        {
+                            p.dead = true;
+                            s.srcProjectile.exploding = true;
+                            s.srcProjectile.position.velocity = Vector3.Zero;
+                        }
+                    }
+                }
+            }
+            foreach (Monster m in unfoldedRoom.monsters)
+            {
+                m.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+                if (p.CollisionFirstPass(m) == false)
+                {
+                    List<Vector3> monsterVertexList = m.GetCollisionRect();
+                    Vector3 projection = Collide(pVertexList, monsterVertexList, Game1.player.center.normal);
+                    if (projection != Vector3.Zero)
+                    {
+                        p.dead = true;
+                    }
+                }
+            }
+
             // Now that player position is stabilized, use the special rects to detect if it is grounded
             // or prepped for a wall jump.
 
@@ -555,7 +591,7 @@ namespace VexedCore
                         List<Vector3> relVelList = new List<Vector3>();
                         List<EdgeProperties> edgePropertiesList = new List<EdgeProperties>();
 
-                        List<Vector3> doodadVertexList = d.GetCollisionRect();                        
+                        List<Vector3> doodadVertexList = d.GetCollisionRect();
                         d.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
                         foreach (Block b in unfoldedRoom.blocks)
                         {                            
@@ -608,6 +644,7 @@ namespace VexedCore
             }
             #endregion
 
+            #region monsters
             foreach (Monster m in unfoldedRoom.monsters)
             {
                 frictionAdjustment = Vector3.Zero;
@@ -617,14 +654,14 @@ namespace VexedCore
                     List<Vector3> relVelList = new List<Vector3>();
                     List<EdgeProperties> edgePropertiesList = new List<EdgeProperties>();
 
-                    List<Vector3> doodadVertexList = m.GetCollisionRect();
+                    List<Vector3> monsterVertexList = m.GetCollisionRect();
                     m.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
                     foreach (Block b in unfoldedRoom.blocks)
                     {
                         if (m.CollisionFirstPass(b))
                             continue;
                         List<Vector3> blockVertexList = b.GetCollisionRect();
-                        Vector3 projection = Collide(doodadVertexList, blockVertexList, p.center.normal);
+                        Vector3 projection = Collide(monsterVertexList, blockVertexList, p.center.normal);
 
                         if (projection.Length() > 0f)
                         {
@@ -643,7 +680,7 @@ namespace VexedCore
                             if (m.CollisionFirstPass(b))
                                 continue;
                             List<Vector3> brickVertexList = b.GetCollisionRect();
-                            Vector3 projection = Collide(doodadVertexList, brickVertexList, p.center.normal);
+                            Vector3 projection = Collide(monsterVertexList, brickVertexList, p.center.normal);
 
                             if (projection.Length() > 0f)
                             {
@@ -664,6 +701,34 @@ namespace VexedCore
                     }
                     else
                         break;
+                }
+
+
+                List<Vector3> mVertexList = m.GetCollisionRect();
+
+                m.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+                foreach (Projectile s in unfoldedRoom.projectiles)
+                {
+                    if (s.type == ProjectileType.Missile && s.srcProjectile.srcMonster == null && (s.position.position - m.position.position).Length() < 7f)
+                    {
+                        s.srcProjectile.SetTarget(m.srcMonster.position.position);
+                    }
+                    if (s.srcProjectile.active == true || m.srcMonster != s.srcProjectile.srcMonster)
+                    {
+                        s.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+                        if (m.CollisionFirstPass(s) == false)
+                        {
+                            List<Vector3> projectileVertexList = s.GetCollisionRect();
+                            Vector3 projection = Collide(mVertexList, projectileVertexList, Game1.player.center.normal);
+                            if (projection != Vector3.Zero)
+                            {
+                                s.srcProjectile.exploding = true;
+                                m.srcMonster.impactVector = Monster.AdjustVector(s.srcProjectile.position.velocity, m.srcMonster.position.normal, Game1.player.center.normal, Game1.player.center.direction, true);
+                                s.srcProjectile.position.velocity = Vector3.Zero;                                
+                            }
+                        }
+
+                    }
                 }
 
                 List<Vector3> monsterGroundBox = m.GetGroundCollisionRect();
@@ -692,8 +757,9 @@ namespace VexedCore
                         m.srcMonster.groundProjection = Monster.AdjustVector(groundProjection, m.srcMonster.position.normal, p.center.normal, p.center.direction, true);
                 }
             }
+            #endregion
 
-
+            #region projectile-collisions
             foreach (Projectile s in unfoldedRoom.projectiles)
             {
                 frictionAdjustment = Vector3.Zero;
@@ -712,7 +778,10 @@ namespace VexedCore
                     Vector3 projection = Collide(doodadVertexList, blockVertexList, p.center.normal);
                     if (projection != Vector3.Zero)
                     {
-                        s.srcProjectile.exploding = true;
+                        //if (s.srcProjectile.type == ProjectileType.Bomb)
+                            //s.srcProjectile.stopped = true;
+                        //else
+                            s.srcProjectile.exploding = true;
                         s.srcProjectile.position.velocity = Vector3.Zero;
                     }
                 }
@@ -729,13 +798,22 @@ namespace VexedCore
                         Vector3 projection = Collide(doodadVertexList, brickVertexList, p.center.normal);
                         if (projection != Vector3.Zero)
                         {
-                            s.srcProjectile.exploding = true;
+                            //if (s.srcProjectile.type == ProjectileType.Bomb)
+                                //s.srcProjectile.stopped = true;
+                            //else
+                                s.srcProjectile.exploding = true;
                             s.srcProjectile.position.velocity = Vector3.Zero;
+
+                            if (s.srcProjectile.type == ProjectileType.Bomb && s.srcProjectile.exploding == true && b.type == VexedLib.DoodadType.Brick)
+                            {
+                                b.srcDoodad.active = true;
+                            }
                         }
                     }
                 }
 
-            }            
+            }
+            #endregion
 
             p.center.Update(r, 0);
         }

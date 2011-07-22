@@ -45,21 +45,38 @@ namespace VexedCore
         public bool rightWall = false;
         public float playerHalfWidth = .35f;
         public float playerHalfHeight = .5f;
+        public int weaponSwitchCooldown = 0;
+        public int weaponSwitchCooldownMax = 200;
 
-        public static Texture2D neutralTexture;
-        public static Texture2D fallTexture;
-        public static Texture2D wallJumpTexture;
-        public static Texture2D runTexture1;
-        public static Texture2D runTexture2;
-        public static Texture2D runTexture3;
-        public static Texture2D runTexture4;
-        public static Texture2D neutralTexture_detail;
-        public static Texture2D fallTexture_detail;
-        public static Texture2D wallJumpTexture_detail;
-        public static Texture2D runTexture1_detail;
-        public static Texture2D runTexture2_detail;
-        public static Texture2D runTexture3_detail;
-        public static Texture2D runTexture4_detail;
+        public VexedLib.GunType gunType = VexedLib.GunType.Blaster;
+
+        public static Texture2D player_textures;
+        public static List<List<Vector2>> texCoordList;
+
+        public static int texGridCount = 8;
+
+        public static List<Vector2> LoadTexCoords(int x, int y)
+        {
+            float texWidth = 1f / texGridCount;
+            List<Vector2> texCoords = new List<Vector2>();
+            texCoords.Add(new Vector2((x + 1) * texWidth, y * texWidth));
+            texCoords.Add(new Vector2(x * texWidth, y * texWidth));
+            texCoords.Add(new Vector2(x * texWidth, (y + 1) * texWidth));
+            texCoords.Add(new Vector2((x + 1) * texWidth, (y + 1) * texWidth));
+
+            return texCoords;
+        }
+        public static void InitTexCoords()
+        {
+            texCoordList = new List<List<Vector2>>();
+            for (int y = 0; y < 8; y++)
+            {
+                for (int x = 0; x < 8; x++)
+                {                    
+                    texCoordList.Add(LoadTexCoords(x, y));
+                }
+            }            
+        }
         
         public float walkSpeed = .001f;
         public float airSpeed = .0005f;
@@ -84,6 +101,24 @@ namespace VexedCore
         public float boundingBoxLeft;
         public float boundingBoxRight;
 
+
+        public int fireTime
+        {
+            get
+            {
+                if (gunType == VexedLib.GunType.Blaster || gunType == VexedLib.GunType.Spread)
+                    return 1000;
+                if (gunType == VexedLib.GunType.Missile)
+                    return 4000;
+                if (gunType == VexedLib.GunType.Beam)
+                    return 2000;
+                if (gunType == VexedLib.GunType.Repeater)
+                    return 200;
+                return 0;
+            }
+        }
+
+
         public void UpdateBoundingBox()
         {
             Vector3 up = center.direction;
@@ -96,58 +131,54 @@ namespace VexedCore
             boundingBoxRight = centerX + playerHalfWidth;            
         }
         
-        public Texture2D currentTexture
+        public int currentTextureIndex
         {
             get
             {
-                if (Game1.detailTextures)
+                if (state != State.Normal)
+                    return 0;
+                if (walking == true)
                 {
-                    if (state != State.Normal)
-                        return fallTexture_detail;
-                    if (walking == true)
+                    if (faceDirection < 0)
                     {
                         if (walkTime > 3 * walkMaxTime / 4)
-                            return runTexture4_detail;
+                            return 16;
                         else if (walkTime > walkMaxTime / 2)
-                            return runTexture2_detail;
+                            return 18;
                         else if (walkTime > walkMaxTime / 4)
-                            return runTexture3_detail;
+                            return 19;
                         else
-                            return runTexture1_detail;
+                            return 17;
                     }
-                    else if (grounded == true)
-                        return neutralTexture_detail;
-                    else if ((leftWall == true && faceDirection < 0) || (rightWall == true && faceDirection > 0))
-                        return wallJumpTexture_detail;
-                    else if (faceDirection != 0)
-                        return runTexture2_detail;
                     else
-                        return fallTexture_detail;
+                    {
+                        if (walkTime > 3 * walkMaxTime / 4)
+                            return 24;
+                        else if (walkTime > walkMaxTime / 2)
+                            return 26;
+                        else if (walkTime > walkMaxTime / 4)
+                            return 27;
+                        else
+                            return 25;
+                    }
                 }
+                else if (grounded == true)
+                    if (faceDirection < 0)
+                        return 2;
+                    else if (faceDirection > 0)
+                        return 1;
+                    else
+                        return 0;
+                else if (leftWall == true && faceDirection < 0)
+                    return 32;
+                else if (rightWall == true && faceDirection > 0)
+                    return 40;
+                else if (faceDirection < 0)
+                    return 19;
+                else if (faceDirection > 0)
+                    return 27;
                 else
-                {
-                    if (state != State.Normal)
-                        return fallTexture;
-                    if (walking == true)
-                    {
-                        if (walkTime > 3 * walkMaxTime / 4)
-                            return runTexture4;
-                        else if (walkTime > walkMaxTime / 2)
-                            return runTexture2;
-                        else if (walkTime > walkMaxTime / 4)
-                            return runTexture3;
-                        else
-                            return runTexture1;
-                    }
-                    else if (grounded == true)
-                        return neutralTexture;
-                    else if ((leftWall == true && faceDirection < 0) || (rightWall == true && faceDirection > 0))
-                        return wallJumpTexture;
-                    else if (faceDirection != 0)
-                        return runTexture2;
-                    else
-                        return fallTexture;
-                }
+                    return 8;
             }
         }
 
@@ -252,6 +283,9 @@ namespace VexedCore
         {
             fireCooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (fireCooldown < 0) fireCooldown = 0;
+
+            weaponSwitchCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+                if (weaponSwitchCooldown < 0) weaponSwitchCooldown = 0;
             if (dead == true)
                 Respawn();
             groundCounter += gameTime.ElapsedGameTime.Milliseconds;
@@ -364,17 +398,45 @@ namespace VexedCore
                 {
                     center.velocity -= (maxHorizSpeed + rightMagnitude) * right;
                 }
+                if(gamePadState.IsButtonDown(Buttons.RightShoulder))
+                {
+                    if (weaponSwitchCooldown == 0)
+                    {
+                        weaponSwitchCooldown = weaponSwitchCooldownMax;
+                        if (gunType == VexedLib.GunType.Blaster)
+                            gunType = VexedLib.GunType.Beam;
+                        else if (gunType == VexedLib.GunType.Beam)
+                            gunType = VexedLib.GunType.Missile;
+                        else if (gunType == VexedLib.GunType.Missile)
+                            gunType = VexedLib.GunType.Bomb;
+                        else
+                            gunType = VexedLib.GunType.Blaster;
+                    }
+                }
                 if(gamePadState.IsButtonDown(Buttons.X))
                 {
                     if (fireCooldown == 0)
                     {
                         fireCooldown = 400;
                         Vector3 shootDirection;
-                        if (faceDirection >= 0)
+                        if (grounded == false && leftWall == true)
+                            shootDirection = right / right.Length();
+                        else if (grounded == false && rightWall == true)
+                            shootDirection = -right / right.Length();
+                        else if (faceDirection >= 0)
                             shootDirection = right / right.Length();
                         else
                             shootDirection = -right / right.Length();
-                        currentRoom.projectiles.Add(new Projectile(ProjectileType.Player, center.position, Vector3.Zero, center.normal, shootDirection));
+
+                        if (gunType == VexedLib.GunType.Blaster)
+                            currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Player, center.position, center.velocity, center.normal, shootDirection));
+                        if (gunType == VexedLib.GunType.Missile)
+                            currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Missile, center.position + .5f * shootDirection, center.velocity, center.normal, shootDirection));
+                        if (gunType == VexedLib.GunType.Bomb)
+                            currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Bomb, center.position + .5f * shootDirection, center.velocity, center.normal, shootDirection));
+                        if (gunType == VexedLib.GunType.Beam)
+                            currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Laser, center.position, center.velocity, center.normal, shootDirection));
+
                     }
                 }
                 if (gamePadState.IsButtonDown(Buttons.Y) || Keyboard.GetState().IsKeyDown(Keys.LeftShift))
@@ -473,6 +535,23 @@ namespace VexedCore
                         boundingBoxRight < d.boundingBoxLeft);
         }
 
+        public bool CollisionFirstPass(Projectile p)
+        {
+            return (boundingBoxBottom > p.boundingBoxTop ||
+                        boundingBoxTop < p.boundingBoxBottom ||
+                        boundingBoxLeft > p.boundingBoxRight ||
+                        boundingBoxRight < p.boundingBoxLeft);
+        }
+
+        public bool CollisionFirstPass(Monster m)
+        {
+            return (boundingBoxBottom > m.boundingBoxTop ||
+                        boundingBoxTop < m.boundingBoxBottom ||
+                        boundingBoxLeft > m.boundingBoxRight ||
+                        boundingBoxRight < m.boundingBoxLeft);
+        }
+
+
         public void DrawTexture()
         {
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
@@ -485,23 +564,17 @@ namespace VexedCore
                 up.Normalize();
             }
             Vector3 right = Vector3.Cross(up, center.normal);
-            rectVertexList.Add(new Vertex(center.position, center.normal, +playerHalfHeight * up + playerHalfWidth * right, center.direction));
-            rectVertexList.Add(new Vertex(center.position, center.normal, +playerHalfHeight * up - playerHalfWidth * right, center.direction));
-            rectVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up - playerHalfWidth * right, center.direction));
-            rectVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up + playerHalfWidth * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, +playerHalfHeight * up + .5f * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, +playerHalfHeight * up - .5f * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up - .5f * right, center.direction));
+            rectVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up + .5f * right, center.direction));
             foreach (Vertex v in rectVertexList)
             {
                 v.Update(currentRoom, 1);
             }
 
-            List<Vector2> texCoords = new List<Vector2>();
-            texCoords.Add(new Vector2(.125f, 0));
-            texCoords.Add(new Vector2(.875f, 0));
-            texCoords.Add(new Vector2(.875f, 1));
-            texCoords.Add(new Vector2(.125f, 1));
 
-
-            currentRoom.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList, texCoords, faceDirection > 0);
+            currentRoom.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList, Player.texCoordList[currentTextureIndex], true);
 
 
             VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();

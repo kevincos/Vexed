@@ -17,7 +17,8 @@ namespace VexedCore
         Plasma,
         Laser,
         Missile,
-        Player
+        Player,
+        Bomb
     }
 
     public class Projectile
@@ -33,14 +34,37 @@ namespace VexedCore
         
         public bool exploded = false;
 
+        public bool playerProjectile = false;
+        public Monster srcMonster = null;
+        public Vector3 missileTarget = Vector3.Zero;
+
         public static List<Vector2> plasmaTexCoords;
         public static List<Vector2> missileTexCoords;
         public static List<Vector2> laserTexCoords;
+        public static List<Vector2> bombTexCoords;
         public static List<Vector2> blastTexCoords;
 
+        public bool stopped = false;
         public bool exploding = false;
         public int explodeTime = 0;
+
+        public float acceleration
+        {
+            get
+            {
+                return .0005f;
+            }
+        }
         
+        public bool active
+        {
+            get
+            {
+                if (type == ProjectileType.Missile)
+                    return lifeTime > 300;
+                return lifeTime > 100;
+            }
+        }
 
         public static int texGridCount = 8;
 
@@ -65,9 +89,11 @@ namespace VexedCore
                 else if (type == ProjectileType.Plasma)
                     return 100;
                 else if (type == ProjectileType.Missile)
-                    return 2000;
+                    return 100;
+                else if (type == ProjectileType.Bomb)
+                    return 100;
                 else if (type == ProjectileType.Laser)
-                    return 50;
+                    return 100;
                 else
                     return 0;
             }
@@ -85,6 +111,8 @@ namespace VexedCore
                     return 6000;
                 else if (type == ProjectileType.Laser)
                     return 500;
+                else if (type == ProjectileType.Bomb)
+                    return 2000;
                 else
                     return 0;
             }
@@ -95,11 +123,13 @@ namespace VexedCore
             get
             {
                 if (type == ProjectileType.Plasma)
-                    return .008f;
+                    return .015f;
                 else if (type == ProjectileType.Player)
                     return .025f;
                 else if (type == ProjectileType.Missile)
                     return .004f;
+                else if (type == ProjectileType.Bomb)
+                    return .008f;
                 else if (type == ProjectileType.Laser)
                     return .025f;
                 else
@@ -146,6 +176,61 @@ namespace VexedCore
         {
             get
             {
+                if (type == ProjectileType.Laser && exploding == true)
+                {
+                    return upUnit - (maxExplodeTime - explodeTime) * 2f / maxExplodeTime * upUnit;
+                }
+                if (type == ProjectileType.Laser && lifeTime < maxExplodeTime)
+                {
+                    return upUnit - (maxExplodeTime - explodeTime) * 1.5f/ maxExplodeTime * upUnit;
+                }
+                    
+                    
+                return -halfHeight * upUnit;
+            }
+        }
+
+        public Vector3 blastRight
+        {
+            get
+            {
+                return halfWidth * rightUnit;
+            }
+        }
+        public Vector3 blastLeft
+        {
+            get
+            {
+                return -halfWidth * rightUnit;
+            }
+        }
+        public Vector3 blastUp
+        {
+            get
+            {
+                if (type == ProjectileType.Missile)
+                {
+                    return (halfHeight + halfWidth) * upUnit;
+                }
+                if (type == ProjectileType.Laser)
+                {
+                    return (halfHeight + .75f*halfWidth) * upUnit;
+                }
+                return halfHeight * upUnit;
+            }
+        }
+        public Vector3 blastDown
+        {
+            get
+            {
+                if (type == ProjectileType.Missile)
+                {
+                    return (halfHeight - halfWidth) * upUnit;
+                }
+                if (type == ProjectileType.Laser)
+                {
+                    return (halfHeight - 1.25f*halfWidth) * upUnit;
+                }
                 return -halfHeight * upUnit;
             }
         }
@@ -156,6 +241,10 @@ namespace VexedCore
             {
                 if (type == ProjectileType.Missile || type == ProjectileType.Laser)
                 {
+                    if (exploding == true)
+                    {
+                        return .3f + explodeTime * .3f / maxExplodeTime;
+                    }
                     return .3f;
                 }
                 if (exploding == true)
@@ -174,14 +263,7 @@ namespace VexedCore
             {
                 if (type == ProjectileType.Laser)
                 {
-                    if (exploding == true)
-                    {
-                        return (maxExplodeTime - explodeTime) * 1.5f / maxExplodeTime;
-                    }
-                    else
-                    {
-                        return 1.5f;
-                    }
+                    return 1.5f;
                 }
                 if (type == ProjectileType.Missile)
                 {
@@ -202,7 +284,7 @@ namespace VexedCore
         {
             get
             {
-                return 0f;
+                return 0.28f;
             }
         }
 
@@ -212,16 +294,21 @@ namespace VexedCore
             plasmaTexCoords = LoadTexCoords(0, 0);
             missileTexCoords = LoadTexCoords(0, 1);
             laserTexCoords = LoadTexCoords(0, 2);
+            bombTexCoords = LoadTexCoords(0, 3);
             blastTexCoords = LoadTexCoords(1, 0);
         }
 
-        public Projectile(ProjectileType type, Vector3 position, Vector3 velocity, Vector3 normal, Vector3 direction)
+        public Projectile(Monster srcMonster, ProjectileType type, Vector3 position, Vector3 velocity, Vector3 normal, Vector3 direction)
         {
+            this.srcMonster = srcMonster;
+            if (srcMonster == null)
+                playerProjectile = true;
             this.type = type;
             this.position = new Vertex(position, normal, Vector3.Zero, direction);
             Vector3 extraVelocity = direction;
             extraVelocity.Normalize();
             this.position.velocity += extraVelocity * this.velocity;
+            this.position.velocity += Vector3.Dot(velocity, direction) * direction;
             
         }
 
@@ -229,6 +316,7 @@ namespace VexedCore
         {
             position = p.position.Unfold(r,n,u);
             srcProjectile = p;
+            type = p.type;
         }
 
         public void Update(GameTime gameTime)
@@ -245,36 +333,62 @@ namespace VexedCore
                 exploding = true;
                 position.velocity = Vector3.Zero;
             }
-            if (type == ProjectileType.Missile)
+            if (exploding == false && srcMonster != null && type == ProjectileType.Missile)
             {
-                Vector3 targetDirection = Game1.player.center.position - position.position;
-                targetDirection = targetDirection - Vector3.Dot(targetDirection, position.normal) * position.normal;
-                targetDirection.Normalize();
-                
-                position.velocity += .06f*this.velocity * targetDirection;
+                SetTarget(Game1.player.center.position); 
+           }
+            if (exploding == false && type == ProjectileType.Bomb && stopped == false)
+            {
+                position.velocity+=Monster.AdjustVector(-1.5f * acceleration * Game1.player.center.direction, position.normal, Game1.player.center.normal, Game1.player.center.direction, false);
+                if (position.velocity.Length() > velocity * 1.5f)
+                {
+                    position.velocity.Normalize();
+                    position.velocity *= velocity * 1.5f;
+                }
+            }
+
+            if (missileTarget != Vector3.Zero)
+            {
+                position.velocity += .06f * this.velocity * missileTarget;
                 if (position.velocity.Length() > this.velocity)
                 {
                     position.velocity.Normalize();
                     position.velocity *= this.velocity;
                 }
 
-                position.direction = targetDirection/targetDirection.Length();
+                position.direction = missileTarget / missileTarget.Length();
             }
             position.Update(Game1.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds);
+        }
+
+        public void SetTarget(Vector3 targetPos)
+        {
+            missileTarget = targetPos - position.position;
+            missileTarget = missileTarget - Vector3.Dot(missileTarget, position.normal) * position.normal;
+            missileTarget.Normalize();
         }
 
         public void Draw(Room r)
         {
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
             List<VertexPositionColorNormalTexture> textureTriangleList = new List<VertexPositionColorNormalTexture>();
-            List<Vertex> rectVertexList = new List<Vertex>();
 
+            List<Vertex> rectVertexList = new List<Vertex>();
             rectVertexList.Add(new Vertex(position.position, position.normal, up + right, position.direction));
             rectVertexList.Add(new Vertex(position.position, position.normal, up + left, position.direction));
             rectVertexList.Add(new Vertex(position.position, position.normal, down + left, position.direction));
             rectVertexList.Add(new Vertex(position.position, position.normal, down + right, position.direction));
+            List<Vertex> blastVertexList = new List<Vertex>();
+            blastVertexList.Add(new Vertex(position.position, position.normal, blastUp + blastRight, position.direction));
+            blastVertexList.Add(new Vertex(position.position, position.normal, blastUp + blastLeft, position.direction));
+            blastVertexList.Add(new Vertex(position.position, position.normal, blastDown + blastLeft, position.direction));
+            blastVertexList.Add(new Vertex(position.position, position.normal, blastDown + blastRight, position.direction));
 
             foreach (Vertex v in rectVertexList)
+            {
+                v.Update(Game1.player.currentRoom, 1);
+            }
+            foreach (Vertex v in blastVertexList)
             {
                 v.Update(Game1.player.currentRoom, 1);
             }
@@ -283,17 +397,44 @@ namespace VexedCore
             {
                 if (exploding == true)
                 {
-                    r.AddTextureToTriangleList(rectVertexList, Color.GreenYellow, depth - .05f, textureTriangleList, blastTexCoords, true);
+                    r.AddTextureToTriangleList(blastVertexList, Color.GreenYellow, depth, textureTriangleList, blastTexCoords, true);
                 }
                 else
                 {
-                    r.AddTextureToTriangleList(rectVertexList, Color.GreenYellow, depth - .05f, textureTriangleList, plasmaTexCoords, true);
+                    r.AddTextureToTriangleList(rectVertexList, Color.GreenYellow, depth, textureTriangleList, plasmaTexCoords, true);
                 }
             }
             if (type == ProjectileType.Missile)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .05f, textureTriangleList, missileTexCoords, true);
+            {
+                if (exploding == true)
+                {
+                    r.AddTextureToTriangleList(blastVertexList, Color.Orange, depth, textureTriangleList, blastTexCoords, true);
+                }
+                else
+                {
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, missileTexCoords, true);
+                }
+            }
+            if (type == ProjectileType.Bomb)
+            {
+                if (exploding == true)
+                {
+                    r.AddTextureToTriangleList(blastVertexList, Color.Orange, depth, textureTriangleList, blastTexCoords, true);
+                }
+                else
+                {
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, bombTexCoords, true);
+                }
+            }
             if (type == ProjectileType.Laser)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .05f, textureTriangleList, laserTexCoords, true);
+            {
+                if (exploding == true)
+                {
+                    r.AddTextureToTriangleList(blastVertexList, Color.Blue, depth, textureTriangleList, blastTexCoords, true);
+                }
+
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, laserTexCoords, true);
+            }
 
             VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,

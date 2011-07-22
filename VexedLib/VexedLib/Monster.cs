@@ -30,7 +30,8 @@ namespace VexedLib
         Repeater=2,
         Beam=3,
         Missile=4,
-        Spread=5
+        Spread=5,
+        Bomb=6
     }
 
     public enum AIType

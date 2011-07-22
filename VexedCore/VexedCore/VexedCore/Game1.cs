@@ -140,6 +140,7 @@ namespace VexedCore
             Skybox.Init();
 
             Monster.InitTexCoords();
+            Player.InitTexCoords();
             Projectile.InitTexCoords();
         }
 
@@ -154,20 +155,7 @@ namespace VexedCore
             cartoonEffect = Content.Load<Effect>("CartoonEffect");
             postprocessEffect = Content.Load<Effect>("PostprocessEffect");
             Room.blockTexture = Content.Load<Texture2D>("plate_texture");
-            Player.neutralTexture = Content.Load<Texture2D>("p_neutral");
-            Player.fallTexture = Content.Load<Texture2D>("p_fall");
-            Player.wallJumpTexture = Content.Load<Texture2D>("p_walljump");
-            Player.runTexture2 = Content.Load<Texture2D>("p_run2");
-            Player.runTexture1 = Content.Load<Texture2D>("p_run1");
-            Player.runTexture3 = Content.Load<Texture2D>("p_run3");
-            Player.runTexture4 = Content.Load<Texture2D>("p_run4");
-            Player.neutralTexture_detail = Content.Load<Texture2D>("p_neutral_detail");
-            Player.fallTexture_detail = Content.Load<Texture2D>("p_fall_detail");
-            Player.wallJumpTexture_detail = Content.Load<Texture2D>("p_walljump_detail");
-            Player.runTexture2_detail = Content.Load<Texture2D>("p_run2_detail");
-            Player.runTexture1_detail = Content.Load<Texture2D>("p_run1_detail");
-            Player.runTexture3_detail = Content.Load<Texture2D>("p_run3_detail");
-            Player.runTexture4_detail = Content.Load<Texture2D>("p_run4_detail");
+            Player.player_textures = Content.Load<Texture2D>("p_texture");
             Monster.monsterTexture = Content.Load<Texture2D>("m_body");
             Monster.monsterTextureDetail = Content.Load<Texture2D>("m_body_detail");
             Projectile.projectileTexture = Content.Load<Texture2D>("projectiles");
@@ -331,7 +319,7 @@ namespace VexedCore
                 }
             }
 
-            playerTextureEffect.Texture = player.currentTexture;
+            playerTextureEffect.Texture = Player.player_textures;
             playerTextureEffect.CurrentTechnique.Passes[0].Apply();
             player.DrawTexture();
         }
