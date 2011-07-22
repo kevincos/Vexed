@@ -200,7 +200,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\m_body_detail.xnb</Output>
-      <Time>2011-07-20T13:51:31.1247456-07:00</Time>
+      <Time>2011-07-21T11:57:14.7959385-07:00</Time>
     </Item>
     <Item>
       <Source>p_fall_detail.png</Source>
@@ -264,6 +264,15 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_walljump_detail.xnb</Output>
       <Time>2011-07-20T16:49:03.6815651-07:00</Time>
+    </Item>
+    <Item>
+      <Source>projectiles.png</Source>
+      <Name>projectiles</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\projectiles.xnb</Output>
+      <Time>2011-07-21T19:49:35.2608857-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

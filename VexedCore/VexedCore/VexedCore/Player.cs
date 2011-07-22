@@ -40,6 +40,7 @@ namespace VexedCore
         public int jumpTime = 0;
         public int walkTime = 0;
         public int walkMaxTime = 800;
+        public int fireCooldown = 100;
         public bool leftWall = false;
         public bool rightWall = false;
         public float playerHalfWidth = .35f;
@@ -249,6 +250,8 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            fireCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            if (fireCooldown < 0) fireCooldown = 0;
             if (dead == true)
                 Respawn();
             groundCounter += gameTime.ElapsedGameTime.Milliseconds;
@@ -274,8 +277,8 @@ namespace VexedCore
                 Vector3 up = center.direction;
                 Vector3 right = Vector3.Cross(up, center.normal);
 
-                if (grounded == true)
-                    faceDirection = 0;
+                //if (grounded == true)
+                    //faceDirection = 0;
 
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
@@ -361,8 +364,20 @@ namespace VexedCore
                 {
                     center.velocity -= (maxHorizSpeed + rightMagnitude) * right;
                 }
-
-                if (gamePadState.IsButtonDown(Buttons.X) || Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+                if(gamePadState.IsButtonDown(Buttons.X))
+                {
+                    if (fireCooldown == 0)
+                    {
+                        fireCooldown = 400;
+                        Vector3 shootDirection;
+                        if (faceDirection >= 0)
+                            shootDirection = right / right.Length();
+                        else
+                            shootDirection = -right / right.Length();
+                        currentRoom.projectiles.Add(new Projectile(ProjectileType.Player, center.position, Vector3.Zero, center.normal, shootDirection));
+                    }
+                }
+                if (gamePadState.IsButtonDown(Buttons.Y) || Keyboard.GetState().IsKeyDown(Keys.LeftShift))
                 {
                     foreach (JumpPad j in currentRoom.jumpPads)
                     {

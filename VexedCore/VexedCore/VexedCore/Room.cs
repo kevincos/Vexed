@@ -29,6 +29,7 @@ namespace VexedCore
         public List<Bridge> bridges;
         public List<Doodad> doodads;
         public List<Monster> monsters;
+        public List<Projectile> projectiles;
 
         static Room()
         {
@@ -51,6 +52,7 @@ namespace VexedCore
             bridges = new List<Bridge>();
             doodads = new List<Doodad>();
             monsters = new List<Monster>();
+            projectiles = new List<Projectile>();
         }
 
         public Room(VexedLib.Room xmlRoom)
@@ -62,6 +64,7 @@ namespace VexedCore
             bridges = new List<Bridge>();
             doodads = new List<Doodad>();
             monsters = new List<Monster>();
+            projectiles = new List<Projectile>();
         }
         
         public void Update(GameTime gameTime)
@@ -772,11 +775,30 @@ namespace VexedCore
             }
         }
 
+        public void DrawProjectiles()
+        {
+            foreach (Projectile p in projectiles)
+            {
+                p.Draw(this);
+            }
+        }
+
         public void UpdateMonsters(GameTime gameTime)
         {
             foreach (Monster m in monsters)
             {
                 m.Update(gameTime);
+            }
+            foreach (Projectile p in projectiles)
+            {
+                p.Update(gameTime);
+            }
+            for(int i = projectiles.Count()-1; i >= 0; i--)
+            {
+                if (projectiles[i].exploded == true)
+                {
+                    projectiles.Remove(projectiles[i]);
+                }
             }
         }
 

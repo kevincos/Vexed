@@ -84,3 +84,4 @@ C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run2
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run3_detail.xnb
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run4_detail.xnb
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_walljump_detail.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\projectiles.xnb

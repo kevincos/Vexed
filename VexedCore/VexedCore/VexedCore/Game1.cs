@@ -140,7 +140,7 @@ namespace VexedCore
             Skybox.Init();
 
             Monster.InitTexCoords();
-
+            Projectile.InitTexCoords();
         }
 
         /// <summary>
@@ -170,6 +170,7 @@ namespace VexedCore
             Player.runTexture4_detail = Content.Load<Texture2D>("p_run4_detail");
             Monster.monsterTexture = Content.Load<Texture2D>("m_body");
             Monster.monsterTextureDetail = Content.Load<Texture2D>("m_body_detail");
+            Projectile.projectileTexture = Content.Load<Texture2D>("projectiles");
             Skybox.skyBoxTextures = new Texture2D[6];
             Skybox.skyBoxTextures[0] = Content.Load<Texture2D>("skybox_right");
             Skybox.skyBoxTextures[1] = Content.Load<Texture2D>("skybox_left");
@@ -301,6 +302,9 @@ namespace VexedCore
                 playerTextureEffect.Texture = Monster.monsterTexture;
             playerTextureEffect.CurrentTechnique.Passes[0].Apply();
             Game1.player.currentRoom.DrawMonsters();
+            playerTextureEffect.Texture = Projectile.projectileTexture;
+            playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            Game1.player.currentRoom.DrawProjectiles();
 
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 

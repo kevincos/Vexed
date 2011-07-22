@@ -37,6 +37,11 @@ namespace VexedCore
                 Monster unfoldedMonster = new Monster(m, r, normal, up);
                 unfoldedRoom.monsters.Add(unfoldedMonster);
             }
+            foreach (Projectile p in r.projectiles)
+            {
+                Projectile unfoldedProjectile = new Projectile(p, r, normal, up);
+                unfoldedRoom.projectiles.Add(unfoldedProjectile);
+            }
             foreach (Block b in r.blocks)
             {
                 List<Vertex> points = new List<Vertex>();
@@ -654,7 +659,8 @@ namespace VexedCore
                     {
                         m.srcMonster.AdjustVertex(result.projection, result.velocityAdjustment, p.center.normal, p.center.direction);
                         m.srcMonster.position.Update(p.currentRoom, 0);
-                        m.position.position += result.projection;                        
+                        m.position.position += result.projection;
+                        m.position.velocity += result.velocityAdjustment;
                     }
                     else
                         break;
@@ -686,6 +692,50 @@ namespace VexedCore
                         m.srcMonster.groundProjection = Monster.AdjustVector(groundProjection, m.srcMonster.position.normal, p.center.normal, p.center.direction, true);
                 }
             }
+
+
+            foreach (Projectile s in unfoldedRoom.projectiles)
+            {
+                frictionAdjustment = Vector3.Zero;
+
+                List<Vector3> projectionList = new List<Vector3>();
+                List<Vector3> relVelList = new List<Vector3>();
+                List<EdgeProperties> edgePropertiesList = new List<EdgeProperties>();
+
+                List<Vector3> doodadVertexList = s.GetCollisionRect();
+                s.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+                foreach (Block b in unfoldedRoom.blocks)
+                {
+                    if (s.CollisionFirstPass(b))
+                        continue;
+                    List<Vector3> blockVertexList = b.GetCollisionRect();
+                    Vector3 projection = Collide(doodadVertexList, blockVertexList, p.center.normal);
+                    if (projection != Vector3.Zero)
+                    {
+                        s.srcProjectile.exploding = true;
+                        s.srcProjectile.position.velocity = Vector3.Zero;
+                    }
+                }
+
+                foreach (Doodad b in unfoldedRoom.doodads)
+                {
+                    b.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+
+                    if (b.hasCollisionRect)
+                    {
+                        if (s.CollisionFirstPass(b))
+                            continue;
+                        List<Vector3> brickVertexList = b.GetCollisionRect();
+                        Vector3 projection = Collide(doodadVertexList, brickVertexList, p.center.normal);
+                        if (projection != Vector3.Zero)
+                        {
+                            s.srcProjectile.exploding = true;
+                            s.srcProjectile.position.velocity = Vector3.Zero;
+                        }
+                    }
+                }
+
+            }            
 
             p.center.Update(r, 0);
         }

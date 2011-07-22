@@ -59180,27 +59180,7 @@
                 </Block>
               </blocks>
               <doodads />
-              <monsters>
-                <Monster>
-                  <id>2256</id>
-                  <name>Monster</name>
-                  <position>
-                    <X>60</X>
-                    <Y>-31.5</Y>
-                    <Z>59.5</Z>
-                  </position>
-                  <up>
-                    <X>0</X>
-                    <Y>0</Y>
-                    <Z>1</Z>
-                  </up>
-                  <fixedPath>false</fixedPath>
-                  <movement>None</movement>
-                  <armor>None</armor>
-                  <weapon>None</weapon>
-                  <behavior>Stationary</behavior>
-                </Monster>
-              </monsters>
+              <monsters />
               <vertices>
                 <Vector3>
                   <X>60</X>
@@ -62563,7 +62543,7 @@
                   </up>
                   <activationCost>0</activationCost>
                   <fixedPosition>false</fixedPosition>
-                  <type>Checkpoint</type>
+                  <type>PlayerSpawn</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>
@@ -62588,8 +62568,8 @@
                   <id>2279</id>
                   <name>W</name>
                   <position>
-                    <X>54.5</X>
-                    <Y>3.5</Y>
+                    <X>53.5</X>
+                    <Y>0.5</Y>
                     <Z>35</Z>
                   </position>
                   <up>
@@ -62625,7 +62605,7 @@
                   <name>W</name>
                   <position>
                     <X>37.5</X>
-                    <Y>3.5</Y>
+                    <Y>0.5</Y>
                     <Z>35</Z>
                   </position>
                   <up>
@@ -62662,7 +62642,7 @@
                   <id>2316</id>
                   <name>Monster</name>
                   <position>
-                    <X>38.5</X>
+                    <X>39.5</X>
                     <Y>0.5</Y>
                     <Z>35</Z>
                   </position>
@@ -62672,10 +62652,11 @@
                     <Z>0</Z>
                   </up>
                   <fixedPath>false</fixedPath>
-                  <movement>Hover</movement>
-                  <armor>None</armor>
-                  <weapon>None</weapon>
-                  <behavior>Hunter</behavior>
+                  <waypointId>W_2281</waypointId>
+                  <movement>Spider</movement>
+                  <armor>Top</armor>
+                  <weapon>Beam</weapon>
+                  <behavior>Stationary</behavior>
                 </Monster>
               </monsters>
               <vertices>
