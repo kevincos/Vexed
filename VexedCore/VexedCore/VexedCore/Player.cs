@@ -398,7 +398,7 @@ namespace VexedCore
                 {
                     center.velocity -= (maxHorizSpeed + rightMagnitude) * right;
                 }
-                if(gamePadState.IsButtonDown(Buttons.RightShoulder))
+                if(gamePadState.IsButtonDown(Buttons.RightShoulder) || Keyboard.GetState().IsKeyDown(Keys.Tab))
                 {
                     if (weaponSwitchCooldown == 0)
                     {
@@ -413,7 +413,7 @@ namespace VexedCore
                             gunType = VexedLib.GunType.Blaster;
                     }
                 }
-                if(gamePadState.IsButtonDown(Buttons.X))
+                if (gamePadState.IsButtonDown(Buttons.X) || Keyboard.GetState().IsKeyDown(Keys.LeftShift))
                 {
                     if (fireCooldown == 0)
                     {
@@ -439,7 +439,7 @@ namespace VexedCore
 
                     }
                 }
-                if (gamePadState.IsButtonDown(Buttons.Y) || Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+                if (gamePadState.IsButtonDown(Buttons.Y) || Keyboard.GetState().IsKeyDown(Keys.LeftControl))
                 {
                     foreach (JumpPad j in currentRoom.jumpPads)
                     {
