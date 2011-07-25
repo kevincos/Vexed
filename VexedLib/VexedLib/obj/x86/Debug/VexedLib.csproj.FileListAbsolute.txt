@@ -4,3 +4,9 @@ E:\git_projects\Vexed\VexedLib\VexedLib\bin\x86\Debug\VexedLib.dll
 E:\git_projects\Vexed\VexedLib\VexedLib\bin\x86\Debug\VexedLib.pdb
 E:\git_projects\Vexed\VexedLib\VexedLib\obj\x86\Debug\VexedLib.dll
 E:\git_projects\Vexed\VexedLib\VexedLib\obj\x86\Debug\VexedLib.pdb
+C:\git_projects\Vexed\VexedLib\VexedLib\bin\x86\Debug\VexedLib.dll
+C:\git_projects\Vexed\VexedLib\VexedLib\bin\x86\Debug\VexedLib.pdb
+C:\git_projects\Vexed\VexedLib\VexedLib\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\git_projects\Vexed\VexedLib\VexedLib\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\git_projects\Vexed\VexedLib\VexedLib\obj\x86\Debug\VexedLib.dll
+C:\git_projects\Vexed\VexedLib\VexedLib\obj\x86\Debug\VexedLib.pdb

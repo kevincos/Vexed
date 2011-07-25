@@ -63131,8 +63131,8 @@
                   </up>
                   <fixedPath>false</fixedPath>
                   <waypointId>W_2281</waypointId>
-                  <movement>Tank</movement>
-                  <armor>Top</armor>
+                  <movement>Hover</movement>
+                  <armor>Shield</armor>
                   <weapon>None</weapon>
                   <behavior>Hunter</behavior>
                 </Monster>

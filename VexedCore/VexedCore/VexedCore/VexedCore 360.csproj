@@ -132,7 +132,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="LevelData\spikeelevator">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="LevelData\spiral">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

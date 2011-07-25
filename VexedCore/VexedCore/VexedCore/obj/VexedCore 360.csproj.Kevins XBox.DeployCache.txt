@@ -2,54 +2,80 @@ e7416b4bbd544c1bb40495ac7f0e40de
 0
 Kevins XBox
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\
-129553942020000000
+129559171700000000
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\GameThumbnail.png
 2011-07-02T00:55:34.0250061Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\VexedCore.exe
-2011-07-17T20:51:42.5571844Z
+2011-07-24T01:03:51.7969120Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\VexedLib.dll
-2011-07-06T01:41:10.5350296Z
+2011-07-23T17:42:36.8786313Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\BloomCombine.xnb
-2011-07-17T16:38:04.6760861Z
+2011-07-23T17:41:31.5858967Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\BloomExtract.xnb
-2011-07-17T16:38:04.6860867Z
+2011-07-23T17:41:31.5978974Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\CartoonEffect.xnb
+2011-07-23T17:41:31.6899027Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Font.xnb
-2011-07-17T16:38:04.4860752Z
+2011-07-23T17:41:31.4398884Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\GaussianBlur.xnb
-2011-07-17T16:38:04.7100880Z
+2011-07-23T17:41:31.6408999Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\m_body.xnb
+2011-07-23T17:42:04.4497764Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\m_body_detail.xnb
+2011-07-23T17:42:06.4038882Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\plate_texture.xnb
-2011-07-17T16:38:31.2296049Z
+2011-07-23T17:42:02.5316667Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\PostprocessEffect.xnb
+2011-07-23T17:41:31.7399055Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\projectiles.xnb
+2011-07-23T17:42:09.4980652Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_fall.xnb
-2011-07-17T16:38:04.8220944Z
+2011-07-23T17:41:32.1029263Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_fall_detail.xnb
+2011-07-23T17:42:06.5798983Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_neutral.xnb
-2011-07-17T16:38:04.9040991Z
+2011-07-23T17:41:32.2599353Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_neutral_detail.xnb
+2011-07-23T17:42:06.7429076Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_run1.xnb
-2011-07-17T16:38:05.1851152Z
+2011-07-23T17:41:32.8529692Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_run1_detail.xnb
+2011-07-23T17:42:06.9439191Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_run2.xnb
-2011-07-17T16:38:05.0681085Z
+2011-07-23T17:41:32.6929601Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_run2_detail.xnb
+2011-07-23T17:42:07.0909275Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_run3.xnb
-2011-07-17T16:38:05.2651198Z
+2011-07-23T17:41:33.0719817Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_run3_detail.xnb
+2011-07-23T17:42:07.2449363Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_run4.xnb
-2011-07-17T16:38:05.3471245Z
+2011-07-23T17:41:33.2649928Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_run4_detail.xnb
+2011-07-23T17:42:07.4019453Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_texture.xnb
+2011-07-23T17:42:11.5801843Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_walljump.xnb
-2011-07-17T16:38:04.9851038Z
+2011-07-23T17:41:32.5209502Z
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_walljump_detail.xnb
+2011-07-23T17:42:07.6289583Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_back.xnb
-2011-07-17T16:38:10.1593997Z
+2011-07-23T17:41:38.8003094Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_bottom.xnb
-2011-07-17T16:38:13.2515766Z
+2011-07-23T17:41:42.2165048Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_front.xnb
-2011-07-17T16:38:18.3408677Z
+2011-07-23T17:41:47.9108305Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_left.xnb
-2011-07-17T16:38:23.0031343Z
+2011-07-23T17:41:53.2431355Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_right.xnb
-2011-07-17T16:38:28.2314334Z
+2011-07-23T17:41:58.8354553Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_top.xnb
-2011-07-17T16:38:31.0435942Z
+2011-07-23T17:42:01.9916358Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\LevelData\awesome
-2011-07-16T02:51:37.7088146Z
+2011-07-21T06:28:12.6609136Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\LevelData\movingplatform
 2011-07-06T01:35:56.9890958Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\LevelData\spikeelevator
-2011-07-16T02:51:37.7948195Z
+2011-07-23T04:56:18.8311890Z
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\LevelData\spiral
-2011-07-09T02:54:25.8094495Z
+2011-07-09T02:54:25.6834423Z

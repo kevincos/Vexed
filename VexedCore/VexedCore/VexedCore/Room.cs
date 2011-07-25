@@ -821,54 +821,54 @@ namespace VexedCore
             Vector3 adjustedSize = new Vector3(size.X - .1f, size.Y - .1f, size.Z - .1f);
             if (innerBlockMode > 0)
             {
-                List<VertexPositionColorNormal> translucentTriangleList = new List<VertexPositionColorNormal>();
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
+                List<VertexPositionColorNormalTexture> translucentTriangleList = new List<VertexPositionColorNormalTexture>();
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitX, -.5f));
 
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitX, -.5f));
 
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitX, -.5f));
 
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitX, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitX, -.5f));
 
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitY, -.5f));
 
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitY, -.5f));
 
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitY, -.5f));
 
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitY, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitY, -.5f));
 
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitZ, -.5f));
 
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), interiorColor, Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, Vector3.UnitZ, -.5f));
 
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitZ, -.5f));
 
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
-                translucentTriangleList.Add(GenerateVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), interiorColor, -Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitZ, -.5f));
+                translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f,.5f), interiorColor, -Vector3.UnitZ, -.5f));
                 for (int i = 0; i < translucentTriangleList.Count(); i+=6)
                 {
                     TrasnparentSquare t = new TrasnparentSquare(translucentTriangleList[i], translucentTriangleList[i + 1], translucentTriangleList[i + 2], translucentTriangleList[i+3], translucentTriangleList[i + 4], translucentTriangleList[i + 5]);
@@ -890,36 +890,49 @@ namespace VexedCore
                 if (b.staticObject == false)
                 {
                     AddBlockToTriangleList2(vList, b.color, .5f, Game1.dynamicOpaqueObjects);
+                    //AddBlockToTriangleList(vList, b.color, .5f, Room.plateTexCoords, Game1.dynamicOpaqueObjects);
+                    foreach (Edge e in b.edges)
+                    {
+                        if (e.properties.type == VexedLib.EdgeType.Spikes)
+                            AddSpikesToTriangleList(e, .5f, Game1.dynamicOpaqueObjects);
+                        else if (e.properties.type != VexedLib.EdgeType.Normal)
+                            AddStripToTriangleList(e, .5f, Game1.dynamicOpaqueObjects);
+                    }
                 }
                 else if(Game1.staticObjectsInitialized == false)
                 {
+                    //AddBlockToTriangleList(vList, b.color, .5f, Room.plateTexCoords, Game1.staticOpaqueObjects);
                     AddBlockToTriangleList2(vList, b.color, .5f, Game1.staticOpaqueObjects);
+                    foreach (Edge e in b.edges)
+                    {
+                        if (e.properties.type == VexedLib.EdgeType.Spikes)
+                            AddSpikesToTriangleList(e, .5f, Game1.staticOpaqueObjects);
+                        else if (e.properties.type != VexedLib.EdgeType.Normal)
+                            AddStripToTriangleList(e, .5f, Game1.staticOpaqueObjects);
+                    }
                 }
 
-                foreach (Edge e in b.edges)
-                {
-                    if (e.properties.type == VexedLib.EdgeType.Spikes)
-                        AddSpikesToTriangleList(e, .5f, Game1.dynamicOpaqueObjects);
-                    else if (e.properties.type != VexedLib.EdgeType.Normal)
-                        AddStripToTriangleList(e, .5f, Game1.dynamicOpaqueObjects);
-                }
+                
                 
                 
             }
             #endregion
 
             #region Doodads
-            foreach (JumpPad j in jumpPads)
+            if (Game1.staticObjectsInitialized == false)
             {
-                j.Draw(this, Game1.dynamicOpaqueObjects);
+                foreach (JumpPad j in jumpPads)
+                {
+                    j.Draw(this, Game1.staticOpaqueObjects);
+                }
+                foreach (Bridge b in bridges)
+                {
+                    b.Draw(this, Game1.staticOpaqueObjects);
+                }
             }
-            foreach (Bridge b in bridges)
+            foreach (Doodad d in doodads)
             {
-                b.Draw(this, Game1.dynamicOpaqueObjects);
-            }
-            foreach (Doodad b in doodads)
-            {
-                b.Draw(this, Game1.dynamicOpaqueObjects);
+                d.Draw(this, Game1.dynamicOpaqueObjects);
             }
             #endregion
         }

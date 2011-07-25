@@ -42,6 +42,7 @@ namespace VexedCore
         public static List<VertexPositionColorNormalTexture> dynamicOpaqueObjects;
         public static List<VertexPositionColorNormalTexture> texturedObjects;
         public static List<TrasnparentSquare> staticTranslucentObjects;
+        public static VertexBuffer staticObjectBuffer;
         public static bool staticObjectsInitialized = false;
 
         RenderTarget2D sceneRenderTarget;
@@ -71,6 +72,8 @@ namespace VexedCore
                 //graphics.IsFullScreen = true;
                 //graphics.PreferredBackBufferWidth = 1920;
                 //graphics.PreferredBackBufferHeight = 1080;
+                graphics.PreferredBackBufferWidth = 800;
+                graphics.PreferredBackBufferHeight = 600;
 
                 
 
@@ -275,8 +278,16 @@ namespace VexedCore
             effect.CurrentTechnique.Passes[0].Apply();
             if (staticOpaqueObjects.Count > 0)
             {
-                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                    Game1.staticOpaqueObjects.ToArray(), 0, staticOpaqueObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                if (staticObjectsInitialized == false)
+                {
+                    staticObjectBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticOpaqueObjects.Count, BufferUsage.WriteOnly);
+                    staticObjectBuffer.SetData<VertexPositionColorNormalTexture>(Game1.staticOpaqueObjects.ToArray());
+                    
+                }
+                Game1.graphicsDevice.SetVertexBuffer(staticObjectBuffer);
+                Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
+                    0, staticOpaqueObjects.Count / 3);
+
             }
             if (dynamicOpaqueObjects.Count > 0)
             {
@@ -295,16 +306,17 @@ namespace VexedCore
             Game1.player.currentRoom.DrawProjectiles();
 
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
-
+            
             if (Room.innerBlockMode > 0)
             {
                 translucentEffect.CurrentTechnique.Passes[0].Apply();
                 // Sort Triangles
                 staticTranslucentObjects.Sort(new FaceSorter(player.cameraTarget - player.cameraPos));
 
-                List<VertexPositionColorNormal> translucentList = new List<VertexPositionColorNormal>();
+                List<VertexPositionColorNormalTexture> translucentList = new List<VertexPositionColorNormalTexture>();
                 for (int i = 0; i < staticTranslucentObjects.Count; i++)
                 {
+                    
                     translucentList.Add(staticTranslucentObjects[i].v1);
                     translucentList.Add(staticTranslucentObjects[i].v2);
                     translucentList.Add(staticTranslucentObjects[i].v3);
@@ -315,10 +327,10 @@ namespace VexedCore
                 if (translucentList.Count > 0)
                 {
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        translucentList.ToArray(), 0, translucentList.Count / 3, VertexPositionColorNormal.VertexDeclaration);
+                        translucentList.ToArray(), 0, translucentList.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
             }
-
+            Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
             playerTextureEffect.Texture = Player.player_textures;
             playerTextureEffect.CurrentTechnique.Passes[0].Apply();
             player.DrawTexture();
@@ -338,10 +350,6 @@ namespace VexedCore
 
             //bloom.BeginDraw();            
             
-            //Game1.graphicsDevice.Clear(Color.Black);
-            Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
-            Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;   
-
             // Set transform matrices.
             float aspect = Game1.graphicsDevice.Viewport.AspectRatio;
 
@@ -371,7 +379,7 @@ namespace VexedCore
             }
 
 
-
+            
             if (Settings.EnableEdgeDetect)
             {
                 Game1.graphicsDevice.SetRenderTarget(normalDepthRenderTarget);
@@ -390,14 +398,14 @@ namespace VexedCore
             else
                 Game1.graphicsDevice.SetRenderTarget(null);
 
-            Game1.graphicsDevice.Clear(Color.White);
+            Game1.graphicsDevice.Clear(Color.Blue);
 
 
             Skybox.Draw(player);
             DrawScene();
 
 
-
+            
             // Run the postprocessing filter over the scene that we just rendered.
             if (Settings.EnableEdgeDetect || Settings.EnableSketch)
             {

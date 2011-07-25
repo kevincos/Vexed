@@ -59,16 +59,16 @@ namespace VexedCore
 
     public class TrasnparentSquare
     {
-        public VertexPositionColorNormal v1;
-        public VertexPositionColorNormal v2;
-        public VertexPositionColorNormal v3;
-        public VertexPositionColorNormal v4;
-        public VertexPositionColorNormal v5;
-        public VertexPositionColorNormal v6;
+        public VertexPositionColorNormalTexture v1;
+        public VertexPositionColorNormalTexture v2;
+        public VertexPositionColorNormalTexture v3;
+        public VertexPositionColorNormalTexture v4;
+        public VertexPositionColorNormalTexture v5;
+        public VertexPositionColorNormalTexture v6;
         
         public Vector3 averagePos;
 
-        public TrasnparentSquare(VertexPositionColorNormal v1, VertexPositionColorNormal v2, VertexPositionColorNormal v3,VertexPositionColorNormal v4, VertexPositionColorNormal v5, VertexPositionColorNormal v6)
+        public TrasnparentSquare(VertexPositionColorNormalTexture v1, VertexPositionColorNormalTexture v2, VertexPositionColorNormalTexture v3, VertexPositionColorNormalTexture v4, VertexPositionColorNormalTexture v5, VertexPositionColorNormalTexture v6)
         {
             this.v1 = v1;
             this.v2 = v2;
