@@ -145,6 +145,7 @@ namespace VexedCore
             Monster.InitTexCoords();
             Player.InitTexCoords();
             Projectile.InitTexCoords();
+            Room.InitTexCoords();
         }
 
         /// <summary>

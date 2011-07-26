@@ -35739,7 +35739,7 @@
                       <id>1271</id>
                       <name>Behavior</name>
                       <offset>0</offset>
-                      <duration>16000</duration>
+                      <duration>32000</duration>
                       <period>0</period>
                       <destination>
                         <X>0</X>

@@ -22,12 +22,97 @@ namespace VexedCore
         public static Texture2D blockTexture;
 
         public static List<Vector2> magnetSideTexCoords;
-        public static List<Vector2> magnetEndTexCoords;
+        public static List<Vector2> magnetSideEndTexCoords;
         public static List<Vector2> magnetTopTexCoords;
+        public static List<Vector2> magnetTopEndTexCoords;
+
+        public static List<Vector2> iceSideTexCoords;
+        public static List<Vector2> iceSideEndTexCoords;
+        public static List<Vector2> iceTopTexCoords;
+        public static List<Vector2> iceTopEndTexCoords;
+
+        public static List<Vector2> electricOnSideTexCoords;
+        public static List<Vector2> electricOnSideEndTexCoords;
+        public static List<Vector2> electricOnTopTexCoords;
+        public static List<Vector2> electricOnTopEndTexCoords;
+
+        public static List<Vector2> electricOffSideTexCoords;
+        public static List<Vector2> electricOffSideEndTexCoords;
+        public static List<Vector2> electricOffTopTexCoords;
+        public static List<Vector2> electricOffTopEndTexCoords;
+
+        public static List<Vector2> rubberSideTexCoords;
+        public static List<Vector2> rubberSideEndTexCoords;
+        public static List<Vector2> rubberTopTexCoords;
+        public static List<Vector2> rubberTopEndTexCoords;
+
+        public static List<Vector2> beltSideTexCoords;
+        public static List<Vector2> beltSideEndTexCoords;
+        public static List<Vector2> beltTopTexCoords;
+        public static List<Vector2> beltTopEndTexCoords;
+
         public static List<Vector2> plateTexCoords;
         public static List<Vector2> blankTexCoords;
-        public static float plateTexWidth = .5f;
+        public static float plateTexWidth = .25f;
 
+        public static int texGridCount = 8;
+
+        public static List<Vector2> LoadTexCoords(int x, int y)
+        {
+            float epsilon = .003f;
+            float texWidth = 1f / texGridCount;
+            List<Vector2> texCoords = new List<Vector2>();
+            texCoords.Add(new Vector2((x + 1) * texWidth - epsilon, y * texWidth + epsilon));
+            texCoords.Add(new Vector2(x * texWidth + epsilon, y * texWidth + epsilon));
+            texCoords.Add(new Vector2(x * texWidth + epsilon, (y + 1) * texWidth - epsilon));
+            texCoords.Add(new Vector2((x + 1) * texWidth - epsilon, (y + 1) * texWidth - epsilon));
+
+            return texCoords;
+        }
+
+        public static void InitTexCoords()
+        {
+            plateTexCoords = new List<Vector2>();
+            plateTexCoords.Add(new Vector2(plateTexWidth, 0));
+            plateTexCoords.Add(new Vector2(0, 0));
+            plateTexCoords.Add(new Vector2(0, plateTexWidth));
+            plateTexCoords.Add(new Vector2(plateTexWidth, plateTexWidth));
+            blankTexCoords = new List<Vector2>();
+            blankTexCoords.Add(new Vector2(3*plateTexWidth/5, 2*plateTexWidth/5));
+            blankTexCoords.Add(new Vector2(2 * plateTexWidth / 5, 2 * plateTexWidth / 5));
+            blankTexCoords.Add(new Vector2(2 * plateTexWidth / 5, 3 * plateTexWidth / 5));
+            blankTexCoords.Add(new Vector2(3 * plateTexWidth / 5, 3 * plateTexWidth / 5));
+
+            magnetSideTexCoords = LoadTexCoords(3, 1);
+            magnetTopTexCoords = LoadTexCoords(3, 0);
+            magnetSideEndTexCoords = LoadTexCoords(2, 1);
+            magnetTopEndTexCoords = LoadTexCoords(2, 0);
+
+            iceSideTexCoords = LoadTexCoords(3, 3);
+            iceTopTexCoords = LoadTexCoords(3, 2);
+            iceSideEndTexCoords = LoadTexCoords(2, 3);
+            iceTopEndTexCoords = LoadTexCoords(2, 2);
+
+            electricOnSideTexCoords = LoadTexCoords(7, 1);
+            electricOnTopTexCoords = LoadTexCoords(7, 0);
+            electricOnSideEndTexCoords = LoadTexCoords(6, 1);
+            electricOnTopEndTexCoords = LoadTexCoords(6, 0);
+
+            electricOffSideTexCoords = LoadTexCoords(5, 1);
+            electricOffTopTexCoords = LoadTexCoords(5, 0);
+            electricOffSideEndTexCoords = LoadTexCoords(4, 1);
+            electricOffTopEndTexCoords = LoadTexCoords(4, 0);
+
+            rubberSideTexCoords = LoadTexCoords(5, 3);
+            rubberTopTexCoords = LoadTexCoords(5, 2);
+            rubberSideEndTexCoords = LoadTexCoords(4, 3);
+            rubberTopEndTexCoords = LoadTexCoords(4, 2);
+
+            beltSideTexCoords = LoadTexCoords(7, 3);
+            beltTopTexCoords = LoadTexCoords(7, 2);
+            beltSideEndTexCoords = LoadTexCoords(6, 3);
+            beltTopEndTexCoords = LoadTexCoords(6, 2);
+        }
 
         public List<Block> blocks;
         public List<JumpPad> jumpPads;
@@ -36,36 +121,6 @@ namespace VexedCore
         public List<Monster> monsters;
         public List<Projectile> projectiles;
 
-        static Room()
-        {
-            plateTexCoords = new List<Vector2>();
-            plateTexCoords.Add(new Vector2(.5f, 0));
-            plateTexCoords.Add(new Vector2(0, 0));
-            plateTexCoords.Add(new Vector2(0, .5f));
-            plateTexCoords.Add(new Vector2(.5f, .5f));
-            magnetSideTexCoords = new List<Vector2>();
-            magnetSideTexCoords.Add(new Vector2(1f, .25f));
-            magnetSideTexCoords.Add(new Vector2(.75f, .25f));
-            magnetSideTexCoords.Add(new Vector2(.75f, .5f));
-            magnetSideTexCoords.Add(new Vector2(1f, .5f));
-
-            magnetTopTexCoords = new List<Vector2>();
-            magnetTopTexCoords.Add(new Vector2(1f, 0f));
-            magnetTopTexCoords.Add(new Vector2(.75f, 0f));
-            magnetTopTexCoords.Add(new Vector2(.75f, .25f));
-            magnetTopTexCoords.Add(new Vector2(1f, .25f));
-
-            magnetEndTexCoords = new List<Vector2>();
-            magnetEndTexCoords.Add(new Vector2(.75f, .25f));
-            magnetEndTexCoords.Add(new Vector2(.51f, .25f));
-            magnetEndTexCoords.Add(new Vector2(.51f, .5f));
-            magnetEndTexCoords.Add(new Vector2(.75f, .5f));
-            blankTexCoords = new List<Vector2>();
-            blankTexCoords.Add(new Vector2(.3f, .2f));
-            blankTexCoords.Add(new Vector2(.2f, .2f));
-            blankTexCoords.Add(new Vector2(.2f, .3f));
-            blankTexCoords.Add(new Vector2(.3f, .3f));
-        }
 
         public Room()
         {
@@ -313,18 +368,20 @@ namespace VexedCore
             }            
         }
 
-        public void AddTopStrip(Vertex start, Vertex end, float depth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
-        {
+        public void AddTopStrip(Vertex start, Vertex end, float depth, bool flip, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
+        {           
             Color baseColor = Color.White;
 
             float epsilon = .01f;
-
+            
             if (start.normal == end.normal)
-            {
+            {                
                 Vector3 edgeDir = end.position - start.position;
-                Vector3 edgeNormal = Vector3.Cross(end.position - start.position, start.normal);
+                Vector3 edgeNormal = Vector3.Cross(edgeDir, start.normal);
                 edgeNormal.Normalize();
                 edgeDir.Normalize();
+                if(flip == true)
+                    edgeNormal *= -1;            
 
                 triangleList.Add(GenerateTexturedVertex(start.position + epsilon * edgeNormal, texCoords[2], baseColor, edgeNormal, depth + epsilon));
                 triangleList.Add(GenerateTexturedVertex(start.position + epsilon * edgeNormal, texCoords[1], baseColor, edgeNormal, -depth));
@@ -348,9 +405,11 @@ namespace VexedCore
                 Vector3 edgeNormal = Vector3.Cross(midPoint - start.position, start.normal);
                 edgeNormal.Normalize();
                 edgeDir.Normalize();
-
-                Vector2 midA = (texCoords[3] + texCoords[2]) / 2;
-                Vector2 midB = (texCoords[0] + texCoords[1]) / 2;
+                if (flip == true)
+                    edgeNormal *= -1;    
+                
+                Vector2 midA = currentPercent * texCoords[3] + (1f-currentPercent) * texCoords[2];
+                Vector2 midB = currentPercent * texCoords[0] + (1f-currentPercent) * texCoords[1];
 
                 triangleList.Add(GenerateTexturedVertex(start.position + epsilon * edgeNormal, texCoords[2], baseColor, edgeNormal, depth + epsilon));
                 triangleList.Add(GenerateTexturedVertex(start.position + epsilon * edgeNormal, texCoords[1], baseColor, edgeNormal, -depth));
@@ -364,7 +423,9 @@ namespace VexedCore
                 edgeNormal = Vector3.Cross(end.position - midPoint, end.normal);
                 edgeNormal.Normalize();
                 edgeDir.Normalize();
-
+                if (flip == true)
+                    edgeNormal *= -1;    
+                
                 triangleList.Add(GenerateTexturedVertex(midPoint + epsilon * edgeNormal, midA, baseColor, edgeNormal, depth + epsilon));
                 triangleList.Add(GenerateTexturedVertex(midPoint + epsilon * edgeNormal, midB, baseColor, edgeNormal, -depth));
                 triangleList.Add(GenerateTexturedVertex(end.position + epsilon * edgeNormal, texCoords[3], baseColor, edgeNormal, depth + epsilon));
@@ -415,7 +476,7 @@ namespace VexedCore
             {
                 List<Vertex> subList = new List<Vertex>();
 
-                if (i != 0)
+                if (i == width - 1)
                 {
                     subList.Add(fullPointList[i * 3 + 1]);
                     subList.Add(fullPointList[(i + 1) * 3 + 1]);
@@ -430,12 +491,105 @@ namespace VexedCore
                     subList.Add(fullPointList[(i+1) * 3]);
                 }
 
-                if(i==width-1 || i==0)
-                    AddBlockFrontToTriangleList(subList, Color.White, depth+.01f, magnetEndTexCoords, triangleList,true);
+                if (e.properties.type == VexedLib.EdgeType.Ice)
+                {
+                    if (i == width - 1)
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, iceSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, iceTopEndTexCoords, triangleList);                        
+                    }
+                    else if (i == 0)
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, iceSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, iceTopEndTexCoords, triangleList);
+                    }
+                    else
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, iceSideTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, iceTopTexCoords, triangleList);
+                    }
+                }
+                else if (e.properties.type == VexedLib.EdgeType.Bounce)
+                {
+                    if (i == width - 1)
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, rubberSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, rubberTopEndTexCoords, triangleList);
+                    }
+                    else if (i == 0)
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, rubberSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, rubberTopEndTexCoords, triangleList);
+                    }
+                    else
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, rubberSideTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, rubberTopTexCoords, triangleList);
+                    }
+                }
+                else if (e.properties.type == VexedLib.EdgeType.ConveyorBelt)
+                {
+                    if (i == width - 1)
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, beltSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, beltTopEndTexCoords, triangleList);
+                    }
+                    else if (i == 0)
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, beltSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, beltTopEndTexCoords, triangleList);
+                    }
+                    else
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, beltSideTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, beltTopTexCoords, triangleList);
+                    }
+                }
+                else if (e.properties.type == VexedLib.EdgeType.Electric && e.properties.primaryValue == 0)
+                {
+                    if (i == width - 1)
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOffSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, electricOffTopEndTexCoords, triangleList);
+                    }
+                    else if (i == 0)
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOffSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, electricOffTopEndTexCoords, triangleList);
+                    }
+                    else
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOffSideTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, electricOffTopTexCoords, triangleList);
+                    }
+                }
+                else if (e.properties.type == VexedLib.EdgeType.Electric && e.properties.primaryValue != 0)
+                {
+                    if (i == width - 1)
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOnSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, electricOnTopEndTexCoords, triangleList);
+                    }
+                    else if (i == 0)
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOnSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, electricOnTopEndTexCoords, triangleList);
+                    }
+                    else
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOnSideTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, electricOnTopTexCoords, triangleList);
+                    }
+                }
                 else
-                    AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, magnetSideTexCoords, triangleList, true);
+                {
+                    if (i == width - 1 || i == 0)
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, magnetSideEndTexCoords, triangleList, true);
+                    else
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, magnetSideTexCoords, triangleList, true);
 
-                AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, magnetTopTexCoords, triangleList);
+                    AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, magnetTopTexCoords, triangleList);
+                }
             }
 
         }
@@ -780,10 +934,6 @@ namespace VexedCore
             for (int i = 0; i < 4; i++)
             {
                 Vector3 incomingDirection = vList[(i+3)%4].direction;
-                /*fullPointList.Add(new Vertex(vList[i], Vector3.Zero));
-                fullPointList.Add(new Vertex(vList[i], -.5f * Vector3.Cross(vList[i].direction, vList[i].normal)));
-                fullPointList.Add(new Vertex(vList[i], .5f * vList[i].direction - .5f * Vector3.Cross(vList[i].direction, vList[i].normal)));
-                fullPointList.Add(new Vertex(vList[i], .5f * vList[i].direction));*/
                 if (vList[(i + 3) % 4].normal != vList[i].normal)
                 {
                     Vector3 fullEdge = vList[(i + 3) % 4].position - vList[i].position;
@@ -795,7 +945,6 @@ namespace VexedCore
                     incomingDirection = vList[i].position - midPoint;
                     incomingDirection.Normalize();
                 }                                
-                //Vector3 incomingDirection = vList[(i+3)%4].direction);
                 fullPointList.Add(new Vertex(vList[i], Vector3.Zero));
                 fullPointList.Add(new Vertex(vList[i], -.5f * incomingDirection));
                 fullPointList.Add(new Vertex(vList[i], .5f * vList[i].direction - .5f * incomingDirection));
@@ -1054,16 +1203,28 @@ namespace VexedCore
                             AddStripToTriangleList2(e, .5f, Game1.dynamicOpaqueObjects);
                     }
                 }
-                else if(Game1.staticObjectsInitialized == false)
+                else 
                 {
                     //AddBlockToTriangleList(vList, b.color, .5f, Room.plateTexCoords, Game1.staticOpaqueObjects);
-                    AddBlockToTriangleList2(vList, b.color, .5f, Game1.staticOpaqueObjects);
+                    if (Game1.staticObjectsInitialized == false)
+                        AddBlockToTriangleList2(vList, b.color, .5f, Game1.staticOpaqueObjects);
+
                     foreach (Edge e in b.edges)
                     {
-                        if (e.properties.type == VexedLib.EdgeType.Spikes)
-                            AddSpikesToTriangleList(e, .5f, Game1.staticOpaqueObjects);
-                        else if (e.properties.type != VexedLib.EdgeType.Normal)
-                            AddStripToTriangleList2(e, .5f, Game1.staticOpaqueObjects);
+                        if (e.properties.type == VexedLib.EdgeType.Spikes || e.properties.type == VexedLib.EdgeType.Electric || e.properties.type == VexedLib.EdgeType.ConveyorBelt)
+                        {
+                            if (e.properties.type == VexedLib.EdgeType.Spikes)
+                                AddSpikesToTriangleList(e, .5f, Game1.dynamicOpaqueObjects);
+                            else if (e.properties.type != VexedLib.EdgeType.Normal)
+                                AddStripToTriangleList2(e, .5f, Game1.dynamicOpaqueObjects);
+                        }
+                        else if (Game1.staticObjectsInitialized == false)
+                        {
+                            if (e.properties.type == VexedLib.EdgeType.Spikes)
+                                AddSpikesToTriangleList(e, .5f, Game1.staticOpaqueObjects);
+                            else if (e.properties.type != VexedLib.EdgeType.Normal)
+                                AddStripToTriangleList2(e, .5f, Game1.staticOpaqueObjects);
+                        }
                     }
                 }
 
