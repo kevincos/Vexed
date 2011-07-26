@@ -40,9 +40,11 @@ namespace VexedCore
 
         public static List<VertexPositionColorNormalTexture> staticOpaqueObjects;
         public static List<VertexPositionColorNormalTexture> dynamicOpaqueObjects;
-        public static List<VertexPositionColorNormalTexture> texturedObjects;
+        public static List<VertexPositionColorNormalTexture> staticDetailObjects;
+        public static List<VertexPositionColorNormalTexture> dynamicDetailObjects;
         public static List<TrasnparentSquare> staticTranslucentObjects;
         public static VertexBuffer staticObjectBuffer;
+        public static VertexBuffer staticDetailBuffer;
         public static bool staticObjectsInitialized = false;
 
         RenderTarget2D sceneRenderTarget;
@@ -59,7 +61,8 @@ namespace VexedCore
         {
             staticOpaqueObjects = new List<VertexPositionColorNormalTexture>();
             dynamicOpaqueObjects = new List<VertexPositionColorNormalTexture>();
-            texturedObjects = new List<VertexPositionColorNormalTexture>();
+            staticDetailObjects = new List<VertexPositionColorNormalTexture>();
+            dynamicDetailObjects = new List<VertexPositionColorNormalTexture>();
             staticTranslucentObjects = new List<TrasnparentSquare>();
 
             graphics = new GraphicsDeviceManager(this);
@@ -69,11 +72,11 @@ namespace VexedCore
                 graphics.PreferredBackBufferWidth = 1280;
                 graphics.PreferredBackBufferHeight = 720;
 #endif
-                //graphics.IsFullScreen = true;
-                //graphics.PreferredBackBufferWidth = 1920;
-                //graphics.PreferredBackBufferHeight = 1080;
-                graphics.PreferredBackBufferWidth = 800;
-                graphics.PreferredBackBufferHeight = 600;
+                graphics.IsFullScreen = true;
+                graphics.PreferredBackBufferWidth = 1920;
+                graphics.PreferredBackBufferHeight = 1080;
+                //graphics.PreferredBackBufferWidth = 800;
+                //graphics.PreferredBackBufferHeight = 600;
 
                 
 
@@ -292,12 +295,30 @@ namespace VexedCore
                 Game1.graphicsDevice.SetVertexBuffer(staticObjectBuffer);
                 Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
                     0, staticOpaqueObjects.Count / 3);
-
             }
             if (dynamicOpaqueObjects.Count > 0)
             {
                 Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                     Game1.dynamicOpaqueObjects.ToArray(), 0, dynamicOpaqueObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
+
+            if (staticDetailObjects.Count > 0)
+            {
+                if (staticObjectsInitialized == false)
+                {
+                    staticDetailBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticDetailObjects.Count, BufferUsage.WriteOnly);
+                    staticDetailBuffer.SetData<VertexPositionColorNormalTexture>(Game1.staticDetailObjects.ToArray());
+
+                }
+                Game1.graphicsDevice.SetVertexBuffer(staticDetailBuffer);
+                Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
+                    0, staticDetailObjects.Count / 3);
+            }
+
+            if (dynamicDetailObjects.Count > 0)
+            {
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    Game1.dynamicDetailObjects.ToArray(), 0, dynamicDetailObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
             }
 
             Game1.graphicsDevice.BlendState = BlendState.Opaque;
@@ -350,10 +371,13 @@ namespace VexedCore
         {
             Game1.staticTranslucentObjects = new List<TrasnparentSquare>();
             Game1.dynamicOpaqueObjects = new List<VertexPositionColorNormalTexture>();
-            if(Game1.staticOpaqueObjects == null)
+            Game1.dynamicDetailObjects = new List<VertexPositionColorNormalTexture>();
+            if (Game1.staticOpaqueObjects == null)
+            {
                 Game1.staticOpaqueObjects = new List<VertexPositionColorNormalTexture>();
-            Game1.texturedObjects = new List<VertexPositionColorNormalTexture>();
-
+                Game1.staticDetailObjects = new List<VertexPositionColorNormalTexture>();
+            }
+            
             //bloom.BeginDraw();            
             
             // Set transform matrices.

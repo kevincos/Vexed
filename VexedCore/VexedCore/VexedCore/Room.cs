@@ -475,20 +475,20 @@ namespace VexedCore
             for (int i = 0; i < width; i++)
             {
                 List<Vertex> subList = new List<Vertex>();
-
+                Vector3 up = Vector3.Cross(fullPointList[(i * 3)].direction, fullPointList[i * 3].normal);
                 if (i == width - 1)
                 {
-                    subList.Add(fullPointList[i * 3 + 1]);
-                    subList.Add(fullPointList[(i + 1) * 3 + 1]);
+                    subList.Add(new Vertex(fullPointList[(i) * 3 + 1], .01f * up));
+                    subList.Add(new Vertex(fullPointList[(i + 1) * 3 + 1], .01f * up));
                     subList.Add(fullPointList[(i + 1) * 3]);
                     subList.Add(fullPointList[i * 3]);
                 }
                 else
                 {
-                    subList.Add(fullPointList[(i+1) * 3 + 1]);
-                    subList.Add(fullPointList[(i) * 3 + 1]);
+                    subList.Add(new Vertex(fullPointList[(i+1) * 3 + 1], .01f*up));
+                    subList.Add(new Vertex(fullPointList[(i) * 3 + 1], .01f*up));
                     subList.Add(fullPointList[(i) * 3]);
-                    subList.Add(fullPointList[(i+1) * 3]);
+                    subList.Add(fullPointList[(i+1) * 3]);                    
                 }
 
                 if (e.properties.type == VexedLib.EdgeType.Ice)
@@ -1200,7 +1200,7 @@ namespace VexedCore
                         if (e.properties.type == VexedLib.EdgeType.Spikes)
                             AddSpikesToTriangleList(e, .5f, Game1.dynamicOpaqueObjects);
                         else if (e.properties.type != VexedLib.EdgeType.Normal)
-                            AddStripToTriangleList2(e, .5f, Game1.dynamicOpaqueObjects);
+                            AddStripToTriangleList2(e, .5f, Game1.dynamicDetailObjects);
                     }
                 }
                 else 
@@ -1216,14 +1216,14 @@ namespace VexedCore
                             if (e.properties.type == VexedLib.EdgeType.Spikes)
                                 AddSpikesToTriangleList(e, .5f, Game1.dynamicOpaqueObjects);
                             else if (e.properties.type != VexedLib.EdgeType.Normal)
-                                AddStripToTriangleList2(e, .5f, Game1.dynamicOpaqueObjects);
+                                AddStripToTriangleList2(e, .5f, Game1.dynamicDetailObjects);
                         }
                         else if (Game1.staticObjectsInitialized == false)
                         {
                             if (e.properties.type == VexedLib.EdgeType.Spikes)
                                 AddSpikesToTriangleList(e, .5f, Game1.staticOpaqueObjects);
                             else if (e.properties.type != VexedLib.EdgeType.Normal)
-                                AddStripToTriangleList2(e, .5f, Game1.staticOpaqueObjects);
+                                AddStripToTriangleList2(e, .5f, Game1.staticDetailObjects);
                         }
                     }
                 }
