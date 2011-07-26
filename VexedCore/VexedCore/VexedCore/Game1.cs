@@ -275,7 +275,11 @@ namespace VexedCore
         public void DrawScene()
         {
             Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
-            effect.CurrentTechnique.Passes[0].Apply();
+            Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
+
+            playerTextureEffect.Texture = Room.blockTexture;
+            playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            
             if (staticOpaqueObjects.Count > 0)
             {
                 if (staticObjectsInitialized == false)
@@ -294,6 +298,7 @@ namespace VexedCore
                 Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                     Game1.dynamicOpaqueObjects.ToArray(), 0, dynamicOpaqueObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
             }
+
             Game1.graphicsDevice.BlendState = BlendState.Opaque;
             if(detailTextures)
                 playerTextureEffect.Texture = Monster.monsterTextureDetail;

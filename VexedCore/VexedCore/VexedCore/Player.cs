@@ -92,6 +92,9 @@ namespace VexedCore
         public float baseCameraDistance = 9;
         public int orbsCollected = 0;
 
+        public Vector2 cameraAngle;
+        public Vector2 targetCameraAngle;
+
         public Doodad respawnPoint;
         public Vertex respawnCenter;
         public bool dead = false;
@@ -211,7 +214,7 @@ namespace VexedCore
             {
                 if (state == State.Normal || state == State.Spin)
                 {
-                    return currentRoom.RaisedPosition(center.position, baseCameraDistance, 6f);
+                    return currentRoom.RaisedPosition(center.position + cameraOffset, baseCameraDistance, 6f);
                 }
                 if (state == State.BridgeJump)
                 {
@@ -226,6 +229,41 @@ namespace VexedCore
                     Vector3 camera = cameraBase + sideValue * side;
                     return camera;
                 }
+            }
+        }
+
+        public Vector3 baseCameraPos
+        {
+            get
+            {
+                if (state == State.Normal || state == State.Spin)
+                {
+                    return currentRoom.RaisedPosition(center.position, baseCameraDistance, 6f);
+                }
+                if (state == State.BridgeJump)
+                {
+                    return ((jumpMaxTime - jumpTime) * jumpCameraSource + jumpTime * jumpCameraDestination) / jumpMaxTime;
+                    //return jumpPosition + center.normal * 16;
+                }
+                else
+                {
+                    Vector3 side = Vector3.Cross(center.direction, center.normal);
+                    float sideValue = 1f * jumpTime / jumpMaxTime;
+                    Vector3 cameraBase = ((jumpMaxTime - jumpTime) * jumpCameraSource + jumpTime * jumpCameraDestination) / jumpMaxTime;
+                    Vector3 camera = cameraBase + sideValue * side;
+                    return camera;
+                }
+            }
+        }
+
+        public Vector3 cameraOffset
+        {
+            get
+            {
+                Vector3 cameraOut = baseCameraPos - cameraTarget;
+                cameraOut.Normalize();
+                Vector3 cameraRight = Vector3.Cross(cameraUp, cameraOut);
+                return 5 * (cameraAngle.Y * cameraUp + cameraAngle.X * cameraRight);
             }
         }
 
@@ -288,6 +326,9 @@ namespace VexedCore
                 if (weaponSwitchCooldown < 0) weaponSwitchCooldown = 0;
             if (dead == true)
                 Respawn();
+            
+            cameraAngle = (cameraAngle + targetCameraAngle) / 2;
+
             groundCounter += gameTime.ElapsedGameTime.Milliseconds;
             if (groundCounter > groundTolerance)
             {
@@ -295,6 +336,7 @@ namespace VexedCore
                 grounded = false;
             }
             Vector2 stick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Left;
+            Vector2 rightStick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Right;
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             
             if (state == State.Normal)
@@ -381,7 +423,9 @@ namespace VexedCore
 
                 upMagnitude = Vector3.Dot(up, center.velocity);
                 rightMagnitude = Vector3.Dot(right, center.velocity - platformVelocity);
-                    
+
+                targetCameraAngle = rightStick;
+
                 if (upMagnitude > maxVertSpeed)
                 {
                     center.velocity -= (upMagnitude - maxVertSpeed) * up;

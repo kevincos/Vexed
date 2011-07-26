@@ -35616,7 +35616,7 @@
                         <Y>70</Y>
                         <Z>4</Z>
                       </end>
-                      <type>Ice</type>
+                      <type>Normal</type>
                       <behaviors>
                         <Behavior>
                           <id>1264</id>
@@ -35632,6 +35632,7 @@
                           <primaryValue>0</primaryValue>
                           <secondaryValue>0</secondaryValue>
                           <toggle>false</toggle>
+                          <nextBehavior />
                         </Behavior>
                       </behaviors>
                     </Edge>
@@ -35681,7 +35682,7 @@
                         <Y>70</Y>
                         <Z>-4</Z>
                       </end>
-                      <type>Ice</type>
+                      <type>Normal</type>
                       <behaviors>
                         <Behavior>
                           <id>1268</id>
@@ -35738,7 +35739,7 @@
                       <id>1271</id>
                       <name>Behavior</name>
                       <offset>0</offset>
-                      <duration>4000</duration>
+                      <duration>16000</duration>
                       <period>0</period>
                       <destination>
                         <X>0</X>
@@ -38542,7 +38543,7 @@
                   </up>
                   <activationCost>0</activationCost>
                   <fixedPosition>false</fixedPosition>
-                  <type>Checkpoint</type>
+                  <type>PlayerSpawn</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>
@@ -62860,7 +62861,7 @@
                   </up>
                   <activationCost>0</activationCost>
                   <fixedPosition>false</fixedPosition>
-                  <type>PlayerSpawn</type>
+                  <type>Checkpoint</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>

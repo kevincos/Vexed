@@ -17,7 +17,6 @@ Content\skybox_front.xnb
 Content\skybox_left.xnb
 Content\skybox_right.xnb
 Content\skybox_top.xnb
-Content\plate_texture.xnb
 Content\m_body.xnb
 Content\m_body_detail.xnb
 Content\p_fall_detail.xnb
@@ -29,3 +28,4 @@ Content\p_run4_detail.xnb
 Content\p_walljump_detail.xnb
 Content\projectiles.xnb
 Content\p_texture.xnb
+Content\plate_texture.xnb
