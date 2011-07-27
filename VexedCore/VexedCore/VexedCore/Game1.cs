@@ -50,7 +50,9 @@ namespace VexedCore
         public static bool transparencyEnabled = true;
         public static int lightingLevel = 1;
         public static bool toonShadingEnabled = false;
-        public static float drawDistance = 100f;
+        public static float drawDistance = 50f;
+        public int optionToggleCooldown = 0;
+        public static bool reDraw = false;
 
         RenderTarget2D sceneRenderTarget;
         RenderTarget2D normalDepthRenderTarget;
@@ -71,7 +73,7 @@ namespace VexedCore
             staticTranslucentObjects = new List<TrasnparentSquare>();
 
             graphics = new GraphicsDeviceManager(this);
-            //graphics.PreferMultiSampling = true;
+            graphics.PreferMultiSampling = true;
 
 #if XBOX
                 graphics.PreferredBackBufferWidth = 1280;
@@ -79,7 +81,10 @@ namespace VexedCore
 #endif
             int resWidth = 800;
             int resHeight = 600;
-            bool fullScreen = true;
+            bool fullScreen = false;
+            //resWidth = 1920;
+            //resHeight = 1080;
+            //fullScreen = true;
             graphics.IsFullScreen = fullScreen;
             graphics.PreferredBackBufferWidth = resWidth;
             graphics.PreferredBackBufferHeight = resHeight;
@@ -119,17 +124,12 @@ namespace VexedCore
 
             translucentEffect = new BasicEffect(Game1.graphicsDevice);
             translucentEffect.VertexColorEnabled = true;
-            //translucentEffect.LightingEnabled = true;
             translucentEffect.Alpha = 1f;
             translucentEffect.SpecularPower = 0.1f;
             translucentEffect.AmbientLightColor = new Vector3(.7f, .7f, .7f);
             translucentEffect.DiffuseColor = new Vector3(1, 1, 1);
             translucentEffect.SpecularColor = new Vector3(0, 1f, 1f);
-            //translucentEffect.DirectionalLight0.Enabled = true;
-            //translucentEffect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-10, -5, -1));
-            //translucentEffect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
-            //translucentEffect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
-
+            
             playerTextureEffect = new AlphaTestEffect(Game1.graphicsDevice);
             playerTextureEffect.VertexColorEnabled = true;
             playerTextureEffect.Alpha = 1f;
@@ -177,6 +177,8 @@ namespace VexedCore
             postprocessEffect = Content.Load<Effect>("PostprocessEffect");
             Room.blockTexture = Content.Load<Texture2D>("plate_texture");
             Player.player_textures = Content.Load<Texture2D>("p_texture");
+            Player.player_textures_detail = Content.Load<Texture2D>("p_texture");
+            Player.player_textures_clean = Content.Load<Texture2D>("p_texture_clean");
             Monster.monsterTexture = Content.Load<Texture2D>("m_body");
             Monster.monsterTextureDetail = Content.Load<Texture2D>("m_body_detail");
             Projectile.projectileTexture = Content.Load<Texture2D>("projectiles");
@@ -233,38 +235,59 @@ namespace VexedCore
             if (Keyboard.GetState().IsKeyDown(Keys.PageDown))
                 return;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D1))
-            {
-                settingsIndex = 0;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.D2))
-            {
-                settingsIndex = 1;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.D3))
-            {
-                settingsIndex = 2;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.D4))
-            {
-                settingsIndex = 3;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.D5))
-            {
-                settingsIndex = 4;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.D6))
-            {
-                settingsIndex = 5;
-            }
+            optionToggleCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            if(optionToggleCooldown < 0) optionToggleCooldown = 0;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D7))
+            if (optionToggleCooldown == 0)
             {
-                detailTextures = false;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.D8))
-            {
-                detailTextures = true;
+                if (Keyboard.GetState().IsKeyDown(Keys.D1))
+                {
+                    lightingLevel++;
+                    lightingLevel %= 3;
+                    if (lightingLevel == 0)
+                    {
+                        worldTextureEffect.LightingEnabled = false;
+                        worldTextureEffect.DirectionalLight1.Enabled = false;
+                        worldTextureEffect.DirectionalLight0.Enabled = false;
+                    }
+                    else if (lightingLevel == 1)
+                    {
+                        worldTextureEffect.LightingEnabled = true;
+                        worldTextureEffect.DirectionalLight1.Enabled = false;
+                        worldTextureEffect.DirectionalLight0.Enabled = true;
+                    }
+                    if (lightingLevel > 1)
+                    {
+                        worldTextureEffect.LightingEnabled = true;                        
+                        worldTextureEffect.DirectionalLight1.Enabled = true;
+                        worldTextureEffect.DirectionalLight0.Enabled = true;
+                    }
+                    optionToggleCooldown = 100;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.D2))
+                {
+                    settingsIndex = 0;
+                    toonShadingEnabled = !toonShadingEnabled;
+                    optionToggleCooldown = 100;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.D3))
+                {
+                    if (Player.player_textures_detail == Player.player_textures)
+                        Player.player_textures = Player.player_textures_clean;
+                    else
+                        Player.player_textures = Player.player_textures_detail;
+                    optionToggleCooldown = 100;
+                }
+                
+
+                if (Keyboard.GetState().IsKeyDown(Keys.D7))
+                {
+                    detailTextures = false;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.D8))
+                {
+                    detailTextures = true;
+                }
             }
 
             // Allows the game to exit
@@ -348,20 +371,16 @@ namespace VexedCore
 
             Game1.graphicsDevice.BlendState = BlendState.Opaque;
 
-            if (depthShader == false)
-            {
-                if (detailTextures)
-                    playerTextureEffect.Texture = Monster.monsterTextureDetail;
-                else
-                    playerTextureEffect.Texture = Monster.monsterTexture;
-                playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            if (detailTextures)
+                playerTextureEffect.Texture = Monster.monsterTextureDetail;
+            else
+                playerTextureEffect.Texture = Monster.monsterTexture;
+            playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            Game1.player.currentRoom.DrawMonsters();
 
-                Game1.player.currentRoom.DrawMonsters();
-                playerTextureEffect.Texture = Projectile.projectileTexture;
-                playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-
-                Game1.player.currentRoom.DrawProjectiles();
-            }
+            playerTextureEffect.Texture = Projectile.projectileTexture;
+            playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            Game1.player.currentRoom.DrawProjectiles();
 
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
@@ -406,10 +425,11 @@ namespace VexedCore
             Game1.staticTranslucentObjects = new List<TrasnparentSquare>();
             Game1.dynamicOpaqueObjects = new List<VertexPositionColorNormalTexture>();
             Game1.dynamicDetailObjects = new List<VertexPositionColorNormalTexture>();
-            if (Game1.staticOpaqueObjects == null)
+            if (Game1.staticOpaqueObjects == null || reDraw == true)
             {
                 Game1.staticOpaqueObjects = new List<VertexPositionColorNormalTexture>();
                 Game1.staticDetailObjects = new List<VertexPositionColorNormalTexture>();
+                staticObjectsInitialized = false;
             }
             
             //bloom.BeginDraw();            
@@ -440,9 +460,12 @@ namespace VexedCore
             Game1.graphicsDevice.RasterizerState = RasterizerState.CullNone;
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
+
             foreach (Room r in roomList)
             {
-                r.Draw(gameTime);
+                if((r.center - player.currentRoom.center).Length() < drawDistance ||
+                    (player.jumpRoom != null && (r.center - player.jumpRoom.center).Length() < drawDistance))
+                    r.Draw(gameTime);
             }
 
 
@@ -484,6 +507,7 @@ namespace VexedCore
             base.Draw(gameTime);
 
             Game1.staticObjectsInitialized = true;
+            Game1.reDraw = false;
         }
 
         /// <summary>

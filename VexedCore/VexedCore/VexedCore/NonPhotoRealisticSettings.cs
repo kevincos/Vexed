@@ -68,7 +68,7 @@ namespace VexedCore
         public static NonPhotoRealisticSettings[] PresetSettings =
         {
             new NonPhotoRealisticSettings("Cartoon", true,
-                                          true, 1f, 1f,
+                                          true, .5f, .5f,
                                           false, false, 0, 0, 0),
 
             new NonPhotoRealisticSettings("Pencil", false,

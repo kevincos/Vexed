@@ -50,6 +50,8 @@ namespace VexedCore
 
         public VexedLib.GunType gunType = VexedLib.GunType.Blaster;
 
+        public static Texture2D player_textures_detail;
+        public static Texture2D player_textures_clean;
         public static Texture2D player_textures;
         public static List<List<Vector2>> texCoordList;
 
@@ -536,7 +538,8 @@ namespace VexedCore
                     center.velocity = Vector3.Zero;
                     faceDirection = 0;
                     state = State.Normal;
-                    currentRoom = jumpRoom;                    
+                    currentRoom = jumpRoom;
+                    Game1.reDraw = true;
                 }
 
             }
