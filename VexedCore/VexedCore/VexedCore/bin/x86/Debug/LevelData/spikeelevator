@@ -30080,7 +30080,7 @@
                             <Y>0</Y>
                             <Z>0</Z>
                           </destination>
-                          <primaryValue>8</primaryValue>
+                          <primaryValue>2</primaryValue>
                           <secondaryValue>0</secondaryValue>
                           <toggle>false</toggle>
                           <nextBehavior>Right_896</nextBehavior>
@@ -30255,7 +30255,7 @@
                             <Y>0</Y>
                             <Z>0</Z>
                           </destination>
-                          <primaryValue>8</primaryValue>
+                          <primaryValue>4</primaryValue>
                           <secondaryValue>0</secondaryValue>
                           <toggle>false</toggle>
                           <nextBehavior />
@@ -30446,7 +30446,7 @@
                             <Y>0</Y>
                             <Z>0</Z>
                           </destination>
-                          <primaryValue>8</primaryValue>
+                          <primaryValue>4</primaryValue>
                           <secondaryValue>0</secondaryValue>
                           <toggle>false</toggle>
                         </Behavior>
@@ -30668,6 +30668,164 @@
                     <PackedValue>4278190080</PackedValue>
                   </color>
                 </Block>
+                <Block>
+                  <id>2272</id>
+                  <name>Block</name>
+                  <edges>
+                    <Edge>
+                      <id>2273</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>45</X>
+                        <Y>0</Y>
+                        <Z>10</Z>
+                      </start>
+                      <end>
+                        <X>46</X>
+                        <Y>0</Y>
+                        <Z>10</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>2274</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>2275</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>46</X>
+                        <Y>0</Y>
+                        <Z>10</Z>
+                      </start>
+                      <end>
+                        <X>46</X>
+                        <Y>5</Y>
+                        <Z>10</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>2276</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>2277</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>46</X>
+                        <Y>5</Y>
+                        <Z>10</Z>
+                      </start>
+                      <end>
+                        <X>45</X>
+                        <Y>5</Y>
+                        <Z>10</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>2278</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>2279</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>45</X>
+                        <Y>5</Y>
+                        <Z>10</Z>
+                      </start>
+                      <end>
+                        <X>45</X>
+                        <Y>0</Y>
+                        <Z>10</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>2280</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                  </edges>
+                  <behaviors>
+                    <Behavior>
+                      <id>2281</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                  </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
+                </Block>
               </blocks>
               <doodads>
                 <Doodad>
@@ -30849,8 +31007,8 @@
                   <id>1646</id>
                   <name>Doodad</name>
                   <position>
-                    <X>47.5</X>
-                    <Y>-11.5</Y>
+                    <X>46.5</X>
+                    <Y>2.5</Y>
                     <Z>10</Z>
                   </position>
                   <up>
@@ -30860,7 +31018,7 @@
                   </up>
                   <activationCost>0</activationCost>
                   <fixedPosition>false</fixedPosition>
-                  <type>PowerOrb</type>
+                  <type>PlayerSpawn</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>
@@ -38543,7 +38701,7 @@
                   </up>
                   <activationCost>0</activationCost>
                   <fixedPosition>false</fixedPosition>
-                  <type>PlayerSpawn</type>
+                  <type>Checkpoint</type>
                   <ability>DoubleJump</ability>
                   <behaviors>
                     <Behavior>

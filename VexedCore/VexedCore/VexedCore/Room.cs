@@ -14,6 +14,8 @@ namespace VexedCore
 {
     public class Room
     {
+        public static int beltAnimation = 0;
+
         public static int innerBlockMode = 2;
 
         public Vector3 center;
@@ -50,6 +52,9 @@ namespace VexedCore
         public static List<Vector2> beltSideEndTexCoords;
         public static List<Vector2> beltTopTexCoords;
         public static List<Vector2> beltTopEndTexCoords;
+        public static List<Vector2> beltSideSmallTexCoords;
+        public static List<Vector2> beltSideSmallEndTexCoords;
+        
 
         public static List<Vector2> plateTexCoords;
         public static List<Vector2> blankTexCoords;
@@ -57,15 +62,14 @@ namespace VexedCore
 
         public static int texGridCount = 8;
 
-        public static List<Vector2> LoadTexCoords(int x, int y)
+        public static List<Vector2> LoadTexCoords(int x, int y, float epsilonX, float epsilonY)
         {
-            float epsilon = .003f;
             float texWidth = 1f / texGridCount;
             List<Vector2> texCoords = new List<Vector2>();
-            texCoords.Add(new Vector2((x + 1) * texWidth - epsilon, y * texWidth + epsilon));
-            texCoords.Add(new Vector2(x * texWidth + epsilon, y * texWidth + epsilon));
-            texCoords.Add(new Vector2(x * texWidth + epsilon, (y + 1) * texWidth - epsilon));
-            texCoords.Add(new Vector2((x + 1) * texWidth - epsilon, (y + 1) * texWidth - epsilon));
+            texCoords.Add(new Vector2((x + 1) * texWidth - epsilonX, y * texWidth + epsilonY));
+            texCoords.Add(new Vector2(x * texWidth + epsilonX, y * texWidth + epsilonY));
+            texCoords.Add(new Vector2(x * texWidth + epsilonX, (y + 1) * texWidth - epsilonY));
+            texCoords.Add(new Vector2((x + 1) * texWidth - epsilonX, (y + 1) * texWidth - epsilonY));
 
             return texCoords;
         }
@@ -83,35 +87,37 @@ namespace VexedCore
             blankTexCoords.Add(new Vector2(2 * plateTexWidth / 5, 3 * plateTexWidth / 5));
             blankTexCoords.Add(new Vector2(3 * plateTexWidth / 5, 3 * plateTexWidth / 5));
 
-            magnetSideTexCoords = LoadTexCoords(3, 1);
-            magnetTopTexCoords = LoadTexCoords(3, 0);
-            magnetSideEndTexCoords = LoadTexCoords(2, 1);
-            magnetTopEndTexCoords = LoadTexCoords(2, 0);
+            magnetSideTexCoords = LoadTexCoords(3, 1, .003f, .003f);
+            magnetTopTexCoords = LoadTexCoords(3, 0, .003f, .003f);
+            magnetSideEndTexCoords = LoadTexCoords(2, 1, .003f, .003f);
+            magnetTopEndTexCoords = LoadTexCoords(2, 0, .003f, .003f);
 
-            iceSideTexCoords = LoadTexCoords(3, 3);
-            iceTopTexCoords = LoadTexCoords(3, 2);
-            iceSideEndTexCoords = LoadTexCoords(2, 3);
-            iceTopEndTexCoords = LoadTexCoords(2, 2);
+            iceSideTexCoords = LoadTexCoords(3, 3, .003f, .003f);
+            iceTopTexCoords = LoadTexCoords(3, 2, .003f, .003f);
+            iceSideEndTexCoords = LoadTexCoords(2, 3, .003f, .003f);
+            iceTopEndTexCoords = LoadTexCoords(2, 2, .003f, .003f);
 
-            electricOnSideTexCoords = LoadTexCoords(7, 1);
-            electricOnTopTexCoords = LoadTexCoords(7, 0);
-            electricOnSideEndTexCoords = LoadTexCoords(6, 1);
-            electricOnTopEndTexCoords = LoadTexCoords(6, 0);
+            electricOnSideTexCoords = LoadTexCoords(7, 1, .003f, .003f);
+            electricOnTopTexCoords = LoadTexCoords(7, 0, .003f, .003f);
+            electricOnSideEndTexCoords = LoadTexCoords(6, 1, .003f, .003f);
+            electricOnTopEndTexCoords = LoadTexCoords(6, 0, .003f, .003f);
 
-            electricOffSideTexCoords = LoadTexCoords(5, 1);
-            electricOffTopTexCoords = LoadTexCoords(5, 0);
-            electricOffSideEndTexCoords = LoadTexCoords(4, 1);
-            electricOffTopEndTexCoords = LoadTexCoords(4, 0);
+            electricOffSideTexCoords = LoadTexCoords(5, 1, .003f, .003f);
+            electricOffTopTexCoords = LoadTexCoords(5, 0, .003f, .003f);
+            electricOffSideEndTexCoords = LoadTexCoords(4, 1, .003f, .003f);
+            electricOffTopEndTexCoords = LoadTexCoords(4, 0, .003f, .003f);
 
-            rubberSideTexCoords = LoadTexCoords(5, 3);
-            rubberTopTexCoords = LoadTexCoords(5, 2);
-            rubberSideEndTexCoords = LoadTexCoords(4, 3);
-            rubberTopEndTexCoords = LoadTexCoords(4, 2);
+            rubberSideTexCoords = LoadTexCoords(5, 3, .003f, .003f);
+            rubberTopTexCoords = LoadTexCoords(5, 2, .003f, .003f);
+            rubberSideEndTexCoords = LoadTexCoords(4, 3, .003f, .003f);
+            rubberTopEndTexCoords = LoadTexCoords(4, 2, .003f, .003f);
 
-            beltSideTexCoords = LoadTexCoords(7, 3);
-            beltTopTexCoords = LoadTexCoords(7, 2);
-            beltSideEndTexCoords = LoadTexCoords(6, 3);
-            beltTopEndTexCoords = LoadTexCoords(6, 2);
+            beltSideTexCoords = LoadTexCoords(5, 5, .003f, .003f);
+            beltTopTexCoords = LoadTexCoords(5, 4, .0f, .003f);
+            beltSideEndTexCoords = LoadTexCoords(4, 5, .003f, .003f);
+            beltTopEndTexCoords = LoadTexCoords(4, 4, .003f, .003f);
+            beltSideSmallTexCoords = LoadTexCoords(5, 6, .0f, .003f);
+            beltSideSmallEndTexCoords = LoadTexCoords(4, 6, .003f, .003f);
         }
 
         public List<Block> blocks;
@@ -146,6 +152,7 @@ namespace VexedCore
         
         public void Update(GameTime gameTime)
         {
+            beltAnimation += gameTime.ElapsedGameTime.Milliseconds;
             foreach (Block b in blocks)
             {
                 int blockUpdateTime = b.UpdateBehavior(gameTime);
@@ -475,27 +482,24 @@ namespace VexedCore
             for (int i = 0; i < width; i++)
             {
                 List<Vertex> subList = new List<Vertex>();
+                List<Vertex> mirrorSubList = new List<Vertex>();
                 Vector3 up = Vector3.Cross(fullPointList[(i * 3)].direction, fullPointList[i * 3].normal);
-                if (i == width - 1)
-                {
-                    subList.Add(new Vertex(fullPointList[(i) * 3 + 1], .01f * up));
-                    subList.Add(new Vertex(fullPointList[(i + 1) * 3 + 1], .01f * up));
-                    subList.Add(fullPointList[(i + 1) * 3]);
-                    subList.Add(fullPointList[i * 3]);
-                }
-                else
-                {
-                    subList.Add(new Vertex(fullPointList[(i+1) * 3 + 1], .01f*up));
-                    subList.Add(new Vertex(fullPointList[(i) * 3 + 1], .01f*up));
-                    subList.Add(fullPointList[(i) * 3]);
-                    subList.Add(fullPointList[(i+1) * 3]);                    
-                }
+
+                mirrorSubList.Add(new Vertex(fullPointList[(i) * 3 + 1], .01f * up));
+                mirrorSubList.Add(new Vertex(fullPointList[(i + 1) * 3 + 1], .01f * up));
+                mirrorSubList.Add(fullPointList[(i + 1) * 3]);
+                mirrorSubList.Add(fullPointList[i * 3]);
+
+                subList.Add(new Vertex(fullPointList[(i+1) * 3 + 1], .01f*up));
+                subList.Add(new Vertex(fullPointList[(i) * 3 + 1], .01f*up));
+                subList.Add(fullPointList[(i) * 3]);
+                subList.Add(fullPointList[(i+1) * 3]);                    
 
                 if (e.properties.type == VexedLib.EdgeType.Ice)
                 {
                     if (i == width - 1)
                     {
-                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, iceSideEndTexCoords, triangleList, true);
+                        AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, iceSideEndTexCoords, triangleList, true);
                         AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, iceTopEndTexCoords, triangleList);                        
                     }
                     else if (i == 0)
@@ -513,7 +517,7 @@ namespace VexedCore
                 {
                     if (i == width - 1)
                     {
-                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, rubberSideEndTexCoords, triangleList, true);
+                        AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, rubberSideEndTexCoords, triangleList, true);
                         AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, rubberTopEndTexCoords, triangleList);
                     }
                     else if (i == 0)
@@ -529,27 +533,54 @@ namespace VexedCore
                 }
                 else if (e.properties.type == VexedLib.EdgeType.ConveyorBelt)
                 {
+                    float beltOffset = .0000125f * beltAnimation * e.properties.primaryValue;
+
+                    beltOffset %= .125f;
+                    if (beltOffset < 0)
+                        beltOffset += .125f;
+
+                    List<Vector2> activeBeltTopTexCoords = new List<Vector2>();
+                    activeBeltTopTexCoords.Add(beltTopTexCoords[0] + beltOffset * Vector2.UnitX);
+                    activeBeltTopTexCoords.Add(beltTopTexCoords[1] + beltOffset * Vector2.UnitX);
+                    activeBeltTopTexCoords.Add(beltTopTexCoords[2] + beltOffset * Vector2.UnitX);
+                    activeBeltTopTexCoords.Add(beltTopTexCoords[3] + beltOffset * Vector2.UnitX);
+                    List<Vector2> activeBeltSideTexCoords = new List<Vector2>();
+                    activeBeltSideTexCoords.Add(beltSideSmallTexCoords[0] + beltOffset * Vector2.UnitX);
+                    activeBeltSideTexCoords.Add(beltSideSmallTexCoords[1] + beltOffset * Vector2.UnitX);
+                    activeBeltSideTexCoords.Add(beltSideSmallTexCoords[2] + beltOffset * Vector2.UnitX);
+                    activeBeltSideTexCoords.Add(beltSideSmallTexCoords[3] + beltOffset * Vector2.UnitX);
+
+                    List<Vertex> shortSubList = new List<Vertex>();
+                    shortSubList.Add(new Vertex(fullPointList[(i + 1) * 3 + 1], .01f * up));
+                    shortSubList.Add(new Vertex(fullPointList[(i) * 3 + 1], .01f * up));
+                    shortSubList.Add(new Vertex(fullPointList[(i) * 3],.9f*up));
+                    shortSubList.Add(new Vertex(fullPointList[(i + 1) * 3], .9f * up));
+                    foreach (Vertex v in shortSubList)
+                        v.Update(this, 0);
+
+
+                    AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .011f, false, activeBeltTopTexCoords, triangleList);
                     if (i == width - 1)
                     {
-                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, beltSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, beltTopEndTexCoords, triangleList);
+                        AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, beltSideEndTexCoords, triangleList, true);
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .011f, activeBeltSideTexCoords, triangleList, true);                        
                     }
                     else if (i == 0)
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, beltSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, beltTopEndTexCoords, triangleList);
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .011f, activeBeltSideTexCoords, triangleList, true);                        
                     }
                     else
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, beltSideTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, beltTopTexCoords, triangleList);
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .011f, activeBeltSideTexCoords, triangleList, true);                        
                     }
                 }
                 else if (e.properties.type == VexedLib.EdgeType.Electric && e.properties.primaryValue == 0)
                 {
                     if (i == width - 1)
                     {
-                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOffSideEndTexCoords, triangleList, true);
+                        AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, electricOffSideEndTexCoords, triangleList, true);
                         AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, electricOffTopEndTexCoords, triangleList);
                     }
                     else if (i == 0)
@@ -567,7 +598,7 @@ namespace VexedCore
                 {
                     if (i == width - 1)
                     {
-                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOnSideEndTexCoords, triangleList, true);
+                        AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, electricOnSideEndTexCoords, triangleList, true);
                         AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, electricOnTopEndTexCoords, triangleList);
                     }
                     else if (i == 0)
@@ -583,7 +614,9 @@ namespace VexedCore
                 }
                 else
                 {
-                    if (i == width - 1 || i == 0)
+                    if (i == width - 1)
+                        AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, magnetSideEndTexCoords, triangleList, true);
+                    else if (i == 0)
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, magnetSideEndTexCoords, triangleList, true);
                     else
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, magnetSideTexCoords, triangleList, true);
@@ -639,19 +672,19 @@ namespace VexedCore
 
                     triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, e.start.normal, depth));
                     triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, e.start.normal, depth));
-                    triangeList.Add(GenerateTexturedVertex(spikePoint,blankTexCoords[1], spikeColor, edgeNormal, depth / 2));
+                    triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, e.start.normal, depth / 2));
 
                     triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, -e.start.normal, 0));
                     triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -e.start.normal, 0));
-                    triangeList.Add(GenerateTexturedVertex(spikePoint,blankTexCoords[1], spikeColor, edgeNormal, depth / 2));
+                    triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, -e.start.normal, depth / 2));
 
                     triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, edgeDir, depth));
                     triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, edgeDir, 0));
-                    triangeList.Add(GenerateTexturedVertex(spikePoint,blankTexCoords[1], spikeColor, edgeNormal, depth / 2));
+                    triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, edgeDir, depth / 2));
 
                     triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -edgeDir, depth));
                     triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -edgeDir, 0));
-                    triangeList.Add(GenerateTexturedVertex(spikePoint,blankTexCoords[1], spikeColor, edgeNormal, depth / 2));
+                    triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, -edgeDir, depth / 2));
 
                     if (i < numSpikes - 1)
                     {
@@ -661,19 +694,19 @@ namespace VexedCore
 
                         triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, e.start.normal, 0));
                         triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, e.start.normal, 0));
-                        triangeList.Add(GenerateTexturedVertex(spikePoint,blankTexCoords[1], spikeColor, edgeNormal, -depth / 2));
+                        triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, e.start.normal, -depth / 2));
 
                         triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, -e.start.normal, -depth));
                         triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -e.start.normal, -depth));
-                        triangeList.Add(GenerateTexturedVertex(spikePoint,blankTexCoords[1], spikeColor, edgeNormal, -depth / 2));
+                        triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, -e.start.normal, -depth / 2));
 
                         triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, edgeDir, 0));
                         triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, edgeDir, -depth));
-                        triangeList.Add(GenerateTexturedVertex(spikePoint,blankTexCoords[1], spikeColor, edgeNormal, -depth / 2));
+                        triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, edgeDir, -depth / 2));
 
                         triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -edgeDir, 0));
                         triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -edgeDir, -depth));
-                        triangeList.Add(GenerateTexturedVertex(spikePoint,blankTexCoords[1], spikeColor, edgeNormal, -depth / 2));
+                        triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, -edgeDir, -depth / 2));
                     }
                 }
             }

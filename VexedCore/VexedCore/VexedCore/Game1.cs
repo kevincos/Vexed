@@ -23,9 +23,9 @@ namespace VexedCore
         public static GraphicsDevice graphicsDevice;
         public static BloomComponent bloom;
         SpriteBatch spriteBatch;
-        public BasicEffect effect = null;
         public BasicEffect translucentEffect = null;
         public AlphaTestEffect playerTextureEffect = null;
+        public BasicEffect worldTextureEffect = null;
         public BasicEffect skyBoxEffect = null;
         public Effect cartoonEffect = null;
         Effect postprocessEffect = null;
@@ -109,21 +109,6 @@ namespace VexedCore
             //bloom.Settings = BloomSettings.PresetSettings[0];
             
             base.Initialize();
-            
-            effect = new BasicEffect(Game1.graphicsDevice);
-            effect.VertexColorEnabled = true;
-            effect.TextureEnabled = true;
-            effect.Texture = Room.blockTexture;
-            effect.LightingEnabled = true;
-            effect.Alpha = 1f;
-            effect.SpecularPower = 0.1f;
-            effect.AmbientLightColor = new Vector3(.7f, .7f, .7f);
-            effect.DiffuseColor = new Vector3(1, 1, 1);
-            effect.SpecularColor = new Vector3(0, 1f, 1f);
-            effect.DirectionalLight0.Enabled = true;
-            effect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-10, -5, -1));
-            effect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
-            effect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
 
             translucentEffect = new BasicEffect(Game1.graphicsDevice);
             translucentEffect.VertexColorEnabled = true;
@@ -141,6 +126,24 @@ namespace VexedCore
             playerTextureEffect = new AlphaTestEffect(Game1.graphicsDevice);
             playerTextureEffect.VertexColorEnabled = true;
             playerTextureEffect.Alpha = 1f;
+
+            worldTextureEffect = new BasicEffect(Game1.graphicsDevice);
+            worldTextureEffect.TextureEnabled = true;
+            worldTextureEffect.VertexColorEnabled = true;
+            worldTextureEffect.LightingEnabled = true;
+            worldTextureEffect.Alpha = 1f;
+            worldTextureEffect.SpecularPower = 0.1f;
+            worldTextureEffect.AmbientLightColor = new Vector3(.7f, .7f, .7f);
+            worldTextureEffect.DiffuseColor = new Vector3(1, 1, 1);
+            worldTextureEffect.SpecularColor = new Vector3(0, 1f, 1f);
+            worldTextureEffect.DirectionalLight0.Enabled = true;
+            worldTextureEffect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-10, -5, -1));
+            worldTextureEffect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
+            worldTextureEffect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
+            worldTextureEffect.DirectionalLight1.Enabled = true;
+            worldTextureEffect.DirectionalLight1.Direction = Vector3.Normalize(new Vector3(10, 5, 1));
+            worldTextureEffect.DirectionalLight1.DiffuseColor = Color.Gray.ToVector3();
+            worldTextureEffect.DirectionalLight1.SpecularColor = Color.Black.ToVector3();
             
             
             Skybox.Init();
@@ -276,13 +279,24 @@ namespace VexedCore
         }
 
 
-        public void DrawScene()
+        public void DrawScene(bool depthShader)
         {
             Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
+            Game1.graphicsDevice.BlendState = BlendState.Opaque;
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            playerTextureEffect.Texture = Room.blockTexture;
-            playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            if (depthShader == false)
+            {
+                worldTextureEffect.Texture = Room.blockTexture;
+                worldTextureEffect.CurrentTechnique.Passes[0].Apply();
+            }
+            else
+            {
+                
+                cartoonEffect.CurrentTechnique = cartoonEffect.Techniques["NormalDepth"];                
+                cartoonEffect.CurrentTechnique.Passes[0].Apply();
+            }
+
             
             if (staticOpaqueObjects.Count > 0)
             {
@@ -322,45 +336,54 @@ namespace VexedCore
             }
 
             Game1.graphicsDevice.BlendState = BlendState.Opaque;
-            if(detailTextures)
-                playerTextureEffect.Texture = Monster.monsterTextureDetail;
-            else
-                playerTextureEffect.Texture = Monster.monsterTexture;
-            playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-            Game1.player.currentRoom.DrawMonsters();
-            playerTextureEffect.Texture = Projectile.projectileTexture;
-            playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-            Game1.player.currentRoom.DrawProjectiles();
+
+            if (depthShader == false)
+            {
+                if (detailTextures)
+                    playerTextureEffect.Texture = Monster.monsterTextureDetail;
+                else
+                    playerTextureEffect.Texture = Monster.monsterTexture;
+                playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+
+                Game1.player.currentRoom.DrawMonsters();
+                playerTextureEffect.Texture = Projectile.projectileTexture;
+                playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+
+                Game1.player.currentRoom.DrawProjectiles();
+            }
 
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
-            
-            if (Room.innerBlockMode > 0)
-            {
-                translucentEffect.CurrentTechnique.Passes[0].Apply();
-                // Sort Triangles
-                staticTranslucentObjects.Sort(new FaceSorter(player.cameraTarget - player.cameraPos));
 
-                List<VertexPositionColorNormalTexture> translucentList = new List<VertexPositionColorNormalTexture>();
-                for (int i = 0; i < staticTranslucentObjects.Count; i++)
+            if (depthShader == false)
+            {
+                if (Room.innerBlockMode > 0)
                 {
-                    
-                    translucentList.Add(staticTranslucentObjects[i].v1);
-                    translucentList.Add(staticTranslucentObjects[i].v2);
-                    translucentList.Add(staticTranslucentObjects[i].v3);
-                    translucentList.Add(staticTranslucentObjects[i].v4);
-                    translucentList.Add(staticTranslucentObjects[i].v5);
-                    translucentList.Add(staticTranslucentObjects[i].v6);
+                    translucentEffect.CurrentTechnique.Passes[0].Apply();
+                    // Sort Triangles
+                    staticTranslucentObjects.Sort(new FaceSorter(player.cameraTarget - player.cameraPos));
+
+                    List<VertexPositionColorNormalTexture> translucentList = new List<VertexPositionColorNormalTexture>();
+                    for (int i = 0; i < staticTranslucentObjects.Count; i++)
+                    {
+
+                        translucentList.Add(staticTranslucentObjects[i].v1);
+                        translucentList.Add(staticTranslucentObjects[i].v2);
+                        translucentList.Add(staticTranslucentObjects[i].v3);
+                        translucentList.Add(staticTranslucentObjects[i].v4);
+                        translucentList.Add(staticTranslucentObjects[i].v5);
+                        translucentList.Add(staticTranslucentObjects[i].v6);
+                    }
+                    if (translucentList.Count > 0)
+                    {
+                        Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                            translucentList.ToArray(), 0, translucentList.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                    }
                 }
-                if (translucentList.Count > 0)
-                {
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        translucentList.ToArray(), 0, translucentList.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }
+                Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
             }
-            Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
             playerTextureEffect.Texture = Player.player_textures;
             playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-            player.DrawTexture();
+            player.DrawTexture();            
         }
 
         /// <summary>
@@ -383,11 +406,7 @@ namespace VexedCore
             // Set transform matrices.
             float aspect = Game1.graphicsDevice.Viewport.AspectRatio;
 
-            effect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
-            effect.View = Matrix.CreateLookAt(player.cameraPos, player.cameraTarget, player.cameraUp);
-            effect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
-
-
+            
             translucentEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
             translucentEffect.View = Matrix.CreateLookAt(player.cameraPos, player.cameraTarget, player.cameraUp);
             translucentEffect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
@@ -396,7 +415,14 @@ namespace VexedCore
             playerTextureEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
             playerTextureEffect.View = Matrix.CreateLookAt(player.cameraPos, player.cameraTarget, player.cameraUp);
             playerTextureEffect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
-            
+
+            worldTextureEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
+            worldTextureEffect.View = Matrix.CreateLookAt(player.cameraPos, player.cameraTarget, player.cameraUp);
+            worldTextureEffect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
+
+            cartoonEffect.Parameters["World"].SetValue(Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch));
+            cartoonEffect.Parameters["View"].SetValue(Matrix.CreateLookAt(player.cameraPos, player.cameraTarget, player.cameraUp));
+            cartoonEffect.Parameters["Projection"].SetValue(Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000));
 
             
             // Set renderstates.
@@ -417,7 +443,7 @@ namespace VexedCore
                 Game1.graphicsDevice.Clear(Color.Black);
 
 
-                DrawScene();
+                DrawScene(true);
             }
 
             
@@ -432,7 +458,7 @@ namespace VexedCore
 
 
             Skybox.Draw(player);
-            DrawScene();
+            DrawScene(false);
 
 
             
