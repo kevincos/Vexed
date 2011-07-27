@@ -47,6 +47,11 @@ namespace VexedCore
         public static VertexBuffer staticDetailBuffer;
         public static bool staticObjectsInitialized = false;
 
+        public static bool transparencyEnabled = true;
+        public static int lightingLevel = 1;
+        public static bool toonShadingEnabled = false;
+        public static float drawDistance = 100f;
+
         RenderTarget2D sceneRenderTarget;
         RenderTarget2D normalDepthRenderTarget;
         NonPhotoRealisticSettings Settings
@@ -66,19 +71,21 @@ namespace VexedCore
             staticTranslucentObjects = new List<TrasnparentSquare>();
 
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferMultiSampling = true;
+            //graphics.PreferMultiSampling = true;
 
 #if XBOX
                 graphics.PreferredBackBufferWidth = 1280;
                 graphics.PreferredBackBufferHeight = 720;
 #endif
-                graphics.IsFullScreen = true;
-                graphics.PreferredBackBufferWidth = 1920;
-                graphics.PreferredBackBufferHeight = 1080;
-                //graphics.PreferredBackBufferWidth = 800;
-                //graphics.PreferredBackBufferHeight = 600;
-
-                
+            int resWidth = 800;
+            int resHeight = 600;
+            bool fullScreen = true;
+            graphics.IsFullScreen = fullScreen;
+            graphics.PreferredBackBufferWidth = resWidth;
+            graphics.PreferredBackBufferHeight = resHeight;
+            Window.BeginScreenDeviceChange(fullScreen);
+            Window.EndScreenDeviceChange(Window.ScreenDeviceName, resWidth, resHeight);
+            graphics.ApplyChanges();
 
 
             //bloom = new BloomComponent(this);
@@ -112,16 +119,16 @@ namespace VexedCore
 
             translucentEffect = new BasicEffect(Game1.graphicsDevice);
             translucentEffect.VertexColorEnabled = true;
-            translucentEffect.LightingEnabled = true;
+            //translucentEffect.LightingEnabled = true;
             translucentEffect.Alpha = 1f;
             translucentEffect.SpecularPower = 0.1f;
             translucentEffect.AmbientLightColor = new Vector3(.7f, .7f, .7f);
             translucentEffect.DiffuseColor = new Vector3(1, 1, 1);
             translucentEffect.SpecularColor = new Vector3(0, 1f, 1f);
-            translucentEffect.DirectionalLight0.Enabled = true;
-            translucentEffect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-10, -5, -1));
-            translucentEffect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
-            translucentEffect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
+            //translucentEffect.DirectionalLight0.Enabled = true;
+            //translucentEffect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-10, -5, -1));
+            //translucentEffect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
+            //translucentEffect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
 
             playerTextureEffect = new AlphaTestEffect(Game1.graphicsDevice);
             playerTextureEffect.VertexColorEnabled = true;
@@ -130,20 +137,24 @@ namespace VexedCore
             worldTextureEffect = new BasicEffect(Game1.graphicsDevice);
             worldTextureEffect.TextureEnabled = true;
             worldTextureEffect.VertexColorEnabled = true;
-            worldTextureEffect.LightingEnabled = true;
             worldTextureEffect.Alpha = 1f;
             worldTextureEffect.SpecularPower = 0.1f;
             worldTextureEffect.AmbientLightColor = new Vector3(.7f, .7f, .7f);
             worldTextureEffect.DiffuseColor = new Vector3(1, 1, 1);
             worldTextureEffect.SpecularColor = new Vector3(0, 1f, 1f);
-            worldTextureEffect.DirectionalLight0.Enabled = true;
             worldTextureEffect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-10, -5, -1));
             worldTextureEffect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
             worldTextureEffect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
-            worldTextureEffect.DirectionalLight1.Enabled = true;
             worldTextureEffect.DirectionalLight1.Direction = Vector3.Normalize(new Vector3(10, 5, 1));
             worldTextureEffect.DirectionalLight1.DiffuseColor = Color.Gray.ToVector3();
             worldTextureEffect.DirectionalLight1.SpecularColor = Color.Black.ToVector3();
+            if(lightingLevel > 0)
+                worldTextureEffect.LightingEnabled = true;
+            if (lightingLevel > 1)
+            {
+                worldTextureEffect.DirectionalLight1.Enabled = true;
+                worldTextureEffect.DirectionalLight0.Enabled = true;
+            }
             
             
             Skybox.Init();
@@ -354,7 +365,7 @@ namespace VexedCore
 
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            if (depthShader == false)
+            if (depthShader == false && transparencyEnabled == true)
             {
                 if (Room.innerBlockMode > 0)
                 {
@@ -436,7 +447,7 @@ namespace VexedCore
 
 
             
-            if (Settings.EnableEdgeDetect)
+            if (toonShadingEnabled)
             {
                 Game1.graphicsDevice.SetRenderTarget(normalDepthRenderTarget);
 
@@ -449,7 +460,7 @@ namespace VexedCore
             
 
 
-            if (Settings.EnableEdgeDetect || Settings.EnableSketch)
+            if (toonShadingEnabled)
                 Game1.graphicsDevice.SetRenderTarget(sceneRenderTarget);
             else
                 Game1.graphicsDevice.SetRenderTarget(null);
@@ -463,7 +474,7 @@ namespace VexedCore
 
             
             // Run the postprocessing filter over the scene that we just rendered.
-            if (Settings.EnableEdgeDetect || Settings.EnableSketch)
+            if (toonShadingEnabled)
             {
                 Game1.graphicsDevice.SetRenderTarget(null);
 
