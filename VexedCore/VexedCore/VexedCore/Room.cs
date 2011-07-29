@@ -21,6 +21,8 @@ namespace VexedCore
         public Vector3 center;
         public Vector3 size;
 
+        public bool hasWarp = false;
+
         public static Texture2D blockTexture;
 
         public static List<Vector2> magnetSideTexCoords;
@@ -47,6 +49,8 @@ namespace VexedCore
         public static List<Vector2> rubberSideEndTexCoords;
         public static List<Vector2> rubberTopTexCoords;
         public static List<Vector2> rubberTopEndTexCoords;
+        public static List<Vector2> rubberSideSmallTexCoords;
+        public static List<Vector2> rubberSideSmallEndTexCoords;
 
         public static List<Vector2> beltSideTexCoords;
         public static List<Vector2> beltSideEndTexCoords;
@@ -61,6 +65,8 @@ namespace VexedCore
         public static float plateTexWidth = .25f;
 
         public static int texGridCount = 8;
+
+        public Color color;
 
         public static List<Vector2> LoadTexCoords(int x, int y, float epsilonX, float epsilonY)
         {
@@ -111,6 +117,8 @@ namespace VexedCore
             rubberTopTexCoords = LoadTexCoords(5, 2, .003f, .003f);
             rubberSideEndTexCoords = LoadTexCoords(4, 3, .003f, .003f);
             rubberTopEndTexCoords = LoadTexCoords(4, 2, .003f, .003f);
+            rubberSideSmallTexCoords = LoadTexCoords(7, 3, .0f, .003f);
+            rubberSideSmallEndTexCoords = LoadTexCoords(7, 3, .003f, .003f);
 
             beltSideTexCoords = LoadTexCoords(5, 5, .003f, .003f);
             beltTopTexCoords = LoadTexCoords(5, 4, .0f, .003f);
@@ -164,31 +172,31 @@ namespace VexedCore
                 }                
             }
 
-            if (this == Game1.player.currentRoom)
+            if (this == Engine.player.currentRoom)
             {
                 foreach (Doodad d in doodads)
                 {
                     if (d.freeMotion)
                     {
                         d.position.Update(this, gameTime.ElapsedGameTime.Milliseconds);
-                        Vector3 gravityDirection = Game1.player.center.direction;
-                        if (d.position.normal == Game1.player.center.direction)
+                        Vector3 gravityDirection = Engine.player.center.direction;
+                        if (d.position.normal == Engine.player.center.direction)
                         {
-                            gravityDirection = -Game1.player.center.normal;
+                            gravityDirection = -Engine.player.center.normal;
                         }
-                        else if (d.position.normal == -Game1.player.center.direction)
+                        else if (d.position.normal == -Engine.player.center.direction)
                         {
-                            gravityDirection = Game1.player.center.normal;
+                            gravityDirection = Engine.player.center.normal;
                         }
 
-                        d.position.velocity -= Game1.player.gravityAcceleration * gravityDirection;
+                        d.position.velocity -= Engine.player.gravityAcceleration * gravityDirection;
 
                         Vector3 up = d.position.direction;
                         Vector3 right = Vector3.Cross(d.position.direction, d.position.normal);
 
                         float upMagnitude = Vector3.Dot(up, d.position.velocity);
                         float rightMagnitude = Vector3.Dot(right, d.position.velocity);
-                        float maxSpeed = Game1.player.maxVertSpeed / 2;
+                        float maxSpeed = Engine.player.maxVertSpeed / 2;
                         if (upMagnitude > maxSpeed)
                         {
                             d.position.velocity -= (upMagnitude - maxSpeed) * up;
@@ -212,6 +220,7 @@ namespace VexedCore
                         d.position.velocity = Vector3.Zero;
                     }
                     d.UpdateBehavior(gameTime);
+                    d.Update(gameTime);
                 }
             }
         }
@@ -375,12 +384,10 @@ namespace VexedCore
             }            
         }
 
-        public void AddTopStrip(Vertex start, Vertex end, float depth, bool flip, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
+        public void AddTopStrip(Vertex start, Vertex end, float depth, float epsilon, bool flip, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
         {           
             Color baseColor = Color.White;
 
-            float epsilon = .01f;
-            
             if (start.normal == end.normal)
             {                
                 Vector3 edgeDir = end.position - start.position;
@@ -470,11 +477,9 @@ namespace VexedCore
             {
                 Vector3 up = Vector3.Cross(e.start.normal, e.start.direction);
                 fullPointList.Add(new Vertex(e.start, e.start.direction * i + up));
-                fullPointList.Add(new Vertex(e.start, e.start.direction * i));
-                fullPointList.Add(new Vertex(e.start, e.start.direction * i - up));
-                
+                fullPointList.Add(new Vertex(e.start, e.start.direction * i));                
             }
-            for (int i = 0; i < (width+1) * 3; i++)
+            for (int i = 0; i < (width+1) * 2; i++)
             {
                 fullPointList[i].Update(this, 0);
             }
@@ -483,56 +488,127 @@ namespace VexedCore
             {
                 List<Vertex> subList = new List<Vertex>();
                 List<Vertex> mirrorSubList = new List<Vertex>();
-                Vector3 up = Vector3.Cross(fullPointList[(i * 3)].direction, fullPointList[i * 3].normal);
+                Vector3 up = Vector3.Cross(fullPointList[(i * 2)].direction, fullPointList[i * 2].normal);
 
-                mirrorSubList.Add(new Vertex(fullPointList[(i) * 3 + 1], .01f * up));
-                mirrorSubList.Add(new Vertex(fullPointList[(i + 1) * 3 + 1], .01f * up));
-                mirrorSubList.Add(fullPointList[(i + 1) * 3]);
-                mirrorSubList.Add(fullPointList[i * 3]);
-
-                subList.Add(new Vertex(fullPointList[(i+1) * 3 + 1], .01f*up));
-                subList.Add(new Vertex(fullPointList[(i) * 3 + 1], .01f*up));
-                subList.Add(fullPointList[(i) * 3]);
-                subList.Add(fullPointList[(i+1) * 3]);                    
+                mirrorSubList.Add(new Vertex(fullPointList[(i) * 2 + 1], .01f * up));
+                mirrorSubList.Add(new Vertex(fullPointList[(i + 1) * 2 + 1], .01f * up));
+                mirrorSubList.Add(fullPointList[(i + 1) * 2]);
+                mirrorSubList.Add(fullPointList[i * 2]);
+                
+                subList.Add(new Vertex(fullPointList[(i+1) * 2 + 1], .01f*up));
+                subList.Add(new Vertex(fullPointList[(i) * 2 + 1], .01f*up));
+                subList.Add(fullPointList[(i) * 2]);
+                subList.Add(fullPointList[(i+1) * 2]);
+                /*foreach (Vertex v in mirrorSubList)
+                    v.Update(this, 0);
+                foreach (Vertex v in subList)
+                    v.Update(this, 0);*/
 
                 if (e.properties.type == VexedLib.EdgeType.Ice)
                 {
+                    #region ice
                     if (i == width - 1)
                     {
                         AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, iceSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, iceTopEndTexCoords, triangleList);                        
+                        AddTopStrip(fullPointList[(i + 1) * 2 + 1], fullPointList[i * 2 + 1], depth + .01f, .001f, true, iceTopEndTexCoords, triangleList);                        
                     }
                     else if (i == 0)
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, iceSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, iceTopEndTexCoords, triangleList);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, iceTopEndTexCoords, triangleList);
                     }
                     else
-                    {
+                    {                        
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, iceSideTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, iceTopTexCoords, triangleList);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, iceTopTexCoords, triangleList);
                     }
+                    #endregion
                 }
                 else if (e.properties.type == VexedLib.EdgeType.Bounce)
                 {
+                    #region bounce
+                    float treadRise = .1f;
+                    float treadFraction = .75f;
                     if (i == width - 1)
                     {
+                        Vertex v1t = new Vertex(fullPointList[i * 2 + 1], treadRise * up);
+                        Vertex v3t = fullPointList[(i + 1) * 2 + 1];
+                        Vertex v2t = new Vertex(fullPointList[i * 2 + 1], treadRise * up + treadFraction * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position));
+                        v1t.Update(this, 0);
+                        v2t.Update(this, 0);
+                        v3t.Update(this, 0);
+
+                        List<Vertex> subListA = new List<Vertex>();
+                        subListA.Add(new Vertex(subList[0], Vector3.Zero)); // Left
+                        subListA.Add(new Vertex(subList[1], treadRise * up + treadFraction * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        subListA.Add(new Vertex(subList[2], treadFraction * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        subListA.Add(new Vertex(subList[3], Vector3.Zero)); // Left
+                        foreach (Vertex v in subListA)
+                            v.Update(this, 0);
+                        List<Vertex> subListB = new List<Vertex>();
+                        subListB.Add(new Vertex(subList[1], treadRise * up + treadFraction * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        subListB.Add(new Vertex(subList[1], treadRise * up));
+                        subListB.Add(new Vertex(subList[2], Vector3.Zero));
+                        subListB.Add(new Vertex(subList[2], treadFraction * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        foreach (Vertex v in subListB)
+                            v.Update(this, 0);
+
+                        AddTopStrip(v1t, v2t, depth + .011f, .00f, false, rubberTopTexCoords, triangleList);
+                        AddTopStrip(v2t, v3t, depth + .011f, .00f, false, rubberTopTexCoords, triangleList);
+                        
                         AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, rubberSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, rubberTopEndTexCoords, triangleList);
+                        AddBlockFrontToTriangleList(subListA, Color.White, depth + .011f, rubberSideSmallTexCoords, triangleList, true);
+                        AddBlockFrontToTriangleList(subListB, Color.White, depth + .011f, rubberSideSmallTexCoords, triangleList, true);                        
                     }
                     else if (i == 0)
                     {
+                        Vertex v1 = fullPointList[i * 2 + 1];
+                        Vertex v3 = new Vertex(fullPointList[(i + 1) * 2 + 1], treadRise * up);
+                        Vertex v2 = new Vertex(fullPointList[i * 2 + 1], treadRise * up + (1 - treadFraction) * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position));
+                        v1.Update(this, 0);
+                        v2.Update(this, 0);
+                        v3.Update(this, 0);
+
+                        List<Vertex> subListA = new List<Vertex>();
+                        subListA.Add(new Vertex(subList[0], treadRise * up)); // Left
+                        subListA.Add(new Vertex(subList[1], treadRise * up + (1 - treadFraction) * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        subListA.Add(new Vertex(subList[2], (1 - treadFraction) * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        subListA.Add(new Vertex(subList[3], Vector3.Zero)); // Left
+                        List<Vertex> subListB = new List<Vertex>();
+                        subListB.Add(new Vertex(subList[1], treadRise * up + (1 - treadFraction) * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        subListB.Add(new Vertex(subList[1], Vector3.Zero));
+                        subListB.Add(new Vertex(subList[2], Vector3.Zero));
+                        subListB.Add(new Vertex(subList[2], (1 - treadFraction) * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, rubberSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, rubberTopEndTexCoords, triangleList);
+                        AddBlockFrontToTriangleList(subListA, Color.White, depth + .011f, rubberSideSmallTexCoords, triangleList, true);
+                        AddBlockFrontToTriangleList(subListB, Color.White, depth + .011f, rubberSideSmallTexCoords, triangleList, true);
+                        AddTopStrip(v1, v2, depth + .011f, .00f, false, rubberTopTexCoords, triangleList);
+                        AddTopStrip(v2, v3, depth + .011f, .00f, false, rubberTopTexCoords, triangleList);
+                        
                     }
                     else
                     {
+                        Vertex v1 = new Vertex(fullPointList[i * 2 + 1], treadRise * up);
+                        Vertex v2 = new Vertex(fullPointList[(i + 1) * 2 + 1], treadRise * up);
+                        v1.Update(this, 0);
+                        v2.Update(this, 0);
+                        List<Vertex> subListA = new List<Vertex>();
+                        subListA.Add(new Vertex(subList[0], treadRise * up));
+                        subListA.Add(new Vertex(subList[1], treadRise * up));
+                        subListA.Add(new Vertex(subList[2], Vector3.Zero));
+                        subListA.Add(new Vertex(subList[3], Vector3.Zero));
+
+
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, rubberSideTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, rubberTopTexCoords, triangleList);
+                        AddBlockFrontToTriangleList(subListA, Color.White, depth + .01f, rubberSideSmallTexCoords, triangleList, true);
+                        AddTopStrip(v1, v2, depth + .01f, .00f, false, rubberTopTexCoords, triangleList);
                     }
+#endregion
                 }
                 else if (e.properties.type == VexedLib.EdgeType.ConveyorBelt)
                 {
+                    #region conveyorbelt
                     float beltOffset = .0000125f * beltAnimation * e.properties.primaryValue;
 
                     beltOffset %= .125f;
@@ -550,70 +626,122 @@ namespace VexedCore
                     activeBeltSideTexCoords.Add(beltSideSmallTexCoords[2] + beltOffset * Vector2.UnitX);
                     activeBeltSideTexCoords.Add(beltSideSmallTexCoords[3] + beltOffset * Vector2.UnitX);
 
-                    List<Vertex> shortSubList = new List<Vertex>();
-                    shortSubList.Add(new Vertex(fullPointList[(i + 1) * 3 + 1], .01f * up));
-                    shortSubList.Add(new Vertex(fullPointList[(i) * 3 + 1], .01f * up));
-                    shortSubList.Add(new Vertex(fullPointList[(i) * 3],.9f*up));
-                    shortSubList.Add(new Vertex(fullPointList[(i + 1) * 3], .9f * up));
-                    foreach (Vertex v in shortSubList)
-                        v.Update(this, 0);
-
-
-                    AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .011f, false, activeBeltTopTexCoords, triangleList);
+                    float treadRise = .08f;
+                    float treadFraction = .8f;
+                    
                     if (i == width - 1)
                     {
+                        Vertex v1t = new Vertex(fullPointList[i * 2 + 1], treadRise * up);
+                        Vertex v3t = fullPointList[(i + 1) * 2 + 1];
+                        Vertex v2t = new Vertex(fullPointList[i * 2 + 1], treadRise * up + treadFraction * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position));
+
+                        List<Vertex> subListA = new List<Vertex>();
+                        subListA.Add(new Vertex(subList[0], Vector3.Zero)); // Left
+                        subListA.Add(new Vertex(subList[1], treadRise * up + treadFraction * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        subListA.Add(new Vertex(subList[2], treadFraction * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        subListA.Add(new Vertex(subList[3], Vector3.Zero)); // Left
+                        List<Vertex> subListB = new List<Vertex>();
+                        subListB.Add(new Vertex(subList[1], treadRise * up + treadFraction * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        subListB.Add(new Vertex(subList[1], treadRise * up));
+                        subListB.Add(new Vertex(subList[2], Vector3.Zero));
+                        subListB.Add(new Vertex(subList[2], treadFraction * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+
+
+                        AddTopStrip(v1t, v2t, depth + .011f, .00f, false, activeBeltTopTexCoords, triangleList);
+                        AddTopStrip(v2t, v3t, depth + .011f, .00f, false, activeBeltTopTexCoords, triangleList);
                         AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, beltSideEndTexCoords, triangleList, true);
-                        AddBlockFrontToTriangleList(subList, Color.White, depth + .011f, activeBeltSideTexCoords, triangleList, true);                        
+                        AddBlockFrontToTriangleList(subListA, Color.White, depth + .011f, activeBeltSideTexCoords, triangleList, true);
+                        AddBlockFrontToTriangleList(subListB, Color.White, depth + .011f, activeBeltSideTexCoords, triangleList, true);                        
                     }
                     else if (i == 0)
                     {
+                        Vertex v1 = fullPointList[i * 2 + 1];
+                        Vertex v3 = new Vertex(fullPointList[(i + 1) * 2 + 1], treadRise * up);
+                        Vertex v2 = new Vertex(fullPointList[i * 2 + 1], treadRise * up + (1-treadFraction) * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position));
+                        v1.Update(this, 0);
+                        v2.Update(this, 0);
+                        v3.Update(this, 0);
+
+                        List<Vertex> subListA = new List<Vertex>();
+                        subListA.Add(new Vertex(subList[0], treadRise * up)); // Left
+                        subListA.Add(new Vertex(subList[1], treadRise * up+(1 - treadFraction) * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        subListA.Add(new Vertex(subList[2], (1-treadFraction) * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        subListA.Add(new Vertex(subList[3], Vector3.Zero)); // Left
+                        List<Vertex> subListB = new List<Vertex>();
+                        subListB.Add(new Vertex(subList[1], treadRise * up + (1-treadFraction) * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+                        subListB.Add(new Vertex(subList[1], Vector3.Zero));
+                        subListB.Add(new Vertex(subList[2], Vector3.Zero));
+                        subListB.Add(new Vertex(subList[2], (1 - treadFraction) * (fullPointList[(i + 1) * 2 + 1].position - fullPointList[i * 2 + 1].position)));
+
+
+                        AddTopStrip(v1, v2, depth + .011f, .00f, false, activeBeltTopTexCoords, triangleList);
+                        AddTopStrip(v2, v3, depth + .011f, .00f, false, activeBeltTopTexCoords, triangleList);
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, beltSideEndTexCoords, triangleList, true);
-                        AddBlockFrontToTriangleList(subList, Color.White, depth + .011f, activeBeltSideTexCoords, triangleList, true);                        
+                        AddBlockFrontToTriangleList(subListA, Color.White, depth + .011f, activeBeltSideTexCoords, triangleList, true);
+                        AddBlockFrontToTriangleList(subListB, Color.White, depth + .011f, activeBeltSideTexCoords, triangleList, true);                        
                     }
                     else
                     {
+                        Vertex v1 = new Vertex(fullPointList[i * 2 + 1], treadRise * up);
+                        Vertex v2 = new Vertex(fullPointList[(i + 1) * 2 + 1], treadRise * up);
+                        v1.Update(this, 0);
+                        v2.Update(this, 0);
+
+                        List<Vertex> subListA = new List<Vertex>();
+                        subListA.Add(new Vertex(subList[0], treadRise * up));
+                        subListA.Add(new Vertex(subList[1], treadRise * up));
+                        subListA.Add(new Vertex(subList[2], Vector3.Zero));
+                        subListA.Add(new Vertex(subList[3], Vector3.Zero));
+
+                        AddTopStrip(v1, v2, depth + .011f, .00f, false, activeBeltTopTexCoords, triangleList);
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, beltSideTexCoords, triangleList, true);
-                        AddBlockFrontToTriangleList(subList, Color.White, depth + .011f, activeBeltSideTexCoords, triangleList, true);                        
+                        AddBlockFrontToTriangleList(subListA, Color.White, depth + .011f, activeBeltSideTexCoords, triangleList, true);
                     }
+                    #endregion
                 }
                 else if (e.properties.type == VexedLib.EdgeType.Electric && e.properties.primaryValue == 0)
                 {
+                    #region electric off
                     if (i == width - 1)
                     {
                         AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, electricOffSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, electricOffTopEndTexCoords, triangleList);
+                        AddTopStrip(fullPointList[(i + 1) * 2 + 1], fullPointList[i * 2 + 1], depth + .01f, .001f, true, electricOffTopEndTexCoords, triangleList);
                     }
                     else if (i == 0)
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOffSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, electricOffTopEndTexCoords, triangleList);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, electricOffTopEndTexCoords, triangleList);
                     }
                     else
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOffSideTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, electricOffTopTexCoords, triangleList);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, electricOffTopTexCoords, triangleList);
                     }
+                    #endregion
                 }
                 else if (e.properties.type == VexedLib.EdgeType.Electric && e.properties.primaryValue != 0)
                 {
+                    #region electric on
                     if (i == width - 1)
                     {
                         AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, electricOnSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[(i + 1) * 3 + 1], fullPointList[i * 3 + 1], depth + .01f, true, electricOnTopEndTexCoords, triangleList);
+                        AddTopStrip(fullPointList[(i + 1) * 2 + 1], fullPointList[i * 2 + 1], depth + .01f, .001f, true, electricOnTopEndTexCoords, triangleList);
                     }
                     else if (i == 0)
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOnSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, electricOnTopEndTexCoords, triangleList);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, electricOnTopEndTexCoords, triangleList);
                     }
                     else
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOnSideTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, electricOnTopTexCoords, triangleList);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, electricOnTopTexCoords, triangleList);
                     }
+                    #endregion
                 }
                 else
                 {
+                    #region magnet
                     if (i == width - 1)
                         AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, magnetSideEndTexCoords, triangleList, true);
                     else if (i == 0)
@@ -621,7 +749,8 @@ namespace VexedCore
                     else
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, magnetSideTexCoords, triangleList, true);
 
-                    AddTopStrip(fullPointList[i * 3 + 1], fullPointList[(i + 1) * 3 + 1], depth + .01f, false, magnetTopTexCoords, triangleList);
+                    AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, magnetTopTexCoords, triangleList);
+                    #endregion
                 }
             }
 
@@ -761,9 +890,12 @@ namespace VexedCore
             }
         }
 
+        public void AddBlockToTriangleList(List<Vertex> vList, Color c, float frontDepth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
+        {
+            AddBlockToTriangleList(vList, c, frontDepth, frontDepth, texCoords, triangleList);
+        }
 
-
-        public void AddBlockToTriangleList(List<Vertex> vList, Color c, float depth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
+        public void AddBlockToTriangleList(List<Vertex> vList, Color c, float frontDepth, float backDepth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
         {
             List<Vertex> points = new List<Vertex>();
             List<Vector2> pointsTexCoords = new List<Vector2>();
@@ -793,51 +925,51 @@ namespace VexedCore
 
                     Vector3 edgeNormal = Vector3.Cross(midPoint - vList[i].position, vList[i].normal);
 
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[1], c, edgeNormal, depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], c, edgeNormal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[0], c, edgeNormal, depth));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[1], c, edgeNormal,frontDepth));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], c, edgeNormal, -backDepth));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[0], c, edgeNormal,frontDepth));
 
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[0], c, edgeNormal, depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], c, edgeNormal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[3], c, edgeNormal, -depth));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[0], c, edgeNormal,frontDepth));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], c, edgeNormal, -backDepth));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[3], c, edgeNormal, -backDepth));
 
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[1], c, edgeNormal, depth));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[2], c, edgeNormal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], c, edgeNormal, depth));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[1], c, edgeNormal,frontDepth));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[2], c, edgeNormal, -backDepth));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], c, edgeNormal,frontDepth));
 
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], c, edgeNormal, depth));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[2], c, edgeNormal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[3], c, edgeNormal, -depth));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], c, edgeNormal,frontDepth));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[2], c, edgeNormal, -backDepth));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[3], c, edgeNormal, -backDepth));
                 }
                 else
                 {
                     Vector3 edgeNormal = Vector3.Cross(vList[(i+1)%4].position - vList[i].position, vList[i].normal);
                     // straight edge case
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[1], c, edgeNormal, depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], c, edgeNormal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], c, edgeNormal, depth));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[1], c, edgeNormal,frontDepth));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], c, edgeNormal, -backDepth));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], c, edgeNormal,frontDepth));
 
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], c, edgeNormal, depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], c, edgeNormal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[3], c, edgeNormal, -depth));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], c, edgeNormal,frontDepth));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], c, edgeNormal, -backDepth));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[3], c, edgeNormal, -backDepth));
                 }
             }
 
             if (points.Count == 4)
             {
-                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], c, vList[0].normal, depth));
-                triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], c, vList[1].normal, depth));
-                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], c, vList[2].normal, depth));
-                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], c, vList[0].normal, depth));
-                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], c, vList[2].normal, depth));
-                triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], c, vList[3].normal, depth));
+                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], c, vList[0].normal,frontDepth));
+                triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], c, vList[1].normal,frontDepth));
+                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], c, vList[2].normal,frontDepth));
+                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], c, vList[0].normal,frontDepth));
+                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], c, vList[2].normal,frontDepth));
+                triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], c, vList[3].normal,frontDepth));
 
-                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], c, vList[0].normal, -depth));
-                triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], c, vList[1].normal, -depth));
-                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], c, vList[2].normal, -depth));
-                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], c, vList[0].normal, -depth));
-                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], c, vList[2].normal, -depth));
-                triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], c, vList[3].normal, -depth));
+                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], c, vList[0].normal, -backDepth));
+                triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], c, vList[1].normal, -backDepth));
+                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], c, vList[2].normal, -backDepth));
+                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], c, vList[0].normal, -backDepth));
+                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], c, vList[2].normal, -backDepth));
+                triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], c, vList[3].normal, -backDepth));
             }
             else
             {
@@ -846,13 +978,13 @@ namespace VexedCore
                     Vector3 normal = points[(jointVertexIndex + i) % 6].normal;
                     if (normal == Vector3.Zero)
                         normal = points[(jointVertexIndex + i + 1) % 6].normal;
-                    triangleList.Add(GenerateTexturedVertex(points[jointVertexIndex].position, pointsTexCoords[jointVertexIndex], c, normal, depth));
-                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i) % 6].position, pointsTexCoords[(jointVertexIndex + i) % 6], c, normal, depth));
-                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i + 1) % 6].position, pointsTexCoords[(jointVertexIndex + i + 1) % 6], c, normal, depth));
+                    triangleList.Add(GenerateTexturedVertex(points[jointVertexIndex].position, pointsTexCoords[jointVertexIndex], c, normal,frontDepth));
+                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i) % 6].position, pointsTexCoords[(jointVertexIndex + i) % 6], c, normal,frontDepth));
+                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i + 1) % 6].position, pointsTexCoords[(jointVertexIndex + i + 1) % 6], c, normal,frontDepth));
 
-                    triangleList.Add(GenerateTexturedVertex(points[jointVertexIndex].position, pointsTexCoords[jointVertexIndex], c, normal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i) % 6].position, pointsTexCoords[(jointVertexIndex + i) % 6], c, normal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i + 1) % 6].position, pointsTexCoords[(jointVertexIndex + i + 1) % 6], c, normal, -depth));
+                    triangleList.Add(GenerateTexturedVertex(points[jointVertexIndex].position, pointsTexCoords[jointVertexIndex], c, normal, -backDepth));
+                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i) % 6].position, pointsTexCoords[(jointVertexIndex + i) % 6], c, normal, -backDepth));
+                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i + 1) % 6].position, pointsTexCoords[(jointVertexIndex + i + 1) % 6], c, normal, -backDepth));
                 }
             }
 
@@ -1146,6 +1278,72 @@ namespace VexedCore
             }
         }
 
+        public List<TrasnparentSquare> GetMapBlock(Vector3 adjustedSize, Color blockColor)
+        {
+            Color shellColor = blockColor;
+            shellColor.A = (Byte)(200 * Engine.zoomLevel);
+            shellColor.R = (Byte)(shellColor.R * Engine.zoomLevel);
+            shellColor.G = (Byte)(shellColor.G * Engine.zoomLevel);
+            shellColor.B = (Byte)(shellColor.B * Engine.zoomLevel);            
+
+            List<VertexPositionColorNormalTexture> translucentTriangleList = new List<VertexPositionColorNormalTexture>();
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitX, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitX, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitX, -.5f));
+
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitX, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitX, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitX, -.5f));
+
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitX, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitX, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitX, -.5f));
+
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitX, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitX, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitX, -.5f));
+
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitY, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitY, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitY, -.5f));
+
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitY, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitY, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitY, -.5f));
+
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitY, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitY, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitY, -.5f));
+
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitY, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitY, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitY, -.5f));
+
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitZ, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitZ, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitZ, -.5f));
+
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitZ, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitZ, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, Vector3.UnitZ, -.5f));
+
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitZ, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitZ, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitZ, -.5f));
+
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitZ, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitZ, -.5f));
+            translucentTriangleList.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), shellColor, -Vector3.UnitZ, -.5f));
+
+            List<TrasnparentSquare> squareList = new List<TrasnparentSquare>();
+            for (int i = 0; i < translucentTriangleList.Count(); i += 6)
+            {
+                TrasnparentSquare t = new TrasnparentSquare(translucentTriangleList[i], translucentTriangleList[i + 1], translucentTriangleList[i + 2], translucentTriangleList[i + 3], translucentTriangleList[i + 4], translucentTriangleList[i + 5]);
+                squareList.Add(t);
+            }
+            return squareList;
+        }
+
         public void Draw(GameTime gameTime)
         {
             Color interiorColor = new Color(20, 20, 20);
@@ -1209,11 +1407,20 @@ namespace VexedCore
                 for (int i = 0; i < translucentTriangleList.Count(); i+=6)
                 {
                     TrasnparentSquare t = new TrasnparentSquare(translucentTriangleList[i], translucentTriangleList[i + 1], translucentTriangleList[i + 2], translucentTriangleList[i+3], translucentTriangleList[i + 4], translucentTriangleList[i + 5]);
-                    Game1.staticTranslucentObjects.Add(t);
+                    Engine.staticTranslucentObjects.Add(t);
                 }
             }
             #endregion
-            
+
+
+            #region outerBlock
+
+            adjustedSize = new Vector3(size.X + 5f, size.Y + 5f, size.Z + 5f);
+            if (innerBlockMode > 0)
+            {
+                Engine.mapShellObjects.AddRange(GetMapBlock(adjustedSize, color));                
+            }
+            #endregion
 
             #region Blocks
             foreach (Block b in blocks)
@@ -1226,37 +1433,37 @@ namespace VexedCore
 
                 if (b.staticObject == false)
                 {
-                    AddBlockToTriangleList2(vList, b.color, .5f, Game1.dynamicOpaqueObjects);
-                    //AddBlockToTriangleList(vList, b.color, .5f, Room.plateTexCoords, Game1.dynamicOpaqueObjects);
+                    AddBlockToTriangleList2(vList, b.color, .5f, Engine.dynamicOpaqueObjects);
+                    //AddBlockToTriangleList(vList, b.color, .5f, Room.plateTexCoords, Engine.dynamicOpaqueObjects);
                     foreach (Edge e in b.edges)
                     {
                         if (e.properties.type == VexedLib.EdgeType.Spikes)
-                            AddSpikesToTriangleList(e, .5f, Game1.dynamicOpaqueObjects);
+                            AddSpikesToTriangleList(e, .5f, Engine.dynamicOpaqueObjects);
                         else if (e.properties.type != VexedLib.EdgeType.Normal)
-                            AddStripToTriangleList2(e, .5f, Game1.dynamicDetailObjects);
+                            AddStripToTriangleList2(e, .5f, Engine.dynamicDetailObjects);
                     }
                 }
                 else 
                 {
-                    //AddBlockToTriangleList(vList, b.color, .5f, Room.plateTexCoords, Game1.staticOpaqueObjects);
-                    if (Game1.staticObjectsInitialized == false)
-                        AddBlockToTriangleList2(vList, b.color, .5f, Game1.staticOpaqueObjects);
+                    //AddBlockToTriangleList(vList, b.color, .5f, Room.plateTexCoords, Engine.staticOpaqueObjects);
+                    if (Engine.staticObjectsInitialized == false)
+                        AddBlockToTriangleList2(vList, b.color, .5f, Engine.staticOpaqueObjects);
 
                     foreach (Edge e in b.edges)
                     {
                         if (e.properties.type == VexedLib.EdgeType.Spikes || e.properties.type == VexedLib.EdgeType.Electric || e.properties.type == VexedLib.EdgeType.ConveyorBelt)
                         {
                             if (e.properties.type == VexedLib.EdgeType.Spikes)
-                                AddSpikesToTriangleList(e, .5f, Game1.dynamicOpaqueObjects);
+                                AddSpikesToTriangleList(e, .5f, Engine.dynamicOpaqueObjects);
                             else if (e.properties.type != VexedLib.EdgeType.Normal)
-                                AddStripToTriangleList2(e, .5f, Game1.dynamicDetailObjects);
+                                AddStripToTriangleList2(e, .5f, Engine.dynamicDetailObjects);
                         }
-                        else if (Game1.staticObjectsInitialized == false)
+                        else if (Engine.staticObjectsInitialized == false)
                         {
                             if (e.properties.type == VexedLib.EdgeType.Spikes)
-                                AddSpikesToTriangleList(e, .5f, Game1.staticOpaqueObjects);
+                                AddSpikesToTriangleList(e, .5f, Engine.staticOpaqueObjects);
                             else if (e.properties.type != VexedLib.EdgeType.Normal)
-                                AddStripToTriangleList2(e, .5f, Game1.staticDetailObjects);
+                                AddStripToTriangleList2(e, .5f, Engine.staticDetailObjects);
                         }
                     }
                 }
@@ -1268,20 +1475,20 @@ namespace VexedCore
             #endregion
 
             #region Doodads
-            if (Game1.staticObjectsInitialized == false)
+            if (Engine.staticObjectsInitialized == false)
             {
                 foreach (JumpPad j in jumpPads)
                 {
-                    j.Draw(this, Game1.staticOpaqueObjects);
+                    j.Draw(this, Engine.staticOpaqueObjects);
                 }
                 foreach (Bridge b in bridges)
                 {
-                    b.Draw(this, Game1.staticOpaqueObjects);
+                    b.Draw(this, Engine.staticOpaqueObjects);
                 }
             }
             foreach (Doodad d in doodads)
             {
-                d.Draw(this, Game1.dynamicOpaqueObjects);
+                d.Draw(this, Engine.dynamicOpaqueObjects);
             }
             #endregion
         }

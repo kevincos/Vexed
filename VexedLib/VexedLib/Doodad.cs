@@ -30,7 +30,10 @@ namespace VexedLib
         ItemBlock = 19,
         PlayerSpawn = 20,
         Checkpoint = 21,
-        Waypoint = 22
+        Waypoint = 22,
+        BridgeBack = 23,
+        BridgeSide = 24,
+        BridgeCover = 25
     }
 
     public enum AbilityType

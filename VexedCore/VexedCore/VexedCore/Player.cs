@@ -311,12 +311,27 @@ namespace VexedCore
             }
         }
 
+        public void Warp(Room targetRoom)
+        {
+            foreach (Doodad d in targetRoom.doodads)
+            {
+                if (d.type == VexedLib.DoodadType.WarpStation)
+                {
+                    currentRoom = targetRoom;
+                    Engine.reDraw = true;
+                    center = new Vertex(d.position.position, d.position.normal, Vector3.Zero, d.position.direction);
+                    state = State.Normal;
+                }
+            }
+        }
+
         public void Respawn()
         {
             currentRoom = respawnPoint.targetRoom;
             state = State.Normal;
             center = new Vertex(respawnCenter.position, respawnCenter.normal, respawnCenter.velocity, respawnCenter.direction);
             dead = false;
+            Engine.reDraw = true;
         }
 
         public void Update(GameTime gameTime)
@@ -504,24 +519,40 @@ namespace VexedCore
                             jumpNormal = -center.normal;
                         }
                     }
-                    foreach (Bridge b in currentRoom.bridges)
+
+                    foreach (Doodad d in currentRoom.doodads)
                     {
-                        if (b.active)
+                        if (d.active)
                         {
-                            jumpRoom = b.targetRoom;
-                            jumpSource = center.position;
-                            jumpDestination = b.targetBridge.position.position;
-                            jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
-                            jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
-                            
-                            jumpNormal = center.normal;
-                            jumpTime = 0;
-                            state = State.BridgeJump;
-                            center.velocity = Vector3.Zero;
-                            faceDirection = 0;
-                            b.active = false;
+                            if (d.type == VexedLib.DoodadType.WarpStation)
+                            {
+                                Engine.state = EngineState.ZoomOut;
+                                for (int i = 0; i < Engine.roomList.Count(); i++)
+                                {
+                                    if (Engine.roomList[i] == currentRoom)
+                                        Engine.selectedRoomIndex = i;
+                                }
+                            }
                         }
-                    }                   
+                    }  
+                }
+                foreach (Doodad d in currentRoom.doodads)
+                {
+                    if (d.type == VexedLib.DoodadType.BridgeGate && d.active)
+                    {
+                        jumpRoom = d.targetRoom;
+                        jumpSource = center.position;
+                        jumpDestination = d.targetDoodad.position.position - 2f* d.targetDoodad.upUnit;
+                        jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
+                        jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
+
+                        jumpNormal = center.normal;
+                        jumpTime = 0;
+                        state = State.BridgeJump;
+                        faceDirection = 0;
+                        d.active = false;
+                        d.targetDoodad.active = false;
+                    }
                 }
                 #endregion
             }
@@ -535,11 +566,11 @@ namespace VexedCore
                 {
                     center.normal = jumpNormal;
                     center.position = jumpDestination;
-                    center.velocity = Vector3.Zero;
+                    //center.velocity = Vector3.Zero;
                     faceDirection = 0;
                     state = State.Normal;
                     currentRoom = jumpRoom;
-                    Game1.reDraw = true;
+                    Engine.reDraw = true;
                 }
 
             }
@@ -601,6 +632,13 @@ namespace VexedCore
 
         public void DrawTexture()
         {
+
+            if (state == State.BridgeJump)
+            {
+                if ((jumpPosition - jumpDestination).Length() > .75f && (jumpPosition - center.position).Length() > .75f)
+                    return;
+            }
+
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
             List<VertexPositionColorNormalTexture> textureTriangleList = new List<VertexPositionColorNormalTexture>();
             List<Vertex> rectVertexList = new List<Vertex>();

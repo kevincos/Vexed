@@ -57,8 +57,26 @@ namespace VexedCore
             behaviors = new List<Behavior>();
         }
 
+        public Edge(Vector3 s, Vector3 e, Vector3 normal)
+        {
+            start = new Vertex(s, normal, Vector3.Zero, e-s);
+            end = new Vertex(e, normal, Vector3.Zero, s-e);
+
+            start.direction.Normalize();
+            end.direction.Normalize();
+            start.normal.Normalize();
+            end.normal.Normalize();
+
+            properties = new EdgeProperties();
+            properties.type = VexedLib.EdgeType.Normal;
+
+            behaviors = new List<Behavior>();
+        }
+
         public int UpdateBehavior(GameTime gameTime)
         {
+            if (currentBehavior == null)
+                return 0;
             if (behaviorStarted == false && currentTime > currentBehavior.offSet)
             {
                 properties.primaryValue = currentBehavior.primaryValue;

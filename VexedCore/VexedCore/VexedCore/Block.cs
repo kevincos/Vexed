@@ -104,6 +104,8 @@ namespace VexedCore
 
         public int UpdateBehavior(GameTime gameTime)
         {
+            if (currentBehavior == null)
+                return 0;
             if (nextBehavior == true)
             {
                 foreach (Behavior b in behaviors)

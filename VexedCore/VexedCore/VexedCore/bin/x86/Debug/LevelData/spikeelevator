@@ -691,8 +691,8 @@
                   <name>OrangeGate</name>
                   <position>
                     <X>10</X>
-                    <Y>-2.5</Y>
-                    <Z>-2.5</Z>
+                    <Y>-3.5</Y>
+                    <Z>0.5</Z>
                   </position>
                   <up>
                     <X>0</X>
@@ -4279,6 +4279,41 @@
                   <behaviors>
                     <Behavior>
                       <id>1583</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                  </behaviors>
+                </Doodad>
+                <Doodad>
+                  <id>2267</id>
+                  <name>Doodad</name>
+                  <position>
+                    <X>-6.5</X>
+                    <Y>7</Y>
+                    <Z>2.5</Z>
+                  </position>
+                  <up>
+                    <X>-0</X>
+                    <Y>-0</Y>
+                    <Z>-1</Z>
+                  </up>
+                  <activationCost>0</activationCost>
+                  <fixedPosition>false</fixedPosition>
+                  <type>WarpStation</type>
+                  <ability>DoubleJump</ability>
+                  <behaviors>
+                    <Behavior>
+                      <id>2268</id>
                       <name>Behavior</name>
                       <offset>0</offset>
                       <duration>0</duration>
@@ -27622,7 +27657,7 @@
                   <name>CyanGate</name>
                   <position>
                     <X>40</X>
-                    <Y>-13.5</Y>
+                    <Y>-12.5</Y>
                     <Z>-3.5</Z>
                   </position>
                   <up>
@@ -31008,7 +31043,7 @@
                   <name>Doodad</name>
                   <position>
                     <X>46.5</X>
-                    <Y>2.5</Y>
+                    <Y>3.5</Y>
                     <Z>10</Z>
                   </position>
                   <up>
@@ -31023,6 +31058,41 @@
                   <behaviors>
                     <Behavior>
                       <id>1647</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                  </behaviors>
+                </Doodad>
+                <Doodad>
+                  <id>2269</id>
+                  <name>Doodad</name>
+                  <position>
+                    <X>46.5</X>
+                    <Y>2.5</Y>
+                    <Z>10</Z>
+                  </position>
+                  <up>
+                    <X>1</X>
+                    <Y>-0</Y>
+                    <Z>-0</Z>
+                  </up>
+                  <activationCost>0</activationCost>
+                  <fixedPosition>false</fixedPosition>
+                  <type>WarpStation</type>
+                  <ability>DoubleJump</ability>
+                  <behaviors>
+                    <Behavior>
+                      <id>2270</id>
                       <name>Behavior</name>
                       <offset>0</offset>
                       <duration>0</duration>
@@ -36568,7 +36638,7 @@
                         <Y>70</Y>
                         <Z>4</Z>
                       </end>
-                      <type>Electric</type>
+                      <type>Normal</type>
                       <behaviors>
                         <Behavior>
                           <id>1404</id>
@@ -36633,7 +36703,7 @@
                         <Y>70</Y>
                         <Z>-4</Z>
                       </end>
-                      <type>Electric</type>
+                      <type>Normal</type>
                       <behaviors>
                         <Behavior>
                           <id>1408</id>
@@ -36728,7 +36798,7 @@
                         <Y>70</Y>
                         <Z>4</Z>
                       </end>
-                      <type>Electric</type>
+                      <type>Normal</type>
                       <behaviors>
                         <Behavior>
                           <id>1414</id>
@@ -36792,7 +36862,7 @@
                         <Y>70</Y>
                         <Z>-4</Z>
                       </end>
-                      <type>Electric</type>
+                      <type>Normal</type>
                       <behaviors>
                         <Behavior>
                           <id>1418</id>
@@ -37312,7 +37382,7 @@
                         <Y>60</Y>
                         <Z>-4</Z>
                       </end>
-                      <type>Bounce</type>
+                      <type>Normal</type>
                       <behaviors>
                         <Behavior>
                           <id>1184</id>
@@ -37376,7 +37446,7 @@
                         <Y>60</Y>
                         <Z>4</Z>
                       </end>
-                      <type>Bounce</type>
+                      <type>Normal</type>
                       <behaviors>
                         <Behavior>
                           <id>1188</id>
@@ -39386,7 +39456,7 @@
                         <Y>69</Y>
                         <Z>5</Z>
                       </end>
-                      <type>Magnet</type>
+                      <type>Normal</type>
                       <behaviors>
                         <Behavior>
                           <id>1256</id>
@@ -39450,7 +39520,7 @@
                         <Y>61</Y>
                         <Z>5</Z>
                       </end>
-                      <type>Magnet</type>
+                      <type>Normal</type>
                       <behaviors>
                         <Behavior>
                           <id>1260</id>
@@ -40019,7 +40089,7 @@
                         <Y>69</Y>
                         <Z>5</Z>
                       </end>
-                      <type>Magnet</type>
+                      <type>Normal</type>
                       <behaviors>
                         <Behavior>
                           <id>1426</id>
@@ -40084,7 +40154,7 @@
                         <Y>67</Y>
                         <Z>5</Z>
                       </end>
-                      <type>Magnet</type>
+                      <type>Normal</type>
                       <behaviors>
                         <Behavior>
                           <id>1430</id>
@@ -45422,119 +45492,6 @@
                   </behaviors>
                 </Doodad>
                 <Doodad>
-                  <id>1453</id>
-                  <name>Doodad</name>
-                  <position>
-                    <X>-0.5</X>
-                    <Y>25</Y>
-                    <Z>30.5</Z>
-                  </position>
-                  <up>
-                    <X>-0</X>
-                    <Y>-0</Y>
-                    <Z>1</Z>
-                  </up>
-                  <activationCost>0</activationCost>
-                  <targetObject />
-                  <expectBehavior />
-                  <targetBehavior />
-                  <fixedPosition>false</fixedPosition>
-                  <type>Spring</type>
-                  <ability>DoubleJump</ability>
-                  <behaviors>
-                    <Behavior>
-                      <id>1507</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>1478</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>1449</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>1420</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>1391</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                    <Behavior>
-                      <id>1454</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                  </behaviors>
-                </Doodad>
-                <Doodad>
                   <id>1455</id>
                   <name>BeamSwitch</name>
                   <position>
@@ -45750,6 +45707,7 @@
                       <primaryValue>0</primaryValue>
                       <secondaryValue>0</secondaryValue>
                       <toggle>false</toggle>
+                      <nextBehavior />
                     </Behavior>
                   </behaviors>
                 </Doodad>

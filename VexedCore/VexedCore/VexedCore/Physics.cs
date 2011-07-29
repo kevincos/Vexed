@@ -233,7 +233,7 @@ namespace VexedCore
             {
                 Vector3 projectionDirection = maxProjection / maxProjection.Length();
                 //Vector3 frictionDirection = Vector3.Cross(Vector3.Dot(projectionDirection, p.center.direction) * p.center.direction, p.center.normal);
-                Vector3 frictionDirection = Vector3.Cross(projectionDirection, Game1.player.center.normal);
+                Vector3 frictionDirection = Vector3.Cross(projectionDirection, Engine.player.center.normal);
 
                 if (edgeProperties.type == VexedLib.EdgeType.ConveyorBelt)
                 {
@@ -247,7 +247,7 @@ namespace VexedCore
                     if (edgeProperties.type == VexedLib.EdgeType.Bounce)
                     {
                         result.velocityAdjustment -= badVelocityComponent * projectionDirection;
-                        result.velocityAdjustment += Game1.player.jumpSpeed * projectionDirection;
+                        result.velocityAdjustment += Engine.player.jumpSpeed * projectionDirection;
                     }
                     else
                     {
@@ -255,7 +255,7 @@ namespace VexedCore
                     }
                 }
 
-                float projectionUpComponent = Vector3.Dot(projectionDirection, Game1.player.center.direction);
+                float projectionUpComponent = Vector3.Dot(projectionDirection, Engine.player.center.direction);
                 if (projectionUpComponent > 0)
                 {
 
@@ -338,10 +338,22 @@ namespace VexedCore
                 {
                     if (p.CollisionFirstPass(d))
                         continue;
+                    if (d.type == VexedLib.DoodadType.BridgeGate)
+                    {
+                        List<Vector3> doodadVertexList = d.GetCollisionRect();
+                        Vector3 projection = Collide(playerVertexList, doodadVertexList, p.center.normal);
+
+                        if (projection.Length() > 0f)
+                            d.srcDoodad.active = true;
+                        else
+                            d.srcDoodad.active = false;
+                    }
                     if (d.hasCollisionRect)
                     {
                         List<Vector3> doodadVertexList = d.GetCollisionRect();
                         Vector3 projection = Collide(playerVertexList, doodadVertexList, p.center.normal);
+
+
                         if (projection.Length() > 0f)
                         {
                             projectionList.Add(projection);
@@ -380,7 +392,7 @@ namespace VexedCore
                     if (p.CollisionFirstPass(s) == false)
                     {
                         List<Vector3> projectileVertexList = s.GetCollisionRect();
-                        Vector3 projection = Collide(pVertexList, projectileVertexList, Game1.player.center.normal);
+                        Vector3 projection = Collide(pVertexList, projectileVertexList, Engine.player.center.normal);
                         if (projection != Vector3.Zero)
                         {
                             p.dead = true;
@@ -396,7 +408,7 @@ namespace VexedCore
                 if (p.CollisionFirstPass(m) == false)
                 {
                     List<Vector3> monsterVertexList = m.GetCollisionRect();
-                    Vector3 projection = Collide(pVertexList, monsterVertexList, Game1.player.center.normal);
+                    Vector3 projection = Collide(pVertexList, monsterVertexList, Engine.player.center.normal);
                     if (projection != Vector3.Zero)
                     {
                         p.dead = true;
@@ -528,19 +540,18 @@ namespace VexedCore
                     j.active = false;
             }
 
-            foreach (Bridge b in r.bridges)
-            {
-                if ((b.position.position - p.center.position).Length() < .5f)
-                    b.active = true;
-                else
-                    b.active = false;
-            }
-
             foreach (Doodad d in r.doodads)
             {
                 if (d.type == VexedLib.DoodadType.Checkpoint)
                 {
                     if (d == p.respawnPoint)
+                        d.active = true;
+                    else
+                        d.active = false;
+                }
+                if (d.type == VexedLib.DoodadType.WarpStation || d.type == VexedLib.DoodadType.JumpPad)
+                {
+                    if ((d.position.position - p.center.position).Length() < d.triggerDistance)
                         d.active = true;
                     else
                         d.active = false;
@@ -563,16 +574,7 @@ namespace VexedCore
                     }
                     if(d.targetDoodad != null)
                     {
-                        if (d.targetDoodad.currentBehavior.id == d.expectedBehavior)
-                        {
-                            foreach (Behavior b in d.targetDoodad.behaviors)
-                            {
-                                if (b.id == d.targetBehavior)
-                                {
-                                    d.targetDoodad.SetBehavior(b);
-                                }
-                            }
-                        }                        
+                        d.Activate();                        
                     }
                 }
             }
@@ -719,11 +721,11 @@ namespace VexedCore
                         if (m.CollisionFirstPass(s) == false)
                         {
                             List<Vector3> projectileVertexList = s.GetCollisionRect();
-                            Vector3 projection = Collide(mVertexList, projectileVertexList, Game1.player.center.normal);
+                            Vector3 projection = Collide(mVertexList, projectileVertexList, Engine.player.center.normal);
                             if (projection != Vector3.Zero)
                             {
                                 s.srcProjectile.exploding = true;
-                                m.srcMonster.impactVector = Monster.AdjustVector(s.srcProjectile.position.velocity, m.srcMonster.position.normal, Game1.player.center.normal, Game1.player.center.direction, true);
+                                m.srcMonster.impactVector = Monster.AdjustVector(s.srcProjectile.position.velocity, m.srcMonster.position.normal, Engine.player.center.normal, Engine.player.center.direction, true);
                                 s.srcProjectile.position.velocity = Vector3.Zero;                                
                             }
                         }

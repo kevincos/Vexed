@@ -98,6 +98,10 @@ namespace VexedCore
 
         public Doodad srcDoodad = null;
 
+        public float stateTransition = 1;
+        public float stateTransitionVelocity = .005f;
+        public int stateTransitionDir = 0;
+
         public float boundingBoxTop;
         public float boundingBoxBottom;
         public float boundingBoxLeft;
@@ -149,6 +153,10 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.BridgeGate)
+                    return Color.LightBlue;
+                if (type == VexedLib.DoodadType.BridgeSide || type == VexedLib.DoodadType.BridgeCover || type == VexedLib.DoodadType.BridgeBack)
+                    return Color.Gray;
                 if (type == VexedLib.DoodadType.PowerOrb)
                     return Color.Gold;
                 if (type == VexedLib.DoodadType.Brick)
@@ -168,6 +176,10 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.BridgeSide || type == VexedLib.DoodadType.BridgeCover || type == VexedLib.DoodadType.BridgeBack)
+                    return Color.Gray;
+                if (type == VexedLib.DoodadType.BridgeGate)
+                    return Color.LightBlue;
                 if (type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb)
                     return Color.Yellow;
                 else
@@ -181,6 +193,8 @@ namespace VexedCore
             {
                 if (type == VexedLib.DoodadType.Checkpoint)
                     return 2f;
+                if (type == VexedLib.DoodadType.WarpStation)
+                    return .5f;
                 return .5f;
             }
         }
@@ -189,9 +203,11 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.BridgeCover || type == VexedLib.DoodadType.BridgeGate)
+                    return false;
                 if (type == VexedLib.DoodadType.Brick && active == true)
                     return false;
-                if (type == VexedLib.DoodadType.Waypoint || type == VexedLib.DoodadType.WallSwitch || type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb)
+                if (type == VexedLib.DoodadType.Waypoint || type == VexedLib.DoodadType.WallSwitch || type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb || type == VexedLib.DoodadType.WarpStation)
                     return false;
                 return true;
             }
@@ -201,6 +217,8 @@ namespace VexedCore
         {
             get
             {
+                if ((type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam) && stateTransition == 0)
+                    return false;
                 if (type == VexedLib.DoodadType.Brick && active == true)
                     return false;
                 if (type == VexedLib.DoodadType.Waypoint)
@@ -255,17 +273,16 @@ namespace VexedCore
             {
                 if (type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam)
                 {
-                    if (toggleOn == true)
-                        return 3 * upUnit;
-                    else
-                        return -.5f * upUnit;
+                    return (-.5f + stateTransition * 3f) * upUnit;
+                    //return 2.5f * upUnit;
                 }
                 if (type == VexedLib.DoodadType.WallSwitch)
                 {
-                    if (targetDoodad.currentBehavior.id == expectedBehavior)
+                    /*if (targetDoodad.currentBehavior.id == expectedBehavior)
                         return -.3f * upUnit;
                     else
-                        return -.5f * upUnit;
+                        return -.5f * upUnit;*/
+                    return (-.3f - stateTransition * .2f) * upUnit;
                 }
                 return halfHeight * upUnit;
             }
@@ -280,7 +297,16 @@ namespace VexedCore
         public float halfWidth
         {
             get
-            {                
+            {
+                if (type == VexedLib.DoodadType.BridgeGate)
+                    return 1f;
+                if (type == VexedLib.DoodadType.BridgeSide)
+                    return .25f;
+                if (type == VexedLib.DoodadType.BridgeBack)
+                    return 1.5f;
+                if (type == VexedLib.DoodadType.BridgeCover)
+                    return 1.5f;
+                
                 if (type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam || type == VexedLib.DoodadType.PowerOrb)
                     return .1f;
                 if (type == VexedLib.DoodadType.WallSwitch)
@@ -292,6 +318,14 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.BridgeGate)
+                    return .25f;
+                if (type == VexedLib.DoodadType.BridgeCover)
+                    return 1f;
+                if (type == VexedLib.DoodadType.BridgeBack)                
+                    return .25f;
+                if (type == VexedLib.DoodadType.BridgeSide)
+                    return .75f;                
                 if (type == VexedLib.DoodadType.PowerOrb)
                     return .1f;
                 return .5f;
@@ -303,7 +337,7 @@ namespace VexedCore
             {
                 if (type == VexedLib.DoodadType.WallSwitch)
                     return .25f;
-                if (type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb)
+                if (type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb || type == VexedLib.DoodadType.WarpStation)
                     return .1f;
                 return .5f;
             }
@@ -323,6 +357,9 @@ namespace VexedCore
 
             if (type == VexedLib.DoodadType.PowerOrb)
                 active = true;
+
+            if (type == VexedLib.DoodadType.WallSwitch)
+                stateTransition = 0;
         }
 
         public Doodad(VexedLib.DoodadType type, Vector3 position, Vector3 normal, Vector3 direction)
@@ -341,6 +378,7 @@ namespace VexedCore
             targetDoodad = d.targetDoodad;
             active = d.active;
             srcDoodad = d;
+            stateTransition = d.stateTransition;
         }
 
         public void AdjustVertex(Vector3 pos, Vector3 vel, Vector3 normal, Vector3 playerUp)
@@ -429,23 +467,83 @@ namespace VexedCore
                 vList.Add(new Vertex(position, up + left));
                 vList.Add(new Vertex(position, down + left));
                 vList.Add(new Vertex(position, down + right));
-                if (active)
-                    currentRoom.AddBlockToTriangleList(vList, activeColor, depth, Room.plateTexCoords, triangleList);
+                if (type == VexedLib.DoodadType.BridgeCover)
+                {
+                    currentRoom.AddBlockToTriangleList(vList, baseColor, .5f, -.6f, Room.plateTexCoords, triangleList);
+                    currentRoom.AddBlockToTriangleList(vList, baseColor, -.5f, .6f, Room.plateTexCoords, triangleList);
+                }
                 else
-                    currentRoom.AddBlockToTriangleList(vList, baseColor, depth, Room.plateTexCoords, triangleList);
+                {
+                    if (active)
+                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
+                    else
+                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
+                }
             }
         }
 
+        public void Update(GameTime gameTime)
+        {
+            stateTransition += gameTime.ElapsedGameTime.Milliseconds * stateTransitionDir * stateTransitionVelocity;
+            if (stateTransitionDir == 1 && stateTransition > 1)
+            {
+                toggleOn = true;
+                stateTransition = 1;
+            }
+            if (stateTransitionDir == -1 && stateTransition < 0)
+            {
+                toggleOn = false;
+                stateTransition = 0;
+            }
 
+            if (type == VexedLib.DoodadType.WallSwitch)
+            {
+                if (stateTransition == 1f && stateTransitionDir == 1)
+                {
+                    if (targetDoodad.currentBehavior.id == expectedBehavior)
+                    {
+                        foreach (Behavior b in targetDoodad.behaviors)
+                        {
+                            if (b.id == targetBehavior)
+                            {
+                                targetDoodad.SetBehavior(b);
+                                stateTransitionDir = 0;
+                                
+                            }
+                        }
+                    }
+                }
+                if (targetDoodad.currentBehavior.id == expectedBehavior && stateTransition == 1f && stateTransitionDir == 0)
+                {
+                    stateTransitionDir = -1;
+                }
+            }
+            
+            
+        }
+
+        public void Activate()
+        {
+            stateTransitionDir = 1;
+        }
+        public void Deactivate()
+        {
+            stateTransitionDir = -1;
+        }
 
 
         public int UpdateBehavior(GameTime gameTime)
         {
+            if (currentBehavior == null)
+                return 0;
             if (behaviorStarted == false && currentTime > currentBehavior.offSet)
             {
                 //properties.primaryValue = currentBehavior.primaryValue;
                 //properties.secondaryValue = currentBehavior.secondaryValue;
-                toggleOn = currentBehavior.toggle;
+                if (currentBehavior.toggle)
+                    Activate();
+                else
+                    Deactivate();
                 currentTime = gameTime.ElapsedGameTime.Milliseconds;
                 behaviorStarted = true;
                 nextBehavior = false;
@@ -463,7 +561,11 @@ namespace VexedCore
                 }
                 //properties.primaryValue = currentBehavior.primaryValue;
                 //properties.secondaryValue = currentBehavior.secondaryValue;
-                toggleOn = currentBehavior.toggle;
+                if (currentBehavior.toggle)
+                    Activate();
+                else
+                    Deactivate();
+
                 currentTime = 0;
                 nextBehavior = false;
                 return gameTime.ElapsedGameTime.Milliseconds;
@@ -479,7 +581,11 @@ namespace VexedCore
                 if (currentBehavior.period != 0 && currentTime > currentBehavior.period)
                 {
                     currentTime = 0;
-                    toggleOn = !toggleOn;
+                    if (toggleOn)
+                        Deactivate();
+                    else
+                        Activate();
+                    
                     if (!toggleOn)
                     {
                         //properties.primaryValue = 0;
@@ -498,7 +604,11 @@ namespace VexedCore
         public void SetBehavior(Behavior b)
         {           
             currentBehavior = b;
-            toggleOn = currentBehavior.toggle;
+            if (currentBehavior.toggle)
+                Activate();
+            else
+                Deactivate();
+            //toggleOn = currentBehavior.toggle;
             currentTime = 0;
             nextBehavior = false;            
         }

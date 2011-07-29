@@ -73,10 +73,10 @@ namespace VexedCore
             this.v1 = v1;
             this.v2 = v2;
             this.v3 = v3;
-            this.v4 = v4;
-            this.v5 = v5;
+            this.v4 = v4; // REDUNDANT
+            this.v5 = v5; // REDUNDANT
             this.v6 = v6;
-            averagePos = (v1.Position + v2.Position + v3.Position + v4.Position + v5.Position + v6.Position) / 6;
+            averagePos = (v1.Position + v2.Position + v3.Position + v6.Position) / 4;
         }
     }
 

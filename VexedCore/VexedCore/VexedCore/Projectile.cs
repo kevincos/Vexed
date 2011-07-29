@@ -335,11 +335,11 @@ namespace VexedCore
             }
             if (exploding == false && srcMonster != null && type == ProjectileType.Missile)
             {
-                SetTarget(Game1.player.center.position); 
+                SetTarget(Engine.player.center.position); 
            }
             if (exploding == false && type == ProjectileType.Bomb && stopped == false)
             {
-                position.velocity+=Monster.AdjustVector(-1.5f * acceleration * Game1.player.center.direction, position.normal, Game1.player.center.normal, Game1.player.center.direction, false);
+                position.velocity+=Monster.AdjustVector(-1.5f * acceleration * Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false);
                 if (position.velocity.Length() > velocity * 1.5f)
                 {
                     position.velocity.Normalize();
@@ -358,7 +358,7 @@ namespace VexedCore
 
                 position.direction = missileTarget / missileTarget.Length();
             }
-            position.Update(Game1.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds);
+            position.Update(Engine.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds);
         }
 
         public void SetTarget(Vector3 targetPos)
@@ -386,11 +386,11 @@ namespace VexedCore
 
             foreach (Vertex v in rectVertexList)
             {
-                v.Update(Game1.player.currentRoom, 1);
+                v.Update(Engine.player.currentRoom, 1);
             }
             foreach (Vertex v in blastVertexList)
             {
-                v.Update(Game1.player.currentRoom, 1);
+                v.Update(Engine.player.currentRoom, 1);
             }
 
             if (type == ProjectileType.Plasma || type == ProjectileType.Player)

@@ -242,7 +242,7 @@ namespace VexedCore
             }
 
 
-            position.Update(Game1.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds);
+            position.Update(Engine.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds);
             
             Vector3 direction = Vector3.Zero;
             if (aiType == VexedLib.AIType.Waypoint)
@@ -274,9 +274,9 @@ namespace VexedCore
             }
             if (aiType == VexedLib.AIType.Hunter)
             {
-                Vector3 target = Game1.player.center.position;
+                Vector3 target = Engine.player.center.position;
                 direction = target - position.position;
-                if (position.normal == -Game1.player.center.normal)
+                if (position.normal == -Engine.player.center.normal)
                 {
                     direction *= -1;
                 }
@@ -295,7 +295,7 @@ namespace VexedCore
                 direction = -rightUnit;
             }
 
-            Vector3 aimTarget = Game1.player.center.position - position.position;
+            Vector3 aimTarget = Engine.player.center.position - position.position;
             aimTarget.Normalize();
             float cosTheta = Vector3.Dot(upUnit, aimTarget);
             float sinTheta = Vector3.Dot(rightUnit, aimTarget);
@@ -341,21 +341,21 @@ namespace VexedCore
                 fireCooldown = fireTime;
                 if (gunType == VexedLib.GunType.Blaster || gunType == VexedLib.GunType.Repeater)
                 {
-                    Game1.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity));
+                    Engine.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity));
                 }
                 if (gunType == VexedLib.GunType.Beam)
                 {
-                    Game1.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Laser, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity));
+                    Engine.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Laser, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity));
                 }
                 if (gunType == VexedLib.GunType.Missile)
                 {
-                    Game1.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Missile, position.position + gunLine, position.velocity, position.normal, projectileVelocity));
+                    Engine.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Missile, position.position + gunLine, position.velocity, position.normal, projectileVelocity));
                 }
                 if (gunType == VexedLib.GunType.Spread)
                 {
-                    Game1.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity + .5f * gunNormal));
-                    Game1.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity - .5f * gunNormal));
-                    Game1.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity));
+                    Engine.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity + .5f * gunNormal));
+                    Engine.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity - .5f * gunNormal));
+                    Engine.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + gunLine, Vector3.Zero, position.normal, projectileVelocity));
                 }
 
             }
@@ -387,8 +387,8 @@ namespace VexedCore
                     rightMoving = false;
 
 
-                AdjustVertex(Vector3.Zero, -1.5f * acceleration * Game1.player.center.direction, Game1.player.center.normal, Game1.player.center.direction, false);
-                if (forwardGroundProjection == Vector3.Zero && Vector3.Dot(groundProjection, Monster.AdjustVector(Game1.player.center.direction, position.normal, Game1.player.center.normal, Game1.player.center.direction, false))>0f)
+                AdjustVertex(Vector3.Zero, -1.5f * acceleration * Engine.player.center.direction, Engine.player.center.normal, Engine.player.center.direction, false);
+                if (forwardGroundProjection == Vector3.Zero && Vector3.Dot(groundProjection, Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false))>0f)
                 {
                     position.velocity = Vector3.Zero;
                 }
@@ -408,7 +408,7 @@ namespace VexedCore
                 }
                 else
                 {
-                    AdjustVertex(Vector3.Zero, -1.5f * acceleration * Game1.player.center.direction, Game1.player.center.normal, Game1.player.center.direction, false);
+                    AdjustVertex(Vector3.Zero, -1.5f * acceleration * Engine.player.center.direction, Engine.player.center.normal, Engine.player.center.direction, false);
                 }
 
                 if (directionChangeCooldown == 0)
@@ -446,9 +446,9 @@ namespace VexedCore
 
                 if (spinUp != Vector3.Zero)
                     groundProjection = Vector3.Zero;
-                if (position.direction != Monster.AdjustVector(Game1.player.center.direction, position.normal, Game1.player.center.normal, Game1.player.center.direction, false))
+                if (position.direction != Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false))
                 {
-                    spinUp = Monster.AdjustVector(Game1.player.center.direction, position.normal, Game1.player.center.normal, Game1.player.center.direction, false);
+                    spinUp = Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false);
                 }
                 if (spinUp != Vector3.Zero)
                 {
@@ -476,7 +476,7 @@ namespace VexedCore
                 }
                 else
                 {
-                    AdjustVertex(Vector3.Zero, -1.5f * acceleration * Game1.player.center.direction, Game1.player.center.normal, Game1.player.center.direction, false);
+                    AdjustVertex(Vector3.Zero, -1.5f * acceleration * Engine.player.center.direction, Engine.player.center.normal, Engine.player.center.direction, false);
                 }
                 if (groundProjection != Vector3.Zero && jumping == false)
                 {
@@ -522,9 +522,9 @@ namespace VexedCore
                 if (Vector3.Dot(rightUnit, position.velocity) < 0)
                     rightMoving = false;
 
-                if (position.direction != Monster.AdjustVector(Game1.player.center.direction, position.normal, Game1.player.center.normal, Game1.player.center.direction, false))
+                if (position.direction != Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false))
                 {
-                    spinUp = Monster.AdjustVector(Game1.player.center.direction, position.normal, Game1.player.center.normal, Game1.player.center.direction, false);
+                    spinUp = Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false);
                 }
                 if (spinUp != Vector3.Zero)
                 {
@@ -776,11 +776,11 @@ namespace VexedCore
             
             foreach (Vertex v in rectVertexList)
             {
-                v.Update(Game1.player.currentRoom, 1);
+                v.Update(Engine.player.currentRoom, 1);
             }
             foreach (Vertex v in gunVertexList)
             {
-                v.Update(Game1.player.currentRoom, 1);
+                v.Update(Engine.player.currentRoom, 1);
             }
 
             if (moveType == VexedLib.MovementType.Tank)

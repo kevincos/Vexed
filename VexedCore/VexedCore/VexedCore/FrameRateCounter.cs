@@ -63,7 +63,7 @@ namespace VexedCore
 
             string fps = string.Format("fps: {0}", frameRate);
 
-            string score = "Score: " + Game1.player.orbsCollected;
+            string score = "Score: " + Engine.player.orbsCollected;
 
             spriteBatch.Begin();
 
