@@ -510,12 +510,12 @@ namespace VexedCore
                     if (i == width - 1)
                     {
                         AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, iceSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[(i + 1) * 2 + 1], fullPointList[i * 2 + 1], depth + .01f, .001f, true, iceTopEndTexCoords, triangleList);                        
+                        AddTopStrip(fullPointList[(i + 1) * 2 + 1], fullPointList[i * 2 + 1], depth + .01f, .01f, true, iceTopEndTexCoords, triangleList);                        
                     }
                     else if (i == 0)
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, iceSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, iceTopEndTexCoords, triangleList);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .01f, false, iceTopEndTexCoords, triangleList);
                     }
                     else
                     {                        
@@ -705,17 +705,17 @@ namespace VexedCore
                     if (i == width - 1)
                     {
                         AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, electricOffSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[(i + 1) * 2 + 1], fullPointList[i * 2 + 1], depth + .01f, .001f, true, electricOffTopEndTexCoords, triangleList);
+                        AddTopStrip(fullPointList[(i + 1) * 2 + 1], fullPointList[i * 2 + 1], depth + .01f, .01f, true, electricOffTopEndTexCoords, triangleList);
                     }
                     else if (i == 0)
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOffSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, electricOffTopEndTexCoords, triangleList);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .01f, false, electricOffTopEndTexCoords, triangleList);
                     }
                     else
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOffSideTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, electricOffTopTexCoords, triangleList);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .01f, false, electricOffTopTexCoords, triangleList);
                     }
                     #endregion
                 }
@@ -725,17 +725,17 @@ namespace VexedCore
                     if (i == width - 1)
                     {
                         AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, electricOnSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[(i + 1) * 2 + 1], fullPointList[i * 2 + 1], depth + .01f, .001f, true, electricOnTopEndTexCoords, triangleList);
+                        AddTopStrip(fullPointList[(i + 1) * 2 + 1], fullPointList[i * 2 + 1], depth + .01f, .01f, true, electricOnTopEndTexCoords, triangleList);
                     }
                     else if (i == 0)
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOnSideEndTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, electricOnTopEndTexCoords, triangleList);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .01f, false, electricOnTopEndTexCoords, triangleList);
                     }
                     else
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOnSideTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, electricOnTopTexCoords, triangleList);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .01f, false, electricOnTopTexCoords, triangleList);
                     }
                     #endregion
                 }
@@ -749,7 +749,7 @@ namespace VexedCore
                     else
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, magnetSideTexCoords, triangleList, true);
 
-                    AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, magnetTopTexCoords, triangleList);
+                    AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .01f, false, magnetTopTexCoords, triangleList);
                     #endregion
                 }
             }

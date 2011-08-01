@@ -89,3 +89,4 @@ E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_text
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\projectiles.xnb
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_clean.xnb
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_clean.xnb

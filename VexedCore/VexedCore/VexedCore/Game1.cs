@@ -42,7 +42,7 @@ namespace VexedCore
             bool fullScreen = false;
             //resWidth = 1920;
             //resHeight = 1080;
-            //fullScreen = true;
+            fullScreen = true;
             graphics.IsFullScreen = fullScreen;
             graphics.PreferredBackBufferWidth = resWidth;
             graphics.PreferredBackBufferHeight = resHeight;
