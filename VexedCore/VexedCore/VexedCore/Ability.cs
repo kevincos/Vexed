@@ -14,7 +14,7 @@ namespace VexedCore
 {
     public enum AbilityType
     {
-        Empty = 29,
+        Empty = 31,
         Blaster = 19,
         Missile = 16,
         Laser = 17,
@@ -54,6 +54,14 @@ namespace VexedCore
         public int ammo = 0;        
         public int cooldown = 0;
         public int duration = 0;
+
+        public bool isPassive
+        {
+            get
+            {
+                return type == AbilityType.WallJump || type == AbilityType.DoubleJump || type == AbilityType.Shield || type == AbilityType.Boots || type == AbilityType.BlueKey || type == AbilityType.RedKey || type == AbilityType.YellowKey;
+            }
+        }
 
         public bool isGun
         {

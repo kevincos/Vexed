@@ -445,12 +445,12 @@ namespace VexedCore
             Engine.reDraw = false;
 
 
-            if(Engine.player.primaryAbility.type != AbilityType.Empty)
+            if (Engine.player.secondaryAbility.isPassive == false)
                 Ability.Draw(.825f, .02f, AbilityType.YButton);
             else
                 Ability.Draw(.825f, .02f, AbilityType.Passive);
 
-            if (Engine.player.secondaryAbility.type != AbilityType.Empty)            
+            if (Engine.player.primaryAbility.isPassive == false)            
                 Ability.Draw(.75f, .12f, AbilityType.XButton);
             else
                 Ability.Draw(.75f, .12f, AbilityType.Passive);
@@ -575,7 +575,7 @@ namespace VexedCore
                 {
                     state = EngineState.ZoomIn;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.OemMinus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder))
+                if (Keyboard.GetState().IsKeyDown(Keys.OemMinus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder) && state == EngineState.Active)
                 {
                     selectedRoomIndex = -1;
                     state = EngineState.ZoomOut;
