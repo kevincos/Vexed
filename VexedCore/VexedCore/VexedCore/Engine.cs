@@ -46,7 +46,7 @@ namespace VexedCore
         public Effect postprocessEffect = null;
 
         public static bool transparencyEnabled = true;
-        public static int lightingLevel = 2;
+        public static int lightingLevel = 0;
         public static bool toonShadingEnabled = false;
         public static float drawDistance = 150f;
         public int optionToggleCooldown = 0;
@@ -553,6 +553,17 @@ namespace VexedCore
             optionToggleCooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (optionToggleCooldown < 0) optionToggleCooldown = 0;
 
+            if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftTrigger))
+            {
+                player.baseCameraDistance += .03f * gameTime.ElapsedGameTime.Milliseconds;
+                if (player.baseCameraDistance > 15f) player.baseCameraDistance = 15f;
+            }
+            if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightTrigger))
+            {
+                player.baseCameraDistance -= .03f * gameTime.ElapsedGameTime.Milliseconds;
+                if (player.baseCameraDistance < 5f) player.baseCameraDistance = 5f;
+            }
+
             if (optionToggleCooldown == 0)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A) && state == EngineState.Warp && selectedRoomIndex != -1)
@@ -560,11 +571,11 @@ namespace VexedCore
                     player.Warp(roomList[selectedRoomIndex]);
                     state = EngineState.ZoomIn;
                 }
-                if(Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightTrigger) && state == EngineState.Warp && selectedRoomIndex == -1)
+                if(Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder) && state == EngineState.Warp && selectedRoomIndex == -1)
                 {
                     state = EngineState.ZoomIn;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.OemMinus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftTrigger))
+                if (Keyboard.GetState().IsKeyDown(Keys.OemMinus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder))
                 {
                     selectedRoomIndex = -1;
                     state = EngineState.ZoomOut;

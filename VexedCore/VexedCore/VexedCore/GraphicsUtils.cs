@@ -96,6 +96,42 @@ namespace VexedCore
             return -t1Center.CompareTo(t2Center);            
         }
 
-    }    
+    }
+
+    public class FakeShader
+    {
+        public static Color Shade(Color c, Vector3 n)
+        {
+            n.Normalize();
+            int alt = 15;
+            int r = c.R;
+            int g = c.G;
+            int b = c.B;
+            if (n == Vector3.UnitX || n == -Vector3.UnitX)
+            {
+                r += 2*alt/3;
+                g += 2 * alt / 3;
+                b += 2 * alt / 3;
+            }
+            if (n == Vector3.UnitZ || n == -Vector3.UnitZ)
+            {
+                r -= alt;
+                b -= alt;
+                g -= alt;
+
+            }
+            if (r < 0) r = 0;
+            if (g < 0) g = 0;
+            if (b < 0) b = 0;
+            if (r > 255) r = 255;
+            if (g > 255) g = 255;
+            if (b > 255) b = 255;
+            Color shadedColor = c;
+            shadedColor.R = (byte)r;
+            shadedColor.G = (byte)g;
+            shadedColor.B = (byte)b;
+            return shadedColor;
+        }
+    }
 
 }

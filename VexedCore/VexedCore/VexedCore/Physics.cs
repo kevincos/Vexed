@@ -452,7 +452,9 @@ namespace VexedCore
                 Vector3 rightProjection = Collide(playerRightBox, blockVertexList, p.center.normal);
 
 
-                if (Vector3.Dot(groundProjection, up) > 0)
+                //if (Vector3.Dot(groundProjection, up) > 0)
+                //if (groundProjection != Vector3.Zero)
+                if(groundProjection.Length() > .001f)
                 {
                     p.grounded = true;
                     EdgeProperties properties = b.GetProperties(groundProjection);

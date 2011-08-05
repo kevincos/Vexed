@@ -372,7 +372,14 @@ namespace VexedCore
         public void Boost()
         {
             //center.velocity -= Vector3.Dot(center.velocity, up) * up;
-            center.velocity = right * maxHorizSpeed * faceDirection;
+            int boostDirection = faceDirection;
+            if (leftWall == true)
+                boostDirection = 1;
+            if (rightWall == true)
+                boostDirection = -1;
+
+            center.velocity = right * maxHorizSpeed * boostDirection;
+            faceDirection = boostDirection;
             
             boosting = true;
             boostTime = maxBoostTime;
@@ -707,21 +714,7 @@ namespace VexedCore
                 {
                     center.velocity -= (maxHorizSpeed + rightMagnitude) * right;
                 }
-                if(gamePadState.IsButtonDown(Buttons.RightShoulder) || Keyboard.GetState().IsKeyDown(Keys.Tab))
-                {
-                    if (weaponSwitchCooldown == 0)
-                    {
-                        weaponSwitchCooldown = weaponSwitchCooldownMax;
-                        if (gunType == VexedLib.GunType.Blaster)
-                            gunType = VexedLib.GunType.Beam;
-                        else if (gunType == VexedLib.GunType.Beam)
-                            gunType = VexedLib.GunType.Missile;
-                        else if (gunType == VexedLib.GunType.Missile)
-                            gunType = VexedLib.GunType.Bomb;
-                        else
-                            gunType = VexedLib.GunType.Blaster;
-                    }
-                }
+                
                 jetPackThrust = false;
                 if (Game1.controller.XButton.Pressed)
                 {
@@ -1120,10 +1113,10 @@ namespace VexedCore
                     {
                         List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();
                         List<Vertex> flameVertexList = new List<Vertex>();
-                        flameVertexList.Add(new Vertex(center.position, center.normal, .4f * right, center.direction));
-                        flameVertexList.Add(new Vertex(center.position, center.normal, -.2f * right, center.direction));
-                        flameVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up - .2f * right, center.direction));
-                        flameVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up + .4f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -.3f * playerHalfHeight * up + .43f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -.3f * playerHalfHeight * up - .17f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -1.3f * playerHalfHeight * up - .17f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -1.3f*playerHalfHeight * up + .43f * right, center.direction));
                         foreach (Vertex v in flameVertexList)
                         {
                             v.Update(currentRoom, 1);
@@ -1138,10 +1131,10 @@ namespace VexedCore
                     {
                         List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();
                         List<Vertex> flameVertexList = new List<Vertex>();
-                        flameVertexList.Add(new Vertex(center.position, center.normal, .2f * right, center.direction));
-                        flameVertexList.Add(new Vertex(center.position, center.normal, -.4f * right, center.direction));
-                        flameVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up -.4f * right, center.direction));
-                        flameVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up + .2f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal,-.3f * playerHalfHeight * up + .17f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -.3f * playerHalfHeight * up - .43f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -1.3f*playerHalfHeight * up -.43f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -1.3f*playerHalfHeight * up + .17f * right, center.direction));
                         foreach (Vertex v in flameVertexList)
                         {
                             v.Update(currentRoom, 1);
