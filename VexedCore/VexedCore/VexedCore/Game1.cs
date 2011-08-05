@@ -34,6 +34,7 @@ namespace VexedCore
         {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferMultiSampling = true;
+            graphics.SynchronizeWithVerticalRetrace = true;
 
 #if XBOX
                 graphics.PreferredBackBufferWidth = 1280;
@@ -41,7 +42,7 @@ namespace VexedCore
 #endif
             int resWidth = 800;
             int resHeight = 600;
-            bool fullScreen = false;
+            bool fullScreen = true;
             //resWidth = 1920;
             //resHeight = 1080;
             //fullScreen = true;
@@ -70,8 +71,8 @@ namespace VexedCore
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            graphicsDevice = GraphicsDevice;            
-
+            graphicsDevice = GraphicsDevice;
+            
             LevelLoader.Load("LevelData\\spikeelevator");
             //LevelLoader.Load("LevelData\\spiral2");
             

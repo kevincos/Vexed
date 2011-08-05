@@ -95,3 +95,8 @@ E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_gun_
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_boots.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_jetpack.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_booster.xnb
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\abilities.xnb
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_gun_texture.xnb
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_boots.xnb
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_jetpack.xnb
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_booster.xnb

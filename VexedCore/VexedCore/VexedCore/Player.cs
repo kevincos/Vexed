@@ -425,7 +425,11 @@ namespace VexedCore
 
         public void SetAnimationState()
         {
-            if (lastFireTime > 1000)
+            if (state == State.Jump)
+            {
+                AnimationControl.SetState(AnimationState.JumpPad);
+            }
+            else if (lastFireTime > 1000)
             {
                 if (boosting)
                 {

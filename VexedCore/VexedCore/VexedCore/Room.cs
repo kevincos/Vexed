@@ -383,21 +383,27 @@ namespace VexedCore
                     Vector3 spikeEnd = start.position + (i + 1) * spikeWidth * edgeDir;
                     Vector3 spikePoint = .5f * (spikeStart + spikeEnd) + spikeHeight * edgeNormal;
 
-                    triangleList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, start.normal, depth));
-                    triangleList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, start.normal, depth));
-                    triangleList.Add(GenerateTexturedVertex(spikePoint,blankTexCoords[1], spikeColor, edgeNormal, depth / 2));
+                    Color shadedColor = Color.Blue;
 
-                    triangleList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, -start.normal, 0));
-                    triangleList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -start.normal, 0));
-                    triangleList.Add(GenerateTexturedVertex(spikePoint,blankTexCoords[1], spikeColor, edgeNormal, depth / 2));
+                    shadedColor = FakeShader.Shade(spikeColor, start.normal);
+                    triangleList.Add(GenerateTexturedVertex(spikeStart, blankTexCoords[1], shadedColor, start.normal, depth));
+                    triangleList.Add(GenerateTexturedVertex(spikeEnd, blankTexCoords[1], shadedColor, start.normal, depth));
+                    triangleList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], shadedColor, edgeNormal, depth / 2));
+                    
+                    shadedColor = FakeShader.Shade(spikeColor, -start.normal);
+                    triangleList.Add(GenerateTexturedVertex(spikeStart, blankTexCoords[1], shadedColor, -start.normal, 0));
+                    triangleList.Add(GenerateTexturedVertex(spikeEnd, blankTexCoords[1], shadedColor, -start.normal, 0));
+                    triangleList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], shadedColor, edgeNormal, depth / 2));
 
-                    triangleList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, edgeDir, depth));
-                    triangleList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, edgeDir, 0));
-                    triangleList.Add(GenerateTexturedVertex(spikePoint,blankTexCoords[1], spikeColor, edgeNormal, depth / 2));
+                    shadedColor = FakeShader.Shade(spikeColor, edgeDir);
+                    triangleList.Add(GenerateTexturedVertex(spikeStart, blankTexCoords[1], shadedColor, edgeDir, depth));
+                    triangleList.Add(GenerateTexturedVertex(spikeStart, blankTexCoords[1], shadedColor, edgeDir, 0));
+                    triangleList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], shadedColor, edgeNormal, depth / 2));
 
-                    triangleList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -edgeDir, depth));
-                    triangleList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -edgeDir, 0));
-                    triangleList.Add(GenerateTexturedVertex(spikePoint,blankTexCoords[1], spikeColor, edgeNormal, depth / 2));
+                    shadedColor = FakeShader.Shade(spikeColor, -edgeDir);
+                    triangleList.Add(GenerateTexturedVertex(spikeEnd, blankTexCoords[1], shadedColor, -edgeDir, depth));
+                    triangleList.Add(GenerateTexturedVertex(spikeEnd, blankTexCoords[1], shadedColor, -edgeDir, 0));
+                    triangleList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], shadedColor, edgeNormal, depth / 2));
                 }
             
             }
@@ -830,27 +836,32 @@ namespace VexedCore
             }
             else
             {
+                Color shadedColor = Color.Blue;
                 for (int i = 0; i < numSpikes; i++)
                 {
                     Vector3 spikeStart = e.start.position + i * spikeWidth * edgeDir;
                     Vector3 spikeEnd = e.start.position + (i + 1) * spikeWidth * edgeDir;
                     Vector3 spikePoint = .5f * (spikeStart + spikeEnd) + spikeHeight * edgeNormal;
 
-                    triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, e.start.normal, depth));
-                    triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, e.start.normal, depth));
-                    triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, e.start.normal, depth / 2));
+                    shadedColor = FakeShader.Shade(spikeColor, e.start.normal);
+                    triangeList.Add(GenerateTexturedVertex(spikeStart, blankTexCoords[1], shadedColor, e.start.normal, depth));
+                    triangeList.Add(GenerateTexturedVertex(spikeEnd, blankTexCoords[1], shadedColor, e.start.normal, depth));
+                    triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], shadedColor, e.start.normal, depth / 2));
 
-                    triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, -e.start.normal, 0));
-                    triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -e.start.normal, 0));
-                    triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, -e.start.normal, depth / 2));
+                    shadedColor = FakeShader.Shade(spikeColor, -e.start.normal);
+                    triangeList.Add(GenerateTexturedVertex(spikeStart, blankTexCoords[1], shadedColor, -e.start.normal, 0));
+                    triangeList.Add(GenerateTexturedVertex(spikeEnd, blankTexCoords[1], shadedColor, -e.start.normal, 0));
+                    triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], shadedColor, -e.start.normal, depth / 2));
 
-                    triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, edgeDir, depth));
-                    triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, edgeDir, 0));
-                    triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, edgeDir, depth / 2));
+                    shadedColor = FakeShader.Shade(spikeColor, edgeDir);
+                    triangeList.Add(GenerateTexturedVertex(spikeStart, blankTexCoords[1], shadedColor, edgeDir, depth));
+                    triangeList.Add(GenerateTexturedVertex(spikeStart, blankTexCoords[1], shadedColor, edgeDir, 0));
+                    triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], shadedColor, edgeDir, depth / 2));
 
-                    triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -edgeDir, depth));
-                    triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -edgeDir, 0));
-                    triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, -edgeDir, depth / 2));
+                    shadedColor = FakeShader.Shade(spikeColor, -edgeDir);
+                    triangeList.Add(GenerateTexturedVertex(spikeEnd, blankTexCoords[1], shadedColor, -edgeDir, depth));
+                    triangeList.Add(GenerateTexturedVertex(spikeEnd, blankTexCoords[1], shadedColor, -edgeDir, 0));
+                    triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], shadedColor, -edgeDir, depth / 2));
 
                     if (i < numSpikes - 1)
                     {
@@ -858,21 +869,25 @@ namespace VexedCore
                         spikeEnd = e.start.position + (i + 1.5f) * spikeWidth * edgeDir;
                         spikePoint = .5f * (spikeStart + spikeEnd) + spikeHeight * edgeNormal;
 
-                        triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, e.start.normal, 0));
-                        triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, e.start.normal, 0));
-                        triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, e.start.normal, -depth / 2));
+                        shadedColor = FakeShader.Shade(spikeColor, e.start.normal);
+                        triangeList.Add(GenerateTexturedVertex(spikeStart, blankTexCoords[1], shadedColor, e.start.normal, 0));
+                        triangeList.Add(GenerateTexturedVertex(spikeEnd, blankTexCoords[1], shadedColor, e.start.normal, 0));
+                        triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], shadedColor, e.start.normal, -depth / 2));
 
-                        triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, -e.start.normal, -depth));
-                        triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -e.start.normal, -depth));
-                        triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, -e.start.normal, -depth / 2));
+                        shadedColor = FakeShader.Shade(spikeColor, -e.start.normal);
+                        triangeList.Add(GenerateTexturedVertex(spikeStart, blankTexCoords[1], shadedColor, -e.start.normal, -depth));
+                        triangeList.Add(GenerateTexturedVertex(spikeEnd, blankTexCoords[1], shadedColor, -e.start.normal, -depth));
+                        triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], shadedColor, -e.start.normal, -depth / 2));
 
-                        triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, edgeDir, 0));
-                        triangeList.Add(GenerateTexturedVertex(spikeStart,blankTexCoords[1], spikeColor, edgeDir, -depth));
-                        triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, edgeDir, -depth / 2));
+                        shadedColor = FakeShader.Shade(spikeColor, edgeDir);
+                        triangeList.Add(GenerateTexturedVertex(spikeStart, blankTexCoords[1], shadedColor, edgeDir, 0));
+                        triangeList.Add(GenerateTexturedVertex(spikeStart, blankTexCoords[1], shadedColor, edgeDir, -depth));
+                        triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], shadedColor, edgeDir, -depth / 2));
 
-                        triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -edgeDir, 0));
-                        triangeList.Add(GenerateTexturedVertex(spikeEnd,blankTexCoords[1], spikeColor, -edgeDir, -depth));
-                        triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], spikeColor, -edgeDir, -depth / 2));
+                        shadedColor = FakeShader.Shade(spikeColor, -edgeDir);
+                        triangeList.Add(GenerateTexturedVertex(spikeEnd, blankTexCoords[1], shadedColor, -edgeDir, 0));
+                        triangeList.Add(GenerateTexturedVertex(spikeEnd, blankTexCoords[1], shadedColor, -edgeDir, -depth));
+                        triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[1], shadedColor, -edgeDir, -depth / 2));
                     }
                 }
             }
