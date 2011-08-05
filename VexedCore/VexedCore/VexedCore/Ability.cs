@@ -104,7 +104,7 @@ namespace VexedCore
             get
             {
                 if (type == AbilityType.Booster)
-                    return 600;
+                    return 700;
                 if (type == AbilityType.JetPack)
                     return 0;
                 return 400;

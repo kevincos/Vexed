@@ -17,6 +17,7 @@ namespace VexedCore
     public class Doodad
     {
         public Vertex position;
+        public Vertex spawnPosition;
         public bool active = false;
         public string id = "";
         public string targetBehavior ="";
@@ -54,6 +55,7 @@ namespace VexedCore
         public Doodad(Doodad d)
         {
             position = new Vertex(d.position);
+            spawnPosition = new Vertex(d.spawnPosition);
             active = d.active;
 
             id = d.id;
@@ -110,6 +112,7 @@ namespace VexedCore
 
             this.abilityType = (AbilityType)xmlDoodad.ability;
             this.position = new Vertex(xmlDoodad.position, normal, Vector3.Zero, xmlDoodad.up);
+            this.spawnPosition = new Vertex(xmlDoodad.position, normal, Vector3.Zero, xmlDoodad.up);
             behaviors = new List<Behavior>();
             currentBehavior = null;
 
@@ -124,6 +127,7 @@ namespace VexedCore
         {
             this.type = type;
             this.position = new Vertex(position, normal, Vector3.Zero, direction);
+            this.spawnPosition = new Vertex(position, normal, Vector3.Zero, direction);
             behaviors = new List<Behavior>();
             currentBehavior = null;
         }

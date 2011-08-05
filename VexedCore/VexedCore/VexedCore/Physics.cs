@@ -211,7 +211,7 @@ namespace VexedCore
             //return Vector3.Zero;
         }
 
-        public static CollisionResult ResolveCollision(List<Vector3> projectionList, List<Vector3> relVelList, List<EdgeProperties> edgePropertiesList, Vector3 velocity)
+        public static CollisionResult ResolveCollision(List<Vector3> projectionList, List<Vector3> relVelList, List<EdgeProperties> edgePropertiesList, Vector3 velocity, bool traction)
         {
             CollisionResult result = new CollisionResult();
             Vector3 maxProjection = Vector3.Zero;
@@ -274,7 +274,9 @@ namespace VexedCore
                     {
                         result.frictionAdjustment += .02f * frictionDirection;
                     }
-                    if (edgeProperties.type == VexedLib.EdgeType.Ice || edgeProperties.type == VexedLib.EdgeType.Bounce)
+                    if (edgeProperties.type == VexedLib.EdgeType.Ice && traction == false)
+                        result.frictionAdjustment = Vector3.Zero;
+                    if (edgeProperties.type == VexedLib.EdgeType.Bounce)
                         result.frictionAdjustment = Vector3.Zero;
                 }
             }
@@ -364,7 +366,11 @@ namespace VexedCore
                 }
 
                 // Compute the most powerful collision and resolve it.
-                CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, p.center.velocity);
+                CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, p.center.velocity, p.HasTraction());
+                if (result.properties != null && result.properties.type == VexedLib.EdgeType.Ice && Vector3.Dot(result.projection, p.center.direction) > 0)
+                    p.sliding = true;
+                else
+                    p.sliding = false;
                 p.center.velocity += result.velocityAdjustment;
                 frictionAdjustment += result.frictionAdjustment;
                 if(result.projection != Vector3.Zero)
@@ -629,7 +635,7 @@ namespace VexedCore
                             }                            
                         }
 
-                        CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, d.position.velocity);
+                        CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, d.position.velocity, false);
                         if(result.projection != Vector3.Zero)
                         {
                             d.srcDoodad.AdjustVertex(result.projection, result.velocityAdjustment + result.frictionAdjustment, p.center.normal, p.center.direction);
@@ -692,7 +698,7 @@ namespace VexedCore
                         }
                     }
 
-                    CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, m.position.velocity);
+                    CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, m.position.velocity, false);
                     if (result.projection != Vector3.Zero)
                     {
                         m.srcMonster.AdjustVertex(result.projection, result.velocityAdjustment, p.center.normal, p.center.direction);

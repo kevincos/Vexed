@@ -79,6 +79,7 @@ namespace VexedCore
         public bool superJump = false;
         public bool jetPacking = false;
         public bool jetPackThrust = false;
+        public bool sliding = false;
         public int walkTime = 0;
         public int idleTime = 0;
         public int boostTime = 0;
@@ -145,7 +146,9 @@ namespace VexedCore
             primaryAbility = new Ability(AbilityType.Booster);
             secondaryAbility = new Ability(AbilityType.JetPack);
             naturalShield = new Ability(AbilityType.Shield);
-            for (int i = 0; i < 32; i++)
+            upgrades[(int)AbilityType.WallJump] = true;
+            upgrades[(int)AbilityType.DoubleJump] = true;
+            for (int i = 8; i < 19; i++)
                 upgrades[i] = true;            
         }
 
@@ -367,6 +370,11 @@ namespace VexedCore
         {
             Engine.reDraw = true;
             LevelLoader.QuickLoad();
+        }
+
+        public bool HasTraction()
+        {
+            return primaryAbility.type == AbilityType.Boots || secondaryAbility.type == AbilityType.Boots || upgrades[(int)AbilityType.PermanentBoots];
         }
 
         public void Boost()
@@ -817,6 +825,7 @@ namespace VexedCore
                             if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
                             {
                                 jumpRoom = d.targetRoom;
+                                jumpRoom.Reset();
                                 float roomSize = Math.Abs(Vector3.Dot(jumpRoom.size / 2, center.normal));
                                 jumpSource = center.position;
                                 jumpDestination = center.position + Vector3.Dot(jumpRoom.center - center.position - roomSize * center.normal, center.normal) * center.normal;
@@ -900,6 +909,7 @@ namespace VexedCore
                         if (d.type == VexedLib.DoodadType.BridgeGate)
                         {
                             jumpRoom = d.targetRoom;
+                            jumpRoom.Reset();
                             jumpSource = center.position;
                             jumpDestination = d.targetDoodad.position.position - 2f * d.targetDoodad.upUnit;
                             jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);

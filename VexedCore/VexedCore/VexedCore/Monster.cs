@@ -30,7 +30,7 @@ namespace VexedCore
 
         public static int texGridCount = 8;
 
-
+        public Vertex spawnPosition;
         public Vertex position;
         public string firstWaypoint;
         public List<Vector3> waypoints;
@@ -70,6 +70,7 @@ namespace VexedCore
 
         public Monster(Monster m)
         {
+            spawnPosition = new Vertex(m.spawnPosition);
             position = new Vertex(m.position);
             firstWaypoint = m.firstWaypoint;
             waypoints = new List<Vector3>();
@@ -135,6 +136,7 @@ namespace VexedCore
 
         public Monster(VexedLib.Monster xmlMonster, Vector3 normal)
         {
+            this.spawnPosition = new Vertex(xmlMonster.position, normal, Vector3.Zero, xmlMonster.up);
             this.position = new Vertex(xmlMonster.position, normal, Vector3.Zero, xmlMonster.up);
             firstWaypoint = xmlMonster.waypointId;
             waypoints = new List<Vector3>();

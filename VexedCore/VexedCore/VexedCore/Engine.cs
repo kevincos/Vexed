@@ -48,7 +48,7 @@ namespace VexedCore
         public static bool transparencyEnabled = true;
         public static int lightingLevel = 0;
         public static bool toonShadingEnabled = false;
-        public static float drawDistance = 150f;
+        public static float drawDistance = 50f;
         public int optionToggleCooldown = 0;
         public static bool reDraw = false;
         public static bool detailTextures = true;
@@ -400,9 +400,7 @@ namespace VexedCore
 
             foreach (Room r in roomList)
             {
-                if ((r.center - player.currentRoom.center).Length() < drawDistance ||
-                    (player.jumpRoom != null && (r.center - player.jumpRoom.center).Length() < drawDistance))
-                    r.Draw(gameTime);
+                r.Draw(gameTime);
             }
 
 
