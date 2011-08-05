@@ -9,19 +9,12 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Xml.Serialization;
 
 namespace VexedCore
 {
     public class Room
     {
-        public static int beltAnimation = 0;
-
-        public static int innerBlockMode = 2;
-
-        public Vector3 center;
-        public Vector3 size;
-
-        public bool hasWarp = false;
 
         public static Texture2D blockTexture;
 
@@ -58,7 +51,7 @@ namespace VexedCore
         public static List<Vector2> beltTopEndTexCoords;
         public static List<Vector2> beltSideSmallTexCoords;
         public static List<Vector2> beltSideSmallEndTexCoords;
-        
+
 
         public static List<Vector2> plateTexCoords;
         public static List<Vector2> blankTexCoords;
@@ -66,7 +59,67 @@ namespace VexedCore
 
         public static int texGridCount = 8;
 
+        public static int beltAnimation = 0;
+
+        public static int innerBlockMode = 2;
+
+        public Vector3 center;
+        public Vector3 size;
+        public bool hasWarp = false;
         public Color color;
+        public List<Block> blocks;
+        public List<Doodad> doodads;
+        public List<Monster> monsters;
+        public List<Projectile> projectiles;
+        public string id;
+
+        public Room(Room r)
+        {
+            center = r.center;
+            size = r.size;
+            hasWarp = r.hasWarp;
+            color = r.color;
+            id = r.id;
+            blocks = new List<Block>();
+            foreach (Block b in r.blocks)
+            {
+                blocks.Add(new Block(b));
+            }
+            doodads = new List<Doodad>();
+            foreach (Doodad d in r.doodads)
+            {
+                doodads.Add(new Doodad(d));
+            }
+            monsters = new List<Monster>();
+            foreach (Monster m in r.monsters)
+            {
+                monsters.Add(new Monster(m));
+            }
+            projectiles = new List<Projectile>();
+            foreach (Projectile p in r.projectiles)
+            {
+                projectiles.Add(new Projectile(p));
+            }
+        }
+
+        public Room()
+        {
+            blocks = new List<Block>();
+            doodads = new List<Doodad>();
+            monsters = new List<Monster>();
+            projectiles = new List<Projectile>();
+        }
+
+        public Room(VexedLib.Room xmlRoom)
+        {
+            id = xmlRoom.IDString;
+            center = new Vector3(xmlRoom.centerX, xmlRoom.centerY, xmlRoom.centerZ);
+            size = new Vector3(xmlRoom.sizeX, xmlRoom.sizeY, xmlRoom.sizeZ);
+            blocks = new List<Block>();
+            doodads = new List<Doodad>();
+            monsters = new List<Monster>();
+            projectiles = new List<Projectile>();
+        }
 
         public static List<Vector2> LoadTexCoords(int x, int y, float epsilonX, float epsilonY)
         {
@@ -88,7 +141,7 @@ namespace VexedCore
             plateTexCoords.Add(new Vector2(0, plateTexWidth));
             plateTexCoords.Add(new Vector2(plateTexWidth, plateTexWidth));
             blankTexCoords = new List<Vector2>();
-            blankTexCoords.Add(new Vector2(3*plateTexWidth/5, 2*plateTexWidth/5));
+            blankTexCoords.Add(new Vector2(3 * plateTexWidth / 5, 2 * plateTexWidth / 5));
             blankTexCoords.Add(new Vector2(2 * plateTexWidth / 5, 2 * plateTexWidth / 5));
             blankTexCoords.Add(new Vector2(2 * plateTexWidth / 5, 3 * plateTexWidth / 5));
             blankTexCoords.Add(new Vector2(3 * plateTexWidth / 5, 3 * plateTexWidth / 5));
@@ -128,36 +181,7 @@ namespace VexedCore
             beltSideSmallEndTexCoords = LoadTexCoords(4, 6, .003f, .003f);
         }
 
-        public List<Block> blocks;
-        public List<JumpPad> jumpPads;
-        public List<Bridge> bridges;
-        public List<Doodad> doodads;
-        public List<Monster> monsters;
-        public List<Projectile> projectiles;
 
-
-        public Room()
-        {
-            blocks = new List<Block>();
-            jumpPads = new List<JumpPad>();
-            bridges = new List<Bridge>();
-            doodads = new List<Doodad>();
-            monsters = new List<Monster>();
-            projectiles = new List<Projectile>();
-        }
-
-        public Room(VexedLib.Room xmlRoom)
-        {
-            center = new Vector3(xmlRoom.centerX, xmlRoom.centerY, xmlRoom.centerZ);
-            size = new Vector3(xmlRoom.sizeX, xmlRoom.sizeY, xmlRoom.sizeZ);
-            blocks = new List<Block>();
-            jumpPads = new List<JumpPad>();
-            bridges = new List<Bridge>();
-            doodads = new List<Doodad>();
-            monsters = new List<Monster>();
-            projectiles = new List<Projectile>();
-        }
-        
         public void Update(GameTime gameTime)
         {
             beltAnimation += gameTime.ElapsedGameTime.Milliseconds;
@@ -1475,17 +1499,6 @@ namespace VexedCore
             #endregion
 
             #region Doodads
-            if (Engine.staticObjectsInitialized == false)
-            {
-                foreach (JumpPad j in jumpPads)
-                {
-                    j.Draw(this, Engine.staticOpaqueObjects);
-                }
-                foreach (Bridge b in bridges)
-                {
-                    b.Draw(this, Engine.staticOpaqueObjects);
-                }
-            }
             foreach (Doodad d in doodads)
             {
                 d.Draw(this, Engine.dynamicOpaqueObjects);

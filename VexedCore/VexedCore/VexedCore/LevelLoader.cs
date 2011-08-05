@@ -14,8 +14,17 @@ using Microsoft.Xna.Framework.Media;
 
 namespace VexedCore
 {
-    class LevelLoader
+    public class SaveData
     {
+        public List<Room> roomList;
+        public Player player;
+    }
+
+    public class LevelLoader
+    {
+        public static SaveData lastSave;
+    
+
         public static void Load(String filename)
         {
             Engine.roomList = new List<Room>();
@@ -47,13 +56,11 @@ namespace VexedCore
                             {
                                 Engine.player.center = new Vertex(xmlDoodad.position, xmlFace.normal, Vector3.Zero, xmlDoodad.up);                                
                                 Engine.player.currentRoom = newRoom;
-                                Engine.player.respawnCenter = new Vertex(xmlDoodad.position, xmlFace.normal, Vector3.Zero, xmlDoodad.up);
+                                Engine.player.respawnPlayer = new Player();
+                                Engine.player.respawnPlayer.center = new Vertex(xmlDoodad.position, xmlFace.normal, Vector3.Zero, xmlDoodad.up);
+                                Engine.player.respawnPlayer.currentRoom = newRoom;
                                 Engine.player.respawnPoint = new Doodad(VexedLib.DoodadType.Checkpoint, xmlDoodad.position, xmlFace.normal, xmlDoodad.up);
                                 Engine.player.respawnPoint.targetRoom = newRoom;
-                            }
-                            else if (xmlDoodad.type == VexedLib.DoodadType.JumpPad)
-                            {
-                                newRoom.jumpPads.Add(new JumpPad(xmlDoodad.position, xmlFace.normal, xmlDoodad.up));
                             }
                             else if (xmlDoodad.type == VexedLib.DoodadType.BridgeGate)
                             {
@@ -120,58 +127,50 @@ namespace VexedCore
             }
             #endregion
 
-            #region fix extra doodad data
-            foreach (Room r in Engine.roomList)
-            {
-                foreach (Bridge b in r.bridges)
-                {
-                    foreach (Room destinationRoom in Engine.roomList)
-                    {
-                        foreach (Bridge destinationBridge in destinationRoom.bridges)
-                        {
-                            if (destinationBridge.id == b.targetId)
-                            {
-                                b.targetRoom = destinationRoom;
-                                b.targetBridge = destinationBridge;
-                            }
-                        }
-                    }
-                }
-                foreach (JumpPad j in r.jumpPads)
-                {                    
-                    float baseLineValue = Vector3.Dot(j.position.position, j.position.normal);
-                    float minPosValue = 0;
-                    foreach (Room destinationRoom in Engine.roomList)
-                    {
-                        float roomSize = Math.Abs(Vector3.Dot(destinationRoom.size / 2, j.position.normal));
-                        float roomValue = Vector3.Dot(destinationRoom.center - roomSize * j.position.normal, j.position.normal);
-                        if (roomValue > baseLineValue)
-                        {
-                            if (minPosValue == 0 || roomValue < minPosValue)
-                            {
-                                // Verify that line crosses cube
-                                Vector3 right = Vector3.Cross(j.position.normal, j.position.direction);
-                                float upValue = Vector3.Dot(j.position.position, j.position.direction);
-                                float rightValue = Vector3.Dot(j.position.position, right);
-                                float upSize = Math.Abs(Vector3.Dot(destinationRoom.size, j.position.direction));
-                                float rightSize = Math.Abs(Vector3.Dot(destinationRoom.size, right));
-                                float upCenter = Vector3.Dot(destinationRoom.center, j.position.direction);
-                                float rightCenter = Vector3.Dot(destinationRoom.center, right);
+            FixDoodads(Engine.roomList);
 
-                                if (!(upValue > upCenter + upSize || upValue < upCenter - upSize || rightValue > rightCenter + rightSize || rightValue < rightCenter - rightSize))
+            QuickSave();
+        }
+
+        public static void FixDoodads(List<Room> roomList)
+        {
+            foreach (Room r in roomList)
+            {
+                foreach (Doodad d in r.doodads)
+                {
+                    if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
+                    {
+                        float baseLineValue = Vector3.Dot(d.position.position, d.position.normal);
+                        float minPosValue = 0;
+                        foreach (Room destinationRoom in roomList)
+                        {
+                            float roomSize = Math.Abs(Vector3.Dot(destinationRoom.size / 2, d.position.normal));
+                            float roomValue = Vector3.Dot(destinationRoom.center - roomSize * d.position.normal, d.position.normal);
+                            if (roomValue > baseLineValue)
+                            {
+                                if (minPosValue == 0 || roomValue < minPosValue)
                                 {
-                                    minPosValue = roomValue;
-                                    j.targetRoom = destinationRoom;    
+                                    // Verify that line crosses cube
+                                    Vector3 right = Vector3.Cross(d.position.normal, d.position.direction);
+                                    float upValue = Vector3.Dot(d.position.position, d.position.direction);
+                                    float rightValue = Vector3.Dot(d.position.position, right);
+                                    float upSize = Math.Abs(Vector3.Dot(destinationRoom.size, d.position.direction));
+                                    float rightSize = Math.Abs(Vector3.Dot(destinationRoom.size, right));
+                                    float upCenter = Vector3.Dot(destinationRoom.center, d.position.direction);
+                                    float rightCenter = Vector3.Dot(destinationRoom.center, right);
+
+                                    if (!(upValue > upCenter + upSize || upValue < upCenter - upSize || rightValue > rightCenter + rightSize || rightValue < rightCenter - rightSize))
+                                    {
+                                        minPosValue = roomValue;
+                                        d.targetRoom = destinationRoom;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                foreach (Doodad d in r.doodads)
-                {
-                    if (d.type == VexedLib.DoodadType.BridgeGate)
+                    else if (d.type == VexedLib.DoodadType.BridgeGate)
                     {
-                        foreach (Room destinationRoom in Engine.roomList)
+                        foreach (Room destinationRoom in roomList)
                         {
                             foreach (Doodad destinationDoodad in destinationRoom.doodads)
                             {
@@ -194,6 +193,21 @@ namespace VexedCore
                             if (dTarget.id == d.targetObject)
                             {
                                 d.targetDoodad = dTarget;
+                            }
+                        }
+                        foreach (Block bTarget in r.blocks)
+                        {
+                            if (bTarget.id == d.targetObject)
+                            {
+                                d.targetBlock = bTarget;
+                            }
+
+                            foreach (Edge eTarget in bTarget.edges)
+                            {
+                                if (eTarget.id == d.targetObject)
+                                {
+                                    d.targetEdge = eTarget;
+                                }
                             }
                         }
                     }
@@ -227,7 +241,69 @@ namespace VexedCore
                     }
                 }
             }
-            #endregion
+        }
+
+        public static void QuickSave()
+        {
+            lastSave = new SaveData();
+            lastSave.roomList = new List<Room>();
+            foreach (Room r in Engine.roomList)
+                lastSave.roomList.Add(new Room(r));
+            lastSave.player = new Player(Engine.player);
+
+            //Stream stream = new FileStream("tempFile", FileMode.Create, FileAccess.ReadWrite);
+            //XmlSerializer serializer = new XmlSerializer(typeof(SaveData));
+            //serializer.Serialize(stream, lastSave);
+        }
+
+        public static void QuickLoad()
+        {
+            Engine.roomList = new List<Room>();
+            foreach (Room r in lastSave.roomList)
+                Engine.roomList.Add(new Room(r));
+            Engine.player = new Player(lastSave.player);
+
+            foreach (Room r in Engine.roomList)
+            {
+                if (r.id == Engine.player.currentRoomId)
+                    Engine.player.currentRoom = r;
+
+                foreach (Block b in r.blocks)
+                {
+                    if (b.currentBehavior == null)
+                    {
+                        foreach (Behavior behavior in b.behaviors)
+                        {
+                            if (behavior.id == b.currentBehaviorId)
+                                b.currentBehavior = behavior;
+                        }
+                    }
+                    foreach (Edge e in b.edges)
+                    {
+                        if (e.currentBehavior == null)
+                        {
+                            foreach (Behavior behavior in e.behaviors)
+                            {
+                                if (behavior.id == e.currentBehaviorId)
+                                    e.currentBehavior = behavior;
+                            }
+                        }
+                    }
+                }
+                foreach (Doodad d in r.doodads)
+                {
+                    if (d.currentBehavior == null)
+                    {
+                        foreach (Behavior behavior in d.behaviors)
+                        {
+                            if (behavior.id == d.currentBehaviorId)
+                                d.currentBehavior = behavior;
+                        }
+                    }
+                    
+                }
+            }
+            FixDoodads(Engine.roomList);
         }
     }
 }

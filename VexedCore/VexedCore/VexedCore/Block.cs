@@ -15,15 +15,46 @@ namespace VexedCore
     public class Block
     {
         public bool staticObject = true;
-        bool nextBehavior;
+        public bool nextBehavior;
         public float boundingBoxTop = 0;
         public float boundingBoxLeft = 0;
         public float boundingBoxRight = 0;
         public float boundingBoxBottom = 0;
 
+        public List<Edge> edges;
+        public List<Behavior> behaviors;
+
+        public Behavior currentBehavior = null;
+        public String currentBehaviorId;
+        public int currentTime = 0;
+        public Color color;
+        public String id;
+
         public Block()
         {
             edges = new List<Edge>();
+        }
+
+        public Block(Block b)
+        {
+            id = b.id;
+            staticObject = b.staticObject;
+            nextBehavior = b.nextBehavior;
+            color = b.color;
+            currentTime = b.currentTime;
+            currentBehaviorId = b.currentBehaviorId;
+            if(b.currentBehavior != null)
+                currentBehaviorId = b.currentBehavior.id;
+            edges = new List<Edge>();
+            behaviors = new List<Behavior>();
+            foreach (Edge e in b.edges)
+            {
+                edges.Add(new Edge(e));
+            }
+            foreach (Behavior behavior in b.behaviors)
+            {
+                behaviors.Add(new Behavior(behavior));
+            }
         }
 
         public Block(VexedLib.Block xmlBlock)
@@ -31,6 +62,7 @@ namespace VexedCore
             edges = new List<Edge>();
             behaviors = new List<Behavior>();
             color = xmlBlock.color;
+            id = xmlBlock.IDString;
         }
 
         public void UpdateBoundingBox(Vector3 up, Vector3 right)
@@ -123,6 +155,11 @@ namespace VexedCore
                         e.start.velocity = currentBehavior.destination / currentBehavior.duration;
                         e.end.velocity = currentBehavior.destination / currentBehavior.duration;
                     }
+                    else
+                    {
+                        e.start.velocity = Vector3.Zero;
+                        e.end.velocity = Vector3.Zero;
+                    }
                 }
                 currentTime = gameTime.ElapsedGameTime.Milliseconds;
                 nextBehavior = false;
@@ -136,7 +173,29 @@ namespace VexedCore
             }
             return gameTime.ElapsedGameTime.Milliseconds;
         }
-       
+
+        public void SetBehavior(Behavior b)
+        {
+            currentBehavior = b;
+            
+            currentTime = 0;
+            nextBehavior = false;
+
+            foreach (Edge e in edges)
+            {
+                if (currentBehavior.duration != 0)
+                {
+                    e.start.velocity = currentBehavior.destination / currentBehavior.duration;
+                    e.end.velocity = currentBehavior.destination / currentBehavior.duration;
+                }
+                else
+                {
+                    e.start.velocity = Vector3.Zero;
+                    e.end.velocity = Vector3.Zero;
+                }
+            }
+        }
+
         public void UpdateBehavior()
         {
             if (currentBehavior == null)
@@ -156,12 +215,5 @@ namespace VexedCore
                 }
             }
         }
-
-        public List<Edge> edges;
-        public List<Behavior> behaviors;
-
-        public Behavior currentBehavior = null;        
-        public int currentTime = 0;
-        public Color color;
     }
 }

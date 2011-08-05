@@ -37,22 +37,37 @@ namespace VexedLib
     }
 
     public enum AbilityType
-    {        
-        DoubleJump = 0,
-        Boost = 1,
-        Blaster = 2,
-        RedKey = 3,
-        BlueKey = 4,
-        YellowKey = 5,
-        GreenKey =6,
-        Jets =7,
-        Bomb = 8,
-        Boots = 9,
-        WallJump = 10,
-        Jetpack = 11,
-        HighJump = 12,
-        Speed = 13,
-        NinjaRope = 14
+    {
+        Empty = 29,
+        Blaster = 19,
+        Missile = 16,
+        Laser = 17,
+        Bomb = 18,
+        WallJump = 0,
+        DoubleJump = 1,
+        JetPack = 9,
+        Boots = 10,
+        Booster = 8,
+        Shield = 4,
+        RedKey = 11,
+        BlueKey = 13,
+        YellowKey = 12,
+        NormalJump = 2,
+        Use = 3,
+        BButton = 24,
+        XButton = 25,
+        AButton = 26,
+        YButton = 27,
+        Passive = 28,
+        PermanentBoots = 5,
+        PermanentWallJump = 6,
+        PermanentShield = 7,
+        PermanentYellowKey = 14,
+        PermanentBlueKey = 15,
+        PermanentRedKey = 20,
+        DualWield = 21,
+        ImprovedJump = 22,
+        Ultima = 23
     }
 
     public class Doodad

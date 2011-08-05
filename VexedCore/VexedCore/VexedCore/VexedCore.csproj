@@ -110,12 +110,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ability.cs" />
+    <Compile Include="AnimationData.cs" />
     <Compile Include="Behavior.cs" />
     <Compile Include="Block.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BloomComponent.cs" />
     <Compile Include="Collidable.cs" />
+    <Compile Include="Controls.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="FrameRateCounter.cs" />
@@ -135,6 +138,7 @@
     </Compile>
     <Compile Include="Skybox.cs" />
     <Compile Include="Vertex.cs" />
+    <Compile Include="WorldSave.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

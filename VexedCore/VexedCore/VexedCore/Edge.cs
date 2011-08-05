@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Xml.Serialization;
 
 namespace VexedCore
 {
@@ -26,11 +27,13 @@ namespace VexedCore
 
         public EdgeProperties properties;
         public List<Behavior> behaviors;
-        public Behavior currentBehavior = null;
+        [XmlIgnore]public Behavior currentBehavior = null;
+        public String currentBehaviorId = null;
         public int currentTime = 0;
-        bool nextBehavior = false;
-        bool behaviorStarted = false;
-        bool toggleOn = true;
+        public bool nextBehavior = false;
+        public bool behaviorStarted = false;
+        public bool toggleOn = true;
+        public string id;
 
         public Edge()
         {
@@ -39,6 +42,27 @@ namespace VexedCore
             properties = new EdgeProperties();
             properties.type = VexedLib.EdgeType.Normal;
             behaviors = new List<Behavior>();
+        }
+
+        public Edge(Edge e)
+        {
+            id = e.id;
+            start = new Vertex(e.start);
+            end = new Vertex(e.end);
+            properties = e.properties;
+            currentBehavior = null;
+            currentBehaviorId = e.currentBehaviorId;
+            if(e.currentBehavior != null)
+                currentBehaviorId = e.currentBehavior.id;
+            currentTime = e.currentTime;
+            nextBehavior = e.nextBehavior;
+            behaviorStarted = e.behaviorStarted;
+            toggleOn = e.toggleOn;
+            behaviors = new List<Behavior>();
+            foreach (Behavior b in e.behaviors)
+            {
+                behaviors.Add(new Behavior(b));
+            }
         }
 
         public Edge(VexedLib.Edge xmlEdge, Vector3 normal)
@@ -55,6 +79,8 @@ namespace VexedCore
             properties.type = xmlEdge.type;
 
             behaviors = new List<Behavior>();
+
+            id = xmlEdge.IDString;
         }
 
         public Edge(Vector3 s, Vector3 e, Vector3 normal)
@@ -127,6 +153,23 @@ namespace VexedCore
                 }
             }
             return gameTime.ElapsedGameTime.Milliseconds;
+        }
+
+        public void SetBehavior(Behavior b)
+        {
+            currentBehavior = b;
+            if (!toggleOn)
+            {
+                properties.primaryValue = 0;
+                properties.secondaryValue = 0;
+            }
+            else
+            {
+                properties.primaryValue = currentBehavior.primaryValue;
+                properties.secondaryValue = currentBehavior.secondaryValue;
+            }    
+            currentTime = 0;
+            nextBehavior = false;
         }
 
         public void UpdateBehavior()

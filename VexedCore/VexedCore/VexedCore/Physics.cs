@@ -395,7 +395,7 @@ namespace VexedCore
                         Vector3 projection = Collide(pVertexList, projectileVertexList, Engine.player.center.normal);
                         if (projection != Vector3.Zero)
                         {
-                            p.dead = true;
+                            p.Damage(projection);
                             s.srcProjectile.exploding = true;
                             s.srcProjectile.position.velocity = Vector3.Zero;
                         }
@@ -411,7 +411,7 @@ namespace VexedCore
                     Vector3 projection = Collide(pVertexList, monsterVertexList, Engine.player.center.normal);
                     if (projection != Vector3.Zero)
                     {
-                        p.dead = true;
+                        p.Damage(projection);
                     }
                 }
             }
@@ -471,8 +471,7 @@ namespace VexedCore
                     p.platformVelocity = b.GetVelocity();
                     if (properties.type == VexedLib.EdgeType.Magnet)
                     {
-                        p.state = State.Spin;
-                        p.spinUp = leftProjection / leftProjection.Length();
+                        p.Spin(leftProjection / leftProjection.Length());
                     }
                 }
                 if (Vector3.Dot(rightProjection, -right) != 0)
@@ -482,8 +481,7 @@ namespace VexedCore
                     p.platformVelocity = b.GetVelocity();
                     if (properties.type == VexedLib.EdgeType.Magnet)
                     {
-                        p.state = State.Spin;
-                        p.spinUp = rightProjection / rightProjection.Length();
+                        p.Spin(rightProjection / rightProjection.Length());                        
                     }
                 }
             }
@@ -532,13 +530,6 @@ namespace VexedCore
             
             #region doodad-activation
             // Test and activate doodads.
-            foreach (JumpPad j in r.jumpPads)
-            {
-                if ((j.position.position - p.center.position).Length() < .5f)
-                    j.active = true;
-                else
-                    j.active = false;
-            }
 
             foreach (Doodad d in r.doodads)
             {
@@ -549,9 +540,9 @@ namespace VexedCore
                     else
                         d.active = false;
                 }
-                if (d.type == VexedLib.DoodadType.WarpStation || d.type == VexedLib.DoodadType.JumpPad)
+                if (d.type == VexedLib.DoodadType.WarpStation || d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.ItemBlock || d.type == VexedLib.DoodadType.JumpStation || d.type == VexedLib.DoodadType.PowerStation || d.type == VexedLib.DoodadType.SwitchStation || d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.UpgradeStation)
                 {
-                    if ((d.position.position - p.center.position).Length() < d.triggerDistance)
+                    if (d.ActivationRange(p))
                         d.active = true;
                     else
                         d.active = false;
@@ -568,11 +559,17 @@ namespace VexedCore
                     }
                     if (d.type == VexedLib.DoodadType.Checkpoint)
                     {
-                        p.respawnPoint = d;
-                        p.respawnCenter = new Vertex(d.position.position, p.center.normal, Vector3.Zero, p.center.direction);
+                        if (p.respawnPoint != d)
+                        {
+                            LevelLoader.QuickSave();
+                            p.respawnPoint = d;
+                            p.respawnPlayer = new Player();
+                            p.respawnPlayer.currentRoom = p.currentRoom;
+                            p.respawnPlayer.center = new Vertex(d.position.position, p.center.normal, Vector3.Zero, p.center.direction);
+                        }
 
                     }
-                    if(d.targetDoodad != null)
+                    if(d.type == VexedLib.DoodadType.WallSwitch)
                     {
                         d.Activate();                        
                     }
@@ -726,6 +723,7 @@ namespace VexedCore
                             {
                                 s.srcProjectile.exploding = true;
                                 m.srcMonster.impactVector = Monster.AdjustVector(s.srcProjectile.position.velocity, m.srcMonster.position.normal, Engine.player.center.normal, Engine.player.center.direction, true);
+                                m.srcMonster.lastHitType = s.srcProjectile.type;
                                 s.srcProjectile.position.velocity = Vector3.Zero;                                
                             }
                         }
@@ -806,7 +804,7 @@ namespace VexedCore
                                 s.srcProjectile.exploding = true;
                             s.srcProjectile.position.velocity = Vector3.Zero;
 
-                            if (s.srcProjectile.type == ProjectileType.Bomb && s.srcProjectile.exploding == true && b.type == VexedLib.DoodadType.Brick)
+                            if ((s.srcProjectile.type == ProjectileType.Bomb || s.srcProjectile.type == ProjectileType.Missile) && s.srcProjectile.exploding == true && b.type == VexedLib.DoodadType.Brick)
                             {
                                 b.srcDoodad.active = true;
                             }

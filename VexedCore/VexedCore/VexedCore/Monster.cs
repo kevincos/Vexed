@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Xml.Serialization;
 
 namespace VexedCore
 {
@@ -16,6 +17,20 @@ namespace VexedCore
     {
         public static Texture2D monsterTexture;
         public static Texture2D monsterTextureDetail;
+
+        public static List<Vector2> bodyTexCoords;
+        public static List<Vector2> eyesTexCoords;
+        public static List<Vector2> fullArmorTexCoords;
+        public static List<Vector2> topArmorTexCoords;
+        public static List<Vector2> frontArmorTexCoords;
+        public static List<Vector2> treadsTexCoords;
+        public static List<Vector2> spiderTexCoords;
+        public static List<Vector2> legsTexCoords;
+        public static List<Vector2> gunTexCoords;
+
+        public static int texGridCount = 8;
+
+
         public Vertex position;
         public string firstWaypoint;
         public List<Vector3> waypoints;
@@ -36,28 +51,58 @@ namespace VexedCore
         public int spinTime = 0;
         public bool rightFacing = false;
         public bool rightMoving = false;
-        public Monster srcMonster;
+        [XmlIgnore]public Monster srcMonster;
+        
         public int directionChangeCooldown = 0;        
         public float currentAngle = .5f;
         public float angleRotateSpeed = .05f;
         public int fireCooldown = 0;
-        
-        
+        public string id;
+        public bool dead;
+        public Vector3 impactVector = Vector3.Zero;
+
+        public int armorHP = 3;
+        public int baseHP = 5;
+        public ProjectileType lastHitType;
 
         public Vector3 gunLine = Vector3.Zero;
         public Vector3 gunNormal = Vector3.Zero;
 
-        public static List<Vector2> bodyTexCoords;
-        public static List<Vector2> eyesTexCoords;
-        public static List<Vector2> fullArmorTexCoords;
-        public static List<Vector2> topArmorTexCoords;
-        public static List<Vector2> frontArmorTexCoords;
-        public static List<Vector2> treadsTexCoords;
-        public static List<Vector2> spiderTexCoords;
-        public static List<Vector2> legsTexCoords;
-        public static List<Vector2> gunTexCoords;
-
-        public static int texGridCount = 8;
+        public Monster(Monster m)
+        {
+            position = new Vertex(m.position);
+            firstWaypoint = m.firstWaypoint;
+            waypoints = new List<Vector3>();
+            foreach (Vector3 v in m.waypoints)
+                waypoints.Add(v);
+            currentWaypointIndex = m.currentWaypointIndex;
+            wayPointDirection = m.wayPointDirection;
+            waypointLoop = m.waypointLoop;
+            aiType = m.aiType;
+            moveType = m.moveType;
+            armorType = m.armorType;
+            gunType = m.gunType;
+            groundProjection = m.groundProjection;
+            forwardGroundProjection = m.forwardGroundProjection;
+            jumping = m.jumping;
+            jumpCooldown = m.jumpCooldown;
+            spinUp = m.spinUp;
+            spinMaxTime = m.spinMaxTime;
+            spinTime = m.spinTime;
+            rightFacing = m.rightFacing;
+            rightMoving = m.rightMoving;
+            directionChangeCooldown = m.directionChangeCooldown;
+            currentAngle = m.currentAngle;
+            angleRotateSpeed = m.angleRotateSpeed;
+            fireCooldown = m.fireCooldown;
+            id = m.id;
+            dead = m.dead;
+            impactVector = m.impactVector;
+            gunLine = m.gunLine;
+            gunNormal = m.gunNormal;
+            armorHP = m.armorHP;
+            baseHP = m.baseHP;
+        }
         
         public static List<Vector2> LoadTexCoords(int x, int y)
         {
@@ -84,6 +129,10 @@ namespace VexedCore
             legsTexCoords = LoadTexCoords(0, 3);            
         }
 
+        public Monster()
+        {
+        }
+
         public Monster(VexedLib.Monster xmlMonster, Vector3 normal)
         {
             this.position = new Vertex(xmlMonster.position, normal, Vector3.Zero, xmlMonster.up);
@@ -93,6 +142,7 @@ namespace VexedCore
             moveType = xmlMonster.movement;
             armorType = xmlMonster.armor;
             gunType = xmlMonster.weapon;
+            id = xmlMonster.IDString;
         }
 
         public Monster(Monster m, Room r, Vector3 n, Vector3 u)
@@ -118,9 +168,6 @@ namespace VexedCore
                 return 0;
             }
         }
-
-        public bool dead;
-        public Vector3 impactVector = Vector3.Zero;
 
         public float acceleration
         {
@@ -217,6 +264,24 @@ namespace VexedCore
             }
         }
 
+        public void ApplyDamage(bool armor, ProjectileType gunType)
+        {
+            if (armor == false)
+            {
+                baseHP--;
+            }
+            else if (gunType == ProjectileType.Laser)
+            {
+                armorHP--;
+                if (armorHP == 0)
+                {
+                    armorType = VexedLib.ArmorType.None;
+                }
+            }
+            if(baseHP == 0)
+                dead = true;
+        }
+
         public void Update(GameTime gameTime)
         {
             directionChangeCooldown -= gameTime.ElapsedGameTime.Milliseconds;
@@ -227,18 +292,22 @@ namespace VexedCore
                 fireCooldown = 0;
 
 
-            if (impactVector != Vector3.Zero && armorType != VexedLib.ArmorType.Full)
+            if (impactVector != Vector3.Zero)
             {
                 impactVector.Normalize();
-                if(armorType == VexedLib.ArmorType.None)                           
-                    dead = true;
-                if (armorType == VexedLib.ArmorType.Top && Vector3.Dot(impactVector, position.direction) > .5f)
-                    dead = true;
-                if (rightFacing == true && armorType == VexedLib.ArmorType.Shield && Vector3.Dot(impactVector, rightUnit) > 0)
-                    dead = true;
-                if (rightFacing == false && armorType == VexedLib.ArmorType.Shield && Vector3.Dot(impactVector, -rightUnit) > 0)
-                    dead = true;
-                impactVector = Vector3.Zero;
+                bool armorBlock = true;
+                if(armorType == VexedLib.ArmorType.None)
+                    armorBlock = false;
+                else if (armorType == VexedLib.ArmorType.Top && Vector3.Dot(impactVector, position.direction) > .5f)
+                    armorBlock = false;
+                else if (rightFacing == true && armorType == VexedLib.ArmorType.Shield && Vector3.Dot(impactVector, rightUnit) > 0)
+                    armorBlock = false;
+                else if (rightFacing == false && armorType == VexedLib.ArmorType.Shield && Vector3.Dot(impactVector, -rightUnit) > 0)
+                    armorBlock = false;
+
+                ApplyDamage(armorBlock, lastHitType);
+
+                impactVector = Vector3.Zero;                
             }
 
 

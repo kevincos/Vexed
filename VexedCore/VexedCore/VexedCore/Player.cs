@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Xml.Serialization;
 
 namespace VexedCore
 {
@@ -19,40 +20,17 @@ namespace VexedCore
         BridgeJump,
         Spin
     }
+
     public class Player
     {
-        public State state = State.Normal;
-        public Vertex center;
-        public Room currentRoom;
-        int jumpRecovery = 0;
-        public Vector3 jumpDestination;
-        public Vector3 jumpSource;
-        public Vector3 jumpCameraDestination;
-        public Vector3 jumpCameraSource;
-        public Vector3 jumpPosition;
-        public Vector3 jumpNormal;
-        public Vector3 platformVelocity;
-        public Vector3 spinUp;
-        public Room jumpRoom;
-        public int spinMaxTime = 200;
-        public int spinTime = 0;
-        public int jumpMaxTime = 1000;
-        public int jumpTime = 0;
-        public int walkTime = 0;
-        public int walkMaxTime = 800;
-        public int fireCooldown = 100;
-        public bool leftWall = false;
-        public bool rightWall = false;
-        public float playerHalfWidth = .35f;
-        public float playerHalfHeight = .5f;
-        public int weaponSwitchCooldown = 0;
-        public int weaponSwitchCooldownMax = 200;
-
-        public VexedLib.GunType gunType = VexedLib.GunType.Blaster;
 
         public static Texture2D player_textures_detail;
         public static Texture2D player_textures_clean;
         public static Texture2D player_textures;
+        public static Texture2D player_gun_textures;
+        public static Texture2D player_boots_textures;
+        public static Texture2D player_jetpack_textures;
+        public static Texture2D player_booster_textures;
         public static List<List<Vector2>> texCoordList;
 
         public static int texGridCount = 8;
@@ -74,31 +52,82 @@ namespace VexedCore
             for (int y = 0; y < 8; y++)
             {
                 for (int x = 0; x < 8; x++)
-                {                    
+                {
                     texCoordList.Add(LoadTexCoords(x, y));
                 }
-            }            
+            }
         }
+
+        public State state = State.Normal;
+        public Vertex center;
+        [XmlIgnore]public Room currentRoom;
+        public string currentRoomId;
+        int jumpRecovery = 0;
+        public Vector3 jumpDestination;
+        public Vector3 jumpSource;
+        public Vector3 jumpCameraDestination;
+        public Vector3 jumpCameraSource;
+        public Vector3 jumpPosition;
+        public Vector3 jumpNormal;
+        public Vector3 platformVelocity;
+        public Vector3 spinUp;
+        [XmlIgnore]public Room jumpRoom;
+        public int spinTime = 0;
+        public int launchTime = 0;
+        public int jumpTime = 0;
+        public int lastFireTime = 0;
+        public bool superJump = false;
+        public bool jetPacking = false;
+        public bool jetPackThrust = false;
+        public int walkTime = 0;
+        public int idleTime = 0;
+        public int boostTime = 0;
+        public int fireCooldown = 100;
+        public bool leftWall = false;
+        public bool rightWall = false;
+        public int weaponSwitchCooldown = 0;
+        public Ability primaryAbility;
+        public Ability secondaryAbility;
+        public Ability naturalShield;
+        public bool boosting = false;
+        public bool[] upgrades;
+
+
+        public float playerHalfWidth = .35f;
+        public float playerHalfHeight = .5f;
+
+        public static int jumpRecoveryMax = 300;
+        public static int spinMaxTime = 200;
+        public static int walkMaxTime = 800;
+        public static int launchMaxTime = 1000;
+        public static int maxBoostTime = 300;
+        public static int weaponSwitchCooldownMax = 200;
+
+        public VexedLib.GunType gunType = VexedLib.GunType.Blaster;
+        
         
         public float walkSpeed = .001f;
         public float airSpeed = .0005f;
-        public float jumpSpeed = .026f;
+        public float jumpSpeed = .020f;
+        
         public float wallJumpSpeed = .01f;
         public float maxHorizSpeed = .01f;
-        public float maxVertSpeed = .025f;
+        public float maxVertSpeed = .02f;
         public float gravityAcceleration = .001f;
+        public float boostAcceleration = .002f;
         private bool _grounded = false;
         public int groundTolerance = 100;
         public int groundCounter = 0;
         public int faceDirection = 0;
-        public float baseCameraDistance = 9;
+        public float baseCameraDistance = 12;
         public int orbsCollected = 0;
 
         public Vector2 cameraAngle;
         public Vector2 targetCameraAngle;
 
-        public Doodad respawnPoint;
-        public Vertex respawnCenter;
+        [XmlIgnore]public Doodad respawnPoint;
+        [XmlIgnore]public Player respawnPlayer;
+
         public bool dead = false;
 
         public float boundingBoxTop;
@@ -106,6 +135,57 @@ namespace VexedCore
         public float boundingBoxLeft;
         public float boundingBoxRight;
 
+
+        public Player()
+        {
+            upgrades = new bool[32];
+            upgrades[(int)AbilityType.RedKey] = true;
+            upgrades[(int)AbilityType.BlueKey] = true;
+            upgrades[(int)AbilityType.YellowKey] = true;
+            primaryAbility = new Ability(AbilityType.Booster);
+            secondaryAbility = new Ability(AbilityType.JetPack);
+            naturalShield = new Ability(AbilityType.Shield);
+            for (int i = 0; i < 32; i++)
+                upgrades[i] = true;            
+        }
+
+        public Player(Player p)
+        {
+            
+            state = p.state;
+            center = new Vertex(p.center);
+            jumpRecovery = p.jumpRecovery;
+            jumpDestination = p.jumpDestination;
+            jumpSource = p.jumpSource;
+            jumpCameraDestination = p.jumpCameraDestination;
+            jumpPosition = p.jumpPosition;
+            jumpNormal = p.jumpNormal;
+            platformVelocity = p.platformVelocity;
+            spinUp = p.spinUp;
+            spinTime = p.spinTime;
+            launchTime = p.launchTime;
+            walkTime = p.walkTime;
+            boostTime = p.boostTime;
+            fireCooldown = p.fireCooldown;
+            leftWall = p.leftWall;
+            rightWall = p.rightWall;
+            jumpTime = p.jumpTime;
+            weaponSwitchCooldown = p.weaponSwitchCooldown;
+            gunType = p.gunType;
+            currentRoomId = p.currentRoomId;
+            primaryAbility = new Ability(p.primaryAbility);
+            secondaryAbility = new Ability(p.secondaryAbility);
+            naturalShield = new Ability(p.naturalShield);
+            boosting = p.boosting;
+
+            upgrades = new bool[32];
+            for (int i = 0; i < 32; i++)
+                upgrades[i] = p.upgrades[i];
+
+            if (p.currentRoom != null)
+                currentRoomId = p.currentRoom.id;
+
+        }
 
         public int fireTime
         {
@@ -140,50 +220,7 @@ namespace VexedCore
         {
             get
             {
-                if (state != State.Normal)
-                    return 0;
-                if (walking == true)
-                {
-                    if (faceDirection < 0)
-                    {
-                        if (walkTime > 3 * walkMaxTime / 4)
-                            return 16;
-                        else if (walkTime > walkMaxTime / 2)
-                            return 18;
-                        else if (walkTime > walkMaxTime / 4)
-                            return 19;
-                        else
-                            return 17;
-                    }
-                    else
-                    {
-                        if (walkTime > 3 * walkMaxTime / 4)
-                            return 24;
-                        else if (walkTime > walkMaxTime / 2)
-                            return 26;
-                        else if (walkTime > walkMaxTime / 4)
-                            return 27;
-                        else
-                            return 25;
-                    }
-                }
-                else if (grounded == true)
-                    if (faceDirection < 0)
-                        return 2;
-                    else if (faceDirection > 0)
-                        return 1;
-                    else
-                        return 0;
-                else if (leftWall == true && faceDirection < 0)
-                    return 32;
-                else if (rightWall == true && faceDirection > 0)
-                    return 40;
-                else if (faceDirection < 0)
-                    return 19;
-                else if (faceDirection > 0)
-                    return 27;
-                else
-                    return 8;
+                return AnimationControl.GetCurrentFrame();
             }
         }
 
@@ -206,7 +243,8 @@ namespace VexedCore
             get
             {
                 Vector2 stick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Left;
-                return (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Right) || stick.X != 0) && grounded == true;
+                return (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Right) ||
+                    Keyboard.GetState().IsKeyDown(Keys.A) || (Keyboard.GetState().IsKeyDown(Keys.D)) || stick.X != 0) && grounded == true;
             }
         }
 
@@ -220,14 +258,14 @@ namespace VexedCore
                 }
                 if (state == State.BridgeJump)
                 {
-                    return ((jumpMaxTime - jumpTime) * jumpCameraSource + jumpTime * jumpCameraDestination) / jumpMaxTime;
+                    return ((launchMaxTime - launchTime) * jumpCameraSource + launchTime * jumpCameraDestination) / launchMaxTime;
                     //return jumpPosition + center.normal * 16;
                 }
                 else
                 {
                     Vector3 side = Vector3.Cross(center.direction, center.normal);
-                    float sideValue = 1f*jumpTime / jumpMaxTime;
-                    Vector3 cameraBase = ((jumpMaxTime-jumpTime)*jumpCameraSource + jumpTime* jumpCameraDestination) / jumpMaxTime;
+                    float sideValue = 1f*launchTime / launchMaxTime;
+                    Vector3 cameraBase = ((launchMaxTime-launchTime)*jumpCameraSource + launchTime* jumpCameraDestination) / launchMaxTime;
                     Vector3 camera = cameraBase + sideValue * side;
                     return camera;
                 }
@@ -244,14 +282,14 @@ namespace VexedCore
                 }
                 if (state == State.BridgeJump)
                 {
-                    return ((jumpMaxTime - jumpTime) * jumpCameraSource + jumpTime * jumpCameraDestination) / jumpMaxTime;
+                    return ((launchMaxTime - launchTime) * jumpCameraSource + launchTime * jumpCameraDestination) / launchMaxTime;
                     //return jumpPosition + center.normal * 16;
                 }
                 else
                 {
                     Vector3 side = Vector3.Cross(center.direction, center.normal);
-                    float sideValue = 1f * jumpTime / jumpMaxTime;
-                    Vector3 cameraBase = ((jumpMaxTime - jumpTime) * jumpCameraSource + jumpTime * jumpCameraDestination) / jumpMaxTime;
+                    float sideValue = 1f * launchTime / launchMaxTime;
+                    Vector3 cameraBase = ((launchMaxTime - launchTime) * jumpCameraSource + launchTime * jumpCameraDestination) / launchMaxTime;
                     Vector3 camera = cameraBase + sideValue * side;
                     return camera;
                 }
@@ -327,20 +365,176 @@ namespace VexedCore
 
         public void Respawn()
         {
-            currentRoom = respawnPoint.targetRoom;
-            state = State.Normal;
-            center = new Vertex(respawnCenter.position, respawnCenter.normal, respawnCenter.velocity, respawnCenter.direction);
-            dead = false;
             Engine.reDraw = true;
+            LevelLoader.QuickLoad();
+        }
+
+        public void Boost()
+        {
+            //center.velocity -= Vector3.Dot(center.velocity, up) * up;
+            center.velocity = right * maxHorizSpeed * faceDirection;
+            
+            boosting = true;
+            boostTime = maxBoostTime;
+        }
+
+        public void Damage(Vector3 projection)
+        {
+            idleTime = 0;
+            if (primaryAbility.type == AbilityType.Shield && primaryAbility.ammo != 0)
+            {
+                primaryAbility.DepleteAmmo(800);
+                return;
+            }
+            if (secondaryAbility.type == AbilityType.Shield && secondaryAbility.ammo != 0)
+            {
+                secondaryAbility.DepleteAmmo(800);
+                return;
+            }
+            if (naturalShield.ammo != 0)
+            {
+                naturalShield.DepleteAmmo(800);
+                return;
+            }
+            dead = true;
+        }
+
+        public void Spin(Vector3 newUp)
+        {
+            if (upgrades[(int)AbilityType.PermanentBoots]==true || primaryAbility.type == AbilityType.Boots || secondaryAbility.type == AbilityType.Boots)
+            {
+                state = State.Spin;
+                spinUp = newUp;
+            }
+        }
+
+        public void SetAnimationState()
+        {
+            if (lastFireTime > 1000)
+            {
+                if (boosting)
+                {
+                    if (faceDirection < 0)
+                        AnimationControl.SetState(AnimationState.BoostLeft);
+                    if (faceDirection > 0)
+                        AnimationControl.SetState(AnimationState.BoostRight);
+                }
+                else if (jetPacking)
+                {
+                    if (faceDirection < 0)
+                        AnimationControl.SetState(AnimationState.FlyLeft);
+                    if (faceDirection > 0)
+                        AnimationControl.SetState(AnimationState.FlyRight);
+                }
+                else if (walking)
+                {
+                    if (faceDirection < 0)
+                        AnimationControl.SetState(AnimationState.RunLeft);
+                    if (faceDirection > 0)
+                        AnimationControl.SetState(AnimationState.RunRight);
+                }
+                else if (grounded == false && leftWall == true && faceDirection < 0)
+                {
+                    AnimationControl.SetState(AnimationState.WallRight);
+                }
+                else if (grounded == false && rightWall == true && faceDirection > 0)
+                {
+                    AnimationControl.SetState(AnimationState.WallLeft);
+                }
+                else if (grounded == false)
+                {
+                    if (faceDirection < 0)
+                        AnimationControl.SetState(AnimationState.JumpLeft);
+                    if (faceDirection > 0)
+                        AnimationControl.SetState(AnimationState.JumpRight);
+                }
+                else
+                {
+                    if (faceDirection < 0)
+                        AnimationControl.SetState(AnimationState.IdleLeft);
+                    if (faceDirection > 0)
+                        AnimationControl.SetState(AnimationState.IdleRight);
+                    if (faceDirection == 0)
+                        AnimationControl.SetState(AnimationState.Idle);
+                }
+            }
+            else
+            {
+                if (boosting)
+                {
+                    if (faceDirection < 0)
+                        AnimationControl.SetState(AnimationState.BoostLeft);
+                    if (faceDirection > 0)
+                        AnimationControl.SetState(AnimationState.BoostRight);
+                }
+                else if (jetPacking)
+                {
+                    if (faceDirection < 0)
+                        AnimationControl.SetState(AnimationState.FlyLeftFiring);
+                    if (faceDirection > 0)
+                        AnimationControl.SetState(AnimationState.FlyRightFiring);
+                }
+                else if (walking)
+                {
+                    if (faceDirection < 0)
+                        AnimationControl.SetState(AnimationState.RunLeftFiring);
+                    if (faceDirection > 0)
+                        AnimationControl.SetState(AnimationState.RunRightFiring);
+                }
+                else if (grounded == false && leftWall == true && faceDirection < 0)
+                {
+                    AnimationControl.SetState(AnimationState.WallRightFiring);
+                }
+                else if (grounded == false && rightWall == true && faceDirection > 0)
+                {
+                    AnimationControl.SetState(AnimationState.WallLeftFiring);
+                }
+                else if (grounded == false)
+                {
+                    if (faceDirection < 0)
+                        AnimationControl.SetState(AnimationState.JumpLeftFiring);
+                    if (faceDirection > 0)
+                        AnimationControl.SetState(AnimationState.JumpRightFiring);
+                }
+                else
+                {
+                    if (faceDirection < 0)
+                        AnimationControl.SetState(AnimationState.IdleLeftFiring);
+                    if (faceDirection > 0)
+                        AnimationControl.SetState(AnimationState.IdleRightFiring);
+                    if (faceDirection == 0)
+                        AnimationControl.SetState(AnimationState.Idle);
+                }
+            }
         }
 
         public void Update(GameTime gameTime)
         {
-            fireCooldown -= gameTime.ElapsedGameTime.Milliseconds;
-            if (fireCooldown < 0) fireCooldown = 0;
+            SetAnimationState();
+            primaryAbility.Update(gameTime);
+            secondaryAbility.Update(gameTime);
 
-            weaponSwitchCooldown -= gameTime.ElapsedGameTime.Milliseconds;
-                if (weaponSwitchCooldown < 0) weaponSwitchCooldown = 0;
+            if (grounded && !walking)
+                idleTime += gameTime.ElapsedGameTime.Milliseconds;
+            else
+                idleTime = 0;
+
+            lastFireTime += gameTime.ElapsedGameTime.Milliseconds;
+
+            if (idleTime > 2000)
+            {
+                if (primaryAbility.type == AbilityType.Shield)
+                {
+                    primaryAbility.AddAmmo(gameTime.ElapsedGameTime.Milliseconds);
+                }
+                if (secondaryAbility.type == AbilityType.Shield)
+                {
+                    secondaryAbility.AddAmmo(gameTime.ElapsedGameTime.Milliseconds);
+                }
+            }
+            if (grounded)
+                jetPacking = false;
+
             if (dead == true)
                 Respawn();
             
@@ -354,7 +548,7 @@ namespace VexedCore
             }
             Vector2 stick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Left;
             Vector2 rightStick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Right;
-            GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+            GamePadState gamePadState = GamePad.GetState(Game1.activePlayer);
             
             if (state == State.Normal)
             {
@@ -367,13 +561,18 @@ namespace VexedCore
                 center.Update(currentRoom, gameTime.ElapsedGameTime.Milliseconds);
                 jumpRecovery -= gameTime.ElapsedGameTime.Milliseconds;
                 if (jumpRecovery < 0) jumpRecovery = 0;
+                boostTime -= gameTime.ElapsedGameTime.Milliseconds;
+                if (boostTime < 0) boostTime = 0;
+                if (boostTime == 0)
+                    boosting = false;
+
                 Vector3 up = center.direction;
                 Vector3 right = Vector3.Cross(up, center.normal);
 
                 //if (grounded == true)
                     //faceDirection = 0;
 
-                if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
                 {
                     faceDirection = -1;
                     if (grounded == true)
@@ -381,7 +580,7 @@ namespace VexedCore
                     else
                         center.velocity -= airSpeed * right;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
                 {
                     faceDirection = 1;
                     if (grounded == true)
@@ -398,45 +597,94 @@ namespace VexedCore
                     if (stick.X > 0) faceDirection = 1;
                     if (stick.X < 0) faceDirection = -1;
                 }
-                if ((gamePadState.IsButtonDown(Buttons.A) || Keyboard.GetState().IsKeyDown(Keys.Space)) && jumpRecovery == 0)
+
+                if (superJump == true)
                 {
+                    jumpTime += gameTime.ElapsedGameTime.Milliseconds;
+                    
+                    if (jumpTime > 45 && grounded == true)
+                        center.velocity += (jumpSpeed - upMagnitude) * up;
+                    int jumpLimit = 60;
+                    if (upgrades[(int)AbilityType.ImprovedJump])
+                        jumpLimit = 150;
+                    if (jumpTime > jumpLimit)
+                        superJump = false;
+                    if (jumpTime < 45 && grounded == false)
+                        superJump = false;
+                    if (Game1.controller.AButton.Pressed == false && jumpTime > 45)
+                        superJump = false;
+                }
+
+                if (Game1.controller.AButton.NewPressed && jumpRecovery == 0)
+                {
+
+                    Game1.controller.AButton.Invalidate();
                     upMagnitude = Vector3.Dot(up, center.velocity);
                     rightMagnitude = Vector3.Dot(right, center.velocity);
-                        
                     if (grounded)
                     {
                         if (upMagnitude < jumpSpeed)
                         {
-                            center.velocity += (jumpSpeed - upMagnitude) * up;
-                            jumpRecovery = 500;
+                            superJump = true;
+                            jumpTime = 0;
+                            jetPacking = false;
+                            //center.velocity += (jumpSpeed - upMagnitude) * up;
+                            jumpRecovery = jumpRecoveryMax;
                         }
                     }
-                    else if (leftWall && faceDirection < 0)
+                    else if (leftWall && faceDirection < 0 && (upgrades[(int)AbilityType.PermanentWallJump] == true || primaryAbility.type == AbilityType.WallJump || secondaryAbility.type == AbilityType.WallJump))
                     {
                         faceDirection = 1;
                         if (upMagnitude < jumpSpeed)
-                            center.velocity += (jumpSpeed - upMagnitude) * up;                                                    
-                        if(rightMagnitude < wallJumpSpeed)
+                            center.velocity += (jumpSpeed - upMagnitude) * up;
+                        if (rightMagnitude < wallJumpSpeed)
                             center.velocity += (wallJumpSpeed - rightMagnitude) * right;
-                        jumpRecovery = 500;
-                        
+                        jumpRecovery = jumpRecoveryMax;
+
                     }
-                    else if (rightWall && faceDirection > 0)
+                    else if (rightWall && faceDirection > 0 && (upgrades[(int)AbilityType.PermanentWallJump] == true || primaryAbility.type == AbilityType.WallJump || secondaryAbility.type == AbilityType.WallJump))
                     {
                         faceDirection = -1;
                         if (upMagnitude < jumpSpeed)
                             center.velocity += (jumpSpeed - upMagnitude) * up;
                         if (rightMagnitude > -wallJumpSpeed)
-                            center.velocity -= (wallJumpSpeed + rightMagnitude) * right;                         
-                        jumpRecovery = 500;
+                            center.velocity -= (wallJumpSpeed + rightMagnitude) * right;
+                        jumpRecovery = jumpRecoveryMax;
+                    }
+                    else
+                    {
+                        if (primaryAbility.type == AbilityType.DoubleJump && primaryAbility.ammo != 0)
+                        {
+                            if (upMagnitude < jumpSpeed)
+                            {
+                                jetPacking = false;
+                                center.velocity += (jumpSpeed - upMagnitude) * up;
+                                jumpRecovery = jumpRecoveryMax;
+                                primaryAbility.ammo--;
+                            }
+                        }
+                        else if (secondaryAbility.type == AbilityType.DoubleJump && secondaryAbility.ammo != 0)
+                        {
+                            if (upMagnitude < jumpSpeed)
+                            {
+                                jetPacking = false;
+                                center.velocity += (jumpSpeed - upMagnitude) * up;
+                                jumpRecovery = jumpRecoveryMax;
+                                secondaryAbility.ammo--;
+                            }
+                        }
                     }
                 }
-                if((gamePadState.IsButtonDown(Buttons.B)))
+                
+                if((gamePadState.IsButtonDown(Buttons.Back)))
                 {
                     Respawn();
                 }
-                
-                center.velocity -= gravityAcceleration * up;
+
+                if (boosting == false)
+                    center.velocity -= gravityAcceleration * up;
+                else
+                    center.velocity += boostAcceleration * right * faceDirection;
 
                 upMagnitude = Vector3.Dot(up, center.velocity);
                 rightMagnitude = Vector3.Dot(right, center.velocity - platformVelocity);
@@ -451,11 +699,11 @@ namespace VexedCore
                 {
                     center.velocity -= (maxVertSpeed + upMagnitude) * up;
                 }
-                if (rightMagnitude > maxHorizSpeed)
+                if (rightMagnitude > maxHorizSpeed && boosting == false)
                 {
                     center.velocity -= (rightMagnitude - maxHorizSpeed) * right;
                 }
-                if (rightMagnitude < -maxHorizSpeed)
+                if (rightMagnitude < -maxHorizSpeed && boosting == false)
                 {
                     center.velocity -= (maxHorizSpeed + rightMagnitude) * right;
                 }
@@ -474,56 +722,172 @@ namespace VexedCore
                             gunType = VexedLib.GunType.Blaster;
                     }
                 }
-                if (gamePadState.IsButtonDown(Buttons.X) || Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+                jetPackThrust = false;
+                if (Game1.controller.XButton.Pressed)
                 {
-                    if (fireCooldown == 0)
+                    Doodad itemStation = null;
+                    bool stationPresent = false;
+                    foreach (Doodad d in currentRoom.doodads)
                     {
-                        fireCooldown = 400;
-                        Vector3 shootDirection;
-                        if (grounded == false && leftWall == true)
-                            shootDirection = right / right.Length();
-                        else if (grounded == false && rightWall == true)
-                            shootDirection = -right / right.Length();
-                        else if (faceDirection >= 0)
-                            shootDirection = right / right.Length();
-                        else
-                            shootDirection = -right / right.Length();
-
-                        if (gunType == VexedLib.GunType.Blaster)
-                            currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Player, center.position, center.velocity, center.normal, shootDirection));
-                        if (gunType == VexedLib.GunType.Missile)
-                            currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Missile, center.position + .5f * shootDirection, center.velocity, center.normal, shootDirection));
-                        if (gunType == VexedLib.GunType.Bomb)
-                            currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Bomb, center.position + .5f * shootDirection, center.velocity, center.normal, shootDirection));
-                        if (gunType == VexedLib.GunType.Beam)
-                            currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Laser, center.position, center.velocity, center.normal, shootDirection));
-
-                    }
-                }
-                if (gamePadState.IsButtonDown(Buttons.Y) || Keyboard.GetState().IsKeyDown(Keys.LeftControl))
-                {
-                    foreach (JumpPad j in currentRoom.jumpPads)
-                    {
-                        if (j.active)
+                        if (d.active && (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.ItemBlock))
                         {
-                            jumpRoom = j.targetRoom;
-                            float roomSize = Math.Abs(Vector3.Dot(jumpRoom.size / 2, center.normal));
-                            jumpSource = center.position;
-                            jumpDestination = center.position + Vector3.Dot(jumpRoom.center - center.position - roomSize * center.normal, center.normal) * center.normal;
-                            jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
-                            jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
-                            state = State.Jump;
-                            center.velocity = Vector3.Zero;
-                            jumpTime = 0;
-                            j.active = false;
-                            jumpNormal = -center.normal;
+                            if (Game1.controller.XButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == true)
+                            {
+                                itemStation = d;
+                            }
+                            stationPresent = true;
                         }
                     }
+                
+                    if (stationPresent == false)
+                    {
+                        primaryAbility.Do(gameTime);
+                        Game1.controller.XButton.Invalidate();
+                    }
+                    else if (itemStation != null)
+                    {
+                        AbilityType swapAbilityType = primaryAbility.type;
+                        primaryAbility = new Ability(itemStation.abilityType);
+                        itemStation.abilityType = swapAbilityType;
+                        itemStation.cooldown = itemStation.maxCooldown;
+                    }
+                }
+                if (Game1.controller.YButton.Pressed)
+                {
+                    Doodad itemStation = null;
+                    bool stationPresent = false;
+
+                    foreach (Doodad d in currentRoom.doodads)
+                    {
+                        if (d.active && (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.ItemBlock))
+                        {
+                            if (Game1.controller.YButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == true)
+                            {
+                                itemStation = d;
+                            }
+                            stationPresent = true;
+                        }
+                    }
+                    if (stationPresent == false)
+                    {
+                        secondaryAbility.Do(gameTime);
+                        Game1.controller.YButton.Invalidate();
+                    }
+                    else if (itemStation != null)
+                    {
+                        AbilityType swapAbilityType = secondaryAbility.type;
+                        secondaryAbility = new Ability(itemStation.abilityType);
+                        itemStation.abilityType = swapAbilityType;
+                        itemStation.cooldown = itemStation.maxCooldown;
+                    }
+                }
+                if (Game1.controller.BButton.Pressed)
+                {
 
                     foreach (Doodad d in currentRoom.doodads)
                     {
                         if (d.active)
                         {
+                            if (d.type == VexedLib.DoodadType.BridgeGate)
+                            {
+                                jumpRoom = d.targetRoom;
+                                jumpSource = center.position;
+                                jumpDestination = d.targetDoodad.position.position - 2f * d.targetDoodad.upUnit;
+                                jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
+                                jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
+
+                                jumpNormal = center.normal;
+                                launchTime = 0;
+                                state = State.BridgeJump;
+                                faceDirection = 0;
+                                d.active = false;
+                                d.targetDoodad.active = false;
+                            }
+                            if (d.type == VexedLib.DoodadType.PowerStation)
+                            {
+                                if (d.orbsRemaining > 0)
+                                {
+                                    orbsCollected += 1;
+                                    d.orbsRemaining--;
+                                }
+                            }
+                            if (d.type == VexedLib.DoodadType.UpgradeStation)
+                            {
+                                if (d.abilityType == AbilityType.Ultima)
+                                {
+                                    for (int i = 0; i < 32; i++)
+                                        upgrades[i] = true;
+                                }
+                                upgrades[(int)d.abilityType] = true;
+                                d.abilityType = AbilityType.Empty;
+                            }
+                            if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
+                            {
+                                jumpRoom = d.targetRoom;
+                                float roomSize = Math.Abs(Vector3.Dot(jumpRoom.size / 2, center.normal));
+                                jumpSource = center.position;
+                                jumpDestination = center.position + Vector3.Dot(jumpRoom.center - center.position - roomSize * center.normal, center.normal) * center.normal;
+                                jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
+                                jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
+                                state = State.Jump;
+                                center.velocity = Vector3.Zero;
+                                launchTime = 0;
+                                d.active = false;
+                                jumpNormal = -center.normal;
+                            }
+                            if (d.type == VexedLib.DoodadType.SwitchStation)
+                            {
+                                bool locked = false;
+                                if (d.abilityType == AbilityType.RedKey && !(primaryAbility.type == AbilityType.RedKey || secondaryAbility.type == AbilityType.RedKey || upgrades[(int)AbilityType.PermanentRedKey] == true))
+                                    locked = true;
+                                if (d.abilityType == AbilityType.BlueKey && !(primaryAbility.type == AbilityType.BlueKey || secondaryAbility.type == AbilityType.BlueKey || upgrades[(int)AbilityType.PermanentBlueKey] == true))
+                                    locked = true;
+                                if (d.abilityType == AbilityType.YellowKey && !(primaryAbility.type == AbilityType.YellowKey || secondaryAbility.type == AbilityType.YellowKey || upgrades[(int)AbilityType.PermanentYellowKey] == true))
+                                    locked = true;
+                                if (locked == false)
+                                {
+
+                                    if (d.targetDoodad != null)
+                                    {
+                                        if (d.targetDoodad.currentBehavior.id == d.expectedBehavior)
+                                        {
+                                            foreach (Behavior b in d.targetDoodad.behaviors)
+                                            {
+                                                if (b.id == d.targetBehavior)
+                                                {
+                                                    d.targetDoodad.SetBehavior(b);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (d.targetBlock != null)
+                                    {
+                                        if (d.targetBlock.currentBehavior.id == d.expectedBehavior)
+                                        {
+                                            foreach (Behavior b in d.targetBlock.behaviors)
+                                            {
+                                                if (b.id == d.targetBehavior)
+                                                {
+                                                    d.targetBlock.SetBehavior(b);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (d.targetEdge != null)
+                                    {
+                                        if (d.targetEdge.currentBehavior.id == d.expectedBehavior)
+                                        {
+                                            foreach (Behavior b in d.targetEdge.behaviors)
+                                            {
+                                                if (b.id == d.targetBehavior)
+                                                {
+                                                    d.targetEdge.SetBehavior(b);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }                            
                             if (d.type == VexedLib.DoodadType.WarpStation)
                             {
                                 Engine.state = EngineState.ZoomOut;
@@ -538,31 +902,34 @@ namespace VexedCore
                 }
                 foreach (Doodad d in currentRoom.doodads)
                 {
-                    if (d.type == VexedLib.DoodadType.BridgeGate && d.active)
+                    if (d.active)
                     {
-                        jumpRoom = d.targetRoom;
-                        jumpSource = center.position;
-                        jumpDestination = d.targetDoodad.position.position - 2f* d.targetDoodad.upUnit;
-                        jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
-                        jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
+                        if (d.type == VexedLib.DoodadType.BridgeGate)
+                        {
+                            jumpRoom = d.targetRoom;
+                            jumpSource = center.position;
+                            jumpDestination = d.targetDoodad.position.position - 2f * d.targetDoodad.upUnit;
+                            jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
+                            jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
 
-                        jumpNormal = center.normal;
-                        jumpTime = 0;
-                        state = State.BridgeJump;
-                        faceDirection = 0;
-                        d.active = false;
-                        d.targetDoodad.active = false;
+                            jumpNormal = center.normal;
+                            launchTime = 0;
+                            state = State.BridgeJump;
+                            faceDirection = 0;
+                            d.active = false;
+                            d.targetDoodad.active = false;
+                        }
                     }
                 }
                 #endregion
             }
             if (state == State.Jump || state == State.BridgeJump)
             {
-                jumpTime += gameTime.ElapsedGameTime.Milliseconds;
-                if (jumpTime > jumpMaxTime)
-                    jumpTime = jumpMaxTime;
-                jumpPosition = ((jumpMaxTime - jumpTime) * jumpSource + jumpTime * jumpDestination) / jumpMaxTime;
-                if (jumpTime == jumpMaxTime)
+                launchTime += gameTime.ElapsedGameTime.Milliseconds;
+                if (launchTime > launchMaxTime)
+                    launchTime = launchMaxTime;
+                jumpPosition = ((launchMaxTime - launchTime) * jumpSource + launchTime * jumpDestination) / launchMaxTime;
+                if (launchTime == launchMaxTime)
                 {
                     center.normal = jumpNormal;
                     center.position = jumpDestination;
@@ -629,9 +996,18 @@ namespace VexedCore
                         boundingBoxRight < m.boundingBoxLeft);
         }
 
-
-        public void DrawTexture()
+        public void DrawTexture(AlphaTestEffect playerEffect)
         {
+            if (primaryAbility.isGun || secondaryAbility.isGun)
+            {
+                playerEffect.Texture = Player.player_gun_textures;
+                playerEffect.CurrentTechnique.Passes[0].Apply();
+            }
+            else
+            {
+                playerEffect.Texture = Player.player_textures;
+                playerEffect.CurrentTechnique.Passes[0].Apply();
+            }
 
             if (state == State.BridgeJump)
             {
@@ -672,8 +1048,113 @@ namespace VexedCore
             }
 
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration); 
-            
+                triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+
+
+            if (primaryAbility.isBoots || secondaryAbility.isBoots)
+            {
+                playerEffect.Texture = Player.player_boots_textures;
+                playerEffect.CurrentTechnique.Passes[0].Apply();
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
+            if (primaryAbility.type == AbilityType.Booster || secondaryAbility.type == AbilityType.Booster)
+            {
+                playerEffect.Texture = Player.player_booster_textures;
+                playerEffect.CurrentTechnique.Passes[0].Apply();
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                if (boosting == true)
+                {
+                    float flameDepth = .35f;
+                    if (faceDirection < 0)
+                    {
+                        List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();
+                        List<Vertex> flameVertexList = new List<Vertex>();
+                        flameVertexList.Add(new Vertex(center.position, center.normal, +.8f*playerHalfHeight * up + 1.3f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, +.8f* playerHalfHeight * up - .1f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -.6f * playerHalfHeight * up - .1f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -.6f * playerHalfHeight * up + 1.3f * right, center.direction));
+                        foreach (Vertex v in flameVertexList)
+                        {
+                            v.Update(currentRoom, 1);
+                        }
+                        currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Ability.texCoordList[33], true);
+                        playerEffect.Texture = Ability.ability_textures;
+                        playerEffect.CurrentTechnique.Passes[0].Apply();
+                        Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                            jetFlameTriangleList.ToArray(), 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                    }
+                    if (faceDirection > 0)
+                    {
+                        List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();
+                        List<Vertex> flameVertexList = new List<Vertex>();
+                        flameVertexList.Add(new Vertex(center.position, center.normal, +.8f * playerHalfHeight * up + .1f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, +.8f * playerHalfHeight * up - 1.3f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -.6f * playerHalfHeight * up - 1.3f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -.6f * playerHalfHeight * up + .1f * right, center.direction));
+                        foreach (Vertex v in flameVertexList)
+                        {
+                            v.Update(currentRoom, 1);
+                        }
+                        currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Ability.texCoordList[33], false);
+                        playerEffect.Texture = Ability.ability_textures;
+                        playerEffect.CurrentTechnique.Passes[0].Apply();
+                        Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                            jetFlameTriangleList.ToArray(), 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                    }
+                }
+            }
+            if (primaryAbility.type == AbilityType.JetPack || secondaryAbility.type == AbilityType.JetPack)
+            {
+                playerEffect.Texture = Player.player_jetpack_textures;
+                playerEffect.CurrentTechnique.Passes[0].Apply();
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                if (jetPackThrust == true)
+                {
+                    float flameDepth = .25f;
+                    if (faceDirection != 0)
+                        flameDepth = .35f;
+                    if (faceDirection <= 0)
+                    {
+                        List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();
+                        List<Vertex> flameVertexList = new List<Vertex>();
+                        flameVertexList.Add(new Vertex(center.position, center.normal, .4f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -.2f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up - .2f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up + .4f * right, center.direction));
+                        foreach (Vertex v in flameVertexList)
+                        {
+                            v.Update(currentRoom, 1);
+                        }
+                        currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Ability.texCoordList[32], true);
+                        playerEffect.Texture = Ability.ability_textures;
+                        playerEffect.CurrentTechnique.Passes[0].Apply();
+                        Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                            jetFlameTriangleList.ToArray(), 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                    }
+                    if (faceDirection >= 0)
+                    {
+                        List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();
+                        List<Vertex> flameVertexList = new List<Vertex>();
+                        flameVertexList.Add(new Vertex(center.position, center.normal, .2f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -.4f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up -.4f * right, center.direction));
+                        flameVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up + .2f * right, center.direction));
+                        foreach (Vertex v in flameVertexList)
+                        {
+                            v.Update(currentRoom, 1);
+                        }
+                        currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Ability.texCoordList[32], true);
+                        playerEffect.Texture = Ability.ability_textures;
+                        playerEffect.CurrentTechnique.Passes[0].Apply();
+                        Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                            jetFlameTriangleList.ToArray(), 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                    }
+                }
+            }
+
         }        
         
 

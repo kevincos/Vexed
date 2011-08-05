@@ -24,7 +24,9 @@ namespace VexedCore
         public static float controlStickTrigger = .25f;
         public static PlayerIndex activePlayer = PlayerIndex.One;
 
+        public static Rectangle titleSafeRect;
         public static Engine engine;
+        public static Controls controller;
 
   
 
@@ -42,7 +44,7 @@ namespace VexedCore
             bool fullScreen = false;
             //resWidth = 1920;
             //resHeight = 1080;
-            fullScreen = true;
+            //fullScreen = true;
             graphics.IsFullScreen = fullScreen;
             graphics.PreferredBackBufferWidth = resWidth;
             graphics.PreferredBackBufferHeight = resHeight;
@@ -50,7 +52,10 @@ namespace VexedCore
             Window.EndScreenDeviceChange(Window.ScreenDeviceName, resWidth, resHeight);
             graphics.ApplyChanges();
 
+            titleSafeRect = graphics.GraphicsDevice.Viewport.TitleSafeArea;
+
             engine = new Engine();
+            controller = new Controls(activePlayer);
             //bloom = new BloomComponent(this);
             Content.RootDirectory = "Content";
 
@@ -82,10 +87,12 @@ namespace VexedCore
 
             engine.Init();
             Skybox.Init();
+            AnimationControl.Init();
 
             Monster.InitTexCoords();
             Player.InitTexCoords();
             Projectile.InitTexCoords();
+            Ability.InitTexCoords();
             Room.InitTexCoords();
         }
 
@@ -96,13 +103,18 @@ namespace VexedCore
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            engine.spriteBatch = new SpriteBatch(GraphicsDevice);
+            Engine.spriteBatch = new SpriteBatch(GraphicsDevice);
             engine.cartoonEffect = Content.Load<Effect>("CartoonEffect");
             engine.postprocessEffect = Content.Load<Effect>("PostprocessEffect");
             Room.blockTexture = Content.Load<Texture2D>("plate_texture");
             Player.player_textures = Content.Load<Texture2D>("p_texture");
+            Player.player_gun_textures = Content.Load<Texture2D>("p_gun_texture");
+            Player.player_boots_textures = Content.Load<Texture2D>("p_texture_boots");
+            Player.player_jetpack_textures = Content.Load<Texture2D>("p_texture_jetpack");
+            Player.player_booster_textures = Content.Load<Texture2D>("p_texture_booster");
             Player.player_textures_detail = Content.Load<Texture2D>("p_texture");
             Player.player_textures_clean = Content.Load<Texture2D>("p_texture_clean");
+            Ability.ability_textures = Content.Load<Texture2D>("abilities");
             Monster.monsterTexture = Content.Load<Texture2D>("m_body");
             Monster.monsterTextureDetail = Content.Load<Texture2D>("m_body_detail");
             Projectile.projectileTexture = Content.Load<Texture2D>("projectiles");
@@ -153,9 +165,11 @@ namespace VexedCore
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape) || GamePad.GetState(activePlayer).Buttons.Back == ButtonState.Pressed)
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
-    
+
+            AnimationControl.Update(gameTime);
+            controller.Update(gameTime);
             engine.Update(gameTime);
             base.Update(gameTime);
         }

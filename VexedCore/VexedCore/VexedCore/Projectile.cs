@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Xml.Serialization;
 
 namespace VexedCore
 {
@@ -23,10 +24,15 @@ namespace VexedCore
 
     public class Projectile
     {
-        public Vertex position;
-        public Projectile srcProjectile;
-        public ProjectileType type;
+        public static List<Vector2> plasmaTexCoords;
+        public static List<Vector2> missileTexCoords;
+        public static List<Vector2> laserTexCoords;
+        public static List<Vector2> bombTexCoords;
+        public static List<Vector2> blastTexCoords;
 
+        public Vertex position;
+        [XmlIgnore]public Projectile srcProjectile;
+        public ProjectileType type;
 
         public static Texture2D projectileTexture;
 
@@ -35,18 +41,29 @@ namespace VexedCore
         public bool exploded = false;
 
         public bool playerProjectile = false;
-        public Monster srcMonster = null;
+        [XmlIgnore]public Monster srcMonster = null;
+        public String srcMonsterId;
         public Vector3 missileTarget = Vector3.Zero;
-
-        public static List<Vector2> plasmaTexCoords;
-        public static List<Vector2> missileTexCoords;
-        public static List<Vector2> laserTexCoords;
-        public static List<Vector2> bombTexCoords;
-        public static List<Vector2> blastTexCoords;
 
         public bool stopped = false;
         public bool exploding = false;
         public int explodeTime = 0;
+
+        public Projectile(Projectile p)
+        {
+            position = new Vertex(p.position);
+            type = p.type;
+            lifeTime = p.lifeTime;
+            exploded = p.exploded;
+            playerProjectile = p.playerProjectile;
+            if(p.srcMonster != null)
+                srcMonsterId = p.srcMonster.id;
+            missileTarget = p.missileTarget;
+            stopped = p.stopped;
+            exploding = p.exploding;
+            explodeTime = p.explodeTime;
+
+        }
 
         public float acceleration
         {
@@ -296,6 +313,10 @@ namespace VexedCore
             laserTexCoords = LoadTexCoords(0, 2);
             bombTexCoords = LoadTexCoords(0, 3);
             blastTexCoords = LoadTexCoords(1, 0);
+        }
+
+        public Projectile()
+        {
         }
 
         public Projectile(Monster srcMonster, ProjectileType type, Vector3 position, Vector3 velocity, Vector3 normal, Vector3 direction)

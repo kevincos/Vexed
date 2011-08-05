@@ -36,7 +36,7 @@ namespace VexedCore
 
         public static int selectedRoomIndex = 0;
 
-        public SpriteBatch spriteBatch;
+        public static SpriteBatch spriteBatch;
         public BasicEffect translucentEffect = null;
         public BasicEffect mapEffect = null;
         public AlphaTestEffect playerTextureEffect = null;
@@ -58,6 +58,7 @@ namespace VexedCore
         public static List<VertexPositionColorNormalTexture> dynamicOpaqueObjects;
         public static List<VertexPositionColorNormalTexture> staticDetailObjects;
         public static List<VertexPositionColorNormalTexture> dynamicDetailObjects;
+        public static List<VertexPositionColorNormalTexture> abilityDecalObjects;
         public static List<TrasnparentSquare> staticTranslucentObjects;
         public static List<TrasnparentSquare> mapShellObjects;
         public static VertexBuffer staticObjectBuffer;
@@ -210,8 +211,17 @@ namespace VexedCore
 
                 if (dynamicDetailObjects.Count > 0)
                 {
+                    
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         Engine.dynamicDetailObjects.ToArray(), 0, Engine.dynamicDetailObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+
+                playerTextureEffect.Texture = Ability.ability_textures;
+                playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                if (abilityDecalObjects.Count > 0)
+                {
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        Engine.abilityDecalObjects.ToArray(), 0, Engine.abilityDecalObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
                 Game1.graphicsDevice.BlendState = BlendState.Opaque;
@@ -259,9 +269,8 @@ namespace VexedCore
                     }
                     Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
                 }
-                playerTextureEffect.Texture = Player.player_textures;
-                playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                player.DrawTexture();
+                
+                player.DrawTexture(playerTextureEffect);
             }
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
             
@@ -335,6 +344,7 @@ namespace VexedCore
             Engine.mapShellObjects = new List<TrasnparentSquare>();
             Engine.dynamicOpaqueObjects = new List<VertexPositionColorNormalTexture>();
             Engine.dynamicDetailObjects = new List<VertexPositionColorNormalTexture>();
+            Engine.abilityDecalObjects = new List<VertexPositionColorNormalTexture>();
             if (Engine.staticOpaqueObjects == null || reDraw == true)
             {
                 Engine.staticOpaqueObjects = new List<VertexPositionColorNormalTexture>();
@@ -433,6 +443,25 @@ namespace VexedCore
             
             Engine.staticObjectsInitialized = true;
             Engine.reDraw = false;
+
+
+            if(Engine.player.primaryAbility.type != AbilityType.Empty)
+                Ability.Draw(.825f, .02f, AbilityType.YButton);
+            else
+                Ability.Draw(.825f, .02f, AbilityType.Passive);
+
+            if (Engine.player.secondaryAbility.type != AbilityType.Empty)            
+                Ability.Draw(.75f, .12f, AbilityType.XButton);
+            else
+                Ability.Draw(.75f, .12f, AbilityType.Passive);
+            Ability.Draw(.825f, .22f, AbilityType.AButton);
+            Ability.Draw(.9f, .12f, AbilityType.BButton);
+
+            Engine.player.secondaryAbility.Draw(.825f, .02f);
+            Engine.player.primaryAbility.Draw(.75f, .12f);
+            Ability.Draw(.825f, .22f, AbilityType.NormalJump, player.naturalShield.ammo, player.naturalShield.maxAmmo);
+            Ability.Draw(.9f, .12f, AbilityType.Use);
+            
         }
 
 

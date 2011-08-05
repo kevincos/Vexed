@@ -254,8 +254,9 @@ namespace WinFormsGraphicsDevice
                                     c = Color.White;
                                 else
                                     c = Color.Red;
+
                                 Vector3 up = .5f * m.up;
-                                Vector3 left = .5f * Vector3.Cross(m.up, MainForm.selectedFace.normal);
+                                Vector3 left = .5f * Vector3.Cross(m.up, f.normal);
                                 vList[currentVertex] = new VertexPositionColor(m.position - up - left, c);
                                 vList[currentVertex + 1] = new VertexPositionColor(m.position + up + left, c);
                                 vList[currentVertex + 2] = new VertexPositionColor(m.position - up + left, c);

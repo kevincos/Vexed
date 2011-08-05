@@ -27,6 +27,14 @@ namespace VexedCore
             velocity = Vector3.Zero;
         }
 
+        public Vertex(Vertex v)
+        {
+            position = v.position;
+            normal = v.normal;
+            direction = v.direction;
+            velocity = v.velocity;
+        }
+
         public Vertex(Vertex v, Vector3 positionOffset)
         {
             position = v.position + positionOffset;

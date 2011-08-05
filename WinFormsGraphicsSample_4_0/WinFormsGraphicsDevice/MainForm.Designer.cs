@@ -502,7 +502,7 @@ namespace WinFormsGraphicsDevice
             this.doodadTypeDropdown.SelectedIndexChanged += new System.EventHandler(this.doodad_change);
 
             this.doodadAbilityDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 30; i++)
             {
                 this.doodadAbilityDropdown.Items.Add((AbilityType)i);
             }

@@ -24,6 +24,23 @@ namespace VexedCore
         public int secondaryValue;
         public bool toggle;
 
+        public Behavior()
+        {
+        }
+
+        public Behavior(Behavior b)
+        {
+            id = b.id;
+            nextBehavior = b.nextBehavior;
+            destination = b.destination;
+            duration = b.duration;
+            offSet = b.offSet;
+            period = b.period;
+            toggle = b.toggle;
+            primaryValue = b.primaryValue;
+            secondaryValue = b.secondaryValue;
+        }
+
         public Behavior(VexedLib.Behavior xmlBehavior)
         {
             id = xmlBehavior.IDString;
