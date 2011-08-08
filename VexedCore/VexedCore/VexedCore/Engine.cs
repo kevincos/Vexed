@@ -396,8 +396,8 @@ namespace VexedCore
             // Set renderstates.
             Game1.graphicsDevice.RasterizerState = RasterizerState.CullNone;
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
-
-
+            
+            
             foreach (Room r in roomList)
             {
                 r.Draw(gameTime);
@@ -458,8 +458,7 @@ namespace VexedCore
             Engine.player.secondaryAbility.Draw(.825f, .02f);
             Engine.player.primaryAbility.Draw(.75f, .12f);
             Ability.Draw(.825f, .22f, AbilityType.NormalJump, player.naturalShield.ammo, player.naturalShield.maxAmmo);
-            Ability.Draw(.9f, .12f, AbilityType.Use);
-            
+            Ability.Draw(.9f, .12f, AbilityType.Use);            
         }
 
 

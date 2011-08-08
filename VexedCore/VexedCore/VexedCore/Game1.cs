@@ -169,6 +169,9 @@ namespace VexedCore
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
+            if (GamePad.GetState(activePlayer).IsButtonDown(Buttons.Back))
+                this.Exit();
+
             AnimationControl.Update(gameTime);
             controller.Update(gameTime);
             engine.Update(gameTime);

@@ -29,3 +29,9 @@ Content\p_run4_detail.xnb
 Content\p_walljump_detail.xnb
 Content\projectiles.xnb
 Content\p_texture.xnb
+Content\p_texture_clean.xnb
+Content\abilities.xnb
+Content\p_gun_texture.xnb
+Content\p_texture_boots.xnb
+Content\p_texture_jetpack.xnb
+Content\p_texture_booster.xnb

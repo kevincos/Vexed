@@ -44,7 +44,7 @@
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\CartoonEffect.xnb</Output>
-      <Time>2011-07-20T19:26:33.2745962-07:00</Time>
+      <Time>2011-07-27T13:10:14.7116231-07:00</Time>
     </Item>
     <Item>
       <Source>PostprocessEffect.Fx</Source>
@@ -182,7 +182,7 @@
       </Parameters>
       <Options>None</Options>
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\plate_texture.xnb</Output>
-      <Time>2011-07-20T19:24:46.010461-07:00</Time>
+      <Time>2011-08-05T02:05:13.2953114-07:00</Time>
     </Item>
     <Item>
       <Source>m_body.png</Source>
@@ -281,7 +281,61 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_texture.xnb</Output>
-      <Time>2011-07-22T16:36:18.8534244-07:00</Time>
+      <Time>2011-08-05T02:05:13.0342964-07:00</Time>
+    </Item>
+    <Item>
+      <Source>p_texture_clean.png</Source>
+      <Name>p_texture_clean</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_texture_clean.xnb</Output>
+      <Time>2011-07-27T13:10:14.7216236-07:00</Time>
+    </Item>
+    <Item>
+      <Source>abilities.png</Source>
+      <Name>abilities</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\abilities.xnb</Output>
+      <Time>2011-08-05T02:05:12.6662754-07:00</Time>
+    </Item>
+    <Item>
+      <Source>p_gun_texture.png</Source>
+      <Name>p_gun_texture</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_gun_texture.xnb</Output>
+      <Time>2011-08-05T02:05:12.7602808-07:00</Time>
+    </Item>
+    <Item>
+      <Source>p_texture_boots.png</Source>
+      <Name>p_texture_boots</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_texture_boots.xnb</Output>
+      <Time>2011-08-05T02:05:13.0452971-07:00</Time>
+    </Item>
+    <Item>
+      <Source>p_texture_jetpack.png</Source>
+      <Name>p_texture_jetpack</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_texture_jetpack.xnb</Output>
+      <Time>2011-08-05T14:00:16.5155138-07:00</Time>
+    </Item>
+    <Item>
+      <Source>p_texture_booster.png</Source>
+      <Name>p_texture_booster</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_texture_booster.xnb</Output>
+      <Time>2011-08-05T02:05:13.0392967-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

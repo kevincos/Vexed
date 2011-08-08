@@ -42,7 +42,7 @@ namespace VexedCore
                 Projectile unfoldedProjectile = new Projectile(p, r, normal, up);
                 unfoldedRoom.projectiles.Add(unfoldedProjectile);
             }
-            foreach (Block b in r.blocks)
+            foreach (Block b in r.staticBlocks)
             {
                 List<Vertex> points = new List<Vertex>();
                 List<EdgeProperties> edgeTypes = new List<EdgeProperties>();
@@ -70,7 +70,7 @@ namespace VexedCore
                 }
                 if (points.Count == 4)
                 {
-                    unfoldedRoom.blocks.Add(new Block(points, edgeTypes, r, normal, up));
+                    unfoldedRoom.staticBlocks.Add(new Block(points, edgeTypes, r, normal, up));
                 }
                 else
                 {
@@ -84,11 +84,11 @@ namespace VexedCore
                         else
                             vList2.Add(points[i]);
                     }
-                    unfoldedRoom.blocks.Add(new Block(vList1, edgeTypes, r, normal, up));
-                    unfoldedRoom.blocks.Add(new Block(vList2, edgeTypes, r, normal, up));
+                    unfoldedRoom.staticBlocks.Add(new Block(vList1, edgeTypes, r, normal, up));
+                    unfoldedRoom.staticBlocks.Add(new Block(vList2, edgeTypes, r, normal, up));
                 }
             }
-            foreach (Block b in unfoldedRoom.blocks)
+            foreach (Block b in unfoldedRoom.staticBlocks)
             {
                 b.UpdateBoundingBox(up, right);
             }
@@ -102,7 +102,7 @@ namespace VexedCore
         public static void DebugDraw(Room r, Vector3 normal, Vector3 up)
         {
             List<VertexPositionColorNormalTexture> triangleList = new List<VertexPositionColorNormalTexture>();
-            List<Block> debugList = Physics.BlockUnfold(r, normal, up).blocks;
+            List<Block> debugList = Physics.BlockUnfold(r, normal, up).staticBlocks;
             foreach (Block b in debugList)
             {
                 List<Vertex> vList = new List<Vertex>();
@@ -321,7 +321,7 @@ namespace VexedCore
                 List<Vector3> relVelList = new List<Vector3>();
                 List<EdgeProperties> edgePropertiesList = new List<EdgeProperties>();
 
-                foreach (Block b in unfoldedRoom.blocks)
+                foreach (Block b in unfoldedRoom.staticBlocks)
                 {
                     if(p.CollisionFirstPass(b))
                         continue;
@@ -338,6 +338,7 @@ namespace VexedCore
                 }
                 foreach (Doodad d in unfoldedRoom.doodads)
                 {
+                    
                     if (p.CollisionFirstPass(d))
                         continue;
                     if (d.type == VexedLib.DoodadType.BridgeGate)
@@ -443,7 +444,7 @@ namespace VexedCore
             p.rightWall = false;
 
             p.platformVelocity = Vector3.Zero;
-            foreach (Block b in unfoldedRoom.blocks)
+            foreach (Block b in unfoldedRoom.staticBlocks)
             {
                 if (p.boundingBoxBottom > b.boundingBoxTop + 1 ||
                         p.boundingBoxTop < b.boundingBoxBottom - 1 ||
@@ -600,7 +601,7 @@ namespace VexedCore
 
                         List<Vector3> doodadVertexList = d.GetCollisionRect();
                         d.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
-                        foreach (Block b in unfoldedRoom.blocks)
+                        foreach (Block b in unfoldedRoom.staticBlocks)
                         {                            
                             if (d.CollisionFirstPass(b))
                                 continue;
@@ -663,7 +664,7 @@ namespace VexedCore
 
                     List<Vector3> monsterVertexList = m.GetCollisionRect();
                     m.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
-                    foreach (Block b in unfoldedRoom.blocks)
+                    foreach (Block b in unfoldedRoom.staticBlocks)
                     {
                         if (m.CollisionFirstPass(b))
                             continue;
@@ -744,7 +745,7 @@ namespace VexedCore
 
                 m.srcMonster.groundProjection = Vector3.Zero;
                 m.srcMonster.forwardGroundProjection = Vector3.Zero;
-                foreach (Block b in unfoldedRoom.blocks)
+                foreach (Block b in unfoldedRoom.staticBlocks)
                 {
                     if (m.boundingBoxBottom > b.boundingBoxTop + 1 ||
                             m.boundingBoxTop < b.boundingBoxBottom - 1 ||
@@ -778,7 +779,7 @@ namespace VexedCore
 
                 List<Vector3> doodadVertexList = s.GetCollisionRect();
                 s.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
-                foreach (Block b in unfoldedRoom.blocks)
+                foreach (Block b in unfoldedRoom.staticBlocks)
                 {
                     if (s.CollisionFirstPass(b))
                         continue;

@@ -52,7 +52,6 @@ namespace VexedCore
         public static List<Vector2> beltSideSmallTexCoords;
         public static List<Vector2> beltSideSmallEndTexCoords;
 
-
         public static List<Vector2> plateTexCoords;
         public static List<Vector2> blankTexCoords;
         public static float plateTexWidth = .25f;
@@ -67,7 +66,7 @@ namespace VexedCore
         public Vector3 size;
         public bool hasWarp = false;
         public Color color;
-        public List<Block> blocks;
+        public List<Block> staticBlocks;
         public List<Doodad> doodads;
         public List<Monster> monsters;
         public List<Projectile> projectiles;
@@ -80,10 +79,10 @@ namespace VexedCore
             hasWarp = r.hasWarp;
             color = r.color;
             id = r.id;
-            blocks = new List<Block>();
-            foreach (Block b in r.blocks)
+            staticBlocks = new List<Block>();
+            foreach (Block b in r.staticBlocks)
             {
-                blocks.Add(new Block(b));
+                staticBlocks.Add(new Block(b));
             }
             doodads = new List<Doodad>();
             foreach (Doodad d in r.doodads)
@@ -104,7 +103,7 @@ namespace VexedCore
 
         public Room()
         {
-            blocks = new List<Block>();
+            staticBlocks = new List<Block>();
             doodads = new List<Doodad>();
             monsters = new List<Monster>();
             projectiles = new List<Projectile>();
@@ -115,7 +114,7 @@ namespace VexedCore
             id = xmlRoom.IDString;
             center = new Vector3(xmlRoom.centerX, xmlRoom.centerY, xmlRoom.centerZ);
             size = new Vector3(xmlRoom.sizeX, xmlRoom.sizeY, xmlRoom.sizeZ);
-            blocks = new List<Block>();
+            staticBlocks = new List<Block>();
             doodads = new List<Doodad>();
             monsters = new List<Monster>();
             projectiles = new List<Projectile>();
@@ -198,15 +197,18 @@ namespace VexedCore
         public void Update(GameTime gameTime)
         {
             beltAnimation += gameTime.ElapsedGameTime.Milliseconds;
-            foreach (Block b in blocks)
+            foreach (Block b in staticBlocks)
             {
-                int blockUpdateTime = b.UpdateBehavior(gameTime);
-                foreach (Edge e in b.edges)
+                if (b.staticObject == false)
                 {
-                    e.start.Update(this, blockUpdateTime);
-                    e.end.Update(this, blockUpdateTime);
-                    e.UpdateBehavior(gameTime);
-                }                
+                    int blockUpdateTime = b.UpdateBehavior(gameTime);
+                    foreach (Edge e in b.edges)
+                    {
+                        e.start.Update(this, blockUpdateTime);
+                        e.end.Update(this, blockUpdateTime);
+                        e.UpdateBehavior(gameTime);
+                    }
+                }
             }
 
             if (this == Engine.player.currentRoom)
@@ -563,7 +565,7 @@ namespace VexedCore
                     else
                     {                        
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, iceSideTexCoords, triangleList, true);
-                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .001f, false, iceTopTexCoords, triangleList);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .01f, false, iceTopTexCoords, triangleList);
                     }
                     #endregion
                 }
@@ -1488,7 +1490,7 @@ namespace VexedCore
 
 
                 #region Blocks
-                foreach (Block b in blocks)
+                foreach (Block b in staticBlocks)
                 {
                     List<Vertex> vList = new List<Vertex>();
                     vList.Add(b.edges[0].start);

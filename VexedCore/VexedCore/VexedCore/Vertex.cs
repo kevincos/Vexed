@@ -93,7 +93,7 @@ namespace VexedCore
         
 
         public void Update(Room r, int updateTime)
-        {
+        {            
             position += updateTime * velocity;
             Vector3 relative = position - r.center;
             float overFlow = 0;
