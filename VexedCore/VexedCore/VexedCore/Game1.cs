@@ -42,7 +42,7 @@ namespace VexedCore
 #endif
             int resWidth = 800;
             int resHeight = 600;
-            bool fullScreen = true;
+            bool fullScreen = false;
             //resWidth = 1920;
             //resHeight = 1080;
             //fullScreen = true;

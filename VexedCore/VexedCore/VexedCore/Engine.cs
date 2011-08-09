@@ -58,12 +58,16 @@ namespace VexedCore
         public static List<VertexPositionColorNormalTexture> dynamicOpaqueObjects;
         public static List<VertexPositionColorNormalTexture> staticDetailObjects;
         public static List<VertexPositionColorNormalTexture> dynamicDetailObjects;
+        public static List<VertexPositionColorNormalTexture> staticDoodadObjects;
+        public static List<VertexPositionColorNormalTexture> dynamicDoodadObjects;
         public static List<VertexPositionColorNormalTexture> abilityDecalObjects;
         public static List<TrasnparentSquare> staticTranslucentObjects;
         public static List<TrasnparentSquare> mapShellObjects;
         public static VertexBuffer staticObjectBuffer;
         public static VertexBuffer staticDetailBuffer;
+        public static VertexBuffer staticDoodadBuffer;
         public static bool staticObjectsInitialized = false;
+        public static bool staticDoodadsInitialized = false;
 
         public static RenderTarget2D sceneRenderTarget;
         public static RenderTarget2D normalDepthRenderTarget;
@@ -85,6 +89,8 @@ namespace VexedCore
             dynamicOpaqueObjects = new List<VertexPositionColorNormalTexture>();
             staticDetailObjects = new List<VertexPositionColorNormalTexture>();
             dynamicDetailObjects = new List<VertexPositionColorNormalTexture>();
+            staticDoodadObjects = new List<VertexPositionColorNormalTexture>();
+            dynamicDoodadObjects = new List<VertexPositionColorNormalTexture>();
             staticTranslucentObjects = new List<TrasnparentSquare>();
             mapShellObjects = new List<TrasnparentSquare>();
 
@@ -175,13 +181,29 @@ namespace VexedCore
                     cartoonEffect.CurrentTechnique.Passes[0].Apply();
                 }
 
+                if (staticDoodadObjects.Count > 0)
+                {
+                    if (staticDoodadsInitialized == false)
+                    {
+                        staticDoodadBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticDoodadObjects.Count, BufferUsage.WriteOnly);
+                        staticDoodadBuffer.SetData<VertexPositionColorNormalTexture>(Engine.staticDoodadObjects.ToArray());                        
+                    }
+                    Game1.graphicsDevice.SetVertexBuffer(staticDoodadBuffer);
+                    Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
+                        0, staticDoodadObjects.Count / 3);
+                }
+                if (dynamicDoodadObjects.Count > 0)
+                {
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        Engine.dynamicDoodadObjects.ToArray(), 0, dynamicDoodadObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
 
                 if (staticOpaqueObjects.Count > 0)
-                {
+                {                    
                     if (staticObjectsInitialized == false)
                     {
                         staticObjectBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticOpaqueObjects.Count, BufferUsage.WriteOnly);
-                        staticObjectBuffer.SetData<VertexPositionColorNormalTexture>(Engine.staticOpaqueObjects.ToArray());
+                        staticObjectBuffer.SetData<VertexPositionColorNormalTexture>(Engine.staticOpaqueObjects.ToArray());                        
 
                     }
                     Game1.graphicsDevice.SetVertexBuffer(staticObjectBuffer);
@@ -344,12 +366,15 @@ namespace VexedCore
             Engine.mapShellObjects = new List<TrasnparentSquare>();
             Engine.dynamicOpaqueObjects = new List<VertexPositionColorNormalTexture>();
             Engine.dynamicDetailObjects = new List<VertexPositionColorNormalTexture>();
+            Engine.dynamicDoodadObjects = new List<VertexPositionColorNormalTexture>();
             Engine.abilityDecalObjects = new List<VertexPositionColorNormalTexture>();
             if (Engine.staticOpaqueObjects == null || reDraw == true)
             {
                 Engine.staticOpaqueObjects = new List<VertexPositionColorNormalTexture>();
                 Engine.staticDetailObjects = new List<VertexPositionColorNormalTexture>();
+                Engine.staticDoodadObjects = new List<VertexPositionColorNormalTexture>();
                 staticObjectsInitialized = false;
+                staticDoodadsInitialized = false;
             }
 
             //bloom.BeginDraw();            
@@ -440,6 +465,7 @@ namespace VexedCore
             }            
             
             Engine.staticObjectsInitialized = true;
+            Engine.staticDoodadsInitialized = true;
             Engine.reDraw = false;
 
 
@@ -553,7 +579,7 @@ namespace VexedCore
             if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftTrigger))
             {
                 player.baseCameraDistance += .03f * gameTime.ElapsedGameTime.Milliseconds;
-                if (player.baseCameraDistance > 15f) player.baseCameraDistance = 15f;
+                if (player.baseCameraDistance > 80f) player.baseCameraDistance = 80f;
             }
             if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightTrigger))
             {

@@ -24,6 +24,8 @@ namespace VexedCore
         public List<Edge> edges;
         public List<Behavior> behaviors;
 
+        public List<Block> unfoldedBlocks;
+
         public Behavior currentBehavior = null;
         public String currentBehaviorId;
         public int currentTime = 0;
@@ -32,11 +34,18 @@ namespace VexedCore
 
         public Block()
         {
+            unfoldedBlocks = new List<Block>();
             edges = new List<Edge>();
         }
 
         public Block(Block b)
         {
+            unfoldedBlocks = new List<Block>();
+            if (b.unfoldedBlocks != null)
+            {
+                foreach (Block oldUnfoldedBlock in b.unfoldedBlocks)
+                    unfoldedBlocks.Add(new Block(oldUnfoldedBlock));
+            }
             id = b.id;
             staticObject = b.staticObject;
             nextBehavior = b.nextBehavior;
@@ -51,18 +60,72 @@ namespace VexedCore
             {
                 edges.Add(new Edge(e));
             }
-            foreach (Behavior behavior in b.behaviors)
+            if (b.behaviors != null)
             {
-                behaviors.Add(new Behavior(behavior));
+                foreach (Behavior behavior in b.behaviors)
+                {
+                    behaviors.Add(new Behavior(behavior));
+                }
             }
         }
 
         public Block(VexedLib.Block xmlBlock)
         {
+            unfoldedBlocks = new List<Block>();
             edges = new List<Edge>();
             behaviors = new List<Behavior>();
             color = xmlBlock.color;
             id = xmlBlock.IDString;
+        }
+
+        public void UpdateUnfoldedBlocks(Room r, Vector3 normal, Vector3 up)
+        {
+            List<Vertex> points = new List<Vertex>();
+            List<EdgeProperties> edgeTypes = new List<EdgeProperties>();
+            unfoldedBlocks.Clear();
+            for (int i = 0; i < this.edges.Count; i++)
+            {
+                Edge e = this.edges[i];
+                points.Add(e.start);
+                edgeTypes.Add(e.properties);
+                if (e.start.normal != e.end.normal && (e.start.normal != normal && e.end.normal != normal))
+                {
+                    Vector3 fullEdge = e.end.position - e.start.position;
+                    Vector3 currentComponent = Vector3.Dot(e.end.normal, fullEdge) * e.end.normal;
+                    Vector3 nextComponent = Vector3.Dot(e.start.normal, fullEdge) * e.start.normal;
+                    Vector3 constantComponent = Vector3.Dot(Vector3.Cross(e.end.normal, e.start.normal), fullEdge) * Vector3.Cross(e.end.normal, e.start.normal);
+                    float currentPercent = currentComponent.Length() / (currentComponent.Length() + nextComponent.Length());
+
+                    Vector3 midPoint = e.start.position + currentComponent + currentPercent * constantComponent;
+                    points.Add(new Vertex(midPoint, e.start.normal, e.start.velocity, e.start.direction));
+                    edgeTypes.Add(e.properties);
+                    points.Add(new Vertex(midPoint, e.end.normal, e.end.velocity, e.end.direction));
+                    edgeTypes.Add(this.edges[(i + 1) % this.edges.Count].properties);
+
+                }
+            }
+            if (points.Count == 4)
+            {
+                unfoldedBlocks.Add(new Block(points, edgeTypes, r, normal, up));
+            }
+            else
+            {
+                Vector3 n1 = points[0].normal;
+                List<Vertex> vList1 = new List<Vertex>();
+                List<Vertex> vList2 = new List<Vertex>();
+                for (int i = 0; i < 8; i++)
+                {
+                    if (points[i].normal == n1)
+                        vList1.Add(points[i]);
+                    else
+                        vList2.Add(points[i]);
+                }
+                unfoldedBlocks.Add(new Block(vList1, edgeTypes, r, normal, up));
+                unfoldedBlocks.Add(new Block(vList2, edgeTypes, r, normal, up));
+            }
+
+            foreach (Block b in unfoldedBlocks)
+                b.UpdateBoundingBox(Engine.player.up, Engine.player.right);
         }
 
         public void UpdateBoundingBox(Vector3 up, Vector3 right)

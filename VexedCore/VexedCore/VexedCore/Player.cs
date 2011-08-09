@@ -92,7 +92,8 @@ namespace VexedCore
         public Ability naturalShield;
         public bool boosting = false;
         public bool[] upgrades;
-
+        public Vector3 oldNormal = Vector3.Zero;
+        public Vector3 oldUp = Vector3.Zero;
 
         public float playerHalfWidth = .35f;
         public float playerHalfHeight = .5f;
@@ -529,6 +530,12 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            if (center.normal != oldNormal || center.direction != oldUp)
+            {
+                Physics.refresh = true;
+            }
+            oldUp = center.direction;
+            oldNormal = center.normal;
             SetAnimationState();
             primaryAbility.Update(gameTime);
             secondaryAbility.Update(gameTime);

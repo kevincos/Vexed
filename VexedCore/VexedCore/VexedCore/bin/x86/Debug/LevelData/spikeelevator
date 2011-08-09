@@ -13528,7 +13528,7 @@
         </Room>
         <Room>
           <id>373</id>
-          <name>Room</name>
+          <name>PurpleRedPlatform</name>
           <centerX>-5</centerX>
           <centerY>35</centerY>
           <centerZ>0</centerZ>
@@ -79008,6 +79008,41 @@
                     </Behavior>
                   </behaviors>
                 </Doodad>
+                <Doodad>
+                  <id>2871</id>
+                  <name>Doodad</name>
+                  <position>
+                    <X>41.5</X>
+                    <Y>-35</Y>
+                    <Z>33.5</Z>
+                  </position>
+                  <up>
+                    <X>0</X>
+                    <Y>0</Y>
+                    <Z>1</Z>
+                  </up>
+                  <activationCost>0</activationCost>
+                  <fixedPosition>false</fixedPosition>
+                  <type>Crate</type>
+                  <ability>WallJump</ability>
+                  <behaviors>
+                    <Behavior>
+                      <id>2872</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                  </behaviors>
+                </Doodad>
               </doodads>
               <monsters />
               <vertices>
@@ -80239,7 +80274,7 @@
                     <Z>-0</Z>
                   </up>
                   <fixedPath>false</fixedPath>
-                  <movement>Hover</movement>
+                  <movement>Tank</movement>
                   <armor>None</armor>
                   <weapon>Blaster</weapon>
                   <behavior>Stationary</behavior>

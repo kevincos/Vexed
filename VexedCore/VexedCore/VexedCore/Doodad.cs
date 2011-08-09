@@ -16,6 +16,7 @@ namespace VexedCore
     
     public class Doodad
     {
+        public Vertex unfoldedPosition;
         public Vertex position;
         public Vertex spawnPosition;
         public bool active = false;
@@ -54,6 +55,8 @@ namespace VexedCore
 
         public Doodad(Doodad d)
         {
+            srcDoodad = this;
+            //unfoldedPosition = new Vertex(d.unfoldedPosition);
             position = new Vertex(d.position);
             spawnPosition = new Vertex(d.spawnPosition);
             active = d.active;
@@ -104,6 +107,7 @@ namespace VexedCore
 
         public Doodad(VexedLib.Doodad xmlDoodad, Vector3 normal)
         {
+            srcDoodad = this;
             this.type = xmlDoodad.type;
             this.id = xmlDoodad.IDString;
             this.targetBehavior = xmlDoodad.targetBehavior;
@@ -125,6 +129,7 @@ namespace VexedCore
 
         public Doodad(VexedLib.DoodadType type, Vector3 position, Vector3 normal, Vector3 direction)
         {
+            srcDoodad = this;
             this.type = type;
             this.position = new Vertex(position, normal, Vector3.Zero, direction);
             this.spawnPosition = new Vertex(position, normal, Vector3.Zero, direction);
@@ -143,6 +148,11 @@ namespace VexedCore
             stateTransition = d.stateTransition;
         }
 
+        public void UpdateUnfoldedDoodad(Room r, Vector3 n, Vector3 u)
+        {
+            unfoldedPosition = position.Unfold(r, n, u);
+        }
+
         public float boundingBoxTop;
         public float boundingBoxBottom;
         public float boundingBoxLeft;
@@ -152,14 +162,14 @@ namespace VexedCore
         {
             float x1, x2, x3, x4 = 0;
             float y1, y2, y3, y4 = 0;
-            x1 = Vector3.Dot(playerRight, position.position + up);
-            x2 = Vector3.Dot(playerRight, position.position + down);
-            x3 = Vector3.Dot(playerRight, position.position + left);
-            x4 = Vector3.Dot(playerRight, position.position + right);
-            y1 = Vector3.Dot(playerUp, position.position + up);
-            y2 = Vector3.Dot(playerUp, position.position + down);
-            y3 = Vector3.Dot(playerUp, position.position + left);
-            y4 = Vector3.Dot(playerUp, position.position + right);
+            x1 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_up);
+            x2 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_down);
+            x3 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_left);
+            x4 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_right);
+            y1 = Vector3.Dot(playerUp, unfoldedPosition.position + unfolded_up);
+            y2 = Vector3.Dot(playerUp, unfoldedPosition.position + unfolded_down);
+            y3 = Vector3.Dot(playerUp, unfoldedPosition.position + unfolded_left);
+            y4 = Vector3.Dot(playerUp, unfoldedPosition.position + unfolded_right);
             boundingBoxLeft = x1;
             if (x2 < boundingBoxLeft)
                 boundingBoxLeft = x2;
@@ -205,6 +215,28 @@ namespace VexedCore
                 return false;
         }
 
+        public void ActivateDoodad(bool state)
+        {
+            if (state != active)
+            {
+                Engine.staticDoodadObjects.Clear();
+                Engine.staticDoodadsInitialized = false;
+            }
+            active = state;
+        }
+
+        public bool dynamic
+        {
+            get
+            {
+                if ((type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam) && stateTransition != 0 && stateTransition != 1)
+                    return true;
+                if (type == VexedLib.DoodadType.Crate)                
+                    return true;                
+                return false;
+            }
+        }
+        
         public Color baseColor
         {
             get
@@ -321,47 +353,117 @@ namespace VexedCore
                 return Vector3.Cross(position.direction, position.normal);
             }
         }
+
+        public Vector3 unfoldedUpUnit
+        {
+            get
+            {
+                return unfoldedPosition.direction;
+            }
+        }
+        public Vector3 unfoldedRightUnit
+        {
+            get
+            {
+                return Vector3.Cross(unfoldedPosition.direction, unfoldedPosition.normal);
+            }
+        }
+
+        public float right_mag
+        {
+            get
+            {
+                return halfWidth;
+            }
+        }
+        public float left_mag
+        {
+            get
+            {
+                return -halfWidth;
+            }
+        }
+        public float up_mag
+        {
+            get
+            {
+                if (type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam)
+                {
+                    return -.5f + stateTransition * 3f;
+                }
+                if (type == VexedLib.DoodadType.WallSwitch)
+                {
+                    return -.3f - stateTransition * .2f;
+                }
+                return halfHeight;
+            }
+        }
+        public float down_mag
+        {
+            get
+            {
+                return -halfHeight;
+            }
+        }
+
         public Vector3 right
         {
             get
             {
-                return halfWidth * rightUnit;
+                return right_mag * rightUnit;
             }
         }
         public Vector3 left
         {
             get
             {
-                return -halfWidth * rightUnit;
+                return left_mag * rightUnit;
             }
         }
         public Vector3 up
         {
             get
-            {
-                if (type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam)
-                {
-                    return (-.5f + stateTransition * 3f) * upUnit;
-                    //return 2.5f * upUnit;
-                }
-                if (type == VexedLib.DoodadType.WallSwitch)
-                {
-                    /*if (targetDoodad.currentBehavior.id == expectedBehavior)
-                        return -.3f * upUnit;
-                    else
-                        return -.5f * upUnit;*/
-                    return (-.3f - stateTransition * .2f) * upUnit;
-                }
-                return halfHeight * upUnit;
+            {                
+                return up_mag * upUnit;
             }
         }
         public Vector3 down
         {
             get
             {
-                return -halfHeight * upUnit;
+                return down_mag * upUnit;
             }
         }
+
+        public Vector3 unfolded_right
+        {
+            get
+            {
+                return right_mag * unfoldedRightUnit;
+            }
+        }
+        public Vector3 unfolded_left
+        {
+            get
+            {
+                return left_mag * unfoldedRightUnit;
+            }
+        }
+        public Vector3 unfolded_up
+        {
+            get
+            {
+                return up_mag * unfoldedUpUnit;
+            }
+        }
+        public Vector3 unfolded_down
+        {
+            get
+            {
+                return down_mag * unfoldedUpUnit;
+            }
+        }
+        
         public float halfWidth
         {
             get
@@ -475,10 +577,14 @@ namespace VexedCore
         {
             List<Vector3> doodadVertexList = new List<Vector3>();
 
-            doodadVertexList.Add(position.position + up + right);
+            /*doodadVertexList.Add(position.position + up + right);
             doodadVertexList.Add(position.position + up + left);
             doodadVertexList.Add(position.position + down + left);
-            doodadVertexList.Add(position.position + down + right);
+            doodadVertexList.Add(position.position + down + right);*/
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_up + unfolded_right);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_up + unfolded_left);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_down + unfolded_left);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_down + unfolded_right);
             
             return doodadVertexList;
         }
@@ -508,48 +614,52 @@ namespace VexedCore
                 vList.Add(new Vertex(position, up + left));
                 vList.Add(new Vertex(position, down + left));
                 vList.Add(new Vertex(position, down + right));
-                if (type == VexedLib.DoodadType.BridgeCover)
+                if(Engine.staticDoodadsInitialized == false || dynamic == true)
                 {
-                    currentRoom.AddBlockToTriangleList(vList, baseColor, .5f, -.6f, Room.plateTexCoords, triangleList);
-                    currentRoom.AddBlockToTriangleList(vList, baseColor, -.5f, .6f, Room.plateTexCoords, triangleList);
-                }
-                else if (type == VexedLib.DoodadType.PowerStation)
-                {
-                    if (orbsRemaining > 0)
-                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
+                    
+                    if (type == VexedLib.DoodadType.BridgeCover)
+                    {
+                        currentRoom.AddBlockToTriangleList(vList, baseColor, .5f, -.6f, Room.plateTexCoords, triangleList);
+                        currentRoom.AddBlockToTriangleList(vList, baseColor, -.5f, .6f, Room.plateTexCoords, triangleList);
+                    }
+                    else if (type == VexedLib.DoodadType.PowerStation)
+                    {
+                        if (orbsRemaining > 0)
+                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
+                        else
+                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
+                    }
+                    else if (type == VexedLib.DoodadType.SwitchStation)
+                    {
+                        if (targetDoodad != null)
+                        {
+                            if (targetDoodad.currentBehavior.id == targetBehavior)
+                                currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
+                            else
+                                currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
+                        }
+                        if (targetBlock != null)
+                        {
+                            if (targetBlock.currentBehavior.id == targetBehavior)
+                                currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
+                            else
+                                currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
+                        }
+                        if (targetEdge != null)
+                        {
+                            if (targetEdge.currentBehavior.id == targetBehavior)
+                                currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
+                            else
+                                currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
+                        }
+                    }
                     else
-                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
-                }
-                else if (type == VexedLib.DoodadType.SwitchStation)
-                {
-                    if (targetDoodad != null)
                     {
-                        if (targetDoodad.currentBehavior.id == targetBehavior)
+                        if (active)
                             currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
                         else
                             currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
                     }
-                    if (targetBlock != null)
-                    {
-                        if (targetBlock.currentBehavior.id == targetBehavior)
-                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
-                        else
-                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
-                    }
-                    if (targetEdge != null)
-                    {
-                        if (targetEdge.currentBehavior.id == targetBehavior)
-                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
-                        else
-                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
-                    }
-                }
-                else
-                {
-                    if (active)
-                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
-                    else
-                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
                 }
 
                 if (type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.UpgradeStation)
@@ -573,11 +683,15 @@ namespace VexedCore
             {
                 toggleOn = true;
                 stateTransition = 1;
+                Engine.staticDoodadsInitialized = false;
+                Engine.staticDoodadObjects.Clear();
             }
             if (stateTransitionDir == -1 && stateTransition < 0)
             {
                 toggleOn = false;
                 stateTransition = 0;
+                Engine.staticDoodadsInitialized = false;
+                Engine.staticDoodadObjects.Clear();
             }
 
             if (type == VexedLib.DoodadType.WallSwitch)
@@ -659,10 +773,14 @@ namespace VexedCore
         public void Activate()
         {
             stateTransitionDir = 1;
+            Engine.staticDoodadsInitialized = false;
+            Engine.staticDoodadObjects.Clear();
         }
         public void Deactivate()
         {
             stateTransitionDir = -1;
+            Engine.staticDoodadsInitialized = false;
+            Engine.staticDoodadObjects.Clear();
         }
 
 

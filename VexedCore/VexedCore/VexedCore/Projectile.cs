@@ -30,6 +30,7 @@ namespace VexedCore
         public static List<Vector2> bombTexCoords;
         public static List<Vector2> blastTexCoords;
 
+        public Vertex unfoldedPosition;
         public Vertex position;
         [XmlIgnore]public Projectile srcProjectile;
         public ProjectileType type;
@@ -63,6 +64,11 @@ namespace VexedCore
             exploding = p.exploding;
             explodeTime = p.explodeTime;
 
+        }
+
+        public void UpdateUnfoldedDoodad(Room r, Vector3 n, Vector3 u)
+        {
+            unfoldedPosition = position.Unfold(r, n, u);
         }
 
         public float acceleration
@@ -154,6 +160,21 @@ namespace VexedCore
             }
         }
 
+        public Vector3 unfoldedUpUnit
+        {
+            get
+            {
+                return unfoldedPosition.direction;
+            }
+        }
+        public Vector3 unfoldedRightUnit
+        {
+            get
+            {
+                return Vector3.Cross(unfoldedPosition.direction, unfoldedPosition.normal);
+            }
+        }
+
         public Vector3 upUnit
         {
             get
@@ -168,42 +189,100 @@ namespace VexedCore
                 return Vector3.Cross(position.direction, position.normal);                
             }
         }
+        public float right_mag
+        {
+            get
+            {
+                return halfWidth;
+            }
+        }
+        public float left_mag
+        {
+            get
+            {
+                return -halfWidth;
+            }
+        }
+        public float up_mag
+        {
+            get
+            {
+                return halfHeight;
+            }
+        }
+        public float down_mag
+        {
+            get
+            {
+                if (type == ProjectileType.Laser && exploding == true)
+                {
+                    return 1f - (maxExplodeTime - explodeTime) * 2f / maxExplodeTime;
+                }
+                if (type == ProjectileType.Laser && lifeTime < maxExplodeTime)
+                {
+                    return 1f - (maxExplodeTime - explodeTime) * 1.5f/ maxExplodeTime;
+                }
+                    
+                    
+                return -halfHeight;
+            }
+        }
+
         public Vector3 right
         {
             get
             {
-                return halfWidth * rightUnit;
+                return right_mag * rightUnit;
             }
         }
         public Vector3 left
         {
             get
             {
-                return -halfWidth * rightUnit;
+                return left_mag * rightUnit;
             }
         }
         public Vector3 up
         {
             get
             {
-                return halfHeight * upUnit;
+                return up_mag * upUnit;
             }
         }
         public Vector3 down
         {
             get
             {
-                if (type == ProjectileType.Laser && exploding == true)
-                {
-                    return upUnit - (maxExplodeTime - explodeTime) * 2f / maxExplodeTime * upUnit;
-                }
-                if (type == ProjectileType.Laser && lifeTime < maxExplodeTime)
-                {
-                    return upUnit - (maxExplodeTime - explodeTime) * 1.5f/ maxExplodeTime * upUnit;
-                }
-                    
-                    
-                return -halfHeight * upUnit;
+                return down_mag * upUnit;
+            }
+        }
+
+        public Vector3 unfolded_right
+        {
+            get
+            {
+                return right_mag * unfoldedRightUnit;
+            }
+        }
+        public Vector3 unfolded_left
+        {
+            get
+            {
+                return left_mag * unfoldedRightUnit;
+            }
+        }
+        public Vector3 unfolded_up
+        {
+            get
+            {
+                return up_mag * unfoldedUpUnit;
+            }
+        }
+        public Vector3 unfolded_down
+        {
+            get
+            {
+                return down_mag * unfoldedUpUnit;
             }
         }
 
@@ -467,10 +546,14 @@ namespace VexedCore
         {
             List<Vector3> doodadVertexList = new List<Vector3>();
 
-            doodadVertexList.Add(position.position + up + right);
+            /*doodadVertexList.Add(position.position + up + right);
             doodadVertexList.Add(position.position + up + left);
             doodadVertexList.Add(position.position + down + left);
-            doodadVertexList.Add(position.position + down + right);
+            doodadVertexList.Add(position.position + down + right);*/
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_up + unfolded_right);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_up + unfolded_left);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_down + unfolded_left);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_down + unfolded_right);
 
             return doodadVertexList;
         }
@@ -497,18 +580,19 @@ namespace VexedCore
         public float boundingBoxRight;
 
 
+
         public void UpdateBoundingBox(Vector3 playerUp, Vector3 playerRight)
         {
             float x1, x2, x3, x4 = 0;
             float y1, y2, y3, y4 = 0;
-            x1 = Vector3.Dot(playerRight, position.position + up);
-            x2 = Vector3.Dot(playerRight, position.position + down);
-            x3 = Vector3.Dot(playerRight, position.position + left);
-            x4 = Vector3.Dot(playerRight, position.position + right);
-            y1 = Vector3.Dot(playerUp, position.position + up);
-            y2 = Vector3.Dot(playerUp, position.position + down);
-            y3 = Vector3.Dot(playerUp, position.position + left);
-            y4 = Vector3.Dot(playerUp, position.position + right);
+            x1 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_up);
+            x2 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_down);
+            x3 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_left);
+            x4 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_right);
+            y1 = Vector3.Dot(playerUp, unfoldedPosition.position + unfolded_up);
+            y2 = Vector3.Dot(playerUp, unfoldedPosition.position + unfolded_down);
+            y3 = Vector3.Dot(playerUp, unfoldedPosition.position + unfolded_left);
+            y4 = Vector3.Dot(playerUp, unfoldedPosition.position + unfolded_right);
             boundingBoxLeft = x1;
             if (x2 < boundingBoxLeft)
                 boundingBoxLeft = x2;

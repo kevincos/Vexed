@@ -30,6 +30,7 @@ namespace VexedCore
 
         public static int texGridCount = 8;
 
+        public Vertex unfoldedPosition;
         public Vertex spawnPosition;
         public Vertex position;
         public string firstWaypoint;
@@ -70,6 +71,7 @@ namespace VexedCore
 
         public Monster(Monster m)
         {
+            //unfoldedPosition = new Vertex(m.unfoldedPosition);
             spawnPosition = new Vertex(m.spawnPosition);
             position = new Vertex(m.position);
             firstWaypoint = m.firstWaypoint;
@@ -155,6 +157,11 @@ namespace VexedCore
             rightMoving = m.rightMoving;
         }
 
+        public void UpdateUnfoldedDoodad(Room r, Vector3 n, Vector3 u)
+        {
+            unfoldedPosition = position.Unfold(r, n, u);
+        }
+
         public int fireTime
         {
             get
@@ -215,32 +222,120 @@ namespace VexedCore
                 }
             }
         }
+
+        public Vector3 unfoldedUpUnit
+        {
+            get
+            {
+                if (spinUp == Vector3.Zero)
+                    return unfoldedPosition.direction;
+                else
+                {
+                    Vector3 tempUp = (spinUp * spinTime + unfoldedPosition.direction * (spinMaxTime - spinTime)) / (1f * spinMaxTime);
+                    tempUp.Normalize();
+                    return tempUp;
+                }
+            }
+        }
+        public Vector3 unfoldedRightUnit
+        {
+            get
+            {
+                if (spinUp == Vector3.Zero)
+                    return Vector3.Cross(unfoldedPosition.direction, unfoldedPosition.normal);
+                else
+                {
+                    Vector3 tempUp = Vector3.Cross((spinUp * spinTime + unfoldedPosition.direction * (spinMaxTime - spinTime)) / (1f * spinMaxTime), unfoldedPosition.normal);
+                    tempUp.Normalize();
+                    return tempUp;
+                }
+            }
+        }
+
+        public float right_mag
+        {
+            get
+            {
+                return halfWidth;
+            }
+        }
+        public float left_mag
+        {
+            get
+            {
+                return -halfWidth;
+            }
+        }
+        public float up_mag
+        {
+            get
+            {
+                return halfHeight;
+            }
+        }
+        public float down_mag
+        {
+            get
+            {
+                return -halfHeight;
+            }
+        }
+
         public Vector3 right
         {
             get
             {
-                return halfWidth * rightUnit;
+                return right_mag * rightUnit;
             }
         }
         public Vector3 left
         {
             get
             {
-                return -halfWidth * rightUnit;
+                return left_mag * rightUnit;
             }
         }
         public Vector3 up
         {
             get
             {
-                return halfHeight * upUnit;
+                return up_mag * upUnit;
             }
         }
         public Vector3 down
         {
             get
             {
-                return -halfHeight * upUnit;
+                return down_mag * upUnit;
+            }
+        }
+
+        public Vector3 unfolded_right
+        {
+            get
+            {
+                return right_mag * unfoldedRightUnit;
+            }
+        }
+        public Vector3 unfolded_left
+        {
+            get
+            {
+                return left_mag * unfoldedRightUnit;
+            }
+        }
+        public Vector3 unfolded_up
+        {
+            get
+            {
+                return up_mag * unfoldedUpUnit;
+            }
+        }
+        public Vector3 unfolded_down
+        {
+            get
+            {
+                return down_mag * unfoldedUpUnit;
             }
         }
 
@@ -621,10 +716,14 @@ namespace VexedCore
         {
             List<Vector3> doodadVertexList = new List<Vector3>();
 
-            doodadVertexList.Add(position.position + up + right);
+            /*doodadVertexList.Add(position.position + up + right);
             doodadVertexList.Add(position.position + up + left);
             doodadVertexList.Add(position.position + down + left);
-            doodadVertexList.Add(position.position + down + right);
+            doodadVertexList.Add(position.position + down + right);*/
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_up + unfolded_right);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_up + unfolded_left);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_down + unfolded_left);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_down + unfolded_right);
 
             return doodadVertexList;
         }
@@ -633,10 +732,10 @@ namespace VexedCore
         {
             List<Vector3> doodadVertexList = new List<Vector3>();
 
-            doodadVertexList.Add(position.position + right);
-            doodadVertexList.Add(position.position + left);
-            doodadVertexList.Add(position.position + 1.1f*down + left);
-            doodadVertexList.Add(position.position + 1.1f*down + right);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_right);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_left);
+            doodadVertexList.Add(unfoldedPosition.position + 1.1f * unfolded_down + unfolded_left);
+            doodadVertexList.Add(unfoldedPosition.position + 1.1f * unfolded_down + unfolded_right);
 
             return doodadVertexList;
         }
@@ -649,18 +748,18 @@ namespace VexedCore
             
             if (rightMoving == false)
             {
-                forward = -.75f * right;
+                forward = -.75f * unfolded_right;
             }
             else if (rightMoving == true)
             {
-                forward = .75f * right;
+                forward = .75f * unfolded_right;
             }
-            forward+= Vector3.Dot(position.velocity, forward) * forward;
+            forward += Vector3.Dot(unfoldedPosition.velocity, forward) * forward;
 
-            doodadVertexList.Add(position.position + right/4f + forward);
-            doodadVertexList.Add(position.position + left / 4f + forward);
-            doodadVertexList.Add(position.position + 1.1f * down + left / 4f + forward);
-            doodadVertexList.Add(position.position + 1.1f * down + right/4f + forward);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_right / 4f + forward);
+            doodadVertexList.Add(unfoldedPosition.position + unfolded_left / 4f + forward);
+            doodadVertexList.Add(unfoldedPosition.position + 1.1f * unfolded_down + unfolded_left / 4f + forward);
+            doodadVertexList.Add(unfoldedPosition.position + 1.1f * unfolded_down + unfolded_right / 4f + forward);
 
             return doodadVertexList;
         }
@@ -699,14 +798,14 @@ namespace VexedCore
         {
             float x1, x2, x3, x4 = 0;
             float y1, y2, y3, y4 = 0;
-            x1 = Vector3.Dot(playerRight, position.position + up);
-            x2 = Vector3.Dot(playerRight, position.position + down);
-            x3 = Vector3.Dot(playerRight, position.position + left);
-            x4 = Vector3.Dot(playerRight, position.position + right);
-            y1 = Vector3.Dot(playerUp, position.position + up);
-            y2 = Vector3.Dot(playerUp, position.position + down);
-            y3 = Vector3.Dot(playerUp, position.position + left);
-            y4 = Vector3.Dot(playerUp, position.position + right);
+            x1 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_up);
+            x2 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_down);
+            x3 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_left);
+            x4 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_right);
+            y1 = Vector3.Dot(playerUp, unfoldedPosition.position + unfolded_up);
+            y2 = Vector3.Dot(playerUp, unfoldedPosition.position + unfolded_down);
+            y3 = Vector3.Dot(playerUp, unfoldedPosition.position + unfolded_left);
+            y4 = Vector3.Dot(playerUp, unfoldedPosition.position + unfolded_right);
             boundingBoxLeft = x1;
             if (x2 < boundingBoxLeft)
                 boundingBoxLeft = x2;

@@ -118,7 +118,7 @@ namespace VexedCore
                                 newBlock.behaviors.Add(newBehavior);
                             }
                             newBlock.UpdateBehavior();
-                            newRoom.staticBlocks.Add(newBlock);
+                            newRoom.blocks.Add(newBlock);
                         }
                     }
                     newRoom.color = xmlRoom.color;
@@ -195,7 +195,7 @@ namespace VexedCore
                                 d.targetDoodad = dTarget;
                             }
                         }
-                        foreach (Block bTarget in r.staticBlocks)
+                        foreach (Block bTarget in r.blocks)
                         {
                             if (bTarget.id == d.targetObject)
                             {
@@ -268,7 +268,7 @@ namespace VexedCore
                 if (r.id == Engine.player.currentRoomId)
                     Engine.player.currentRoom = r;
 
-                foreach (Block b in r.staticBlocks)
+                foreach (Block b in r.blocks)
                 {
                     if (b.currentBehavior == null)
                     {
