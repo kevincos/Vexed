@@ -220,6 +220,7 @@ namespace VexedCore
             if (state != active)
             {
                 Engine.staticDoodadObjects.Clear();
+                Engine.staticDecalObjects.Clear();
                 Engine.staticDoodadsInitialized = false;
             }
             active = state;
@@ -605,17 +606,17 @@ namespace VexedCore
                         boundingBoxRight < d.boundingBoxLeft);
         }
 
-        public void Draw(Room currentRoom, List<VertexPositionColorNormalTexture> triangleList)
+        public void Draw(Room currentRoom, List<VertexPositionColorNormalTexture> triangleList, List<VertexPositionColorNormalTexture> decalList)
         {
             if (shouldRender == true)
             {
-                List<Vertex> vList = new List<Vertex>();
-                vList.Add(new Vertex(position, up + right));
-                vList.Add(new Vertex(position, up + left));
-                vList.Add(new Vertex(position, down + left));
-                vList.Add(new Vertex(position, down + right));
                 if(Engine.staticDoodadsInitialized == false || dynamic == true)
                 {
+                    List<Vertex> vList = new List<Vertex>();
+                    vList.Add(new Vertex(position, up + right));
+                    vList.Add(new Vertex(position, up + left));
+                    vList.Add(new Vertex(position, down + left));
+                    vList.Add(new Vertex(position, down + right));
                     
                     if (type == VexedLib.DoodadType.BridgeCover)
                     {
@@ -660,16 +661,17 @@ namespace VexedCore
                         else
                             currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
                     }
+                    if (type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.UpgradeStation)
+                    {
+                        currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .1f, Ability.texCoordList[(int)abilityType], decalList, true);
+                    }
+                    if (type == VexedLib.DoodadType.SwitchStation && (abilityType == AbilityType.RedKey || abilityType == AbilityType.BlueKey || abilityType == AbilityType.YellowKey))
+                    {
+                        currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .1f, Ability.texCoordList[(int)abilityType], decalList, true);
+                    }
                 }
 
-                if (type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.UpgradeStation)
-                {
-                    currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth+.1f, Ability.texCoordList[(int)abilityType], Engine.abilityDecalObjects, true);
-                }
-                if(type == VexedLib.DoodadType.SwitchStation && (abilityType == AbilityType.RedKey || abilityType == AbilityType.BlueKey || abilityType == AbilityType.YellowKey))
-                {
-                    currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .1f, Ability.texCoordList[(int)abilityType], Engine.abilityDecalObjects, true);
-                }
+                
             }
         }
 
@@ -685,6 +687,7 @@ namespace VexedCore
                 stateTransition = 1;
                 Engine.staticDoodadsInitialized = false;
                 Engine.staticDoodadObjects.Clear();
+                Engine.staticDecalObjects.Clear();
             }
             if (stateTransitionDir == -1 && stateTransition < 0)
             {
@@ -692,6 +695,7 @@ namespace VexedCore
                 stateTransition = 0;
                 Engine.staticDoodadsInitialized = false;
                 Engine.staticDoodadObjects.Clear();
+                Engine.staticDecalObjects.Clear();
             }
 
             if (type == VexedLib.DoodadType.WallSwitch)
@@ -775,12 +779,14 @@ namespace VexedCore
             stateTransitionDir = 1;
             Engine.staticDoodadsInitialized = false;
             Engine.staticDoodadObjects.Clear();
+            Engine.staticDecalObjects.Clear();
         }
         public void Deactivate()
         {
             stateTransitionDir = -1;
             Engine.staticDoodadsInitialized = false;
             Engine.staticDoodadObjects.Clear();
+            Engine.staticDecalObjects.Clear();
         }
 
 

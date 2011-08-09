@@ -36,13 +36,15 @@ namespace VexedCore
             graphics.PreferMultiSampling = true;
             graphics.SynchronizeWithVerticalRetrace = true;
 
-#if XBOX
-                graphics.PreferredBackBufferWidth = 1280;
-                graphics.PreferredBackBufferHeight = 720;
-#endif
             int resWidth = 800;
             int resHeight = 600;
             bool fullScreen = false;
+
+#if XBOX
+            resWidth = 1280;
+            resHeight = 720;
+#endif
+
             //resWidth = 1920;
             //resHeight = 1080;
             //fullScreen = true;

@@ -1424,7 +1424,7 @@ namespace VexedCore
             {
                 float cameraLineDistance = Vector3.Dot(center - Engine.player.center.position, Vector3.Normalize(Engine.player.cameraTarget - Engine.player.cameraPos));
 
-                if (Engine.staticObjectsInitialized == false || cameraLineDistance >= 0)
+                if (Engine.staticObjectsInitialized == false || cameraLineDistance >= -10)
                 {
 
                     Color interiorColor = new Color(20, 20, 20);
@@ -1523,7 +1523,7 @@ namespace VexedCore
 
                             foreach (Edge e in b.edges)
                             {
-                                if (e.properties.type == VexedLib.EdgeType.Spikes || e.properties.type == VexedLib.EdgeType.Electric || e.properties.type == VexedLib.EdgeType.ConveyorBelt)
+                                if (e.properties.type == VexedLib.EdgeType.Electric || e.properties.type == VexedLib.EdgeType.ConveyorBelt)
                                 {
                                     if (e.properties.type == VexedLib.EdgeType.Spikes)
                                         AddSpikesToTriangleList(e, .5f, Engine.dynamicOpaqueObjects);
@@ -1547,18 +1547,18 @@ namespace VexedCore
                     #endregion
                 }
 
-                if (Engine.staticDoodadsInitialized == false || cameraLineDistance >= 0)
+                if (Engine.staticDoodadsInitialized == false || cameraLineDistance >= -10)
                 {
                     #region Doodads
                     foreach (Doodad d in doodads)
                     {
                         if (d.dynamic == true)
                         {
-                            d.Draw(this, Engine.dynamicDoodadObjects);
+                            d.Draw(this, Engine.dynamicDoodadObjects, Engine.dynamicDecalObjects);
                         }
                         else
                         {
-                            d.Draw(this, Engine.staticDoodadObjects);
+                            d.Draw(this, Engine.staticDoodadObjects, Engine.staticDecalObjects);
                         }
                     }
                     #endregion

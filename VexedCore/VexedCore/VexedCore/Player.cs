@@ -360,6 +360,7 @@ namespace VexedCore
                 if (d.type == VexedLib.DoodadType.WarpStation)
                 {
                     currentRoom = targetRoom;
+                    Physics.refresh = true;
                     Engine.reDraw = true;
                     center = new Vertex(d.position.position, d.position.normal, Vector3.Zero, d.position.direction);
                     state = State.Normal;
@@ -951,6 +952,7 @@ namespace VexedCore
                     faceDirection = 0;
                     state = State.Normal;
                     currentRoom = jumpRoom;
+                    Physics.refresh = true;
                     Engine.reDraw = true;
                 }
 

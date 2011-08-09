@@ -48,7 +48,7 @@ namespace VexedCore
         public static bool transparencyEnabled = true;
         public static int lightingLevel = 0;
         public static bool toonShadingEnabled = false;
-        public static float drawDistance = 50f;
+        public static float drawDistance = 40f;
         public int optionToggleCooldown = 0;
         public static bool reDraw = false;
         public static bool detailTextures = true;
@@ -60,12 +60,14 @@ namespace VexedCore
         public static List<VertexPositionColorNormalTexture> dynamicDetailObjects;
         public static List<VertexPositionColorNormalTexture> staticDoodadObjects;
         public static List<VertexPositionColorNormalTexture> dynamicDoodadObjects;
-        public static List<VertexPositionColorNormalTexture> abilityDecalObjects;
+        public static List<VertexPositionColorNormalTexture> staticDecalObjects;
+        public static List<VertexPositionColorNormalTexture> dynamicDecalObjects;
         public static List<TrasnparentSquare> staticTranslucentObjects;
         public static List<TrasnparentSquare> mapShellObjects;
         public static VertexBuffer staticObjectBuffer;
         public static VertexBuffer staticDetailBuffer;
         public static VertexBuffer staticDoodadBuffer;
+        public static VertexBuffer staticDecalBuffer;
         public static bool staticObjectsInitialized = false;
         public static bool staticDoodadsInitialized = false;
 
@@ -91,6 +93,8 @@ namespace VexedCore
             dynamicDetailObjects = new List<VertexPositionColorNormalTexture>();
             staticDoodadObjects = new List<VertexPositionColorNormalTexture>();
             dynamicDoodadObjects = new List<VertexPositionColorNormalTexture>();
+            staticDecalObjects = new List<VertexPositionColorNormalTexture>();
+            dynamicDecalObjects = new List<VertexPositionColorNormalTexture>();
             staticTranslucentObjects = new List<TrasnparentSquare>();
             mapShellObjects = new List<TrasnparentSquare>();
 
@@ -240,11 +244,26 @@ namespace VexedCore
 
                 playerTextureEffect.Texture = Ability.ability_textures;
                 playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                if (abilityDecalObjects.Count > 0)
+
+                if (staticDecalObjects.Count > 0)
                 {
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        Engine.abilityDecalObjects.ToArray(), 0, Engine.abilityDecalObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                    if (staticDoodadsInitialized == false)
+                    {
+                        staticDecalBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticDecalObjects.Count, BufferUsage.WriteOnly);
+                        staticDecalBuffer.SetData<VertexPositionColorNormalTexture>(Engine.staticDecalObjects.ToArray());
+                    }
+                    Game1.graphicsDevice.SetVertexBuffer(staticDecalBuffer);
+                    Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
+                        0, staticDecalObjects.Count / 3);
                 }
+
+                if (dynamicDecalObjects.Count > 0)
+                {
+
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        Engine.dynamicDecalObjects.ToArray(), 0, Engine.dynamicDecalObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+
 
                 Game1.graphicsDevice.BlendState = BlendState.Opaque;
 
@@ -367,12 +386,13 @@ namespace VexedCore
             Engine.dynamicOpaqueObjects = new List<VertexPositionColorNormalTexture>();
             Engine.dynamicDetailObjects = new List<VertexPositionColorNormalTexture>();
             Engine.dynamicDoodadObjects = new List<VertexPositionColorNormalTexture>();
-            Engine.abilityDecalObjects = new List<VertexPositionColorNormalTexture>();
+            Engine.dynamicDecalObjects = new List<VertexPositionColorNormalTexture>();
             if (Engine.staticOpaqueObjects == null || reDraw == true)
             {
                 Engine.staticOpaqueObjects = new List<VertexPositionColorNormalTexture>();
                 Engine.staticDetailObjects = new List<VertexPositionColorNormalTexture>();
                 Engine.staticDoodadObjects = new List<VertexPositionColorNormalTexture>();
+                Engine.staticDecalObjects = new List<VertexPositionColorNormalTexture>();
                 staticObjectsInitialized = false;
                 staticDoodadsInitialized = false;
             }
