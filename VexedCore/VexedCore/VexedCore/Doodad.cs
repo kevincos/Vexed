@@ -20,6 +20,7 @@ namespace VexedCore
         public Vertex position;
         public Vertex spawnPosition;
         public bool active = false;
+        public bool refreshVertexData = false;
         public string id = "";
         public string targetBehavior ="";
         public string targetObject = "";
@@ -219,9 +220,7 @@ namespace VexedCore
         {
             if (state != active)
             {
-                Engine.staticDoodadObjects.Clear();
-                Engine.staticDecalObjects.Clear();
-                Engine.staticDoodadsInitialized = false;
+                refreshVertexData = true;
             }
 
             active = state;
@@ -642,90 +641,112 @@ namespace VexedCore
                         boundingBoxRight < d.boundingBoxLeft);
         }
 
-        public void Draw(Room currentRoom, List<VertexPositionColorNormalTexture> triangleList, List<VertexPositionColorNormalTexture> decalList)
+        public List<VertexPositionColorNormalTexture> baseTriangleList;
+        public List<VertexPositionColorNormalTexture> decalList;
+
+        public void UpdateVertexData(Room currentRoom)
+        {
+            if (Engine.staticDoodadsInitialized == false || dynamic == true || refreshVertexData == true)
+            {
+                refreshVertexData = false;
+                baseTriangleList = new List<VertexPositionColorNormalTexture>();
+                decalList = new List<VertexPositionColorNormalTexture>();
+
+                List<Vertex> vList = new List<Vertex>();
+                vList.Add(new Vertex(position, up + right));
+                vList.Add(new Vertex(position, up + left));
+                vList.Add(new Vertex(position, down + left));
+                vList.Add(new Vertex(position, down + right));
+
+                if (type == VexedLib.DoodadType.BridgeCover)
+                {
+                    currentRoom.AddBlockToTriangleList(vList, baseColor, .5f, -.6f, Room.plateTexCoords, baseTriangleList);
+                    currentRoom.AddBlockToTriangleList(vList, baseColor, -.5f, .6f, Room.plateTexCoords, baseTriangleList);
+                }
+                else if (type == VexedLib.DoodadType.PowerStation)
+                {
+                    if (orbsRemaining > 0)
+                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                    else
+                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                }
+                else if (type == VexedLib.DoodadType.SwitchStation)
+                {
+                    if (targetDoodad != null)
+                    {
+                        if (targetDoodad.currentBehavior.id == targetBehavior)
+                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        else
+                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                    }
+                    if (targetBlock != null)
+                    {
+                        if (targetBlock.currentBehavior.id == targetBehavior)
+                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        else
+                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                    }
+                    if (targetEdge != null)
+                    {
+                        if (targetEdge.currentBehavior.id == targetBehavior)
+                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        else
+                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                    }
+                }
+                else if (type != VexedLib.DoodadType.NPC_OldMan)
+                {
+                    if (active)
+                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                    else
+                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                }
+
+                if (type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.UpgradeStation ||
+                    type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.WarpStation
+                    || type == VexedLib.DoodadType.JumpStation)
+                {
+                    currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[34], decalList, true);
+                }
+                if (type == VexedLib.DoodadType.JumpPad)
+                {
+                    float jumpVel = (Engine.player.jumpDestination - Engine.player.jumpSource).Length() / (1f * Player.launchMaxTime);
+                    float transitionTime = 1f / Math.Abs(stateTransitionVelocity);
+                    float maxExtend = jumpVel * transitionTime;
+
+                    currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
+                    currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[35], decalList, true);
+                }
+
+                if (type == VexedLib.DoodadType.StationIcon)
+                {
+                    currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[(int)targetDoodad.abilityType], decalList, true);
+                }
+
+                if (type == VexedLib.DoodadType.NPC_OldMan)
+                {
+                    currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[36], decalList, true);
+                }
+            }
+        }
+
+        public void Draw(Room currentRoom, List<VertexPositionColorNormalTexture> masterTriangleList, List<VertexPositionColorNormalTexture> masterDecalList)
         {
             if (shouldRender == true)
             {
-                if(Engine.staticDoodadsInitialized == false || dynamic == true)
+                UpdateVertexData(currentRoom);
+                for (int i = 0; i < baseTriangleList.Count; i++)
                 {
-                    List<Vertex> vList = new List<Vertex>();
-                    vList.Add(new Vertex(position, up + right));
-                    vList.Add(new Vertex(position, up + left));
-                    vList.Add(new Vertex(position, down + left));
-                    vList.Add(new Vertex(position, down + right));
-                    
-                    if (type == VexedLib.DoodadType.BridgeCover)
-                    {
-                        currentRoom.AddBlockToTriangleList(vList, baseColor, .5f, -.6f, Room.plateTexCoords, triangleList);
-                        currentRoom.AddBlockToTriangleList(vList, baseColor, -.5f, .6f, Room.plateTexCoords, triangleList);
-                    }
-                    else if (type == VexedLib.DoodadType.PowerStation)
-                    {
-                        if (orbsRemaining > 0)
-                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
-                        else
-                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
-                    }
-                    else if (type == VexedLib.DoodadType.SwitchStation)
-                    {
-                        if (targetDoodad != null)
-                        {
-                            if (targetDoodad.currentBehavior.id == targetBehavior)
-                                currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
-                            else
-                                currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
-                        }
-                        if (targetBlock != null)
-                        {
-                            if (targetBlock.currentBehavior.id == targetBehavior)
-                                currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
-                            else
-                                currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
-                        }
-                        if (targetEdge != null)
-                        {
-                            if (targetEdge.currentBehavior.id == targetBehavior)
-                                currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
-                            else
-                                currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
-                        }
-                    }
-                    else if (type != VexedLib.DoodadType.NPC_OldMan)
-                    {
-                        if (active)
-                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
-                        else
-                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
-                    }
-                    
-                    if (type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.UpgradeStation ||
-                        type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.WarpStation
-                        || type == VexedLib.DoodadType.JumpStation)
-                    {
-                        currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[34], decalList, true);
-                    }
-                    if (type == VexedLib.DoodadType.JumpPad)
-                    {
-                        float jumpVel = (Engine.player.jumpDestination - Engine.player.jumpSource).Length() / (1f*Player.launchMaxTime);
-                        float transitionTime = 1f / Math.Abs(stateTransitionVelocity);
-                        float maxExtend = jumpVel * transitionTime;
-
-                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend*stateTransition, depth, Room.plateTexCoords, triangleList);
-                        currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[35], decalList, true);
-                    }
-
-                    if (type == VexedLib.DoodadType.StationIcon)
-                    {
-                        currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[(int)targetDoodad.abilityType], decalList, true);
-                    }
-
-                    if (type == VexedLib.DoodadType.NPC_OldMan)
-                    {
-                        currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[36], decalList, true);
-                    }
+                    Engine.doodadVertexArray[Engine.doodadVertexArrayCount + i] = baseTriangleList[i];
                 }
-
-                
+                Engine.doodadVertexArrayCount += baseTriangleList.Count;                
+                for (int i = 0; i < decalList.Count; i++)
+                {
+                    Engine.decalVertexArray[Engine.decalVertexArrayCount + i] = decalList[i];
+                }
+                Engine.decalVertexArrayCount += decalList.Count;
+                //masterTriangleList.AddRange(baseTriangleList);
+                //masterDecalList.AddRange(decalList);
             }
         }
 
@@ -747,17 +768,15 @@ namespace VexedCore
             {
                 toggleOn = true;
                 stateTransition = 1;
-                Engine.staticDoodadsInitialized = false;
-                Engine.staticDoodadObjects.Clear();
-                Engine.staticDecalObjects.Clear();
+                refreshVertexData = true;
+                stateTransitionDir = 0;
             }
             if (stateTransitionDir == -1 && stateTransition < 0)
             {
                 toggleOn = false;
                 stateTransition = 0;
-                Engine.staticDoodadsInitialized = false;
-                Engine.staticDoodadObjects.Clear();
-                Engine.staticDecalObjects.Clear();
+                refreshVertexData = true;
+                stateTransitionDir = 0;
             }
 
             if (type == VexedLib.DoodadType.JumpPad && stateTransition == 1)
@@ -841,17 +860,19 @@ namespace VexedCore
 
         public void Activate()
         {
-            stateTransitionDir = 1;
-            Engine.staticDoodadsInitialized = false;
-            Engine.staticDoodadObjects.Clear();
-            Engine.staticDecalObjects.Clear();
+            if(stateTransition < 1)
+            {
+                stateTransitionDir = 1;
+                refreshVertexData = true;
+            }
         }
         public void Deactivate()
         {
-            stateTransitionDir = -1;
-            Engine.staticDoodadsInitialized = false;
-            Engine.staticDoodadObjects.Clear();
-            Engine.staticDecalObjects.Clear();
+            if (stateTransition > 0)
+            {
+                stateTransitionDir = -1;
+                refreshVertexData = true;
+            }
         }
 
 

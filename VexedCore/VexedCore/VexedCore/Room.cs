@@ -1612,14 +1612,7 @@ namespace VexedCore
                     #region Doodads
                     foreach (Doodad d in doodads)
                     {
-                        if (d.dynamic == true)
-                        {
-                            d.Draw(this, Engine.dynamicDoodadObjects, Engine.dynamicDecalObjects);
-                        }
-                        else
-                        {
-                            d.Draw(this, Engine.staticDoodadObjects, Engine.staticDecalObjects);
-                        }
+                        d.Draw(this, Engine.dynamicDoodadObjects, Engine.dynamicDecalObjects);
                     }
                     #endregion
                 }
