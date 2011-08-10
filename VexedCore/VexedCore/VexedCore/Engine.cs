@@ -56,24 +56,25 @@ namespace VexedCore
         public static bool detailTextures = true;
         public static int depthCount =80;
 
-        public static List<VertexPositionColorNormalTexture> staticOpaqueObjects;
+        /*public static List<VertexPositionColorNormalTexture> staticOpaqueObjects;
         public static List<VertexPositionColorNormalTexture> dynamicOpaqueObjects;
         public static List<VertexPositionColorNormalTexture> staticDetailObjects;
-        public static List<VertexPositionColorNormalTexture> dynamicDetailObjects;
-        public static List<VertexPositionColorNormalTexture> staticDoodadObjects;
-        public static List<VertexPositionColorNormalTexture> dynamicDoodadObjects;
+        public static List<VertexPositionColorNormalTexture> dynamicDetailObjects;*/
+
+
+        public static VertexPositionColorNormalTexture[] detailVertexArray;
+        public static int detailVertexArrayCount = 0;
         public static VertexPositionColorNormalTexture[] doodadVertexArray;
         public static int doodadVertexArrayCount =0;
         public static VertexPositionColorNormalTexture[] decalVertexArray;
         public static int decalVertexArrayCount = 0;
-        public static List<VertexPositionColorNormalTexture> staticDecalObjects;
-        public static List<VertexPositionColorNormalTexture> dynamicDecalObjects;
+        public static VertexPositionColorNormalTexture[] staticBlockVertexArray;
+        public static int staticBlockVertexArrayCount = 0;
+        public static VertexPositionColorNormalTexture[] dynamicBlockVertexArray;
+        public static int dynamicBlockVertexArrayCount = 0;
         public static List<TrasnparentSquare> staticTranslucentObjects;
         public static List<TrasnparentSquare> mapShellObjects;
         public static VertexBuffer staticObjectBuffer;
-        /*public static VertexBuffer staticDetailBuffer;
-        public static VertexBuffer staticDoodadBuffer;
-        public static VertexBuffer staticDecalBuffer;*/
         public static bool staticObjectsInitialized = false;
         public static bool staticDoodadsInitialized = false;
 
@@ -93,14 +94,6 @@ namespace VexedCore
 
         public Engine()
         {
-            staticOpaqueObjects = new List<VertexPositionColorNormalTexture>();
-            dynamicOpaqueObjects = new List<VertexPositionColorNormalTexture>();
-            staticDetailObjects = new List<VertexPositionColorNormalTexture>();
-            dynamicDetailObjects = new List<VertexPositionColorNormalTexture>();
-            staticDoodadObjects = new List<VertexPositionColorNormalTexture>();
-            dynamicDoodadObjects = new List<VertexPositionColorNormalTexture>();
-            staticDecalObjects = new List<VertexPositionColorNormalTexture>();
-            dynamicDecalObjects = new List<VertexPositionColorNormalTexture>();
             staticTranslucentObjects = new List<TrasnparentSquare>();
             mapShellObjects = new List<TrasnparentSquare>();
 
@@ -191,95 +184,49 @@ namespace VexedCore
                     cartoonEffect.CurrentTechnique.Passes[0].Apply();
                 }
 
-                if (staticDoodadObjects.Count > 0)
-                {
-                    /*if (staticDoodadsInitialized == false)
-                    {
-                        staticDoodadBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticDoodadObjects.Count, BufferUsage.WriteOnly);
-                        staticDoodadBuffer.SetData<VertexPositionColorNormalTexture>(Engine.staticDoodadObjects.ToArray());                        
-                    }
-                    Game1.graphicsDevice.SetVertexBuffer(staticDoodadBuffer);
-                    Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
-                        0, staticDoodadObjects.Count / 3);*/
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        Engine.staticDoodadObjects.ToArray(), 0, staticDoodadObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }
-                /*if (dynamicDoodadObjects.Count > 0)
-                {
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        Engine.dynamicDoodadObjects.ToArray(), 0, dynamicDoodadObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }*/
                 if (doodadVertexArrayCount > 0)
                 {
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         doodadVertexArray, 0, doodadVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
-                if (staticOpaqueObjects.Count > 0)
+                if (staticBlockVertexArrayCount > 0)
                 {                    
                     if (staticObjectsInitialized == false)
                     {
-                        staticObjectBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticOpaqueObjects.Count, BufferUsage.WriteOnly);
-                        staticObjectBuffer.SetData<VertexPositionColorNormalTexture>(Engine.staticOpaqueObjects.ToArray());                        
+                        staticObjectBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticBlockVertexArray.Length, BufferUsage.WriteOnly);
+                        staticObjectBuffer.SetData<VertexPositionColorNormalTexture>(staticBlockVertexArray);                        
 
                     }
                     Game1.graphicsDevice.SetVertexBuffer(staticObjectBuffer);
                     Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
-                        0, staticOpaqueObjects.Count / 3);
+                        0, staticBlockVertexArrayCount / 3);
                 }
-                if (dynamicOpaqueObjects.Count > 0)
+                if (dynamicBlockVertexArrayCount > 0)
                 {
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        Engine.dynamicOpaqueObjects.ToArray(), 0, dynamicOpaqueObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        dynamicBlockVertexArray, 0, dynamicBlockVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
+
+
+
                 Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
                 playerTextureEffect.Texture = Room.blockTexture;
                 playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                if (staticDetailObjects.Count > 0)
-                {
-                    /*if (staticObjectsInitialized == false)
-                    {
-                        staticDetailBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticDetailObjects.Count, BufferUsage.WriteOnly);
-                        staticDetailBuffer.SetData<VertexPositionColorNormalTexture>(Engine.staticDetailObjects.ToArray());
 
-                    }
-                    Game1.graphicsDevice.SetVertexBuffer(staticDetailBuffer);
-                    Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
-                        0, staticDetailObjects.Count / 3);*/
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        Engine.staticDetailObjects.ToArray(), 0, Engine.staticDetailObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }
 
-                if (dynamicDetailObjects.Count > 0)
+                if (detailVertexArrayCount > 0)
                 {
-                    
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        Engine.dynamicDetailObjects.ToArray(), 0, Engine.dynamicDetailObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        detailVertexArray, 0, detailVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
                 Game1.graphicsDevice.BlendState = BlendState.Opaque;
                 playerTextureEffect.Texture = Ability.ability_textures;
                 playerTextureEffect.CurrentTechnique.Passes[0].Apply();
 
-                if (staticDecalObjects.Count > 0)
-                {
-                    /*if (staticDoodadsInitialized == false)
-                    {
-                        staticDecalBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticDecalObjects.Count, BufferUsage.WriteOnly);
-                        staticDecalBuffer.SetData<VertexPositionColorNormalTexture>(Engine.staticDecalObjects.ToArray());
-                    }
-                    Game1.graphicsDevice.SetVertexBuffer(staticDecalBuffer);
-                    Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
-                        0, staticDecalObjects.Count / 3);*/
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        Engine.staticDecalObjects.ToArray(), 0, Engine.staticDecalObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }
 
-                /*if (dynamicDecalObjects.Count > 0)
-                {
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        Engine.dynamicDecalObjects.ToArray(), 0, Engine.dynamicDecalObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }*/
+
                 if (decalVertexArrayCount > 0)
                 {
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
@@ -405,24 +352,28 @@ namespace VexedCore
         {
             Engine.staticTranslucentObjects = new List<TrasnparentSquare>();
             Engine.mapShellObjects = new List<TrasnparentSquare>();
-            Engine.dynamicOpaqueObjects = new List<VertexPositionColorNormalTexture>();
-            Engine.dynamicDetailObjects = new List<VertexPositionColorNormalTexture>();
-            Engine.dynamicDoodadObjects = new List<VertexPositionColorNormalTexture>();
+            if(Engine.detailVertexArray == null)
+                Engine.detailVertexArray = new VertexPositionColorNormalTexture[30000];
+            detailVertexArrayCount = 0;
             if (Engine.doodadVertexArray == null)
                 Engine.doodadVertexArray = new VertexPositionColorNormalTexture[30000];
             doodadVertexArrayCount = 0;
             if (Engine.decalVertexArray == null)
                 Engine.decalVertexArray = new VertexPositionColorNormalTexture[30000];
             decalVertexArrayCount = 0;
-            Engine.dynamicDecalObjects = new List<VertexPositionColorNormalTexture>();
-            if (Engine.staticOpaqueObjects == null || reDraw == true)
+
+            if (Engine.dynamicBlockVertexArray == null)
+                Engine.dynamicBlockVertexArray = new VertexPositionColorNormalTexture[60000];
+            dynamicBlockVertexArrayCount = 0;
+
+            if (Engine.staticBlockVertexArray == null || reDraw == true)
             {
-                Engine.staticOpaqueObjects = new List<VertexPositionColorNormalTexture>();
-                Engine.staticDetailObjects = new List<VertexPositionColorNormalTexture>();
-                Engine.staticDoodadObjects = new List<VertexPositionColorNormalTexture>();
-                Engine.staticDecalObjects = new List<VertexPositionColorNormalTexture>();
                 staticObjectsInitialized = false;
                 staticDoodadsInitialized = false;
+
+                if (Engine.staticBlockVertexArray == null)
+                    Engine.staticBlockVertexArray = new VertexPositionColorNormalTexture[60000];
+                staticBlockVertexArrayCount = 0;
             }
 
             //bloom.BeginDraw();            

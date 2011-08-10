@@ -35,6 +35,8 @@ namespace VexedCore
         public bool toggleOn = true;
         public string id;
 
+        public bool refreshVertices = false;
+
         public Edge()
         {
             start = new Vertex();
@@ -107,6 +109,7 @@ namespace VexedCore
             {
                 properties.primaryValue = currentBehavior.primaryValue;
                 properties.secondaryValue = currentBehavior.secondaryValue;
+                refreshVertices = true;
                 currentTime = gameTime.ElapsedGameTime.Milliseconds;
                 behaviorStarted = true;
                 nextBehavior = false;
@@ -124,6 +127,7 @@ namespace VexedCore
                 }
                 properties.primaryValue = currentBehavior.primaryValue;
                 properties.secondaryValue = currentBehavior.secondaryValue;
+                refreshVertices = true;
                 currentTime = 0;
                 nextBehavior = false;
                 return gameTime.ElapsedGameTime.Milliseconds;
@@ -142,11 +146,13 @@ namespace VexedCore
                     toggleOn = !toggleOn;
                     if (!toggleOn)
                     {
+                        refreshVertices = true;
                         properties.primaryValue = 0;
                         properties.secondaryValue = 0;
                     }
                     else
                     {
+                        refreshVertices = true;
                         properties.primaryValue = currentBehavior.primaryValue;
                         properties.secondaryValue = currentBehavior.secondaryValue;
                     }                    
@@ -162,11 +168,13 @@ namespace VexedCore
             {
                 properties.primaryValue = 0;
                 properties.secondaryValue = 0;
+                refreshVertices = true;
             }
             else
             {
                 properties.primaryValue = currentBehavior.primaryValue;
                 properties.secondaryValue = currentBehavior.secondaryValue;
+                refreshVertices = true;
             }    
             currentTime = 0;
             nextBehavior = false;
@@ -181,9 +189,37 @@ namespace VexedCore
                 {
                     properties.primaryValue = currentBehavior.primaryValue;
                     properties.secondaryValue = currentBehavior.secondaryValue;
+                    refreshVertices = true;
                     behaviorStarted = true;
                 }
             }
+        }
+
+
+        public List<VertexPositionColorNormalTexture> baseTriangleList;
+
+        public void UpdateVertexData(Room currentRoom, bool dynamic)
+        {
+            if (Engine.staticObjectsInitialized == false || dynamic == true || refreshVertices == true || properties.type == VexedLib.EdgeType.ConveyorBelt)
+            {
+                baseTriangleList = new List<VertexPositionColorNormalTexture>();
+            
+                if (properties.type == VexedLib.EdgeType.Spikes)
+                    currentRoom.AddSpikesToTriangleList(this, .5f, baseTriangleList);
+                else if (properties.type != VexedLib.EdgeType.Normal)
+                    currentRoom.AddStripToTriangleList2(this, .5f, baseTriangleList);
+            }
+            refreshVertices = false;
+        }
+
+        public void Draw(Room currentRoom)
+        {
+            for (int i = 0; i < baseTriangleList.Count; i++)
+            {
+                Engine.detailVertexArray[Engine.detailVertexArrayCount + i] = baseTriangleList[i];
+            }
+            Engine.detailVertexArrayCount += baseTriangleList.Count;
+
         }
     }
 }

@@ -278,5 +278,44 @@ namespace VexedCore
                 }
             }
         }
+
+        public List<VertexPositionColorNormalTexture> baseTriangleList;
+        
+        public void UpdateVertexData(Room currentRoom)
+        {
+            baseTriangleList = new List<VertexPositionColorNormalTexture>();
+            if (Engine.staticObjectsInitialized == false || staticObject == false)
+            {
+                List<Vertex> vList = new List<Vertex>();
+                vList.Add(edges[0].start);
+                vList.Add(edges[1].start);
+                vList.Add(edges[2].start);
+                vList.Add(edges[3].start);
+                currentRoom.AddBlockToTriangleList2(vList, color, .5f, baseTriangleList);
+            }
+        }
+
+        public void Draw(Room currentRoom)
+        {
+            UpdateVertexData(currentRoom);
+            if (staticObject == true)
+            {
+                for (int i = 0; i < baseTriangleList.Count; i++)
+                {
+                    Engine.staticBlockVertexArray[Engine.staticBlockVertexArrayCount + i] = baseTriangleList[i];
+                }
+                Engine.staticBlockVertexArrayCount += baseTriangleList.Count;
+            }
+            else
+            {
+                for (int i = 0; i < baseTriangleList.Count; i++)
+                {
+                    Engine.dynamicBlockVertexArray[Engine.dynamicBlockVertexArrayCount + i] = baseTriangleList[i];
+                }
+                Engine.dynamicBlockVertexArrayCount += baseTriangleList.Count;
+            }
+        }
+
+    
     }
 }

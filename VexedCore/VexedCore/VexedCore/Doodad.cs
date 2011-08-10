@@ -730,7 +730,7 @@ namespace VexedCore
             }
         }
 
-        public void Draw(Room currentRoom, List<VertexPositionColorNormalTexture> masterTriangleList, List<VertexPositionColorNormalTexture> masterDecalList)
+        public void Draw(Room currentRoom)
         {
             if (shouldRender == true)
             {
@@ -745,8 +745,6 @@ namespace VexedCore
                     Engine.decalVertexArray[Engine.decalVertexArrayCount + i] = decalList[i];
                 }
                 Engine.decalVertexArrayCount += decalList.Count;
-                //masterTriangleList.AddRange(baseTriangleList);
-                //masterDecalList.AddRange(decalList);
             }
         }
 

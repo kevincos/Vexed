@@ -219,8 +219,8 @@ namespace VexedCore
             beltAnimation += gameTime.ElapsedGameTime.Milliseconds;
             foreach (Block b in blocks)
             {
-                if (b.staticObject == false)
-                {
+                //if (b.staticObject == false)
+                //{
                     int blockUpdateTime = b.UpdateBehavior(gameTime);
                     foreach (Edge e in b.edges)
                     {
@@ -228,7 +228,7 @@ namespace VexedCore
                         e.end.Update(this, blockUpdateTime);
                         e.UpdateBehavior(gameTime);
                     }
-                }
+                //}
             }
 
             if (this == Engine.player.currentRoom)
@@ -1565,38 +1565,29 @@ namespace VexedCore
 
                         if (b.staticObject == false)
                         {
-                            AddBlockToTriangleList2(vList, b.color, .5f, Engine.dynamicOpaqueObjects);
-                            //AddBlockToTriangleList(vList, b.color, .5f, Room.plateTexCoords, Engine.dynamicOpaqueObjects);
+                            b.UpdateVertexData(this);
+                            b.Draw(this);
+                            //AddBlockToTriangleList2(vList, b.color, .5f, Engine.dynamicOpaqueObjects);
+
                             foreach (Edge e in b.edges)
                             {
-                                if (e.properties.type == VexedLib.EdgeType.Spikes)
-                                    AddSpikesToTriangleList(e, .5f, Engine.dynamicOpaqueObjects);
-                                else if (e.properties.type != VexedLib.EdgeType.Normal)
-                                    AddStripToTriangleList2(e, .5f, Engine.dynamicDetailObjects);
+                                e.UpdateVertexData(this, true);
+                                e.Draw(this);
                             }
                         }
                         else
                         {
-                            //AddBlockToTriangleList(vList, b.color, .5f, Room.plateTexCoords, Engine.staticOpaqueObjects);
                             if (Engine.staticObjectsInitialized == false)
-                                AddBlockToTriangleList2(vList, b.color, .5f, Engine.staticOpaqueObjects);
+                            {
+                                b.UpdateVertexData(this);
+                                b.Draw(this);
+                                //AddBlockToTriangleList2(vList, b.color, .5f, Engine.staticOpaqueObjects);
+                            }
 
                             foreach (Edge e in b.edges)
                             {
-                                if (e.properties.type == VexedLib.EdgeType.Electric || e.properties.type == VexedLib.EdgeType.Fire || e.properties.type == VexedLib.EdgeType.ConveyorBelt)
-                                {
-                                    if (e.properties.type == VexedLib.EdgeType.Spikes)
-                                        AddSpikesToTriangleList(e, .5f, Engine.dynamicOpaqueObjects);
-                                    else if (e.properties.type != VexedLib.EdgeType.Normal)
-                                        AddStripToTriangleList2(e, .5f, Engine.dynamicDetailObjects);
-                                }
-                                else if (Engine.staticObjectsInitialized == false)
-                                {
-                                    if (e.properties.type == VexedLib.EdgeType.Spikes)
-                                        AddSpikesToTriangleList(e, .5f, Engine.staticOpaqueObjects);
-                                    else if (e.properties.type != VexedLib.EdgeType.Normal)
-                                        AddStripToTriangleList2(e, .5f, Engine.staticDetailObjects);
-                                }
+                                e.UpdateVertexData(this, false);
+                                e.Draw(this);
                             }
                         }
 
@@ -1612,7 +1603,7 @@ namespace VexedCore
                     #region Doodads
                     foreach (Doodad d in doodads)
                     {
-                        d.Draw(this, Engine.dynamicDoodadObjects, Engine.dynamicDecalObjects);
+                        d.Draw(this);
                     }
                     #endregion
                 }
@@ -1621,7 +1612,7 @@ namespace VexedCore
             #region outerBlock
 
             Vector3 outerAdjustedSize = new Vector3(size.X + 5f, size.Y + 5f, size.Z + 5f);
-            if (innerBlockMode > 0)
+            if (innerBlockMode > 0 && Engine.state != EngineState.Active)
             {
                 Engine.mapShellObjects.AddRange(GetMapBlock(outerAdjustedSize, color));
             }
