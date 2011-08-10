@@ -119,6 +119,7 @@
     <Compile Include="BloomComponent.cs" />
     <Compile Include="Collidable.cs" />
     <Compile Include="Controls.cs" />
+    <Compile Include="DialogBox.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="FrameRateCounter.cs" />
@@ -182,6 +183,9 @@
     <None Include="LevelData\awesome">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="LevelData\blarg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="LevelData\debug">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -189,7 +193,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="LevelData\spikeelevator">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="LevelData\spiral">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -38,6 +38,16 @@ namespace VexedCore
         public static List<Vector2> electricOffTopTexCoords;
         public static List<Vector2> electricOffTopEndTexCoords;
 
+        public static List<Vector2> lavaOnSideTexCoords;
+        public static List<Vector2> lavaOnSideEndTexCoords;
+        public static List<Vector2> lavaOnTopTexCoords;
+        public static List<Vector2> lavaOnTopEndTexCoords;
+
+        public static List<Vector2> lavaOffSideTexCoords;
+        public static List<Vector2> lavaOffSideEndTexCoords;
+        public static List<Vector2> lavaOffTopTexCoords;
+        public static List<Vector2> lavaOffTopEndTexCoords;
+
         public static List<Vector2> rubberSideTexCoords;
         public static List<Vector2> rubberSideEndTexCoords;
         public static List<Vector2> rubberTopTexCoords;
@@ -164,6 +174,16 @@ namespace VexedCore
             electricOffTopTexCoords = LoadTexCoords(5, 0, .003f, .003f);
             electricOffSideEndTexCoords = LoadTexCoords(4, 1, .003f, .003f);
             electricOffTopEndTexCoords = LoadTexCoords(4, 0, .003f, .003f);
+
+            lavaOnSideTexCoords = LoadTexCoords(3, 5, .003f, .003f);
+            lavaOnTopTexCoords = LoadTexCoords(3, 4, .003f, .003f);
+            lavaOnSideEndTexCoords = LoadTexCoords(2, 5, .003f, .003f);
+            lavaOnTopEndTexCoords = LoadTexCoords(2, 4, .003f, .003f);
+
+            lavaOffSideTexCoords = LoadTexCoords(1, 5, .003f, .003f);
+            lavaOffTopTexCoords = LoadTexCoords(1, 4, .003f, .003f);
+            lavaOffSideEndTexCoords = LoadTexCoords(0, 5, .003f, .003f);
+            lavaOffTopEndTexCoords = LoadTexCoords(0, 4, .003f, .003f);
 
             rubberSideTexCoords = LoadTexCoords(5, 3, .003f, .003f);
             rubberTopTexCoords = LoadTexCoords(5, 2, .003f, .003f);
@@ -781,6 +801,46 @@ namespace VexedCore
                     {
                         AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, electricOnSideTexCoords, triangleList, true);
                         AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .01f, false, electricOnTopTexCoords, triangleList);
+                    }
+                    #endregion
+                }
+                else if (e.properties.type == VexedLib.EdgeType.Fire && e.properties.primaryValue == 0)
+                {
+                    #region lava off
+                    if (i == width - 1)
+                    {
+                        AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, lavaOffSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[(i + 1) * 2 + 1], fullPointList[i * 2 + 1], depth + .01f, .01f, true, lavaOffTopEndTexCoords, triangleList);
+                    }
+                    else if (i == 0)
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, lavaOffSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .01f, false, lavaOffTopEndTexCoords, triangleList);
+                    }
+                    else
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, lavaOffSideTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .01f, false, lavaOffTopTexCoords, triangleList);
+                    }
+                    #endregion
+                }
+                else if (e.properties.type == VexedLib.EdgeType.Fire && e.properties.primaryValue != 0)
+                {
+                    #region lava on
+                    if (i == width - 1)
+                    {
+                        AddBlockFrontToTriangleList(mirrorSubList, Color.White, depth + .01f, lavaOnSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[(i + 1) * 2 + 1], fullPointList[i * 2 + 1], depth + .01f, .01f, true, lavaOnTopEndTexCoords, triangleList);
+                    }
+                    else if (i == 0)
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, lavaOnSideEndTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .01f, false, lavaOnTopEndTexCoords, triangleList);
+                    }
+                    else
+                    {
+                        AddBlockFrontToTriangleList(subList, Color.White, depth + .01f, lavaOnSideTexCoords, triangleList, true);
+                        AddTopStrip(fullPointList[i * 2 + 1], fullPointList[(i + 1) * 2 + 1], depth + .01f, .01f, false, lavaOnTopTexCoords, triangleList);
                     }
                     #endregion
                 }
@@ -1523,7 +1583,7 @@ namespace VexedCore
 
                             foreach (Edge e in b.edges)
                             {
-                                if (e.properties.type == VexedLib.EdgeType.Electric || e.properties.type == VexedLib.EdgeType.ConveyorBelt)
+                                if (e.properties.type == VexedLib.EdgeType.Electric || e.properties.type == VexedLib.EdgeType.Fire || e.properties.type == VexedLib.EdgeType.ConveyorBelt)
                                 {
                                     if (e.properties.type == VexedLib.EdgeType.Spikes)
                                         AddSpikesToTriangleList(e, .5f, Engine.dynamicOpaqueObjects);

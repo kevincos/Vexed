@@ -492,7 +492,7 @@ namespace WinFormsGraphicsDevice
             this.doodadPropertiesGroup.Controls.Add(this.doodadTargetLabel);
 
             this.doodadTypeDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 23; i++)
+            for (int i = 0; i < 30; i++)
             {
                 this.doodadTypeDropdown.Items.Add((DoodadType)i);
             }
@@ -543,7 +543,7 @@ namespace WinFormsGraphicsDevice
             this.edgeTypeDropdown.Location = new System.Drawing.Point(10, 10);
             this.edgeTypeDropdown.Size = new System.Drawing.Size(90, 20);
             this.edgeTypeDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 8; i++)
             {
                 this.edgeTypeDropdown.Items.Add((EdgeType)i);
             }

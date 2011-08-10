@@ -77279,76 +77279,6 @@
               </blocks>
               <doodads>
                 <Doodad>
-                  <id>2643</id>
-                  <name>Doodad</name>
-                  <position>
-                    <X>41.5</X>
-                    <Y>-35</Y>
-                    <Z>29.5</Z>
-                  </position>
-                  <up>
-                    <X>0</X>
-                    <Y>0</Y>
-                    <Z>1</Z>
-                  </up>
-                  <activationCost>0</activationCost>
-                  <fixedPosition>false</fixedPosition>
-                  <type>ItemStation</type>
-                  <ability>Blaster</ability>
-                  <behaviors>
-                    <Behavior>
-                      <id>2644</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                  </behaviors>
-                </Doodad>
-                <Doodad>
-                  <id>2645</id>
-                  <name>Doodad</name>
-                  <position>
-                    <X>43.5</X>
-                    <Y>-35</Y>
-                    <Z>29.5</Z>
-                  </position>
-                  <up>
-                    <X>0</X>
-                    <Y>0</Y>
-                    <Z>1</Z>
-                  </up>
-                  <activationCost>0</activationCost>
-                  <fixedPosition>false</fixedPosition>
-                  <type>ItemStation</type>
-                  <ability>Missile</ability>
-                  <behaviors>
-                    <Behavior>
-                      <id>2646</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                  </behaviors>
-                </Doodad>
-                <Doodad>
                   <id>2647</id>
                   <name>Doodad</name>
                   <position>
@@ -77629,76 +77559,6 @@
                   </behaviors>
                 </Doodad>
                 <Doodad>
-                  <id>2803</id>
-                  <name>Doodad</name>
-                  <position>
-                    <X>58.5</X>
-                    <Y>-35</Y>
-                    <Z>33.5</Z>
-                  </position>
-                  <up>
-                    <X>-1</X>
-                    <Y>0</Y>
-                    <Z>0</Z>
-                  </up>
-                  <activationCost>0</activationCost>
-                  <fixedPosition>false</fixedPosition>
-                  <type>ItemBlock</type>
-                  <ability>RedKey</ability>
-                  <behaviors>
-                    <Behavior>
-                      <id>2804</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                  </behaviors>
-                </Doodad>
-                <Doodad>
-                  <id>2805</id>
-                  <name>Doodad</name>
-                  <position>
-                    <X>58.5</X>
-                    <Y>-35</Y>
-                    <Z>31.5</Z>
-                  </position>
-                  <up>
-                    <X>-1</X>
-                    <Y>0</Y>
-                    <Z>0</Z>
-                  </up>
-                  <activationCost>0</activationCost>
-                  <fixedPosition>false</fixedPosition>
-                  <type>ItemBlock</type>
-                  <ability>JetPack</ability>
-                  <behaviors>
-                    <Behavior>
-                      <id>2806</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                  </behaviors>
-                </Doodad>
-                <Doodad>
                   <id>2859</id>
                   <name>Doodad</name>
                   <position>
@@ -77734,12 +77594,12 @@
                   </behaviors>
                 </Doodad>
                 <Doodad>
-                  <id>2871</id>
+                  <id>2809</id>
                   <name>Doodad</name>
                   <position>
                     <X>41.5</X>
                     <Y>-35</Y>
-                    <Z>33.5</Z>
+                    <Z>29.5</Z>
                   </position>
                   <up>
                     <X>0</X>
@@ -77748,11 +77608,11 @@
                   </up>
                   <activationCost>0</activationCost>
                   <fixedPosition>false</fixedPosition>
-                  <type>Crate</type>
+                  <type>NPC_OldMan</type>
                   <ability>WallJump</ability>
                   <behaviors>
                     <Behavior>
-                      <id>2872</id>
+                      <id>2810</id>
                       <name>Behavior</name>
                       <offset>0</offset>
                       <duration>0</duration>
@@ -78948,41 +78808,6 @@
                     </Behavior>
                   </behaviors>
                 </Doodad>
-                <Doodad>
-                  <id>2829</id>
-                  <name>Doodad</name>
-                  <position>
-                    <X>56.5</X>
-                    <Y>-30.5</Y>
-                    <Z>37</Z>
-                  </position>
-                  <up>
-                    <X>-1</X>
-                    <Y>0</Y>
-                    <Z>0</Z>
-                  </up>
-                  <activationCost>0</activationCost>
-                  <fixedPosition>false</fixedPosition>
-                  <type>ItemBlock</type>
-                  <ability>BlueKey</ability>
-                  <behaviors>
-                    <Behavior>
-                      <id>2830</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                  </behaviors>
-                </Doodad>
               </doodads>
               <monsters>
                 <Monster>
@@ -78990,7 +78815,7 @@
                   <name>Monster</name>
                   <position>
                     <X>44.5</X>
-                    <Y>-32.5</Y>
+                    <Y>-29.5</Y>
                     <Z>37</Z>
                   </position>
                   <up>
@@ -78999,7 +78824,7 @@
                     <Z>-0</Z>
                   </up>
                   <fixedPath>false</fixedPath>
-                  <movement>Tank</movement>
+                  <movement>Spider</movement>
                   <armor>None</armor>
                   <weapon>Blaster</weapon>
                   <behavior>Stationary</behavior>

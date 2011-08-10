@@ -35,9 +35,11 @@ Content\p_gun_texture.xnb
 Content\p_texture_boots.xnb
 Content\p_texture_jetpack.xnb
 Content\p_texture_booster.xnb
+Content\dialogbox.xnb
 LevelData\awesome
+LevelData\blarg
 LevelData\debug
 LevelData\movingplatform
-LevelData\spikeelevator
 LevelData\spiral
 LevelData\spiral2
+LevelData\spikeelevator

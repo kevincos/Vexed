@@ -33,6 +33,8 @@ namespace VexedCore
 
         public static List<Room> roomList;
         public static Player player;
+        public static DialogBox dialogBox;
+        public static SpriteFont spriteFont;
 
         public static int selectedRoomIndex = 0;
 
@@ -48,7 +50,7 @@ namespace VexedCore
         public static bool transparencyEnabled = true;
         public static int lightingLevel = 0;
         public static bool toonShadingEnabled = false;
-        public static float drawDistance = 40f;
+        public static float drawDistance = 150f;
         public int optionToggleCooldown = 0;
         public static bool reDraw = false;
         public static bool detailTextures = true;
@@ -242,6 +244,7 @@ namespace VexedCore
                         Engine.dynamicDetailObjects.ToArray(), 0, Engine.dynamicDetailObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
+                Game1.graphicsDevice.BlendState = BlendState.Opaque;
                 playerTextureEffect.Texture = Ability.ability_textures;
                 playerTextureEffect.CurrentTechnique.Passes[0].Apply();
 
@@ -504,7 +507,14 @@ namespace VexedCore
             Engine.player.secondaryAbility.Draw(.825f, .02f);
             Engine.player.primaryAbility.Draw(.75f, .12f);
             Ability.Draw(.825f, .22f, AbilityType.NormalJump, player.naturalShield.ammo, player.naturalShield.maxAmmo);
-            Ability.Draw(.9f, .12f, AbilityType.Use);            
+            Ability.Draw(.9f, .12f, AbilityType.Use);
+
+            if (Engine.player.state == State.Dialog)
+            {
+                if (dialogBox == null)
+                    dialogBox = new DialogBox();
+                dialogBox.Draw();
+            }
         }
 
 
@@ -725,8 +735,25 @@ namespace VexedCore
 
                 player.currentRoom.UpdateMonsters(gameTime);
 
+                if(Engine.player.state != State.Death)
+                    Physics.CollisionCheck(player.currentRoom, player, gameTime);
+            }
 
-                Physics.CollisionCheck(player.currentRoom, player, gameTime);
+            if (Engine.player.state == State.Dialog)
+            {
+                if (dialogBox != null)
+                {
+                    dialogBox.Update(gameTime);
+                    if (Game1.controller.AButton.Pressed)
+                    {
+                        if (false == dialogBox.Next())
+                        {
+                            dialogBox = null;
+                            Engine.player.jumpRecovery = 500;
+                            Engine.player.state = State.Normal;
+                        }
+                    }
+                }
             }
         }
     }

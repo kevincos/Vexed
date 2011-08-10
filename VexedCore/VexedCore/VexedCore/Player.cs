@@ -18,7 +18,9 @@ namespace VexedCore
         Normal,
         Jump,
         BridgeJump,
-        Spin
+        Spin,
+        Death,
+        Dialog
     }
 
     public class Player
@@ -62,7 +64,7 @@ namespace VexedCore
         public Vertex center;
         [XmlIgnore]public Room currentRoom;
         public string currentRoomId;
-        int jumpRecovery = 0;
+        public int jumpRecovery = 0;
         public Vector3 jumpDestination;
         public Vector3 jumpSource;
         public Vector3 jumpCameraDestination;
@@ -71,10 +73,12 @@ namespace VexedCore
         public Vector3 jumpNormal;
         public Vector3 platformVelocity;
         public Vector3 spinUp;
+        public Vector3 lastLivingPosition;
         [XmlIgnore]public Room jumpRoom;
         public int spinTime = 0;
         public int launchTime = 0;
         public int jumpTime = 0;
+        public int deathTime = 0;
         public int lastFireTime = 0;
         public bool superJump = false;
         public bool jetPacking = false;
@@ -103,6 +107,7 @@ namespace VexedCore
         public static int walkMaxTime = 800;
         public static int launchMaxTime = 1000;
         public static int maxBoostTime = 300;
+        public static int maxDeathTime = 1000;
         public static int weaponSwitchCooldownMax = 200;
 
         public VexedLib.GunType gunType = VexedLib.GunType.Blaster;
@@ -256,9 +261,13 @@ namespace VexedCore
         {
             get
             {
-                if (state == State.Normal || state == State.Spin)
+                if (state == State.Normal || state == State.Spin || state == State.Dialog)
                 {
                     return currentRoom.RaisedPosition(center.position + cameraOffset, baseCameraDistance, 6f);
+                }
+                if (state == State.Death)
+                {
+                    return currentRoom.RaisedPosition(lastLivingPosition + cameraOffset, baseCameraDistance, 6f);
                 }
                 if (state == State.BridgeJump)
                 {
@@ -280,9 +289,13 @@ namespace VexedCore
         {
             get
             {
-                if (state == State.Normal || state == State.Spin)
+                if (state == State.Normal || state == State.Spin || state == State.Dialog)
                 {
                     return currentRoom.RaisedPosition(center.position, baseCameraDistance, 6f);
+                }
+                else if (state == State.Death)
+                {
+                    return currentRoom.RaisedPosition(lastLivingPosition, baseCameraDistance, 6f);
                 }
                 if (state == State.BridgeJump)
                 {
@@ -321,6 +334,8 @@ namespace VexedCore
                     Vector3 newUp = currentRoom.AdjustedUp(center.position, spinUp, center.normal, 1f);
                     return ((spinMaxTime - spinTime) * oldUp + spinTime * newUp) / spinMaxTime;
                 }
+                else if(state == State.Death)
+                    return currentRoom.AdjustedUp(lastLivingPosition, center.direction, center.normal, 1f);
                 else
                     return currentRoom.AdjustedUp(center.position, center.direction, center.normal, 1f);
             }
@@ -330,8 +345,10 @@ namespace VexedCore
         {
             get
             {
-                if (state == State.Normal || state == State.Spin)
+                if (state == State.Normal || state == State.Spin || state == State.Dialog)
                     return center.position;
+                else if (state == State.Death)
+                    return lastLivingPosition;
                 else
                     return jumpPosition;
             }
@@ -398,22 +415,27 @@ namespace VexedCore
         public void Damage(Vector3 projection)
         {
             idleTime = 0;
+            if (state == State.Death)
+                return;
+            center.velocity += maxHorizSpeed * Vector3.Normalize(projection);
             if (primaryAbility.type == AbilityType.Shield && primaryAbility.ammo != 0)
             {
                 primaryAbility.DepleteAmmo(800);
-                return;
             }
-            if (secondaryAbility.type == AbilityType.Shield && secondaryAbility.ammo != 0)
+            else if (secondaryAbility.type == AbilityType.Shield && secondaryAbility.ammo != 0)
             {
                 secondaryAbility.DepleteAmmo(800);
-                return;
             }
-            if (naturalShield.ammo != 0)
+            else if (naturalShield.ammo != 0)
             {
                 naturalShield.DepleteAmmo(800);
-                return;
             }
-            dead = true;
+            else
+            {
+                deathTime = 0;
+                state = State.Death;
+                lastLivingPosition = center.position;
+            }
         }
 
         public void Spin(Vector3 newUp)
@@ -425,9 +447,46 @@ namespace VexedCore
             }
         }
 
+        public void EnforceVelocityLimits()
+        {
+            float upMagnitude = Vector3.Dot(up, center.velocity);
+            float rightMagnitude = Vector3.Dot(right, center.velocity - platformVelocity);
+
+
+            if (upMagnitude > maxVertSpeed)
+            {
+                center.velocity -= (upMagnitude - maxVertSpeed) * up;
+            }
+            if (upMagnitude < -maxVertSpeed)
+            {
+                center.velocity -= (maxVertSpeed + upMagnitude) * up;
+            }
+            if (rightMagnitude > maxHorizSpeed && boosting == false)
+            {
+                center.velocity -= (rightMagnitude - maxHorizSpeed) * right;
+            }
+            if (rightMagnitude < -maxHorizSpeed && boosting == false)
+            {
+                center.velocity -= (maxHorizSpeed + rightMagnitude) * right;
+            }
+        }
+
         public void SetAnimationState()
         {
-            if (state == State.Jump)
+            if (state == State.Dialog)
+            {
+                if (faceDirection < 0)
+                    AnimationControl.SetState(AnimationState.IdleLeft);
+                if (faceDirection > 0)
+                    AnimationControl.SetState(AnimationState.IdleRight);
+                if (faceDirection == 0)
+                    AnimationControl.SetState(AnimationState.Idle);
+            }
+            else if (state == State.Death)
+            {
+                AnimationControl.SetState(AnimationState.JumpPad);
+            }
+            else if (state == State.Jump)
             {
                 AnimationControl.SetState(AnimationState.JumpPad);
             }
@@ -531,6 +590,7 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+
             if (center.normal != oldNormal || center.direction != oldUp)
             {
                 Physics.refresh = true;
@@ -576,8 +636,19 @@ namespace VexedCore
             Vector2 stick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Left;
             Vector2 rightStick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Right;
             GamePadState gamePadState = GamePad.GetState(Game1.activePlayer);
-            
-            if (state == State.Normal)
+
+            if (state == State.Death)
+            {
+                center.position += center.velocity * gameTime.ElapsedGameTime.Milliseconds;
+                center.velocity -= gravityAcceleration * up;
+                EnforceVelocityLimits();
+                deathTime += gameTime.ElapsedGameTime.Milliseconds;
+                if (deathTime > maxDeathTime)
+                {
+                    Respawn();
+                }
+            }
+            else if (state == State.Normal)
             {
                 #region normal update
                 float upMagnitude = 0;
@@ -597,7 +668,7 @@ namespace VexedCore
                 Vector3 right = Vector3.Cross(up, center.normal);
 
                 //if (grounded == true)
-                    //faceDirection = 0;
+                //faceDirection = 0;
 
                 if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
                 {
@@ -611,7 +682,7 @@ namespace VexedCore
                 {
                     faceDirection = 1;
                     if (grounded == true)
-                        center.velocity += walkSpeed * right;                    
+                        center.velocity += walkSpeed * right;
                     else
                         center.velocity += airSpeed * right;
                 }
@@ -628,7 +699,7 @@ namespace VexedCore
                 if (superJump == true)
                 {
                     jumpTime += gameTime.ElapsedGameTime.Milliseconds;
-                    
+
                     if (jumpTime > 45 && grounded == true)
                         center.velocity += (jumpSpeed - upMagnitude) * up;
                     int jumpLimit = 60;
@@ -702,8 +773,8 @@ namespace VexedCore
                         }
                     }
                 }
-                
-                if((gamePadState.IsButtonDown(Buttons.Back)))
+
+                if ((gamePadState.IsButtonDown(Buttons.Back)))
                 {
                     Respawn();
                 }
@@ -713,28 +784,9 @@ namespace VexedCore
                 else
                     center.velocity += boostAcceleration * right * faceDirection;
 
-                upMagnitude = Vector3.Dot(up, center.velocity);
-                rightMagnitude = Vector3.Dot(right, center.velocity - platformVelocity);
-
                 targetCameraAngle = rightStick;
 
-                if (upMagnitude > maxVertSpeed)
-                {
-                    center.velocity -= (upMagnitude - maxVertSpeed) * up;
-                }
-                if (upMagnitude < -maxVertSpeed)
-                {
-                    center.velocity -= (maxVertSpeed + upMagnitude) * up;
-                }
-                if (rightMagnitude > maxHorizSpeed && boosting == false)
-                {
-                    center.velocity -= (rightMagnitude - maxHorizSpeed) * right;
-                }
-                if (rightMagnitude < -maxHorizSpeed && boosting == false)
-                {
-                    center.velocity -= (maxHorizSpeed + rightMagnitude) * right;
-                }
-                
+                EnforceVelocityLimits();
                 jetPackThrust = false;
                 if (Game1.controller.XButton.Pressed)
                 {
@@ -751,7 +803,7 @@ namespace VexedCore
                             stationPresent = true;
                         }
                     }
-                
+
                     if (stationPresent == false)
                     {
                         primaryAbility.Do(gameTime);
@@ -836,6 +888,8 @@ namespace VexedCore
                             }
                             if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
                             {
+                                if (d.type == VexedLib.DoodadType.JumpPad)
+                                    d.Activate();
                                 jumpRoom = d.targetRoom;
                                 jumpRoom.Reset();
                                 float roomSize = Math.Abs(Vector3.Dot(jumpRoom.size / 2, center.normal));
@@ -848,6 +902,11 @@ namespace VexedCore
                                 launchTime = 0;
                                 d.active = false;
                                 jumpNormal = -center.normal;
+                            }
+                            if (d.type == VexedLib.DoodadType.NPC_OldMan)
+                            {
+                                state = State.Dialog;
+                                
                             }
                             if (d.type == VexedLib.DoodadType.SwitchStation)
                             {
@@ -901,7 +960,7 @@ namespace VexedCore
                                         }
                                     }
                                 }
-                            }                            
+                            }
                             if (d.type == VexedLib.DoodadType.WarpStation)
                             {
                                 Engine.state = EngineState.ZoomOut;
@@ -912,7 +971,7 @@ namespace VexedCore
                                 }
                             }
                         }
-                    }  
+                    }
                 }
                 foreach (Doodad d in currentRoom.doodads)
                 {
@@ -1045,10 +1104,21 @@ namespace VexedCore
             rectVertexList.Add(new Vertex(center.position, center.normal, +playerHalfHeight * up - .5f * right, center.direction));
             rectVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up - .5f * right, center.direction));
             rectVertexList.Add(new Vertex(center.position, center.normal, -playerHalfHeight * up + .5f * right, center.direction));
-            foreach (Vertex v in rectVertexList)
+            if (state == State.Death)
             {
-                v.Update(currentRoom, 1);
+                foreach (Vertex v in rectVertexList)
+                {
+                    v.SimpleUpdate(currentRoom, 1);
+                }
             }
+            else
+            {
+                foreach (Vertex v in rectVertexList)
+                {
+                    v.Update(currentRoom, 1);
+                }
+            }
+            
 
 
             currentRoom.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList, Player.texCoordList[currentTextureIndex], true);
@@ -1062,6 +1132,14 @@ namespace VexedCore
                     triangleArray[i].Position += jumpPosition - center.position;
                 }
             }
+            if (state == State.Death)
+            {
+                for (int i = 0; i < textureTriangleList.Count(); i++)
+                {
+                    triangleArray[i].Position += .01f * deathTime * center.normal;
+                }
+            }
+
 
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                 triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);

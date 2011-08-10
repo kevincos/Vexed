@@ -223,6 +223,7 @@ namespace VexedCore
                 Engine.staticDecalObjects.Clear();
                 Engine.staticDoodadsInitialized = false;
             }
+
             active = state;
         }
 
@@ -230,7 +231,7 @@ namespace VexedCore
         {
             get
             {
-                if ((type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam) && stateTransition != 0 && stateTransition != 1)
+                if (stateTransition != 0 && stateTransition != 1)
                     return true;
                 if (type == VexedLib.DoodadType.Crate)                
                     return true;                
@@ -242,6 +243,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.RightDoor || type == VexedLib.DoodadType.LeftDoor)
+                    return Color.Gray;
                 if (type == VexedLib.DoodadType.UpgradeStation)
                     return Color.Gray;
                 if (type == VexedLib.DoodadType.PowerStation)
@@ -271,6 +274,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.RightDoor || type == VexedLib.DoodadType.LeftDoor)
+                    return Color.Gray;
                 if (type == VexedLib.DoodadType.UpgradeStation)
                     return Color.DarkGray;
                 if (type == VexedLib.DoodadType.PowerStation)
@@ -292,6 +297,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.NPC_OldMan)
+                    return 1f;
                 if (type == VexedLib.DoodadType.Checkpoint)
                     return 2f;
                 if (type == VexedLib.DoodadType.WarpStation)
@@ -304,6 +311,10 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.NPC_OldMan)
+                    return false;
+                if (type == VexedLib.DoodadType.RightDoor || type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.StationIcon)
+                    return false;
                 if (type == VexedLib.DoodadType.BridgeCover || type == VexedLib.DoodadType.BridgeGate || type == VexedLib.DoodadType.JumpPad || type == VexedLib.DoodadType.UpgradeStation || type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.SwitchStation)
                     return false;
                 if (type == VexedLib.DoodadType.Brick && active == true)
@@ -374,6 +385,10 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.LeftDoor)
+                    return halfWidth - .5f * stateTransition;
+                if (type == VexedLib.DoodadType.RightDoor)
+                    return halfWidth + .5f * stateTransition;
                 return halfWidth;
             }
         }
@@ -381,6 +396,11 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.LeftDoor)
+                    return -halfWidth - .5f * stateTransition;
+                if (type == VexedLib.DoodadType.RightDoor)
+                    return -halfWidth + .5f * stateTransition;
+                
                 return -halfWidth;
             }
         }
@@ -410,7 +430,7 @@ namespace VexedCore
         public Vector3 right
         {
             get
-            {
+            {                
                 return right_mag * rightUnit;
             }
         }
@@ -469,6 +489,10 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.RightDoor)
+                    return .3f;
+                if (type == VexedLib.DoodadType.StationIcon)
+                    return .4f;
                 if (type == VexedLib.DoodadType.BridgeGate)
                     return 1f;
                 if (type == VexedLib.DoodadType.BridgeSide)
@@ -477,8 +501,6 @@ namespace VexedCore
                     return 1.5f;
                 if (type == VexedLib.DoodadType.BridgeCover)
                     return 1.5f;
-                if (type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.WarpStation || type == VexedLib.DoodadType.SwitchStation)
-                    return .35f;
                 if (type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam || type == VexedLib.DoodadType.PowerOrb)
                     return .1f;
                 if (type == VexedLib.DoodadType.WallSwitch)
@@ -490,6 +512,10 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.RightDoor)
+                    return .6f;
+                if (type == VexedLib.DoodadType.StationIcon)
+                    return .4f;
                 if (type == VexedLib.DoodadType.BridgeGate)
                     return .25f;
                 if (type == VexedLib.DoodadType.BridgeCover)
@@ -507,11 +533,25 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.NPC_OldMan)
+                    return 0f;
+                if (type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.RightDoor)
+                    return .15f;
+                if (type == VexedLib.DoodadType.StationIcon)
+                    return .1f;
                 if (type == VexedLib.DoodadType.WallSwitch)
                     return .25f;
                 if (type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.PowerOrb || type == VexedLib.DoodadType.WarpStation || type == VexedLib.DoodadType.JumpPad || type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.UpgradeStation)
                     return .1f;
                 return .5f;
+            }
+        }
+
+        public bool isStation
+        {
+            get
+            {
+                return type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.WarpStation || type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.UpgradeStation || type == VexedLib.DoodadType.PowerStation;
             }
         }
 
@@ -578,10 +618,6 @@ namespace VexedCore
         {
             List<Vector3> doodadVertexList = new List<Vector3>();
 
-            /*doodadVertexList.Add(position.position + up + right);
-            doodadVertexList.Add(position.position + up + left);
-            doodadVertexList.Add(position.position + down + left);
-            doodadVertexList.Add(position.position + down + right);*/
             doodadVertexList.Add(unfoldedPosition.position + unfolded_up + unfolded_right);
             doodadVertexList.Add(unfoldedPosition.position + unfolded_up + unfolded_left);
             doodadVertexList.Add(unfoldedPosition.position + unfolded_down + unfolded_left);
@@ -654,20 +690,38 @@ namespace VexedCore
                                 currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
                         }
                     }
-                    else
+                    else if (type != VexedLib.DoodadType.NPC_OldMan)
                     {
                         if (active)
                             currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, triangleList);
                         else
                             currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, triangleList);
                     }
-                    if (type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.UpgradeStation)
+                    
+                    if (type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.UpgradeStation ||
+                        type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.WarpStation
+                        || type == VexedLib.DoodadType.JumpStation)
                     {
-                        currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .1f, Ability.texCoordList[(int)abilityType], decalList, true);
+                        currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[34], decalList, true);
                     }
-                    if (type == VexedLib.DoodadType.SwitchStation && (abilityType == AbilityType.RedKey || abilityType == AbilityType.BlueKey || abilityType == AbilityType.YellowKey))
+                    if (type == VexedLib.DoodadType.JumpPad)
                     {
-                        currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .1f, Ability.texCoordList[(int)abilityType], decalList, true);
+                        float jumpVel = (Engine.player.jumpDestination - Engine.player.jumpSource).Length() / (1f*Player.launchMaxTime);
+                        float transitionTime = 1f / Math.Abs(stateTransitionVelocity);
+                        float maxExtend = jumpVel * transitionTime;
+
+                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend*stateTransition, depth, Room.plateTexCoords, triangleList);
+                        currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[35], decalList, true);
+                    }
+
+                    if (type == VexedLib.DoodadType.StationIcon)
+                    {
+                        currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[(int)targetDoodad.abilityType], decalList, true);
+                    }
+
+                    if (type == VexedLib.DoodadType.NPC_OldMan)
+                    {
+                        currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[36], decalList, true);
                     }
                 }
 
@@ -677,6 +731,14 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            if (type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.RightDoor)
+            {
+                if (targetDoodad.active == true)
+                    Activate();
+                else
+                    Deactivate();
+            }
+
             cooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (cooldown < 0) cooldown = 0;
 
@@ -697,6 +759,9 @@ namespace VexedCore
                 Engine.staticDoodadObjects.Clear();
                 Engine.staticDecalObjects.Clear();
             }
+
+            if (type == VexedLib.DoodadType.JumpPad && stateTransition == 1)
+                Deactivate();
 
             if (type == VexedLib.DoodadType.WallSwitch)
             {

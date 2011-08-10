@@ -74,7 +74,8 @@ namespace VexedCore
         {
             // TODO: Add your initialization logic here
             graphicsDevice = GraphicsDevice;
-            
+
+            //LevelLoader.Load("LevelData\\blarg");
             LevelLoader.Load("LevelData\\spikeelevator");
             //LevelLoader.Load("LevelData\\spiral2");
             
@@ -109,6 +110,7 @@ namespace VexedCore
             Engine.spriteBatch = new SpriteBatch(GraphicsDevice);
             engine.cartoonEffect = Content.Load<Effect>("CartoonEffect");
             engine.postprocessEffect = Content.Load<Effect>("PostprocessEffect");
+            DialogBox.box = Content.Load<Texture2D>("dialogbox");
             Room.blockTexture = Content.Load<Texture2D>("plate_texture");
             Player.player_textures = Content.Load<Texture2D>("p_texture");
             Player.player_gun_textures = Content.Load<Texture2D>("p_gun_texture");
@@ -128,6 +130,7 @@ namespace VexedCore
             Skybox.skyBoxTextures[3] = Content.Load<Texture2D>("skybox_back");
             Skybox.skyBoxTextures[4] = Content.Load<Texture2D>("skybox_bottom");
             Skybox.skyBoxTextures[5] = Content.Load<Texture2D>("skybox_top");
+            Engine.spriteFont = Content.Load<SpriteFont>("Font");
 
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
 

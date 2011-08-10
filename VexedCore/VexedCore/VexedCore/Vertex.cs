@@ -149,5 +149,10 @@ namespace VexedCore
             }
 
         }
+
+        public void SimpleUpdate(Room r, int updateTime)
+        {
+            position += updateTime * velocity;
+        }
     }
 }

@@ -75,6 +75,21 @@ namespace VexedCore
                                 newRoom.doodads.Add(new Doodad(VexedLib.DoodadType.BridgeSide, xmlDoodad.position + 1.25f * right + .25f * xmlDoodad.up, xmlFace.normal, xmlDoodad.up));
                                 newRoom.doodads.Add(new Doodad(VexedLib.DoodadType.BridgeSide, xmlDoodad.position - 1.25f * right + .25f * xmlDoodad.up, xmlFace.normal, xmlDoodad.up));                                
                             }
+                            else if (xmlDoodad.type == VexedLib.DoodadType.JumpStation || xmlDoodad.type == VexedLib.DoodadType.ItemStation || xmlDoodad.type == VexedLib.DoodadType.WarpStation || xmlDoodad.type == VexedLib.DoodadType.SwitchStation || xmlDoodad.type == VexedLib.DoodadType.UpgradeStation || xmlDoodad.type == VexedLib.DoodadType.PowerStation)
+                            {
+                                Vector3 right = Vector3.Cross(xmlDoodad.up, xmlFace.normal);
+                                Doodad station = new Doodad(xmlDoodad, xmlFace.normal);
+                                Doodad icon = new Doodad(VexedLib.DoodadType.StationIcon, xmlDoodad.position + .9f * xmlDoodad.up, xmlFace.normal, xmlDoodad.up);
+                                icon.targetObject = station.id;
+                                Doodad leftDoor = new Doodad(VexedLib.DoodadType.LeftDoor, xmlDoodad.position - .3f * right, xmlFace.normal, xmlDoodad.up);
+                                leftDoor.targetObject = station.id;
+                                Doodad rightDoor = new Doodad(VexedLib.DoodadType.RightDoor, xmlDoodad.position + .3f * right, xmlFace.normal, xmlDoodad.up);
+                                rightDoor.targetObject = station.id;
+                                newRoom.doodads.Add(station);
+                                newRoom.doodads.Add(icon);
+                                newRoom.doodads.Add(leftDoor);
+                                newRoom.doodads.Add(rightDoor);
+                            }
                             else
                             {
                                 newDoodad = new Doodad(xmlDoodad, xmlFace.normal);

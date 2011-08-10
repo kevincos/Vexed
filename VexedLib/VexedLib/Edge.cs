@@ -14,7 +14,8 @@ namespace VexedLib
         ConveyorBelt = 3,
         Bounce = 4,
         Electric = 5,
-        Magnet = 6
+        Magnet = 6,
+        Fire = 7
     }
 
     public class Edge
