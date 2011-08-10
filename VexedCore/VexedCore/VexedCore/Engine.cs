@@ -67,9 +67,9 @@ namespace VexedCore
         public static List<TrasnparentSquare> staticTranslucentObjects;
         public static List<TrasnparentSquare> mapShellObjects;
         public static VertexBuffer staticObjectBuffer;
-        public static VertexBuffer staticDetailBuffer;
+        /*public static VertexBuffer staticDetailBuffer;
         public static VertexBuffer staticDoodadBuffer;
-        public static VertexBuffer staticDecalBuffer;
+        public static VertexBuffer staticDecalBuffer;*/
         public static bool staticObjectsInitialized = false;
         public static bool staticDoodadsInitialized = false;
 
@@ -189,14 +189,16 @@ namespace VexedCore
 
                 if (staticDoodadObjects.Count > 0)
                 {
-                    if (staticDoodadsInitialized == false)
+                    /*if (staticDoodadsInitialized == false)
                     {
                         staticDoodadBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticDoodadObjects.Count, BufferUsage.WriteOnly);
                         staticDoodadBuffer.SetData<VertexPositionColorNormalTexture>(Engine.staticDoodadObjects.ToArray());                        
                     }
                     Game1.graphicsDevice.SetVertexBuffer(staticDoodadBuffer);
                     Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
-                        0, staticDoodadObjects.Count / 3);
+                        0, staticDoodadObjects.Count / 3);*/
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        Engine.staticDoodadObjects.ToArray(), 0, staticDoodadObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
                 if (dynamicDoodadObjects.Count > 0)
                 {
@@ -226,7 +228,7 @@ namespace VexedCore
                 playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                 if (staticDetailObjects.Count > 0)
                 {
-                    if (staticObjectsInitialized == false)
+                    /*if (staticObjectsInitialized == false)
                     {
                         staticDetailBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticDetailObjects.Count, BufferUsage.WriteOnly);
                         staticDetailBuffer.SetData<VertexPositionColorNormalTexture>(Engine.staticDetailObjects.ToArray());
@@ -234,7 +236,9 @@ namespace VexedCore
                     }
                     Game1.graphicsDevice.SetVertexBuffer(staticDetailBuffer);
                     Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
-                        0, staticDetailObjects.Count / 3);
+                        0, staticDetailObjects.Count / 3);*/
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        Engine.staticDetailObjects.ToArray(), 0, Engine.staticDetailObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
                 if (dynamicDetailObjects.Count > 0)
@@ -250,19 +254,20 @@ namespace VexedCore
 
                 if (staticDecalObjects.Count > 0)
                 {
-                    if (staticDoodadsInitialized == false)
+                    /*if (staticDoodadsInitialized == false)
                     {
                         staticDecalBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticDecalObjects.Count, BufferUsage.WriteOnly);
                         staticDecalBuffer.SetData<VertexPositionColorNormalTexture>(Engine.staticDecalObjects.ToArray());
                     }
                     Game1.graphicsDevice.SetVertexBuffer(staticDecalBuffer);
                     Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
-                        0, staticDecalObjects.Count / 3);
+                        0, staticDecalObjects.Count / 3);*/
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        Engine.staticDecalObjects.ToArray(), 0, Engine.staticDecalObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
                 if (dynamicDecalObjects.Count > 0)
                 {
-
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         Engine.dynamicDecalObjects.ToArray(), 0, Engine.dynamicDecalObjects.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
