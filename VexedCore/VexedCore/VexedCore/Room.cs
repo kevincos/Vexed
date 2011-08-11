@@ -1484,7 +1484,7 @@ namespace VexedCore
             {
                 float cameraLineDistance = Vector3.Dot(center - Engine.player.center.position, Vector3.Normalize(Engine.player.cameraTarget - Engine.player.cameraPos));
 
-                if (Engine.staticObjectsInitialized == false || cameraLineDistance >= -10)
+                //if (Engine.staticObjectsInitialized == false || cameraLineDistance >= -10)
                 {
 
                     Color interiorColor = new Color(20, 20, 20);
@@ -1598,7 +1598,7 @@ namespace VexedCore
                     #endregion
                 }
 
-                if (Engine.staticDoodadsInitialized == false || cameraLineDistance >= -10)
+                //if (Engine.staticDoodadsInitialized == false || cameraLineDistance >= -10)
                 {
                     #region Doodads
                     foreach (Doodad d in doodads)

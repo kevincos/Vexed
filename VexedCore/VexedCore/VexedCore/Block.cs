@@ -283,9 +283,10 @@ namespace VexedCore
         
         public void UpdateVertexData(Room currentRoom)
         {
-            baseTriangleList = new List<VertexPositionColorNormalTexture>();
-            if (Engine.staticObjectsInitialized == false || staticObject == false)
+            if (baseTriangleList == null|| staticObject == false)
             {
+                baseTriangleList = new List<VertexPositionColorNormalTexture>();
+            
                 List<Vertex> vList = new List<Vertex>();
                 vList.Add(edges[0].start);
                 vList.Add(edges[1].start);

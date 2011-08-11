@@ -18,6 +18,7 @@ namespace VexedCore
         Normal,
         Jump,
         BridgeJump,
+        Tunnel,
         Spin,
         Death,
         Dialog
@@ -62,6 +63,7 @@ namespace VexedCore
 
         public State state = State.Normal;
         public Vertex center;
+        public Vertex tunnelDummy;
         [XmlIgnore]public Room currentRoom;
         public string currentRoomId;
         public int jumpRecovery = 0;
@@ -261,6 +263,10 @@ namespace VexedCore
         {
             get
             {
+                if (state == State.Tunnel)
+                {
+                    return currentRoom.RaisedPosition(tunnelDummy.position + cameraOffset, baseCameraDistance, 6f);
+                }
                 if (state == State.Normal || state == State.Spin || state == State.Dialog)
                 {
                     return currentRoom.RaisedPosition(center.position + cameraOffset, baseCameraDistance, 6f);
@@ -277,9 +283,9 @@ namespace VexedCore
                 else
                 {
                     Vector3 side = Vector3.Cross(center.direction, center.normal);
-                    float sideValue = 1f*launchTime / launchMaxTime;
+                    float sideValue = 1f * launchTime / launchMaxTime;
                     Vector3 cameraBase = ((launchMaxTime-launchTime)*jumpCameraSource + launchTime* jumpCameraDestination) / launchMaxTime;
-                    Vector3 camera = cameraBase + sideValue * side;
+                    Vector3 camera = cameraBase + 5f * sideValue * (1 - sideValue) * side;
                     return camera;
                 }
             }
@@ -289,6 +295,10 @@ namespace VexedCore
         {
             get
             {
+                if (state == State.Tunnel)
+                {
+                    return currentRoom.RaisedPosition(tunnelDummy.position, baseCameraDistance, 6f);
+                }
                 if (state == State.Normal || state == State.Spin || state == State.Dialog)
                 {
                     return currentRoom.RaisedPosition(center.position, baseCameraDistance, 6f);
@@ -307,7 +317,7 @@ namespace VexedCore
                     Vector3 side = Vector3.Cross(center.direction, center.normal);
                     float sideValue = 1f * launchTime / launchMaxTime;
                     Vector3 cameraBase = ((launchMaxTime - launchTime) * jumpCameraSource + launchTime * jumpCameraDestination) / launchMaxTime;
-                    Vector3 camera = cameraBase + sideValue * side;
+                    Vector3 camera = cameraBase + 5f*sideValue * (1 - sideValue) * side;
                     return camera;
                 }
             }
@@ -336,6 +346,8 @@ namespace VexedCore
                 }
                 else if(state == State.Death)
                     return currentRoom.AdjustedUp(lastLivingPosition, center.direction, center.normal, 1f);
+                else if(state == State.Tunnel)
+                    return currentRoom.AdjustedUp(tunnelDummy.position, tunnelDummy.direction, tunnelDummy.normal, 1f);
                 else
                     return currentRoom.AdjustedUp(center.position, center.direction, center.normal, 1f);
             }
@@ -347,6 +359,8 @@ namespace VexedCore
             {
                 if (state == State.Normal || state == State.Spin || state == State.Dialog)
                     return center.position;
+                else if (state == State.Tunnel)
+                    return tunnelDummy.position;
                 else if (state == State.Death)
                     return lastLivingPosition;
                 else
@@ -367,6 +381,17 @@ namespace VexedCore
             get
             {
                 return Vector3.Cross(center.direction, center.normal);
+            }
+        }
+
+        public bool insideBox
+        {
+            get
+            {
+                if (state != State.Tunnel) return false;
+                float distanceFromMid = Math.Abs(Vector3.Dot(jumpPosition - currentRoom.center, center.normal));
+                float boxHalfSize = .5f * Math.Abs(Vector3.Dot(currentRoom.size, center.normal));
+                return distanceFromMid < boxHalfSize;
             }
         }
 
@@ -486,7 +511,7 @@ namespace VexedCore
             {
                 AnimationControl.SetState(AnimationState.JumpPad);
             }
-            else if (state == State.Jump)
+            else if (state == State.Jump || state == State.Tunnel)
             {
                 AnimationControl.SetState(AnimationState.JumpPad);
             }
@@ -585,12 +610,16 @@ namespace VexedCore
                     if (faceDirection == 0)
                         AnimationControl.SetState(AnimationState.Idle);
                 }
-            }
-        }
+            }            
+        }        
 
         public void Update(GameTime gameTime)
         {
-
+            if (state == State.Tunnel)
+            {
+                if(launchTime > launchMaxTime/4 && launchTime < 3*launchMaxTime/4)
+                    tunnelDummy.Update(currentRoom, gameTime.ElapsedGameTime.Milliseconds);
+            }
             if (center.normal != oldNormal || center.direction != oldUp)
             {
                 Physics.refresh = true;
@@ -853,6 +882,23 @@ namespace VexedCore
                     {
                         if (d.active)
                         {
+                            if (d.type == VexedLib.DoodadType.Vortex)
+                            {
+                                state = State.Tunnel;
+                                center.velocity = Vector3.Zero;
+                                jumpRoom = currentRoom;
+                                jumpSource = center.position;
+                                jumpDestination = d.targetDoodad.position.position;                                
+                                jumpNormal = -center.normal;
+
+                                float throughDistance = Math.Abs(Vector3.Dot(center.normal, currentRoom.size));
+                                float sideSize = .5f*Math.Abs(Vector3.Dot(right, currentRoom.size));
+                                float sideDistance = Vector3.Dot(currentRoom.center - center.position, right) + sideSize;
+                                
+                                tunnelDummy = new Vertex(center.position, center.normal, (throughDistance + 2*sideDistance)/(.5f*launchMaxTime)*right, center.direction);
+                                launchTime = 0;
+                                d.targetDoodad.active = false;
+                            }
                             if (d.type == VexedLib.DoodadType.BridgeGate)
                             {
                                 jumpRoom = d.targetRoom;
@@ -982,7 +1028,7 @@ namespace VexedCore
                             jumpRoom = d.targetRoom;
                             jumpRoom.Reset();
                             jumpSource = center.position;
-                            jumpDestination = d.targetDoodad.position.position - 2f * d.targetDoodad.upUnit;
+                            jumpDestination = d.targetDoodad.position.position - 1f * d.targetDoodad.upUnit;
                             jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
                             jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
 
@@ -997,12 +1043,12 @@ namespace VexedCore
                 }
                 #endregion
             }
-            if (state == State.Jump || state == State.BridgeJump)
+            if (state == State.Jump || state == State.BridgeJump || state == State.Tunnel)
             {
                 launchTime += gameTime.ElapsedGameTime.Milliseconds;
                 if (launchTime > launchMaxTime)
                     launchTime = launchMaxTime;
-                jumpPosition = ((launchMaxTime - launchTime) * jumpSource + launchTime * jumpDestination) / launchMaxTime;
+                jumpPosition = ((launchMaxTime - launchTime) * jumpSource + launchTime * (jumpDestination+.3f*jumpNormal)) / launchMaxTime;
                 if (launchTime == launchMaxTime)
                 {
                     center.normal = jumpNormal;
@@ -1013,6 +1059,11 @@ namespace VexedCore
                     currentRoom = jumpRoom;
                     Physics.refresh = true;
                     Engine.reDraw = true;
+                    foreach (Doodad d in jumpRoom.doodads)
+                    {
+                        if(d.type == VexedLib.DoodadType.BridgeGate)
+                            d.active = false;
+                    }
                 }
 
             }
@@ -1125,11 +1176,11 @@ namespace VexedCore
 
 
             VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
-            if (state == State.Jump || state == State.BridgeJump)
+            if (state == State.Jump || state == State.BridgeJump || state == State.Tunnel)
             {
                 for (int i = 0; i < textureTriangleList.Count(); i++)
                 {
-                    triangleArray[i].Position += jumpPosition - center.position;
+                     triangleArray[i].Position += jumpPosition - center.position;
                 }
             }
             if (state == State.Death)

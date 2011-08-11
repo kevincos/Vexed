@@ -249,6 +249,9 @@ namespace VexedCore
 
                 Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
+                if (player.insideBox == true)
+                    player.DrawTexture(playerTextureEffect);
+
                 if (depthShader == false && transparencyEnabled == true)
                 {
                     if (Room.innerBlockMode > 0)
@@ -279,8 +282,9 @@ namespace VexedCore
                     }
                     Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
                 }
-                
-                player.DrawTexture(playerTextureEffect);
+
+                if (player.insideBox == false)
+                    player.DrawTexture(playerTextureEffect);
             }
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
             

@@ -312,13 +312,13 @@ namespace VexedCore
             {
                 if (type == VexedLib.DoodadType.NPC_OldMan)
                     return false;
-                if (type == VexedLib.DoodadType.RightDoor || type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.StationIcon)
+                if (type == VexedLib.DoodadType.RightDoor || type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.StationIcon || type == VexedLib.DoodadType.TunnelTop || type == VexedLib.DoodadType.TunnelSide)
                     return false;
                 if (type == VexedLib.DoodadType.BridgeCover || type == VexedLib.DoodadType.BridgeGate || type == VexedLib.DoodadType.JumpPad || type == VexedLib.DoodadType.UpgradeStation || type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.SwitchStation)
                     return false;
                 if (type == VexedLib.DoodadType.Brick && active == true)
                     return false;
-                if (type == VexedLib.DoodadType.Waypoint || type == VexedLib.DoodadType.WallSwitch || type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb || type == VexedLib.DoodadType.WarpStation || type == VexedLib.DoodadType.ItemBlock)
+                if (type == VexedLib.DoodadType.Vortex || type == VexedLib.DoodadType.Waypoint || type == VexedLib.DoodadType.WallSwitch || type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PowerOrb || type == VexedLib.DoodadType.WarpStation || type == VexedLib.DoodadType.ItemBlock)
                     return false;
                 return true;
             }
@@ -328,6 +328,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.Vortex)
+                    return false;
                 if ((type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam) && stateTransition == 0)
                     return false;
                 if (type == VexedLib.DoodadType.Brick && active == true)
@@ -488,6 +490,10 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.TunnelSide)
+                    return .1f;
+                if (type == VexedLib.DoodadType.TunnelTop)
+                    return .7f;
                 if (type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.RightDoor)
                     return .3f;
                 if (type == VexedLib.DoodadType.StationIcon)
@@ -511,6 +517,10 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.TunnelTop)
+                    return .1f;
+                if (type == VexedLib.DoodadType.TunnelSide)
+                    return .8f;
                 if (type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.RightDoor)
                     return .6f;
                 if (type == VexedLib.DoodadType.StationIcon)
@@ -532,6 +542,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.TunnelTop || type == VexedLib.DoodadType.TunnelSide)
+                    return .1f;
                 if (type == VexedLib.DoodadType.NPC_OldMan)
                     return 0f;
                 if (type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.RightDoor)
@@ -646,7 +658,7 @@ namespace VexedCore
 
         public void UpdateVertexData(Room currentRoom)
         {
-            if (Engine.staticDoodadsInitialized == false || dynamic == true || refreshVertexData == true)
+            if (baseTriangleList == null || Engine.staticDoodadsInitialized == false || dynamic == true || refreshVertexData == true)
             {
                 refreshVertexData = false;
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
@@ -693,6 +705,11 @@ namespace VexedCore
                         else
                             currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                     }
+                }
+                else if (type == VexedLib.DoodadType.TunnelSide || type == VexedLib.DoodadType.TunnelTop)
+                {
+                    float roomSize = .5f*Math.Abs(Vector3.Dot(currentRoom.size, position.normal));
+                    currentRoom.AddBlockToTriangleList(vList, activeColor, depth, roomSize, Room.plateTexCoords, baseTriangleList);
                 }
                 else if (type != VexedLib.DoodadType.NPC_OldMan)
                 {

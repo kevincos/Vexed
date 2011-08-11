@@ -75,6 +75,37 @@ namespace VexedCore
                                 newRoom.doodads.Add(new Doodad(VexedLib.DoodadType.BridgeSide, xmlDoodad.position + 1.25f * right + .25f * xmlDoodad.up, xmlFace.normal, xmlDoodad.up));
                                 newRoom.doodads.Add(new Doodad(VexedLib.DoodadType.BridgeSide, xmlDoodad.position - 1.25f * right + .25f * xmlDoodad.up, xmlFace.normal, xmlDoodad.up));                                
                             }
+                            else if (xmlDoodad.type == VexedLib.DoodadType.Vortex)
+                            {
+                                Vector3 right = Vector3.Cross(xmlDoodad.up, xmlFace.normal);
+                                Doodad entrance = new Doodad(xmlDoodad, xmlFace.normal);
+                                Doodad exit = new Doodad(VexedLib.DoodadType.Vortex, xmlDoodad.position + -1f*Math.Abs(Vector3.Dot(newRoom.size, xmlFace.normal))*xmlFace.normal, -xmlFace.normal, xmlDoodad.up);
+                                exit.id = entrance.id + "_X";
+                                entrance.targetObject = exit.id;
+                                exit.targetObject = entrance.id;
+
+                                Doodad leftSide1 = new Doodad(VexedLib.DoodadType.TunnelSide, entrance.position.position + .8f * right, entrance.position.normal, entrance.position.direction);
+                                Doodad rightSide1 = new Doodad(VexedLib.DoodadType.TunnelSide, entrance.position.position - .8f * right, entrance.position.normal, entrance.position.direction);
+                                Doodad topSide1 = new Doodad(VexedLib.DoodadType.TunnelTop, entrance.position.position + .8f * entrance.position.direction, entrance.position.normal, entrance.position.direction);
+                                Doodad bottomSide1 = new Doodad(VexedLib.DoodadType.TunnelTop, entrance.position.position - .8f * entrance.position.direction, entrance.position.normal, entrance.position.direction);
+
+                                Doodad leftSide2 = new Doodad(VexedLib.DoodadType.TunnelSide, exit.position.position + .8f * right, exit.position.normal, exit.position.direction);
+                                Doodad rightSide2 = new Doodad(VexedLib.DoodadType.TunnelSide, exit.position.position - .8f * right, exit.position.normal, exit.position.direction);
+                                Doodad topSide2 = new Doodad(VexedLib.DoodadType.TunnelTop, exit.position.position + .8f * exit.position.direction, entrance.position.normal, exit.position.direction);
+                                Doodad bottomSide2 = new Doodad(VexedLib.DoodadType.TunnelTop, exit.position.position - .8f * exit.position.direction, entrance.position.normal, exit.position.direction);
+
+
+                                newRoom.doodads.Add(entrance);
+                                newRoom.doodads.Add(exit);
+                                newRoom.doodads.Add(leftSide1);
+                                newRoom.doodads.Add(rightSide1);
+                                newRoom.doodads.Add(topSide1);
+                                newRoom.doodads.Add(bottomSide1);
+                                newRoom.doodads.Add(leftSide2);
+                                newRoom.doodads.Add(rightSide2);
+                                newRoom.doodads.Add(topSide2);
+                                newRoom.doodads.Add(bottomSide2);
+                            }
                             else if (xmlDoodad.type == VexedLib.DoodadType.JumpStation || xmlDoodad.type == VexedLib.DoodadType.ItemStation || xmlDoodad.type == VexedLib.DoodadType.WarpStation || xmlDoodad.type == VexedLib.DoodadType.SwitchStation || xmlDoodad.type == VexedLib.DoodadType.UpgradeStation || xmlDoodad.type == VexedLib.DoodadType.PowerStation)
                             {
                                 Vector3 right = Vector3.Cross(xmlDoodad.up, xmlFace.normal);
