@@ -270,7 +270,7 @@ namespace VexedCore
                     if (Room.innerBlockMode > 0)
                     {
 
-                        if (staticObjectsInitialized == false || (Engine.player.state == State.Jump))
+                        if (staticObjectsInitialized == false || (Engine.player.state == State.Jump) || Engine.player.state == State.Tunnel)
                         {
                             // Sort Triangles
                             staticTranslucentObjects.Sort(new FaceSorter(player.cameraTarget - player.cameraPos));

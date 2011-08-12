@@ -618,15 +618,19 @@ namespace VexedCore
         public void Update(GameTime gameTime)
         {
             if (state == State.Tunnel)
-            {                
-                if(launchTime > launchMaxTime/4 && launchTime < 3*launchMaxTime/4)
+            {
+                if (launchTime > launchMaxTime / 4 && launchTime < 3 * launchMaxTime / 4)
                     tunnelDummy.Update(currentRoom, gameTime.ElapsedGameTime.Milliseconds);
                 if (launchTime > 3 * launchMaxTime / 4)
                     tunnelExit.ActivateDoodad(currentRoom, true);
+                oldUp = tunnelDummy.direction;
+                oldNormal = tunnelDummy.normal;
             }
-            
-            oldUp = center.direction;
-            oldNormal = center.normal;
+            else
+            {
+                oldUp = center.direction;
+                oldNormal = center.normal;
+            }
             SetAnimationState();
             primaryAbility.Update(gameTime);
             secondaryAbility.Update(gameTime);
