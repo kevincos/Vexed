@@ -76,11 +76,15 @@ namespace VexedCore
         public Vector3 size;
         public bool hasWarp = false;
         public Color color;
+        public int maxOrbs = 0;
+        public int currentOrbs = 0;
         public List<Block> blocks;
         public List<Doodad> doodads;
         public List<Monster> monsters;
         public List<Projectile> projectiles;
         public string id;
+
+        public bool refreshVertices = false;
 
         public Room(Room r)
         {
@@ -89,6 +93,9 @@ namespace VexedCore
             hasWarp = r.hasWarp;
             color = r.color;
             id = r.id;
+            currentOrbs = r.currentOrbs;
+            maxOrbs = r.maxOrbs;
+
             blocks = new List<Block>();
             foreach (Block b in r.blocks)
             {
@@ -206,11 +213,29 @@ namespace VexedCore
             foreach (Monster m in monsters)
             {
                 m.position = new Vertex(m.spawnPosition);
+                m.armorType = m.startingArmorType;
+                m.baseHP = m.startingBaseHP;
+                m.armorHP = m.startingArmorHP;
                 m.dead = false;
             }
             foreach (Doodad d in doodads)
             {
                 d.position = new Vertex(d.spawnPosition);                
+            }
+        }
+
+        public Color currentColor
+        {
+            get
+            {
+                Color powerUpColor = color;
+                if (maxOrbs != 0)
+                {
+                    powerUpColor.R = (Byte)(40 + currentOrbs * (color.R - 40) / maxOrbs);
+                    powerUpColor.G = (Byte)(40 + currentOrbs * (color.G - 40) / maxOrbs);
+                    powerUpColor.B = (Byte)(40 + currentOrbs * (color.B - 40) / maxOrbs);
+                }
+                return powerUpColor;
             }
         }
 
@@ -398,7 +423,7 @@ namespace VexedCore
                 int numSpikes = 2 * (int)(end.position - start.position).Length();
                 float spikeHeight = .75f;
                 float spikeWidth = (end.position - start.position).Length() / numSpikes;
-                Color spikeColor = Color.LightGray;
+                Color spikeColor = new Color(180, 180, 180);
                 for (int i = 0; i < numSpikes; i++)
                 {
                     Vector3 spikeStart = start.position + i * spikeWidth * edgeDir;
@@ -890,7 +915,8 @@ namespace VexedCore
             Vector3 edgeNormal = Vector3.Cross(e.end.position - e.start.position, e.start.normal);
             edgeNormal.Normalize();
             edgeDir.Normalize();
-            Color spikeColor = Color.LightGray;
+            
+            Color spikeColor = new Color(180,180,180);
 
             if (e.start.velocity != Vector3.Zero)
             {
@@ -1391,13 +1417,13 @@ namespace VexedCore
             {
                 m.Update(gameTime);
             }
-            for (int i = monsters.Count() - 1; i >= 0; i--)
+            /*for (int i = monsters.Count() - 1; i >= 0; i--)
             {
                 if (monsters[i].dead == true)
                 {
                     monsters.Remove(monsters[i]);
                 }
-            }
+            }*/
             foreach (Projectile p in projectiles)
             {
                 p.Update(gameTime);
@@ -1614,10 +1640,12 @@ namespace VexedCore
             Vector3 outerAdjustedSize = new Vector3(size.X + 5f, size.Y + 5f, size.Z + 5f);
             if (innerBlockMode > 0 && Engine.state != EngineState.Active)
             {
-                Engine.mapShellObjects.AddRange(GetMapBlock(outerAdjustedSize, color));
+                Engine.mapShellObjects.AddRange(GetMapBlock(outerAdjustedSize, currentColor));
             }
             #endregion
             
+            if(refreshVertices == true)
+                refreshVertices = false;
         }
 
     }

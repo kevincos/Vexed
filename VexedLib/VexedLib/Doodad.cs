@@ -39,7 +39,9 @@ namespace VexedLib
         RightDoor = 28,
         NPC_OldMan = 29,
         TunnelSide = 30,
-        TunnelTop = 31
+        TunnelTop = 31,
+        LeftTunnelDoor = 32,
+        RightTunnelDoor = 33,
     }
 
     public enum AbilityType

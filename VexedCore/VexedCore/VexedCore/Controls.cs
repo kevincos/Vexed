@@ -112,8 +112,8 @@ namespace VexedCore
         {
             this.activePlayer = activePlayer;
             buttons = new List<GameButton>();
-            buttons.Add(new GameButton(Buttons.X, Keys.LeftControl, 1));
-            buttons.Add(new GameButton(Buttons.Y, Keys.LeftShift, 2));
+            buttons.Add(new GameButton(Buttons.X, Keys.LeftControl));
+            buttons.Add(new GameButton(Buttons.Y, Keys.LeftShift));
             buttons.Add(new GameButton(Buttons.A, Keys.Space));
             buttons.Add(new GameButton(Buttons.B, Keys.E));
         }

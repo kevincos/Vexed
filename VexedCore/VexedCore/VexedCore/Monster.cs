@@ -30,6 +30,7 @@ namespace VexedCore
 
         public static int texGridCount = 8;
 
+        public bool hasOrbs = true;
         public Vertex unfoldedPosition;
         public Vertex spawnPosition;
         public Vertex position;
@@ -40,6 +41,7 @@ namespace VexedCore
         public bool waypointLoop = false;
         public VexedLib.AIType aiType;
         public VexedLib.MovementType moveType;
+        public VexedLib.ArmorType startingArmorType;
         public VexedLib.ArmorType armorType;
         public VexedLib.GunType gunType;
         public Vector3 groundProjection;
@@ -62,6 +64,8 @@ namespace VexedCore
         public bool dead;
         public Vector3 impactVector = Vector3.Zero;
 
+        public int startingArmorHP = 3;
+        public int startingBaseHP = 5;
         public int armorHP = 3;
         public int baseHP = 5;
         public ProjectileType lastHitType;
@@ -72,7 +76,11 @@ namespace VexedCore
         public Monster(Monster m)
         {
             //unfoldedPosition = new Vertex(m.unfoldedPosition);
+            hasOrbs = m.hasOrbs;
             spawnPosition = new Vertex(m.spawnPosition);
+            startingArmorHP = m.startingArmorHP;
+            startingBaseHP = m.startingBaseHP;
+            startingArmorType = m.startingArmorType;
             position = new Vertex(m.position);
             firstWaypoint = m.firstWaypoint;
             waypoints = new List<Vector3>();
@@ -144,6 +152,7 @@ namespace VexedCore
             waypoints = new List<Vector3>();
             aiType = xmlMonster.behavior;
             moveType = xmlMonster.movement;
+            startingArmorType = xmlMonster.armor;
             armorType = xmlMonster.armor;
             gunType = xmlMonster.weapon;
             id = xmlMonster.IDString;
@@ -375,12 +384,45 @@ namespace VexedCore
                     armorType = VexedLib.ArmorType.None;
                 }
             }
-            if(baseHP == 0)
+            if (baseHP == 0)
+            {
                 dead = true;
+
+                if (hasOrbs == true)
+                {
+                    Doodad bonusOrb1 = new Doodad(VexedLib.DoodadType.PowerOrb, position.position + .3f * upUnit, position.normal, position.direction);
+                    Doodad bonusOrb2 = new Doodad(VexedLib.DoodadType.PowerOrb, position.position - .3f * upUnit, position.normal, position.direction);
+                    Doodad bonusOrb3 = new Doodad(VexedLib.DoodadType.PowerOrb, position.position + .3f * rightUnit, position.normal, position.direction);
+                    Doodad bonusOrb4 = new Doodad(VexedLib.DoodadType.PowerOrb, position.position - .3f * rightUnit, position.normal, position.direction);
+                    Doodad bonusOrb5 = new Doodad(VexedLib.DoodadType.PowerOrb, position.position, position.normal, position.direction);
+                    bonusOrb1.tracking = true;
+                    bonusOrb1.currentRoom = Engine.player.currentRoom;
+                    bonusOrb1.position.velocity += .3f * upUnit;
+                    bonusOrb2.tracking = true;
+                    bonusOrb2.currentRoom = Engine.player.currentRoom;
+                    bonusOrb2.position.velocity -= .3f * upUnit;
+                    bonusOrb3.tracking = true;
+                    bonusOrb3.currentRoom = Engine.player.currentRoom;
+                    bonusOrb3.position.velocity += .3f * rightUnit;
+                    bonusOrb4.tracking = true;
+                    bonusOrb4.currentRoom = Engine.player.currentRoom;
+                    bonusOrb4.position.velocity -= .3f * rightUnit;
+                    bonusOrb5.tracking = true;
+                    bonusOrb5.currentRoom = Engine.player.currentRoom;
+                    Engine.player.currentRoom.doodads.Add(bonusOrb1);
+                    Engine.player.currentRoom.doodads.Add(bonusOrb2);
+                    Engine.player.currentRoom.doodads.Add(bonusOrb3);
+                    Engine.player.currentRoom.doodads.Add(bonusOrb4);
+                    Engine.player.currentRoom.doodads.Add(bonusOrb5);
+                    hasOrbs = false;
+                }                
+            }
         }
 
         public void Update(GameTime gameTime)
         {
+            if (dead == true)
+                return;
             directionChangeCooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (directionChangeCooldown < 0)
                 directionChangeCooldown = 0;
@@ -929,6 +971,8 @@ namespace VexedCore
 
         public void Draw(Room r)
         {
+            if (dead == true)
+                return;
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
             List<VertexPositionColorNormalTexture> textureTriangleList = new List<VertexPositionColorNormalTexture>();
             List<Vertex> rectVertexList = new List<Vertex>();

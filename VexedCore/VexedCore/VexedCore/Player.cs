@@ -76,6 +76,8 @@ namespace VexedCore
         public Vector3 platformVelocity;
         public Vector3 spinUp;
         public Vector3 lastLivingPosition;
+        [XmlIgnore]
+        public Doodad tunnelExit;
         [XmlIgnore]public Room jumpRoom;
         public int spinTime = 0;
         public int launchTime = 0;
@@ -156,8 +158,8 @@ namespace VexedCore
             naturalShield = new Ability(AbilityType.Shield);
             upgrades[(int)AbilityType.WallJump] = true;
             upgrades[(int)AbilityType.DoubleJump] = true;
-            for (int i = 8; i < 19; i++)
-                upgrades[i] = true;            
+            //for (int i = 8; i < 19; i++)
+                //upgrades[i] = true;            
         }
 
         public Player(Player p)
@@ -616,14 +618,13 @@ namespace VexedCore
         public void Update(GameTime gameTime)
         {
             if (state == State.Tunnel)
-            {
+            {                
                 if(launchTime > launchMaxTime/4 && launchTime < 3*launchMaxTime/4)
                     tunnelDummy.Update(currentRoom, gameTime.ElapsedGameTime.Milliseconds);
+                if (launchTime > 3 * launchMaxTime / 4)
+                    tunnelExit.ActivateDoodad(currentRoom, true);
             }
-            if (center.normal != oldNormal || center.direction != oldUp)
-            {
-                Physics.refresh = true;
-            }
+            
             oldUp = center.direction;
             oldNormal = center.normal;
             SetAnimationState();
@@ -882,8 +883,10 @@ namespace VexedCore
                     {
                         if (d.active)
                         {
-                            if (d.type == VexedLib.DoodadType.Vortex)
+                            if (d.type == VexedLib.DoodadType.Vortex && (d.position.position - center.position).Length() < .3f)
                             {
+                                d.targetDoodad.ActivateDoodad(currentRoom, true);
+                                tunnelExit = d.targetDoodad;
                                 state = State.Tunnel;
                                 center.velocity = Vector3.Zero;
                                 jumpRoom = currentRoom;
@@ -901,18 +904,21 @@ namespace VexedCore
                             }
                             if (d.type == VexedLib.DoodadType.BridgeGate)
                             {
-                                jumpRoom = d.targetRoom;
-                                jumpSource = center.position;
-                                jumpDestination = d.targetDoodad.position.position - 2f * d.targetDoodad.upUnit;
-                                jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
-                                jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
+                                if (Vector3.Dot(center.velocity, d.position.direction) > 0)
+                                {
+                                    jumpRoom = d.targetRoom;
+                                    jumpSource = center.position;
+                                    jumpDestination = d.targetDoodad.position.position - 2f * d.targetDoodad.upUnit;
+                                    jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
+                                    jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
 
-                                jumpNormal = center.normal;
-                                launchTime = 0;
-                                state = State.BridgeJump;
-                                faceDirection = 0;
-                                d.active = false;
-                                d.targetDoodad.active = false;
+                                    jumpNormal = center.normal;
+                                    launchTime = 0;
+                                    state = State.BridgeJump;
+                                    faceDirection = 0;
+                                    d.active = false;
+                                    d.targetDoodad.active = false;
+                                }
                             }
                             if (d.type == VexedLib.DoodadType.PowerStation)
                             {
@@ -920,6 +926,9 @@ namespace VexedCore
                                 {
                                     orbsCollected += 1;
                                     d.orbsRemaining--;
+                                    currentRoom.currentOrbs++;
+                                    Engine.reDraw = true;
+                                    currentRoom.refreshVertices = true;
                                 }
                             }
                             if (d.type == VexedLib.DoodadType.UpgradeStation)

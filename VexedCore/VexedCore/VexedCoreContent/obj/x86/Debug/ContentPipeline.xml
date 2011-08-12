@@ -119,60 +119,6 @@
       <Time>2011-07-20T15:30:42.0701376-07:00</Time>
     </Item>
     <Item>
-      <Source>skybox_back.JPG</Source>
-      <Name>skybox_back</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_back.xnb</Output>
-      <Time>2010-07-01T19:28:50-07:00</Time>
-    </Item>
-    <Item>
-      <Source>skybox_bottom.JPG</Source>
-      <Name>skybox_bottom</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_bottom.xnb</Output>
-      <Time>2010-07-03T10:46:32-07:00</Time>
-    </Item>
-    <Item>
-      <Source>skybox_front.JPG</Source>
-      <Name>skybox_front</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_front.xnb</Output>
-      <Time>2010-07-01T19:36:40-07:00</Time>
-    </Item>
-    <Item>
-      <Source>skybox_left.JPG</Source>
-      <Name>skybox_left</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_left.xnb</Output>
-      <Time>2010-07-01T19:42:02-07:00</Time>
-    </Item>
-    <Item>
-      <Source>skybox_right.JPG</Source>
-      <Name>skybox_right</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_right.xnb</Output>
-      <Time>2010-07-01T19:33:08-07:00</Time>
-    </Item>
-    <Item>
-      <Source>skybox_top.JPG</Source>
-      <Name>skybox_top</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_top.xnb</Output>
-      <Time>2010-07-03T10:46:42-07:00</Time>
-    </Item>
-    <Item>
       <Source>plate_texture.png</Source>
       <Name>plate_texture</Name>
       <Importer>TextureImporter</Importer>
@@ -182,7 +128,7 @@
       </Parameters>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\plate_texture.xnb</Output>
-      <Time>2011-08-09T18:31:55.639961-07:00</Time>
+      <Time>2011-08-11T13:00:24.9677661-07:00</Time>
     </Item>
     <Item>
       <Source>m_body.png</Source>
@@ -299,7 +245,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\abilities.xnb</Output>
-      <Time>2011-08-10T16:07:07.8011417-07:00</Time>
+      <Time>2011-08-11T23:47:28.5492645-07:00</Time>
     </Item>
     <Item>
       <Source>p_gun_texture.png</Source>
@@ -345,6 +291,60 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dialogbox.xnb</Output>
       <Time>2011-08-09T20:46:41.7555442-07:00</Time>
+    </Item>
+    <Item>
+      <Source>skybox_back.png</Source>
+      <Name>skybox_back</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_back.xnb</Output>
+      <Time>2011-08-11T14:09:44.5927459-07:00</Time>
+    </Item>
+    <Item>
+      <Source>skybox_bottom.png</Source>
+      <Name>skybox_bottom</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_bottom.xnb</Output>
+      <Time>2011-08-11T14:07:25.8269745-07:00</Time>
+    </Item>
+    <Item>
+      <Source>skybox_front.png</Source>
+      <Name>skybox_front</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_front.xnb</Output>
+      <Time>2011-08-11T14:09:33.3121955-07:00</Time>
+    </Item>
+    <Item>
+      <Source>skybox_left.png</Source>
+      <Name>skybox_left</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_left.xnb</Output>
+      <Time>2011-08-11T14:08:43.668773-07:00</Time>
+    </Item>
+    <Item>
+      <Source>skybox_right.png</Source>
+      <Name>skybox_right</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_right.xnb</Output>
+      <Time>2011-08-11T14:08:54.9733246-07:00</Time>
+    </Item>
+    <Item>
+      <Source>skybox_top.png</Source>
+      <Name>skybox_top</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_top.xnb</Output>
+      <Time>2011-08-11T14:09:21.3686126-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

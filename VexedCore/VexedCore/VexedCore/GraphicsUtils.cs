@@ -55,6 +55,7 @@ namespace VexedCore
             Normal = n;
             TextureCoordinates = t;
         }
+
     }
 
     public class TrasnparentSquare

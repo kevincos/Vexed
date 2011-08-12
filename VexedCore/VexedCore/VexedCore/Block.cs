@@ -280,10 +280,23 @@ namespace VexedCore
         }
 
         public List<VertexPositionColorNormalTexture> baseTriangleList;
-        
+
+        public Color GetCurrentColor(Room currentRoom)
+        {
+            Color powerUpColor = color;
+            if (currentRoom.maxOrbs != 0)
+            {
+                powerUpColor.R = (Byte)(40 + currentRoom.currentOrbs * (color.R - 40) / currentRoom.maxOrbs);
+                powerUpColor.G = (Byte)(40 + currentRoom.currentOrbs * (color.G - 40) / currentRoom.maxOrbs);
+                powerUpColor.B = (Byte)(40 + currentRoom.currentOrbs * (color.B - 40) / currentRoom.maxOrbs);
+            }
+            return powerUpColor;            
+        }
+
         public void UpdateVertexData(Room currentRoom)
         {
-            if (baseTriangleList == null|| staticObject == false)
+            
+            if (baseTriangleList == null || staticObject == false)
             {
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
             
@@ -292,7 +305,21 @@ namespace VexedCore
                 vList.Add(edges[1].start);
                 vList.Add(edges[2].start);
                 vList.Add(edges[3].start);
-                currentRoom.AddBlockToTriangleList2(vList, color, .5f, baseTriangleList);
+                Color powerUpColor = GetCurrentColor(currentRoom);
+                currentRoom.AddBlockToTriangleList2(vList, powerUpColor, .5f, baseTriangleList);
+            }
+            if (currentRoom.refreshVertices == true)
+            {
+                List<VertexPositionColorNormalTexture> newColors = new List<VertexPositionColorNormalTexture>();
+                Color powerUpColor = GetCurrentColor(currentRoom);
+
+                for (int i = 0; i < baseTriangleList.Count; i++)
+                {
+                    newColors.Add(new VertexPositionColorNormalTexture(baseTriangleList[i].Position, powerUpColor, baseTriangleList[i].Normal, baseTriangleList[i].TextureCoordinates));
+                }
+                baseTriangleList.Clear();
+                baseTriangleList = newColors;
+                Engine.reDraw = true;
             }
         }
 

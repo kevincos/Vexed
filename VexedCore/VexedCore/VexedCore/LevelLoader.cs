@@ -46,12 +46,18 @@ namespace VexedCore
                     {
                         foreach (VexedLib.Monster xmlMonster in xmlFace.monsters)
                         {
+                            newRoom.maxOrbs += 5;
                             newRoom.monsters.Add(new Monster(xmlMonster, xmlFace.normal));
                         }
                         foreach (VexedLib.Doodad xmlDoodad in xmlFace.doodads)
                         {
                             Doodad newDoodad = null;
                             
+                            if (xmlDoodad.type == VexedLib.DoodadType.PowerOrb)
+                                newRoom.maxOrbs++;
+                            if (xmlDoodad.type == VexedLib.DoodadType.PowerStation)
+                                newRoom.maxOrbs += 10;
+
                             if (xmlDoodad.type == VexedLib.DoodadType.PlayerSpawn)
                             {
                                 Engine.player.center = new Vertex(xmlDoodad.position, xmlFace.normal, Vector3.Zero, xmlDoodad.up);                                
@@ -86,14 +92,22 @@ namespace VexedCore
 
                                 Doodad leftSide1 = new Doodad(VexedLib.DoodadType.TunnelSide, entrance.position.position + .8f * right, entrance.position.normal, entrance.position.direction);
                                 Doodad rightSide1 = new Doodad(VexedLib.DoodadType.TunnelSide, entrance.position.position - .8f * right, entrance.position.normal, entrance.position.direction);
+                                Doodad leftDoor1 = new Doodad(VexedLib.DoodadType.LeftTunnelDoor, entrance.position.position + .35f * right, entrance.position.normal, entrance.position.direction);
+                                Doodad rightDoor1 = new Doodad(VexedLib.DoodadType.RightTunnelDoor, entrance.position.position - .35f * right, entrance.position.normal, entrance.position.direction);
+                                leftDoor1.targetObject = entrance.id;
+                                rightDoor1.targetObject = entrance.id;
                                 Doodad topSide1 = new Doodad(VexedLib.DoodadType.TunnelTop, entrance.position.position + .8f * entrance.position.direction, entrance.position.normal, entrance.position.direction);
                                 Doodad bottomSide1 = new Doodad(VexedLib.DoodadType.TunnelTop, entrance.position.position - .8f * entrance.position.direction, entrance.position.normal, entrance.position.direction);
 
                                 Doodad leftSide2 = new Doodad(VexedLib.DoodadType.TunnelSide, exit.position.position + .8f * right, exit.position.normal, exit.position.direction);
                                 Doodad rightSide2 = new Doodad(VexedLib.DoodadType.TunnelSide, exit.position.position - .8f * right, exit.position.normal, exit.position.direction);
+                                Doodad leftDoor2 = new Doodad(VexedLib.DoodadType.RightTunnelDoor, exit.position.position + .35f * right, exit.position.normal, exit.position.direction);
+                                Doodad rightDoor2 = new Doodad(VexedLib.DoodadType.LeftTunnelDoor, exit.position.position - .35f * right, exit.position.normal, exit.position.direction);
                                 Doodad topSide2 = new Doodad(VexedLib.DoodadType.TunnelTop, exit.position.position + .8f * exit.position.direction, entrance.position.normal, exit.position.direction);
                                 Doodad bottomSide2 = new Doodad(VexedLib.DoodadType.TunnelTop, exit.position.position - .8f * exit.position.direction, entrance.position.normal, exit.position.direction);
-
+                                leftDoor2.targetObject = exit.id;
+                                rightDoor2.targetObject = exit.id;
+                                
 
                                 newRoom.doodads.Add(entrance);
                                 newRoom.doodads.Add(exit);
@@ -101,10 +115,15 @@ namespace VexedCore
                                 newRoom.doodads.Add(rightSide1);
                                 newRoom.doodads.Add(topSide1);
                                 newRoom.doodads.Add(bottomSide1);
+                                newRoom.doodads.Add(leftDoor1);
+                                newRoom.doodads.Add(rightDoor1);
                                 newRoom.doodads.Add(leftSide2);
                                 newRoom.doodads.Add(rightSide2);
                                 newRoom.doodads.Add(topSide2);
                                 newRoom.doodads.Add(bottomSide2);
+                                newRoom.doodads.Add(leftDoor2);
+                                newRoom.doodads.Add(rightDoor2);
+                                
                             }
                             else if (xmlDoodad.type == VexedLib.DoodadType.JumpStation || xmlDoodad.type == VexedLib.DoodadType.ItemStation || xmlDoodad.type == VexedLib.DoodadType.WarpStation || xmlDoodad.type == VexedLib.DoodadType.SwitchStation || xmlDoodad.type == VexedLib.DoodadType.UpgradeStation || xmlDoodad.type == VexedLib.DoodadType.PowerStation)
                             {
@@ -184,6 +203,7 @@ namespace VexedCore
             {
                 foreach (Doodad d in r.doodads)
                 {
+                    d.currentRoom = r;
                     if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
                     {
                         float baseLineValue = Vector3.Dot(d.position.position, d.position.normal);
@@ -257,6 +277,10 @@ namespace VexedCore
                             }
                         }
                     }
+                }
+                foreach (Doodad d in r.doodads)
+                {
+                    d.Update(new GameTime(TimeSpan.Zero, TimeSpan.Zero));
                 }
                 foreach (Monster m in r.monsters)
                 {

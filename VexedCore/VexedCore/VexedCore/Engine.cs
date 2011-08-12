@@ -68,6 +68,8 @@ namespace VexedCore
         public static int doodadVertexArrayCount =0;
         public static VertexPositionColorNormalTexture[] decalVertexArray;
         public static int decalVertexArrayCount = 0;
+        public static VertexPositionColorNormalTexture[] spriteVertexArray;
+        public static int spriteVertexArrayCount = 0;
         public static VertexPositionColorNormalTexture[] staticBlockVertexArray;
         public static int staticBlockVertexArrayCount = 0;
         public static VertexPositionColorNormalTexture[] dynamicBlockVertexArray;
@@ -221,7 +223,6 @@ namespace VexedCore
                         detailVertexArray, 0, detailVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
-                Game1.graphicsDevice.BlendState = BlendState.Opaque;
                 playerTextureEffect.Texture = Ability.ability_textures;
                 playerTextureEffect.CurrentTechnique.Passes[0].Apply();
 
@@ -233,9 +234,16 @@ namespace VexedCore
                         decalVertexArray, 0, decalVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
-
                 Game1.graphicsDevice.BlendState = BlendState.Opaque;
 
+                if (spriteVertexArrayCount > 0)
+                {
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        spriteVertexArray, 0, spriteVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+
+
+                
                 if (detailTextures)
                     playerTextureEffect.Texture = Monster.monsterTextureDetail;
                 else
@@ -365,6 +373,9 @@ namespace VexedCore
             if (Engine.decalVertexArray == null)
                 Engine.decalVertexArray = new VertexPositionColorNormalTexture[30000];
             decalVertexArrayCount = 0;
+            if (Engine.spriteVertexArray == null)
+                Engine.spriteVertexArray = new VertexPositionColorNormalTexture[30000];
+            spriteVertexArrayCount = 0;
 
             if (Engine.dynamicBlockVertexArray == null)
                 Engine.dynamicBlockVertexArray = new VertexPositionColorNormalTexture[60000];

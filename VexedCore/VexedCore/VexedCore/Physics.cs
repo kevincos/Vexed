@@ -26,6 +26,10 @@ namespace VexedCore
         public static bool refresh = false;
         public static void BlockUnfold(Room r, Vector3 normal, Vector3 up)
         {
+            if (Engine.player.center.normal != Engine.player.oldNormal || Engine.player.center.direction != Engine.player.oldUp)
+            {
+                refresh = true;
+            }
             Vector3 right = Vector3.Cross(up, normal);
               foreach (Doodad d in r.doodads)
             {
@@ -44,8 +48,11 @@ namespace VexedCore
             }
             foreach (Block b in r.blocks)
             {
-                if(b.staticObject == false || b.unfoldedBlocks.Count == 0 || refresh == true)
+                if (b.staticObject == false || b.unfoldedBlocks.Count == 0 || refresh == true)
+                {
                     b.UpdateUnfoldedBlocks(r, normal, up);
+                    b.UpdateBoundingBox(Engine.player.up, Engine.player.right);
+                }
                 
             }
             refresh = false;
@@ -300,7 +307,7 @@ namespace VexedCore
                         List<Vector3> doodadVertexList = d.GetCollisionRect();
                         Vector3 projection = Collide(playerVertexList, doodadVertexList, p.center.normal);
 
-                        d.ActivateDoodad(projection.Length() > 0f);                        
+                        d.ActivateDoodad(r, projection.Length() > 0f);                        
                     }
                     if (d.hasCollisionRect)
                     {
@@ -363,6 +370,8 @@ namespace VexedCore
             }
             foreach (Monster m in r.monsters)
             {
+                if (m.dead == true)
+                    continue;
                 m.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
                 if (p.CollisionFirstPass(m) == false)
                 {
@@ -454,10 +463,11 @@ namespace VexedCore
             {
                 if (b.hasCollisionRect)
                 {
-                    if (p.boundingBoxBottom > b.boundingBoxTop ||
-                        p.boundingBoxTop < b.boundingBoxBottom ||
-                        p.boundingBoxLeft > b.boundingBoxRight ||
-                        p.boundingBoxRight < b.boundingBoxLeft)
+                    b.UpdateBoundingBox(p.center.direction, p.right);
+                    if (p.boundingBoxBottom > b.boundingBoxTop +2f ||
+                        p.boundingBoxTop < b.boundingBoxBottom-2f ||
+                        p.boundingBoxLeft > b.boundingBoxRight+2f ||
+                        p.boundingBoxRight < b.boundingBoxLeft-2f)
                         continue;
                     // if block intesects with rectVertexList
                     List<Vector3> brickVertexList = b.GetCollisionRect();
@@ -499,15 +509,22 @@ namespace VexedCore
             {
                 if (d.type == VexedLib.DoodadType.Checkpoint)
                 {
-                    d.ActivateDoodad(d == p.respawnPoint);
+                    d.ActivateDoodad(r, d == p.respawnPoint);
                 }
                 if (d.type == VexedLib.DoodadType.Vortex || d.type == VexedLib.DoodadType.WarpStation || d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.ItemBlock || d.type == VexedLib.DoodadType.JumpStation || d.type == VexedLib.DoodadType.PowerStation || d.type == VexedLib.DoodadType.SwitchStation || d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.UpgradeStation)
                 {
-                    d.ActivateDoodad(d.ActivationRange(p));
+                    d.ActivateDoodad(r, d.ActivationRange(p));
                 }
                 if (d.type == VexedLib.DoodadType.NPC_OldMan)
                 {
-                    d.ActivateDoodad(d.ActivationRange(p));
+                    d.ActivateDoodad(r, d.ActivationRange(p));
+                }
+                if( (d.position.position - p.center.position).Length() < 3f*d.triggerDistance)
+                {
+                    if (d.type == VexedLib.DoodadType.PowerOrb)
+                    {
+                        d.tracking = true;
+                    }
                 }
                 if ((d.position.position - p.center.position).Length() < d.triggerDistance)
                 {
@@ -515,7 +532,10 @@ namespace VexedCore
                     {
                         if(d.active == true)
                         {
-                            d.ActivateDoodad(false);
+                            d.ActivateDoodad(r, false);
+                            r.currentOrbs++;
+                            Engine.reDraw = true;
+                            r.refreshVertices = true;
                             p.orbsCollected++;
                         }
                     }
@@ -611,6 +631,8 @@ namespace VexedCore
             #region monsters
             foreach (Monster m in r.monsters)
             {
+                //if (m.dead == true)
+                    //continue;
                 frictionAdjustment = Vector3.Zero;
                 for (int attempt = 0; attempt < 2; attempt++)
                 {
@@ -708,10 +730,10 @@ namespace VexedCore
                 {
                     foreach (Block b in baseBlock.unfoldedBlocks)
                     {
-                        if (m.boundingBoxBottom > b.boundingBoxTop + 1 ||
-                                m.boundingBoxTop < b.boundingBoxBottom - 1 ||
-                                m.boundingBoxLeft > b.boundingBoxRight + 1 ||
-                                m.boundingBoxRight < b.boundingBoxLeft - 1)
+                        if (m.boundingBoxBottom > b.boundingBoxTop + 2 ||
+                                m.boundingBoxTop < b.boundingBoxBottom - 2 ||
+                                m.boundingBoxLeft > b.boundingBoxRight + 2 ||
+                                m.boundingBoxRight < b.boundingBoxLeft - 2)
                             continue;
                         // if block intesects with rectVertexList
                         List<Vector3> blockVertexList = b.GetCollisionRect();
@@ -772,7 +794,7 @@ namespace VexedCore
                         Vector3 projection = Collide(doodadVertexList, brickVertexList, p.center.normal);
                         if (projection != Vector3.Zero)
                         {
-                            //if (s.type == ProjectileType.Bomb)
+                            //if (s.type == ProjectileType.Bomb)A
                                 //s.stopped = true;
                             //else
                                 s.exploding = true;
@@ -780,7 +802,7 @@ namespace VexedCore
 
                             if ((s.type == ProjectileType.Bomb || s.type == ProjectileType.Missile) && s.exploding == true && b.type == VexedLib.DoodadType.Brick)
                             {
-                                b.ActivateDoodad(true);
+                                b.ActivateDoodad(r, true);
                             }
                         }
                     }
