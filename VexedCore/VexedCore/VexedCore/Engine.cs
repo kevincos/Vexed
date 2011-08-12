@@ -74,7 +74,12 @@ namespace VexedCore
         public static int staticBlockVertexArrayCount = 0;
         public static VertexPositionColorNormalTexture[] dynamicBlockVertexArray;
         public static int dynamicBlockVertexArrayCount = 0;
+        public static VertexPositionColorNormalTexture[] translucentBlockVertexArray;
+        public static int translucentBlockVertexArrayCount = 0;
+        
+
         public static List<TrasnparentSquare> staticTranslucentObjects;
+        List<VertexPositionColorNormalTexture> translucentList;
         public static List<TrasnparentSquare> mapShellObjects;
         public static VertexBuffer staticObjectBuffer;
         public static bool staticObjectsInitialized = false;
@@ -264,26 +269,39 @@ namespace VexedCore
                 {
                     if (Room.innerBlockMode > 0)
                     {
-                        translucentEffect.CurrentTechnique.Passes[0].Apply();
-                        // Sort Triangles
-                        staticTranslucentObjects.Sort(new FaceSorter(player.cameraTarget - player.cameraPos));
 
-                        List<VertexPositionColorNormalTexture> translucentList = new List<VertexPositionColorNormalTexture>();
-                        for (int i = 0; i < staticTranslucentObjects.Count; i++)
+                        if (staticObjectsInitialized == false || (Engine.player.state == State.Jump))
                         {
+                            // Sort Triangles
+                            staticTranslucentObjects.Sort(new FaceSorter(player.cameraTarget - player.cameraPos));
 
-                            translucentList.Add(staticTranslucentObjects[i].v1);
-                            translucentList.Add(staticTranslucentObjects[i].v2);
-                            translucentList.Add(staticTranslucentObjects[i].v3);
-                            translucentList.Add(staticTranslucentObjects[i].v4);
-                            translucentList.Add(staticTranslucentObjects[i].v5);
-                            translucentList.Add(staticTranslucentObjects[i].v6);
+                            translucentList = new List<VertexPositionColorNormalTexture>();
+                            Engine.translucentBlockVertexArrayCount = 0;
+                            for (int i = 0; i < staticTranslucentObjects.Count; i++)
+                            {
+
+                                /*translucentList.Add(staticTranslucentObjects[i].v1);
+                                translucentList.Add(staticTranslucentObjects[i].v2);
+                                translucentList.Add(staticTranslucentObjects[i].v3);
+                                translucentList.Add(staticTranslucentObjects[i].v4);
+                                translucentList.Add(staticTranslucentObjects[i].v5);
+                                translucentList.Add(staticTranslucentObjects[i].v6);*/
+                                translucentBlockVertexArray[Engine.translucentBlockVertexArrayCount] = staticTranslucentObjects[i].v1;
+                                translucentBlockVertexArray[Engine.translucentBlockVertexArrayCount+1] = staticTranslucentObjects[i].v2;
+                                translucentBlockVertexArray[Engine.translucentBlockVertexArrayCount+2] = staticTranslucentObjects[i].v3;
+                                translucentBlockVertexArray[Engine.translucentBlockVertexArrayCount+3] = staticTranslucentObjects[i].v4;
+                                translucentBlockVertexArray[Engine.translucentBlockVertexArrayCount+4] = staticTranslucentObjects[i].v5;
+                                translucentBlockVertexArray[Engine.translucentBlockVertexArrayCount+5] = staticTranslucentObjects[i].v6;
+                                Engine.translucentBlockVertexArrayCount += 6;
+                            }
                         }
 
-                        if (translucentList.Count > 0)
+                        if (translucentBlockVertexArrayCount > 0)
                         {
+                            translucentEffect.CurrentTechnique.Passes[0].Apply();
+                            
                             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                translucentList.ToArray(), 0, translucentList.Count / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                                translucentBlockVertexArray, 0, translucentBlockVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                         }
 
 
@@ -362,7 +380,7 @@ namespace VexedCore
 
         public void Draw(GameTime gameTime)
         {
-            Engine.staticTranslucentObjects = new List<TrasnparentSquare>();
+            
             Engine.mapShellObjects = new List<TrasnparentSquare>();
             if(Engine.detailVertexArray == null)
                 Engine.detailVertexArray = new VertexPositionColorNormalTexture[30000];
@@ -376,6 +394,11 @@ namespace VexedCore
             if (Engine.spriteVertexArray == null)
                 Engine.spriteVertexArray = new VertexPositionColorNormalTexture[30000];
             spriteVertexArrayCount = 0;
+            if (Engine.translucentBlockVertexArray == null)
+            {
+                Engine.translucentBlockVertexArray = new VertexPositionColorNormalTexture[1000];
+                translucentBlockVertexArrayCount = 0;
+            }
 
             if (Engine.dynamicBlockVertexArray == null)
                 Engine.dynamicBlockVertexArray = new VertexPositionColorNormalTexture[60000];
@@ -383,6 +406,7 @@ namespace VexedCore
 
             if (Engine.staticBlockVertexArray == null || reDraw == true)
             {
+                Engine.staticTranslucentObjects = new List<TrasnparentSquare>();
                 staticObjectsInitialized = false;
                 staticDoodadsInitialized = false;
 
