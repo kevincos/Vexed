@@ -927,7 +927,7 @@ namespace VexedCore
                                     orbsCollected += 1;
                                     d.orbsRemaining--;
                                     currentRoom.currentOrbs++;
-                                    Engine.reDraw = true;
+                                    //Engine.reDraw = true;
                                     currentRoom.refreshVertices = true;
                                 }
                             }

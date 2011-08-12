@@ -534,7 +534,7 @@ namespace VexedCore
                         {
                             d.ActivateDoodad(r, false);
                             r.currentOrbs++;
-                            Engine.reDraw = true;
+                            //Engine.reDraw = true;
                             r.refreshVertices = true;
                             p.orbsCollected++;
                         }

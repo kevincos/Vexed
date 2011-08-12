@@ -1603,7 +1603,7 @@ namespace VexedCore
                         }
                         else
                         {
-                            if (Engine.staticObjectsInitialized == false)
+                            if (Engine.staticObjectsInitialized == false || this == Engine.player.currentRoom)
                             {
                                 b.UpdateVertexData(this);
                                 b.Draw(this);

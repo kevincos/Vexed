@@ -326,7 +326,7 @@ namespace VexedCore
         public void Draw(Room currentRoom)
         {
             UpdateVertexData(currentRoom);
-            if (staticObject == true)
+            if (staticObject == true && Engine.player.currentRoom != currentRoom)
             {
                 for (int i = 0; i < baseTriangleList.Count; i++)
                 {
