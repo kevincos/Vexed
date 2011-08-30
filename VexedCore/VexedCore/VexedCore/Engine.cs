@@ -270,7 +270,7 @@ namespace VexedCore
                     if (Room.innerBlockMode > 0)
                     {
 
-                        if (staticObjectsInitialized == false || (Engine.player.state == State.Jump) || Engine.player.state == State.Tunnel)
+                        //if (staticObjectsInitialized == false || (Engine.player.state == State.Jump) || Engine.player.state == State.Tunnel)
                         {
                             // Sort Triangles
                             staticTranslucentObjects.Sort(new FaceSorter(player.cameraTarget - player.cameraPos));
@@ -634,22 +634,22 @@ namespace VexedCore
 
             if (optionToggleCooldown == 0)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A) && state == EngineState.Warp && selectedRoomIndex != -1)
+                if ((Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && state == EngineState.Warp && selectedRoomIndex != -1)
                 {
                     player.Warp(roomList[selectedRoomIndex]);
                     state = EngineState.ZoomIn;
                 }
-                if(Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder) && state == EngineState.Warp && selectedRoomIndex == -1)
+                if((Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder)) && state == EngineState.Warp && selectedRoomIndex == -1)
                 {
                     state = EngineState.ZoomIn;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.OemMinus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder) && state == EngineState.Active)
+                if ((Keyboard.GetState().IsKeyDown(Keys.OemMinus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder)) && state == EngineState.Active)
                 {
                     selectedRoomIndex = -1;
                     state = EngineState.ZoomOut;
 
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder))
+                if ((Keyboard.GetState().IsKeyDown(Keys.Right) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder)))
                 {
                     if (state == EngineState.Warp && selectedRoomIndex != -1)
                     {
@@ -664,7 +664,7 @@ namespace VexedCore
                         optionToggleCooldown = 100;
                     }
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.OemMinus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder))
+                if ((Keyboard.GetState().IsKeyDown(Keys.Left) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder)))
                 {
                     if (state == EngineState.Warp && selectedRoomIndex != -1)
                     {

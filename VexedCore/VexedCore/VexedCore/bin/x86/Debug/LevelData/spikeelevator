@@ -41459,6 +41459,165 @@
                     <PackedValue>4278190080</PackedValue>
                   </color>
                 </Block>
+                <Block>
+                  <id>3129</id>
+                  <name>Block</name>
+                  <edges>
+                    <Edge>
+                      <id>3130</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>25</X>
+                        <Y>60</Y>
+                        <Z>-2</Z>
+                      </start>
+                      <end>
+                        <X>32</X>
+                        <Y>60</Y>
+                        <Z>-2</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>3131</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>3132</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>32</X>
+                        <Y>60</Y>
+                        <Z>-2</Z>
+                      </start>
+                      <end>
+                        <X>32</X>
+                        <Y>60</Y>
+                        <Z>1</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>3133</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>3134</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>32</X>
+                        <Y>60</Y>
+                        <Z>1</Z>
+                      </start>
+                      <end>
+                        <X>25</X>
+                        <Y>60</Y>
+                        <Z>1</Z>
+                      </end>
+                      <type>Spikes</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>3135</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                          <nextBehavior />
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                    <Edge>
+                      <id>3136</id>
+                      <name>Edge</name>
+                      <start>
+                        <X>25</X>
+                        <Y>60</Y>
+                        <Z>1</Z>
+                      </start>
+                      <end>
+                        <X>25</X>
+                        <Y>60</Y>
+                        <Z>-2</Z>
+                      </end>
+                      <type>Normal</type>
+                      <behaviors>
+                        <Behavior>
+                          <id>3137</id>
+                          <name>Behavior</name>
+                          <offset>0</offset>
+                          <duration>0</duration>
+                          <period>0</period>
+                          <destination>
+                            <X>0</X>
+                            <Y>0</Y>
+                            <Z>0</Z>
+                          </destination>
+                          <primaryValue>0</primaryValue>
+                          <secondaryValue>0</secondaryValue>
+                          <toggle>false</toggle>
+                        </Behavior>
+                      </behaviors>
+                    </Edge>
+                  </edges>
+                  <behaviors>
+                    <Behavior>
+                      <id>3138</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                  </behaviors>
+                  <color>
+                    <R>0</R>
+                    <G>0</G>
+                    <B>0</B>
+                    <A>255</A>
+                    <PackedValue>4278190080</PackedValue>
+                  </color>
+                </Block>
               </blocks>
               <doodads>
                 <Doodad>
@@ -41866,6 +42025,41 @@
                   <behaviors>
                     <Behavior>
                       <id>1705</id>
+                      <name>Behavior</name>
+                      <offset>0</offset>
+                      <duration>0</duration>
+                      <period>0</period>
+                      <destination>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </destination>
+                      <primaryValue>0</primaryValue>
+                      <secondaryValue>0</secondaryValue>
+                      <toggle>false</toggle>
+                    </Behavior>
+                  </behaviors>
+                </Doodad>
+                <Doodad>
+                  <id>3139</id>
+                  <name>Doodad</name>
+                  <position>
+                    <X>19.5</X>
+                    <Y>60</Y>
+                    <Z>-0.5</Z>
+                  </position>
+                  <up>
+                    <X>0</X>
+                    <Y>0</Y>
+                    <Z>1</Z>
+                  </up>
+                  <activationCost>0</activationCost>
+                  <fixedPosition>false</fixedPosition>
+                  <type>Beam</type>
+                  <ability>WallJump</ability>
+                  <behaviors>
+                    <Behavior>
+                      <id>3140</id>
                       <name>Behavior</name>
                       <offset>0</offset>
                       <duration>0</duration>
@@ -86524,7 +86718,7 @@
                     <Z>-0</Z>
                   </up>
                   <fixedPath>false</fixedPath>
-                  <movement>Spider</movement>
+                  <movement>Tank</movement>
                   <armor>None</armor>
                   <weapon>Blaster</weapon>
                   <behavior>Stationary</behavior>

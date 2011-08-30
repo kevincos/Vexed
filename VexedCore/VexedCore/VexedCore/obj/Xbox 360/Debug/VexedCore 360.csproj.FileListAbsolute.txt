@@ -96,3 +96,4 @@ E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_texture_boots.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_texture_jetpack.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\p_texture_booster.xnb
+C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dialogbox.xnb
