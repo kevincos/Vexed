@@ -37,11 +37,11 @@ namespace VexedCore
         Passive = 28,
         PermanentBoots = 5,
         PermanentWallJump = 6,
-        PermanentShield = 7,
+        SpinHook = 7,
         PermanentYellowKey = 14,
         PermanentBlueKey = 15,
         PermanentRedKey = 20,
-        DualWield = 21,
+        Phase = 21,
         ImprovedJump = 22,
         Ultima = 23
 
@@ -67,7 +67,7 @@ namespace VexedCore
         {
             get
             {
-                return type == AbilityType.Blaster || type == AbilityType.Laser || type == AbilityType.Missile || type == AbilityType.Bomb;
+                return type == AbilityType.Blaster || type == AbilityType.Laser || type == AbilityType.Missile || type == AbilityType.Bomb || type == AbilityType.SpinHook;
             }
         }
 
@@ -107,6 +107,8 @@ namespace VexedCore
                     return 700;
                 if (type == AbilityType.JetPack)
                     return 0;
+                if (type == AbilityType.SpinHook)
+                    return 100;
                 return 400;
             }
         }
@@ -221,6 +223,8 @@ namespace VexedCore
                 else
                     shootDirection = -Engine.player.right / Engine.player.right.Length();
 
+                if (type == AbilityType.SpinHook)
+                     Engine.player.SpinHook();
                 if (type == AbilityType.Blaster)
                     Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Player, Engine.player.center.position, Engine.player.center.velocity, Engine.player.center.normal, shootDirection));
                 if (type == AbilityType.Missile)
@@ -233,6 +237,10 @@ namespace VexedCore
                 if (type == AbilityType.Laser || type == AbilityType.Blaster || type == AbilityType.Missile || type == AbilityType.Bomb)
                     Engine.player.lastFireTime = 0;
 
+                if (type == AbilityType.Phase)
+                {
+                    Engine.player.AttemptPhase();
+                }
                 if (type == AbilityType.Booster)
                 {
                     Engine.player.Boost();               

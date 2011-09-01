@@ -41,7 +41,7 @@
                   <name>Doodad</name>
                   <position>
                     <X>5</X>
-                    <Y>-0.5</Y>
+                    <Y>0.5</Y>
                     <Z>-0.5</Z>
                   </position>
                   <up>
@@ -51,8 +51,8 @@
                   </up>
                   <activationCost>0</activationCost>
                   <fixedPosition>false</fixedPosition>
-                  <type>PowerOrb</type>
-                  <ability>DoubleJump</ability>
+                  <type>HookTarget</type>
+                  <ability>WallJump</ability>
                   <behaviors>
                     <Behavior>
                       <id>5</id>
@@ -69,41 +69,6 @@
                       <secondaryValue>0</secondaryValue>
                       <toggle>false</toggle>
                       <nextBehavior />
-                    </Behavior>
-                  </behaviors>
-                </Doodad>
-                <Doodad>
-                  <id>6</id>
-                  <name>Doodad</name>
-                  <position>
-                    <X>5</X>
-                    <Y>1.5</Y>
-                    <Z>1.5</Z>
-                  </position>
-                  <up>
-                    <X>0</X>
-                    <Y>0</Y>
-                    <Z>1</Z>
-                  </up>
-                  <activationCost>0</activationCost>
-                  <fixedPosition>false</fixedPosition>
-                  <type>PowerOrb</type>
-                  <ability>DoubleJump</ability>
-                  <behaviors>
-                    <Behavior>
-                      <id>7</id>
-                      <name>Behavior</name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
                     </Behavior>
                   </behaviors>
                 </Doodad>

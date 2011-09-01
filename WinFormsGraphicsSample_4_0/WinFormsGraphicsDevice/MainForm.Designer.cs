@@ -492,7 +492,7 @@ namespace WinFormsGraphicsDevice
             this.doodadPropertiesGroup.Controls.Add(this.doodadTargetLabel);
 
             this.doodadTypeDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 40; i++)
             {
                 this.doodadTypeDropdown.Items.Add((DoodadType)i);
             }
@@ -502,7 +502,7 @@ namespace WinFormsGraphicsDevice
             this.doodadTypeDropdown.SelectedIndexChanged += new System.EventHandler(this.doodad_change);
 
             this.doodadAbilityDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 32; i++)
             {
                 this.doodadAbilityDropdown.Items.Add((AbilityType)i);
             }

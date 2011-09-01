@@ -270,7 +270,7 @@ namespace VexedCore
                     if (Room.innerBlockMode > 0)
                     {
 
-                        //if (staticObjectsInitialized == false || (Engine.player.state == State.Jump) || Engine.player.state == State.Tunnel)
+                        //if (staticObjectsInitialized == false || (Engine.player.state == State.Jump) || Engine.player.state == State.Tunnel || Engine.player.state == State.Phase || Engine.player.state == State.PhaseFail)
                         {
                             // Sort Triangles
                             staticTranslucentObjects.Sort(new FaceSorter(player.cameraTarget - player.cameraPos));
@@ -411,7 +411,7 @@ namespace VexedCore
                 staticDoodadsInitialized = false;
 
                 if (Engine.staticBlockVertexArray == null)
-                    Engine.staticBlockVertexArray = new VertexPositionColorNormalTexture[60000];
+                    Engine.staticBlockVertexArray = new VertexPositionColorNormalTexture[80000];
                 staticBlockVertexArrayCount = 0;
             }
 
@@ -621,12 +621,12 @@ namespace VexedCore
             optionToggleCooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (optionToggleCooldown < 0) optionToggleCooldown = 0;
 
-            if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftTrigger))
+            if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftTrigger) || Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets))
             {
                 player.baseCameraDistance += .03f * gameTime.ElapsedGameTime.Milliseconds;
                 if (player.baseCameraDistance > 80f) player.baseCameraDistance = 80f;
             }
-            if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightTrigger))
+            if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightTrigger) || Keyboard.GetState().IsKeyDown(Keys.OemOpenBrackets))
             {
                 player.baseCameraDistance -= .03f * gameTime.ElapsedGameTime.Milliseconds;
                 if (player.baseCameraDistance < 5f) player.baseCameraDistance = 5f;

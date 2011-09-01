@@ -19,9 +19,20 @@ namespace VexedCore
         Jump,
         BridgeJump,
         Tunnel,
+        Phase,
+        PhaseFail,
         Spin,
         Death,
-        Dialog
+        Dialog,
+        HookSpin
+    }
+
+    public enum HookState
+    {
+        Waiting,
+        Out,
+        Hook,
+        In
     }
 
     public class Player
@@ -64,6 +75,8 @@ namespace VexedCore
         public State state = State.Normal;
         public Vertex center;
         public Vertex tunnelDummy;
+        public Vertex hookShot;
+        public Vector3 hookLand;
         [XmlIgnore]public Room currentRoom;
         public string currentRoomId;
         public int jumpRecovery = 0;
@@ -84,6 +97,8 @@ namespace VexedCore
         public int jumpTime = 0;
         public int deathTime = 0;
         public int lastFireTime = 0;
+        public int hookTime = 0;
+        public int hookHangTime = 0;
         public bool superJump = false;
         public bool jetPacking = false;
         public bool jetPackThrust = false;
@@ -103,6 +118,8 @@ namespace VexedCore
         public Vector3 oldNormal = Vector3.Zero;
         public Vector3 oldUp = Vector3.Zero;
 
+        public HookState hookState = HookState.Waiting;
+
         public float playerHalfWidth = .35f;
         public float playerHalfHeight = .5f;
 
@@ -112,6 +129,8 @@ namespace VexedCore
         public static int launchMaxTime = 1000;
         public static int maxBoostTime = 300;
         public static int maxDeathTime = 1000;
+        public static int maxHookTime = 150;
+        public static int maxHookHangTime = 100;
         public static int weaponSwitchCooldownMax = 200;
 
         public VexedLib.GunType gunType = VexedLib.GunType.Blaster;
@@ -149,7 +168,7 @@ namespace VexedCore
 
         public Player()
         {
-            upgrades = new bool[32];
+            upgrades = new bool[64];
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
@@ -191,8 +210,8 @@ namespace VexedCore
             naturalShield = new Ability(p.naturalShield);
             boosting = p.boosting;
 
-            upgrades = new bool[32];
-            for (int i = 0; i < 32; i++)
+            upgrades = new bool[64];
+            for (int i = 0; i < 64; i++)
                 upgrades[i] = p.upgrades[i];
 
             if (p.currentRoom != null)
@@ -265,7 +284,7 @@ namespace VexedCore
         {
             get
             {
-                if (state == State.Tunnel)
+                if (state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
                 {
                     return currentRoom.RaisedPosition(tunnelDummy.position + cameraOffset, baseCameraDistance, 6f);
                 }
@@ -297,7 +316,7 @@ namespace VexedCore
         {
             get
             {
-                if (state == State.Tunnel)
+                if (state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
                 {
                     return currentRoom.RaisedPosition(tunnelDummy.position, baseCameraDistance, 6f);
                 }
@@ -348,7 +367,7 @@ namespace VexedCore
                 }
                 else if(state == State.Death)
                     return currentRoom.AdjustedUp(lastLivingPosition, center.direction, center.normal, 1f);
-                else if(state == State.Tunnel)
+                else if (state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
                     return currentRoom.AdjustedUp(tunnelDummy.position, tunnelDummy.direction, tunnelDummy.normal, 1f);
                 else
                     return currentRoom.AdjustedUp(center.position, center.direction, center.normal, 1f);
@@ -390,7 +409,7 @@ namespace VexedCore
         {
             get
             {
-                if (state != State.Tunnel) return false;
+                if (state != State.Tunnel && state != State.PhaseFail && state != State.Phase) return false;
                 float distanceFromMid = Math.Abs(Vector3.Dot(jumpPosition - currentRoom.center, center.normal));
                 float boxHalfSize = .5f * Math.Abs(Vector3.Dot(currentRoom.size, center.normal));
                 return distanceFromMid < boxHalfSize;
@@ -421,6 +440,32 @@ namespace VexedCore
         public bool HasTraction()
         {
             return primaryAbility.type == AbilityType.Boots || secondaryAbility.type == AbilityType.Boots || upgrades[(int)AbilityType.PermanentBoots];
+        }
+
+        public void SpinHook()
+        {
+            if (hookState == HookState.Waiting)
+            {
+                hookState = HookState.Out;
+                hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
+                hookTime = 0;
+            }
+            else
+            {
+                foreach (Doodad d in currentRoom.doodads)
+                {
+                    if (d.type == VexedLib.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
+                    {
+                        center.velocity = Vector3.Zero;
+                        jumpSource = center.position;
+                        jumpDestination = d.position.position + right * faceDirection - up;
+                        state = State.Spin;
+                        spinUp = -faceDirection * right;
+                        hookHangTime = 0;
+                        hookState = HookState.Hook;
+                    }
+                }
+            }
         }
 
         public void Boost()
@@ -469,9 +514,41 @@ namespace VexedCore
         {
             if (upgrades[(int)AbilityType.PermanentBoots]==true || primaryAbility.type == AbilityType.Boots || secondaryAbility.type == AbilityType.Boots)
             {
+                jumpSource = center.position;
+                jumpDestination = center.position;
                 state = State.Spin;
                 spinUp = newUp;
             }
+        }
+
+        public void AttemptPhase()
+        {
+            float throughDistance = Math.Abs(Vector3.Dot(center.normal, currentRoom.size));
+            float sideSize = .5f * Math.Abs(Vector3.Dot(right, currentRoom.size));
+            float sideDistance = Vector3.Dot(currentRoom.center - center.position, right) + sideSize;
+
+
+            
+            center.velocity = Vector3.Zero;
+            jumpRoom = currentRoom;
+            jumpSource = center.position;
+            jumpNormal = -center.normal;
+
+            if (true == Physics.PhaseTest())
+            {
+                jumpDestination = center.position - throughDistance * center.normal;
+                state = State.Phase;
+                tunnelDummy = new Vertex(center.position, center.normal, (throughDistance + 2 * sideDistance) / (.5f * launchMaxTime) * right, center.direction);
+            }
+            else
+            {
+                jumpDestination = center.position - (2f * throughDistance - 1f) * center.normal;
+                state = State.PhaseFail;
+                tunnelDummy = new Vertex(center.position, center.normal, Vector3.Zero, center.direction);
+            }
+            
+
+            launchTime = 0;
         }
 
         public void EnforceVelocityLimits()
@@ -513,7 +590,7 @@ namespace VexedCore
             {
                 AnimationControl.SetState(AnimationState.JumpPad);
             }
-            else if (state == State.Jump || state == State.Tunnel)
+            else if (state == State.Jump || state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
             {
                 AnimationControl.SetState(AnimationState.JumpPad);
             }
@@ -617,11 +694,11 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
-            if (state == State.Tunnel)
+            if (state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
             {
                 if (launchTime > launchMaxTime / 4 && launchTime < 3 * launchMaxTime / 4)
                     tunnelDummy.Update(currentRoom, gameTime.ElapsedGameTime.Milliseconds);
-                if (launchTime > 3 * launchMaxTime / 4)
+                if (launchTime > 3 * launchMaxTime / 4 && tunnelExit != null)
                     tunnelExit.ActivateDoodad(currentRoom, true);
                 oldUp = tunnelDummy.direction;
                 oldNormal = tunnelDummy.normal;
@@ -631,6 +708,79 @@ namespace VexedCore
                 oldUp = center.direction;
                 oldNormal = center.normal;
             }
+
+            if (hookState != HookState.Waiting)
+            {
+                if(hookState == HookState.Hook && state != State.Spin)
+                    hookHangTime += gameTime.ElapsedGameTime.Milliseconds;
+                else if (hookState == HookState.Out)
+                    hookTime += gameTime.ElapsedGameTime.Milliseconds;
+                else if (hookState == HookState.In)
+                    hookTime -= gameTime.ElapsedGameTime.Milliseconds;
+                if (hookState == HookState.Out)
+                {
+                    hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
+                    hookShot.Update(currentRoom, hookTime);
+                    foreach (Doodad d in currentRoom.doodads)
+                    {
+                        if (d.type == VexedLib.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
+                        {
+                            center.velocity = Vector3.Zero;
+                            jumpSource = center.position;
+                            jumpDestination = d.position.position + right * faceDirection - up;
+                            state = State.Spin;
+                            spinUp = -faceDirection * right;
+                            hookHangTime = 0;
+                            hookState = HookState.Hook;
+                        }
+                    }
+                }                    
+                if (hookState == HookState.In)
+                {
+                    hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
+                    hookShot.Update(currentRoom, hookTime);
+                }
+
+                if (hookState == HookState.Hook)
+                {
+                    foreach (Doodad d in currentRoom.doodads)
+                    {
+                        if (d.type == VexedLib.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
+                        {
+                            Vector3 vel = .01f * up + .01f * right * faceDirection;
+
+                            float distance = (d.position.position - (center.position + .5f * right * faceDirection)).Length();
+                            hookTime = (int)(distance / vel.Length());
+
+                            hookShot = new Vertex(d.position.position, center.normal, Vector3.Zero, center.direction);
+                        }
+                    }
+                    if (state != State.Spin)
+                    {
+                        hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
+                        hookShot.Update(currentRoom, hookTime);
+                    }
+
+                }
+
+                    
+                if (hookTime > maxHookTime && hookState == HookState.Out)
+                {
+                    hookLand = hookShot.position;
+                    hookShot.velocity = -hookShot.velocity;
+                    hookHangTime = 0;                            
+                    hookState = HookState.Hook;
+                }
+                if (hookTime < 0 && hookState == HookState.In)
+                {
+                    hookState = HookState.Waiting;
+                }
+                if (hookHangTime > maxHookHangTime && hookState == HookState.Hook)
+                {                    
+                    hookState = HookState.In;
+                } 
+            }
+
             SetAnimationState();
             primaryAbility.Update(gameTime);
             secondaryAbility.Update(gameTime);
@@ -1056,12 +1206,18 @@ namespace VexedCore
                 }
                 #endregion
             }
-            if (state == State.Jump || state == State.BridgeJump || state == State.Tunnel)
+            if (state == State.Jump || state == State.BridgeJump || state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
             {
                 launchTime += gameTime.ElapsedGameTime.Milliseconds;
                 if (launchTime > launchMaxTime)
                     launchTime = launchMaxTime;
                 jumpPosition = ((launchMaxTime - launchTime) * jumpSource + launchTime * (jumpDestination+.3f*jumpNormal)) / launchMaxTime;
+                if (state == State.PhaseFail && jumpDestination != center.position && launchTime > launchMaxTime / 2)
+                {
+                    jumpSource = jumpDestination;                   
+                    jumpDestination = center.position;
+                    jumpNormal = center.normal;
+                }
                 if (launchTime == launchMaxTime)
                 {
                     center.normal = jumpNormal;
@@ -1083,11 +1239,17 @@ namespace VexedCore
             if (state == State.Spin)
             {
                 spinTime += gameTime.ElapsedGameTime.Milliseconds;
+                center.position = (spinTime * jumpDestination + (spinMaxTime - spinTime) * jumpSource) / spinMaxTime;
+                    
                 if (spinTime > spinMaxTime)
                 {
                     spinTime = 0;
                     center.direction = spinUp;
                     state = State.Normal;
+                    if (hookState == HookState.Hook)
+                    {
+                        hookHangTime = maxHookHangTime;
+                    }
                 }
             }
         }
@@ -1189,7 +1351,7 @@ namespace VexedCore
 
 
             VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
-            if (state == State.Jump || state == State.BridgeJump || state == State.Tunnel)
+            if (state == State.Jump || state == State.BridgeJump || state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
             {
                 for (int i = 0; i < textureTriangleList.Count(); i++)
                 {
@@ -1208,6 +1370,30 @@ namespace VexedCore
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                 triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
 
+            if (hookState != HookState.Waiting)
+            {
+                List<VertexPositionColorNormalTexture> hookTriangleList = new List<VertexPositionColorNormalTexture>();
+                List<Vertex> hookVertexList = new List<Vertex>();
+                Vector3 hookUp = hookShot.direction;
+                Vector3 hookRight = Vector3.Cross(hookShot.direction, hookShot.normal);
+                hookVertexList.Add(new Vertex(hookShot.position, hookShot.normal, +playerHalfHeight * hookUp + .5f * hookRight, hookShot.direction));
+                hookVertexList.Add(new Vertex(hookShot.position, hookShot.normal, +playerHalfHeight * hookUp - .5f * hookRight, hookShot.direction));
+                hookVertexList.Add(new Vertex(hookShot.position, hookShot.normal, -playerHalfHeight * hookUp - .5f * hookRight, hookShot.direction));
+                hookVertexList.Add(new Vertex(hookShot.position, hookShot.normal, -playerHalfHeight * hookUp + .5f * hookRight, hookShot.direction));
+                foreach (Vertex v in hookVertexList)
+                    v.Update(currentRoom, 1);
+
+
+                currentRoom.AddTextureToTriangleList(hookVertexList, Color.White, .5f, hookTriangleList, Ability.texCoordList[7], true);
+
+                VertexPositionColorNormalTexture[] hookArray = hookTriangleList.ToArray();
+
+                playerEffect.Texture = Ability.ability_textures;
+                playerEffect.CurrentTechnique.Passes[0].Apply();
+
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    hookArray, 0, hookArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
 
             if (primaryAbility.isBoots || secondaryAbility.isBoots)
             {

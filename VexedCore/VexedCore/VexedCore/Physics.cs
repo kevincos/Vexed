@@ -242,6 +242,46 @@ namespace VexedCore
             return result;    
         }
 
+        public static bool PhaseTest()
+        {
+            bool phaseOK = true;
+            float throughDistance = Math.Abs(Vector3.Dot(Engine.player.center.normal, Engine.player.currentRoom.size));
+            Vector3 originalPosition = Engine.player.center.position;
+            Engine.player.center.position = Engine.player.center.position - throughDistance * Engine.player.center.normal;
+            Engine.player.center.normal = -Engine.player.center.normal;
+            
+            Engine.player.center.Update(Engine.player.currentRoom, 0);
+            refresh = true;
+            Physics.BlockUnfold(Engine.player.currentRoom, Engine.player.center.normal, Engine.player.center.direction);
+
+            List<Vector3> playerVertexList = new List<Vector3>();
+            Vector3 up = Engine.player.center.direction;
+            Vector3 right = Vector3.Cross(up, Engine.player.center.normal);
+            playerVertexList = Engine.player.GetCollisionRect();
+
+            foreach (Block baseBlock in Engine.player.currentRoom.blocks)
+            {
+                foreach (Block b in baseBlock.unfoldedBlocks)
+                {
+                    if (Engine.player.CollisionFirstPass(b))
+                        continue;
+
+                    List<Vector3> blockVertexList = b.GetCollisionRect();
+                    Vector3 projection = Collide(playerVertexList, blockVertexList, Engine.player.center.normal);
+                    // If a collision is found, save the necessary data and continue.                        
+                    if (projection.Length() > .3f)
+                    {
+                        phaseOK = false;
+                    }
+                }
+            }
+            Engine.player.center.normal = -Engine.player.center.normal;
+            Engine.player.center.position = originalPosition;
+            Engine.player.center.Update(Engine.player.currentRoom, 0);
+            refresh = true;
+            return phaseOK;
+        }
+
         /* Test for collision between player and blocks, and adjust player's position and velocity accordingly.
          * There's some tricky order of operations here that is explained inline*/
         public static void CollisionCheck(Room r, Player p, GameTime gameTime)
@@ -626,6 +666,23 @@ namespace VexedCore
                         
                 }
             }
+            foreach (Doodad d in r.doodads)
+            {
+                if (d.freeMotion)
+                {
+                    foreach (Doodad b in r.doodads)
+                    {
+                        if ((d.position.position - b.position.position).Length() < b.triggerDistance)
+                        {
+                            if (b.type == VexedLib.DoodadType.WallSwitch)
+                            {
+                                b.Activate();
+                            }
+                        }
+                    }
+                }
+            }
+
             #endregion
 
             #region monsters

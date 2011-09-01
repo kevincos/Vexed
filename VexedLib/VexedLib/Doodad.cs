@@ -42,6 +42,7 @@ namespace VexedLib
         TunnelTop = 31,
         LeftTunnelDoor = 32,
         RightTunnelDoor = 33,
+        HookTarget = 34
     }
 
     public enum AbilityType
@@ -69,13 +70,13 @@ namespace VexedLib
         Passive = 28,
         PermanentBoots = 5,
         PermanentWallJump = 6,
-        PermanentShield = 7,
+        SpinHook = 7,
         PermanentYellowKey = 14,
         PermanentBlueKey = 15,
         PermanentRedKey = 20,
-        DualWield = 21,
+        Phase = 21,
         ImprovedJump = 22,
-        Ultima = 23
+        Ultima = 23,        
     }
 
     public class Doodad

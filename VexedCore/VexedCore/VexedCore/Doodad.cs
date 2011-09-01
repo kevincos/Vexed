@@ -292,6 +292,8 @@ namespace VexedCore
                     return Color.Gray;
                 if (type == VexedLib.DoodadType.PowerStation)
                     return Color.Yellow;
+                if (type == VexedLib.DoodadType.HookTarget)
+                    return new Color(100, 100, 100);
                 if (type == VexedLib.DoodadType.JumpPad)
                 {
                     if (powered == false)
@@ -342,6 +344,8 @@ namespace VexedCore
                     return Color.DarkGray;
                 if (type == VexedLib.DoodadType.PowerStation)
                     return Color.DarkGray;
+                if (type == VexedLib.DoodadType.HookTarget)
+                    return new Color(100, 100, 100);
                 if (type == VexedLib.DoodadType.JumpPad)
                 {
                     if (powered == false)
@@ -380,7 +384,7 @@ namespace VexedCore
         {
             get
             {
-                if (type == VexedLib.DoodadType.NPC_OldMan)
+                if (type == VexedLib.DoodadType.NPC_OldMan || type == VexedLib.DoodadType.HookTarget)
                     return false;
                 if (type == VexedLib.DoodadType.RightTunnelDoor || type == VexedLib.DoodadType.LeftTunnelDoor || type == VexedLib.DoodadType.RightDoor || type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.StationIcon || type == VexedLib.DoodadType.TunnelTop || type == VexedLib.DoodadType.TunnelSide)
                     return false;
@@ -636,7 +640,7 @@ namespace VexedCore
                     return .1f;
                 if (type == VexedLib.DoodadType.WallSwitch)
                     return .25f;
-                if (type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.PowerOrb || type == VexedLib.DoodadType.WarpStation || type == VexedLib.DoodadType.JumpPad || type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.UpgradeStation)
+                if (type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.PowerOrb || type == VexedLib.DoodadType.HookTarget || type == VexedLib.DoodadType.WarpStation || type == VexedLib.DoodadType.JumpPad || type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.UpgradeStation)
                     return .1f;
                 return .5f;
             }
@@ -827,6 +831,11 @@ namespace VexedCore
                         currentRoom.AddBlockToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[35], decalList, true);
                     }
+                }
+                if (type == VexedLib.DoodadType.HookTarget)
+                {
+                    currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                    currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth, Ability.texCoordList[7], decalList, true);                
                 }
 
                 if (type == VexedLib.DoodadType.StationIcon)
