@@ -70,6 +70,8 @@ namespace VexedCore
         public static int decalVertexArrayCount = 0;
         public static VertexPositionColorNormalTexture[] spriteVertexArray;
         public static int spriteVertexArrayCount = 0;
+        public static VertexPositionColorNormalTexture[] beamVertexArray;
+        public static int beamVertexArrayCount = 0;
         public static VertexPositionColorNormalTexture[] staticBlockVertexArray;
         public static int staticBlockVertexArrayCount = 0;
         public static VertexPositionColorNormalTexture[] dynamicBlockVertexArray;
@@ -247,6 +249,15 @@ namespace VexedCore
                         spriteVertexArray, 0, spriteVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
+                playerTextureEffect.Texture = Doodad.beam_textures;
+                playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+
+                if (beamVertexArrayCount > 0)
+                {
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        beamVertexArray, 0, beamVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+
 
                 
                 if (detailTextures)
@@ -394,6 +405,9 @@ namespace VexedCore
             if (Engine.spriteVertexArray == null)
                 Engine.spriteVertexArray = new VertexPositionColorNormalTexture[30000];
             spriteVertexArrayCount = 0;
+            if (Engine.beamVertexArray == null)
+                Engine.beamVertexArray = new VertexPositionColorNormalTexture[30000];
+            beamVertexArrayCount = 0;
             if (Engine.translucentBlockVertexArray == null)
             {
                 Engine.translucentBlockVertexArray = new VertexPositionColorNormalTexture[1000];

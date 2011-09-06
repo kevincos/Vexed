@@ -13,7 +13,14 @@ using System.Xml.Serialization;
 
 namespace VexedCore
 {
-    
+    public enum RoomStyle
+    {
+        Electric,
+        Flame,
+        Blue,
+        Blade
+    }
+   
     public class Doodad
     {
         public Vertex unfoldedPosition;
@@ -35,7 +42,8 @@ namespace VexedCore
         [XmlIgnore]public Behavior currentBehavior = null;
         public String currentBehaviorId;
         [XmlIgnore]public Room currentRoom;
-        
+
+        public RoomStyle style = RoomStyle.Electric;
         public int orbsRemaining = 10;
 
         public int currentTime = 0;
@@ -50,7 +58,10 @@ namespace VexedCore
         public string targetBlockId;
         public string targetEdgeId;
         public string targetRoomId;
-        
+
+        public int animationFrame = 0;
+        public int animationTime = 0;
+
         public int cooldown = 0;
         public int activationCost = 0;
 
@@ -62,9 +73,39 @@ namespace VexedCore
         public float stateTransitionVelocity = .005f;
         public int stateTransitionDir = 0;
 
+        public static Texture2D beam_textures;
+        public static List<List<Vector2>> texCoordList;
+
+        public static int texGridCount = 8;
+
+        public static List<Vector2> LoadTexCoords(int x, int y)
+        {
+            float texWidth = 1f / texGridCount;
+            List<Vector2> texCoords = new List<Vector2>();
+            texCoords.Add(new Vector2((x + 1) * texWidth, y*2 * texWidth));
+            texCoords.Add(new Vector2(x * texWidth, y*2 * texWidth));
+            texCoords.Add(new Vector2(x * texWidth, (y*2 + 2) * texWidth));
+            texCoords.Add(new Vector2((x + 1) * texWidth, (y*2 + 2) * texWidth));
+
+            return texCoords;
+        }
+        public static void InitTexCoords()
+        {
+            texCoordList = new List<List<Vector2>>();
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 8; x++)
+                {
+                    texCoordList.Add(LoadTexCoords(x, y));
+                }
+            }
+        }
+
+
         public Doodad(Doodad d)
         {
             srcDoodad = this;
+            style = d.style;
             //unfoldedPosition = new Vertex(d.unfoldedPosition);
             position = new Vertex(d.position);
             spawnPosition = new Vertex(d.spawnPosition);
@@ -380,10 +421,26 @@ namespace VexedCore
             }
         }
 
+
+        public int styleSpriteIndex
+        {
+            get
+            {
+                if (type == VexedLib.DoodadType.Beam && style == RoomStyle.Electric)
+                    return 0;
+                if (type == VexedLib.DoodadType.Beam && style == RoomStyle.Flame)
+                    return 8;
+                
+                return 0;
+            }
+        }
+
         public bool hasCollisionRect
         {
             get
             {
+                if (type == VexedLib.DoodadType.Beam)
+                    return false;
                 if (type == VexedLib.DoodadType.NPC_OldMan || type == VexedLib.DoodadType.HookTarget)
                     return false;
                 if (type == VexedLib.DoodadType.RightTunnelDoor || type == VexedLib.DoodadType.LeftTunnelDoor || type == VexedLib.DoodadType.RightDoor || type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.StationIcon || type == VexedLib.DoodadType.TunnelTop || type == VexedLib.DoodadType.TunnelSide)
@@ -590,8 +647,10 @@ namespace VexedCore
                     return 1.5f;
                 if (type == VexedLib.DoodadType.BridgeCover)
                     return 1.5f;
-                if (type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam || type == VexedLib.DoodadType.PowerOrb)
+                if (type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.PowerOrb)
                     return .1f;
+                if (type == VexedLib.DoodadType.Beam)
+                    return .3f;
                 if (type == VexedLib.DoodadType.WallSwitch)
                     return .25f;
                 return .5f;
@@ -642,6 +701,8 @@ namespace VexedCore
                     return .25f;
                 if (type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.PowerOrb || type == VexedLib.DoodadType.HookTarget || type == VexedLib.DoodadType.WarpStation || type == VexedLib.DoodadType.JumpPad || type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.UpgradeStation)
                     return .1f;
+                if (type == VexedLib.DoodadType.Beam)
+                    return .25f;
                 return .5f;
             }
         }
@@ -744,6 +805,7 @@ namespace VexedCore
         public List<VertexPositionColorNormalTexture> baseTriangleList;
         public List<VertexPositionColorNormalTexture> decalList;
         public List<VertexPositionColorNormalTexture> spriteList;
+        public List<VertexPositionColorNormalTexture> beamList;
 
         public void UpdateVertexData(Room currentRoom)
         {
@@ -753,6 +815,7 @@ namespace VexedCore
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
                 decalList = new List<VertexPositionColorNormalTexture>();
                 spriteList = new List<VertexPositionColorNormalTexture>();
+                beamList = new List<VertexPositionColorNormalTexture>();
 
                 List<Vertex> vList = new List<Vertex>();
                 vList.Add(new Vertex(position, up + right));
@@ -801,7 +864,7 @@ namespace VexedCore
                     float roomSize = .5f*Math.Abs(Vector3.Dot(currentRoom.size, position.normal));
                     currentRoom.AddBlockToTriangleList(vList, activeColor, depth, roomSize, Room.plateTexCoords, baseTriangleList);
                 }
-                else if (type != VexedLib.DoodadType.NPC_OldMan)
+                else if (type != VexedLib.DoodadType.NPC_OldMan && type != VexedLib.DoodadType.Beam)
                 {
                     if (active)
                         currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
@@ -856,6 +919,10 @@ namespace VexedCore
                 {
                     currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[36], spriteList, true);
                 }
+                if (type == VexedLib.DoodadType.Beam)
+                {
+                    currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth, Doodad.texCoordList[styleSpriteIndex+animationFrame], beamList, true);
+                }
             }
         }
 
@@ -879,11 +946,24 @@ namespace VexedCore
                     Engine.spriteVertexArray[Engine.spriteVertexArrayCount + i] = spriteList[i];
                 }
                 Engine.spriteVertexArrayCount += spriteList.Count;
+                for (int i = 0; i < beamList.Count; i++)
+                {
+                    Engine.beamVertexArray[Engine.beamVertexArrayCount + i] = beamList[i];
+                }
+                Engine.beamVertexArrayCount += beamList.Count;
             }
         }
 
         public void Update(GameTime gameTime)
         {
+            animationTime += gameTime.ElapsedGameTime.Milliseconds;
+            if (animationTime > 100)
+            {
+                refreshVertexData = true;
+                animationFrame++;
+                animationTime = 0;
+            }
+            animationFrame %= 2;
             if (type == VexedLib.DoodadType.PowerOrb && tracking == true && active == true)
             {
                 Vector3 dir = Engine.player.center.position - position.position;
@@ -1227,3 +1307,4 @@ namespace VexedCore
         }
     }
 }
+

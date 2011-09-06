@@ -423,6 +423,21 @@ namespace VexedCore
                     }
                 }
             }
+            foreach (Doodad d in r.doodads)
+            {
+                if (d.type != VexedLib.DoodadType.Beam)
+                    continue;
+                d.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+                if (p.CollisionFirstPass(d) == false)
+                {
+                    List<Vector3> doodadVertexList = d.GetCollisionRect();
+                    Vector3 projection = Collide(pVertexList, doodadVertexList, Engine.player.center.normal);
+                    if (projection != Vector3.Zero)
+                    {
+                        p.Damage(projection);
+                    }
+                }
+            }
 
             // Now that player position is stabilized, use the special rects to detect if it is grounded
             // or prepped for a wall jump.

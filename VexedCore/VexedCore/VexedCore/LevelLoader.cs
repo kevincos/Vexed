@@ -145,6 +145,14 @@ namespace VexedCore
                                 newDoodad = new Doodad(xmlDoodad, xmlFace.normal);
                             }
 
+                            if (newDoodad != null && newDoodad.type == VexedLib.DoodadType.Beam)
+                            {
+                                if (xmlDoodad.behaviors[0].secondaryValue == 1)
+                                    newDoodad.style = RoomStyle.Flame;
+                                else
+                                    newDoodad.style = RoomStyle.Electric;
+                            }
+
                             if (xmlDoodad.type == VexedLib.DoodadType.WarpStation)
                                 newRoom.hasWarp = true;
                             

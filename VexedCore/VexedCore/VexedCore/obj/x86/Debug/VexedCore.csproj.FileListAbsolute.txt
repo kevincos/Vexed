@@ -104,3 +104,4 @@ E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\LevelData\blar
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dialogbox.xnb
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\LevelData\blarg
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dialogbox.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\beams.xnb

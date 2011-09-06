@@ -489,7 +489,7 @@ namespace VexedCore
             idleTime = 0;
             if (state == State.Death)
                 return;
-            center.velocity += maxHorizSpeed * Vector3.Normalize(projection);
+            center.velocity += 2*maxHorizSpeed * Vector3.Normalize(projection);
             if (primaryAbility.type == AbilityType.Shield && primaryAbility.ammo != 0)
             {
                 primaryAbility.DepleteAmmo(800);
