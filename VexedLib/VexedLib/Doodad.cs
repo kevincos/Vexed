@@ -42,7 +42,10 @@ namespace VexedLib
         TunnelTop = 31,
         LeftTunnelDoor = 32,
         RightTunnelDoor = 33,
-        HookTarget = 34
+        HookTarget = 34,
+        LaserSwitch = 35,
+        PlugSlot = 36,
+        PowerPlug = 37
     }
 
     public enum AbilityType

@@ -349,7 +349,7 @@ namespace VexedCore
 
                         d.ActivateDoodad(r, projection.Length() > 0f);                        
                     }
-                    if (d.hasCollisionRect)
+                    if (d.hasCollisionRect && d.type != VexedLib.DoodadType.PowerPlug)
                     {
                         List<Vector3> doodadVertexList = d.GetCollisionRect();
                         Vector3 projection = Collide(playerVertexList, doodadVertexList, p.center.normal);
@@ -425,18 +425,19 @@ namespace VexedCore
             }
             foreach (Doodad d in r.doodads)
             {
-                if (d.type != VexedLib.DoodadType.Beam)
-                    continue;
-                d.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
-                if (p.CollisionFirstPass(d) == false)
+                if (d.type == VexedLib.DoodadType.Beam)
                 {
-                    List<Vector3> doodadVertexList = d.GetCollisionRect();
-                    Vector3 projection = Collide(pVertexList, doodadVertexList, Engine.player.center.normal);
-                    if (projection != Vector3.Zero)
+                    d.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+                    if (p.CollisionFirstPass(d) == false)
                     {
-                        p.Damage(projection);
+                        List<Vector3> doodadVertexList = d.GetCollisionRect();
+                        Vector3 projection = Collide(pVertexList, doodadVertexList, Engine.player.center.normal);
+                        if (projection != Vector3.Zero)
+                        {
+                            p.Damage(projection);
+                        }
                     }
-                }
+                }                
             }
 
             // Now that player position is stabilized, use the special rects to detect if it is grounded
@@ -516,7 +517,7 @@ namespace VexedCore
             
             foreach (Doodad b in r.doodads)
             {
-                if (b.hasCollisionRect)
+                if (b.hasCollisionRect && b.type != VexedLib.DoodadType.PowerPlug)
                 {
                     b.UpdateBoundingBox(p.center.direction, p.right);
                     if (p.boundingBoxBottom > b.boundingBoxTop +2f ||
@@ -693,6 +694,12 @@ namespace VexedCore
                             {
                                 b.Activate();
                             }
+                            if (b.type == VexedLib.DoodadType.PlugSlot && d.type == VexedLib.DoodadType.PowerPlug)
+                            {
+                                d.active = true;
+                                d.position.position = b.position.position;
+                                d.SetTargetBehavior();
+                            }
                         }
                     }
                 }
@@ -858,7 +865,7 @@ namespace VexedCore
                 {
                     b.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
 
-                    if (b.hasCollisionRect)
+                    if (b.hasCollisionRect || (b.type == VexedLib.DoodadType.LaserSwitch && s.type == ProjectileType.Laser && b.active == false))
                     {
                         if (s.CollisionFirstPass(b))
                             continue;
@@ -872,6 +879,11 @@ namespace VexedCore
                                 s.exploding = true;
                             s.position.velocity = Vector3.Zero;
 
+                            if (b.type == VexedLib.DoodadType.LaserSwitch && s.type == ProjectileType.Laser)
+                            {
+                                b.ActivateDoodad(r, true);
+                                b.SetTargetBehavior();
+                            }
                             if ((s.type == ProjectileType.Bomb || s.type == ProjectileType.Missile) && s.exploding == true && b.type == VexedLib.DoodadType.Brick)
                             {
                                 b.ActivateDoodad(r, true);
