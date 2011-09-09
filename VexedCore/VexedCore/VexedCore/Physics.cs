@@ -334,6 +334,7 @@ namespace VexedCore
                         {
                             projectionList.Add(projection);
                             relVelList.Add(b.GetVelocity());
+                            EdgeProperties eTemp = b.GetProperties(projection);
                             edgePropertiesList.Add(b.GetProperties(projection));
                         }
                     }
@@ -710,8 +711,8 @@ namespace VexedCore
             #region monsters
             foreach (Monster m in r.monsters)
             {
-                //if (m.dead == true)
-                    //continue;
+                if (m.dead == true)
+                    continue;
                 frictionAdjustment = Vector3.Zero;
                 for (int attempt = 0; attempt < 2; attempt++)
                 {
@@ -802,9 +803,11 @@ namespace VexedCore
 
                 List<Vector3> monsterGroundBox = m.GetGroundCollisionRect();
                 List<Vector3> monsterForwardGroundBox = m.GetForwardGroundCollisionRect();
+                List<Vector3> monsterForwardBox = m.GetForwardCollisionRect();
 
                 m.groundProjection = Vector3.Zero;
                 m.forwardGroundProjection = Vector3.Zero;
+                m.forwardProjection = Vector3.Zero;
                 foreach (Block baseBlock in r.blocks)
                 {
                     foreach (Block b in baseBlock.unfoldedBlocks)
@@ -819,11 +822,14 @@ namespace VexedCore
 
                         Vector3 groundProjection = Collide(monsterGroundBox, blockVertexList, p.center.normal);
                         Vector3 forwardGroundProjection = Collide(monsterForwardGroundBox, blockVertexList, p.center.normal);
+                        Vector3 forwardProjection = Collide(monsterForwardBox, blockVertexList, p.center.normal);
                         //if(m.position.velocity == Vector3.Zero)
                         //forwardGroundProjection = groundProjection;
 
                         if (forwardGroundProjection != Vector3.Zero)
                             m.forwardGroundProjection = Monster.AdjustVector(forwardGroundProjection, m.position.normal, p.center.normal, p.center.direction, true);
+                        if (forwardProjection != Vector3.Zero)
+                            m.forwardProjection = Monster.AdjustVector(forwardProjection, m.position.normal, p.center.normal, p.center.direction, true);                        
                         if (groundProjection != Vector3.Zero)
                             m.groundProjection = Monster.AdjustVector(groundProjection, m.position.normal, p.center.normal, p.center.direction, true);
                     }

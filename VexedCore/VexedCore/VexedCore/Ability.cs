@@ -109,7 +109,7 @@ namespace VexedCore
                     return 0;
                 if (type == AbilityType.SpinHook)
                     return 100;
-                return 400;
+                return 200;
             }
         }
 

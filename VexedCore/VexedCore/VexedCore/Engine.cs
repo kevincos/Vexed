@@ -425,7 +425,7 @@ namespace VexedCore
                 staticDoodadsInitialized = false;
 
                 if (Engine.staticBlockVertexArray == null)
-                    Engine.staticBlockVertexArray = new VertexPositionColorNormalTexture[80000];
+                    Engine.staticBlockVertexArray = new VertexPositionColorNormalTexture[100000];
                 staticBlockVertexArrayCount = 0;
             }
 

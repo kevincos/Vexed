@@ -20,7 +20,43 @@ namespace VexedLib
         None=0,
         Top=1,
         Shield=2,
-        Full=3
+        Full=3,
+        TopSuper=4,
+        ShieldSuper=5,
+        FullSuper=6
+    }
+
+    public enum TrackType
+    {
+        Slow=0,
+        Normal=1,
+        Fast=2,
+        Up=3,
+        UpLeft=4,
+        Left=5,
+        UpRight=6,
+        Right=7
+    }
+
+    public enum MonsterSpeed
+    {
+        Slow=0,
+        Medium=1,
+        Fast=2
+    }
+
+    public enum MonsterSize
+    {
+        Normal = 0,
+        Large = 1,
+        Huge = 2
+    }
+
+    public enum MonsterHealth
+    {
+        Weak = 0,
+        Normal = 1,
+        Tough = 2
     }
 
     public enum GunType
@@ -54,7 +90,11 @@ namespace VexedLib
         public ArmorType armor;
         public GunType weapon;
         public AIType behavior;
-        
+        public MonsterHealth health;
+        public MonsterSize size;
+        public MonsterSpeed speed;
+        public TrackType trackType;
+
         public Monster()
         {
             name = "Monster";

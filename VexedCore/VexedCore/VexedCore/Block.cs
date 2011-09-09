@@ -187,9 +187,9 @@ namespace VexedCore
             {
                 Vector3 edgeNormal = Vector3.Cross(e.start.normal, e.start.position - e.end.position);
                 edgeNormal.Normalize();
-                Vector3 projectionNormal = projection / projection.Length();
+                Vector3 projectionNormal = Vector3.Normalize(projection);
                 float result = Vector3.Dot(edgeNormal, projectionNormal);
-                if (result == 1)
+                if (result > .99f)
                 {
                     properties = e.properties;
                 }

@@ -142,8 +142,8 @@ namespace VexedCore
         
         public float wallJumpSpeed = .01f;
         public float maxHorizSpeed = .01f;
-        public float maxVertSpeed = .02f;
-        public float gravityAcceleration = .001f;
+        public float maxVertSpeed = .018f;
+        public float gravityAcceleration = .0009f;
         public float boostAcceleration = .002f;
         private bool _grounded = false;
         public int groundTolerance = 100;
@@ -165,6 +165,8 @@ namespace VexedCore
         public float boundingBoxLeft;
         public float boundingBoxRight;
 
+        public static float cameraUpTilt = .2f;
+        public static float cameraRoundingThreshold = 5f;
 
         public Player()
         {
@@ -286,15 +288,15 @@ namespace VexedCore
             {
                 if (state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
                 {
-                    return currentRoom.RaisedPosition(tunnelDummy.position + cameraOffset, baseCameraDistance, 6f);
+                    return currentRoom.RaisedPosition(tunnelDummy.position + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
                 }
                 if (state == State.Normal || state == State.Spin || state == State.Dialog)
                 {
-                    return currentRoom.RaisedPosition(center.position + cameraOffset, baseCameraDistance, 6f);
+                    return currentRoom.RaisedPosition(center.position + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
                 }
                 if (state == State.Death)
                 {
-                    return currentRoom.RaisedPosition(lastLivingPosition + cameraOffset, baseCameraDistance, 6f);
+                    return currentRoom.RaisedPosition(lastLivingPosition + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
                 }
                 if (state == State.BridgeJump)
                 {
@@ -318,15 +320,15 @@ namespace VexedCore
             {
                 if (state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
                 {
-                    return currentRoom.RaisedPosition(tunnelDummy.position, baseCameraDistance, 6f);
+                    return currentRoom.RaisedPosition(tunnelDummy.position, baseCameraDistance, cameraRoundingThreshold);
                 }
                 if (state == State.Normal || state == State.Spin || state == State.Dialog)
                 {
-                    return currentRoom.RaisedPosition(center.position, baseCameraDistance, 6f);
+                    return currentRoom.RaisedPosition(center.position, baseCameraDistance, cameraRoundingThreshold);
                 }
                 else if (state == State.Death)
                 {
-                    return currentRoom.RaisedPosition(lastLivingPosition, baseCameraDistance, 6f);
+                    return currentRoom.RaisedPosition(lastLivingPosition, baseCameraDistance, cameraRoundingThreshold);
                 }
                 if (state == State.BridgeJump)
                 {
@@ -352,6 +354,14 @@ namespace VexedCore
                 cameraOut.Normalize();
                 Vector3 cameraRight = Vector3.Cross(cameraUp, cameraOut);
                 return 5 * (cameraAngle.Y * cameraUp + cameraAngle.X * cameraRight);
+            }
+        }
+
+        public Vector3 simpleCameraOffset
+        {
+            get
+            {
+                return 5 * (cameraUpTilt* cameraUp);
             }
         }
 
@@ -694,6 +704,7 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            center.direction.Normalize();
             if (state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
             {
                 if (launchTime > launchMaxTime / 4 && launchTime < 3 * launchMaxTime / 4)
@@ -968,7 +979,7 @@ namespace VexedCore
                 else
                     center.velocity += boostAcceleration * right * faceDirection;
 
-                targetCameraAngle = rightStick;
+                targetCameraAngle = rightStick + new Vector2(0,cameraUpTilt);
 
                 EnforceVelocityLimits();
                 jetPackThrust = false;
@@ -1063,9 +1074,9 @@ namespace VexedCore
                                     jumpRoom = d.targetRoom;
                                     jumpSource = center.position;
                                     jumpDestination = d.targetDoodad.position.position - 2f * d.targetDoodad.upUnit;
-                                    jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
-                                    jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
-
+                                    jumpCameraSource = currentRoom.RaisedPosition(jumpSource + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
+                                    jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination + simpleCameraOffset, baseCameraDistance, cameraRoundingThreshold);
+                                    
                                     jumpNormal = center.normal;
                                     launchTime = 0;
                                     state = State.BridgeJump;
@@ -1104,8 +1115,10 @@ namespace VexedCore
                                 float roomSize = Math.Abs(Vector3.Dot(jumpRoom.size / 2, center.normal));
                                 jumpSource = center.position;
                                 jumpDestination = center.position + Vector3.Dot(jumpRoom.center - center.position - roomSize * center.normal, center.normal) * center.normal;
-                                jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
-                                jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
+                                // Base Camera
+                                jumpCameraSource = currentRoom.RaisedPosition(jumpSource + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
+                                jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination + simpleCameraOffset, baseCameraDistance, cameraRoundingThreshold);
+                                    
                                 state = State.Jump;
                                 center.velocity = Vector3.Zero;
                                 launchTime = 0;
@@ -1192,9 +1205,12 @@ namespace VexedCore
                             jumpRoom.Reset();
                             jumpSource = center.position;
                             jumpDestination = d.targetDoodad.position.position - 1f * d.targetDoodad.upUnit;
-                            jumpCameraSource = currentRoom.RaisedPosition(jumpSource, baseCameraDistance, 6f);
-                            jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination, baseCameraDistance, 6f);
 
+                            // Base Camera
+                            jumpCameraSource = currentRoom.RaisedPosition(jumpSource + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
+                            jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination + simpleCameraOffset, baseCameraDistance, cameraRoundingThreshold);
+                                    
+                            
                             jumpNormal = center.normal;
                             launchTime = 0;
                             state = State.BridgeJump;

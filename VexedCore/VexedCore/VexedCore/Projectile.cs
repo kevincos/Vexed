@@ -131,7 +131,7 @@ namespace VexedCore
                 else if (type == ProjectileType.Plasma)
                     return 1500;
                 else if (type == ProjectileType.Missile)
-                    return 6000;
+                    return 20000;
                 else if (type == ProjectileType.Laser)
                     return 500;
                 else if (type == ProjectileType.Bomb)
@@ -146,7 +146,7 @@ namespace VexedCore
             get
             {
                 if (type == ProjectileType.Plasma)
-                    return .015f;
+                    return .005f;
                 else if (type == ProjectileType.Player)
                     return .025f;
                 else if (type == ProjectileType.Missile)
@@ -404,11 +404,12 @@ namespace VexedCore
             if (srcMonster == null)
                 playerProjectile = true;
             this.type = type;
-            this.position = new Vertex(position, normal, Vector3.Zero, direction);
+            this.position = new Vertex(position - Engine.player.platformVelocity, normal, Vector3.Zero, direction);
             Vector3 extraVelocity = direction;
             extraVelocity.Normalize();
             this.position.velocity += extraVelocity * this.velocity;
             this.position.velocity += Vector3.Dot(velocity, direction) * direction;
+            this.position.velocity += Engine.player.platformVelocity;
             
         }
 

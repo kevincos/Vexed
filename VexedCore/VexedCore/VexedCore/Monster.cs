@@ -46,6 +46,7 @@ namespace VexedCore
         public VexedLib.GunType gunType;
         public Vector3 groundProjection;
         public Vector3 forwardGroundProjection;
+        public Vector3 forwardProjection;
         public bool jumping = false;
         public int jumpCooldown = 0;
         public int jumpTime = 0;
@@ -54,6 +55,8 @@ namespace VexedCore
         public int spinTime = 0;
         public bool rightFacing = false;
         public bool rightMoving = false;
+        public int currentDirection = 1;
+            
         [XmlIgnore]public Monster srcMonster;
         
         public int directionChangeCooldown = 0;        
@@ -90,11 +93,13 @@ namespace VexedCore
             wayPointDirection = m.wayPointDirection;
             waypointLoop = m.waypointLoop;
             aiType = m.aiType;
+            currentDirection = m.currentDirection;
             moveType = m.moveType;
             armorType = m.armorType;
             gunType = m.gunType;
             groundProjection = m.groundProjection;
             forwardGroundProjection = m.forwardGroundProjection;
+            forwardProjection = m.forwardProjection;
             jumping = m.jumping;
             jumpCooldown = m.jumpCooldown;
             spinUp = m.spinUp;
@@ -176,7 +181,7 @@ namespace VexedCore
             get
             {
                 if(gunType == VexedLib.GunType.Blaster || gunType == VexedLib.GunType.Spread)
-                    return 1000;
+                    return 2000;
                 if (gunType == VexedLib.GunType.Missile)
                     return 4000;
                 if (gunType == VexedLib.GunType.Beam)
@@ -370,13 +375,33 @@ namespace VexedCore
             }
         }
 
+        public float trackRange
+        {
+            get
+            {
+                return 20f;
+            }
+        }
+
+        public float weaponRange
+        {
+            get
+            {
+                if (gunType == VexedLib.GunType.Missile)
+                    return 20f;
+                if (gunType == VexedLib.GunType.Beam)
+                    return 20f;
+                return 15f;
+            }
+        }
+
         public void ApplyDamage(bool armor, ProjectileType gunType)
         {
             if (armor == false)
             {
                 baseHP--;
             }
-            else if (gunType == ProjectileType.Laser)
+            else if (gunType == ProjectileType.Missile || gunType == ProjectileType.Bomb)
             {
                 armorHP--;
                 if (armorHP == 0)
@@ -426,7 +451,8 @@ namespace VexedCore
             directionChangeCooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (directionChangeCooldown < 0)
                 directionChangeCooldown = 0;
-            fireCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            if((Engine.player.center.position - position.position).Length() < weaponRange)
+                fireCooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (fireCooldown < 0)
                 fireCooldown = 0;
 
@@ -451,21 +477,26 @@ namespace VexedCore
 
 
             position.Update(Engine.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds);
-            
+
             Vector3 direction = Vector3.Zero;
             if (aiType == VexedLib.AIType.Waypoint)
             {
                 Vector3 target = waypoints[currentWaypointIndex];
                 direction = target - position.position;
-                if (direction.Length() < .5f)
+                if (direction.Length() < 1f)
                 {
                     currentWaypointIndex+=wayPointDirection;
-                    if (waypointLoop)
+                    if (!waypointLoop)
                     {
-                        if (currentWaypointIndex == waypoints.Count())
+                        if (currentWaypointIndex == waypoints.Count() && wayPointDirection > 0)
                         {
                             wayPointDirection = -wayPointDirection;
-                            currentWaypointIndex += 2 * wayPointDirection;
+                            currentWaypointIndex += 2*wayPointDirection;
+                        }
+                        else if (currentWaypointIndex == -1 && wayPointDirection < 0)
+                        {
+                            wayPointDirection = -wayPointDirection;
+                            currentWaypointIndex += 2*wayPointDirection;
                         }
                     }
                     else
@@ -482,25 +513,38 @@ namespace VexedCore
             }
             if (aiType == VexedLib.AIType.Hunter)
             {
-                Vector3 target = Engine.player.center.position;
-                direction = target - position.position;
-                if (position.normal == -Engine.player.center.normal)
-                {
-                    direction *= -1;
-                }
-                if (moveType != VexedLib.MovementType.Jump && direction.Length() < 3.5f)
-                {
-                    directionChangeCooldown = 300;
-                    direction *= -1;
-                }
                 
-                direction = direction - Vector3.Dot(direction, position.normal) * position.normal;
-                if (direction.Length() > 1)
-                    direction.Normalize();   
+                Vector3 target = Engine.player.center.position;
+                float distance = (target - position.position).Length();
+                if (distance < trackRange)
+                {
+                    direction = target - position.position;
+
+                    if (position.normal == -Engine.player.center.normal)
+                    {
+                        direction *= -1;
+                    }
+                    if (moveType != VexedLib.MovementType.Jump && direction.Length() < 3.5f)
+                    {
+                        directionChangeCooldown = 300;
+                        direction *= -1;
+                    }
+
+                    direction = direction - Vector3.Dot(direction, position.normal) * position.normal;
+                    if (direction.Length() > 1)
+                        direction.Normalize();
+                }
             }
             if (aiType == VexedLib.AIType.Wander)
             {
-                direction = -rightUnit;
+                direction = currentDirection * rightUnit;
+                if ((moveType == VexedLib.MovementType.Hover || groundProjection != Vector3.Zero) && (forwardProjection != Vector3.Zero || forwardGroundProjection == Vector3.Zero) && directionChangeCooldown == 0)
+                {
+                    directionChangeCooldown = 300;
+                    //position.velocity = Vector3.Zero;
+                    //rightFacing = !rightFacing;
+                    currentDirection = -currentDirection;
+                }
             }
 
             Vector3 aimTarget = Engine.player.center.position - position.position;
@@ -613,6 +657,8 @@ namespace VexedCore
                     position.velocity += acceleration * direction;
                     Vector3 groundDirection = groundProjection / groundProjection.Length();
                     position.velocity -= Vector3.Dot(groundDirection, position.velocity) * groundDirection;
+                    if (aiType == VexedLib.AIType.Stationary)
+                        position.velocity = Vector3.Zero;
                 }
                 else
                 {
@@ -802,6 +848,30 @@ namespace VexedCore
             doodadVertexList.Add(unfoldedPosition.position + unfolded_left / 4f + forward);
             doodadVertexList.Add(unfoldedPosition.position + 1.1f * unfolded_down + unfolded_left / 4f + forward);
             doodadVertexList.Add(unfoldedPosition.position + 1.1f * unfolded_down + unfolded_right / 4f + forward);
+
+            return doodadVertexList;
+        }
+
+        public List<Vector3> GetForwardCollisionRect()
+        {
+            List<Vector3> doodadVertexList = new List<Vector3>();
+            Vector3 forward = Vector3.Zero;
+
+
+            if (rightFacing == false)
+            {
+                forward = -.75f * unfolded_right;
+            }
+            else if (rightFacing == true)
+            {
+                forward = .75f * unfolded_right;
+            }
+            forward += Vector3.Dot(unfoldedPosition.velocity, forward) * forward;
+
+            doodadVertexList.Add(unfoldedPosition.position + .8f*halfHeight * unfolded_up + unfolded_right / 4f + forward);
+            doodadVertexList.Add(unfoldedPosition.position + .8f * halfHeight * unfolded_up + unfolded_left / 4f + forward);
+            doodadVertexList.Add(unfoldedPosition.position + .8f * halfHeight * unfolded_down + unfolded_left / 4f + forward);
+            doodadVertexList.Add(unfoldedPosition.position + .8f * halfHeight * unfolded_down + unfolded_right / 4f + forward);
 
             return doodadVertexList;
         }
