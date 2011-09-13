@@ -157,6 +157,10 @@ namespace WinFormsGraphicsDevice
             this.monsterFixedPath = new System.Windows.Forms.CheckBox();
             this.monsterMovementDropdown = new System.Windows.Forms.ComboBox();
             this.monsterArmorDropdown = new System.Windows.Forms.ComboBox();
+            this.monsterSpeedDropdown = new System.Windows.Forms.ComboBox();
+            this.monsterSizeDropdown = new System.Windows.Forms.ComboBox();
+            this.monsterTrackingDropdown = new System.Windows.Forms.ComboBox();
+            this.monsterHealthDropdown = new System.Windows.Forms.ComboBox();
             this.monsterWeaponDropdown = new System.Windows.Forms.ComboBox();
             this.monsterAIDropdown = new System.Windows.Forms.ComboBox();
             this.monsterWaypointID = new System.Windows.Forms.TextBox();
@@ -422,6 +426,10 @@ namespace WinFormsGraphicsDevice
             this.monsterPropertiesGroup.Visible = false;
             this.monsterPropertiesGroup.Controls.Add(this.monsterMovementDropdown);
             this.monsterPropertiesGroup.Controls.Add(this.monsterArmorDropdown);
+            this.monsterPropertiesGroup.Controls.Add(this.monsterHealthDropdown);
+            this.monsterPropertiesGroup.Controls.Add(this.monsterSizeDropdown);
+            this.monsterPropertiesGroup.Controls.Add(this.monsterSpeedDropdown);
+            this.monsterPropertiesGroup.Controls.Add(this.monsterTrackingDropdown);
             this.monsterPropertiesGroup.Controls.Add(this.monsterWeaponDropdown);
             this.monsterPropertiesGroup.Controls.Add(this.monsterAIDropdown);
             this.monsterPropertiesGroup.Controls.Add(this.monsterFixedPath);
@@ -441,12 +449,52 @@ namespace WinFormsGraphicsDevice
             this.monsterArmorDropdown.Location = new System.Drawing.Point(10, 35);
             this.monsterArmorDropdown.Size = new System.Drawing.Size(180, 20);
             this.monsterArmorDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 7; i++)
             {
                 this.monsterArmorDropdown.Items.Add((ArmorType)i);
             }
             this.monsterArmorDropdown.SelectedIndex = 0;
             this.monsterArmorDropdown.SelectedIndexChanged += new System.EventHandler(this.monster_change);
+
+            this.monsterHealthDropdown.Location = new System.Drawing.Point(10, 130);
+            this.monsterHealthDropdown.Size = new System.Drawing.Size(60, 20);
+            this.monsterHealthDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 3; i++)
+            {
+                this.monsterHealthDropdown.Items.Add((MonsterHealth)i);
+            }
+            this.monsterHealthDropdown.SelectedIndex = 0;
+            this.monsterHealthDropdown.SelectedIndexChanged += new System.EventHandler(this.monster_change);
+
+            this.monsterSizeDropdown.Location = new System.Drawing.Point(70, 130);
+            this.monsterSizeDropdown.Size = new System.Drawing.Size(60, 20);
+            this.monsterSizeDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 3; i++)
+            {
+                this.monsterSizeDropdown.Items.Add((MonsterSize)i);
+            }
+            this.monsterSizeDropdown.SelectedIndex = 0;
+            this.monsterSizeDropdown.SelectedIndexChanged += new System.EventHandler(this.monster_change);
+
+            this.monsterSpeedDropdown.Location = new System.Drawing.Point(130, 130);
+            this.monsterSpeedDropdown.Size = new System.Drawing.Size(60, 20);
+            this.monsterSpeedDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 3; i++)
+            {
+                this.monsterSpeedDropdown.Items.Add((MonsterSpeed)i);
+            }
+            this.monsterSpeedDropdown.SelectedIndex = 0;
+            this.monsterSpeedDropdown.SelectedIndexChanged += new System.EventHandler(this.monster_change);
+
+            this.monsterTrackingDropdown.Location = new System.Drawing.Point(190, 130);
+            this.monsterTrackingDropdown.Size = new System.Drawing.Size(100, 20);
+            this.monsterTrackingDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 8; i++)
+            {
+                this.monsterTrackingDropdown.Items.Add((TrackType)i);
+            }
+            this.monsterTrackingDropdown.SelectedIndex = 0;
+            this.monsterTrackingDropdown.SelectedIndexChanged += new System.EventHandler(this.monster_change);
 
             this.monsterWeaponDropdown.Location = new System.Drawing.Point(10, 60);
             this.monsterWeaponDropdown.Size = new System.Drawing.Size(180, 20);
@@ -1120,6 +1168,10 @@ namespace WinFormsGraphicsDevice
         private System.Windows.Forms.ComboBox monsterArmorDropdown;
         private System.Windows.Forms.ComboBox monsterWeaponDropdown;
         private System.Windows.Forms.ComboBox monsterAIDropdown;
+        private System.Windows.Forms.ComboBox monsterHealthDropdown;
+        private System.Windows.Forms.ComboBox monsterSpeedDropdown;
+        private System.Windows.Forms.ComboBox monsterSizeDropdown;
+        private System.Windows.Forms.ComboBox monsterTrackingDropdown;
         private System.Windows.Forms.CheckBox monsterFixedPath;
         private System.Windows.Forms.TextBox monsterWaypointID;
         private System.Windows.Forms.Label monsterWaypointIDLabel;

@@ -19,7 +19,8 @@ namespace VexedCore
         Laser,
         Missile,
         Player,
-        Bomb
+        Bomb,
+        Spikes
     }
 
     public class Projectile
@@ -380,7 +381,9 @@ namespace VexedCore
         {
             get
             {
-                return 0.28f;
+                if(playerProjectile==true)
+                    return 0.28f;
+                return -.06f;
             }
         }
 

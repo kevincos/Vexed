@@ -710,6 +710,22 @@ namespace WinFormsGraphicsDevice
                 {
                     selectedMonster.weapon = (GunType)this.monsterWeaponDropdown.SelectedIndex;
                 }
+                if (sender == this.monsterHealthDropdown)
+                {
+                    selectedMonster.health = (MonsterHealth)this.monsterHealthDropdown.SelectedIndex;
+                }
+                if (sender == this.monsterSpeedDropdown)
+                {
+                    selectedMonster.speed = (MonsterSpeed)this.monsterSpeedDropdown.SelectedIndex;
+                }
+                if (sender == this.monsterSizeDropdown)
+                {
+                    selectedMonster.size = (MonsterSize)this.monsterSizeDropdown.SelectedIndex;
+                }
+                if (sender == this.monsterTrackingDropdown)
+                {
+                    selectedMonster.trackType = (TrackType)this.monsterTrackingDropdown.SelectedIndex;
+                }
             }
             catch { }
         }

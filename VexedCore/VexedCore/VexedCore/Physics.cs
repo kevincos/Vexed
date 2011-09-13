@@ -31,7 +31,7 @@ namespace VexedCore
                 refresh = true;
             }
             Vector3 right = Vector3.Cross(up, normal);
-              foreach (Doodad d in r.doodads)
+            foreach (Doodad d in r.doodads)
             {
                 d.UpdateUnfoldedDoodad(r, normal, up);
                 d.UpdateBoundingBox(Engine.player.up, Engine.player.right);
@@ -216,8 +216,7 @@ namespace VexedCore
 
                 float projectionUpComponent = Vector3.Dot(projectionDirection, Engine.player.center.direction);
                 if (projectionUpComponent > 0)
-                {
-
+                {                    
                     float frictionVelocityComponent = Vector3.Dot(frictionDirection, velocity - relVel);
 
 
@@ -367,6 +366,7 @@ namespace VexedCore
 
                 // Compute the most powerful collision and resolve it.
                 CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, p.center.velocity, p.HasTraction());
+
                 if (result.properties != null && result.properties.type == VexedLib.EdgeType.Ice && Vector3.Dot(result.projection, p.center.direction) > 0)
                     p.sliding = true;
                 else
@@ -379,6 +379,10 @@ namespace VexedCore
 
                     if (result.properties.type == VexedLib.EdgeType.Spikes || (result.properties.type == VexedLib.EdgeType.Electric && result.properties.primaryValue > 0)
                         || (result.properties.type == VexedLib.EdgeType.Fire && result.properties.primaryValue > 0))
+                    {
+                        p.Damage(result.projection);
+                    }
+                    if (result.projection.Length() > p.playerHalfWidth)
                     {
                         p.Damage(result.projection);
                     }
@@ -416,12 +420,13 @@ namespace VexedCore
                 m.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
                 if (p.CollisionFirstPass(m) == false)
                 {
-                    List<Vector3> monsterVertexList = m.GetCollisionRect();
-                    Vector3 projection = Collide(pVertexList, monsterVertexList, Engine.player.center.normal);
-                    if (projection != Vector3.Zero)
+                    Vector3 distance = (p.center.position - m.unfoldedPosition.position);
+                    if (distance.Length() < (p.playerHalfHeight + m.halfHeight))
                     {
+                        Vector3 projection = Vector3.Normalize(distance) * ((p.playerHalfHeight + m.halfHeight) - distance.Length());
                         p.Damage(projection);
                     }
+
                 }
             }
             foreach (Doodad d in r.doodads)
@@ -675,6 +680,7 @@ namespace VexedCore
                             d.AdjustVertex(result.projection, result.velocityAdjustment + result.frictionAdjustment, p.center.normal, p.center.direction);
                             d.position.Update(p.currentRoom, 0);
                             d.unfoldedPosition.position += result.projection;
+                            d.unfoldedPosition.velocity += result.velocityAdjustment;
                             d.unfoldedPosition.velocity += result.frictionAdjustment;
                         }
                         else
@@ -716,6 +722,7 @@ namespace VexedCore
                 frictionAdjustment = Vector3.Zero;
                 for (int attempt = 0; attempt < 2; attempt++)
                 {
+
                     List<Vector3> projectionList = new List<Vector3>();
                     List<Vector3> relVelList = new List<Vector3>();
                     List<EdgeProperties> edgePropertiesList = new List<EdgeProperties>();
@@ -759,14 +766,30 @@ namespace VexedCore
                             }
                         }
                     }
-
-                    CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, m.position.velocity, false);
+                    
+                    CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, m.unfoldedPosition.velocity, false);
                     if (result.projection != Vector3.Zero)
                     {
                         m.AdjustVertex(result.projection, result.velocityAdjustment, p.center.normal, p.center.direction);
                         m.position.Update(p.currentRoom, 0);
                         m.unfoldedPosition.position += result.projection;
                         m.unfoldedPosition.velocity += result.velocityAdjustment;
+                        if (result.properties.type == VexedLib.EdgeType.Spikes)
+                        {
+                            m.impactVector = Monster.AdjustVector(result.projection, m.position.normal, Engine.player.center.normal, Engine.player.center.direction, true);
+                            m.lastHitType = ProjectileType.Spikes;
+                        }
+                        if (result.projection.Length() > m.halfWidth)
+                        {
+                            m.impactVector = Monster.AdjustVector(result.projection, m.position.normal, Engine.player.center.normal, Engine.player.center.direction, true);
+                            m.lastHitType = ProjectileType.Spikes;
+                        }
+
+                        if (Vector3.Dot(m.position.direction, Monster.AdjustVector(result.projection, m.position.normal, p.center.normal, p.center.direction, true)) <= 0)
+                        {
+                            m.AdjustVertex(Vector3.Zero, result.frictionAdjustment, p.center.normal, p.center.direction);                        
+                            m.unfoldedPosition.velocity += result.frictionAdjustment;
+                        }
                     }
                     else
                         break;
@@ -776,6 +799,29 @@ namespace VexedCore
                 List<Vector3> mVertexList = m.GetCollisionRect();
 
                 m.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+
+                foreach (Monster m2 in r.monsters)
+                {
+                    if (m == m2 || m2.dead == true)
+                        continue;
+                    m2.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+
+                    if (m.CollisionFirstPass(m2))
+                        continue;
+                    List<Vector3> brickVertexList = m2.GetCollisionRect();
+                    Vector3 projection = Collide(mVertexList, brickVertexList, p.center.normal);
+
+                    if (projection.Length() > 0f)
+                    {
+                        m.AdjustVertex(.3f*projection, Vector3.Zero, p.center.normal, p.center.direction);
+                        m.position.Update(p.currentRoom, 0);
+                        m.unfoldedPosition.position += .3f * projection;
+                        m2.AdjustVertex(-.3f * projection, Vector3.Zero, p.center.normal, p.center.direction);
+                        m2.position.Update(p.currentRoom, 0);
+                        m2.unfoldedPosition.position -= .3f * projection;                        
+                    }
+                }
+
                 foreach (Projectile s in r.projectiles)
                 {
                     if (s.type == ProjectileType.Missile && s.srcMonster == null && (s.position.position - m.position.position).Length() < 7f)
@@ -823,9 +869,7 @@ namespace VexedCore
                         Vector3 groundProjection = Collide(monsterGroundBox, blockVertexList, p.center.normal);
                         Vector3 forwardGroundProjection = Collide(monsterForwardGroundBox, blockVertexList, p.center.normal);
                         Vector3 forwardProjection = Collide(monsterForwardBox, blockVertexList, p.center.normal);
-                        //if(m.position.velocity == Vector3.Zero)
-                        //forwardGroundProjection = groundProjection;
-
+                 
                         if (forwardGroundProjection != Vector3.Zero)
                             m.forwardGroundProjection = Monster.AdjustVector(forwardGroundProjection, m.position.normal, p.center.normal, p.center.direction, true);
                         if (forwardProjection != Vector3.Zero)
@@ -834,8 +878,35 @@ namespace VexedCore
                             m.groundProjection = Monster.AdjustVector(groundProjection, m.position.normal, p.center.normal, p.center.direction, true);
                     }
                 }
+                foreach (Monster m2 in r.monsters)
+                {
+                    if (m == m2 || m2.dead == true)
+                        continue;
+                    if (m.boundingBoxBottom > m2.boundingBoxTop + 2 ||
+                            m.boundingBoxTop < m2.boundingBoxBottom - 2 ||
+                            m.boundingBoxLeft > m2.boundingBoxRight + 2 ||
+                            m.boundingBoxRight < m2.boundingBoxLeft - 2)
+                        continue;
+                    // if block intesects with rectVertexList
+                    List<Vector3> blockVertexList = m2.GetCollisionRect();
+
+                    Vector3 forwardProjection = Collide(monsterForwardBox, blockVertexList, p.center.normal);
+
+                    if (forwardProjection != Vector3.Zero)
+                    {
+                        m.forwardProjection = Monster.AdjustVector(forwardProjection, m.position.normal, p.center.normal, p.center.direction, true);
+                    }
+                    
+                }
             }
+
+
+
+
             #endregion
+
+
+
 
             #region projectile-collisions
             foreach (Projectile s in r.projectiles)
