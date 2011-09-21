@@ -413,6 +413,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.TriggerPoint)
+                    return .75f;
                 if (type == VexedLib.DoodadType.Vortex)
                     return 1.3f;
                 if (type == VexedLib.DoodadType.NPC_OldMan)
@@ -443,6 +445,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.TriggerPoint)
+                    return false;
                 if (type == VexedLib.DoodadType.PlugSlot)
                     return false;
                 if (type == VexedLib.DoodadType.Beam || type == VexedLib.DoodadType.LaserSwitch)
@@ -465,6 +469,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == VexedLib.DoodadType.TriggerPoint)
+                    return false;
                 if (type == VexedLib.DoodadType.Vortex)
                     return false;
                 if ((type == VexedLib.DoodadType.Door || type == VexedLib.DoodadType.Beam) && stateTransition == 0)

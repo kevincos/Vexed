@@ -142,7 +142,7 @@ namespace VexedCore
         
         public float wallJumpSpeed = .01f;
         public float maxHorizSpeed = .01f;
-        public float maxVertSpeed = .018f;
+        
         public float gravityAcceleration = .0009f;
         public float boostAcceleration = .002f;
         private bool _grounded = false;
@@ -174,7 +174,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Booster);
+            primaryAbility = new Ability(AbilityType.Blaster);
             secondaryAbility = new Ability(AbilityType.JetPack);
             naturalShield = new Ability(AbilityType.Shield);
             upgrades[(int)AbilityType.WallJump] = true;
@@ -399,6 +399,19 @@ namespace VexedCore
             }
         }
 
+        public float maxVertSpeed
+        {
+            get
+            {
+                if (leftWall || rightWall)
+                {
+                    if(Vector3.Dot(center.velocity, center.direction) < 0)
+                        return .009f;
+                }
+                return .018f;
+            }
+        }
+
         public Vector3 up
         {
             get
@@ -544,19 +557,35 @@ namespace VexedCore
             jumpSource = center.position;
             jumpNormal = -center.normal;
 
-            if (true == Physics.PhaseTest())
+            Monster finalBoss = null;
+            foreach (Monster m in currentRoom.monsters)
+            {
+                if (m.moveType == VexedLib.MovementType.FaceBoss)
+                    finalBoss = m;
+            }
+            
+            bool worldPhaseOK = Physics.PhaseTest();
+            bool bossPhaseOK = true;
+            if(finalBoss != null && (finalBoss.faceBoss.state == FaceState.Armored || finalBoss.faceBoss.state == FaceState.Rebuilding))
+                bossPhaseOK = finalBoss.faceBoss.PhaseTest();
+            if (true == worldPhaseOK && bossPhaseOK == true)
             {
                 jumpDestination = center.position - throughDistance * center.normal;
                 state = State.Phase;
                 tunnelDummy = new Vertex(center.position, center.normal, (throughDistance + 2 * sideDistance) / (.5f * launchMaxTime) * right, center.direction);
             }
-            else
+            else if (bossPhaseOK == true)
             {
                 jumpDestination = center.position - (2f * throughDistance - 1f) * center.normal;
                 state = State.PhaseFail;
                 tunnelDummy = new Vertex(center.position, center.normal, Vector3.Zero, center.direction);
             }
-            
+            else
+            {
+                jumpDestination = center.position - 10.2f * center.normal;
+                state = State.PhaseFail;
+                tunnelDummy = new Vertex(center.position, center.normal, Vector3.Zero, center.direction);
+            }
 
             launchTime = 0;
         }
@@ -887,8 +916,8 @@ namespace VexedCore
                         center.velocity += walkSpeed * stick.X * right;
                     else
                         center.velocity += airSpeed * stick.X * right;
-                    if (stick.X > 0) faceDirection = 1;
-                    if (stick.X < 0) faceDirection = -1;
+                    if (stick.X > .2) faceDirection = 1;
+                    if (stick.X < -.2) faceDirection = -1;
                 }
 
                 if (superJump == true)
@@ -1261,6 +1290,7 @@ namespace VexedCore
                 {
                     spinTime = 0;
                     center.direction = spinUp;
+                    
                     state = State.Normal;
                     if (hookState == HookState.Hook)
                     {

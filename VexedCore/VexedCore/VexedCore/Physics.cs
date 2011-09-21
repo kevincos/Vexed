@@ -363,6 +363,24 @@ namespace VexedCore
                         }
                     }                    
                 }
+                foreach (Monster m in r.monsters)
+                {
+                    if (p.CollisionFirstPass(m))
+                        continue;
+                    if (m.dead == true)
+                        continue;
+                    if (m.moveType == VexedLib.MovementType.SnakeBoss)
+                    {
+                        List<Vector3> monsterVertexList = m.GetCollisionRect();
+                        Vector3 projection = Collide(playerVertexList, monsterVertexList, Engine.player.center.normal);
+                        if (projection.Length() > 0f)
+                        {
+                            projectionList.Add(projection);
+                            relVelList.Add(m.position.velocity);
+                            edgePropertiesList.Add(new EdgeProperties());
+                        }
+                    }
+                }
 
                 // Compute the most powerful collision and resolve it.
                 CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, p.center.velocity, p.HasTraction());
@@ -420,13 +438,15 @@ namespace VexedCore
                 m.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
                 if (p.CollisionFirstPass(m) == false)
                 {
-                    Vector3 distance = (p.center.position - m.unfoldedPosition.position);
-                    if (distance.Length() < (p.playerHalfHeight + m.halfHeight))
+                    if (m.moveType != VexedLib.MovementType.SnakeBoss)
                     {
-                        Vector3 projection = Vector3.Normalize(distance) * ((p.playerHalfHeight + m.halfHeight) - distance.Length());
-                        p.Damage(projection);
+                        Vector3 distance = (p.center.position - m.unfoldedPosition.position);
+                        if (distance.Length() < (p.playerHalfHeight + m.halfHeight))
+                        {
+                            Vector3 projection = Vector3.Normalize(distance) * ((p.playerHalfHeight + m.halfHeight) - distance.Length());
+                            p.Damage(projection);
+                        }
                     }
-
                 }
             }
             foreach (Doodad d in r.doodads)
@@ -555,6 +575,45 @@ namespace VexedCore
                     }
                 }
             }
+
+            foreach (Monster m in r.monsters)
+            {
+                if (p.CollisionFirstPass(m))
+                    continue;
+                if (m.dead == true)
+                    continue;
+                if (m.moveType == VexedLib.MovementType.SnakeBoss)
+                {
+                    m.UpdateBoundingBox(p.center.direction, p.right);
+                    if (p.boundingBoxBottom > m.boundingBoxTop + 2f ||
+                        p.boundingBoxTop < m.boundingBoxBottom - 2f ||
+                        p.boundingBoxLeft > m.boundingBoxRight + 2f ||
+                        p.boundingBoxRight < m.boundingBoxLeft - 2f)
+                        continue;
+                    // if block intesects with rectVertexList
+                    List<Vector3> brickVertexList = m.GetCollisionRect();
+
+                    Vector3 groundProjection = Collide(playerGroundBox, brickVertexList, p.center.normal);
+                    Vector3 leftProjection = Collide(playerLeftBox, brickVertexList, p.center.normal);
+                    Vector3 rightProjection = Collide(playerRightBox, brickVertexList, p.center.normal);
+
+                    if (Vector3.Dot(groundProjection, up) > 0)
+                    {
+                        p.grounded = true;
+                        p.platformVelocity = m.position.velocity;
+                    }
+                    if (Vector3.Dot(leftProjection, right) > 0)
+                    {
+                        p.leftWall = true;
+                        p.platformVelocity = m.position.velocity;
+                    }
+                    if (Vector3.Dot(rightProjection, -right) != 0)
+                    {
+                        p.rightWall = true;
+                        p.platformVelocity = m.position.velocity;
+                    }
+                }
+            }
             #endregion
             
             // Now that we know if the player is grounded or not, we can use the walking property to determine whether or
@@ -569,6 +628,11 @@ namespace VexedCore
 
             foreach (Doodad d in r.doodads)
             {
+                if (d.type == VexedLib.DoodadType.TriggerPoint)
+                {
+                    if (d.id.Contains("Rock2Trigger") && d.ActivationRange(p))
+                        RockBoss.triggered = true;
+                }
                 if (d.type == VexedLib.DoodadType.Checkpoint)
                 {
                     d.ActivateDoodad(r, d == p.respawnPoint);
@@ -715,8 +779,13 @@ namespace VexedCore
             #endregion
 
             #region monsters
+
+            bool smashRockBarrier = false;
+
             foreach (Monster m in r.monsters)
             {
+                if (m.moveType == VexedLib.MovementType.FaceBoss)
+                    continue;
                 if (m.dead == true)
                     continue;
                 frictionAdjustment = Vector3.Zero;
@@ -747,6 +816,7 @@ namespace VexedCore
                         }
                     }
 
+                    
                     foreach (Doodad b in r.doodads)
                     {
                         b.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
@@ -755,11 +825,39 @@ namespace VexedCore
                         {
                             if (m.CollisionFirstPass(b))
                                 continue;
+
+                            if (m.moveType == VexedLib.MovementType.RockBoss && b.id.Contains("RockBarrier"))
+                            {
+                                smashRockBarrier = true;
+                            }
+                            if (m.moveType == VexedLib.MovementType.ChaseBoss && b.id.Contains("ChaseBarrier"))
+                            {
+                                smashRockBarrier = true;
+                            }
+                            if (m.moveType == VexedLib.MovementType.ChaseBoss && b.id.Contains("ChaseStop"))
+                            {
+                                ChaseBoss.studder = true;
+                            }
+                            if (m.moveType == VexedLib.MovementType.ChaseBoss && b.type == VexedLib.DoodadType.Brick)
+                            {
+                                b.ActivateDoodad(r, true);
+                                continue;
+                            }
+
                             List<Vector3> brickVertexList = b.GetCollisionRect();
                             Vector3 projection = Collide(monsterVertexList, brickVertexList, p.center.normal);
 
                             if (projection.Length() > 0f)
                             {
+                                if (m.moveType == VexedLib.MovementType.RockBoss && b.type == VexedLib.DoodadType.Crate)
+                                {
+                                    if (m.rockBoss.rockHits > 0)
+                                    {
+                                        m.impactVector = projection;
+                                        m.lastHitType = ProjectileType.Impact;
+                                    }
+                                    continue;
+                                }
                                 projectionList.Add(projection);
                                 relVelList.Add(b.position.velocity);
                                 edgePropertiesList.Add(new EdgeProperties());
@@ -804,6 +902,8 @@ namespace VexedCore
                 {
                     if (m == m2 || m2.dead == true)
                         continue;
+                    if (m.moveType == VexedLib.MovementType.SnakeBoss && m2.moveType == VexedLib.MovementType.SnakeBoss)
+                        continue;
                     m2.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
 
                     if (m.CollisionFirstPass(m2))
@@ -828,7 +928,10 @@ namespace VexedCore
                     {
                         s.SetTarget(m.position.position);
                     }
-                    if (s.active == true || m != s.srcMonster)
+                    //if (s.active == true || m != s.srcMonster)
+                    if (s.srcMonster != null && s.srcMonster.moveType == VexedLib.MovementType.SnakeBoss && m.moveType == VexedLib.MovementType.SnakeBoss)
+                        continue;
+                    if (m != s.srcMonster)
                     {
                         s.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
                         if (m.CollisionFirstPass(s) == false)
@@ -900,7 +1003,16 @@ namespace VexedCore
                 }
             }
 
-
+            if (smashRockBarrier == true)
+            {
+                foreach (Doodad d in r.doodads)
+                {
+                    if (d.id.Contains("RockBarrier") || d.id.Contains("ChaseBarrier"))
+                    {
+                        d.ActivateDoodad(r, true);
+                    }
+                }
+            }
 
 
             #endregion

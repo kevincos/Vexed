@@ -90,9 +90,13 @@ namespace VexedCore
             }
             return v;
         }
-        
 
         public void Update(Room r, int updateTime)
+        {
+            Update(r, updateTime, true);
+        }
+
+        public void Update(Room r, int updateTime, bool enforceVelocityConstraints)
         {            
             position += updateTime * velocity;
             Vector3 relative = position - r.center;
@@ -147,6 +151,10 @@ namespace VexedCore
                 
                 direction = direction - oldDirection + newDirection;
             }
+
+            //position = position - Vector3.Dot(position, normal) * normal;
+            if(enforceVelocityConstraints)
+                velocity = velocity - Vector3.Dot(velocity, normal) * normal;
 
         }
 

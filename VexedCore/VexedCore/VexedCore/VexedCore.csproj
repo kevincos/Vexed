@@ -112,19 +112,25 @@
   <ItemGroup>
     <Compile Include="Ability.cs" />
     <Compile Include="AnimationData.cs" />
+    <Compile Include="ArmorBoss.cs" />
+    <Compile Include="BattleBoss.cs" />
     <Compile Include="Behavior.cs" />
     <Compile Include="Block.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BloomComponent.cs" />
+    <Compile Include="ChaseBoss.cs" />
     <Compile Include="Collidable.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="DialogBox.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="FaceBoss.cs" />
     <Compile Include="FrameRateCounter.cs" />
     <Compile Include="GraphicsUtils.cs" />
     <Compile Include="Doodad.cs" />
+    <Compile Include="GunEmplacement.cs" />
+    <Compile Include="JetBoss.cs" />
     <Compile Include="LevelLoader.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="NonPhotoRealisticSettings.cs" />
@@ -134,10 +140,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="RockBoss.cs" />
     <Compile Include="Room.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Skybox.cs" />
+    <Compile Include="SnakeBoss.cs" />
     <Compile Include="Vertex.cs" />
     <Compile Include="WorldSave.cs" />
   </ItemGroup>

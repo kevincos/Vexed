@@ -439,7 +439,7 @@ namespace WinFormsGraphicsDevice
             this.monsterMovementDropdown.Location = new System.Drawing.Point(10, 10);
             this.monsterMovementDropdown.Size = new System.Drawing.Size(180, 20);
             this.monsterMovementDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 5; i++ )
+            for (int i = 0; i < 12; i++ )
             {
                 this.monsterMovementDropdown.Items.Add((MovementType)i);
             }

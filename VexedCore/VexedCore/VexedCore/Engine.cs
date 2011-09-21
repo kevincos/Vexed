@@ -397,7 +397,7 @@ namespace VexedCore
                 Engine.detailVertexArray = new VertexPositionColorNormalTexture[30000];
             detailVertexArrayCount = 0;
             if (Engine.doodadVertexArray == null)
-                Engine.doodadVertexArray = new VertexPositionColorNormalTexture[30000];
+                Engine.doodadVertexArray = new VertexPositionColorNormalTexture[60000];
             doodadVertexArrayCount = 0;
             if (Engine.decalVertexArray == null)
                 Engine.decalVertexArray = new VertexPositionColorNormalTexture[30000];
@@ -410,7 +410,7 @@ namespace VexedCore
             beamVertexArrayCount = 0;
             if (Engine.translucentBlockVertexArray == null)
             {
-                Engine.translucentBlockVertexArray = new VertexPositionColorNormalTexture[1000];
+                Engine.translucentBlockVertexArray = new VertexPositionColorNormalTexture[2000];
                 translucentBlockVertexArrayCount = 0;
             }
 
@@ -425,7 +425,7 @@ namespace VexedCore
                 staticDoodadsInitialized = false;
 
                 if (Engine.staticBlockVertexArray == null)
-                    Engine.staticBlockVertexArray = new VertexPositionColorNormalTexture[100000];
+                    Engine.staticBlockVertexArray = new VertexPositionColorNormalTexture[150000];
                 staticBlockVertexArrayCount = 0;
             }
 

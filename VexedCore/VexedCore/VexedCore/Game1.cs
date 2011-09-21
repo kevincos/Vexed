@@ -45,9 +45,9 @@ namespace VexedCore
             resHeight = 720;
 #endif
 
-            //resWidth = 1920;
-            //resHeight = 1080;
-            //fullScreen = true;
+            resWidth = 1920;
+            resHeight = 1080;
+            fullScreen = true;
             graphics.IsFullScreen = fullScreen;
             graphics.PreferredBackBufferWidth = resWidth;
             graphics.PreferredBackBufferHeight = resHeight;

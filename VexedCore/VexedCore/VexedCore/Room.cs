@@ -213,6 +213,8 @@ namespace VexedCore
             foreach (Monster m in monsters)
             {
                 m.position = new Vertex(m.spawnPosition);
+                if(m.moveType == VexedLib.MovementType.SnakeBoss)
+                    m.snakeBoss.InitializeLinks(m, this);
                 m.armorType = m.startingArmorType;
                 m.baseHP = m.startingBaseHP;
                 m.armorHP = m.startingArmorHP;

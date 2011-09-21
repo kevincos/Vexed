@@ -12,7 +12,14 @@ namespace VexedLib
         Tank= 1,
         Spider=2,
         Jump=3,
-        Hover=4
+        Hover=4,
+        RockBoss=5,
+        SnakeBoss=6,
+        ArmorBoss=7,
+        ChaseBoss=8,
+        BattleBoss=9,
+        FaceBoss=10,
+        JetBoss=11
     }
 
     public enum ArmorType

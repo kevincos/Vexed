@@ -46,8 +46,27 @@ namespace VexedCore
                     {
                         foreach (VexedLib.Monster xmlMonster in xmlFace.monsters)
                         {
-                            newRoom.maxOrbs += 5;
-                            newRoom.monsters.Add(new Monster(xmlMonster, xmlFace.normal));
+                            
+                            if (xmlMonster.movement == VexedLib.MovementType.SnakeBoss)
+                            {
+                                
+                                int snakeLen = 20;
+                                newRoom.maxOrbs += 5*snakeLen;
+                                for (int i = 0; i < snakeLen; i++)
+                                {
+                                    Monster snakeLink = new Monster(xmlMonster, xmlFace.normal);
+                                    if(i == snakeLen-1)
+                                        snakeLink.id = "TS" + i + "_X";
+                                    else
+                                        snakeLink.id = "S" + i + "_X";
+                                    newRoom.monsters.Add(snakeLink);
+                                }
+                            }
+                            else
+                            {
+                                newRoom.maxOrbs += 5;
+                                newRoom.monsters.Add(new Monster(xmlMonster, xmlFace.normal));
+                            }
                         }
                         foreach (VexedLib.Doodad xmlDoodad in xmlFace.doodads)
                         {
@@ -317,8 +336,8 @@ namespace VexedCore
                             }
                         }
                     }
-                }
-            }
+                }                
+            }            
         }
 
         public static void QuickSave()

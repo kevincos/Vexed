@@ -30,6 +30,24 @@ namespace VexedCore
         public static List<Vector2> spiderTexCoords;
         public static List<Vector2> legsTexCoords;
         public static List<Vector2> gunTexCoords;
+        public static List<Vector2> stoneSolidTexCoords;
+        public static List<Vector2> stoneCrackTexCoords;
+        public static List<Vector2> stoneSolidBreakTexCoords;
+        public static List<Vector2> stoneCrackBreakTexCoords;
+        public static List<Vector2> spikeShieldTexCoords;
+        public static List<Vector2> iceShieldFullTexCoords;
+        public static List<Vector2> iceShieldMedTexCoords;
+        public static List<Vector2> iceShieldLowTexCoords;
+        public static List<Vector2> iceTurretTexCoords;
+        public static List<Vector2> bossShieldTexCoords;
+        public static List<Vector2> flashTexCoords;
+        public static List<Vector2> jetArmorTexCoords;
+        public static List<Vector2> bossArmorTexCoords;
+        public static List<Vector2> facePlateTexCoords;
+        public static List<Vector2> faceBlankTexCoords;
+        public static List<Vector2> faceAngryEyesTexCoords;
+        public static List<Vector2> faceNormalEyesTexCoords;
+
 
         public static int texGridCount = 8;
 
@@ -58,18 +76,18 @@ namespace VexedCore
         public int jumpCooldown = 0;
         public int jumpTime = 0;
         public Vector3 spinUp;
-        public int spinMaxTime = 400;
+
+        public int flashCooldown;
+        public int maxFlashCooldown = 200;
         public int spinTime = 0;
         public bool rightFacing = false;
         public bool rightMoving = false;
         public int currentDirection = 1;
+        public float huntMinDistance = 3.5f;
             
         [XmlIgnore]public Monster srcMonster;
         
         public int directionChangeCooldown = 0;        
-        public float currentAngle = .5f;
-        
-        public int fireCooldown = 0;
         public string id;
         public bool dead;
         public Vector3 impactVector = Vector3.Zero;
@@ -79,14 +97,28 @@ namespace VexedCore
         public int baseHP = 5;
         public ProjectileType lastHitType;
 
-        public Vector3 gunLine = Vector3.Zero;
-        public Vector3 gunNormal = Vector3.Zero;
         public Vector3 prevUp = Vector3.Zero;
         public int spinRecovery = 0;
+        public List<GunEmplacement> guns;
+
+        public RockBoss rockBoss;
+        public ChaseBoss chaseBoss;
+        public SnakeBoss snakeBoss;
+        public ArmorBoss armorBoss;
+        public BattleBoss battleBoss;
+        public FaceBoss faceBoss;
+        public JetBoss jetBoss;
 
         public Monster(Monster m)
         {
             //unfoldedPosition = new Vertex(m.unfoldedPosition);
+            rockBoss = new RockBoss();
+            chaseBoss = new ChaseBoss();
+            snakeBoss = new SnakeBoss();
+            faceBoss = new FaceBoss();
+            battleBoss = new BattleBoss();
+            armorBoss = new ArmorBoss();
+            jetBoss = new JetBoss();
             hasOrbs = m.hasOrbs;
             spawnPosition = new Vertex(m.spawnPosition);
             startingArmorHP = m.startingArmorHP;
@@ -96,6 +128,10 @@ namespace VexedCore
             waypoints = new List<Vector3>();
             foreach (Vector3 v in m.waypoints)
                 waypoints.Add(v);
+            guns = new List<GunEmplacement>();
+            foreach (GunEmplacement g in m.guns)
+                guns.Add(new GunEmplacement(g));
+
             currentWaypointIndex = m.currentWaypointIndex;
             wayPointDirection = m.wayPointDirection;
             waypointLoop = m.waypointLoop;
@@ -114,21 +150,18 @@ namespace VexedCore
             jumping = m.jumping;
             jumpCooldown = m.jumpCooldown;
             spinUp = m.spinUp;
-            spinMaxTime = m.spinMaxTime;
+            
             spinTime = m.spinTime;
             rightFacing = m.rightFacing;
             rightMoving = m.rightMoving;
             directionChangeCooldown = m.directionChangeCooldown;
-            currentAngle = m.currentAngle;
-            
-            fireCooldown = m.fireCooldown;
+
             id = m.id;
             dead = m.dead;
             impactVector = m.impactVector;
-            gunLine = m.gunLine;
-            gunNormal = m.gunNormal;
             armorHP = m.armorHP;
             baseHP = m.baseHP;
+            huntMinDistance = m.huntMinDistance;
         }
         
         public static List<Vector2> LoadTexCoords(int x, int y)
@@ -156,7 +189,24 @@ namespace VexedCore
             gunTexCoords = LoadTexCoords(5, 0);
             treadsTexCoords = LoadTexCoords(0, 2);
             spiderTexCoords = LoadTexCoords(0, 1);
-            legsTexCoords = LoadTexCoords(0, 3);            
+            legsTexCoords = LoadTexCoords(0, 3);
+            stoneCrackBreakTexCoords = LoadTexCoords(3, 5);
+            stoneCrackTexCoords = LoadTexCoords(1, 5);
+            stoneSolidBreakTexCoords = LoadTexCoords(2, 5);
+            stoneSolidTexCoords = LoadTexCoords(0, 5);
+            spikeShieldTexCoords = LoadTexCoords(0, 6);
+            iceShieldFullTexCoords = LoadTexCoords(0, 7);
+            iceShieldMedTexCoords = LoadTexCoords(1, 7);
+            iceShieldLowTexCoords = LoadTexCoords(2, 7);
+            iceTurretTexCoords = LoadTexCoords(3, 7);
+            bossShieldTexCoords = LoadTexCoords(2, 6);
+            flashTexCoords = LoadTexCoords(7, 0);
+            jetArmorTexCoords = LoadTexCoords(4, 6);
+            bossArmorTexCoords = LoadTexCoords(6, 6);
+            facePlateTexCoords = LoadTexCoords(7, 1);
+            faceBlankTexCoords = LoadTexCoords(7, 2);
+            faceAngryEyesTexCoords = LoadTexCoords(7, 3);
+            faceNormalEyesTexCoords = LoadTexCoords(7, 4);
         }
 
         public Monster()
@@ -165,6 +215,13 @@ namespace VexedCore
 
         public Monster(VexedLib.Monster xmlMonster, Vector3 normal)
         {
+            snakeBoss = new SnakeBoss();
+            rockBoss = new RockBoss();
+            chaseBoss = new ChaseBoss();
+            faceBoss = new FaceBoss();
+            battleBoss = new BattleBoss();
+            armorBoss = new ArmorBoss();
+            jetBoss = new JetBoss();
             this.spawnPosition = new Vertex(xmlMonster.position, normal, Vector3.Zero, xmlMonster.up);
             this.position = new Vertex(xmlMonster.position, normal, Vector3.Zero, xmlMonster.up);
             firstWaypoint = xmlMonster.waypointId;
@@ -179,10 +236,50 @@ namespace VexedCore
             armorType = xmlMonster.armor;
             gunType = xmlMonster.weapon;
             id = xmlMonster.IDString;
+            guns = new List<GunEmplacement>();
+            if (moveType == VexedLib.MovementType.RockBoss)
+            {
+                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(1.3f, .3f), .7f * halfWidth, .05f, BaseType.Rock));
+                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(-1.3f, .3f), .7f*halfWidth, .05f, BaseType.Rock));                
+            }
+            else if (moveType == VexedLib.MovementType.ChaseBoss)
+            {
+                rightFacing = true;
+                armorHP = 1;
+                startingArmorType = VexedLib.ArmorType.ShieldSuper;
+            }
+            else if (moveType == VexedLib.MovementType.SnakeBoss)
+            {
+                
+            }
+            else if (moveType == VexedLib.MovementType.BattleBoss)
+            {
+                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(.3f, 1.3f), .7f * halfWidth, .05f, BaseType.Standard));
+                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(.3f, -1.3f), .7f * halfWidth, .05f, BaseType.Standard));
+            }
+            else if (moveType == VexedLib.MovementType.JetBoss)
+            {
+                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(.3f, -1.3f), .7f * halfWidth, .05f, BaseType.Standard));
+            }
+            else if (moveType == VexedLib.MovementType.ArmorBoss)
+            {
+                rightFacing = true;
+                startingArmorType = VexedLib.ArmorType.ShieldSuper;
+                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Missile, new Vector2(.3f, -1.3f), .7f * halfWidth, .05f, BaseType.Standard));
+                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(.3f, 1.3f), .7f * halfWidth, .05f, BaseType.Standard));
+            }
+            else
+                guns.Add(new GunEmplacement(trackType, gunType, Vector2.Zero, halfWidth, -.05f, BaseType.None));            
         }
 
         public Monster(Monster m, Room r, Vector3 n, Vector3 u)
         {
+            snakeBoss = new SnakeBoss();
+            rockBoss = new RockBoss();
+            chaseBoss = new ChaseBoss();
+            faceBoss = new FaceBoss();
+            battleBoss = new BattleBoss();
+            armorBoss = new ArmorBoss();
             position = m.position.Unfold(r,n,u);
             srcMonster = m;
             rightFacing = m.rightFacing;
@@ -194,55 +291,32 @@ namespace VexedCore
             unfoldedPosition = position.Unfold(r, n, u);
         }
 
-        public int fireTime
-        {
-            get
-            {
-                if(gunType == VexedLib.GunType.Blaster || gunType == VexedLib.GunType.Spread)
-                    return 2000;
-                if (gunType == VexedLib.GunType.Missile)
-                    return 4000;
-                if (gunType == VexedLib.GunType.Beam)
-                    return 2000;
-                if (gunType == VexedLib.GunType.Repeater)
-                    return 200;
-                return 0;
-            }
-        }
 
         public int startingBaseHP
         {
             get
             {
+                if (moveType == VexedLib.MovementType.JetBoss)
+                    return 48;
+                if (moveType == VexedLib.MovementType.SnakeBoss)
+                    return 3;
                 if (healthType == VexedLib.MonsterHealth.Weak)
                     return 1;
                 if (healthType == VexedLib.MonsterHealth.Normal)
                     return 4;
                 if (healthType == VexedLib.MonsterHealth.Tough)
                     return 8;
+                
                 return 4;
             }
         }
 
 
-        public float angleRotateSpeed
+        public int spinMaxTime
         {
             get
             {
-                if (trackType == VexedLib.TrackType.Slow)
-                {
-                    return .01f;
-                }
-                if (trackType == VexedLib.TrackType.Normal)
-                {
-                    return .03f;
-                }
-                if (trackType == VexedLib.TrackType.Fast)
-                {
-                    return .1f;
-                }
-
-                return 0f;
+                return 400;
             }
         }
 
@@ -250,6 +324,10 @@ namespace VexedCore
         {
             get
             {
+                if (moveType == VexedLib.MovementType.RockBoss)
+                {
+                    return Color.OrangeRed;
+                }
                 if (gunType == VexedLib.GunType.None)
                 {
                     return new Color(60, 60, 60);
@@ -289,7 +367,7 @@ namespace VexedCore
         public float maxFallSpeed
         {
             get
-            {
+            {                
                 return .009f;
             }
         }
@@ -457,6 +535,8 @@ namespace VexedCore
         {
             get
             {
+                if (moveType == VexedLib.MovementType.ChaseBoss)
+                    return 2.4f;
                 if (sizeType == VexedLib.MonsterSize.Normal)
                     return .5f;
                 if (sizeType == VexedLib.MonsterSize.Large)
@@ -470,6 +550,8 @@ namespace VexedCore
         {
             get
             {
+                if (moveType == VexedLib.MovementType.ChaseBoss)
+                    return 2.4f;
                 if (sizeType == VexedLib.MonsterSize.Normal)
                     return .5f;
                 if (sizeType == VexedLib.MonsterSize.Large)
@@ -487,15 +569,8 @@ namespace VexedCore
             }
         }
 
-        public float trackRange
-        {
-            get
-            {
-                return weaponRange;
-            }
-        }
 
-        public float weaponRange
+        public float trackRange
         {
             get
             {
@@ -509,9 +584,25 @@ namespace VexedCore
 
         public void ApplyDamage(bool armor, ProjectileType gunType)
         {
+            
+            if (moveType == VexedLib.MovementType.RockBoss && rockBoss.rockHits != 0)
+            {
+                armor = rockBoss.rockHits == 0;
+                if (gunType == ProjectileType.Impact)
+                {
+                    rockBoss.Impact();
+                }
+                return;
+            }
+
             if (armor == false)
             {
                 baseHP--;
+                flashCooldown = maxFlashCooldown;
+                if (moveType == VexedLib.MovementType.ArmorBoss)
+                {
+                    armorBoss.Rotate(this);
+                }
             }
             else if (gunType == ProjectileType.Missile || gunType == ProjectileType.Bomb)
             {
@@ -528,7 +619,12 @@ namespace VexedCore
             }
             if (baseHP == 0)
             {
-                dead = true;
+                if (moveType == VexedLib.MovementType.SnakeBoss)
+                    dead = false;
+                else if (moveType == VexedLib.MovementType.RockBoss && rockBoss.state != RockBossState.Fight3)
+                    dead = false;
+                else
+                    dead = true;
 
                 if (hasOrbs == true)
                 {
@@ -556,16 +652,52 @@ namespace VexedCore
                     Engine.player.currentRoom.doodads.Add(bonusOrb3);
                     Engine.player.currentRoom.doodads.Add(bonusOrb4);
                     Engine.player.currentRoom.doodads.Add(bonusOrb5);
-                    hasOrbs = false;
+                    if (moveType == VexedLib.MovementType.RockBoss && rockBoss.state != RockBossState.Fight3)
+                        hasOrbs = true;
+                    else
+                        hasOrbs = false;
                 }                
             }
         }
 
         public void Update(GameTime gameTime)
         {
+            if (moveType == VexedLib.MovementType.SnakeBoss)
+            {
+                snakeBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+            }
+            if (moveType == VexedLib.MovementType.RockBoss)
+            {
+                rockBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+            }
+            if (moveType == VexedLib.MovementType.ChaseBoss)
+            {
+                chaseBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+            }
+            if (moveType == VexedLib.MovementType.BattleBoss)
+            {
+                battleBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+            }
+            if (moveType == VexedLib.MovementType.ArmorBoss)
+            {
+                armorBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+            }
+            if (moveType == VexedLib.MovementType.FaceBoss)
+            {
+                faceBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+            }
+            if (moveType == VexedLib.MovementType.JetBoss)
+            {
+                jetBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+            }
+            flashCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            if (flashCooldown < 0)
+            {
+                flashCooldown = 0;
+            }
 
             Vector3 effectiveUp = Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false);
-            if (prevUp != Engine.player.center.direction)
+            if ((moveType == VexedLib.MovementType.Tank || moveType == VexedLib.MovementType.Spider) && prevUp != Engine.player.center.direction)
             {
                 prevUp = Engine.player.center.direction;
                 position.velocity = Vector3.Zero;                
@@ -578,10 +710,7 @@ namespace VexedCore
             directionChangeCooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (directionChangeCooldown < 0)
                 directionChangeCooldown = 0;
-            if ((Engine.player.center.position - position.position).Length() < weaponRange)
-                fireCooldown -= gameTime.ElapsedGameTime.Milliseconds;
-            if (fireCooldown < 0)
-                fireCooldown = 0;
+
 
 
             if (impactVector != Vector3.Zero)
@@ -592,17 +721,22 @@ namespace VexedCore
                     armorBlock = false;
                 else if ((armorType == VexedLib.ArmorType.Top || armorType == VexedLib.ArmorType.TopSuper) && Vector3.Dot(impactVector, position.direction) > .5f)
                     armorBlock = false;
-                else if (rightFacing == true && (armorType == VexedLib.ArmorType.Shield || armorType == VexedLib.ArmorType.ShieldSuper)&& Vector3.Dot(impactVector, rightUnit) > 0)
+                else if (rightFacing == true && (armorType == VexedLib.ArmorType.Shield || armorType == VexedLib.ArmorType.ShieldSuper) && Vector3.Dot(impactVector, rightUnit) > 0)
                     armorBlock = false;
                 else if (rightFacing == false && (armorType == VexedLib.ArmorType.Shield || armorType == VexedLib.ArmorType.ShieldSuper) && Vector3.Dot(impactVector, -rightUnit) > 0)
                     armorBlock = false;
+
+                
 
                 ApplyDamage(armorBlock, lastHitType);
 
                 impactVector = Vector3.Zero;
             }
 
-            position.Update(Engine.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds);
+            if(rockBoss.phasing == true)
+                position.Update(Engine.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds,false);
+            else
+                position.Update(Engine.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds, true);
 
             Vector3 direction = Vector3.Zero;
             if (aiType == VexedLib.AIType.Waypoint)
@@ -650,7 +784,7 @@ namespace VexedCore
                     {
                         direction *= -1;
                     }
-                    if (gunType != VexedLib.GunType.None && moveType != VexedLib.MovementType.Jump && direction.Length() < 3.5f)
+                    if (guns.Count != 0 && moveType != VexedLib.MovementType.Jump && direction.Length() < huntMinDistance)
                     {
                         directionChangeCooldown = 300;
                         direction *= -1;
@@ -671,102 +805,58 @@ namespace VexedCore
                 {
 
                     position.velocity -= 2*Vector3.Dot(position.velocity, rightUnit)*rightUnit;
-                    //position.velocity = -position.velocity;
                     currentDirection = -currentDirection;
                 }
             }
-
-            float cosTheta = 0f;
-            float sinTheta = 0f;
-            if (angleRotateSpeed != 0)
+            
+            
+            if (moveType == VexedLib.MovementType.RockBoss)
             {
-                Vector3 aimTarget = Engine.player.center.position - position.position;
-                aimTarget.Normalize();
-                cosTheta = Vector3.Dot(upUnit, aimTarget);
-                sinTheta = Vector3.Dot(rightUnit, aimTarget);
-                float targetAngle = 0;
-                if (sinTheta > 0)
-                    targetAngle = (float)Math.Acos(cosTheta);
-                else
-                    targetAngle = (float)(2 * Math.PI) - (float)Math.Acos(cosTheta);
-                float posGap = targetAngle - currentAngle;
-                if (posGap < 0)
-                    posGap += (float)Math.PI * 2;
-                if (posGap < .1f)
+                if (rockBoss.nextWaypointTarget != Vector3.Zero)
                 {
-                }
-                else if (posGap < Math.PI) currentAngle += angleRotateSpeed;
-                else if (posGap > Math.PI) currentAngle -= angleRotateSpeed;
-
-                if (currentAngle > 2 * Math.PI)
-                    currentAngle -= (float)Math.PI * 2;
-                if (currentAngle < 0)
-                    currentAngle += (float)Math.PI * 2;
-                if (moveType != VexedLib.MovementType.Hover)
-                {
-                    if (currentAngle > Math.PI / 2 && currentAngle < Math.PI)
-                        currentAngle = (float)(Math.PI / 2 - .05f);
-                    if (currentAngle > Math.PI && currentAngle < 3 * Math.PI / 2)
-                        currentAngle = (float)(3 * Math.PI / 2 + .05f);
+                    direction = rockBoss.nextWaypointTarget - position.position;
+                    if(rockBoss.phasing == false)
+                        direction = direction - Vector3.Dot(direction, position.normal) * position.normal;
+                    if (direction.Length() > 1)
+                        direction.Normalize();
                 }
             }
-            else if (trackType == VexedLib.TrackType.Up)
+            if (moveType == VexedLib.MovementType.ChaseBoss)
             {
-                currentAngle = 0f;
-            }
-            else if (trackType == VexedLib.TrackType.UpLeft)
-            {
-                currentAngle = (float)(7*Math.PI / 4);
-            }
-            else if (trackType == VexedLib.TrackType.UpRight)
-            {
-                currentAngle = (float)(Math.PI / 4);
-            }
-            else if (trackType == VexedLib.TrackType.Left)
-            {
-                currentAngle = (float)(3 * Math.PI / 2);
-            }
-            else if (trackType == VexedLib.TrackType.Right)
-            {
-                currentAngle = (float)(Math.PI / 2);
-            }
-
-
-
-            cosTheta = (float)Math.Cos(currentAngle);
-            sinTheta = (float)Math.Sin(currentAngle);
-            gunLine = right * sinTheta + up * cosTheta;
-            gunNormal = Vector3.Cross(gunLine, position.normal);
-            gunLine.Normalize();
-            gunNormal.Normalize();
-
-            if (fireCooldown == 0)
-            {
-                Vector3 projectileVelocity = gunLine;
-                projectileVelocity.Normalize();
-
-                fireCooldown = fireTime;
-                if (gunType == VexedLib.GunType.Blaster || gunType == VexedLib.GunType.Repeater)
+                if (chaseBoss.nextWaypointTarget != Vector3.Zero)
                 {
-                    Engine.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + halfWidth*gunLine, Vector3.Zero, position.normal, projectileVelocity));
+                    direction = chaseBoss.nextWaypointTarget - position.position;
+                    direction = direction - Vector3.Dot(direction, position.normal) * position.normal;                    
                 }
-                if (gunType == VexedLib.GunType.Beam)
+            }
+            if (moveType == VexedLib.MovementType.SnakeBoss)
+            {
+                if (snakeBoss.nextWaypointTarget != Vector3.Zero && snakeBoss.waiting == false)
                 {
-                    Engine.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Laser, position.position + halfWidth * gunLine, Vector3.Zero, position.normal, projectileVelocity));
+                    direction = snakeBoss.nextWaypointTarget - position.position;
+                    direction = direction - Vector3.Dot(direction, position.normal) * position.normal;
                 }
-                if (gunType == VexedLib.GunType.Missile)
+            }
+            if (moveType == VexedLib.MovementType.BattleBoss)
+            {
+                if (battleBoss.nextWaypointTarget != Vector3.Zero)
                 {
-                    Engine.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Missile, position.position + halfWidth * gunLine, position.velocity, position.normal, projectileVelocity));
+                    direction = battleBoss.nextWaypointTarget - position.position;
+                    direction = direction - Vector3.Dot(direction, position.normal) * position.normal;
                 }
-                if (gunType == VexedLib.GunType.Spread)
+            }
+            if (moveType == VexedLib.MovementType.JetBoss)
+            {
+                if (jetBoss.nextWaypointTarget != Vector3.Zero)
                 {
-                    Engine.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + halfWidth * gunLine, Vector3.Zero, position.normal, projectileVelocity + .5f * gunNormal));
-                    Engine.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + halfWidth * gunLine, Vector3.Zero, position.normal, projectileVelocity - .5f * gunNormal));
-                    Engine.player.currentRoom.projectiles.Add(new Projectile(this, ProjectileType.Plasma, position.position + halfWidth * gunLine, Vector3.Zero, position.normal, projectileVelocity));
+                    direction = jetBoss.nextWaypointTarget - position.position;
+                    direction = direction - Vector3.Dot(direction, position.normal) * position.normal;
                 }
-
             }
 
+            foreach (GunEmplacement g in guns)
+                g.Upgate(gameTime, this);
+            
             if (moveType == VexedLib.MovementType.Tank)
             {
 
@@ -929,21 +1019,41 @@ namespace VexedCore
 
                 }
             }
-            else if (moveType == VexedLib.MovementType.Hover)
+            else if (moveType == VexedLib.MovementType.Hover || moveType == VexedLib.MovementType.RockBoss || moveType == VexedLib.MovementType.ChaseBoss || moveType == VexedLib.MovementType.SnakeBoss|| moveType == VexedLib.MovementType.BattleBoss || moveType == VexedLib.MovementType.JetBoss)
             {
-                if (directionChangeCooldown == 0)
+                if (moveType != VexedLib.MovementType.BattleBoss && moveType != VexedLib.MovementType.JetBoss && moveType != VexedLib.MovementType.ArmorBoss)
                 {
+                    if (directionChangeCooldown == 0)
+                    {
+                        if (Vector3.Dot(rightUnit, position.velocity) > 0)
+                            rightFacing = true;
+                        if (Vector3.Dot(rightUnit, position.velocity) < 0)
+                            rightFacing = false;
+                    }
                     if (Vector3.Dot(rightUnit, position.velocity) > 0)
-                        rightFacing = true;
+                        rightMoving = true;
                     if (Vector3.Dot(rightUnit, position.velocity) < 0)
-                        rightFacing = false;
-                }
-                if (Vector3.Dot(rightUnit, position.velocity) > 0)
-                    rightMoving = true;
-                if (Vector3.Dot(rightUnit, position.velocity) < 0)
-                    rightMoving = false;
+                        rightMoving = false;
 
-                if (aiType != VexedLib.AIType.Wander && position.direction != Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false))
+                    if ((moveType == VexedLib.MovementType.ChaseBoss) && spinUp == Vector3.Zero)
+                    {
+                        Vector3 forward = rightUnit;
+                        if (rightFacing == false)
+                            forward = -forward;
+
+                        Vector3 targetDir = direction;
+                        targetDir.Normalize();
+                        if (Math.Abs(Vector3.Dot(forward, targetDir)) < .95f)
+                        {
+                            if (Vector3.Dot(targetDir, position.direction) < 0f)
+                                spinUp = forward;
+                            else
+                                spinUp = -forward;
+                        }
+                    }
+                }
+
+                if ((moveType == VexedLib.MovementType.RockBoss || aiType != VexedLib.AIType.Wander) && moveType != VexedLib.MovementType.BattleBoss && moveType != VexedLib.MovementType.JetBoss && moveType != VexedLib.MovementType.SnakeBoss && position.direction != Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false))
                 {
                     spinUp = Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false);
                 }
@@ -971,10 +1081,6 @@ namespace VexedCore
         {
             List<Vector3> doodadVertexList = new List<Vector3>();
 
-            /*doodadVertexList.Add(position.position + up + right);
-            doodadVertexList.Add(position.position + up + left);
-            doodadVertexList.Add(position.position + down + left);
-            doodadVertexList.Add(position.position + down + right);*/
             doodadVertexList.Add(unfoldedPosition.position + unfolded_up + unfolded_right);
             doodadVertexList.Add(unfoldedPosition.position + unfolded_up + unfolded_left);
             doodadVertexList.Add(unfoldedPosition.position + unfolded_down + unfolded_left);
@@ -1222,6 +1328,13 @@ namespace VexedCore
         {
             if (dead == true)
                 return;
+
+            if (moveType == VexedLib.MovementType.FaceBoss)
+            {
+                faceBoss.Render();
+                return;
+            }
+
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
             List<VertexPositionColorNormalTexture> textureTriangleList = new List<VertexPositionColorNormalTexture>();
             List<Vertex> rectVertexList = new List<Vertex>();
@@ -1231,19 +1344,48 @@ namespace VexedCore
             rectVertexList.Add(new Vertex(position.position, position.normal, down +left, position.direction));
             rectVertexList.Add(new Vertex(position.position, position.normal, down + right, position.direction));
 
-            List<Vertex> gunVertexList = new List<Vertex>();
-            gunVertexList.Add(new Vertex(position.position, position.normal, halfWidth * gunNormal, position.direction));
-            gunVertexList.Add(new Vertex(position.position, position.normal, 1.5f*halfWidth *gunLine + halfWidth * gunNormal, position.direction));
-            gunVertexList.Add(new Vertex(position.position, position.normal, 1.5f * halfWidth * gunLine - halfWidth * gunNormal, position.direction));
-            gunVertexList.Add(new Vertex(position.position, position.normal, -halfWidth * gunNormal, position.direction));
             
             foreach (Vertex v in rectVertexList)
             {
                 v.Update(Engine.player.currentRoom, 1);
             }
-            foreach (Vertex v in gunVertexList)
+
+            foreach (GunEmplacement g in guns)
             {
-                v.Update(Engine.player.currentRoom, 1);
+                List<Vertex> gunVertexList = new List<Vertex>();
+                gunVertexList.Add(new Vertex(g.position.position, g.position.normal, g.radius * g.gunNormal, g.position.direction));
+                gunVertexList.Add(new Vertex(g.position.position, g.position.normal, 1.5f * g.radius * g.gunLine + g.radius * g.gunNormal, g.position.direction));
+                gunVertexList.Add(new Vertex(g.position.position, g.position.normal, 1.5f * g.radius * g.gunLine - g.radius * g.gunNormal, g.position.direction));
+                gunVertexList.Add(new Vertex(g.position.position, g.position.normal, -g.radius * g.gunNormal, g.position.direction));
+
+                
+
+                foreach (Vertex v in gunVertexList)
+                {
+                    v.Update(Engine.player.currentRoom, 1);
+                }
+
+                
+                r.AddTextureToTriangleList(gunVertexList, Color.White, depth + g.depthOffset, textureTriangleList, gunTexCoords, true);
+                if (g.baseType != BaseType.None)
+                {
+                    List<Vertex> gunBaseVertexList = new List<Vertex>();
+                    gunBaseVertexList.Add(new Vertex(position.position, position.normal, upUnit * (g.baseRadius-g.positionOffset.Y) + rightUnit * (g.baseRadius+g.positionOffset.X), g.position.direction));
+                    gunBaseVertexList.Add(new Vertex(position.position, position.normal, upUnit * (g.baseRadius - g.positionOffset.Y) - rightUnit * (g.baseRadius - g.positionOffset.X), g.position.direction));
+                    gunBaseVertexList.Add(new Vertex(position.position, position.normal, -upUnit * (g.baseRadius + g.positionOffset.Y) - rightUnit * (g.baseRadius - g.positionOffset.X), g.position.direction));
+                    gunBaseVertexList.Add(new Vertex(position.position, position.normal, -upUnit * (g.baseRadius + g.positionOffset.Y) + rightUnit * (g.baseRadius + g.positionOffset.X), g.position.direction));
+
+                    foreach (Vertex v in gunBaseVertexList)
+                    {
+                        v.Update(Engine.player.currentRoom, 1);
+                    }
+                    if(g.baseType == BaseType.Rock)
+                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + 1.5f*g.depthOffset, textureTriangleList, stoneSolidTexCoords, true);
+                    if (g.baseType == BaseType.Ice)
+                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + 1.5f * g.depthOffset, textureTriangleList, iceTurretTexCoords, true);
+                    if (g.baseType == BaseType.Standard)
+                        r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + 1.5f * g.depthOffset, textureTriangleList, bodyTexCoords, true);
+                }
             }
 
             if (moveType == VexedLib.MovementType.Tank)
@@ -1251,24 +1393,97 @@ namespace VexedCore
             else if (moveType == VexedLib.MovementType.Spider)
                 r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, textureTriangleList, spiderTexCoords, rightFacing);
             else if (moveType == VexedLib.MovementType.Jump)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth-.1f, textureTriangleList, legsTexCoords, rightFacing);
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, textureTriangleList, legsTexCoords, rightFacing);
 
-            r.AddTextureToTriangleList(gunVertexList, Color.White, depth - .05f, textureTriangleList, gunTexCoords, true);
+            float bossAdjustment = 0f;
+            if(snakeBoss.chainIndex%2!=0)
+                bossAdjustment = .001f;
+            r.AddTextureToTriangleList(rectVertexList, monsterColor, depth + bossAdjustment, textureTriangleList, bodyTexCoords, rightFacing);
+            if (flashCooldown != 0)
+            {
+                Color flashColor = new Color(255, 255, 0, (Byte)(flashCooldown / maxFlashCooldown));
+                r.AddTextureToTriangleList(rectVertexList, flashColor, depth + bossAdjustment, textureTriangleList, flashTexCoords, rightFacing);
+            }
+            if (moveType == VexedLib.MovementType.RockBoss)
+            {
+                if(rockBoss.rockHits == 2 && rockBoss.rockHitCooldown == 0)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, stoneSolidTexCoords, rightFacing);
+                if (rockBoss.rockHits == 1 && rockBoss.rockHitCooldown == 0)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, stoneCrackTexCoords, rightFacing);
+                if (rockBoss.rockHits == 1 && rockBoss.rockHitCooldown != 0)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, stoneSolidBreakTexCoords, rightFacing);
+                if (rockBoss.rockHits == 0 && rockBoss.rockHitCooldown != 0)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, stoneCrackBreakTexCoords, rightFacing);
+            }
+            if (moveType == VexedLib.MovementType.ChaseBoss || moveType == VexedLib.MovementType.JetBoss)
+            {
+                List<Vertex> spikeShieldVertexList = new List<Vertex>();
+                Vector3 forward = Vector3.Cross(position.direction, position.normal);
+                float shieldOffset = halfWidth / 4f;
+                if (rightFacing == false)
+                    shieldOffset = -shieldOffset;
+                spikeShieldVertexList.Add(new Vertex(position.position, position.normal, up + right + shieldOffset * forward, position.direction));
+                spikeShieldVertexList.Add(new Vertex(position.position, position.normal, up + left + shieldOffset * forward, position.direction));
+                spikeShieldVertexList.Add(new Vertex(position.position, position.normal, down + left + shieldOffset * forward, position.direction));
+                spikeShieldVertexList.Add(new Vertex(position.position, position.normal, down + right + shieldOffset * forward, position.direction));
+                foreach (Vertex v in spikeShieldVertexList)
+                {
+                    v.Update(Engine.player.currentRoom, 1);
+                }
+                if(moveType == VexedLib.MovementType.ChaseBoss)
+                    r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + .09f, textureTriangleList, spikeShieldTexCoords, rightFacing);
+                if(moveType == VexedLib.MovementType.JetBoss)
+                    r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + .09f, textureTriangleList, jetArmorTexCoords, rightFacing);
 
-            r.AddTextureToTriangleList(rectVertexList, monsterColor, depth, textureTriangleList, bodyTexCoords, rightFacing);
-            if (armorType == VexedLib.ArmorType.Full)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, fullArmorTexCoords, rightFacing);
-            if (armorType == VexedLib.ArmorType.Top)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, topArmorTexCoords, rightFacing);
-            if (armorType == VexedLib.ArmorType.Shield)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, frontArmorTexCoords, rightFacing);
-            if (armorType == VexedLib.ArmorType.FullSuper)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, fullSuperArmorTexCoords, rightFacing);
-            if (armorType == VexedLib.ArmorType.TopSuper)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, topSuperArmorTexCoords, rightFacing);
-            if (armorType == VexedLib.ArmorType.ShieldSuper)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, frontSuperArmorTexCoords, rightFacing);
-            r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, eyesTexCoords, rightFacing);
+            }
+
+            if (moveType == VexedLib.MovementType.SnakeBoss)
+            {
+                if (baseHP > 2)
+                {
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, iceShieldFullTexCoords, rightFacing);
+                }
+                else if (baseHP > 1)
+                {
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, iceShieldMedTexCoords, rightFacing);
+                }
+                else if (baseHP > 0)
+                {
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, iceShieldLowTexCoords, rightFacing);
+                }
+            }
+
+            if (moveType == VexedLib.MovementType.BattleBoss)
+            {
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, bossShieldTexCoords, rightFacing);
+            }
+            if (moveType == VexedLib.MovementType.ArmorBoss)
+            {
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, bossArmorTexCoords, rightFacing);
+            }
+
+            if (moveType != VexedLib.MovementType.ChaseBoss && moveType != VexedLib.MovementType.RockBoss && moveType != VexedLib.MovementType.ArmorBoss && moveType != VexedLib.MovementType.BattleBoss && moveType != VexedLib.MovementType.JetBoss && moveType != VexedLib.MovementType.ArmorBoss)
+            {
+                if (armorType == VexedLib.ArmorType.Full)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, fullArmorTexCoords, rightFacing);
+                if (armorType == VexedLib.ArmorType.Top)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, topArmorTexCoords, rightFacing);
+                if (armorType == VexedLib.ArmorType.Shield)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, frontArmorTexCoords, rightFacing);
+                if (armorType == VexedLib.ArmorType.FullSuper)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, fullSuperArmorTexCoords, rightFacing);
+                if (armorType == VexedLib.ArmorType.TopSuper)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, topSuperArmorTexCoords, rightFacing);
+                if (armorType == VexedLib.ArmorType.ShieldSuper)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, frontSuperArmorTexCoords, rightFacing);
+            }
+            
+
+            if (moveType != VexedLib.MovementType.ChaseBoss && moveType != VexedLib.MovementType.SnakeBoss && moveType != VexedLib.MovementType.BattleBoss && moveType != VexedLib.MovementType.JetBoss && moveType != VexedLib.MovementType.ArmorBoss)
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, eyesTexCoords, rightFacing);
+            if (moveType == VexedLib.MovementType.SnakeBoss && snakeBoss.chainIndex == 0)
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, eyesTexCoords, rightFacing);
+
             if(moveType == VexedLib.MovementType.Tank)
                 r.AddTextureToTriangleList(rectVertexList, Color.White, depth+.1f, textureTriangleList, treadsTexCoords, rightFacing);
             else if (moveType == VexedLib.MovementType.Spider)

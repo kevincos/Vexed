@@ -45,7 +45,8 @@ namespace VexedLib
         HookTarget = 34,
         LaserSwitch = 35,
         PlugSlot = 36,
-        PowerPlug = 37
+        PowerPlug = 37,
+        TriggerPoint = 38
     }
 
     public enum AbilityType
