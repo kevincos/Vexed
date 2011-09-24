@@ -88,6 +88,7 @@
     <Compile Include="JetBoss.cs" />
     <Compile Include="LevelLoader.cs" />
     <Compile Include="Monster.cs" />
+    <Compile Include="MusicControl.cs" />
     <Compile Include="NonPhotoRealisticSettings.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="Player.cs" />
@@ -101,6 +102,7 @@
     </Compile>
     <Compile Include="Skybox.cs" />
     <Compile Include="SnakeBoss.cs" />
+    <Compile Include="SoundFX.cs" />
     <Compile Include="Vertex.cs" />
     <Compile Include="WorldSave.cs" />
   </ItemGroup>
@@ -152,6 +154,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="LevelData\spiral2" />
+    <None Include="LevelData\world" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework">

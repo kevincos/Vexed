@@ -103,6 +103,8 @@ namespace VexedCore
     {
         public static Color Shade(Color c, Vector3 n)
         {
+            if (Engine.lightingLevel != 0)
+                return c;
             n.Normalize();
             int alt = 15;
             int r = c.R;

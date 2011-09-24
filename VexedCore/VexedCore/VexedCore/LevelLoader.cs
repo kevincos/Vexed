@@ -105,6 +105,7 @@ namespace VexedCore
                                 Vector3 right = Vector3.Cross(xmlDoodad.up, xmlFace.normal);
                                 Doodad entrance = new Doodad(xmlDoodad, xmlFace.normal);
                                 Doodad exit = new Doodad(VexedLib.DoodadType.Vortex, xmlDoodad.position + -1f*Math.Abs(Vector3.Dot(newRoom.size, xmlFace.normal))*xmlFace.normal, -xmlFace.normal, xmlDoodad.up);
+                                exit.activationCost = entrance.activationCost;
                                 exit.id = entrance.id + "_X";
                                 entrance.targetObject = exit.id;
                                 exit.targetObject = entrance.id;

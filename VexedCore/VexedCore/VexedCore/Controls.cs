@@ -23,6 +23,8 @@ namespace VexedCore
         public bool released = false;
         public bool pressed = false;
 
+        
+
         public GameButton(Buttons b, Keys k)
         {
             button = b;
@@ -78,6 +80,13 @@ namespace VexedCore
     public class Controls
     {
         public List<GameButton> buttons;
+        public GameButton BackButton
+        {
+            get
+            {
+                return buttons[4];
+            }
+        }
         public GameButton XButton
         {
             get
@@ -116,6 +125,7 @@ namespace VexedCore
             buttons.Add(new GameButton(Buttons.Y, Keys.LeftShift));
             buttons.Add(new GameButton(Buttons.A, Keys.Space));
             buttons.Add(new GameButton(Buttons.B, Keys.E));
+            buttons.Add(new GameButton(Buttons.Back, Keys.Back));
         }
         
 

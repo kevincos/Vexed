@@ -391,6 +391,14 @@ namespace VexedLib
             {
                 b.Move(delta);
             }
+            foreach (Monster m in monsters)
+            {
+                m.Move(delta);
+            }
+            foreach (Doodad d in doodads)
+            {
+                d.Move(delta);
+            }
         }
 
         public void Resize(Vector3 newSize)

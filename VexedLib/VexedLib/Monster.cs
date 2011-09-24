@@ -129,5 +129,10 @@ namespace VexedLib
                 return name + "_" + id;
             }
         }
+
+        public void Move(Vector3 delta)
+        {
+            position += delta;
+        }
     }
 }

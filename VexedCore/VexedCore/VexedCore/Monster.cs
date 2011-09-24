@@ -263,12 +263,16 @@ namespace VexedCore
             }
             else if (moveType == VexedLib.MovementType.ArmorBoss)
             {
+                if (id.Contains("Basic"))
+                {
+
+                }
                 rightFacing = true;
                 startingArmorType = VexedLib.ArmorType.ShieldSuper;
-                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Missile, new Vector2(.3f, -1.3f), .7f * halfWidth, .05f, BaseType.Standard));
+                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(.3f, -1.3f), .7f * halfWidth, .05f, BaseType.Standard));
                 guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(.3f, 1.3f), .7f * halfWidth, .05f, BaseType.Standard));
             }
-            else
+            else if(gunType != VexedLib.GunType.None)
                 guns.Add(new GunEmplacement(trackType, gunType, Vector2.Zero, halfWidth, -.05f, BaseType.None));            
         }
 
@@ -296,6 +300,12 @@ namespace VexedCore
         {
             get
             {
+                if (moveType == VexedLib.MovementType.ArmorBoss)
+                {
+                    if (id.Contains("Basic"))
+                        return 16;
+                    return 6;
+                }
                 if (moveType == VexedLib.MovementType.JetBoss)
                     return 48;
                 if (moveType == VexedLib.MovementType.SnakeBoss)

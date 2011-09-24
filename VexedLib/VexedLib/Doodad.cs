@@ -148,5 +148,10 @@ namespace VexedLib
             }
             return null;
         }
+
+        public void Move(Vector3 delta)
+        {
+            position += delta;
+        }
     }
 }

@@ -663,6 +663,7 @@ namespace VexedCore
                             //Engine.reDraw = true;
                             r.refreshVertices = true;
                             p.orbsCollected++;
+                            SoundFX.CollectOrb();
                         }
                     }
                     if (d.type == VexedLib.DoodadType.Checkpoint)
@@ -821,7 +822,7 @@ namespace VexedCore
                     {
                         b.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
 
-                        if (b.hasCollisionRect)
+                        if (b.hasCollisionRect && b.type != VexedLib.DoodadType.PowerPlug)
                         {
                             if (m.CollisionFirstPass(b))
                                 continue;

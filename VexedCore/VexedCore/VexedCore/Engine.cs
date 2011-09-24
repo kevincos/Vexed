@@ -36,6 +36,9 @@ namespace VexedCore
         public static DialogBox dialogBox;
         public static SpriteFont spriteFont;
 
+        public static bool soundEffectsEnabled = true;
+        public static bool musicEnabled = false;
+
         public static int selectedRoomIndex = 0;
 
         public static SpriteBatch spriteBatch;
@@ -47,10 +50,12 @@ namespace VexedCore
         public Effect cartoonEffect = null;
         public Effect postprocessEffect = null;
 
+        
+
         public static bool transparencyEnabled = true;
         public static int lightingLevel = 0;
         public static bool toonShadingEnabled = false;
-        public static float drawDistance = 150f;
+        public static float drawDistance = 100f;
         public int optionToggleCooldown = 0;
         public static bool reDraw = false;
         public static bool detailTextures = true;

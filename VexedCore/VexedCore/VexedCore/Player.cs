@@ -174,11 +174,11 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Blaster);
-            secondaryAbility = new Ability(AbilityType.JetPack);
+            primaryAbility = new Ability(AbilityType.Empty);
+            secondaryAbility = new Ability(AbilityType.Empty);
             naturalShield = new Ability(AbilityType.Shield);
-            upgrades[(int)AbilityType.WallJump] = true;
-            upgrades[(int)AbilityType.DoubleJump] = true;
+            //upgrades[(int)AbilityType.WallJump] = true;
+            //upgrades[(int)AbilityType.DoubleJump] = true;
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }
@@ -266,6 +266,9 @@ namespace VexedCore
             }
             set
             {
+                if (_grounded == false && value == true)
+                    SoundFX.Land();
+
                 _grounded = value;
                 if(_grounded == true)
                     groundCounter = 0;
@@ -452,6 +455,14 @@ namespace VexedCore
                     state = State.Normal;
                 }
             }
+        }
+
+        public void QuickSave()
+        {
+            LevelLoader.QuickSave();
+            respawnPlayer = new Player();
+            respawnPlayer.currentRoom = currentRoom;
+            respawnPlayer.center = new Vertex(center.position, center.normal, Vector3.Zero, center.direction);
         }
 
         public void Respawn()
@@ -937,6 +948,10 @@ namespace VexedCore
                         superJump = false;
                 }
 
+                if (Game1.controller.BackButton.NewPressed)
+                {
+                    dead = true;
+                }
                 if (Game1.controller.AButton.NewPressed && jumpRecovery == 0)
                 {
 
@@ -1139,6 +1154,7 @@ namespace VexedCore
                             {
                                 if (d.type == VexedLib.DoodadType.JumpPad)
                                     d.Activate();
+                                SoundFX.RoomJump();
                                 jumpRoom = d.targetRoom;
                                 jumpRoom.Reset();
                                 float roomSize = Math.Abs(Vector3.Dot(jumpRoom.size / 2, center.normal));
@@ -1269,8 +1285,18 @@ namespace VexedCore
                     center.position = jumpDestination;
                     //center.velocity = Vector3.Zero;
                     faceDirection = 0;
+                    State oldState = state;
                     state = State.Normal;
                     currentRoom = jumpRoom;
+
+
+
+                    if (oldState == State.Jump)
+                    {
+                        naturalShield.ammo = naturalShield.maxAmmo;
+                        QuickSave();
+                    }
+                    
                     Physics.refresh = true;
                     Engine.reDraw = true;
                     foreach (Doodad d in jumpRoom.doodads)

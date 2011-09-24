@@ -45,9 +45,9 @@ namespace VexedCore
             resHeight = 720;
 #endif
 
-            resWidth = 1920;
-            resHeight = 1080;
-            fullScreen = true;
+            //resWidth = 1920;
+            //resHeight = 1080;
+            //fullScreen = true;
             graphics.IsFullScreen = fullScreen;
             graphics.PreferredBackBufferWidth = resWidth;
             graphics.PreferredBackBufferHeight = resHeight;
@@ -75,13 +75,8 @@ namespace VexedCore
             // TODO: Add your initialization logic here
             graphicsDevice = GraphicsDevice;
 
-            //LevelLoader.Load("LevelData\\blarg");
-            LevelLoader.Load("LevelData\\spikeelevator");
-            //LevelLoader.Load("LevelData\\spiral2");
-            
-            //LevelLoader.Load("LevelData\\movingplatform");
-            //LevelLoader.Load("LevelData\\awesome");
-            //LevelLoader.Load("LevelData\\debug");
+            LevelLoader.Load("LevelData\\world");
+            //LevelLoader.Load("LevelData\\spikeelevator");
             
             Components.Add(new FrameRateCounter(this));
             //Components.Add(bloom);
@@ -99,6 +94,8 @@ namespace VexedCore
             Ability.InitTexCoords();
             Room.InitTexCoords();
             Doodad.InitTexCoords();
+
+            MusicControl.PlayGameMusic();
         }
 
         /// <summary>
@@ -143,6 +140,11 @@ namespace VexedCore
             Engine.normalDepthRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
                                                          pp.BackBufferWidth, pp.BackBufferHeight, false,
                                                          pp.BackBufferFormat, pp.DepthStencilFormat);
+
+            SoundFX.Init(Content);
+            
+            MusicControl.music_menu = Content.Load<Song>("Sounds\\music_menu");
+            MusicControl.music_game = Content.Load<Song>("Sounds\\music_game");
             // TODO: use this.Content to load your game content here
         }
 

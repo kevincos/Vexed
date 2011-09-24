@@ -315,7 +315,7 @@ namespace VexedCore
 
                 for (int i = 0; i < baseTriangleList.Count; i++)
                 {
-                    newColors.Add(new VertexPositionColorNormalTexture(baseTriangleList[i].Position, powerUpColor, baseTriangleList[i].Normal, baseTriangleList[i].TextureCoordinates));
+                    newColors.Add(new VertexPositionColorNormalTexture(baseTriangleList[i].Position, FakeShader.Shade(powerUpColor,baseTriangleList[i].Normal) , baseTriangleList[i].Normal, baseTriangleList[i].TextureCoordinates));
                 }
                 baseTriangleList.Clear();
                 baseTriangleList = newColors;

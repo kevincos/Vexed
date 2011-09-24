@@ -50,14 +50,14 @@ namespace VexedCore
 
         public void Update(int time, Monster srcMonster)
         {
+            if (srcMonster.id.Contains("Basic") && srcMonster.baseHP < 3*srcMonster.startingBaseHP / 4)
+                srcMonster.guns[0].gunType = VexedLib.GunType.Missile;
+
             if (aimDirection == Vector3.Zero)
                 Rotate(srcMonster);
 
             Vector3 targetUp = Vector3.Cross(srcMonster.position.normal, aimDirection);
-            if (srcMonster.rightFacing == false)
-            {
-                int x = 5;
-            }
+
             float angleDiff = Vector3.Dot(targetUp, srcMonster.rightUnit);
             float angleChange = 0f;
             rotating = true;
