@@ -87,6 +87,7 @@ namespace VexedCore
         public Vector3 jumpPosition;
         public Vector3 jumpNormal;
         public Vector3 platformVelocity;
+        public float referenceFrameSpeed;
         public Vector3 spinUp;
         public Vector3 lastLivingPosition;
         [XmlIgnore]
@@ -177,6 +178,7 @@ namespace VexedCore
             primaryAbility = new Ability(AbilityType.Empty);
             secondaryAbility = new Ability(AbilityType.Empty);
             naturalShield = new Ability(AbilityType.Shield);
+            //upgrades[(int)AbilityType.PermanentWallJump] = true;
             //upgrades[(int)AbilityType.WallJump] = true;
             //upgrades[(int)AbilityType.DoubleJump] = true;
             //for (int i = 8; i < 19; i++)
@@ -215,6 +217,8 @@ namespace VexedCore
             upgrades = new bool[64];
             for (int i = 0; i < 64; i++)
                 upgrades[i] = p.upgrades[i];
+
+            
 
             if (p.currentRoom != null)
                 currentRoomId = p.currentRoom.id;
@@ -744,6 +748,29 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            if (grounded == true)
+            {
+                referenceFrameSpeed = Vector3.Dot(platformVelocity, right);
+            }
+            else
+            {
+                float currentSpeed = Vector3.Dot(center.velocity, right);
+                Vector2 controlStick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Left;
+                if (!(Game1.controller.AButton.Pressed == true ||  Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Right) ||
+                    Keyboard.GetState().IsKeyDown(Keys.A) || (Keyboard.GetState().IsKeyDown(Keys.D)) || Math.Abs(controlStick.X) > .1f))
+                {
+                    if (currentSpeed > referenceFrameSpeed)
+                    {
+                        center.velocity -= .0005f * right;
+                    }
+                    if (currentSpeed < referenceFrameSpeed)
+                    {
+                        center.velocity += .0005f * right;
+                    }
+                }
+            }
+            
+
             center.direction.Normalize();
             if (state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
             {
