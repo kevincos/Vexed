@@ -7,8 +7,8 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Font.xnb</Output>
-      <Time>2011-07-01T14:35:12.2506609-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Font.xnb</Output>
+      <Time>2011-07-01T17:55:34.1430129-07:00</Time>
     </Item>
     <Item>
       <Source>BloomCombine.fx</Source>
@@ -16,8 +16,8 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomCombine.xnb</Output>
-      <Time>2011-07-06T12:32:50.1567887-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomCombine.xnb</Output>
+      <Time>2011-07-05T17:25:10.7172229-07:00</Time>
     </Item>
     <Item>
       <Source>BloomExtract.fx</Source>
@@ -25,8 +25,8 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomExtract.xnb</Output>
-      <Time>2011-07-06T12:32:50.1577888-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomExtract.xnb</Output>
+      <Time>2011-07-05T17:25:10.7772264-07:00</Time>
     </Item>
     <Item>
       <Source>GaussianBlur.fx</Source>
@@ -34,8 +34,8 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\GaussianBlur.xnb</Output>
-      <Time>2011-07-06T12:32:50.1577888-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\GaussianBlur.xnb</Output>
+      <Time>2011-07-05T17:25:15.0584712-07:00</Time>
     </Item>
     <Item>
       <Source>CartoonEffect.Fx</Source>
@@ -43,8 +43,8 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\CartoonEffect.xnb</Output>
-      <Time>2011-07-27T12:11:10.3515098-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\CartoonEffect.xnb</Output>
+      <Time>2011-07-27T13:10:14.7116231-07:00</Time>
     </Item>
     <Item>
       <Source>PostprocessEffect.Fx</Source>
@@ -52,8 +52,8 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\PostprocessEffect.xnb</Output>
-      <Time>2010-09-15T15:28:32-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\PostprocessEffect.xnb</Output>
+      <Time>2011-07-20T19:26:33.2785964-07:00</Time>
     </Item>
     <Item>
       <Source>p_fall.png</Source>
@@ -61,8 +61,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_fall.xnb</Output>
-      <Time>2011-07-20T15:25:03.5306177-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_fall.xnb</Output>
+      <Time>2011-07-20T19:24:45.9894598-07:00</Time>
     </Item>
     <Item>
       <Source>p_neutral.png</Source>
@@ -70,8 +70,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_neutral.xnb</Output>
-      <Time>2011-07-20T15:20:35.2325254-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_neutral.xnb</Output>
+      <Time>2011-07-20T19:24:45.9944601-07:00</Time>
     </Item>
     <Item>
       <Source>p_walljump.png</Source>
@@ -79,8 +79,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_walljump.xnb</Output>
-      <Time>2011-07-20T15:27:26.4045896-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_walljump.xnb</Output>
+      <Time>2011-07-20T19:24:46.0074608-07:00</Time>
     </Item>
     <Item>
       <Source>p_run2.png</Source>
@@ -88,8 +88,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run2.xnb</Output>
-      <Time>2011-07-20T15:29:26.787464-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run2.xnb</Output>
+      <Time>2011-07-20T19:24:46.0004604-07:00</Time>
     </Item>
     <Item>
       <Source>p_run1.png</Source>
@@ -97,8 +97,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run1.xnb</Output>
-      <Time>2011-07-20T15:28:54.2368756-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run1.xnb</Output>
+      <Time>2011-07-20T19:24:45.9974603-07:00</Time>
     </Item>
     <Item>
       <Source>p_run3.png</Source>
@@ -106,8 +106,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run3.xnb</Output>
-      <Time>2011-07-20T15:30:00.969132-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run3.xnb</Output>
+      <Time>2011-07-20T19:24:46.0024605-07:00</Time>
     </Item>
     <Item>
       <Source>p_run4.png</Source>
@@ -115,8 +115,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run4.xnb</Output>
-      <Time>2011-07-20T15:30:42.0701376-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run4.xnb</Output>
+      <Time>2011-07-20T19:24:46.0054607-07:00</Time>
     </Item>
     <Item>
       <Source>plate_texture.png</Source>
@@ -127,8 +127,8 @@
         <Data Key="GenerateMipmaps">True</Data>
       </Parameters>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\plate_texture.xnb</Output>
-      <Time>2011-08-11T13:00:24.9677661-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\plate_texture.xnb</Output>
+      <Time>2011-08-12T08:13:34.4206222-07:00</Time>
     </Item>
     <Item>
       <Source>m_body.png</Source>
@@ -136,8 +136,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\m_body.xnb</Output>
-      <Time>2011-07-20T16:01:15.8946239-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\m_body.xnb</Output>
+      <Time>2011-07-20T19:24:45.9804593-07:00</Time>
     </Item>
     <Item>
       <Source>m_body_detail.png</Source>
@@ -145,8 +145,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\m_body_detail.xnb</Output>
-      <Time>2011-09-20T16:15:19.9778609-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\m_body_detail.xnb</Output>
+      <Time>2011-09-21T11:34:55.8686392-07:00</Time>
     </Item>
     <Item>
       <Source>p_fall_detail.png</Source>
@@ -154,8 +154,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_fall_detail.xnb</Output>
-      <Time>2011-07-20T16:49:07.2917412-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_fall_detail.xnb</Output>
+      <Time>2011-07-20T19:26:33.2935972-07:00</Time>
     </Item>
     <Item>
       <Source>p_neutral_detail.png</Source>
@@ -163,8 +163,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_neutral_detail.xnb</Output>
-      <Time>2011-07-20T16:48:33.8141076-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_neutral_detail.xnb</Output>
+      <Time>2011-07-20T19:26:33.2955974-07:00</Time>
     </Item>
     <Item>
       <Source>p_run1_detail.png</Source>
@@ -172,8 +172,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run1_detail.xnb</Output>
-      <Time>2011-07-22T13:39:59.936897-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run1_detail.xnb</Output>
+      <Time>2011-07-22T16:36:18.8394236-07:00</Time>
     </Item>
     <Item>
       <Source>p_run2_detail.png</Source>
@@ -181,8 +181,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run2_detail.xnb</Output>
-      <Time>2011-07-22T13:39:50.2484242-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run2_detail.xnb</Output>
+      <Time>2011-07-22T16:36:18.8414237-07:00</Time>
     </Item>
     <Item>
       <Source>p_run3_detail.png</Source>
@@ -190,8 +190,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run3_detail.xnb</Output>
-      <Time>2011-07-20T16:48:59.9043807-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run3_detail.xnb</Output>
+      <Time>2011-07-20T19:26:33.3005976-07:00</Time>
     </Item>
     <Item>
       <Source>p_run4_detail.png</Source>
@@ -199,8 +199,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run4_detail.xnb</Output>
-      <Time>2011-07-20T16:49:01.8474756-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_run4_detail.xnb</Output>
+      <Time>2011-07-20T19:26:33.3015977-07:00</Time>
     </Item>
     <Item>
       <Source>p_walljump_detail.png</Source>
@@ -208,8 +208,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_walljump_detail.xnb</Output>
-      <Time>2011-07-20T16:49:03.6815651-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_walljump_detail.xnb</Output>
+      <Time>2011-07-20T19:26:33.3035978-07:00</Time>
     </Item>
     <Item>
       <Source>projectiles.png</Source>
@@ -217,8 +217,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\projectiles.xnb</Output>
-      <Time>2011-07-22T15:52:54.096017-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\projectiles.xnb</Output>
+      <Time>2011-07-22T16:36:18.8724255-07:00</Time>
     </Item>
     <Item>
       <Source>p_texture.png</Source>
@@ -226,8 +226,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture.xnb</Output>
-      <Time>2011-08-04T15:21:54.1314171-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture.xnb</Output>
+      <Time>2011-08-05T02:05:13.0342964-07:00</Time>
     </Item>
     <Item>
       <Source>p_texture_clean.png</Source>
@@ -235,8 +235,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_clean.xnb</Output>
-      <Time>2011-07-27T12:38:27.0823783-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_clean.xnb</Output>
+      <Time>2011-07-27T13:10:14.7216236-07:00</Time>
     </Item>
     <Item>
       <Source>abilities.png</Source>
@@ -244,8 +244,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\abilities.xnb</Output>
-      <Time>2011-09-06T16:23:10.8553432-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\abilities.xnb</Output>
+      <Time>2011-09-06T19:52:44.1670389-07:00</Time>
     </Item>
     <Item>
       <Source>p_gun_texture.png</Source>
@@ -253,8 +253,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_gun_texture.xnb</Output>
-      <Time>2011-08-04T15:21:18.144661-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_gun_texture.xnb</Output>
+      <Time>2011-08-05T02:05:12.7602808-07:00</Time>
     </Item>
     <Item>
       <Source>p_texture_boots.png</Source>
@@ -262,8 +262,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_boots.xnb</Output>
-      <Time>2011-08-04T15:38:01.9356436-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_boots.xnb</Output>
+      <Time>2011-08-05T02:05:13.0452971-07:00</Time>
     </Item>
     <Item>
       <Source>p_texture_jetpack.png</Source>
@@ -271,8 +271,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_jetpack.xnb</Output>
-      <Time>2011-08-05T14:12:09.4823597-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_jetpack.xnb</Output>
+      <Time>2011-08-05T14:00:16.5155138-07:00</Time>
     </Item>
     <Item>
       <Source>p_texture_booster.png</Source>
@@ -280,8 +280,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_booster.xnb</Output>
-      <Time>2011-08-04T16:56:16.7907414-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\p_texture_booster.xnb</Output>
+      <Time>2011-08-05T02:05:13.0392967-07:00</Time>
     </Item>
     <Item>
       <Source>dialogbox.png</Source>
@@ -289,8 +289,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dialogbox.xnb</Output>
-      <Time>2011-08-09T20:46:41.7555442-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dialogbox.xnb</Output>
+      <Time>2011-08-10T12:30:08.3444897-07:00</Time>
     </Item>
     <Item>
       <Source>skybox_back.png</Source>
@@ -298,8 +298,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_back.xnb</Output>
-      <Time>2011-08-11T14:09:44.5927459-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_back.xnb</Output>
+      <Time>2011-08-12T08:13:34.4362222-07:00</Time>
     </Item>
     <Item>
       <Source>skybox_bottom.png</Source>
@@ -307,8 +307,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_bottom.xnb</Output>
-      <Time>2011-08-11T14:07:25.8269745-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_bottom.xnb</Output>
+      <Time>2011-08-12T08:13:34.4674223-07:00</Time>
     </Item>
     <Item>
       <Source>skybox_front.png</Source>
@@ -316,8 +316,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_front.xnb</Output>
-      <Time>2011-08-11T14:09:33.3121955-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_front.xnb</Output>
+      <Time>2011-08-12T08:13:34.4830223-07:00</Time>
     </Item>
     <Item>
       <Source>skybox_left.png</Source>
@@ -325,8 +325,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_left.xnb</Output>
-      <Time>2011-08-11T14:08:43.668773-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_left.xnb</Output>
+      <Time>2011-08-12T08:13:34.5142223-07:00</Time>
     </Item>
     <Item>
       <Source>skybox_right.png</Source>
@@ -334,8 +334,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_right.xnb</Output>
-      <Time>2011-08-11T14:08:54.9733246-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_right.xnb</Output>
+      <Time>2011-08-12T08:13:34.5298224-07:00</Time>
     </Item>
     <Item>
       <Source>skybox_top.png</Source>
@@ -343,8 +343,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_top.xnb</Output>
-      <Time>2011-08-11T14:09:21.3686126-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\skybox_top.xnb</Output>
+      <Time>2011-08-12T08:13:34.5610224-07:00</Time>
     </Item>
     <Item>
       <Source>beams.png</Source>
@@ -352,8 +352,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\beams.xnb</Output>
-      <Time>2011-09-06T13:18:15.3639097-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\beams.xnb</Output>
+      <Time>2011-09-06T19:52:44.1670389-07:00</Time>
     </Item>
     <Item>
       <Source>Sounds\beep.wav</Source>
@@ -361,8 +361,8 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\beep.xnb</Output>
-      <Time>2000-11-23T06:33:52-08:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\beep.xnb</Output>
+      <Time>2011-09-25T09:31:15.9299522-07:00</Time>
     </Item>
     <Item>
       <Source>Sounds\bloop.wav</Source>
@@ -370,8 +370,8 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\bloop.xnb</Output>
-      <Time>2000-11-23T06:37:50-08:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\bloop.xnb</Output>
+      <Time>2011-09-25T09:31:15.9455523-07:00</Time>
     </Item>
     <Item>
       <Source>Sounds\click.wav</Source>
@@ -379,8 +379,8 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\click.xnb</Output>
-      <Time>2011-05-20T15:08:50.1305954-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\click.xnb</Output>
+      <Time>2011-09-25T09:31:15.9455523-07:00</Time>
     </Item>
     <Item>
       <Source>Sounds\swoosh.wav</Source>
@@ -388,28 +388,8 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\swoosh.xnb</Output>
-      <Time>2000-11-23T06:30:54-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\music_game.mp3</Source>
-      <Name>Sounds\music_game</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_game.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_game.wma</Extra>
-      <Time>2011-05-31T12:30:19.3215384-07:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\music_menu.mp3</Source>
-      <Name>Sounds\music_menu</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_menu.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_menu.wma</Extra>
-      <Time>2011-05-31T12:30:19.3825414-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\swoosh.xnb</Output>
+      <Time>2011-09-25T09:31:16.3355529-07:00</Time>
     </Item>
     <Item>
       <Source>Sounds\thud.wav</Source>
@@ -417,8 +397,28 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\thud.xnb</Output>
-      <Time>2011-09-23T11:57:26.9930819-07:00</Time>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\thud.xnb</Output>
+      <Time>2011-09-25T09:31:16.3355529-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\music_game.mp3</Source>
+      <Name>Sounds\music_game</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_game.xnb</Output>
+      <Extra>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_game.wma</Extra>
+      <Time>2011-09-25T09:31:16.1483526-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\music_menu.mp3</Source>
+      <Name>Sounds\music_menu</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_menu.xnb</Output>
+      <Extra>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_menu.wma</Extra>
+      <Time>2011-09-25T09:31:16.3199529-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
@@ -426,39 +426,39 @@
       <TargetProfile>Reach</TargetProfile>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCoreContent\</RootDirectory>
-      <LoggerRootDirectory>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\</LoggerRootDirectory>
-      <IntermediateDirectory>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCoreContent\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCoreContent\</RootDirectory>
+      <LoggerRootDirectory>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCoreContent\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>
-        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
         <Value>2010-08-23T13:41:18-07:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
         <Value>2010-08-23T13:41:18-07:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
         <Value>2010-08-23T13:41:18-07:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
         <Value>2010-08-23T13:41:18-07:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
         <Value>2010-08-23T13:41:18-07:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
         <Value>2010-08-23T13:41:18-07:00</Value>
       </Assembly>
       <Assembly>
         <Key>C:\Windows\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
-        <Value>2010-12-04T14:32:05.0333897-08:00</Value>
+        <Value>2011-01-03T13:15:26.512819-08:00</Value>
       </Assembly>
     </Assemblies>
   </Asset>
