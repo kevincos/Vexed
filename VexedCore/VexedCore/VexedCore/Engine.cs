@@ -36,6 +36,8 @@ namespace VexedCore
         public static DialogBox dialogBox;
         public static SpriteFont spriteFont;
 
+        public SaveGameText saveGameText;
+
         public static bool soundEffectsEnabled = true;
         public static bool musicEnabled = false;
 
@@ -44,7 +46,7 @@ namespace VexedCore
         public static SpriteBatch spriteBatch;
         public BasicEffect translucentEffect = null;
         public BasicEffect mapEffect = null;
-        public AlphaTestEffect playerTextureEffect = null;
+        public static AlphaTestEffect playerTextureEffect = null;
         public BasicEffect worldTextureEffect = null;
         public BasicEffect skyBoxEffect = null;
         public Effect cartoonEffect = null;
@@ -175,6 +177,8 @@ namespace VexedCore
                 worldTextureEffect.DirectionalLight1.Enabled = true;
                 worldTextureEffect.DirectionalLight0.Enabled = true;
             }
+
+            saveGameText = new SaveGameText();
             
         }
 
@@ -275,6 +279,8 @@ namespace VexedCore
                 playerTextureEffect.Texture = Projectile.projectileTexture;
                 playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                 Engine.player.currentRoom.DrawProjectiles();
+
+                Engine.player.currentRoom.DrawDecorations();
 
                 Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
@@ -396,7 +402,8 @@ namespace VexedCore
 
         public void Draw(GameTime gameTime)
         {
-            
+            saveGameText.RenderTextures();
+
             Engine.mapShellObjects = new List<TrasnparentSquare>();
             if(Engine.detailVertexArray == null)
                 Engine.detailVertexArray = new VertexPositionColorNormalTexture[30000];
@@ -549,6 +556,7 @@ namespace VexedCore
                     dialogBox = new DialogBox();
                 dialogBox.Draw();
             }
+            saveGameText.Draw();
         }
 
 

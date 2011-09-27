@@ -1156,6 +1156,12 @@ namespace VexedCore
                                     d.targetDoodad.active = false;
                                 }
                             }
+                            if (d.type == VexedLib.DoodadType.LoadStation)
+                            {
+                                LevelLoader.Load("LevelData\\world");
+                                Physics.refresh = true;
+                                Engine.reDraw = true;
+                            }
                             if (d.type == VexedLib.DoodadType.PowerStation)
                             {
                                 if (d.orbsRemaining > 0)

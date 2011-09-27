@@ -68,6 +68,11 @@ namespace VexedCore
                                 newRoom.monsters.Add(new Monster(xmlMonster, xmlFace.normal));
                             }
                         }
+                        foreach (VexedLib.Decoration xmlDecoaration in xmlFace.decorations)
+                        {
+                            Decoration newDecoration = new Decoration(xmlDecoaration, xmlFace.normal);
+                            newRoom.decorations.Add(newDecoration);
+                        }
                         foreach (VexedLib.Doodad xmlDoodad in xmlFace.doodads)
                         {
                             Doodad newDoodad = null;
@@ -145,7 +150,7 @@ namespace VexedCore
                                 newRoom.doodads.Add(rightDoor2);
                                 
                             }
-                            else if (xmlDoodad.type == VexedLib.DoodadType.JumpStation || xmlDoodad.type == VexedLib.DoodadType.ItemStation || xmlDoodad.type == VexedLib.DoodadType.WarpStation || xmlDoodad.type == VexedLib.DoodadType.SwitchStation || xmlDoodad.type == VexedLib.DoodadType.UpgradeStation || xmlDoodad.type == VexedLib.DoodadType.PowerStation)
+                            else if (xmlDoodad.type == VexedLib.DoodadType.JumpStation || xmlDoodad.type == VexedLib.DoodadType.ItemStation || xmlDoodad.type == VexedLib.DoodadType.SaveStation || xmlDoodad.type == VexedLib.DoodadType.WarpStation || xmlDoodad.type == VexedLib.DoodadType.SwitchStation || xmlDoodad.type == VexedLib.DoodadType.UpgradeStation || xmlDoodad.type == VexedLib.DoodadType.PowerStation || xmlDoodad.type == VexedLib.DoodadType.LoadStation || xmlDoodad.type == VexedLib.DoodadType.MenuStation)
                             {
                                 Vector3 right = Vector3.Cross(xmlDoodad.up, xmlFace.normal);
                                 Doodad station = new Doodad(xmlDoodad, xmlFace.normal);

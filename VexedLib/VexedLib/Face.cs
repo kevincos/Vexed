@@ -14,6 +14,7 @@ namespace VexedLib
         public List<Block> blocks;
         public List<Doodad> doodads;
         public List<Monster> monsters;
+        public List<Decoration> decorations;
         public Vector3[] vertices;
 
         public Face()
@@ -27,6 +28,7 @@ namespace VexedLib
             blocks = new List<Block>();
             doodads = new List<Doodad>();
             monsters = new List<Monster>();
+            decorations = new List<Decoration>();
             vertices = new Vector3[f.vertices.Length];
             for (int i = 0; i < f.vertices.Length; i++)
             {
@@ -43,6 +45,10 @@ namespace VexedLib
             foreach (Block b in f.blocks)
             {
                 blocks.Add(new Block(b));
+            }
+            foreach (Decoration d in f.decorations)
+            {
+                decorations.Add(new Decoration(d));
             }
 
         }
@@ -71,6 +77,7 @@ namespace VexedLib
 
             doodads = new List<Doodad>();
             monsters = new List<Monster>();
+            decorations = new List<Decoration>();
         }
 
         public Face(Vector3 normal, Vector3[] pointList)
@@ -86,6 +93,7 @@ namespace VexedLib
             blocks = new List<Block>();
             doodads = new List<Doodad>();
             monsters = new List<Monster>();
+            decorations = new List<Decoration>();
         }
 
         public VertexPositionColor[] GetTemplate(Vector3 position, Vector3 templatePosition)
@@ -188,6 +196,16 @@ namespace VexedLib
             return null;
         }
 
+        public Decoration GetHoverDecoration(Vector3 position)
+        {
+            foreach (Decoration d in decorations)
+            {
+                if ((position - d.position).Length() < .3f)
+                    return d;
+            }
+            return null;
+        }
+
         public Block GetHoverBlock(Vector3 position)
         {
             foreach (Block b in blocks)
@@ -261,6 +279,44 @@ namespace VexedLib
                     vList[9] = new VertexPositionColor(lockPosition, templateColor);
                 }
             
+            }
+
+            return vList;
+        }
+
+        public VertexPositionColor[] GetSelectedDecorationHighlight(Vector3 position, Vector3 currentUp)
+        {
+
+            VertexPositionColor[] vList = null;
+            Decoration d = GetHoverDecoration(position);
+            if (d == null)
+            {
+                Color templateColor = Color.Green;
+                Vector3 lockPosition = new Vector3((int)position.X, (int)position.Y, (int)position.Z);
+                Vector3 up = .5f * currentUp;
+                Vector3 left = .5f * Vector3.Cross(currentUp, normal);
+                lockPosition += up + left + .4f * normal;
+
+                Block testBlock = new Block();
+                testBlock.edges.Add(new Edge(lockPosition - up, lockPosition + left));
+                testBlock.edges.Add(new Edge(lockPosition + left, lockPosition + up));
+                testBlock.edges.Add(new Edge(lockPosition + up, lockPosition - left));
+                testBlock.edges.Add(new Edge(lockPosition - left, lockPosition - up));
+                if (IsBlockValid(testBlock))
+                {
+                    vList = new VertexPositionColor[10];
+                    vList[0] = new VertexPositionColor(lockPosition - up, templateColor);
+                    vList[1] = new VertexPositionColor(lockPosition + left, templateColor);
+                    vList[2] = new VertexPositionColor(lockPosition + left, templateColor);
+                    vList[3] = new VertexPositionColor(lockPosition + up, templateColor);
+                    vList[4] = new VertexPositionColor(lockPosition + up, templateColor);
+                    vList[5] = new VertexPositionColor(lockPosition - left, templateColor);
+                    vList[6] = new VertexPositionColor(lockPosition - left, templateColor);
+                    vList[7] = new VertexPositionColor(lockPosition - up, templateColor);
+                    vList[8] = new VertexPositionColor(lockPosition + up, templateColor);
+                    vList[9] = new VertexPositionColor(lockPosition, templateColor);
+                }
+
             }
 
             return vList;

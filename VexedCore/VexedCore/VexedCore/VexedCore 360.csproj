@@ -77,6 +77,7 @@
     <Compile Include="ChaseBoss.cs" />
     <Compile Include="Collidable.cs" />
     <Compile Include="Controls.cs" />
+    <Compile Include="Decoration.cs" />
     <Compile Include="DialogBox.cs" />
     <Compile Include="Doodad.cs" />
     <Compile Include="Edge.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Room.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SaveGameText.cs" />
     <Compile Include="Skybox.cs" />
     <Compile Include="SnakeBoss.cs" />
     <Compile Include="SoundFX.cs" />
@@ -144,6 +146,7 @@
     </None>
     <None Include="LevelData\blarg" />
     <None Include="LevelData\debug" />
+    <None Include="LevelData\menu" />
     <None Include="LevelData\movingplatform">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

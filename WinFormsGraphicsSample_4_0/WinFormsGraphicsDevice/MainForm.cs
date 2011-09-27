@@ -408,6 +408,11 @@ namespace WinFormsGraphicsDevice
                     undoWorld = new World(world);
                     selectedFace.doodads.Remove(selectedDoodad);
                 }
+                if (editMode == EditMode.Decoration)
+                {
+                    undoWorld = new World(world);
+                    selectedFace.decorations.Remove(selectedDecoration);
+                }
             }
         }
 
@@ -445,6 +450,7 @@ namespace WinFormsGraphicsDevice
                 this.doodadPropertiesGroup.Visible = false;
                 this.monsterPropertiesGroup.Visible = true;
                 this.blockPropertiesGroup.Visible = false;
+                this.decorationPropertiesGroup.Visible = false;
                 
                 this.elementNameField.Text = selectedMonster.name;
                 this.elementIDField.Text = selectedMonster.IDString;
@@ -457,6 +463,23 @@ namespace WinFormsGraphicsDevice
                 this.monsterWeaponDropdown.SelectedIndex = (int)selectedMonster.weapon;
                 this.monsterWaypointID.Text = selectedMonster.waypointId;
                 this.monsterFixedPath.Checked = selectedMonster.fixedPath;
+                this.monsterSizeDropdown.SelectedIndex = (int)selectedMonster.size;
+                this.monsterSpeedDropdown.SelectedIndex = (int)selectedMonster.speed;
+                this.monsterTrackingDropdown.SelectedIndex = (int)selectedMonster.trackType;
+                this.monsterHealthDropdown.SelectedIndex = (int)selectedMonster.health;
+            }
+            else if (selectedDecoration != null && MainForm.editMode == EditMode.Decoration)
+            {
+                this.elementGroup.Visible = true;
+                this.edgePropertiesGroup.Visible = false;
+                this.behaviorPropertiesGroup.Visible = true;
+                this.doodadPropertiesGroup.Visible = false;
+                this.blockPropertiesGroup.Visible = false;
+                this.monsterPropertiesGroup.Visible = false;
+                this.decorationPropertiesGroup.Visible = true;
+                this.elementNameField.Text = selectedDecoration.name;
+                this.elementIDField.Text = selectedDecoration.IDString;
+                this.decorationTexture.Text = selectedDecoration.texture;
             }
             else if (selectedDoodad != null && MainForm.editMode == EditMode.Doodad)
             {
@@ -465,6 +488,8 @@ namespace WinFormsGraphicsDevice
                 this.behaviorPropertiesGroup.Visible = true;
                 this.doodadPropertiesGroup.Visible = true;
                 this.blockPropertiesGroup.Visible = false;
+                this.monsterPropertiesGroup.Visible = false;
+                this.decorationPropertiesGroup.Visible = false;
                 this.elementNameField.Text = selectedDoodad.name;
                 this.elementIDField.Text = selectedDoodad.IDString;
                 this.elementBehaviorDropdown.Items.Clear();
@@ -490,6 +515,8 @@ namespace WinFormsGraphicsDevice
                 this.behaviorPropertiesGroup.Visible = true;
                 this.doodadPropertiesGroup.Visible = false;
                 this.blockPropertiesGroup.Visible = false;
+                this.monsterPropertiesGroup.Visible = false;
+                this.decorationPropertiesGroup.Visible = false;
                 this.elementNameField.Text = selectedEdge.name;
                 this.elementIDField.Text = selectedEdge.IDString;
                 this.elementBehaviorDropdown.Items.Clear();
@@ -508,6 +535,8 @@ namespace WinFormsGraphicsDevice
                 this.behaviorPropertiesGroup.Visible = true;
                 this.doodadPropertiesGroup.Visible = false;
                 this.blockPropertiesGroup.Visible = true;
+                this.monsterPropertiesGroup.Visible = false;
+                this.decorationPropertiesGroup.Visible = false;
                 this.blockColorR.Text = selectedBlock.color.R.ToString();
                 this.blockColorG.Text = selectedBlock.color.G.ToString();
                 this.blockColorB.Text = selectedBlock.color.B.ToString();
@@ -529,6 +558,8 @@ namespace WinFormsGraphicsDevice
                 this.doodadPropertiesGroup.Visible = false;
                 this.monsterPropertiesGroup.Visible = false;
                 this.blockPropertiesGroup.Visible = false;
+                this.monsterPropertiesGroup.Visible = false;
+                this.decorationPropertiesGroup.Visible = false;
             }
         }
 
@@ -586,6 +617,10 @@ namespace WinFormsGraphicsDevice
             if (sender == this.modeMonster)
             {
                 editMode = EditMode.Monster;
+            }
+            if (sender == this.modeDecoration)
+            {
+                editMode = EditMode.Decoration;
             }
         }
 
@@ -676,6 +711,19 @@ namespace WinFormsGraphicsDevice
                 if (sender == this.blockColorB)
                 {
                     selectedBlock.color.B = System.Convert.ToByte(this.blockColorB.Text);
+                }
+            }
+            catch { }
+        }
+
+        void decoration_change(object sender, System.EventArgs e)
+        {
+            try
+            {
+
+                if (sender == this.decorationTexture)
+                {
+                    selectedDecoration.texture = this.decorationTexture.Text;
                 }
             }
             catch { }
@@ -810,6 +858,12 @@ namespace WinFormsGraphicsDevice
                     Monster m = MainForm.selectedMonster;
                     m.name = this.elementNameField.Text;
                     this.elementIDField.Text = m.IDString;
+                }
+                if (MainForm.editMode == EditMode.Decoration)
+                {
+                    Decoration d = MainForm.selectedDecoration;
+                    d.name = this.elementNameField.Text;
+                    this.elementIDField.Text = d.IDString;
                 }
             }
             if (sender == this.behaviorNameField)

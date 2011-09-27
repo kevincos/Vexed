@@ -46,7 +46,9 @@ namespace VexedLib
         LaserSwitch = 35,
         PlugSlot = 36,
         PowerPlug = 37,
-        TriggerPoint = 38
+        TriggerPoint = 38,
+        LoadStation = 39,
+        MenuStation = 40
     }
 
     public enum AbilityType

@@ -455,7 +455,7 @@ namespace VexedCore
                     return false;
                 if (type == VexedLib.DoodadType.RightTunnelDoor || type == VexedLib.DoodadType.LeftTunnelDoor || type == VexedLib.DoodadType.RightDoor || type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.StationIcon || type == VexedLib.DoodadType.TunnelTop || type == VexedLib.DoodadType.TunnelSide)
                     return false;
-                if (type == VexedLib.DoodadType.BridgeCover || type == VexedLib.DoodadType.BridgeGate || type == VexedLib.DoodadType.JumpPad || type == VexedLib.DoodadType.UpgradeStation || type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.SwitchStation)
+                if (type == VexedLib.DoodadType.BridgeCover || type == VexedLib.DoodadType.BridgeGate || type == VexedLib.DoodadType.JumpPad || type == VexedLib.DoodadType.UpgradeStation || type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.LoadStation || type == VexedLib.DoodadType.MenuStation || type == VexedLib.DoodadType.SwitchStation)
                     return false;
                 if (type == VexedLib.DoodadType.Brick && active == true)
                     return false;
@@ -713,7 +713,7 @@ namespace VexedCore
                     return .1f;
                 if (type == VexedLib.DoodadType.WallSwitch)
                     return .25f;
-                if (type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PlugSlot || type == VexedLib.DoodadType.LaserSwitch || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.PowerOrb || type == VexedLib.DoodadType.HookTarget || type == VexedLib.DoodadType.WarpStation || type == VexedLib.DoodadType.JumpPad || type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.UpgradeStation)
+                if (type == VexedLib.DoodadType.Checkpoint || type == VexedLib.DoodadType.PlugSlot || type == VexedLib.DoodadType.LaserSwitch || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.PowerOrb || type == VexedLib.DoodadType.HookTarget || type == VexedLib.DoodadType.WarpStation || type == VexedLib.DoodadType.JumpPad || type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.LoadStation || type == VexedLib.DoodadType.MenuStation || type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.UpgradeStation)
                     return .1f;
                 if (type == VexedLib.DoodadType.PowerPlug)
                     return .11f;
@@ -727,7 +727,7 @@ namespace VexedCore
         {
             get
             {
-                return type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.WarpStation || type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.UpgradeStation || type == VexedLib.DoodadType.PowerStation;
+                return type == VexedLib.DoodadType.JumpStation || type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.WarpStation || type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.UpgradeStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.LoadStation || type == VexedLib.DoodadType.MenuStation;
             }
         }
 
@@ -889,7 +889,7 @@ namespace VexedCore
                 }
 
                 if (type == VexedLib.DoodadType.ItemStation || type == VexedLib.DoodadType.ItemBlock || type == VexedLib.DoodadType.UpgradeStation ||
-                    type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.WarpStation
+                    type == VexedLib.DoodadType.SwitchStation || type == VexedLib.DoodadType.SaveStation || type == VexedLib.DoodadType.LoadStation || type == VexedLib.DoodadType.MenuStation || type == VexedLib.DoodadType.PowerStation || type == VexedLib.DoodadType.WarpStation
                     || type == VexedLib.DoodadType.JumpStation)
                 {
                     currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[34], decalList, true);

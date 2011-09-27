@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="Behavior.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Decoration.cs" />
     <Compile Include="Doodad.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Face.cs" />

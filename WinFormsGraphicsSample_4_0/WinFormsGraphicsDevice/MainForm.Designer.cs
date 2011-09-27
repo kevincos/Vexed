@@ -14,6 +14,7 @@ namespace WinFormsGraphicsDevice
         public static Room zoomRoom = null;
         public static Doodad selectedDoodad = null;
         public static Monster selectedMonster = null;
+        public static Decoration selectedDecoration = null;
         public static string currentFileName = null;
         public static Face selectedFace = null;
         public static Block selectedBlock = null;
@@ -111,6 +112,7 @@ namespace WinFormsGraphicsDevice
             this.modePoint = new System.Windows.Forms.RadioButton();
             this.modeDoodad = new System.Windows.Forms.RadioButton();
             this.modeMonster = new System.Windows.Forms.RadioButton();
+            this.modeDecoration = new System.Windows.Forms.RadioButton();
             this.speedSlider = new System.Windows.Forms.TrackBar();
             this.elementGroup = new System.Windows.Forms.GroupBox();
             this.elementNameField = new System.Windows.Forms.TextBox();
@@ -166,6 +168,9 @@ namespace WinFormsGraphicsDevice
             this.monsterWaypointID = new System.Windows.Forms.TextBox();
             this.monsterWaypointIDLabel = new System.Windows.Forms.Label();
 
+            this.decorationPropertiesGroup = new System.Windows.Forms.GroupBox();
+            this.decorationTexture = new System.Windows.Forms.TextBox();
+
             this.viewControlsGroup = new System.Windows.Forms.GroupBox();
             this.WorldPreviewControl = new WinFormsGraphicsDevice.WorldPreviewControl();
             this.edgePropertiesGroup = new System.Windows.Forms.GroupBox();
@@ -207,6 +212,7 @@ namespace WinFormsGraphicsDevice
             this.splitContainer1.Panel1.Controls.Add(this.edgePropertiesGroup);
             this.splitContainer1.Panel1.Controls.Add(this.blockPropertiesGroup);
             this.splitContainer1.Panel1.Controls.Add(this.doodadPropertiesGroup);
+            this.splitContainer1.Panel1.Controls.Add(this.decorationPropertiesGroup);
             this.splitContainer1.Panel1.Controls.Add(this.monsterPropertiesGroup);
             this.splitContainer1.Panel1.Controls.Add(this.behaviorPropertiesGroup);
             this.splitContainer1.Panel1.Controls.Add(this.debug1);
@@ -436,6 +442,8 @@ namespace WinFormsGraphicsDevice
             this.monsterPropertiesGroup.Controls.Add(this.monsterWaypointID);
             this.monsterPropertiesGroup.Controls.Add(this.monsterWaypointIDLabel);
 
+            
+
             this.monsterMovementDropdown.Location = new System.Drawing.Point(10, 10);
             this.monsterMovementDropdown.Size = new System.Drawing.Size(180, 20);
             this.monsterMovementDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -523,6 +531,16 @@ namespace WinFormsGraphicsDevice
             this.monsterWaypointID.Location = new System.Drawing.Point(10, 110);
             this.monsterWaypointID.Size = new System.Drawing.Size(180, 20);
             this.monsterWaypointID.TextChanged += new System.EventHandler(this.monster_change);
+
+            this.decorationPropertiesGroup.Location = new System.Drawing.Point(10, 605);
+            this.decorationPropertiesGroup.Size = new System.Drawing.Size(300, 300);
+            this.decorationPropertiesGroup.Visible = false;
+            this.decorationPropertiesGroup.Controls.Add(this.decorationTexture);
+
+            this.decorationTexture.Location = new System.Drawing.Point(10, 110);
+            this.decorationTexture.Size = new System.Drawing.Size(200, 20);
+            this.decorationTexture.TextChanged += new System.EventHandler(this.decoration_change);
+
 
             this.doodadPropertiesGroup.Location = new System.Drawing.Point(10, 605);
             this.doodadPropertiesGroup.Size = new System.Drawing.Size(300, 300);
@@ -1039,6 +1057,7 @@ namespace WinFormsGraphicsDevice
             this.viewControlsGroup.Controls.Add(this.modePoint);
             this.viewControlsGroup.Controls.Add(this.modeDoodad);
             this.viewControlsGroup.Controls.Add(this.modeMonster);
+            this.viewControlsGroup.Controls.Add(this.modeDecoration);
 
             #endregion
 
@@ -1063,6 +1082,9 @@ namespace WinFormsGraphicsDevice
             this.modeMonster.Location = new System.Drawing.Point(150, 90);
             this.modeMonster.Text = "Monster";
             this.modeMonster.Click += new System.EventHandler(room_mode_change);
+            this.modeDecoration.Location = new System.Drawing.Point(50, 90);
+            this.modeDecoration.Text = "Decoration";
+            this.modeDecoration.Click += new System.EventHandler(room_mode_change);
             #endregion 
 
 
@@ -1132,6 +1154,7 @@ namespace WinFormsGraphicsDevice
         private System.Windows.Forms.RadioButton modePoint;
         private System.Windows.Forms.RadioButton modeDoodad;
         private System.Windows.Forms.RadioButton modeMonster;
+        private System.Windows.Forms.RadioButton modeDecoration;
 
         private System.Windows.Forms.GroupBox elementGroup;
         private System.Windows.Forms.TextBox elementNameField;
@@ -1175,6 +1198,9 @@ namespace WinFormsGraphicsDevice
         private System.Windows.Forms.CheckBox monsterFixedPath;
         private System.Windows.Forms.TextBox monsterWaypointID;
         private System.Windows.Forms.Label monsterWaypointIDLabel;
+
+        private System.Windows.Forms.GroupBox decorationPropertiesGroup;
+        private System.Windows.Forms.TextBox decorationTexture;
         
 
         private System.Windows.Forms.GroupBox behaviorPropertiesGroup;

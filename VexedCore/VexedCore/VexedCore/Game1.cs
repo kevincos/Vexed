@@ -47,7 +47,7 @@ namespace VexedCore
 
             //resWidth = 1920;
             //resHeight = 1080;
-            fullScreen = true;
+            //fullScreen = true;
 
             graphics.IsFullScreen = fullScreen;
             graphics.PreferredBackBufferWidth = resWidth;
@@ -76,7 +76,8 @@ namespace VexedCore
             // TODO: Add your initialization logic here
             graphicsDevice = GraphicsDevice;
 
-            LevelLoader.Load("LevelData\\world");
+            LevelLoader.Load("LevelData\\menu");
+            //LevelLoader.Load("LevelData\\world");
             //LevelLoader.Load("LevelData\\spikeelevator");
             
             Components.Add(new FrameRateCounter(this));
@@ -119,6 +120,7 @@ namespace VexedCore
             Player.player_textures_detail = Content.Load<Texture2D>("p_texture");
             Player.player_textures_clean = Content.Load<Texture2D>("p_texture_clean");
             Ability.ability_textures = Content.Load<Texture2D>("abilities");
+            Decoration.defaultTexture = Content.Load<Texture2D>("abilities");
             Doodad.beam_textures = Content.Load<Texture2D>("beams");
             Monster.monsterTexture = Content.Load<Texture2D>("m_body");
             Monster.monsterTextureDetail = Content.Load<Texture2D>("m_body_detail");

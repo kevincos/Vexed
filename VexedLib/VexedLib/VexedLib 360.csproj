@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{f715106e-42db-487f-bcfb-3a3d23930746}</ProjectGuid>
+    <ProjectGuid>{F715106E-42DB-487F-BCFB-3A3D23930746}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">Xbox 360</Platform>
@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Behavior.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Decoration.cs" />
     <Compile Include="Doodad.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Face.cs" />

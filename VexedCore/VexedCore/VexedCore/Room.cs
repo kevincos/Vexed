@@ -82,6 +82,7 @@ namespace VexedCore
         public List<Doodad> doodads;
         public List<Monster> monsters;
         public List<Projectile> projectiles;
+        public List<Decoration> decorations;
         public string id;
 
         public bool refreshVertices = false;
@@ -116,6 +117,11 @@ namespace VexedCore
             {
                 projectiles.Add(new Projectile(p));
             }
+            decorations = new List<Decoration>();
+            foreach (Decoration d in r.decorations)
+            {
+                decorations.Add(new Decoration(d));
+            }
         }
 
         public Room()
@@ -124,6 +130,7 @@ namespace VexedCore
             doodads = new List<Doodad>();
             monsters = new List<Monster>();
             projectiles = new List<Projectile>();
+            decorations = new List<Decoration>();
         }
 
         public Room(VexedLib.Room xmlRoom)
@@ -135,6 +142,7 @@ namespace VexedCore
             doodads = new List<Doodad>();
             monsters = new List<Monster>();
             projectiles = new List<Projectile>();
+            decorations = new List<Decoration>();
         }
 
         public static List<Vector2> LoadTexCoords(int x, int y, float epsilonX, float epsilonY)
@@ -1395,6 +1403,15 @@ namespace VexedCore
                 }
             }
 
+        }
+
+
+        public void DrawDecorations()
+        {
+            foreach (Decoration d in decorations)
+            {
+                d.Draw(this);
+            }
         }
 
         public void DrawMonsters()

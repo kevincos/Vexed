@@ -19,7 +19,9 @@ namespace VexedLib
         Doodad,
         DoodadDrag,
         Monster,
-        MonsterDrag
+        MonsterDrag,
+        Decoration,
+        DecorationDrag
     }
 
     public class Sector
