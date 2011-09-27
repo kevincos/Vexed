@@ -146,7 +146,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\m_body_detail.xnb</Output>
-      <Time>2011-07-21T20:54:23.3589089-07:00</Time>
+      <Time>2011-09-21T11:34:55.8686392-07:00</Time>
     </Item>
     <Item>
       <Source>p_fall_detail.png</Source>
@@ -245,7 +245,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\abilities.xnb</Output>
-      <Time>2011-08-12T08:13:33.5938207-07:00</Time>
+      <Time>2011-09-06T19:52:44.1670389-07:00</Time>
     </Item>
     <Item>
       <Source>p_gun_texture.png</Source>
@@ -345,6 +345,80 @@
       <Options>None</Options>
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_top.xnb</Output>
       <Time>2011-08-12T08:13:34.5610224-07:00</Time>
+    </Item>
+    <Item>
+      <Source>beams.png</Source>
+      <Name>beams</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\beams.xnb</Output>
+      <Time>2011-09-06T19:52:44.1670389-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\beep.wav</Source>
+      <Name>Sounds\beep</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\beep.xnb</Output>
+      <Time>2011-09-25T09:31:15.9299522-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\bloop.wav</Source>
+      <Name>Sounds\bloop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\bloop.xnb</Output>
+      <Time>2011-09-25T09:31:15.9455523-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\click.wav</Source>
+      <Name>Sounds\click</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\click.xnb</Output>
+      <Time>2011-09-25T09:31:15.9455523-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\swoosh.wav</Source>
+      <Name>Sounds\swoosh</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\swoosh.xnb</Output>
+      <Time>2011-09-25T09:31:16.3355529-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\thud.wav</Source>
+      <Name>Sounds\thud</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\thud.xnb</Output>
+      <Time>2011-09-25T09:31:16.3355529-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\music_game.mp3</Source>
+      <Name>Sounds\music_game</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_game.xnb</Output>
+      <Extra>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_game.wma</Extra>
+      <Time>2011-09-25T09:31:16.1483526-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\music_menu.mp3</Source>
+      <Name>Sounds\music_menu</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_menu.xnb</Output>
+      <Extra>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_menu.wma</Extra>
+      <Time>2011-09-25T09:31:16.3199529-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
