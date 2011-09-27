@@ -353,10 +353,33 @@ namespace VexedCore
             foreach (Room r in Engine.roomList)
                 lastSave.roomList.Add(new Room(r));
             lastSave.player = new Player(Engine.player);
+        }
 
-            //Stream stream = new FileStream("tempFile", FileMode.Create, FileAccess.ReadWrite);
-            //XmlSerializer serializer = new XmlSerializer(typeof(SaveData));
-            //serializer.Serialize(stream, lastSave);
+        public static void SaveToDisk(int saveFileIndex)
+        {
+            QuickSave();
+
+            Stream stream = new FileStream("saveFile"+saveFileIndex, FileMode.Create, FileAccess.ReadWrite);
+            XmlSerializer serializer = new XmlSerializer(typeof(SaveData));
+            serializer.Serialize(stream, lastSave);
+            stream.Close();
+        }
+
+        public static void LoadFromDisk(int saveFileIndex)
+        {
+
+            if (File.Exists("saveFile" + saveFileIndex))
+            {
+                Stream stream = new FileStream("saveFile" + saveFileIndex, FileMode.Open, FileAccess.ReadWrite);
+                XmlSerializer serializer = new XmlSerializer(typeof(SaveData));
+                lastSave = (SaveData)serializer.Deserialize(stream);
+                QuickLoad();
+                stream.Close();
+            }
+            else
+            {
+                LevelLoader.Load("LevelData\\world");
+            }
         }
 
         public static void QuickLoad()

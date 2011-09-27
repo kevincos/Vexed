@@ -11,7 +11,8 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 namespace VexedCore
-{
+{   
+
     public class SaveGameText
     {
         public static RenderTarget2D textRenderTarget;

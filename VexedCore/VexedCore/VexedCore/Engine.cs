@@ -24,6 +24,8 @@ namespace VexedCore
 
     public class Engine
     {
+        public static int saveFileIndex = 0;
+
         public static EngineState state = EngineState.Active;
         public static float zoomLevel = 0f;
         public static float zoomSpeed = .001f;

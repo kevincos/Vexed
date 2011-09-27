@@ -464,6 +464,16 @@ namespace VexedCore
         public void QuickSave()
         {
             LevelLoader.QuickSave();
+            
+            respawnPlayer = new Player();
+            respawnPlayer.currentRoom = currentRoom;
+            respawnPlayer.center = new Vertex(center.position, center.normal, Vector3.Zero, center.direction);
+        }
+
+        public void SaveGame()
+        {
+            LevelLoader.SaveToDisk(Engine.saveFileIndex);
+
             respawnPlayer = new Player();
             respawnPlayer.currentRoom = currentRoom;
             respawnPlayer.center = new Vertex(center.position, center.normal, Vector3.Zero, center.direction);
@@ -1158,7 +1168,15 @@ namespace VexedCore
                             }
                             if (d.type == VexedLib.DoodadType.LoadStation)
                             {
-                                LevelLoader.Load("LevelData\\world");
+                                if (d.id.Contains("Slot1"))
+                                    Engine.saveFileIndex = 1;
+                                if (d.id.Contains("Slot2"))
+                                    Engine.saveFileIndex = 2;
+                                if (d.id.Contains("Slot3"))
+                                    Engine.saveFileIndex = 3;
+                                if (d.id.Contains("Slot4"))
+                                    Engine.saveFileIndex = 4;
+                                LevelLoader.LoadFromDisk(Engine.saveFileIndex);
                                 Physics.refresh = true;
                                 Engine.reDraw = true;
                             }
@@ -1172,6 +1190,11 @@ namespace VexedCore
                                     //Engine.reDraw = true;
                                     currentRoom.refreshVertices = true;
                                 }
+                            }
+                            if (d.type == VexedLib.DoodadType.SaveStation && d.cooldown == 0)
+                            {
+                                d.cooldown = d.maxCooldown;
+                                SaveGame();
                             }
                             if (d.type == VexedLib.DoodadType.UpgradeStation)
                             {

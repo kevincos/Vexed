@@ -35,7 +35,11 @@ namespace VexedCore
         public float baseRadius = .5f;
         public float depthOffset = 0f;
         public BaseType baseType = BaseType.None;
-        
+
+
+        public GunEmplacement()
+        {
+        }
 
         public GunEmplacement(VexedLib.TrackType trackType, VexedLib.GunType gunType, Vector2 positionOffset, float radius, float depthOffset, BaseType baseType)
         {
