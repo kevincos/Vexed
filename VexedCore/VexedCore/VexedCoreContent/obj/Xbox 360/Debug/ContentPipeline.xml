@@ -299,7 +299,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_back.xnb</Output>
-      <Time>2011-08-12T08:13:34.4362222-07:00</Time>
+      <Time>2011-09-26T23:02:21.934348-07:00</Time>
     </Item>
     <Item>
       <Source>skybox_bottom.png</Source>
@@ -308,7 +308,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_bottom.xnb</Output>
-      <Time>2011-08-12T08:13:34.4674223-07:00</Time>
+      <Time>2011-09-26T23:03:00.3905476-07:00</Time>
     </Item>
     <Item>
       <Source>skybox_front.png</Source>
@@ -317,7 +317,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_front.xnb</Output>
-      <Time>2011-08-12T08:13:34.4830223-07:00</Time>
+      <Time>2011-09-26T23:01:52.4716629-07:00</Time>
     </Item>
     <Item>
       <Source>skybox_left.png</Source>
@@ -326,7 +326,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_left.xnb</Output>
-      <Time>2011-08-12T08:13:34.5142223-07:00</Time>
+      <Time>2011-09-26T23:02:36.1731624-07:00</Time>
     </Item>
     <Item>
       <Source>skybox_right.png</Source>
@@ -335,7 +335,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_right.xnb</Output>
-      <Time>2011-08-12T08:13:34.5298224-07:00</Time>
+      <Time>2011-09-26T23:02:08.0415534-07:00</Time>
     </Item>
     <Item>
       <Source>skybox_top.png</Source>
@@ -344,7 +344,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\skybox_top.xnb</Output>
-      <Time>2011-08-12T08:13:34.5610224-07:00</Time>
+      <Time>2011-09-26T23:03:15.4734103-07:00</Time>
     </Item>
     <Item>
       <Source>beams.png</Source>
