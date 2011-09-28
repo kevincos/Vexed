@@ -630,6 +630,11 @@ namespace VexedCore
             {
                 if (d.type == VexedLib.DoodadType.TriggerPoint)
                 {
+                    if (d.active == false && d.id.Contains("Dialog") && d.ActivationRange(p))
+                    {
+                        DialogBox.SetDialog(d.targetObject);
+                        d.active = true;
+                    }
                     if (d.id.Contains("Rock2Trigger") && d.ActivationRange(p))
                         RockBoss.triggered = true;
                 }

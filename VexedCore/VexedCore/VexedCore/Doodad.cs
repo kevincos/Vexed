@@ -62,6 +62,9 @@ namespace VexedCore
         public int animationFrame = 0;
         public int animationTime = 0;
 
+        public int helpIconTime = 0;
+        public int helpIconMaxTime = 100;
+
         public int cooldown = 0;
         public int activationCost = 0;
 
@@ -839,6 +842,37 @@ namespace VexedCore
                 vList.Add(new Vertex(position, down + left));
                 vList.Add(new Vertex(position, down + right));
 
+                if (helpIconTime != 0)
+                {
+                    if ((isStation == true && type != VexedLib.DoodadType.ItemStation) || type == VexedLib.DoodadType.NPC_OldMan)
+                    {
+                        float size = ((float)(helpIconTime)) / helpIconMaxTime;
+                        List<Vertex> BButtonList = new List<Vertex>();
+                        BButtonList.Add(new Vertex(position, size * up + size * right + up + 2f * right));
+                        BButtonList.Add(new Vertex(position, size * up + size * left + up + 2f * right));
+                        BButtonList.Add(new Vertex(position, size * down + size * left + up + 2f * right));
+                        BButtonList.Add(new Vertex(position, size * down + size * right + up + 2f * right));
+                        currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.White, .5f, Ability.texCoordList[24], decalList, true);
+                    }
+                    if (type == VexedLib.DoodadType.ItemStation)
+                    {
+                        float size = ((float)(helpIconTime)) / helpIconMaxTime;
+                        List<Vertex> XButtonList = new List<Vertex>();
+                        XButtonList.Add(new Vertex(position, size * up + size * right + up + 2f * left));
+                        XButtonList.Add(new Vertex(position, size * up + size * left + up + 2f * left));
+                        XButtonList.Add(new Vertex(position, size * down + size * left + up + 2f * left));
+                        XButtonList.Add(new Vertex(position, size * down + size * right + up + 2f * left));
+                        currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.White, .5f, Ability.texCoordList[25], decalList, true);
+                        List<Vertex> YButtonList = new List<Vertex>();
+                        YButtonList.Add(new Vertex(position, size * up + size * right + 3 * up));
+                        YButtonList.Add(new Vertex(position, size * up + size * left + 3 * up));
+                        YButtonList.Add(new Vertex(position, size * down + size * left + 3 * up));
+                        YButtonList.Add(new Vertex(position, size * down + size * right + 3 * up));
+                        currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.White, .5f, Ability.texCoordList[27], decalList, true);
+                    }
+                }
+
+
                 if (type == VexedLib.DoodadType.BridgeCover)
                 {
                     currentRoom.AddBlockToTriangleList(vList, baseColor, .5f, -.6f, Room.plateTexCoords, baseTriangleList);
@@ -959,6 +993,7 @@ namespace VexedCore
                     else
                         currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Ability.texCoordList[41], decalList, true);
                 }
+                
             }
         }
 
@@ -992,6 +1027,23 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            if (type == VexedLib.DoodadType.NPC_OldMan || isStation == true)
+            {
+                if (helpIconTime != 0 && helpIconTime != helpIconMaxTime)
+                    refreshVertexData = true;
+                if (!ActivationRange(Engine.player) || Engine.player.state != State.Normal)
+                {
+                    helpIconTime -= gameTime.ElapsedGameTime.Milliseconds;
+                    if (helpIconTime < 0) helpIconTime = 0;
+                }
+                else
+                {
+                    helpIconTime += gameTime.ElapsedGameTime.Milliseconds;
+                    if (helpIconTime > helpIconMaxTime) helpIconTime = helpIconMaxTime;
+                    
+                }
+            }
+            
             animationTime += gameTime.ElapsedGameTime.Milliseconds;
             if (animationTime > 100)
             {

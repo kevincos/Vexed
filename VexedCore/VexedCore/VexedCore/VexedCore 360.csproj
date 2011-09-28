@@ -109,6 +109,7 @@
     <Compile Include="WorldSave.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="dialog.xml" />
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>

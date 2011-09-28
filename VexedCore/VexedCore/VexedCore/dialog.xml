@@ -1,0 +1,108 @@
+﻿<?xml version="1.0"?>
+<ArrayOfDialogChunk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DialogChunk>
+    <id>Default</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Hey there! I'm a helpful NPC character. I'm 
+here to give you hints and useful advice.</string>
+      <string>Don't worry. You know you can trust me 
+because I've got this sweet beard.</string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>Help</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Collect all these yellow things to activate the door!</string>      
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>PowerUp</id>
+    <speaker>System</speaker>
+    <textList>
+      <string>This door isn't powered. Collect more
+power cubes.</string>      
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>ChaseBoss1</id>
+    <speaker>ChaseBoss</speaker>
+    <textList>
+      <string>Bwahahahaha. Puny pajama man! I will crush you!</string>      
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>ChaseBoss2</id>
+    <speaker>ChaseBoss</speaker>
+    <textList>
+      <string>Ack! I'm stuck... You'll pay for this!</string>
+    </textList>
+  </DialogChunk>
+  <DialogChunk>
+    <id>ChaseBoss3</id>
+    <speaker>ChaseBoss</speaker>
+    <textList>
+      <string>No wait! Don't touch that! Stay away from my
+vulnerable backside!</string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>ChaseBoss4</id>
+    <speaker>ChaseBoss</speaker>
+    <textList>
+      <string>Ouch! That hurt!</string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>ChaseBoss5</id>
+    <speaker>ChaseBoss</speaker>
+    <textList>
+      <string>Noooooo! I've been defeated by a dude in green
+pajamas!</string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>ArmorBoss1</id>
+    <speaker>ArmorBoss</speaker>
+    <textList>
+      <string>Haha! Fool! Your weapons will never penetrate
+my invincible armor!</string>
+      <string>Prepare to die!!!</string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>ArmorBoss4</id>
+    <speaker>ArmorBoss</speaker>
+    <textList>
+      <string>Nooo... brothers... avenge me!</string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>ArmorBoss2</id>
+    <speaker>ArmorBoss</speaker>
+    <textList>
+      <string>Ack! You've found my weak spot!</string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>ArmorBoss3</id>
+    <speaker>ArmorBoss</speaker>
+    <textList>
+      <string>Oh yeah? Let's see how you deal with my heat 
+seaking missiles?</string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+
+</ArrayOfDialogChunk>

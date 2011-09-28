@@ -21,6 +21,8 @@ namespace VexedCore
         public int studderCooldown = 0;
         public int studderMaxCooldown = 300;
 
+        public int dialogState = 0;
+
         public Vector3 GetWaypointTarget()
         {
             
@@ -38,6 +40,37 @@ namespace VexedCore
 
         public void Update(int time, Monster srcMonster)
         {
+            foreach (Doodad d in Engine.player.currentRoom.doodads)
+            {
+                if (d.active == false && d.type == VexedLib.DoodadType.TriggerPoint)
+                {
+                    if (d.id.Contains("ChaseTalk"))
+                    {
+                        float distanceToTrigger = (d.position.position - srcMonster.position.position).Length();
+                        if (distanceToTrigger < 2)
+                        {
+                            DialogBox.SetDialog(d.targetObject);
+                            d.active = true;
+                            dialogState++;
+                        }
+                    }
+                }
+            }
+            if (dialogState == 2 && Engine.player.primaryAbility.type == AbilityType.Blaster || Engine.player.secondaryAbility.type == AbilityType.Blaster)
+            {
+                DialogBox.SetDialog("ChaseBoss3");
+                dialogState++;
+            }
+            if (dialogState < 9 && srcMonster.baseHP < srcMonster.startingBaseHP)
+            {
+                DialogBox.SetDialog("ChaseBoss4");
+                dialogState = 9;
+            }
+            if (dialogState < 10 && srcMonster.dead == true)
+            {
+                DialogBox.SetDialog("ChaseBoss5");
+                dialogState = 10;
+            }
             float distance = (srcMonster.position.position - nextWaypointTarget).Length();
             if (studder == true)
             {

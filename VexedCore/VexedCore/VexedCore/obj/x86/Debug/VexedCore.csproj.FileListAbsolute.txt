@@ -128,3 +128,5 @@ C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_menu.wma
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\LevelData\menu
 C:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\LevelData\menu
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\dialog.xml
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dialogportraits.xnb

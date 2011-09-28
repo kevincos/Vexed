@@ -46,3 +46,4 @@ Content\Sounds\music_game.xnb
 Content\Sounds\music_game.wma
 Content\Sounds\music_menu.xnb
 Content\Sounds\music_menu.wma
+Content\dialogportraits.xnb

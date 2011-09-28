@@ -154,6 +154,9 @@
     <Compile Include="WorldSave.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="dialog.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>

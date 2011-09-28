@@ -22,6 +22,7 @@ namespace VexedCore
         public bool rotating = false;
         
         public static Random r;
+        public int dialogState = 0;
 
         static ArmorBoss()
         {
@@ -50,7 +51,29 @@ namespace VexedCore
 
         public void Update(int time, Monster srcMonster)
         {
-            if (srcMonster.id.Contains("Basic") && srcMonster.baseHP < 3*srcMonster.startingBaseHP / 4)
+
+            if (dialogState == 0 && Engine.player.state == State.Normal)
+            {
+                DialogBox.SetDialog("ArmorBoss1");
+                dialogState++;
+            }
+            if (dialogState == 1 && srcMonster.baseHP < srcMonster.startingBaseHP)
+            {
+                DialogBox.SetDialog("ArmorBoss2");
+                dialogState++;
+            }
+            if (dialogState == 2 && srcMonster.baseHP < 1 * srcMonster.startingBaseHP / 2)
+            {
+                DialogBox.SetDialog("ArmorBoss3");
+                dialogState++;
+            }
+            if (dialogState < 10 && srcMonster.dead)
+            {
+                DialogBox.SetDialog("ArmorBoss4");
+                dialogState = 10;
+            }
+
+            if (srcMonster.id.Contains("Basic") && srcMonster.baseHP < 1*srcMonster.startingBaseHP / 2)
                 srcMonster.guns[0].gunType = VexedLib.GunType.Missile;
 
             if (aimDirection == Vector3.Zero)

@@ -44,8 +44,10 @@ Content\Sounds\swoosh.xnb
 Content\Sounds\thud.xnb
 Content\Sounds\music_game.xnb
 Content\Sounds\music_menu.xnb
+Content\dialogportraits.xnb
 Content\Sounds\music_game.wma
 Content\Sounds\music_menu.wma
+dialog.xml
 LevelData\awesome
 LevelData\blarg
 LevelData\debug

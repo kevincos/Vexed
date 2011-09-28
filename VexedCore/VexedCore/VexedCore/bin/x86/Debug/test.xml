@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<ArrayOfDialogChunk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DialogChunk>
+    <id>IDSTRING1</id>
+    <speaker>SPEAKERSTRING1</speaker>
+    <textList>
+      <string>TEXTSTRING1</string>
+      <string>EXTRATEXT</string>
+    </textList>
+  </DialogChunk>
+  <DialogChunk>
+    <id>IDSTRING2</id>
+    <speaker>SPEAKERSTRING2</speaker>
+    <textList>
+      <string>TEXTSTRING2</string>
+      <string>EXTRATEXT</string>
+    </textList>
+  </DialogChunk>
+  <DialogChunk>
+    <id>IDSTRING3</id>
+    <speaker>SPEAKERSTRING3</speaker>
+    <textList>
+      <string>TEXTSTRING3</string>
+      <string>EXTRATEXT</string>
+    </textList>
+  </DialogChunk>
+</ArrayOfDialogChunk>

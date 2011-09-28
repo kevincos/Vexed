@@ -552,12 +552,11 @@ namespace VexedCore
             Ability.Draw(.825f, .22f, AbilityType.NormalJump, player.naturalShield.ammo, player.naturalShield.maxAmmo);
             Ability.Draw(.9f, .12f, AbilityType.Use);
 
-            if (Engine.player.state == State.Dialog)
-            {
-                if (dialogBox == null)
-                    dialogBox = new DialogBox();
-                dialogBox.Draw();
-            }
+            
+            if (dialogBox == null)
+                dialogBox = new DialogBox();
+            dialogBox.Draw();
+            
             saveGameText.Draw();
         }
 
@@ -783,19 +782,16 @@ namespace VexedCore
                     Physics.CollisionCheck(player.currentRoom, player, gameTime);
             }
 
-            if (Engine.player.state == State.Dialog)
+
+            if (dialogBox != null)
             {
-                if (dialogBox != null)
+                dialogBox.Update(gameTime);
+                if (Engine.player.state == State.Dialog && Game1.controller.AButton.Pressed)
                 {
-                    dialogBox.Update(gameTime);
-                    if (Game1.controller.AButton.Pressed)
+                    if (false == dialogBox.Next())
                     {
-                        if (false == dialogBox.Next())
-                        {
-                            dialogBox = null;
-                            Engine.player.jumpRecovery = 500;
-                            Engine.player.state = State.Normal;
-                        }
+                        Engine.player.jumpRecovery = 500;
+                        Engine.player.state = State.Normal;
                     }
                 }
             }

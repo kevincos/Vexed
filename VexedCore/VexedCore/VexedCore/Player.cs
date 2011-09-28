@@ -1127,6 +1127,10 @@ namespace VexedCore
 
                     foreach (Doodad d in currentRoom.doodads)
                     {
+                        if (d.powered == false && d.ActivationRange(this) && d.activationCost != 0)
+                        {
+                            DialogBox.SetDialog("PowerUp");
+                        }
                         if (d.active)
                         {
                             if (d.type == VexedLib.DoodadType.Vortex && (d.position.position - center.position).Length() < .3f)
@@ -1228,6 +1232,7 @@ namespace VexedCore
                             }
                             if (d.type == VexedLib.DoodadType.NPC_OldMan)
                             {
+                                DialogBox.SetDialog("Default");
                                 state = State.Dialog;
                                 
                             }

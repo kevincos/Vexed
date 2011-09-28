@@ -76,8 +76,8 @@ namespace VexedCore
             // TODO: Add your initialization logic here
             graphicsDevice = GraphicsDevice;
 
-            LevelLoader.Load("LevelData\\menu");
-            //LevelLoader.Load("LevelData\\world");
+            //LevelLoader.Load("LevelData\\menu");
+            LevelLoader.Load("LevelData\\world");
             //LevelLoader.Load("LevelData\\spikeelevator");
             
             Components.Add(new FrameRateCounter(this));
@@ -96,6 +96,7 @@ namespace VexedCore
             Ability.InitTexCoords();
             Room.InitTexCoords();
             Doodad.InitTexCoords();
+            DialogBox.InitTexCoords();
 
             MusicControl.PlayGameMusic();
         }
@@ -111,6 +112,7 @@ namespace VexedCore
             engine.cartoonEffect = Content.Load<Effect>("CartoonEffect");
             engine.postprocessEffect = Content.Load<Effect>("PostprocessEffect");
             DialogBox.box = Content.Load<Texture2D>("dialogbox");
+            DialogBox.portraits = Content.Load<Texture2D>("dialogportraits");
             Room.blockTexture = Content.Load<Texture2D>("plate_texture");
             Player.player_textures = Content.Load<Texture2D>("p_texture");
             Player.player_gun_textures = Content.Load<Texture2D>("p_gun_texture");

@@ -1432,20 +1432,16 @@ namespace VexedCore
 
         public void UpdateMonsters(GameTime gameTime)
         {
-            foreach (Monster m in monsters)
+            if (Engine.player.state != State.Dialog)
             {
-                m.Update(gameTime);
-            }
-            /*for (int i = monsters.Count() - 1; i >= 0; i--)
-            {
-                if (monsters[i].dead == true)
+                foreach (Monster m in monsters)
                 {
-                    monsters.Remove(monsters[i]);
+                    m.Update(gameTime);
                 }
-            }*/
-            foreach (Projectile p in projectiles)
-            {
-                p.Update(gameTime);
+                foreach (Projectile p in projectiles)
+                {
+                    p.Update(gameTime);
+                }
             }
             for(int i = projectiles.Count()-1; i >= 0; i--)
             {
