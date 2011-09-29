@@ -1291,11 +1291,13 @@ namespace VexedCore
                             }
                             if (d.type == VexedLib.DoodadType.WarpStation)
                             {
-                                Engine.state = EngineState.ZoomOut;
+                                Engine.state = EngineState.Map;
+                                WorldMap.state = ZoomState.ZoomToSector;
+                                
                                 for (int i = 0; i < Engine.roomList.Count(); i++)
                                 {
                                     if (Engine.roomList[i] == currentRoom)
-                                        Engine.selectedRoomIndex = i;
+                                        WorldMap.selectedRoomIndex = i;
                                 }
                             }
                         }

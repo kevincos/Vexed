@@ -242,14 +242,14 @@ namespace WinFormsGraphicsDevice
             }
             if (sender == this.roomGroup)
             {
-                selectedSector = null;
+                selectedSector = s;
                 selectedRoom = r;
             }
         }
 
         void world_mouse_leave(object sender, System.EventArgs e)
         {
-            selectedSector = null;
+            //selectedSector = null;
             selectedRoom = null;            
         }
 
@@ -266,7 +266,9 @@ namespace WinFormsGraphicsDevice
                     this.roomDropdown.Items.Add(r.IDString);
                 }
                 this.roomDropdown.SelectedIndex = 0;
+                
                 selectedSector = s;
+                selectedSector.UpdateSectorCenter();
             }
             if (sender == this.roomDropdown)
             {
@@ -299,7 +301,7 @@ namespace WinFormsGraphicsDevice
             }
             if (sender == this.roomNewButton)
             {
-                Room r = new Room();
+                Room r = new Room(selectedSector.center);
                 Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
                 s.rooms.Add(r);
                 this.roomDropdown.Items.Add(r.IDString);

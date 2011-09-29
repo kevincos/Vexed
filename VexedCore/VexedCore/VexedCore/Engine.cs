@@ -14,11 +14,7 @@ namespace VexedCore
 {
     public enum EngineState
     {
-        Active,
-        Paused,
-        ZoomOut,
-        ZoomIn,
-        Warp,
+        Active,        
         Map        
     }
 
@@ -27,13 +23,12 @@ namespace VexedCore
         public static int saveFileIndex = 0;
 
         public static EngineState state = EngineState.Active;
-        public static float zoomLevel = 0f;
-        public static float zoomSpeed = .001f;
-        public static Vector3 zoomOutCameraPos;
-        public static Vector3 zoomOutCameraTarget;
-        public static Vector3 zoomOutCameraUp;
 
+
+        public static Vector3 worldCenter = Vector3.Zero;
         public static List<Room> roomList;
+        public static List<Sector> sectorList;
+        
         public static Player player;
         public static DialogBox dialogBox;
         public static SpriteFont spriteFont;
@@ -43,8 +38,7 @@ namespace VexedCore
         public static bool soundEffectsEnabled = true;
         public static bool musicEnabled = false;
 
-        public static int selectedRoomIndex = 0;
-
+        
         public static SpriteBatch spriteBatch;
         public BasicEffect translucentEffect = null;
         public BasicEffect mapEffect = null;
@@ -114,10 +108,7 @@ namespace VexedCore
         {
             staticTranslucentObjects = new List<TrasnparentSquare>();
             mapShellObjects = new List<TrasnparentSquare>();
-
-            zoomOutCameraUp = Vector3.UnitZ;
-            zoomOutCameraTarget = Vector3.Zero;
-            zoomOutCameraPos = new Vector3(80, 70, 100);
+          
         }
 
         public void Init()
@@ -190,7 +181,7 @@ namespace VexedCore
             Game1.graphicsDevice.BlendState = BlendState.Opaque;
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            if (state != EngineState.Warp)
+            //if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector)
             {
                 if (depthShader == false)
                 {
@@ -341,7 +332,7 @@ namespace VexedCore
             if (transparencyEnabled == true)
             {
                 //Game1.graphicsDevice.DepthStencilState = DepthStencilState.None;
-                if (state == EngineState.ZoomOut || state == EngineState.ZoomIn || state == EngineState.Warp)
+                if (WorldMap.state != ZoomState.None)
                 {
                     if(depthShader == false)
                         mapEffect.CurrentTechnique.Passes[0].Apply();
@@ -352,7 +343,7 @@ namespace VexedCore
                     }
                     //translucentEffect.CurrentTechnique.Passes[0].Apply();
                     // Sort Triangles
-                    mapShellObjects.Sort(new FaceSorter(-(zoomOutCameraPos-zoomOutCameraTarget)));
+                    mapShellObjects.Sort(new FaceSorter(-(WorldMap.cameraPosition-WorldMap.cameraTarget)));
 
                     List<VertexPositionColorNormalTexture> translucentList = new List<VertexPositionColorNormalTexture>();
                     for (int i = 0; i < mapShellObjects.Count; i++)
@@ -365,12 +356,12 @@ namespace VexedCore
                         translucentList.Add(mapShellObjects[i].v5);
                         translucentList.Add(mapShellObjects[i].v6);
                     }
-                    if (selectedRoomIndex != -1)
+                    if (WorldMap.selectedRoomIndex != -1)
                     {
-                        Room selectedRoom = roomList[selectedRoomIndex];
+                        Room selectedRoom = roomList[WorldMap.selectedRoomIndex];
                         Vector3 adjustedSize = adjustedSize = new Vector3(selectedRoom.size.X + 7f, selectedRoom.size.Y + 7f, selectedRoom.size.Z + 7f);
-                        List<TrasnparentSquare> selectedBlockList = selectedRoom.GetMapBlock(adjustedSize, Color.White);
-                        selectedBlockList.Sort(new FaceSorter(-(zoomOutCameraPos - zoomOutCameraTarget)));
+                        List<TrasnparentSquare> selectedBlockList = selectedRoom.GetMapBlock(adjustedSize, Color.White, true);
+                        selectedBlockList.Sort(new FaceSorter(-(WorldMap.cameraPosition - WorldMap.cameraTarget)));
                         for (int i = 0; i < selectedBlockList.Count; i++)
                         {
 
@@ -388,10 +379,10 @@ namespace VexedCore
                         Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                             translucentList.ToArray(), 0, mapShellObjects.Count * 2, VertexPositionColorNormalTexture.VertexDeclaration);
                     }
-                    if (selectedRoomIndex != -1)
+                    if (WorldMap.selectedRoomIndex != -1)
                     {
                         Game1.graphicsDevice.DepthStencilState = DepthStencilState.None;
-                        if (translucentList.Count > 0 && depthCount > 0)
+                        if (translucentList.Count > 0 && depthCount > 0 && translucentList.Count() / 3 - mapShellObjects.Count * 2 > 0)
                         {
                             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                                 translucentList.ToArray(), mapShellObjects.Count * 6, translucentList.Count() / 3 - mapShellObjects.Count * 2, VertexPositionColorNormalTexture.VertexDeclaration);
@@ -448,20 +439,28 @@ namespace VexedCore
             // Set transform matrices.
             float aspect = Game1.graphicsDevice.Viewport.AspectRatio;
 
-            Vector3 cameraPos = player.cameraPos * (1-zoomLevel) + zoomOutCameraPos * zoomLevel;
-            
-            Vector3 cameraUp = player.cameraUp * (1 - zoomLevel) + zoomOutCameraUp * zoomLevel;
-            if (player.cameraUp == -zoomOutCameraUp)
+            /*Vector3 cameraPos = player.cameraPos * (1 - WorldMap.zoomLevel) + WorldMap.cameraPosition * WorldMap.zoomLevel;
+            Vector3 cameraUp = player.cameraUp * (1 - WorldMap.zoomLevel) + WorldMap.cameraUp * WorldMap.zoomLevel;
+            if (player.cameraUp == -WorldMap.cameraUp)
             {
                 Vector3 cameraSide = Vector3.UnitX;
                 if(Math.Abs(Vector3.Dot(cameraSide, cameraUp)) == 1) 
                 {
                     cameraSide = Vector3.UnitY;
                 }
-                cameraUp += zoomLevel * (1 - zoomLevel) * cameraSide;
+                cameraUp += WorldMap.zoomLevel * (1 - WorldMap.zoomLevel) * cameraSide;
                 cameraUp.Normalize();
-            }            
-            Vector3 cameraTarget = player.cameraTarget * (1 - zoomLevel) + zoomOutCameraTarget * zoomLevel;
+            }
+            Vector3 cameraTarget = player.cameraTarget * (1 - WorldMap.zoomLevel) + WorldMap.cameraTarget * WorldMap.zoomLevel;*/
+            Vector3 cameraPos = player.cameraPos;
+            Vector3 cameraUp = player.cameraUp;
+            Vector3 cameraTarget = player.cameraTarget;
+            if (state == EngineState.Map)
+            {
+                cameraPos = WorldMap.cameraPosition;
+                cameraUp = WorldMap.cameraUp;
+                cameraTarget = WorldMap.cameraTarget;
+            }
 
             translucentEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
             translucentEffect.View = Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp);
@@ -558,6 +557,7 @@ namespace VexedCore
             dialogBox.Draw();
             
             saveGameText.Draw();
+            WorldMap.DrawMetaData();
         }
 
 
@@ -621,24 +621,7 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
-            if (state == EngineState.ZoomOut)
-            {
-                zoomLevel += zoomSpeed * gameTime.ElapsedGameTime.Milliseconds;
-                if (zoomLevel > 1f)
-                {
-                    zoomLevel = 1f;
-                    state = EngineState.Warp;
-                }
-            }
-            if (state == EngineState.ZoomIn)
-            {                
-                zoomLevel -= zoomSpeed*gameTime.ElapsedGameTime.Milliseconds;
-                if (zoomLevel < 0f)
-                {
-                    zoomLevel = 0f;
-                    state = EngineState.Active;
-                }
-            }
+            WorldMap.Update(gameTime);
             // Profiling help
             if (Keyboard.GetState().IsKeyDown(Keys.PageUp))
                 System.Threading.Thread.Sleep(1);
@@ -660,55 +643,12 @@ namespace VexedCore
                 if (player.baseCameraDistance < 5f) player.baseCameraDistance = 5f;
             }
 
+            WorldMap.RotateWorldMap();
             if (optionToggleCooldown == 0)
-            {
-                if ((Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && state == EngineState.Warp && selectedRoomIndex != -1)
-                {
-                    player.Warp(roomList[selectedRoomIndex]);
-                    state = EngineState.ZoomIn;
-                }
-                if((Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder)) && state == EngineState.Warp && selectedRoomIndex == -1)
-                {
-                    state = EngineState.ZoomIn;
-                }
-                if ((Keyboard.GetState().IsKeyDown(Keys.OemMinus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder)) && state == EngineState.Active)
-                {
-                    selectedRoomIndex = -1;
-                    state = EngineState.ZoomOut;
-
-                }
-                if ((Keyboard.GetState().IsKeyDown(Keys.Right) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder)))
-                {
-                    if (state == EngineState.Warp && selectedRoomIndex != -1)
-                    {
-                        selectedRoomIndex++;
-                        selectedRoomIndex %= roomList.Count();
-                        while (roomList[selectedRoomIndex].hasWarp == false)
-                        {
-                            selectedRoomIndex++;
-                            selectedRoomIndex %= roomList.Count();
-                        }
-
-                        optionToggleCooldown = 100;
-                    }
-                }
-                if ((Keyboard.GetState().IsKeyDown(Keys.Left) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder)))
-                {
-                    if (state == EngineState.Warp && selectedRoomIndex != -1)
-                    {
-                        selectedRoomIndex--;
-                        selectedRoomIndex += roomList.Count();
-                        selectedRoomIndex %= roomList.Count();
-                        while (roomList[selectedRoomIndex].hasWarp == false)
-                        {
-                            selectedRoomIndex--;
-                            selectedRoomIndex += roomList.Count();
-                            selectedRoomIndex %= roomList.Count();
-                        }
-
-                        optionToggleCooldown = 100;
-                    }
-                }
+            {                
+                int resultCooldown = WorldMap.ParseInput();
+                if (resultCooldown != 0)
+                    optionToggleCooldown = resultCooldown;
                 if (Keyboard.GetState().IsKeyDown(Keys.D1))
                 {
                     lightingLevel++;

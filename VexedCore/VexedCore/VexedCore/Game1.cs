@@ -127,13 +127,7 @@ namespace VexedCore
             Monster.monsterTexture = Content.Load<Texture2D>("m_body");
             Monster.monsterTextureDetail = Content.Load<Texture2D>("m_body_detail");
             Projectile.projectileTexture = Content.Load<Texture2D>("projectiles");
-            Skybox.skyBoxTextures = new Texture2D[6];
-            Skybox.skyBoxTextures[0] = Content.Load<Texture2D>("skybox_right");
-            Skybox.skyBoxTextures[1] = Content.Load<Texture2D>("skybox_left");
-            Skybox.skyBoxTextures[2] = Content.Load<Texture2D>("skybox_front");
-            Skybox.skyBoxTextures[3] = Content.Load<Texture2D>("skybox_back");
-            Skybox.skyBoxTextures[4] = Content.Load<Texture2D>("skybox_bottom");
-            Skybox.skyBoxTextures[5] = Content.Load<Texture2D>("skybox_top");
+            Skybox.LoadTextures(Content);
             Engine.spriteFont = Content.Load<SpriteFont>("Font");
 
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;

@@ -17,6 +17,7 @@ namespace VexedCore
     public class SaveData
     {
         public List<Room> roomList;
+        public List<Sector> sectorList;
         public Player player;
     }
 
@@ -27,6 +28,7 @@ namespace VexedCore
 
         public static void Load(String filename)
         {
+            Engine.sectorList = new List<Sector>();
             Engine.roomList = new List<Room>();
             Engine.player = new Player();
             
@@ -39,9 +41,12 @@ namespace VexedCore
             VexedLib.World world = (VexedLib.World)serializer.Deserialize(stream);            
             foreach (VexedLib.Sector xmlSector in world.sectors)
             {
+                Sector newSector = new Sector(xmlSector);
+                Engine.sectorList.Add(newSector);
                 foreach (VexedLib.Room xmlRoom in xmlSector.rooms)
                 {
                     Room newRoom = new Room(xmlRoom);
+                    newRoom.sectorID = newSector.id;
                     foreach (VexedLib.Face xmlFace in xmlRoom.faceList)
                     {
                         foreach (VexedLib.Monster xmlMonster in xmlFace.monsters)
@@ -232,8 +237,17 @@ namespace VexedCore
 
         public static void FixDoodads(List<Room> roomList)
         {
+            Engine.worldCenter = Vector3.Zero;
             foreach (Room r in roomList)
             {
+                Engine.worldCenter += r.center;
+                foreach (Sector s in Engine.sectorList)
+                {
+                    if (s.id == r.sectorID)
+                    {
+                        r.parentSector = s;
+                    }
+                }
                 foreach (Doodad d in r.doodads)
                 {
                     d.currentRoom = r;
@@ -343,15 +357,19 @@ namespace VexedCore
                         }
                     }
                 }                
-            }            
+            }
+            Engine.worldCenter = Engine.worldCenter / roomList.Count;
         }
 
         public static void QuickSave()
         {
             lastSave = new SaveData();
             lastSave.roomList = new List<Room>();
+            lastSave.sectorList = new List<Sector>();
             foreach (Room r in Engine.roomList)
                 lastSave.roomList.Add(new Room(r));
+            foreach (Sector s in Engine.sectorList)
+                lastSave.sectorList.Add(new Sector(s));
             lastSave.player = new Player(Engine.player);
         }
 
@@ -388,7 +406,9 @@ namespace VexedCore
             foreach (Room r in lastSave.roomList)
                 Engine.roomList.Add(new Room(r));
             Engine.player = new Player(lastSave.player);
-
+            Engine.sectorList = new List<Sector>();
+            foreach (Sector s in lastSave.sectorList)
+                Engine.sectorList.Add(new Sector(s));
             foreach (Room r in Engine.roomList)
             {
                 if (r.id == Engine.player.currentRoomId)

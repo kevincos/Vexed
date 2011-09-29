@@ -16,6 +16,51 @@ namespace VexedLib
 
         public Face[] faceList;
 
+        public Room(Vector3 center)
+        {
+            name = "Room";
+            id = IDControl.GetID();
+            centerX = (int)center.X;
+            centerY = (int)center.Y;
+            centerZ = (int)center.Z;
+            sizeX = 10;
+            sizeY = 10;
+            sizeZ = 10;
+            color = Color.GreenYellow;
+
+            faceList = new Face[6];
+            faceList[0] = new Face(new Vector3(1, 0, 0), new Vector3[]{
+                new Vector3(centerX + sizeX / 2, centerY - sizeY / 2, centerZ - sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY - sizeY/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY + sizeZ/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY + sizeZ/2, centerZ-sizeZ/2),});
+            faceList[1] = new Face(new Vector3(-1, 0, 0), new Vector3[]{
+                new Vector3(centerX - sizeX / 2, centerY - sizeY / 2, centerZ - sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY - sizeY/2, centerZ+sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY + sizeZ/2, centerZ+sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY + sizeZ/2, centerZ-sizeZ/2),});
+            faceList[2] = new Face(new Vector3(0, 1, 0), new Vector3[]{
+                new Vector3(centerX - sizeX / 2, centerY + sizeY / 2, centerZ - sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY + sizeY/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY + sizeZ/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY + sizeZ/2, centerZ-sizeZ/2),});
+            faceList[3] = new Face(new Vector3(0, -1, 0), new Vector3[]{
+                new Vector3(centerX - sizeX / 2, centerY - sizeY / 2, centerZ - sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY - sizeY/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY - sizeZ/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY - sizeZ/2, centerZ-sizeZ/2),});
+            faceList[4] = new Face(new Vector3(0, 0, 1), new Vector3[]{
+                new Vector3(centerX - sizeX / 2, centerY - sizeY / 2, centerZ + sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY + sizeY/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY + sizeZ/2, centerZ+sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY - sizeZ/2, centerZ+sizeZ/2),});
+            faceList[5] = new Face(new Vector3(0, 0, -1), new Vector3[]{
+                new Vector3(centerX - sizeX / 2, centerY - sizeY / 2, centerZ - sizeZ/2),
+                new Vector3(centerX - sizeX / 2, centerY + sizeY/2, centerZ-sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY + sizeZ/2, centerZ-sizeZ/2),
+                new Vector3(centerX + sizeX / 2, centerY - sizeZ/2, centerZ-sizeZ/2),});
+        }
+
         public Room()
         {
             name = "Room";
