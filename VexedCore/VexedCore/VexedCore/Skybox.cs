@@ -22,14 +22,23 @@ namespace VexedCore
         public static Texture2D[] skyBoxSolar;
         public static Texture2D[] skyBoxGalaxy;
         public static BasicEffect[] skyBoxEffects;
+        public static BasicEffect[] skyBoxEffectsAlt;
 
         public static void Init()
         {
             skyBoxEffects = new BasicEffect[6];
             for (int i = 0; i < 6; i++)
             {
-                skyBoxEffects[i] = new BasicEffect(Game1.graphicsDevice);                
+                skyBoxEffects[i] = new BasicEffect(Game1.graphicsDevice);
                 skyBoxEffects[i].TextureEnabled = true;
+                skyBoxEffects[i].VertexColorEnabled = true;                
+            }
+            skyBoxEffectsAlt = new BasicEffect[6];
+            for (int i = 0; i < 6; i++)
+            {
+                skyBoxEffectsAlt[i] = new BasicEffect(Game1.graphicsDevice);
+                skyBoxEffectsAlt[i].TextureEnabled = true;
+                skyBoxEffectsAlt[i].VertexColorEnabled = true;
             }            
         }
 
@@ -86,6 +95,67 @@ namespace VexedCore
 
         }
 
+        public static VertexPositionColorNormalTexture[] skyBoxVerticesMain;
+        public static VertexPositionColorNormalTexture[] skyBoxVerticesAlt;
+
+        public static VertexPositionColorNormalTexture[] GenerateSkyBoxVertices(Color c)
+        {
+            VertexPositionColorNormalTexture[] skyBoxVertices;
+
+            List<VertexPositionColorNormalTexture> skyBoxVertexList = new List<VertexPositionColorNormalTexture>();
+            // Pos X
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, 100, 100), c, Vector3.UnitZ, new Vector2(0, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, -100, 100), c, Vector3.UnitZ, new Vector2(1, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, 100, -100), c, Vector3.UnitZ, new Vector2(0, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, 100, -100), c, Vector3.UnitZ, new Vector2(0, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, -100, 100), c, Vector3.UnitZ, new Vector2(1, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, -100, -100), c, Vector3.UnitZ, new Vector2(1, 0)));
+
+            // Neg X
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, 100, 100), c, Vector3.UnitZ, new Vector2(1, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, -100, 100), c, Vector3.UnitZ, new Vector2(0, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, 100, -100), c, Vector3.UnitZ, new Vector2(1, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, 100, -100), c, Vector3.UnitZ, new Vector2(1, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, -100, 100), c, Vector3.UnitZ, new Vector2(0, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, -100, -100), c, Vector3.UnitZ, new Vector2(0, 0)));
+
+            // Pos Y
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, 100, 100), c, Vector3.UnitZ, new Vector2(1, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, 100, 100), c, Vector3.UnitZ, new Vector2(0, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, 100, -100), c, Vector3.UnitZ, new Vector2(1, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, 100, -100), c, Vector3.UnitZ, new Vector2(1, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, 100, 100), c, Vector3.UnitZ, new Vector2(0, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, 100, -100), c, Vector3.UnitZ, new Vector2(0, 0)));
+
+            // Neg Y
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, -100, 100), c, Vector3.UnitZ, new Vector2(0, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, -100, 100), c, Vector3.UnitZ, new Vector2(1, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, -100, -100), c, Vector3.UnitZ, new Vector2(0, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, -100, -100), c, Vector3.UnitZ, new Vector2(0, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, -100, 100), c, Vector3.UnitZ, new Vector2(1, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, -100, -100), c, Vector3.UnitZ, new Vector2(1, 0)));
+
+            // Pos Z
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, 100, 100), c, Vector3.UnitZ, new Vector2(1, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, 100, 100), c, Vector3.UnitZ, new Vector2(0, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, -100, 100), c, Vector3.UnitZ, new Vector2(1, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, -100, 100), c, Vector3.UnitZ, new Vector2(1, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, 100, 100), c, Vector3.UnitZ, new Vector2(0, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, -100, 100), c, Vector3.UnitZ, new Vector2(0, 1)));
+
+            // Neg Z
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, 100, -100), c, Vector3.UnitZ, new Vector2(1, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, 100, -100), c, Vector3.UnitZ, new Vector2(0, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, -100, -100), c, Vector3.UnitZ, new Vector2(1, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(100, -100, -100), c, Vector3.UnitZ, new Vector2(1, 0)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, 100, -100), c, Vector3.UnitZ, new Vector2(0, 1)));
+            skyBoxVertexList.Add(new VertexPositionColorNormalTexture(new Vector3(-100, -100, -100), c, Vector3.UnitZ, new Vector2(0, 0)));
+
+            skyBoxVertices = skyBoxVertexList.ToArray();
+
+            return skyBoxVertices;
+        }
+
         public static void Draw(Player player)
         {
 
@@ -102,7 +172,7 @@ namespace VexedCore
                 skyBoxTextures = skyBoxSolar;
             if (Engine.player.currentRoom.parentSector.skyboxType == SkyBoxType.Galaxy)
                 skyBoxTextures = skyBoxGalaxy;
-                
+
             for (int i = 0; i < 6; i++)
             {
                 skyBoxEffects[i].World = Matrix.Identity;
@@ -111,68 +181,87 @@ namespace VexedCore
                 if (Engine.state == EngineState.Map)
                     skyBoxEffects[i].View = Matrix.CreateLookAt(Vector3.Zero, WorldMap.cameraTarget - WorldMap.cameraPosition, WorldMap.cameraUp);
                 skyBoxEffects[i].Projection = Matrix.CreatePerspectiveFieldOfView((float)Math.PI / 4, Game1.graphicsDevice.Viewport.AspectRatio, .1f, 10000);
-                
+
                 skyBoxEffects[i].Texture = skyBoxTextures[i];
-             
+
             }
-            List<VertexPositionTexture> skyBoxVertexList = new List<VertexPositionTexture>();
 
-            // Pos X
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, 100, 100),new Vector2(0,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, -100, 100),new Vector2(1,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, 100, -100),new Vector2(0,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, 100, -100),new Vector2(0,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, -100, 100),new Vector2(1,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, -100, -100),new Vector2(1,0)));
+            Texture2D[] skyBoxTexturesAlt = skyBoxDeepSpace;
+            float jumpProgress = 0f;
+            if ((Engine.player.state == State.Jump || Engine.player.state == State.BridgeJump) && Engine.player.jumpRoom.parentSector != Engine.player.currentRoom.parentSector)
+            {
+                jumpProgress = (1f * Engine.player.launchTime) / Player.launchMaxTime;
+                if (Engine.player.jumpRoom.parentSector.skyboxType == SkyBoxType.Blue)
+                    skyBoxTexturesAlt = skyBoxBlue;
+                if (Engine.player.jumpRoom.parentSector.skyboxType == SkyBoxType.Green)
+                    skyBoxTexturesAlt = skyBoxGreen;
+                if (Engine.player.jumpRoom.parentSector.skyboxType == SkyBoxType.Red)
+                    skyBoxTexturesAlt = skyBoxRed;
+                if (Engine.player.jumpRoom.parentSector.skyboxType == SkyBoxType.Solar)
+                    skyBoxTexturesAlt = skyBoxSolar;
+                if (Engine.player.jumpRoom.parentSector.skyboxType == SkyBoxType.Galaxy)
+                    skyBoxTexturesAlt = skyBoxGalaxy;
 
-            // Neg X
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, 100, 100),new Vector2(1,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, -100, 100),new Vector2(0,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, 100, -100),new Vector2(1,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, 100, -100),new Vector2(1,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, -100, 100),new Vector2(0,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, -100, -100),new Vector2(0,0)));
+                for (int i = 0; i < 6; i++)
+                {
+                    skyBoxEffectsAlt[i].World = Matrix.Identity;
+                    if (Engine.state == EngineState.Active)
+                        skyBoxEffectsAlt[i].View = Matrix.CreateLookAt(Vector3.Zero, player.cameraTarget - player.cameraPos, player.cameraUp);
+                    if (Engine.state == EngineState.Map)
+                        skyBoxEffectsAlt[i].View = Matrix.CreateLookAt(Vector3.Zero, WorldMap.cameraTarget - WorldMap.cameraPosition, WorldMap.cameraUp);
+                    skyBoxEffectsAlt[i].Projection = Matrix.CreatePerspectiveFieldOfView((float)Math.PI / 4, Game1.graphicsDevice.Viewport.AspectRatio, .1f, 10000);
 
-            // Pos Y
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, 100, 100),new Vector2(1,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, 100, 100),new Vector2(0,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, 100, -100),new Vector2(1,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, 100, -100),new Vector2(1,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, 100, 100),new Vector2(0,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, 100, -100),new Vector2(0,0)));
+                    skyBoxEffectsAlt[i].Texture = skyBoxTexturesAlt[i];
 
-            // Neg Y
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, -100, 100), new Vector2(0, 1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, -100, 100),new Vector2(1,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, -100, -100),new Vector2(0,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, -100, -100),new Vector2(0,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, -100, 100),new Vector2(1,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, -100, -100),new Vector2(1,0)));
+                }
+            }
+                
 
-            // Pos Z
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, 100, 100),new Vector2(1,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, 100, 100),new Vector2(0,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, -100, 100),new Vector2(1,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, -100, 100),new Vector2(1,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, 100, 100),new Vector2(0,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, -100, 100),new Vector2(0,1)));
+            List<VertexPositionColorNormalTexture> skyBoxVertexList = new List<VertexPositionColorNormalTexture>();
 
-            // Neg Z
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, 100, -100),new Vector2(1,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, 100, -100),new Vector2(0,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, -100, -100),new Vector2(1,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(100, -100, -100),new Vector2(1,0)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, 100, -100),new Vector2(0,1)));
-            skyBoxVertexList.Add(new VertexPositionTexture(new Vector3(-100, -100, -100),new Vector2(0,0)));
+            if (jumpProgress == 0)
+            {
+                skyBoxVerticesMain = GenerateSkyBoxVertices(Color.White);
+            }
+            if (skyBoxVerticesMain == null || jumpProgress != 0)
+            {
+                Color transparent = Color.White;
+                transparent.G = (Byte)((1f - jumpProgress) * 255);
+                transparent.R = (Byte)((1f - jumpProgress) * 255);
+                transparent.B = (Byte)((1f - jumpProgress) * 255);
+                transparent.A = (Byte)((1f - jumpProgress) * 255);
+                skyBoxVerticesMain = GenerateSkyBoxVertices(transparent);
+            }
+            if (jumpProgress != 0)
+            {
+                Color transparent = Color.Transparent;
+                transparent.R = (Byte)((jumpProgress) * 255);
+                transparent.G = (Byte)((jumpProgress) * 255);
+                transparent.B = (Byte)((jumpProgress) * 255);
+                transparent.A = (Byte)((jumpProgress) * 255);
+
+                skyBoxVerticesAlt = GenerateSkyBoxVertices(transparent);
+            }
 
             /*skyBoxEffects[0].CurrentTechnique.Passes[0].Apply();
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                     skyBoxVertexList.ToArray(), 0, 12, VertexPositionTexture.VertexDeclaration);*/
+            Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
+            
             for (int i = 0; i < 6; i++)
             {
                 skyBoxEffects[i].CurrentTechnique.Passes[0].Apply();
                 Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                    skyBoxVertexList.ToArray(), i*6, 2, VertexPositionTexture.VertexDeclaration);
+                    skyBoxVerticesMain, i * 6, 2, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
+            if (jumpProgress != 0)
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    skyBoxEffectsAlt[i].CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        skyBoxVerticesAlt, i * 6, 2, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
             }
         }
     }
