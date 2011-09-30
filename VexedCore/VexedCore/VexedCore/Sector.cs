@@ -27,6 +27,8 @@ namespace VexedCore
     {
         public string id;
         public Vector3 center;
+        public int currentOrbs;
+        public int maxOrbs;
 
         public SkyBoxType skyboxType
         {
@@ -56,6 +58,8 @@ namespace VexedCore
 
         public Sector(Sector s)
         {
+            maxOrbs = s.maxOrbs;
+            currentOrbs = s.currentOrbs;
             id = s.id;
             center = s.center;
             roomList = new List<Room>();

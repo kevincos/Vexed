@@ -245,7 +245,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\abilities.xnb</Output>
-      <Time>2011-09-06T16:23:10.8553432-07:00</Time>
+      <Time>2011-09-29T15:49:50.8158528-07:00</Time>
     </Item>
     <Item>
       <Source>p_gun_texture.png</Source>
@@ -752,6 +752,15 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Skybox\DeepSpace\skybox_top.xnb</Output>
       <Time>2011-09-28T11:45:43.1386092-07:00</Time>
+    </Item>
+    <Item>
+      <Source>pausebackground.png</Source>
+      <Name>pausebackground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\pausebackground.xnb</Output>
+      <Time>2011-09-29T17:03:36.0657945-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

@@ -93,6 +93,9 @@ namespace VexedCore
         [XmlIgnore]
         public Doodad tunnelExit;
         [XmlIgnore]public Room jumpRoom;
+        public int wallTime = 0;
+        public int wallJumpCooldown = 0;
+        public static int wallJumpCooldownMax = 300;
         public int spinTime = 0;
         public int launchTime = 0;
         public int jumpTime = 0;
@@ -410,7 +413,7 @@ namespace VexedCore
         {
             get
             {
-                if (leftWall || rightWall)
+                if ((leftWall && faceDirection == -1 && (GamePad.GetState(Game1.activePlayer).ThumbSticks.Left.X < 0 || wallTime < 500)) || (rightWall && faceDirection == 1 && (GamePad.GetState(Game1.activePlayer).ThumbSticks.Left.X > 0 || wallTime < 500)))
                 {
                     if(Vector3.Dot(center.velocity, center.direction) < 0)
                         return .009f;
@@ -754,12 +757,52 @@ namespace VexedCore
                         AnimationControl.SetState(AnimationState.Idle);
                 }
             }            
-        }        
+        }
+
+        public void ResetAdjacentRooms()
+        {
+            foreach (Room r in Engine.roomList)
+            {
+                if (r == currentRoom || r == jumpRoom)
+                    r.adjacent = true;
+                else
+                    r.adjacent = false;
+            }
+            foreach (Doodad d in currentRoom.doodads)
+            {
+                if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
+                {
+                    if(d.targetRoom != null)
+                        d.targetRoom.adjacent = true;
+                }
+            }
+            if (jumpRoom != null)
+            {
+                foreach (Doodad d in jumpRoom.doodads)
+                {
+                    if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
+                    {
+                        if (d.targetRoom != null)
+                            d.targetRoom.adjacent = true;
+                    }
+                }
+            }
+        }
 
         public void Update(GameTime gameTime)
         {
+            wallJumpCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            if (wallJumpCooldown < 0) wallJumpCooldown = 0;
+            if (leftWall == true || rightWall == true)
+            {
+                wallTime += gameTime.ElapsedGameTime.Milliseconds;
+            }
+            else
+                wallTime = 0;
+
             if (grounded == true)
             {
+                wallTime = 0;
                 referenceFrameSpeed = Vector3.Dot(platformVelocity, right);
             }
             else
@@ -942,30 +985,33 @@ namespace VexedCore
                 //if (grounded == true)
                 //faceDirection = 0;
 
-                if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
+                if (wallJumpCooldown == 0)
                 {
-                    faceDirection = -1;
-                    if (grounded == true)
-                        center.velocity -= walkSpeed * right;
-                    else
-                        center.velocity -= airSpeed * right;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
-                {
-                    faceDirection = 1;
-                    if (grounded == true)
-                        center.velocity += walkSpeed * right;
-                    else
-                        center.velocity += airSpeed * right;
-                }
-                if (Math.Abs(stick.X) > 0)
-                {
-                    if (grounded == true)
-                        center.velocity += walkSpeed * stick.X * right;
-                    else
-                        center.velocity += airSpeed * stick.X * right;
-                    if (stick.X > .2) faceDirection = 1;
-                    if (stick.X < -.2) faceDirection = -1;
+                    if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
+                    {
+                        faceDirection = -1;
+                        if (grounded == true)
+                            center.velocity -= walkSpeed * right;
+                        else
+                            center.velocity -= airSpeed * right;
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
+                    {
+                        faceDirection = 1;
+                        if (grounded == true)
+                            center.velocity += walkSpeed * right;
+                        else
+                            center.velocity += airSpeed * right;
+                    }
+                    if (Math.Abs(stick.X) > .2)
+                    {
+                        if (grounded == true)
+                            center.velocity += walkSpeed * stick.X * right;
+                        else
+                            center.velocity += airSpeed * stick.X * right;
+                        if (stick.X > .2) faceDirection = 1;
+                        if (stick.X < -.2) faceDirection = -1;
+                    }
                 }
 
                 if (superJump == true)
@@ -1014,6 +1060,7 @@ namespace VexedCore
                         if (rightMagnitude < wallJumpSpeed)
                             center.velocity += (wallJumpSpeed - rightMagnitude) * right;
                         jumpRecovery = jumpRecoveryMax;
+                        wallJumpCooldown = wallJumpCooldownMax;
 
                     }
                     else if (rightWall && faceDirection > 0 && (upgrades[(int)AbilityType.PermanentWallJump] == true || primaryAbility.type == AbilityType.WallJump || secondaryAbility.type == AbilityType.WallJump))
@@ -1024,6 +1071,7 @@ namespace VexedCore
                         if (rightMagnitude > -wallJumpSpeed)
                             center.velocity -= (wallJumpSpeed + rightMagnitude) * right;
                         jumpRecovery = jumpRecoveryMax;
+                        wallJumpCooldown = wallJumpCooldownMax;
                     }
                     else
                     {
@@ -1054,6 +1102,7 @@ namespace VexedCore
                 {
                     Respawn();
                 }
+
 
                 if (boosting == false)
                     center.velocity -= gravityAcceleration * up;
@@ -1191,6 +1240,7 @@ namespace VexedCore
                                     orbsCollected += 1;
                                     d.orbsRemaining--;
                                     currentRoom.currentOrbs++;
+                                    currentRoom.parentSector.currentOrbs++;
                                     //Engine.reDraw = true;
                                     currentRoom.refreshVertices = true;
                                 }
@@ -1214,9 +1264,12 @@ namespace VexedCore
                             {
                                 if (d.type == VexedLib.DoodadType.JumpPad)
                                     d.Activate();
+                                Engine.reDraw = true;
                                 SoundFX.RoomJump();
                                 jumpRoom = d.targetRoom;
                                 jumpRoom.Reset();
+                                ResetAdjacentRooms();
+                                
                                 float roomSize = Math.Abs(Vector3.Dot(jumpRoom.size / 2, center.normal));
                                 jumpSource = center.position;
                                 jumpDestination = center.position + Vector3.Dot(jumpRoom.center - center.position - roomSize * center.normal, center.normal) * center.normal;
@@ -1293,6 +1346,8 @@ namespace VexedCore
                             {
                                 Engine.state = EngineState.Map;
                                 WorldMap.state = ZoomState.ZoomToSector;
+                                WorldMap.warp = true;
+                                WorldMap.ZoomToSector();
                                 
                                 for (int i = 0; i < Engine.roomList.Count(); i++)
                                 {
@@ -1353,7 +1408,6 @@ namespace VexedCore
                     currentRoom = jumpRoom;
 
 
-
                     if (oldState == State.Jump)
                     {
                         naturalShield.ammo = naturalShield.maxAmmo;
@@ -1367,6 +1421,10 @@ namespace VexedCore
                         if(d.type == VexedLib.DoodadType.BridgeGate)
                             d.active = false;
                     }
+
+                    jumpRoom = null;
+                    ResetAdjacentRooms();
+
                 }
 
             }

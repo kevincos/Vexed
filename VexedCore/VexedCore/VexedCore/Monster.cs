@@ -276,6 +276,18 @@ namespace VexedCore
                 guns.Add(new GunEmplacement(trackType, gunType, Vector2.Zero, halfWidth, -.05f, BaseType.None));            
         }
 
+
+        public void ResetBossState()
+        {
+            chaseBoss = new ChaseBoss();
+            armorBoss = new ArmorBoss();
+            faceBoss = new FaceBoss();
+            rockBoss = new RockBoss();
+            snakeBoss = new SnakeBoss();
+            jetBoss = new JetBoss();
+            battleBoss = new BattleBoss();
+        }
+
         public Monster(Monster m, Room r, Vector3 n, Vector3 u)
         {
             snakeBoss = new SnakeBoss();

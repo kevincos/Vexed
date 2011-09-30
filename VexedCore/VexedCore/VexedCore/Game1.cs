@@ -76,8 +76,8 @@ namespace VexedCore
             // TODO: Add your initialization logic here
             graphicsDevice = GraphicsDevice;
 
-            //LevelLoader.Load("LevelData\\menu");
-            LevelLoader.Load("LevelData\\world");
+            LevelLoader.Load("LevelData\\menu");
+            //LevelLoader.Load("LevelData\\world");
             //LevelLoader.Load("LevelData\\spikeelevator");
             
             Components.Add(new FrameRateCounter(this));
@@ -122,6 +122,7 @@ namespace VexedCore
             Player.player_textures_detail = Content.Load<Texture2D>("p_texture");
             Player.player_textures_clean = Content.Load<Texture2D>("p_texture_clean");
             Ability.ability_textures = Content.Load<Texture2D>("abilities");
+            PauseMenu.pauseBackground = Content.Load<Texture2D>("pausebackground");
             Decoration.defaultTexture = Content.Load<Texture2D>("abilities");
             Doodad.beam_textures = Content.Load<Texture2D>("beams");
             Monster.monsterTexture = Content.Load<Texture2D>("m_body");
@@ -174,11 +175,11 @@ namespace VexedCore
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
+            if (Engine.quit == true)
+                this.Exit();
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
-            if (GamePad.GetState(activePlayer).IsButtonDown(Buttons.Back))
-                this.Exit();
 
             AnimationControl.Update(gameTime);
             controller.Update(gameTime);

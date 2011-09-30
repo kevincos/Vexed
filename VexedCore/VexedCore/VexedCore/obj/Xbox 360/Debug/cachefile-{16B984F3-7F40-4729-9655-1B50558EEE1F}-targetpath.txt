@@ -83,3 +83,4 @@ Content\Skybox\DeepSpace\skybox_front.xnb
 Content\Skybox\DeepSpace\skybox_left.xnb
 Content\Skybox\DeepSpace\skybox_right.xnb
 Content\Skybox\DeepSpace\skybox_top.xnb
+Content\pausebackground.xnb

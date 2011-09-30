@@ -70,6 +70,7 @@ namespace VexedCore
                             else
                             {
                                 newRoom.maxOrbs += 5;
+                                newSector.maxOrbs += 5;
                                 newRoom.monsters.Add(new Monster(xmlMonster, xmlFace.normal));
                             }
                         }
@@ -81,11 +82,17 @@ namespace VexedCore
                         foreach (VexedLib.Doodad xmlDoodad in xmlFace.doodads)
                         {
                             Doodad newDoodad = null;
-                            
+
                             if (xmlDoodad.type == VexedLib.DoodadType.PowerOrb)
+                            {
                                 newRoom.maxOrbs++;
+                                newSector.maxOrbs++;
+                            }
                             if (xmlDoodad.type == VexedLib.DoodadType.PowerStation)
+                            {
                                 newRoom.maxOrbs += 10;
+                                newSector.maxOrbs += 10;
+                            }
 
                             if (xmlDoodad.type == VexedLib.DoodadType.PlayerSpawn)
                             {

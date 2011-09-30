@@ -27,7 +27,6 @@ namespace VexedCore
         public Vertex position;
         public Vertex spawnPosition;
         public bool active = false;
-        public bool powered = false;
         public bool ready = false;
         public bool available = true;
         public bool tracking = false;
@@ -69,6 +68,7 @@ namespace VexedCore
         public int activationCost = 0;
 
         public AbilityType abilityType = AbilityType.Empty;
+        public AbilityType originalAbilityType = AbilityType.Empty;
 
         [XmlIgnore]public Doodad srcDoodad = null;
 
@@ -114,7 +114,6 @@ namespace VexedCore
             spawnPosition = new Vertex(d.spawnPosition);
             active = d.active;
 
-            powered = d.powered;
             available = d.available;
             id = d.id;
             targetBehavior = d.targetBehavior;
@@ -131,6 +130,7 @@ namespace VexedCore
             behaviorStarted = d.behaviorStarted;
             toggleOn = d.toggleOn;
             abilityType = d.abilityType;
+            originalAbilityType = d.abilityType;
             cooldown = d.cooldown;
             activationCost = d.activationCost;
 
@@ -157,9 +157,7 @@ namespace VexedCore
             }
         }
 
-        public Doodad()
-        {
-        }
+ 
 
         public Doodad(VexedLib.Doodad xmlDoodad, Vector3 normal)
         {
@@ -172,6 +170,7 @@ namespace VexedCore
             this.activationCost = xmlDoodad.activationCost;
 
             this.abilityType = (AbilityType)xmlDoodad.ability;
+            this.originalAbilityType = (AbilityType)xmlDoodad.ability;
             this.position = new Vertex(xmlDoodad.position, normal, Vector3.Zero, xmlDoodad.up);
             this.spawnPosition = new Vertex(xmlDoodad.position, normal, Vector3.Zero, xmlDoodad.up);
             behaviors = new List<Behavior>();
@@ -199,6 +198,10 @@ namespace VexedCore
 
             if (type == VexedLib.DoodadType.PowerOrb)
                 active = true;
+        }
+
+        public Doodad()
+        {
         }
 
         public Doodad(Doodad d, Room r, Vector3 n, Vector3 u)
@@ -283,7 +286,7 @@ namespace VexedCore
         {
             bool futureState = state;
 
-            if (currentRoom.currentOrbs < activationCost)
+            if (powered == false)
                 futureState = false;
 
             if (futureState != active)
@@ -292,6 +295,40 @@ namespace VexedCore
             }
 
             active = futureState;
+        }
+
+        public bool _powered = false;
+
+        public bool powered
+        {
+            get
+            {
+                if (type == VexedLib.DoodadType.WarpStation)
+                {
+                    if (currentRoom.parentSector.currentOrbs >= activationCost)
+                    {
+                        if (_powered == false)
+                        {
+                            _powered = true;
+                            refreshVertexData = true;
+                        }
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (currentRoom.currentOrbs >= activationCost)
+                    {
+                        if (_powered == false)
+                        {
+                            _powered = true;
+                            refreshVertexData = true;
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
         public bool dynamic
@@ -973,6 +1010,8 @@ namespace VexedCore
                         decalIndex = 38;
                     if (targetDoodad.type == VexedLib.DoodadType.WarpStation)
                         decalIndex = 39;
+                    if (targetDoodad.type == VexedLib.DoodadType.SaveStation || targetDoodad.type == VexedLib.DoodadType.LoadStation)
+                        decalIndex = 43;
                     if (targetDoodad.type == VexedLib.DoodadType.SwitchStation && targetDoodad.abilityType != AbilityType.RedKey && targetDoodad.abilityType != AbilityType.BlueKey && targetDoodad.abilityType != AbilityType.YellowKey)
                         decalIndex = 31;
                     currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[decalIndex], decalList, true);
@@ -1060,22 +1099,7 @@ namespace VexedCore
                 position.Update(currentRoom, gameTime.ElapsedGameTime.Milliseconds);
                 refreshVertexData = true;
             }
-            if (type == VexedLib.DoodadType.JumpPad && powered == false)
-            {
-                if (currentRoom.currentOrbs >= activationCost)
-                {
-                    powered = true;
-                    refreshVertexData = true;
-                }
-            }
-            if (targetDoodad != null && powered == false)
-            {
-                if (currentRoom.currentOrbs >= targetDoodad.activationCost)
-                {
-                    powered = true;
-                    refreshVertexData = true;
-                }
-            }
+            
             if (type == VexedLib.DoodadType.StationIcon)
             {
                 if (targetDoodad.type == VexedLib.DoodadType.ItemStation)
@@ -1134,14 +1158,7 @@ namespace VexedCore
                     }
                 }
             }
-            if (isStation == true && powered == false)
-            {
-                if (currentRoom.currentOrbs >= activationCost)
-                {
-                    powered = true;
-                    refreshVertexData = true;
-                }
-            }
+
 
             if (type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.RightDoor)
             {

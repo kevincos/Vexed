@@ -74,6 +74,7 @@ namespace VexedCore
 
         public bool roomHighlight = false;
         public bool sectorHighlight = false;
+        public bool adjacent = false;
 
         public Vector3 center;
         public Vector3 size;
@@ -226,6 +227,7 @@ namespace VexedCore
             projectiles.Clear();
             foreach (Monster m in monsters)
             {
+                m.ResetBossState();
                 m.position = new Vertex(m.spawnPosition);
                 if(m.moveType == VexedLib.MovementType.SnakeBoss)
                     m.snakeBoss.InitializeLinks(m, this);
@@ -236,7 +238,12 @@ namespace VexedCore
             }
             foreach (Doodad d in doodads)
             {
-                d.position = new Vertex(d.spawnPosition);                
+                d.position = new Vertex(d.spawnPosition);
+                d.abilityType = d.originalAbilityType;
+                if (d.type == VexedLib.DoodadType.Brick)
+                    d.active = false;
+                if (d.type == VexedLib.DoodadType.PowerPlug)
+                    d.active = false;
             }
         }
 
@@ -1463,6 +1470,60 @@ namespace VexedCore
             return GetMapBlock(adjustedSize, blockColor, false);
         }
 
+        VertexPositionColorNormalTexture[] mapDecalVertices = null;
+
+        public void UpdateMapDecals()
+        {
+            //if (mapDecalVertices == null)
+            {
+                List<VertexPositionColorNormalTexture> mapDecalList = new List<VertexPositionColorNormalTexture>();
+                Vector3 cameraUp = WorldMap.cameraUp;
+                Vector3 cameraRight = Vector3.Cross(cameraUp, WorldMap.cameraPosition - WorldMap.cameraTarget);
+                cameraRight.Normalize();
+                foreach (Doodad d in doodads)
+                {
+                    if (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.WarpStation || d.type == VexedLib.DoodadType.SaveStation)
+                    {
+                        float iconDistance = 3f;
+                        float iconSize = 2f;
+
+                        Vector3 lowerLeft = d.position.position + iconSize * -cameraRight + iconSize * -cameraUp + d.position.normal * iconDistance;
+                        Vector3 lowerRight = d.position.position + iconSize * cameraRight + iconSize * -cameraUp + d.position.normal * iconDistance;
+                        Vector3 upperLeft = d.position.position + iconSize * -cameraRight + iconSize * cameraUp + d.position.normal * iconDistance;
+                        Vector3 upperRight = d.position.position + iconSize * cameraRight + iconSize * cameraUp + d.position.normal * iconDistance;
+
+                        int decalIndex = (int)(d.abilityType);
+                        if (d.type == VexedLib.DoodadType.SaveStation)
+                            decalIndex = 43;
+                        if (d.type == VexedLib.DoodadType.WarpStation)
+                            decalIndex = 39;
+                        List<Vector2> iconTextureCoords = Ability.texCoordList[decalIndex];
+
+                        mapDecalList.Add(new VertexPositionColorNormalTexture(lowerLeft, Color.White, d.position.normal, iconTextureCoords[2]));
+                        mapDecalList.Add(new VertexPositionColorNormalTexture(lowerRight, Color.White, d.position.normal, iconTextureCoords[3]));
+                        mapDecalList.Add(new VertexPositionColorNormalTexture(upperLeft, Color.White, d.position.normal, iconTextureCoords[1]));
+
+                        mapDecalList.Add(new VertexPositionColorNormalTexture(lowerRight, Color.White, d.position.normal, iconTextureCoords[3]));
+                        mapDecalList.Add(new VertexPositionColorNormalTexture(upperLeft, Color.White, d.position.normal, iconTextureCoords[1]));
+                        mapDecalList.Add(new VertexPositionColorNormalTexture(upperRight, Color.White, d.position.normal, iconTextureCoords[0]));
+                    }
+                }
+                mapDecalVertices = mapDecalList.ToArray();                
+            }
+            
+        }
+
+        public void DrawMapIcons()
+        {
+            UpdateMapDecals();
+
+            if (mapDecalVertices.Count() > 0)
+            {
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    mapDecalVertices, 0, mapDecalVertices.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
+        }
+
         public List<TrasnparentSquare> GetMapBlock(Vector3 adjustedSize, Color blockColor, bool highlight)
         {
             Color shellColor = blockColor;
@@ -1547,7 +1608,8 @@ namespace VexedCore
 
             foreach (Doodad d in doodads)
             {
-                if (d.type == VexedLib.DoodadType.JumpStation || d.type == VexedLib.DoodadType.JumpPad)
+
+                if ((d.type == VexedLib.DoodadType.JumpStation || d.type == VexedLib.DoodadType.JumpPad) && d.targetRoom != null)
                 {
                     Vector3 startLowerLeft = d.position.position + d.left + d.down;
                     Vector3 startLowerRight = d.position.position + d.right + d.down;
@@ -1611,7 +1673,7 @@ namespace VexedCore
             if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || roomHighlight == true)
             {
                 if ((center - Engine.player.currentRoom.center).Length() < Engine.drawDistance ||
-                        (Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true)
+                        (Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)
                 {
                     float cameraLineDistance = Vector3.Dot(center - Engine.player.center.position, Vector3.Normalize(Engine.player.cameraTarget - Engine.player.cameraPos));
 

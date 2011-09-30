@@ -15,7 +15,8 @@ namespace VexedCore
     public enum EngineState
     {
         Active,        
-        Map        
+        Map,
+        Pause
     }
 
     public class Engine
@@ -24,6 +25,7 @@ namespace VexedCore
 
         public static EngineState state = EngineState.Active;
 
+        public static bool quit = false;
 
         public static Vector3 worldCenter = Vector3.Zero;
         public static List<Room> roomList;
@@ -329,11 +331,18 @@ namespace VexedCore
             }
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
             
-            if (transparencyEnabled == true)
+            //if (transparencyEnabled == true)
             {
                 //Game1.graphicsDevice.DepthStencilState = DepthStencilState.None;
                 if (WorldMap.state != ZoomState.None)
                 {
+                    playerTextureEffect.Texture = Ability.ability_textures;
+                    playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    foreach (Room r in roomList)
+                    {
+                        r.DrawMapIcons();                       
+                    }
+
                     if(depthShader == false)
                         mapEffect.CurrentTechnique.Passes[0].Apply();
                     else
@@ -558,6 +567,7 @@ namespace VexedCore
             
             saveGameText.Draw();
             WorldMap.DrawMetaData();
+            PauseMenu.Draw();
         }
 
 
@@ -621,6 +631,9 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            PauseMenu.Update(gameTime);
+            if (PauseMenu.paused == true)
+                return;
             WorldMap.Update(gameTime);
             // Profiling help
             if (Keyboard.GetState().IsKeyDown(Keys.PageUp))
