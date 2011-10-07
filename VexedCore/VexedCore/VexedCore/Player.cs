@@ -152,7 +152,7 @@ namespace VexedCore
         private bool _grounded = false;
         public int groundTolerance = 100;
         public int groundCounter = 0;
-        public int faceDirection = 0;
+        public int faceDirection = -1;
         public float baseCameraDistance = 12;
         public int orbsCollected = 0;
 
@@ -178,12 +178,15 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Empty);
-            secondaryAbility = new Ability(AbilityType.Empty);
+            primaryAbility = new Ability(AbilityType.Laser);
+            secondaryAbility = new Ability(AbilityType.Boots);
             naturalShield = new Ability(AbilityType.Shield);
             //upgrades[(int)AbilityType.PermanentWallJump] = true;
-            //upgrades[(int)AbilityType.WallJump] = true;
-            //upgrades[(int)AbilityType.DoubleJump] = true;
+            upgrades[(int)AbilityType.WallJump] = true;
+            upgrades[(int)AbilityType.DoubleJump] = true;
+            upgrades[(int)AbilityType.Boots] = true;
+            upgrades[(int)AbilityType.Laser] = true;
+            upgrades[(int)AbilityType.Blaster] = true;
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }
@@ -286,9 +289,9 @@ namespace VexedCore
         {
             get
             {
-                Vector2 stick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Left;
-                return (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Right) ||
-                    Keyboard.GetState().IsKeyDown(Keys.A) || (Keyboard.GetState().IsKeyDown(Keys.D)) || stick.X != 0) && grounded == true;
+                Vector2 stick = Controls.LeftStick();
+                return (Controls.IsLeftKeyDown() ||
+                    Controls.IsRightKeyDown() || stick.X != 0) && grounded == true;
             }
         }
 
@@ -413,7 +416,7 @@ namespace VexedCore
         {
             get
             {
-                if ((leftWall && faceDirection == -1 && (GamePad.GetState(Game1.activePlayer).ThumbSticks.Left.X < 0 || wallTime < 500)) || (rightWall && faceDirection == 1 && (GamePad.GetState(Game1.activePlayer).ThumbSticks.Left.X > 0 || wallTime < 500)))
+                if ((leftWall && faceDirection == -1 && (Controls.LeftStick().X < 0 || wallTime < 500)) || (rightWall && faceDirection == 1 && (Controls.LeftStick().X > 0 || wallTime < 500)))
                 {
                     if(Vector3.Dot(center.velocity, center.direction) < 0)
                         return .009f;
@@ -484,8 +487,11 @@ namespace VexedCore
 
         public void Respawn()
         {
-            Engine.reDraw = true;
             LevelLoader.QuickLoad();
+            Engine.reDraw = true;
+            Physics.refresh = true;
+            
+            Engine.player.currentRoom.Reset();
         }
 
         public bool HasTraction()
@@ -808,9 +814,9 @@ namespace VexedCore
             else
             {
                 float currentSpeed = Vector3.Dot(center.velocity, right);
-                Vector2 controlStick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Left;
-                if (!(Game1.controller.AButton.Pressed == true ||  Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Right) ||
-                    Keyboard.GetState().IsKeyDown(Keys.A) || (Keyboard.GetState().IsKeyDown(Keys.D)) || Math.Abs(controlStick.X) > .1f))
+                Vector2 controlStick = Controls.LeftStick();
+                if (!(Game1.controller.AButton.Pressed == true ||  Controls.IsRightKeyDown() ||
+                    Controls.IsLeftKeyDown() || Math.Abs(controlStick.X) > .1f))
                 {
                     if (currentSpeed > referenceFrameSpeed)
                     {
@@ -836,8 +842,8 @@ namespace VexedCore
             }
             else
             {
-                oldUp = center.direction;
-                oldNormal = center.normal;
+                //oldUp = center.direction;
+                //oldNormal = center.normal;
             }
 
             if (hookState != HookState.Waiting)
@@ -948,8 +954,10 @@ namespace VexedCore
                 groundCounter = groundTolerance;
                 grounded = false;
             }
-            Vector2 stick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Left;
-            Vector2 rightStick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Right;
+            Vector2 stick = Controls.LeftStick();
+            //Vector2 rightStick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Right;
+            Vector2 rightStick = Controls.GetStaticCameraHelper();
+            
             GamePadState gamePadState = GamePad.GetState(Game1.activePlayer);
 
             if (state == State.Death)
@@ -987,7 +995,7 @@ namespace VexedCore
 
                 if (wallJumpCooldown == 0)
                 {
-                    if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
+                    if (Controls.IsLeftKeyDown())
                     {
                         faceDirection = -1;
                         if (grounded == true)
@@ -995,7 +1003,7 @@ namespace VexedCore
                         else
                             center.velocity -= airSpeed * right;
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
+                    if (Controls.IsRightKeyDown())
                     {
                         faceDirection = 1;
                         if (grounded == true)
@@ -1055,8 +1063,8 @@ namespace VexedCore
                     else if (leftWall && faceDirection < 0 && (upgrades[(int)AbilityType.PermanentWallJump] == true || primaryAbility.type == AbilityType.WallJump || secondaryAbility.type == AbilityType.WallJump))
                     {
                         faceDirection = 1;
-                        if (upMagnitude < jumpSpeed)
-                            center.velocity += (jumpSpeed - upMagnitude) * up;
+                        if (upMagnitude < .8f * jumpSpeed)
+                            center.velocity += (.8f*jumpSpeed - upMagnitude) * up;
                         if (rightMagnitude < wallJumpSpeed)
                             center.velocity += (wallJumpSpeed - rightMagnitude) * right;
                         jumpRecovery = jumpRecoveryMax;
@@ -1066,8 +1074,8 @@ namespace VexedCore
                     else if (rightWall && faceDirection > 0 && (upgrades[(int)AbilityType.PermanentWallJump] == true || primaryAbility.type == AbilityType.WallJump || secondaryAbility.type == AbilityType.WallJump))
                     {
                         faceDirection = -1;
-                        if (upMagnitude < jumpSpeed)
-                            center.velocity += (jumpSpeed - upMagnitude) * up;
+                        if (upMagnitude < .8f * jumpSpeed)
+                            center.velocity += (.8f * jumpSpeed - upMagnitude) * up;
                         if (rightMagnitude > -wallJumpSpeed)
                             center.velocity -= (wallJumpSpeed + rightMagnitude) * right;
                         jumpRecovery = jumpRecoveryMax;
@@ -1405,7 +1413,13 @@ namespace VexedCore
                     faceDirection = 0;
                     State oldState = state;
                     state = State.Normal;
+                    Room oldRoom = currentRoom;
                     currentRoom = jumpRoom;
+                    if (oldRoom != jumpRoom)
+                    {
+                        oldRoom.Reset();
+                        currentRoom.Reset();
+                    }
 
 
                     if (oldState == State.Jump)

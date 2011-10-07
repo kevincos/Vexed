@@ -104,5 +104,118 @@ seeking missiles?</string>
     </textList>
     <pause>false</pause>
   </DialogChunk>
+  <DialogChunk>
+    <id>IceSnake1</id>
+    <speaker>IceSnake</speaker>
+    <textList>
+      <string>Muahaha. There's a totally sweet item in the
+next room. But you'll never live to see it!
+      </string>
+      <string>
+        Feel the icy wrath of... ICE SNAKE!
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>IceSnake2</id>
+    <speaker>IceSnake</speaker>
+    <textList>
+      <string>Gah! My ice armor is cracking!
+      </string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>IceSnake3</id>
+    <speaker>IceSnake</speaker>
+    <textList>
+      <string>Fool! You've thawed out my guns! Now I'll
+get you!
+      </string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>IceSnake4</id>
+    <speaker>IceSnake</speaker>
+    <textList>
+      <string>Ouch! You'll never defeat me!
+      </string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>IceSnake5</id>
+    <speaker>IceSnake</speaker>
+    <textList>
+      <string>Nooo... I've failed!
+      </string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>SnowMan1</id>
+    <speaker>SnowMan</speaker>
+    <textList>
+      <string>Bwahahaha. You can't hurt me! My ice armor is far too
+strong for blasters!
+      </string>
+      <string>You've made it pretty far, but your
+quest ends here! The third dimension will be ours!        
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>SnowMan2</id>
+    <speaker>SnowMan</speaker>
+    <textList>
+      <string>What the? A loose block?!?
+      </string>      
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>SnowMan3</id>
+    <speaker>SnowMan</speaker>
+    <textList>
+      <string>Curses! You've broken through my armor!
+      </string>
+      <string>I'll just have to deal with you the old fashioned way
+while my armor regenerates!</string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>SnowMan4</id>
+    <speaker>SnowMan</speaker>
+    <textList>
+      <string>Ah... that's better! Now where were we?
+      </string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>SnowMan5</id>
+    <speaker>SnowMan</speaker>
+    <textList>
+      <string>You're a persistent little bugger aren't you...
+      </string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>SnowMan6</id>
+    <speaker>SnowMan</speaker>
+    <textList>
+      <string>Nooooooooo...
+      </string>
+      <string>Oh whatever. Your DOOM awaits you in the Engine sector!
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
 
 </ArrayOfDialogChunk>

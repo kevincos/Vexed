@@ -232,7 +232,7 @@ namespace WinFormsGraphicsDevice
 
         void world_mouse_hover(object sender, System.EventArgs e)
         {
-            Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
+            /*Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
             Room r = s.FindRoomByIDString((string)this.roomDropdown.Items[this.roomDropdown.SelectedIndex]);
 
             if (sender == this.sectorGroup)
@@ -244,13 +244,13 @@ namespace WinFormsGraphicsDevice
             {
                 selectedSector = s;
                 selectedRoom = r;
-            }
+            }*/
         }
 
         void world_mouse_leave(object sender, System.EventArgs e)
         {
             //selectedSector = null;
-            selectedRoom = null;            
+            //selectedRoom = null;            
         }
 
         void world_selected_change(object sender, System.EventArgs e)

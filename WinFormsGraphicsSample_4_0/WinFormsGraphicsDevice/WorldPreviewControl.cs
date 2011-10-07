@@ -611,13 +611,12 @@ namespace WinFormsGraphicsDevice
 
         public void ViewWorld()
         {
-            futureTarget = Vector3.Zero;
             futureCamera = new Vector3(100, 100, 100);
-            if (MainForm.selectedSector != null)
+            /*if (MainForm.selectedSector != null)
             {
                 futureTarget = MainForm.selectedSector.center;
                 futureCamera = futureTarget + new Vector3(100, 100, 100);
-            }
+            }*/
             if (MainForm.zoomRoom != null)
             {
                 futureTarget = new Vector3(MainForm.zoomRoom.centerX, MainForm.zoomRoom.centerY, MainForm.zoomRoom.centerZ);
@@ -1133,25 +1132,34 @@ namespace WinFormsGraphicsDevice
                 if (MainForm.selectedSector != null && MainForm.zoomRoom == null)
                 {
                     target = MainForm.selectedSector.center;
-                    effect.World = Matrix.CreateTranslation(-target) * Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
+                    effect.World = Matrix.CreateTranslation(-target) * Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);                    
                 }
                 else
                 {
                     effect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
                 }
-                
-                
 
-                
 
-                if (MainForm.selectedRoom != null)
+
+
+
+                if (MainForm.zoomRoom != null)
                 {
                     effect.World = Matrix.Identity;
                 }
 
-                effect.View = Matrix.CreateLookAt(currentCamera,
-                                                  currentTarget,
-                                                  currentUp);
+                if (MainForm.zoomRoom == null)
+                {
+                    effect.View = Matrix.CreateLookAt(currentCamera,
+                                                      Vector3.Zero,
+                                                      currentUp);
+                }
+                else
+                {
+                    effect.View = Matrix.CreateLookAt(currentCamera,
+                                  currentTarget,
+                                  currentUp);
+                }
 
                 effect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
 

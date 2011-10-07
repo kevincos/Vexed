@@ -129,6 +129,10 @@ namespace VexedCore
                     portraitIndex = 2;
                 else if (currentDialog.speaker == "System")
                     portraitIndex = 3;
+                else if (currentDialog.speaker == "IceSnake")
+                    portraitIndex = 4;
+                else if (currentDialog.speaker == "SnowMan")
+                    portraitIndex = 5;                    
                 else
                     portraitIndex = 0;
                 Engine.spriteBatch.Draw(portraits, new Rectangle((int)(Game1.titleSafeRect.Left + xPercent * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height), (int)((textXPercent - xPercent) * Game1.titleSafeRect.Width), (int)(boxHeight * Game1.titleSafeRect.Width)), new Rectangle((portraitIndex % 8) * 64, (portraitIndex / 8) * 64, 64, 64), Color.White);

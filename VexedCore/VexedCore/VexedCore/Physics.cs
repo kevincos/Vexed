@@ -28,6 +28,8 @@ namespace VexedCore
         {
             if (Engine.player.center.normal != Engine.player.oldNormal || Engine.player.center.direction != Engine.player.oldUp)
             {
+                Engine.player.oldNormal = Engine.player.center.normal;
+                Engine.player.oldUp = Engine.player.center.direction;
                 refresh = true;
             }
             Vector3 right = Vector3.Cross(up, normal);

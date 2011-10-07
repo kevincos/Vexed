@@ -24,6 +24,20 @@ namespace VexedCore
         public int chainIndex = 0;
         public static int totalLife = 0;
         public bool deactivated = false;
+        public static int dialogState = 0;
+        public static bool gunDialog = false;
+
+        public SnakeBoss()
+        {
+            
+        }
+
+        public static void Init()
+        {
+            totalLife = 0;
+            dialogState = 0;
+            gunDialog = false;
+        }
 
         public bool waiting
         {
@@ -32,6 +46,7 @@ namespace VexedCore
                 return waitingForNext || waitingForPrev;
             }
         }
+        
 
         public void InitializeLinks(Monster srcMonster, Room targetRoom)
         {
@@ -68,7 +83,24 @@ namespace VexedCore
         public void Update(int time, Monster srcMonster)
         {
             if (SnakeBoss.totalLife == 0)
+            {
+                if (dialogState < 9)
+                {
+                    dialogState = 9;
+                    DialogBox.SetDialog("IceSnake5");
+                }
                 srcMonster.dead = true;
+            }
+            if (dialogState == 1 && srcMonster.baseHP == 2)
+            {
+                dialogState++;
+                DialogBox.SetDialog("IceSnake2");
+            }
+            if (dialogState == 2 && srcMonster.baseHP == 1)
+            {
+                dialogState++;
+                DialogBox.SetDialog("IceSnake4");
+            }
             if (srcMonster.baseHP == 0 && deactivated == false)
             {
                 deactivated = true;
@@ -78,21 +110,36 @@ namespace VexedCore
             {
                 if (srcMonster.guns.Count == 0)
                     srcMonster.guns.Add(new GunEmplacement(VexedLib.TrackType.Fast, VexedLib.GunType.None, Vector2.Zero, .7f * srcMonster.halfWidth, .01f, BaseType.Ice));
-                else if (srcMonster.baseHP == 0)
-                    srcMonster.guns[0].gunType = VexedLib.GunType.Blaster;
+                else if (srcMonster.baseHP <= 1)
+                {
+                    if (gunDialog == false)
+                    {
+                        DialogBox.SetDialog("IceSnake3");
+                        gunDialog = true;
+                        srcMonster.guns[0].gunType = VexedLib.GunType.Blaster;
+                    }
+                }
 
             }
             Vector3 direction = nextWaypointTarget - srcMonster.position.position;
             float distance = direction.Length();
             
+
+
             if (nextWaypointIndex == 0f || Vector3.Dot(srcMonster.position.velocity, direction) < 0f)
             {
+                if (dialogState == 0 && Vector3.Dot(srcMonster.position.velocity, direction) < 0f)
+                {
+                    DialogBox.SetDialog("IceSnake1");
+                    dialogState++;
+                }
+
                 if (nextWaypointTarget != Vector3.Zero)
                     srcMonster.position.position = nextWaypointTarget;
                 srcMonster.position.velocity = Vector3.Zero;
                 
                 nextWaypointIndex++;
-                if (nextWaypointIndex == 10) nextWaypointIndex = 1;
+                if (nextWaypointIndex == 19) nextWaypointIndex = 1;
                 nextWaypointTarget = GetWaypointTarget();
                 srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
                 if(nextSnakeLink != null)
@@ -101,6 +148,7 @@ namespace VexedCore
                     waitingForPrev = true;
                 if(nextSnakeLink != null)
                     nextSnakeLink.snakeBoss.waitingForPrev = false;
+
             }
 
             if (waitingForNext)

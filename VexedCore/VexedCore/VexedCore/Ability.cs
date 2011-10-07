@@ -63,6 +63,22 @@ namespace VexedCore
             }
         }
 
+        public bool isItem
+        {
+            get
+            {
+                return type == AbilityType.WallJump || type == AbilityType.DoubleJump || type == AbilityType.Boots || type == AbilityType.JetPack || type == AbilityType.Blaster || type == AbilityType.Laser || type == AbilityType.Missile || type == AbilityType.Booster || type == AbilityType.Phase || type == AbilityType.SpinHook;
+            }
+        }
+
+        public bool isUpgrade
+        {
+            get
+            {
+                return type == AbilityType.PermanentBlueKey || type == AbilityType.PermanentBoots || type == AbilityType.PermanentRedKey || type == AbilityType.PermanentWallJump || type == AbilityType.PermanentYellowKey || type == AbilityType.ImprovedJump;
+            }
+        }
+
         public bool isGun
         {
             get
@@ -292,6 +308,92 @@ namespace VexedCore
 
             }
             Engine.spriteBatch.End();
+        }
+
+        public String FriendlyName()
+        {
+            if (type == AbilityType.DoubleJump)
+                return "Double Jump";
+            if (type == AbilityType.WallJump)
+                return "Wall Jump";
+            if (type == AbilityType.Blaster)
+                return "Blaster Gun";
+            if (type == AbilityType.Laser)
+                return "Laser Cannon";
+            if (type == AbilityType.Missile)
+                return "Missile Launcher";
+            if (type == AbilityType.Boots)
+                return "Gravity Boots";
+            if (type == AbilityType.Booster)
+                return "Rocket Booster";
+            if (type == AbilityType.JetPack)
+                return "Jet Pack";
+            if (type == AbilityType.SpinHook)
+                return "Spin Hook";
+            if (type == AbilityType.Phase)
+                return "Phase Belt";
+            if (type == AbilityType.RedKey)
+                return "Red Access Card";
+            if (type == AbilityType.BlueKey)
+                return "Blue Access Card";
+            if (type == AbilityType.YellowKey)
+                return "Yellow Access Card";
+            if (type == AbilityType.PermanentRedKey)
+                return "Red Security Codes";
+            if (type == AbilityType.PermanentBlueKey)
+                return "Blue Security Codes";
+            if (type == AbilityType.PermanentYellowKey)
+                return "Yellow Security Codes";
+            if (type == AbilityType.PermanentBoots)
+                return "Gravity Module";
+            if (type == AbilityType.PermanentWallJump)
+                return "Wall Jump Module";
+            if (type == AbilityType.ImprovedJump)
+                return "Advanced Jump";
+            return "BUG";
+        }
+
+        public String Description()
+        {
+            if (type == AbilityType.DoubleJump)
+                return "Press the Jump button while in mid air\nto get a second jump.";
+            if (type == AbilityType.WallJump)
+                return "Press the Jump button while sliding on\na wall to jump off the wall.";
+            if (type == AbilityType.Blaster)
+                return "Short range energy weapon.";
+            if (type == AbilityType.Laser)
+                return "Long range energy weapon. Can be used\nto power up certain switches.";
+            if (type == AbilityType.Missile)
+                return "Explosive homing weapon. Can destroy\nenemy armor and certain blocks.";
+            if (type == AbilityType.Boots)
+                return "Allows you to walk on special gravity\nwalls.";
+            if (type == AbilityType.Booster)
+                return "Gives you a powerful horizontal turbo\nboost.";
+            if (type == AbilityType.JetPack)
+                return "Allows you to fly for a short period\noftime.";
+            if (type == AbilityType.SpinHook)
+                return "Fire at hook targets to shift gravity.";
+            if (type == AbilityType.Phase)
+                return "Allows you to teleport through to the\nfar side of the room.";
+            if (type == AbilityType.RedKey)
+                return "Allows you to activate Red switches.";
+            if (type == AbilityType.BlueKey)
+                return "Allows yout to activate Blue switches.";
+            if (type == AbilityType.YellowKey)
+                return "Allows you to activate Yellow switches.";
+            if (type == AbilityType.PermanentRedKey)
+                return "Allows you to activate Red switches\nwithout an access card.";
+            if (type == AbilityType.PermanentBlueKey)
+                return "Allows you to activate Blue switches\nwithout an access card.";
+            if (type == AbilityType.PermanentYellowKey)
+                return "Allows you to activate Yellow switches\nwithout an access card.";
+            if (type == AbilityType.PermanentBoots)
+                return "Allows you to walk on gravity strips\nwithout using an inventory slot.";
+            if (type == AbilityType.PermanentWallJump)
+                return "Allows you to perform wall jumps without\nusing an inventory slot.";
+            if (type == AbilityType.ImprovedJump)
+                return "Increases maximum jump height.";
+            return "BUG";
         }
     }
 

@@ -17,7 +17,7 @@ namespace VexedCore
     public class Game1 : Microsoft.Xna.Framework.Game
     {
 
-        public GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics;
         public static GraphicsDevice graphicsDevice;
         public static BloomComponent bloom;
 
@@ -76,8 +76,8 @@ namespace VexedCore
             // TODO: Add your initialization logic here
             graphicsDevice = GraphicsDevice;
 
-            LevelLoader.Load("LevelData\\menu");
-            //LevelLoader.Load("LevelData\\world");
+            //LevelLoader.Load("LevelData\\menu");
+            LevelLoader.Load("LevelData\\world");
             //LevelLoader.Load("LevelData\\spikeelevator");
             
             Components.Add(new FrameRateCounter(this));
@@ -123,14 +123,16 @@ namespace VexedCore
             Player.player_textures_clean = Content.Load<Texture2D>("p_texture_clean");
             Ability.ability_textures = Content.Load<Texture2D>("abilities");
             PauseMenu.pauseBackground = Content.Load<Texture2D>("pausebackground");
+            PauseMenu.mouseCursor = Content.Load<Texture2D>("mouse");
             Decoration.defaultTexture = Content.Load<Texture2D>("abilities");
             Doodad.beam_textures = Content.Load<Texture2D>("beams");
             Monster.monsterTexture = Content.Load<Texture2D>("m_body");
             Monster.monsterTextureDetail = Content.Load<Texture2D>("m_body_detail");
+            WorldMap.changeArrow = Content.Load<Texture2D>("screenchangearrow");
             Projectile.projectileTexture = Content.Load<Texture2D>("projectiles");
             Skybox.LoadTextures(Content);
             Engine.spriteFont = Content.Load<SpriteFont>("Font");
-
+            
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
 
             Engine.sceneRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
@@ -142,6 +144,7 @@ namespace VexedCore
                                                          pp.BackBufferFormat, pp.DepthStencilFormat);
 
             SoundFX.Init(Content);
+            Mouse.SetPosition(400, 300);
             
             MusicControl.music_menu = Content.Load<Song>("Sounds\\music_menu");
             MusicControl.music_game = Content.Load<Song>("Sounds\\music_game");
@@ -177,13 +180,12 @@ namespace VexedCore
             // Allows the game to exit
             if (Engine.quit == true)
                 this.Exit();
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                this.Exit();
-
+            
 
             AnimationControl.Update(gameTime);
             controller.Update(gameTime);
             engine.Update(gameTime);
+            Controls.ResetMouse();
             base.Update(gameTime);
         }
 

@@ -23,8 +23,6 @@ namespace VexedCore
         public bool released = false;
         public bool pressed = false;
 
-        
-
         public GameButton(Buttons b, Keys k)
         {
             button = b;
@@ -38,6 +36,7 @@ namespace VexedCore
             key = k;
             mouseButton = m;
         }
+
 
         public void Invalidate()
         {
@@ -79,6 +78,13 @@ namespace VexedCore
 
     public class Controls
     {
+        public static int scrollWheelBase = 0;
+        public static int scrollWheelMin = -10;
+        public static int scrollWheelMax = 100;
+        public static int scrollWheelPrev = 0;
+
+        public static Vector2 lastMousePos = Vector2.Zero;
+
         public List<GameButton> buttons;
         public GameButton BackButton
         {
@@ -121,13 +127,112 @@ namespace VexedCore
         {
             this.activePlayer = activePlayer;
             buttons = new List<GameButton>();
-            buttons.Add(new GameButton(Buttons.X, Keys.LeftControl));
-            buttons.Add(new GameButton(Buttons.Y, Keys.LeftShift));
+            buttons.Add(new GameButton(Buttons.X, Keys.Z, 1));
+            buttons.Add(new GameButton(Buttons.Y, Keys.X, 2));
             buttons.Add(new GameButton(Buttons.A, Keys.Space));
             buttons.Add(new GameButton(Buttons.B, Keys.E));
             buttons.Add(new GameButton(Buttons.Back, Keys.Back));
         }
-        
+
+        public static Vector2 LeftStick()
+        {
+            if(Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+                return Vector2.Zero;
+            return GamePad.GetState(Game1.activePlayer).ThumbSticks.Left;            
+        }
+
+        public static bool IsLeftKeyDown()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+                return false;
+            return Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A);
+        }
+        public static bool IsRightKeyDown()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+                return false;
+            return Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D);
+        }
+
+        public static void ResetMouse()
+        {
+            Controls.scrollWheelPrev = Mouse.GetState().ScrollWheelValue;
+            if (Engine.state != EngineState.Active)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+                {
+                    if (Controls.lastMousePos == Vector2.Zero)
+                        Controls.lastMousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+                    Mouse.SetPosition(0, 0);
+                }
+                else
+                {
+                    if (Controls.lastMousePos != Vector2.Zero)
+                        Mouse.SetPosition((int)Controls.lastMousePos.X, (int)Controls.lastMousePos.Y);
+                    Controls.lastMousePos = Vector2.Zero;
+                }
+            }
+        }
+
+        public static Vector2 GetCameraHelper()
+        {
+            Vector2 rightStick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Right;
+            float yShift = rightStick.Y;
+            float xShift = rightStick.X;
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
+                    xShift -= 1f;
+                if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
+                    xShift += 1f;
+                if (Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S))
+                    yShift -= 1f;
+                if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
+                    yShift += 1f;
+                xShift += .15f * Mouse.GetState().X;
+                yShift -= .15f * Mouse.GetState().Y;
+                if (xShift > 1)
+                    xShift = 1;
+                if (yShift > 1)
+                    yShift = 1;
+                if (xShift < -1)
+                    xShift = -1;
+                if (yShift < -1)
+                    yShift = -1;
+            }
+            return new Vector2(xShift, yShift);
+        }
+
+
+        public static Vector2 GetStaticCameraHelper()
+        {
+            Vector2 rightStick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Right;
+            float yShift = rightStick.Y;
+            float xShift = rightStick.X;
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
+                    xShift -= 1f;
+                if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
+                    xShift += 1f;
+                if (Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S))
+                    yShift -= 1f;
+                if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
+                    yShift += 1f;
+                xShift += .0025f * (Mouse.GetState().X - 400);
+                yShift -= .0025f * (Mouse.GetState().Y - 300);
+                if (xShift > 1)
+                    xShift = 1;
+                if (yShift > 1)
+                    yShift = 1;
+                if (xShift < -1)
+                    xShift = -1;
+                if (yShift < -1)
+                    yShift = -1;
+            }
+            return new Vector2(xShift, yShift);
+        }
+
 
         public void Update(GameTime gameTime)
         {

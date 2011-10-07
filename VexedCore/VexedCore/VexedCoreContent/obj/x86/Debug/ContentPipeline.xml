@@ -146,7 +146,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\m_body_detail.xnb</Output>
-      <Time>2011-09-20T16:15:19.9778609-07:00</Time>
+      <Time>2011-10-04T19:01:54.9087791-07:00</Time>
     </Item>
     <Item>
       <Source>p_fall_detail.png</Source>
@@ -427,7 +427,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dialogportraits.xnb</Output>
-      <Time>2011-09-27T17:13:41.5288545-07:00</Time>
+      <Time>2011-10-05T12:24:08.6262756-07:00</Time>
     </Item>
     <Item>
       <Source>Skybox\Blue\skybox_back.png</Source>
@@ -761,6 +761,24 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\pausebackground.xnb</Output>
       <Time>2011-09-29T17:03:36.0657945-07:00</Time>
+    </Item>
+    <Item>
+      <Source>mouse.png</Source>
+      <Name>mouse</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\mouse.xnb</Output>
+      <Time>2011-10-06T12:43:11.6051645-07:00</Time>
+    </Item>
+    <Item>
+      <Source>screenchangearrow.png</Source>
+      <Name>screenchangearrow</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\screenchangearrow.xnb</Output>
+      <Time>2011-10-06T16:44:02.4063292-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

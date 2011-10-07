@@ -36,9 +36,9 @@ namespace VexedCore
             {
                 if (id.Contains("Green"))
                     return SkyBoxType.Green;
-                if (id.Contains("Blue"))
+                if (id.Contains("Storage"))
                     return SkyBoxType.Blue;
-                if (id.Contains("Red"))
+                if (id.Contains("Engine"))
                     return SkyBoxType.Red;
                 if (id.Contains("Solar"))
                     return SkyBoxType.Solar;

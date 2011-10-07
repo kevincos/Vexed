@@ -51,8 +51,13 @@ namespace VexedCore
                     {
                         foreach (VexedLib.Monster xmlMonster in xmlFace.monsters)
                         {
-                            
-                            if (xmlMonster.movement == VexedLib.MovementType.SnakeBoss)
+                            if (xmlMonster.movement == VexedLib.MovementType.RockBoss && xmlMonster.IDString.Contains("Snow"))
+                            {
+                                newRoom.maxOrbs += 10;
+                                newSector.maxOrbs += 10;
+                                newRoom.monsters.Add(new Monster(xmlMonster, xmlFace.normal));
+                            }
+                            else if (xmlMonster.movement == VexedLib.MovementType.SnakeBoss)
                             {
                                 
                                 int snakeLen = 20;

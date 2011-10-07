@@ -130,7 +130,7 @@ namespace VexedCore
             behaviorStarted = d.behaviorStarted;
             toggleOn = d.toggleOn;
             abilityType = d.abilityType;
-            originalAbilityType = d.abilityType;
+            originalAbilityType = d.originalAbilityType;
             cooldown = d.cooldown;
             activationCost = d.activationCost;
 

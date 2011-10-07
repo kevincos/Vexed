@@ -34,6 +34,10 @@ namespace VexedCore
         public static List<Vector2> stoneCrackTexCoords;
         public static List<Vector2> stoneSolidBreakTexCoords;
         public static List<Vector2> stoneCrackBreakTexCoords;
+        public static List<Vector2> snowSolidTexCoords;
+        public static List<Vector2> snowCrackTexCoords;
+        public static List<Vector2> snowSolidBreakTexCoords;
+        public static List<Vector2> snowCrackBreakTexCoords;
         public static List<Vector2> spikeShieldTexCoords;
         public static List<Vector2> iceShieldFullTexCoords;
         public static List<Vector2> iceShieldMedTexCoords;
@@ -80,7 +84,7 @@ namespace VexedCore
         public int flashCooldown;
         public int maxFlashCooldown = 200;
         public int spinTime = 0;
-        public bool rightFacing = false;
+        public bool rightFacing = true;
         public bool rightMoving = false;
         public int currentDirection = 1;
         public float huntMinDistance = 3.5f;
@@ -194,6 +198,11 @@ namespace VexedCore
             stoneCrackTexCoords = LoadTexCoords(1, 5);
             stoneSolidBreakTexCoords = LoadTexCoords(2, 5);
             stoneSolidTexCoords = LoadTexCoords(0, 5);
+            snowCrackBreakTexCoords = LoadTexCoords(7, 5);
+            snowCrackTexCoords = LoadTexCoords(5, 5);
+            snowSolidBreakTexCoords = LoadTexCoords(6, 5);
+            snowSolidTexCoords = LoadTexCoords(4, 5);
+            
             spikeShieldTexCoords = LoadTexCoords(0, 6);
             iceShieldFullTexCoords = LoadTexCoords(0, 7);
             iceShieldMedTexCoords = LoadTexCoords(1, 7);
@@ -239,8 +248,16 @@ namespace VexedCore
             guns = new List<GunEmplacement>();
             if (moveType == VexedLib.MovementType.RockBoss)
             {
-                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(1.3f, .3f), .7f * halfWidth, .05f, BaseType.Rock));
-                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(-1.3f, .3f), .7f*halfWidth, .05f, BaseType.Rock));                
+                if (id.Contains("Snow"))
+                {
+                    guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(1.3f, .3f), .7f * halfWidth, .05f, BaseType.Snow));
+                    guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(-1.3f, .3f), .7f * halfWidth, .05f, BaseType.Snow));
+                }
+                else
+                {
+                    guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(1.3f, .3f), .7f * halfWidth, .05f, BaseType.Rock));
+                    guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(-1.3f, .3f), .7f * halfWidth, .05f, BaseType.Rock));
+                }
             }
             else if (moveType == VexedLib.MovementType.ChaseBoss)
             {
@@ -285,7 +302,7 @@ namespace VexedCore
             rockBoss = new RockBoss();
             snakeBoss = new SnakeBoss();
             jetBoss = new JetBoss();
-            battleBoss = new BattleBoss();
+            battleBoss = new BattleBoss();            
         }
 
         public Monster(Monster m, Room r, Vector3 n, Vector3 u)
@@ -321,7 +338,7 @@ namespace VexedCore
                 if (moveType == VexedLib.MovementType.JetBoss)
                     return 48;
                 if (moveType == VexedLib.MovementType.SnakeBoss)
-                    return 3;
+                    return 4;
                 if (healthType == VexedLib.MonsterHealth.Weak)
                     return 1;
                 if (healthType == VexedLib.MonsterHealth.Normal)
@@ -346,8 +363,17 @@ namespace VexedCore
         {
             get
             {
+                if (moveType == VexedLib.MovementType.SnakeBoss)
+                {
+                    if (baseHP > 0)
+                        return new Color(60, 60, 100);
+                    else
+                        return new Color(60, 60, 60);
+                }
                 if (moveType == VexedLib.MovementType.RockBoss)
                 {
+                    if (id.Contains("Snow"))
+                        return new Color(60, 60, 150);
                     return Color.OrangeRed;
                 }
                 if (gunType == VexedLib.GunType.None)
@@ -619,8 +645,11 @@ namespace VexedCore
 
             if (armor == false)
             {
-                baseHP--;
-                flashCooldown = maxFlashCooldown;
+                if (baseHP > 0)
+                {
+                    baseHP--;
+                    flashCooldown = maxFlashCooldown;
+                }
                 if (moveType == VexedLib.MovementType.ArmorBoss)
                 {
                     armorBoss.Rotate(this);
@@ -643,7 +672,9 @@ namespace VexedCore
             {
                 if (moveType == VexedLib.MovementType.SnakeBoss)
                     dead = false;
-                else if (moveType == VexedLib.MovementType.RockBoss && rockBoss.state != RockBossState.Fight3)
+                else if (moveType == VexedLib.MovementType.RockBoss && !id.Contains("Snow") && rockBoss.state != RockBossState.Fight3)
+                    dead = false;
+                else if (moveType == VexedLib.MovementType.RockBoss && id.Contains("Snow") && rockBoss.state != RockBossState.Snow_Battle2)
                     dead = false;
                 else
                     dead = true;
@@ -674,7 +705,9 @@ namespace VexedCore
                     Engine.player.currentRoom.doodads.Add(bonusOrb3);
                     Engine.player.currentRoom.doodads.Add(bonusOrb4);
                     Engine.player.currentRoom.doodads.Add(bonusOrb5);
-                    if (moveType == VexedLib.MovementType.RockBoss && rockBoss.state != RockBossState.Fight3)
+                    if (moveType == VexedLib.MovementType.RockBoss && !id.Contains("Snow") && rockBoss.state != RockBossState.Fight3)
+                        hasOrbs = true;
+                    else if (moveType == VexedLib.MovementType.RockBoss && id.Contains("Snow") && rockBoss.state != RockBossState.Snow_Battle2)
                         hasOrbs = true;
                     else
                         hasOrbs = false;
@@ -1401,8 +1434,10 @@ namespace VexedCore
                     {
                         v.Update(Engine.player.currentRoom, 1);
                     }
-                    if(g.baseType == BaseType.Rock)
-                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + 1.5f*g.depthOffset, textureTriangleList, stoneSolidTexCoords, true);
+                    if (g.baseType == BaseType.Rock)
+                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + 1.5f * g.depthOffset, textureTriangleList, stoneSolidTexCoords, true);
+                    if (g.baseType == BaseType.Snow)
+                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + 1.5f * g.depthOffset, textureTriangleList, snowSolidTexCoords, true);
                     if (g.baseType == BaseType.Ice)
                         r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + 1.5f * g.depthOffset, textureTriangleList, iceTurretTexCoords, true);
                     if (g.baseType == BaseType.Standard)
@@ -1426,7 +1461,7 @@ namespace VexedCore
                 Color flashColor = new Color(255, 255, 0, (Byte)(flashCooldown / maxFlashCooldown));
                 r.AddTextureToTriangleList(rectVertexList, flashColor, depth + bossAdjustment, textureTriangleList, flashTexCoords, rightFacing);
             }
-            if (moveType == VexedLib.MovementType.RockBoss)
+            if (moveType == VexedLib.MovementType.RockBoss && !id.Contains("Snow"))
             {
                 if(rockBoss.rockHits == 2 && rockBoss.rockHitCooldown == 0)
                     r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, stoneSolidTexCoords, rightFacing);
@@ -1436,6 +1471,17 @@ namespace VexedCore
                     r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, stoneSolidBreakTexCoords, rightFacing);
                 if (rockBoss.rockHits == 0 && rockBoss.rockHitCooldown != 0)
                     r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, stoneCrackBreakTexCoords, rightFacing);
+            }
+            if (moveType == VexedLib.MovementType.RockBoss && id.Contains("Snow"))
+            {
+                if (rockBoss.rockHits == 2 && rockBoss.rockHitCooldown == 0)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, snowSolidTexCoords, rightFacing);
+                if (rockBoss.rockHits == 1 && rockBoss.rockHitCooldown == 0)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, snowCrackTexCoords, rightFacing);
+                if (rockBoss.rockHits == 1 && rockBoss.rockHitCooldown != 0)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, snowSolidBreakTexCoords, rightFacing);
+                if (rockBoss.rockHits == 0 && rockBoss.rockHitCooldown != 0)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, snowCrackBreakTexCoords, rightFacing);
             }
             if (moveType == VexedLib.MovementType.ChaseBoss || moveType == VexedLib.MovementType.JetBoss)
             {
@@ -1461,15 +1507,15 @@ namespace VexedCore
 
             if (moveType == VexedLib.MovementType.SnakeBoss)
             {
-                if (baseHP > 2)
+                if (baseHP > 3)
                 {
                     r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, iceShieldFullTexCoords, rightFacing);
                 }
-                else if (baseHP > 1)
+                else if (baseHP > 2)
                 {
                     r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, iceShieldMedTexCoords, rightFacing);
                 }
-                else if (baseHP > 0)
+                else if (baseHP > 1)
                 {
                     r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, iceShieldLowTexCoords, rightFacing);
                 }

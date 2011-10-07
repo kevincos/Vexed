@@ -50,7 +50,6 @@ namespace VexedCore
         public Effect cartoonEffect = null;
         public Effect postprocessEffect = null;
 
-        
 
         public static bool transparencyEnabled = true;
         public static int lightingLevel = 0;
@@ -331,7 +330,7 @@ namespace VexedCore
             }
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
             
-            //if (transparencyEnabled == true)
+            if (transparencyEnabled == true)
             {
                 //Game1.graphicsDevice.DepthStencilState = DepthStencilState.None;
                 if (WorldMap.state != ZoomState.None)
@@ -383,7 +382,7 @@ namespace VexedCore
                         }
                     }
 
-                    if (translucentList.Count > 0 && depthCount > 0)
+                    if (translucentList.Count > 0 && depthCount > 0 && mapShellObjects.Count * 2 > 0)
                     {                       
                         Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                             translucentList.ToArray(), 0, mapShellObjects.Count * 2, VertexPositionColorNormalTexture.VertexDeclaration);
@@ -439,7 +438,7 @@ namespace VexedCore
                 staticDoodadsInitialized = false;
 
                 if (Engine.staticBlockVertexArray == null)
-                    Engine.staticBlockVertexArray = new VertexPositionColorNormalTexture[150000];
+                    Engine.staticBlockVertexArray = new VertexPositionColorNormalTexture[300000];
                 staticBlockVertexArrayCount = 0;
             }
 
@@ -647,16 +646,30 @@ namespace VexedCore
 
             if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftTrigger) || Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets))
             {
-                player.baseCameraDistance += .03f * gameTime.ElapsedGameTime.Milliseconds;
-                if (player.baseCameraDistance > 80f) player.baseCameraDistance = 80f;
+                player.baseCameraDistance += .03f * gameTime.ElapsedGameTime.Milliseconds;                
             }
             if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightTrigger) || Keyboard.GetState().IsKeyDown(Keys.OemOpenBrackets))
             {
-                player.baseCameraDistance -= .03f * gameTime.ElapsedGameTime.Milliseconds;
-                if (player.baseCameraDistance < 5f) player.baseCameraDistance = 5f;
+                player.baseCameraDistance -= .03f * gameTime.ElapsedGameTime.Milliseconds;                
             }
+            int currentScrollWheel = Mouse.GetState().ScrollWheelValue;
+            if (Mouse.GetState().RightButton == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+            {
+                if (currentScrollWheel > Controls.scrollWheelPrev)
+                {
+                    player.baseCameraDistance -= .1f * gameTime.ElapsedGameTime.Milliseconds;
+                }
+                if (currentScrollWheel < Controls.scrollWheelPrev)
+                {
+                    player.baseCameraDistance += .1f * gameTime.ElapsedGameTime.Milliseconds;
+                }
+            }
+            if (player.baseCameraDistance < 5f) player.baseCameraDistance = 5f;
+            if (player.baseCameraDistance > 80f) player.baseCameraDistance = 80f;
+            
 
-            WorldMap.RotateWorldMap();
+
+            WorldMap.RotateWorldMap(gameTime);
             if (optionToggleCooldown == 0)
             {                
                 int resultCooldown = WorldMap.ParseInput();

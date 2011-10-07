@@ -18,7 +18,8 @@ namespace VexedCore
         None,
         Rock,
         Ice,
-        Standard
+        Standard,
+        Snow
     }
 
     public class GunEmplacement
@@ -195,7 +196,9 @@ namespace VexedCore
             gunLine.Normalize();
             gunNormal.Normalize();
 
-            if (srcMonster.moveType == VexedLib.MovementType.RockBoss && srcMonster.rockBoss.state != RockBossState.Fight1 && srcMonster.rockBoss.state != RockBossState.Fight2 && srcMonster.rockBoss.state != RockBossState.Fight3)
+            //if (srcMonster.moveType == VexedLib.MovementType.RockBoss && srcMonster.rockBoss.state != RockBossState.Fight1 && srcMonster.rockBoss.state != RockBossState.Fight2 && srcMonster.rockBoss.state != RockBossState.Fight3)
+                //return;
+            if (srcMonster.moveType == VexedLib.MovementType.RockBoss && (srcMonster.rockBoss.state == RockBossState.Snow_Flee1))
                 return;
 
             if (fireCooldown == 0)
