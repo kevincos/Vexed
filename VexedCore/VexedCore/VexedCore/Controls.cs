@@ -147,6 +147,18 @@ namespace VexedCore
                 return false;
             return Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A);
         }
+        public static bool IsUpKeyDown()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+                return false;
+            return Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W);
+        }
+        public static bool IsDownKeyDown()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+                return false;
+            return Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S);
+        }
         public static bool IsRightKeyDown()
         {
             if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
@@ -157,13 +169,17 @@ namespace VexedCore
         public static void ResetMouse()
         {
             Controls.scrollWheelPrev = Mouse.GetState().ScrollWheelValue;
+            if (Engine.state == EngineState.Active && PauseMenu.paused == false && Keyboard.GetState().IsKeyDown(Keys.LeftControl) == false)
+            {
+                //Mouse.SetPosition(400, 300);
+            }
             if (Engine.state != EngineState.Active)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
                 {
                     if (Controls.lastMousePos == Vector2.Zero)
                         Controls.lastMousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-                    Mouse.SetPosition(0, 0);
+                    Mouse.SetPosition(400, 300);
                 }
                 else
                 {
@@ -189,8 +205,8 @@ namespace VexedCore
                     yShift -= 1f;
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
                     yShift += 1f;
-                xShift += .15f * Mouse.GetState().X;
-                yShift -= .15f * Mouse.GetState().Y;
+                xShift += .15f * (400-Mouse.GetState().X);
+                yShift -= .15f * (300-Mouse.GetState().Y);
                 if (xShift > 1)
                     xShift = 1;
                 if (yShift > 1)

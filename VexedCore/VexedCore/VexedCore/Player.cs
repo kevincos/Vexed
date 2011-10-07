@@ -88,6 +88,7 @@ namespace VexedCore
         public Vector3 jumpNormal;
         public Vector3 platformVelocity;
         public float referenceFrameSpeed;
+        public int currentObjective = 0;
         public Vector3 spinUp;
         public Vector3 lastLivingPosition;
         [XmlIgnore]
@@ -182,18 +183,19 @@ namespace VexedCore
             secondaryAbility = new Ability(AbilityType.Boots);
             naturalShield = new Ability(AbilityType.Shield);
             //upgrades[(int)AbilityType.PermanentWallJump] = true;
-            upgrades[(int)AbilityType.WallJump] = true;
+            /*upgrades[(int)AbilityType.WallJump] = true;
             upgrades[(int)AbilityType.DoubleJump] = true;
             upgrades[(int)AbilityType.Boots] = true;
             upgrades[(int)AbilityType.Laser] = true;
-            upgrades[(int)AbilityType.Blaster] = true;
+            upgrades[(int)AbilityType.Blaster] = true;*/
+            upgrades[(int)AbilityType.Empty] = true;
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }
 
         public Player(Player p)
         {
-            
+            currentObjective = p.currentObjective;
             state = p.state;
             center = new Vertex(p.center);
             jumpRecovery = p.jumpRecovery;

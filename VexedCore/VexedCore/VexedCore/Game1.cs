@@ -76,8 +76,8 @@ namespace VexedCore
             // TODO: Add your initialization logic here
             graphicsDevice = GraphicsDevice;
 
-            //LevelLoader.Load("LevelData\\menu");
-            LevelLoader.Load("LevelData\\world");
+            LevelLoader.Load("LevelData\\menu");
+            //LevelLoader.Load("LevelData\\world");
             //LevelLoader.Load("LevelData\\spikeelevator");
             
             Components.Add(new FrameRateCounter(this));
@@ -185,6 +185,7 @@ namespace VexedCore
             AnimationControl.Update(gameTime);
             controller.Update(gameTime);
             engine.Update(gameTime);
+            ObjectiveControl.UpdateObjectiveStatus(gameTime);
             Controls.ResetMouse();
             base.Update(gameTime);
         }

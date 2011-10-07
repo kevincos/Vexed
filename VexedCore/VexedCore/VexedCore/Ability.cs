@@ -292,19 +292,23 @@ namespace VexedCore
             float barHeight = .08f;
             int spriteX = (int)(type) % 8;
             int spriteY = (int)(type) / 8;
+
+            Byte fade = (Byte)(255 - 255 * Engine.depthTimer / Engine.maxDepthTimer);
+            Color c = new Color(fade, fade, fade, fade);     
+            
             
             Engine.spriteBatch.Begin();
-            Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + xPercent * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height), (int)(iconSize * Game1.titleSafeRect.Width), (int)(iconSize * Game1.titleSafeRect.Width)), new Rectangle(128*spriteX, 128*spriteY, 128, 128), Color.White);
+            Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + xPercent * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height), (int)(iconSize * Game1.titleSafeRect.Width), (int)(iconSize * Game1.titleSafeRect.Width)), new Rectangle(128*spriteX, 128*spriteY, 128, 128), c);
             if (type == AbilityType.JetPack)
             {
-                Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + (xPercent + .06) * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height), (int)(barWidth * Game1.titleSafeRect.Width), (int)(barHeight * Game1.titleSafeRect.Width)), new Rectangle(128 * 5, 128 * 3, 128, 128), Color.White);
-                Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + (xPercent + .06) * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height + (barHeight * Game1.titleSafeRect.Width - (int)((1f * ammo / maxAmmo) * barHeight * Game1.titleSafeRect.Width))), (int)(barWidth * Game1.titleSafeRect.Width), (int)((1f * ammo / maxAmmo) * barHeight * Game1.titleSafeRect.Width)), new Rectangle(128 * 6, 128 * 3, 128, 128), Color.White);
+                Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + (xPercent + .06) * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height), (int)(barWidth * Game1.titleSafeRect.Width), (int)(barHeight * Game1.titleSafeRect.Width)), new Rectangle(128 * 5, 128 * 3, 128, 128), c);
+                Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + (xPercent + .06) * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height + (barHeight * Game1.titleSafeRect.Width - (int)((1f * ammo / maxAmmo) * barHeight * Game1.titleSafeRect.Width))), (int)(barWidth * Game1.titleSafeRect.Width), (int)((1f * ammo / maxAmmo) * barHeight * Game1.titleSafeRect.Width)), new Rectangle(128 * 6, 128 * 3, 128, 128), c);
                 
             }
             if (type == AbilityType.Shield || (type == AbilityType.NormalJump && maxAmmo != 0))
             {
-                Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + (xPercent + .06) * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height), (int)(barWidth * Game1.titleSafeRect.Width), (int)(barHeight * Game1.titleSafeRect.Width)), new Rectangle(128 * 5, 128 * 3, 128, 128), Color.White);
-                Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + (xPercent + .06) * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height + (barHeight * Game1.titleSafeRect.Width - (int)((1f * ammo / maxAmmo) * barHeight * Game1.titleSafeRect.Width))), (int)(barWidth * Game1.titleSafeRect.Width), (int)((1f * ammo / maxAmmo) * barHeight * Game1.titleSafeRect.Width)), new Rectangle(128 * 6, 128 * 3, 128, 128), Color.White);
+                Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + (xPercent + .06) * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height), (int)(barWidth * Game1.titleSafeRect.Width), (int)(barHeight * Game1.titleSafeRect.Width)), new Rectangle(128 * 5, 128 * 3, 128, 128), c);
+                Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + (xPercent + .06) * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height + (barHeight * Game1.titleSafeRect.Width - (int)((1f * ammo / maxAmmo) * barHeight * Game1.titleSafeRect.Width))), (int)(barWidth * Game1.titleSafeRect.Width), (int)((1f * ammo / maxAmmo) * barHeight * Game1.titleSafeRect.Width)), new Rectangle(128 * 6, 128 * 3, 128, 128), c);
 
             }
             Engine.spriteBatch.End();

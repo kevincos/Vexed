@@ -177,7 +177,7 @@ namespace VexedCore
             {
                 skyBoxEffects[i].World = Matrix.Identity;
                 if (Engine.state == EngineState.Active)
-                    skyBoxEffects[i].View = Matrix.CreateLookAt(Vector3.Zero, player.cameraTarget - player.cameraPos, player.cameraUp);
+                    skyBoxEffects[i].View = Matrix.CreateLookAt(Vector3.Zero, Engine.cameraTarget - Engine.cameraPos, Engine.cameraUp);
                 if (Engine.state == EngineState.Map)
                     skyBoxEffects[i].View = Matrix.CreateLookAt(Vector3.Zero, WorldMap.cameraTarget - WorldMap.cameraPosition, WorldMap.cameraUp);
                 skyBoxEffects[i].Projection = Matrix.CreatePerspectiveFieldOfView((float)Math.PI / 4, Game1.graphicsDevice.Viewport.AspectRatio, .1f, 10000);
@@ -206,7 +206,7 @@ namespace VexedCore
                 {
                     skyBoxEffectsAlt[i].World = Matrix.Identity;
                     if (Engine.state == EngineState.Active)
-                        skyBoxEffectsAlt[i].View = Matrix.CreateLookAt(Vector3.Zero, player.cameraTarget - player.cameraPos, player.cameraUp);
+                        skyBoxEffectsAlt[i].View = Matrix.CreateLookAt(Vector3.Zero, Engine.cameraTarget - Engine.cameraPos, Engine.cameraUp);
                     if (Engine.state == EngineState.Map)
                         skyBoxEffectsAlt[i].View = Matrix.CreateLookAt(Vector3.Zero, WorldMap.cameraTarget - WorldMap.cameraPosition, WorldMap.cameraUp);
                     skyBoxEffectsAlt[i].Projection = Matrix.CreatePerspectiveFieldOfView((float)Math.PI / 4, Game1.graphicsDevice.Viewport.AspectRatio, .1f, 10000);

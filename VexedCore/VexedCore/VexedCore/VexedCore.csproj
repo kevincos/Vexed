@@ -136,6 +136,7 @@
     <Compile Include="Monster.cs" />
     <Compile Include="MusicControl.cs" />
     <Compile Include="NonPhotoRealisticSettings.cs" />
+    <Compile Include="Objectives.cs" />
     <Compile Include="PauseMenu.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="Player.cs" />

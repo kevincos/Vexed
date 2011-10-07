@@ -90,6 +90,7 @@ namespace VexedCore
         public string id;
         public string sectorID;
         [XmlIgnore]public Sector parentSector;
+        [XmlIgnore]public Vector2 mapPosition2D;
 
         public bool refreshVertices = false;
 
@@ -1484,6 +1485,34 @@ namespace VexedCore
 
         VertexPositionColorNormalTexture[] mapDecalVertices = null;
 
+        public void MapDecalHelper(List<VertexPositionColorNormalTexture> mapDecalList, Vector3 cameraUp, Vector3 cameraRight, Vertex v, int decalIndex, bool objective)
+        {
+            float iconDistance = 3f;
+            float iconSize = 2f;
+            if (objective == true)
+            {
+                iconDistance = 5f;
+                iconSize = 2f + ObjectiveControl.oscillate * 3f / ObjectiveControl.maxOscillate;
+            }
+            Vector3 offset = Vector3.Zero;
+            
+
+            Vector3 lowerLeft = v.position + iconSize * -cameraRight + iconSize * -cameraUp + v.normal * iconDistance;
+            Vector3 lowerRight = v.position + iconSize * cameraRight + iconSize * -cameraUp + v.normal * iconDistance;
+            Vector3 upperLeft = v.position + iconSize * -cameraRight + iconSize * cameraUp + v.normal * iconDistance;
+            Vector3 upperRight = v.position + iconSize * cameraRight + iconSize * cameraUp + v.normal * iconDistance;
+
+            List<Vector2> iconTextureCoords = Ability.texCoordList[decalIndex];
+
+            mapDecalList.Add(new VertexPositionColorNormalTexture(lowerLeft, Color.White, v.normal, iconTextureCoords[2]));
+            mapDecalList.Add(new VertexPositionColorNormalTexture(lowerRight, Color.White, v.normal, iconTextureCoords[3]));
+            mapDecalList.Add(new VertexPositionColorNormalTexture(upperLeft, Color.White, v.normal, iconTextureCoords[1]));
+
+            mapDecalList.Add(new VertexPositionColorNormalTexture(lowerRight, Color.White, v.normal, iconTextureCoords[3]));
+            mapDecalList.Add(new VertexPositionColorNormalTexture(upperLeft, Color.White, v.normal, iconTextureCoords[1]));
+            mapDecalList.Add(new VertexPositionColorNormalTexture(upperRight, Color.White, v.normal, iconTextureCoords[0]));
+        }
+
         public void UpdateMapDecals()
         {
             //if (mapDecalVertices == null)
@@ -1492,32 +1521,22 @@ namespace VexedCore
                 Vector3 cameraUp = WorldMap.cameraUp;
                 Vector3 cameraRight = Vector3.Cross(cameraUp, WorldMap.cameraPosition - WorldMap.cameraTarget);
                 cameraRight.Normalize();
+
+                MapDecalHelper(mapDecalList, cameraUp, cameraRight, Engine.player.center, 44, true);
+                foreach (Vertex v in ObjectiveControl.GetObjectiveLocations())
+                {
+                    MapDecalHelper(mapDecalList, cameraUp, cameraRight, v, 45, true);
+                }
                 foreach (Doodad d in doodads)
                 {
                     if (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.WarpStation || d.type == VexedLib.DoodadType.SaveStation)
                     {
-                        float iconDistance = 3f;
-                        float iconSize = 2f;
-
-                        Vector3 lowerLeft = d.position.position + iconSize * -cameraRight + iconSize * -cameraUp + d.position.normal * iconDistance;
-                        Vector3 lowerRight = d.position.position + iconSize * cameraRight + iconSize * -cameraUp + d.position.normal * iconDistance;
-                        Vector3 upperLeft = d.position.position + iconSize * -cameraRight + iconSize * cameraUp + d.position.normal * iconDistance;
-                        Vector3 upperRight = d.position.position + iconSize * cameraRight + iconSize * cameraUp + d.position.normal * iconDistance;
-
                         int decalIndex = (int)(d.abilityType);
                         if (d.type == VexedLib.DoodadType.SaveStation)
                             decalIndex = 43;
                         if (d.type == VexedLib.DoodadType.WarpStation)
                             decalIndex = 39;
-                        List<Vector2> iconTextureCoords = Ability.texCoordList[decalIndex];
-
-                        mapDecalList.Add(new VertexPositionColorNormalTexture(lowerLeft, Color.White, d.position.normal, iconTextureCoords[2]));
-                        mapDecalList.Add(new VertexPositionColorNormalTexture(lowerRight, Color.White, d.position.normal, iconTextureCoords[3]));
-                        mapDecalList.Add(new VertexPositionColorNormalTexture(upperLeft, Color.White, d.position.normal, iconTextureCoords[1]));
-
-                        mapDecalList.Add(new VertexPositionColorNormalTexture(lowerRight, Color.White, d.position.normal, iconTextureCoords[3]));
-                        mapDecalList.Add(new VertexPositionColorNormalTexture(upperLeft, Color.White, d.position.normal, iconTextureCoords[1]));
-                        mapDecalList.Add(new VertexPositionColorNormalTexture(upperRight, Color.White, d.position.normal, iconTextureCoords[0]));
+                        MapDecalHelper(mapDecalList, cameraUp, cameraRight, d.position, decalIndex, false);
                     }
                 }
                 mapDecalVertices = mapDecalList.ToArray();                

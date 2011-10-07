@@ -59,6 +59,10 @@ namespace VexedCore
         public static bool reDraw = false;
         public static bool detailTextures = true;
         public static int depthCount =80;
+        public static int depthTimer = 3000;
+        public static bool depthTrigger = false;
+        public static int maxDepthTimer = 3000;
+        
 
         /*public static List<VertexPositionColorNormalTexture> staticOpaqueObjects;
         public static List<VertexPositionColorNormalTexture> dynamicOpaqueObjects;
@@ -90,6 +94,13 @@ namespace VexedCore
         public static VertexBuffer staticObjectBuffer;
         public static bool staticObjectsInitialized = false;
         public static bool staticDoodadsInitialized = false;
+
+        public static Vector3 cameraPos;
+        public static Vector3 cameraUp;
+        public static Vector3 cameraTarget;
+        public static Vector3 playerCameraPos;
+        public static Vector3 playerCameraUp;
+        public static Vector3 playerCameraTarget;
 
         public static RenderTarget2D sceneRenderTarget;
         public static RenderTarget2D normalDepthRenderTarget;
@@ -351,6 +362,15 @@ namespace VexedCore
                     }
                     //translucentEffect.CurrentTechnique.Passes[0].Apply();
                     // Sort Triangles
+                    if (WorldMap.selectedRoomIndex != -1)
+                    {
+                        Room selectedRoom = roomList[WorldMap.selectedRoomIndex];
+                        Vector3 adjustedSize = adjustedSize = new Vector3(selectedRoom.size.X + 7f, selectedRoom.size.Y + 7f, selectedRoom.size.Z + 7f);
+                        List<TrasnparentSquare> selectedBlockList = selectedRoom.GetMapBlock(adjustedSize, Color.White, true);
+                        selectedBlockList.Sort(new FaceSorter(-(WorldMap.cameraPosition - WorldMap.cameraTarget)));
+                        mapShellObjects.AddRange(selectedBlockList);
+                    }
+
                     mapShellObjects.Sort(new FaceSorter(-(WorldMap.cameraPosition-WorldMap.cameraTarget)));
 
                     List<VertexPositionColorNormalTexture> translucentList = new List<VertexPositionColorNormalTexture>();
@@ -366,7 +386,7 @@ namespace VexedCore
                     }
                     if (WorldMap.selectedRoomIndex != -1)
                     {
-                        Room selectedRoom = roomList[WorldMap.selectedRoomIndex];
+                        /*Room selectedRoom = roomList[WorldMap.selectedRoomIndex];
                         Vector3 adjustedSize = adjustedSize = new Vector3(selectedRoom.size.X + 7f, selectedRoom.size.Y + 7f, selectedRoom.size.Z + 7f);
                         List<TrasnparentSquare> selectedBlockList = selectedRoom.GetMapBlock(adjustedSize, Color.White, true);
                         selectedBlockList.Sort(new FaceSorter(-(WorldMap.cameraPosition - WorldMap.cameraTarget)));
@@ -379,7 +399,7 @@ namespace VexedCore
                             translucentList.Add(selectedBlockList[i].v4);
                             translucentList.Add(selectedBlockList[i].v5);
                             translucentList.Add(selectedBlockList[i].v6);
-                        }
+                        }*/
                     }
 
                     if (translucentList.Count > 0 && depthCount > 0 && mapShellObjects.Count * 2 > 0)
@@ -447,22 +467,51 @@ namespace VexedCore
             // Set transform matrices.
             float aspect = Game1.graphicsDevice.Viewport.AspectRatio;
 
-            /*Vector3 cameraPos = player.cameraPos * (1 - WorldMap.zoomLevel) + WorldMap.cameraPosition * WorldMap.zoomLevel;
-            Vector3 cameraUp = player.cameraUp * (1 - WorldMap.zoomLevel) + WorldMap.cameraUp * WorldMap.zoomLevel;
-            if (player.cameraUp == -WorldMap.cameraUp)
+            Engine.cameraPos = player.cameraPos;
+            Engine.cameraUp = player.cameraUp;
+            Engine.cameraTarget = player.cameraTarget;
+
+            if (Engine.player.currentRoom.id.Contains("MenuRoom"))
             {
-                Vector3 cameraSide = Vector3.UnitX;
-                if(Math.Abs(Vector3.Dot(cameraSide, cameraUp)) == 1) 
+                Vector3 menuCameraTarget = cameraTarget;
+                Vector3 menuCameraUp = cameraUp;
+                Vector3 menuCameraPos = cameraPos;
+                float shift = 0f;
+                float dist = (Engine.player.center.position - Engine.player.currentRoom.center).Length();
+                if (dist < 18f && Engine.player.center.normal == Vector3.UnitY)
                 {
-                    cameraSide = Vector3.UnitY;
+                    if (dist < 14f)
+                    {
+                        shift = 1f;
+                        depthTrigger = false;
+                    }
+                    else
+                    {
+                        shift = (18 - dist) / 4f;
+                        depthTrigger = true;
+                    }
+                    menuCameraTarget = Engine.player.currentRoom.center;
+                    menuCameraPos = Engine.player.currentRoom.center + 29 * Vector3.UnitY;
+                    menuCameraUp = Vector3.UnitZ;
                 }
-                cameraUp += WorldMap.zoomLevel * (1 - WorldMap.zoomLevel) * cameraSide;
-                cameraUp.Normalize();
+                dist = (Engine.player.center.position - (Engine.player.currentRoom.center - 5 * Vector3.UnitZ - 15 * Vector3.UnitX)).Length();
+                if (dist < 10f && Engine.player.center.normal == -Vector3.UnitX)
+                {
+                    if (dist < 6)
+                        shift = 1f;
+                    else
+                        shift = (10-dist) / 4f;
+                    menuCameraTarget = Engine.player.currentRoom.center + 1.5f * Vector3.UnitZ;
+                    menuCameraPos = Engine.player.currentRoom.center - 29f * Vector3.UnitX + 1.5f * Vector3.UnitZ;
+                    menuCameraUp = Vector3.UnitZ;
+                }
+                cameraPos = shift * menuCameraPos + (1 - shift) * cameraPos;
+                cameraUp = shift * menuCameraUp + (1 - shift) * cameraUp;
+                cameraTarget = shift * menuCameraTarget + (1 - shift) * cameraTarget;
             }
-            Vector3 cameraTarget = player.cameraTarget * (1 - WorldMap.zoomLevel) + WorldMap.cameraTarget * WorldMap.zoomLevel;*/
-            Vector3 cameraPos = player.cameraPos;
-            Vector3 cameraUp = player.cameraUp;
-            Vector3 cameraTarget = player.cameraTarget;
+            playerCameraPos = cameraPos;
+            playerCameraUp = cameraUp;
+            playerCameraTarget = cameraTarget;
             if (state == EngineState.Map)
             {
                 cameraPos = WorldMap.cameraPosition;
@@ -470,25 +519,45 @@ namespace VexedCore
                 cameraTarget = WorldMap.cameraTarget;
             }
 
+            Matrix projectionMatrix = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
+            if ((Keyboard.GetState().IsKeyDown(Keys.D9)|| depthTrigger == false) && state == EngineState.Active)
+            {
+                depthTimer += 3*gameTime.ElapsedGameTime.Milliseconds;
+                if (depthTimer > maxDepthTimer)
+                    depthTimer = maxDepthTimer;
+            }
+            if((Keyboard.GetState().IsKeyDown(Keys.D9) == false && depthTrigger == true) || state != EngineState.Active)
+            {
+                depthTimer -= gameTime.ElapsedGameTime.Milliseconds;
+                if (depthTimer < 0)
+                    depthTimer = 0;
+            }
+            if (depthTimer !=  0)
+            {
+                float depthFactor = (1f * depthTimer / maxDepthTimer);
+                depthFactor = (float)Math.Pow(depthFactor, .25);
+                projectionMatrix = ((1f - depthFactor) * projectionMatrix + depthFactor * Matrix.CreateOrthographic(20 * aspect, 20, 1, 1000)) / 2f;
+            }
             translucentEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
             translucentEffect.View = Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp);
-            translucentEffect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
+            translucentEffect.Projection = projectionMatrix;
             mapEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
             mapEffect.View = Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp);
-            mapEffect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
+            mapEffect.Projection = projectionMatrix;
 
 
             playerTextureEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
             playerTextureEffect.View = Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp);
-            playerTextureEffect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
+            playerTextureEffect.Projection = projectionMatrix;
 
             worldTextureEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
             worldTextureEffect.View = Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp);
-            worldTextureEffect.Projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
+            worldTextureEffect.Projection = projectionMatrix; 
+            
 
             cartoonEffect.Parameters["World"].SetValue(Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch));
             cartoonEffect.Parameters["View"].SetValue(Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp));
-            cartoonEffect.Parameters["Projection"].SetValue(Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000));
+            cartoonEffect.Parameters["Projection"].SetValue(projectionMatrix);
 
 
             // Set renderstates.
