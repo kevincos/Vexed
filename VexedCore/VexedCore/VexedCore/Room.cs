@@ -268,70 +268,78 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
-            beltAnimation += gameTime.ElapsedGameTime.Milliseconds;
-            foreach (Block b in blocks)
+            if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || roomHighlight == true)
             {
-                //if (b.staticObject == false)
-                //{
-                    int blockUpdateTime = b.UpdateBehavior(gameTime);
-                    foreach (Edge e in b.edges)
-                    {
-                        e.start.Update(this, blockUpdateTime);
-                        e.end.Update(this, blockUpdateTime);
-                        e.UpdateBehavior(gameTime);
-                    }
-                //}
-            }
-
-            if (this == Engine.player.currentRoom)
-            {
-                foreach (Doodad d in doodads)
+                //if ((center - Engine.player.currentRoom.center).Length() < Engine.drawDistance ||
+                        //(Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)
+                if(this == Engine.player.currentRoom || adjacent == true)
                 {
-                    if (d.freeMotion)
+                    beltAnimation += gameTime.ElapsedGameTime.Milliseconds;
+                    foreach (Block b in blocks)
                     {
-                        d.position.Update(this, gameTime.ElapsedGameTime.Milliseconds);
-                        Vector3 gravityDirection = Engine.player.center.direction;
-                        if (d.position.normal == Engine.player.center.direction)
+                        //if (b.staticObject == false)
+                        //{
+                        int blockUpdateTime = b.UpdateBehavior(gameTime);
+                        foreach (Edge e in b.edges)
                         {
-                            gravityDirection = -Engine.player.center.normal;
+                            e.start.Update(this, blockUpdateTime);
+                            e.end.Update(this, blockUpdateTime);
+                            e.UpdateBehavior(gameTime);
                         }
-                        else if (d.position.normal == -Engine.player.center.direction)
-                        {
-                            gravityDirection = Engine.player.center.normal;
-                        }
-
-                        d.position.velocity -= Engine.player.gravityAcceleration * gravityDirection;
-
-                        Vector3 up = d.position.direction;
-                        Vector3 right = Vector3.Cross(d.position.direction, d.position.normal);
-
-                        float upMagnitude = Vector3.Dot(up, d.position.velocity);
-                        float rightMagnitude = Vector3.Dot(right, d.position.velocity);
-                        float maxSpeed = Engine.player.maxVertSpeed / 2;
-                        if (upMagnitude > maxSpeed)
-                        {
-                            d.position.velocity -= (upMagnitude - maxSpeed) * up;
-                        }
-                        if (upMagnitude < -maxSpeed)
-                        {
-                            d.position.velocity -= (maxSpeed + upMagnitude) * up;
-                        }
-                        if (rightMagnitude > maxSpeed)
-                        {
-                            d.position.velocity -= (rightMagnitude - maxSpeed) * right;
-                        }
-                        if (rightMagnitude < -maxSpeed)
-                        {
-                            d.position.velocity -= (maxSpeed + rightMagnitude) * right;
-                        }
-
+                        //}
                     }
-                    else
+
+                    if (this == Engine.player.currentRoom)
                     {
-                        d.position.velocity = Vector3.Zero;
+                        foreach (Doodad d in doodads)
+                        {
+                            if (d.freeMotion)
+                            {
+                                d.position.Update(this, gameTime.ElapsedGameTime.Milliseconds);
+                                Vector3 gravityDirection = Engine.player.center.direction;
+                                if (d.position.normal == Engine.player.center.direction)
+                                {
+                                    gravityDirection = -Engine.player.center.normal;
+                                }
+                                else if (d.position.normal == -Engine.player.center.direction)
+                                {
+                                    gravityDirection = Engine.player.center.normal;
+                                }
+
+                                d.position.velocity -= Engine.player.gravityAcceleration * gravityDirection;
+
+                                Vector3 up = d.position.direction;
+                                Vector3 right = Vector3.Cross(d.position.direction, d.position.normal);
+
+                                float upMagnitude = Vector3.Dot(up, d.position.velocity);
+                                float rightMagnitude = Vector3.Dot(right, d.position.velocity);
+                                float maxSpeed = Engine.player.maxVertSpeed / 2;
+                                if (upMagnitude > maxSpeed)
+                                {
+                                    d.position.velocity -= (upMagnitude - maxSpeed) * up;
+                                }
+                                if (upMagnitude < -maxSpeed)
+                                {
+                                    d.position.velocity -= (maxSpeed + upMagnitude) * up;
+                                }
+                                if (rightMagnitude > maxSpeed)
+                                {
+                                    d.position.velocity -= (rightMagnitude - maxSpeed) * right;
+                                }
+                                if (rightMagnitude < -maxSpeed)
+                                {
+                                    d.position.velocity -= (maxSpeed + rightMagnitude) * right;
+                                }
+
+                            }
+                            else
+                            {
+                                d.position.velocity = Vector3.Zero;
+                            }
+                            d.UpdateBehavior(gameTime);
+                            d.Update(gameTime);
+                        }
                     }
-                    d.UpdateBehavior(gameTime);
-                    d.Update(gameTime);
                 }
             }
         }

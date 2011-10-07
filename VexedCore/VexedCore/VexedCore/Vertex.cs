@@ -151,8 +151,7 @@ namespace VexedCore
                 
                 direction = direction - oldDirection + newDirection;
             }
-
-            //position = position - Vector3.Dot(position, normal) * normal;
+            
             if(enforceVelocityConstraints)
                 velocity = velocity - Vector3.Dot(velocity, normal) * normal;
 
