@@ -400,11 +400,14 @@ namespace VexedCore
                     if (result.properties.type == VexedLib.EdgeType.Spikes || (result.properties.type == VexedLib.EdgeType.Electric && result.properties.primaryValue > 0)
                         || (result.properties.type == VexedLib.EdgeType.Fire && result.properties.primaryValue > 0))
                     {
-                        p.Damage(result.projection);
+                        p.Damage(result.projection, false);
                     }
                     if (result.projection.Length() > p.playerHalfWidth)
                     {
-                        p.Damage(result.projection);
+                        if (p.boosting == true)
+                            p.boosting = false;
+                        else
+                            p.Damage(result.projection,true);
                     }
                 }
                 else
@@ -426,7 +429,7 @@ namespace VexedCore
                         Vector3 projection = Collide(pVertexList, projectileVertexList, Engine.player.center.normal);
                         if (projection != Vector3.Zero)
                         {
-                            p.Damage(projection);
+                            p.Damage(projection,false);
                             s.exploding = true;
                             s.position.velocity = Vector3.Zero;
                         }
@@ -440,13 +443,25 @@ namespace VexedCore
                 m.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
                 if (p.CollisionFirstPass(m) == false)
                 {
-                    if (m.moveType != VexedLib.MovementType.SnakeBoss)
+                    if (m.moveType == VexedLib.MovementType.ChaseBoss)
+                    {
+                        List<Vector3> monsterVertexList = m.GetCollisionRect();
+                        Vector3 projection = Collide(playerVertexList, monsterVertexList, Engine.player.center.normal);
+                        if (projection.Length() > 0f)
+                        {
+                            if (m.position.velocity != Vector3.Zero)
+                                p.Damage(m.position.velocity,true);
+                            else
+                                p.Damage(projection,false);
+                        }
+                    }
+                    else if (m.moveType != VexedLib.MovementType.SnakeBoss)
                     {
                         Vector3 distance = (p.center.position - m.unfoldedPosition.position);
                         if (distance.Length() < (p.playerHalfHeight + m.halfHeight))
                         {
                             Vector3 projection = Vector3.Normalize(distance) * ((p.playerHalfHeight + m.halfHeight) - distance.Length());
-                            p.Damage(projection);
+                            p.Damage(projection, true);
                         }
                     }
                 }
@@ -462,7 +477,7 @@ namespace VexedCore
                         Vector3 projection = Collide(pVertexList, doodadVertexList, Engine.player.center.normal);
                         if (projection != Vector3.Zero)
                         {
-                            p.Damage(projection);
+                            p.Damage(projection,false);
                         }
                     }
                 }                
@@ -584,7 +599,7 @@ namespace VexedCore
                     continue;
                 if (m.dead == true)
                     continue;
-                if (m.moveType == VexedLib.MovementType.SnakeBoss)
+                if (m.moveType == VexedLib.MovementType.SnakeBoss || m.moveType == VexedLib.MovementType.ChaseBoss)
                 {
                     m.UpdateBoundingBox(p.center.direction, p.right);
                     if (p.boundingBoxBottom > m.boundingBoxTop + 2f ||
@@ -620,7 +635,7 @@ namespace VexedCore
             
             // Now that we know if the player is grounded or not, we can use the walking property to determine whether or
             // not we should apply friction.
-            if (!p.walking)
+            if (!p.walking && !p.boosting)
                 p.center.velocity += frictionAdjustment;
             
             #endregion                        

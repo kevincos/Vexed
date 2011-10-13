@@ -91,12 +91,12 @@ namespace VexedCore
             int leftColorBase = 40;
             float rightArrowScale = 1f;
             int rightColorBase = 40;
-            if ((Mouse.GetState().X > 750))                
+            if ((Mouse.GetState().X > Game1.titleSafeRect.Right - 50))                
             {
                 rightArrowScale = 1.3f;
                 rightColorBase = 80;
             }
-            if ((Mouse.GetState().X < 50))
+            if ((Mouse.GetState().X < Game1.titleSafeRect.Left + 50))
             {
                 leftArrowScale = 1.3f;
                 leftColorBase = 80;
@@ -104,11 +104,11 @@ namespace VexedCore
             
             if (state == ZoomState.Sector || state == ZoomState.Inventory)
             {
-                Engine.spriteBatch.Draw(changeArrow, new Vector2(25, 280), null, new Color(leftColorBase, leftColorBase, leftColorBase), 0, new Vector2(16,64), leftArrowScale, SpriteEffects.None, 0);
+                Engine.spriteBatch.Draw(changeArrow, new Vector2(Game1.titleSafeRect.Left + 25, Game1.titleSafeRect.Center.Y-20), null, new Color(leftColorBase, leftColorBase, leftColorBase), 0, new Vector2(16, 64), leftArrowScale, SpriteEffects.None, 0);
             }
             if (state == ZoomState.Sector || state == ZoomState.World)
             {
-                Engine.spriteBatch.Draw(changeArrow, new Vector2(765, 280), null, new Color(rightColorBase, rightColorBase, rightColorBase), 0, new Vector2(16, 64), rightArrowScale, SpriteEffects.FlipHorizontally, 0);
+                Engine.spriteBatch.Draw(changeArrow, new Vector2(Game1.titleSafeRect.Right - 35, Game1.titleSafeRect.Center.Y-20), null, new Color(rightColorBase, rightColorBase, rightColorBase), 0, new Vector2(16, 64), rightArrowScale, SpriteEffects.FlipHorizontally, 0);
             }
 
             if(Keyboard.GetState().IsKeyDown(Keys.LeftControl) == false && displayMouse == true)
@@ -138,11 +138,11 @@ namespace VexedCore
             inventoryIndexList[1] = (int)Engine.player.secondaryAbility.type;
             if (state == ZoomState.Inventory)
             {                
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Inventory", new Vector2(50, 90), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Primary   : ", new Vector2(90, 110), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Secondary : ", new Vector2(90, 130), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Suit Upgrades", new Vector2(90, 430), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Items Unlocked", new Vector2(90, 170), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Inventory", new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top+ 90), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Primary   : ", new Vector2(Game1.titleSafeRect.Left + 130, Game1.titleSafeRect.Top + 110), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Secondary : ", new Vector2(Game1.titleSafeRect.Left + 130, Game1.titleSafeRect.Top + 130), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Suit Upgrades", new Vector2(Game1.titleSafeRect.Left + 130, Game1.titleSafeRect.Top + 430), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Items Unlocked", new Vector2(Game1.titleSafeRect.Left + 130, Game1.titleSafeRect.Top + 170), Color.YellowGreen);
 
                 int drawOffset = 0;
                 for(int i = 0; i < inventoryIndexList.Count; i++)
@@ -151,25 +151,25 @@ namespace VexedCore
                     a.type = (AbilityType)inventoryIndexList[i];
                     if (selectedInventory == i)
                     {
-                        Engine.spriteBatch.DrawString(Engine.spriteFont, "X", new Vector2(60, 110 + 20 * drawOffset), Color.YellowGreen);
+                        Engine.spriteBatch.DrawString(Engine.spriteFont, "X", new Vector2(Game1.titleSafeRect.Left+ 100, 110 + 20 * drawOffset), Color.YellowGreen);
 
                         if (Engine.player.upgrades[inventoryIndexList[i]] == true)
                         {
-                            Engine.spriteBatch.DrawString(Engine.spriteFont, a.FriendlyName(), new Vector2(300, 200), Color.YellowGreen);
-                            Engine.spriteBatch.DrawString(Engine.spriteFont, a.Description(), new Vector2(300, 230), Color.YellowGreen);
+                            Engine.spriteBatch.DrawString(Engine.spriteFont, a.FriendlyName(), new Vector2(Game1.titleSafeRect.Left+ 350, Game1.titleSafeRect.Top + 200), Color.YellowGreen);
+                            Engine.spriteBatch.DrawString(Engine.spriteFont, a.Description(), new Vector2(Game1.titleSafeRect.Left+ 350, Game1.titleSafeRect.Top + 230), Color.YellowGreen);
                         }
 
                     }
                     if (Engine.player.upgrades[inventoryIndexList[i]] == true)
                     {
                         if(i < 2)
-                            Engine.spriteBatch.DrawString(Engine.spriteFont, "  " + a.FriendlyName(), new Vector2(200, 110 + 20 * drawOffset), Color.YellowGreen);
+                            Engine.spriteBatch.DrawString(Engine.spriteFont, "  " + a.FriendlyName(), new Vector2(Game1.titleSafeRect.Left + 250, Game1.titleSafeRect.Top + 110 + 20 * drawOffset), Color.YellowGreen);
                         else
-                            Engine.spriteBatch.DrawString(Engine.spriteFont, "  " + a.FriendlyName(), new Vector2(90, 110 + 20 * drawOffset), Color.YellowGreen);
+                            Engine.spriteBatch.DrawString(Engine.spriteFont, "  " + a.FriendlyName(), new Vector2(Game1.titleSafeRect.Left + 150, Game1.titleSafeRect.Top + 110 + 20 * drawOffset), Color.YellowGreen);
                     }
                     else
                     {
-                        Engine.spriteBatch.DrawString(Engine.spriteFont, "  ???", new Vector2(90, 110 + 20 * drawOffset), Color.YellowGreen);
+                        Engine.spriteBatch.DrawString(Engine.spriteFont, "  ???", new Vector2(Game1.titleSafeRect.Left + 150, Game1.titleSafeRect.Top + 110 + 20 * drawOffset), Color.YellowGreen);
                     }
                     drawOffset += 1;
                     if (i == 1)
@@ -185,16 +185,22 @@ namespace VexedCore
             if(state == ZoomState.Sector)
             {
                 Room r = Engine.roomList[selectedRoomIndex];
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Room: " + r.id, new Vector2(10,90), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: " + r.currentOrbs + " / " + r.maxOrbs, new Vector2(10, 110), Color.YellowGreen);                
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Room: " + r.id, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: " + r.currentOrbs + " / " + r.maxOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 140), Color.YellowGreen);                
             }
             if (state == ZoomState.World)
             {
                 
                 Sector s = Engine.sectorList[selectedSectorIndex];
-       
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Sector: " + s.id, new Vector2(10, 90), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: " + s.currentOrbs + " / " + s.maxOrbs, new Vector2(10, 110), Color.YellowGreen);                
+
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Sector: " + s.id, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: " + s.currentOrbs + " / " + s.maxOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 140), Color.YellowGreen);                
+            }
+            if (state == ZoomState.Sector || state == ZoomState.World)
+            {
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Current Objective: " , new Vector2(Game1.titleSafeRect.Left + 350, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
+                
+                Engine.spriteBatch.DrawString(Engine.spriteFont, ObjectiveControl.objectives[Engine.player.currentObjective].text, new Vector2(Game1.titleSafeRect.Left + 350, Game1.titleSafeRect.Top + 140), Color.YellowGreen);                
             }
             Engine.spriteBatch.End();
         }
@@ -387,11 +393,11 @@ namespace VexedCore
             bool scrollForward = (Keyboard.GetState().IsKeyDown(Keys.LeftControl) == false && Controls.scrollWheelPrev < Mouse.GetState().ScrollWheelValue);
             bool zoomOutCommand = (Keyboard.GetState().IsKeyDown(Keys.OemMinus) || (Keyboard.GetState().IsKeyDown(Keys.LeftControl) == false && Controls.scrollWheelPrev > Mouse.GetState().ScrollWheelValue) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder));
 
-            if (Mouse.GetState().X != 400 || Mouse.GetState().Y != 300)
+            if (Mouse.GetState().X != Game1.titleSafeRect.Center.X || Mouse.GetState().Y != Game1.titleSafeRect.Center.Y)
                 displayMouse = true;
             
             // Generate room projections
-            if (state == ZoomState.Sector && Mouse.GetState().LeftButton == ButtonState.Pressed || Controls.LeftStick().Length() > .1f || Controls.IsLeftKeyDown() || Controls.IsRightKeyDown() || Controls.IsUpKeyDown() || Controls.IsDownKeyDown())
+            if (state == ZoomState.Sector && (Mouse.GetState().LeftButton == ButtonState.Pressed || Controls.LeftStick().Length() > .1f || Controls.IsLeftKeyDown() || Controls.IsRightKeyDown() || Controls.IsUpKeyDown() || Controls.IsDownKeyDown()))
             {
                 float bestDistance = 10000;
 
@@ -465,12 +471,12 @@ namespace VexedCore
                 
             }
 
-            if (Mouse.GetState().X < 50 && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (Mouse.GetState().X < Game1.titleSafeRect.Left + 50 && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 leftSreenChange = true;
             }
 
-            if (Mouse.GetState().X > 750 && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (Mouse.GetState().X > Game1.titleSafeRect.Right - 50 && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 rightScreenChange = true;
             }
@@ -493,7 +499,7 @@ namespace VexedCore
                 int drawOffset = 0;
                 for (int i = 0; i < inventoryIndexList.Count; i++)
                 {
-                    if (Math.Abs(Mouse.GetState().Y - (drawOffset * 20 + 120)) < 10f && Mouse.GetState().X > 110 && Mouse.GetState().X < 300)
+                    if (Math.Abs(Mouse.GetState().Y - (Game1.titleSafeRect.Top + drawOffset * 20 + 120)) < 10f && Mouse.GetState().X > Game1.titleSafeRect.Left + 110 && Mouse.GetState().X < Game1.titleSafeRect.Left + 400)
                     {
                         selectedInventory = i;
                     }

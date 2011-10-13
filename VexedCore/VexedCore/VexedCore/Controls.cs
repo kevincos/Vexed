@@ -90,7 +90,7 @@ namespace VexedCore
         {
             get
             {
-                return buttons[4];
+                return buttons[6];
             }
         }
         public GameButton XButton
@@ -123,6 +123,44 @@ namespace VexedCore
         }
         public PlayerIndex activePlayer;
 
+
+        public bool JumpButtonPressed()
+        {
+            return AButton.Pressed || buttons[4].Pressed || buttons[5].Pressed || (YButton.Pressed && Engine.player.secondaryAbility.isJump) || (XButton.Pressed && Engine.player.primaryAbility.isJump);
+        }
+
+        public bool JumpButtonNewPressed()
+        {
+            return AButton.NewPressed || buttons[4].NewPressed || buttons[5].NewPressed || (YButton.NewPressed && Engine.player.secondaryAbility.isJump) || (XButton.NewPressed && Engine.player.primaryAbility.isJump);
+        }
+
+        public bool JumpButtonReleased()
+        {
+            return AButton.Released && buttons[4].Released && buttons[5].Released && (YButton.Released && Engine.player.secondaryAbility.isJump) && (XButton.Released && Engine.player.primaryAbility.isJump);
+        }
+
+        public void JumpInvalidate()
+        {
+            AButton.Invalidate();
+            if (Engine.player.secondaryAbility.isJump)
+                YButton.Invalidate();
+            if (Engine.player.primaryAbility.isJump)
+                XButton.Invalidate();
+            buttons[4].Invalidate();
+            buttons[5].Invalidate();
+        }
+
+        public int JumpHoldTime()
+        {
+            int aHold = AButton.HoldTime;
+            int xHold = 0;
+            int yHold = 0;
+            if (Engine.player.primaryAbility.isJump) xHold = XButton.HoldTime;
+            if (Engine.player.secondaryAbility.isJump) yHold = YButton.HoldTime;
+            return Math.Max(aHold, Math.Max(xHold, yHold));
+
+        }
+
         public Controls(PlayerIndex activePlayer)
         {
             this.activePlayer = activePlayer;
@@ -131,7 +169,10 @@ namespace VexedCore
             buttons.Add(new GameButton(Buttons.Y, Keys.X, 2));
             buttons.Add(new GameButton(Buttons.A, Keys.Space));
             buttons.Add(new GameButton(Buttons.B, Keys.E));
+            buttons.Add(new GameButton(Buttons.A, Keys.Up));
+            buttons.Add(new GameButton(Buttons.A, Keys.W));
             buttons.Add(new GameButton(Buttons.Back, Keys.Back));
+            
         }
 
         public static Vector2 LeftStick()

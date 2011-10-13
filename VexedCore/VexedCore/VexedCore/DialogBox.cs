@@ -24,6 +24,7 @@ namespace VexedCore
         public List<String> textList;
         public bool pause;
 
+        
         public DialogChunk()
         {
         }
@@ -59,13 +60,53 @@ namespace VexedCore
         public static List<Vector2> chaseBossPortait;
         public static List<Vector2> armorBossPortait;
 
+        public static RenderTarget2D dialogRenderTarget;
+
+        public static void RenderTextures()
+        {
+            Game1.graphicsDevice.SetRenderTarget(dialogRenderTarget);
+            Game1.graphicsDevice.Clear(Color.Transparent);
+            Engine.spriteBatch.Begin();
+            if (currentDialog != null && stage < currentDialog.textList.Count)
+            {
+                Engine.spriteBatch.Draw(box, Vector2.Zero, Color.White);
+
+                int portraitIndex = 0;
+                if (currentDialog.speaker == "OldMan")
+                    portraitIndex = 0;
+                else if (currentDialog.speaker == "ChaseBoss")
+                    portraitIndex = 1;
+                else if (currentDialog.speaker == "ArmorBoss")
+                    portraitIndex = 2;
+                else if (currentDialog.speaker == "System")
+                    portraitIndex = 3;
+                else if (currentDialog.speaker == "IceSnake")
+                    portraitIndex = 4;
+                else if (currentDialog.speaker == "SnowMan")
+                    portraitIndex = 5;
+                else
+                    portraitIndex = 0;
+                Engine.spriteBatch.Draw(portraits, new Rectangle(0,0,64,64), new Rectangle((portraitIndex % 8) * 64, (portraitIndex / 8) * 64, 64, 64), Color.White);
+
+
+                Engine.spriteBatch.DrawString(Engine.spriteFont, currentDialog.textList[stage], new Vector2(67,5), Color.YellowGreen, 0, Vector2.Zero, .9f, SpriteEffects.None,0);
+            }
+            Engine.spriteBatch.End();
+            Game1.graphicsDevice.SetRenderTarget(null);
+        }
+
         static DialogBox()
         {
             dialogLibrary = new List<DialogChunk>();
             Stream stream = new FileStream("dialog.xml", FileMode.Open, FileAccess.ReadWrite);
             //Stream stream = new FileStream("test.xml", FileMode.Create, FileAccess.ReadWrite);
             XmlSerializer serializer = new XmlSerializer(typeof(List<DialogChunk>));
-            dialogLibrary = (List<DialogChunk>)serializer.Deserialize(stream);                                       
+            dialogLibrary = (List<DialogChunk>)serializer.Deserialize(stream);
+
+            PresentationParameters pp = Game1.graphicsDevice.PresentationParameters;
+            dialogRenderTarget = new RenderTarget2D(Game1.graphicsDevice,
+                                                   512, 64, false,
+                                                   pp.BackBufferFormat, pp.DepthStencilFormat);    
         }
 
         public static int texGridCount = 8;
@@ -111,34 +152,10 @@ namespace VexedCore
             if (currentDialog != null && stage < currentDialog.textList.Count && ((currentDialog.pause == false && Engine.player.state != State.Dialog && (lifeTime < maxLifeTime)) || Engine.player.state == State.Dialog))
             {
                 Engine.spriteBatch.Begin();
-                float xPercent = .1f;
-                float yPercent = .7f;
-                float textXPercent = .25f;
-                float textYPercent = .72f;
-                float boxWidth = .9f;
-                float boxHeight = .1125f;
+                float dialogBoxHeight = Game1.titleSafeRect.Height / 6;
+                float dialogBoxLength = dialogBoxHeight * 8;
+                Engine.spriteBatch.Draw(dialogRenderTarget, new Rectangle((int)(Game1.titleSafeRect.Center.X - dialogBoxLength/2), (int)(Game1.titleSafeRect.Bottom - dialogBoxHeight - 50), (int)dialogBoxLength, (int)dialogBoxHeight), Color.White);
 
-                Engine.spriteBatch.Draw(box, new Rectangle((int)(Game1.titleSafeRect.Left + xPercent * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height), (int)(boxWidth * Game1.titleSafeRect.Width), (int)(boxHeight * Game1.titleSafeRect.Width)), new Rectangle(0, 0, 512, 64), Color.White);
-
-                int portraitIndex = 0;
-                if (currentDialog.speaker == "OldMan")
-                    portraitIndex = 0;
-                else if (currentDialog.speaker == "ChaseBoss")
-                    portraitIndex = 1;
-                else if (currentDialog.speaker == "ArmorBoss")
-                    portraitIndex = 2;
-                else if (currentDialog.speaker == "System")
-                    portraitIndex = 3;
-                else if (currentDialog.speaker == "IceSnake")
-                    portraitIndex = 4;
-                else if (currentDialog.speaker == "SnowMan")
-                    portraitIndex = 5;                    
-                else
-                    portraitIndex = 0;
-                Engine.spriteBatch.Draw(portraits, new Rectangle((int)(Game1.titleSafeRect.Left + xPercent * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height), (int)((textXPercent - xPercent) * Game1.titleSafeRect.Width), (int)(boxHeight * Game1.titleSafeRect.Width)), new Rectangle((portraitIndex % 8) * 64, (portraitIndex / 8) * 64, 64, 64), Color.White);
-                
-
-                Engine.spriteBatch.DrawString(Engine.spriteFont, currentDialog.textList[stage], new Vector2(Game1.titleSafeRect.Left + textXPercent * Game1.titleSafeRect.Width, Game1.titleSafeRect.Top + textYPercent * Game1.titleSafeRect.Height), Color.YellowGreen);
                 Engine.spriteBatch.End();
             }
         }

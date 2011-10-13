@@ -54,7 +54,7 @@ namespace VexedCore
             Objective doubleJump = new Objective(ObjectiveType.Upgrade, "Locate Double Jump Upgrade");
             doubleJump.upgradeGoals.Add(AbilityType.DoubleJump);
 
-            Objective blaster = new Objective(ObjectiveType.Upgrade, "Locate Double Jump Upgrade");
+            Objective blaster = new Objective(ObjectiveType.Upgrade, "Locate Blaster");
             blaster.upgradeGoals.Add(AbilityType.Blaster);
 
             Objective armorBoss = new Objective(ObjectiveType.DefeatBoss, "Defeat Armortron");

@@ -63,6 +63,14 @@ namespace VexedCore
             }
         }
 
+        public bool isJump
+        {
+            get
+            {
+                return type == AbilityType.WallJump || type == AbilityType.DoubleJump;
+            }
+        }
+
         public bool isItem
         {
             get
@@ -207,9 +215,10 @@ namespace VexedCore
 
             if (type == AbilityType.DoubleJump)
             {
-                if (Engine.player.grounded == true)
+                if (Engine.player.grounded == true && Engine.player.flashTime == 0)
                 {
-                    ammo = 1;
+                    if(ammo == 0)
+                        ammo = 1;
                 }
             }
             if (type == AbilityType.JetPack)
@@ -293,7 +302,10 @@ namespace VexedCore
             int spriteX = (int)(type) % 8;
             int spriteY = (int)(type) / 8;
 
-            Byte fade = (Byte)(255 - 255 * Engine.depthTimer / Engine.maxDepthTimer);
+            Byte fade = 255;
+            
+            if(DepthControl.uiFade == true)
+                fade = (Byte)(255 - 255 * DepthControl.depthTimer / DepthControl.maxDepthTimer);
             Color c = new Color(fade, fade, fade, fade);     
             
             
@@ -354,11 +366,15 @@ namespace VexedCore
                 return "Wall Jump Module";
             if (type == AbilityType.ImprovedJump)
                 return "Advanced Jump";
+            if (type == AbilityType.Empty)
+                return "Empty";
             return "BUG";
         }
 
         public String Description()
         {
+            if (type == AbilityType.Empty)
+                return "Locate and equip an item to this slot.";
             if (type == AbilityType.DoubleJump)
                 return "Press the Jump button while in mid air\nto get a second jump.";
             if (type == AbilityType.WallJump)

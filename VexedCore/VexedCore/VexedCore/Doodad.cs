@@ -1158,6 +1158,20 @@ namespace VexedCore
                     }
                 }
             }
+            if (type == VexedLib.DoodadType.LaserSwitch)
+            {
+                bool switchReady = false;
+                if (targetDoodad != null)
+                    switchReady = expectedBehavior == targetDoodad.currentBehavior.id;
+                if (targetBlock != null)
+                    switchReady = expectedBehavior == targetBlock.currentBehavior.id;
+                if (targetEdge != null)
+                    switchReady = expectedBehavior == targetEdge.currentBehavior.id;
+                if (switchReady == true)
+                {
+                    ActivateDoodad(currentRoom, false);
+                }
+            }
 
 
             if (type == VexedLib.DoodadType.LeftDoor || type == VexedLib.DoodadType.RightDoor)

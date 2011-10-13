@@ -36,25 +36,17 @@ namespace VexedCore
             graphics.PreferMultiSampling = true;
             graphics.SynchronizeWithVerticalRetrace = true;
 
-            int resWidth = 800;
-            int resHeight = 600;
-            bool fullScreen = false;
-
+            Engine.res = ResolutionSettings.R_800x600;
+            Engine.fullScreen = false;
+            
 #if XBOX
-            resWidth = 1280;
-            resHeight = 720;
+            Engine.res = ResolutionSettings.R_1280x720;
 #endif
 
-            //resWidth = 1920;
-            //resHeight = 1080;
-            //fullScreen = true;
+            Engine.res = ResolutionSettings.R_800x600; 
+            Engine.fullScreen = false;
 
-            graphics.IsFullScreen = fullScreen;
-            graphics.PreferredBackBufferWidth = resWidth;
-            graphics.PreferredBackBufferHeight = resHeight;
-            Window.BeginScreenDeviceChange(fullScreen);
-            Window.EndScreenDeviceChange(Window.ScreenDeviceName, resWidth, resHeight);
-            graphics.ApplyChanges();
+            SetGraphicsSettings();
 
             titleSafeRect = graphics.GraphicsDevice.Viewport.TitleSafeArea;
 
@@ -62,7 +54,40 @@ namespace VexedCore
             controller = new Controls(activePlayer);
             //bloom = new BloomComponent(this);
             Content.RootDirectory = "Content";
+            
+        }
 
+        public static void SetGraphicsSettings()
+        {
+            if (Engine.res == ResolutionSettings.R_800x600)
+            {
+                Engine.resWidth = 800;
+                Engine.resHeight = 600;
+            }
+            if (Engine.res == ResolutionSettings.R_1920x1080)
+            {
+                Engine.resWidth = 1920;
+                Engine.resHeight = 1080;
+            }
+            if (Engine.res == ResolutionSettings.R_1280x720)
+            {
+                Engine.resWidth = 1280;
+                Engine.resHeight = 720;
+            }
+            if (Engine.res == ResolutionSettings.R_400x300)
+            {
+                Engine.resWidth = 400;
+                Engine.resHeight = 300;
+            }
+
+            graphics.IsFullScreen = Engine.fullScreen;
+            graphics.PreferredBackBufferWidth = Engine.resWidth;
+            graphics.PreferredBackBufferHeight = Engine.resHeight;
+            ///Window.BeginScreenDeviceChange(Engine.fullScreen);
+            //Window.EndScreenDeviceChange(Window.ScreenDeviceName, Engine.resWidth, Engine.resHeight);
+            graphics.ApplyChanges();
+
+            titleSafeRect = graphics.GraphicsDevice.Viewport.TitleSafeArea;
         }
 
         /// <summary>
@@ -76,8 +101,8 @@ namespace VexedCore
             // TODO: Add your initialization logic here
             graphicsDevice = GraphicsDevice;
 
-            LevelLoader.Load("LevelData\\menu");
-            //LevelLoader.Load("LevelData\\world");
+            //LevelLoader.Load("LevelData\\menu");
+            LevelLoader.Load("LevelData\\world");
             //LevelLoader.Load("LevelData\\spikeelevator");
             
             Components.Add(new FrameRateCounter(this));

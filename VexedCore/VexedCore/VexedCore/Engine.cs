@@ -19,6 +19,14 @@ namespace VexedCore
         Pause
     }
 
+    public enum ResolutionSettings
+    {
+        R_400x300,
+        R_800x600,
+        R_1920x1080,
+        R_1280x720        
+    }
+
     public class Engine
     {
         public static int saveFileIndex = 0;
@@ -58,10 +66,10 @@ namespace VexedCore
         public int optionToggleCooldown = 0;
         public static bool reDraw = false;
         public static bool detailTextures = true;
-        public static int depthCount =80;
-        public static int depthTimer = 3000;
-        public static bool depthTrigger = false;
-        public static int maxDepthTimer = 3000;
+        public static bool fullScreen = false;
+        public static int resWidth = 1920;
+        public static int resHeight = 1280;
+        public static ResolutionSettings res = ResolutionSettings.R_800x600;
         
 
         /*public static List<VertexPositionColorNormalTexture> staticOpaqueObjects;
@@ -402,7 +410,7 @@ namespace VexedCore
                         }*/
                     }
 
-                    if (translucentList.Count > 0 && depthCount > 0 && mapShellObjects.Count * 2 > 0)
+                    if (translucentList.Count > 0 && DepthControl.depthCount > 0 && mapShellObjects.Count * 2 > 0)
                     {                       
                         Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                             translucentList.ToArray(), 0, mapShellObjects.Count * 2, VertexPositionColorNormalTexture.VertexDeclaration);
@@ -410,7 +418,7 @@ namespace VexedCore
                     if (WorldMap.selectedRoomIndex != -1)
                     {
                         Game1.graphicsDevice.DepthStencilState = DepthStencilState.None;
-                        if (translucentList.Count > 0 && depthCount > 0 && translucentList.Count() / 3 - mapShellObjects.Count * 2 > 0)
+                        if (translucentList.Count > 0 && DepthControl.depthCount > 0 && translucentList.Count() / 3 - mapShellObjects.Count * 2 > 0)
                         {
                             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                                 translucentList.ToArray(), mapShellObjects.Count * 6, translucentList.Count() / 3 - mapShellObjects.Count * 2, VertexPositionColorNormalTexture.VertexDeclaration);
@@ -424,6 +432,7 @@ namespace VexedCore
         public void Draw(GameTime gameTime)
         {
             saveGameText.RenderTextures();
+            DialogBox.RenderTextures();
 
             Engine.mapShellObjects = new List<TrasnparentSquare>();
             if(Engine.detailVertexArray == null)
@@ -483,31 +492,35 @@ namespace VexedCore
                     if (dist < 14f)
                     {
                         shift = 1f;
-                        depthTrigger = false;
+                        DepthControl.depthTrigger = false;
                     }
                     else
                     {
                         shift = (18 - dist) / 4f;
-                        depthTrigger = true;
+                        DepthControl.depthTrigger = true;
                     }
                     menuCameraTarget = Engine.player.currentRoom.center;
-                    menuCameraPos = Engine.player.currentRoom.center + 29 * Vector3.UnitY;
+                    menuCameraPos = Engine.player.currentRoom.center + 20 * Vector3.UnitY;
                     menuCameraUp = Vector3.UnitZ;
                 }
-                dist = (Engine.player.center.position - (Engine.player.currentRoom.center - 5 * Vector3.UnitZ - 15 * Vector3.UnitX)).Length();
+                dist = (Engine.player.center.position - (Engine.player.currentRoom.center - 5 * Vector3.UnitZ - 18 * Vector3.UnitX)).Length();
                 if (dist < 10f && Engine.player.center.normal == -Vector3.UnitX)
                 {
                     if (dist < 6)
                         shift = 1f;
                     else
-                        shift = (10-dist) / 4f;
+                        shift = (10 - dist) / 4f;
                     menuCameraTarget = Engine.player.currentRoom.center + 1.5f * Vector3.UnitZ;
-                    menuCameraPos = Engine.player.currentRoom.center - 29f * Vector3.UnitX + 1.5f * Vector3.UnitZ;
+                    menuCameraPos = Engine.player.currentRoom.center - 33f * Vector3.UnitX + 1.5f * Vector3.UnitZ;
                     menuCameraUp = Vector3.UnitZ;
                 }
                 cameraPos = shift * menuCameraPos + (1 - shift) * cameraPos;
                 cameraUp = shift * menuCameraUp + (1 - shift) * cameraUp;
                 cameraTarget = shift * menuCameraTarget + (1 - shift) * cameraTarget;
+            }
+            else
+            {
+                DepthControl.depthTrigger = true;
             }
             playerCameraPos = cameraPos;
             playerCameraUp = cameraUp;
@@ -520,24 +533,11 @@ namespace VexedCore
             }
 
             Matrix projectionMatrix = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 1000);
-            if ((Keyboard.GetState().IsKeyDown(Keys.D9)|| depthTrigger == false) && state == EngineState.Active)
-            {
-                depthTimer += 3*gameTime.ElapsedGameTime.Milliseconds;
-                if (depthTimer > maxDepthTimer)
-                    depthTimer = maxDepthTimer;
-            }
-            if((Keyboard.GetState().IsKeyDown(Keys.D9) == false && depthTrigger == true) || state != EngineState.Active)
-            {
-                depthTimer -= gameTime.ElapsedGameTime.Milliseconds;
-                if (depthTimer < 0)
-                    depthTimer = 0;
-            }
-            if (depthTimer !=  0)
-            {
-                float depthFactor = (1f * depthTimer / maxDepthTimer);
-                depthFactor = (float)Math.Pow(depthFactor, .25);
-                projectionMatrix = ((1f - depthFactor) * projectionMatrix + depthFactor * Matrix.CreateOrthographic(20 * aspect, 20, 1, 1000)) / 2f;
-            }
+
+            DepthControl.Update(gameTime);
+            float cameraDistance = (cameraTarget - cameraPos).Length();
+            projectionMatrix = ((1f - DepthControl.DepthFactor) * projectionMatrix + DepthControl.DepthFactor * Matrix.CreateOrthographic(cameraDistance * aspect, cameraDistance, 1, 1000)) / 2f;
+            
             translucentEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
             translucentEffect.View = Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp);
             translucentEffect.Projection = projectionMatrix;
@@ -610,6 +610,7 @@ namespace VexedCore
             Engine.staticDoodadsInitialized = true;
             Engine.reDraw = false;
 
+            DepthControl.Draw();
 
             if (Engine.player.secondaryAbility.isPassive == false)
                 Ability.Draw(.825f, .02f, AbilityType.YButton);

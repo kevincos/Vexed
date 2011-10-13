@@ -37,13 +37,6 @@ Content\skybox_left.xnb
 Content\skybox_right.xnb
 Content\skybox_top.xnb
 Content\beams.xnb
-Content\Sounds\beep.xnb
-Content\Sounds\bloop.xnb
-Content\Sounds\click.xnb
-Content\Sounds\swoosh.xnb
-Content\Sounds\thud.xnb
-Content\Sounds\music_game.xnb
-Content\Sounds\music_menu.xnb
 Content\dialogportraits.xnb
 Content\Skybox\Blue\skybox_back.xnb
 Content\Skybox\Blue\skybox_bottom.xnb
@@ -84,6 +77,13 @@ Content\Skybox\DeepSpace\skybox_top.xnb
 Content\pausebackground.xnb
 Content\mouse.xnb
 Content\screenchangearrow.xnb
+Content\Sounds\beep.xnb
+Content\Sounds\bloop.xnb
+Content\Sounds\click.xnb
+Content\Sounds\swoosh.xnb
+Content\Sounds\thud.xnb
+Content\Sounds\music_game.xnb
+Content\Sounds\music_menu.xnb
 Content\Sounds\music_game.wma
 Content\Sounds\music_menu.wma
 dialog.xml

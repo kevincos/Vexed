@@ -78,6 +78,7 @@
     <Compile Include="Collidable.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="Decoration.cs" />
+    <Compile Include="DepthControl.cs" />
     <Compile Include="DialogBox.cs" />
     <Compile Include="Doodad.cs" />
     <Compile Include="Edge.cs" />

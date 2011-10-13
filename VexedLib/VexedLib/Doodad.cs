@@ -89,6 +89,7 @@ namespace VexedLib
     {
         public int id;
         public String name;
+        
         public Vector3 position;
         public Vector3 up;
         public int activationCost;

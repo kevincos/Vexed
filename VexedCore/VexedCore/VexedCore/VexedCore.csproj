@@ -123,6 +123,7 @@
     <Compile Include="Collidable.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="Decoration.cs" />
+    <Compile Include="DepthControl.cs" />
     <Compile Include="DialogBox.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Engine.cs" />

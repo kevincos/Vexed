@@ -109,8 +109,11 @@ namespace VexedCore
         public bool jetPackThrust = false;
         public bool sliding = false;
         public int walkTime = 0;
+        public int crushCount = 0;
+        public static int maxCrushCount = 3;
         public int idleTime = 0;
         public int boostTime = 0;
+        public int flashTime = 0;
         public int fireCooldown = 100;
         public bool leftWall = false;
         public bool rightWall = false;
@@ -118,6 +121,7 @@ namespace VexedCore
         public Ability primaryAbility;
         public Ability secondaryAbility;
         public Ability naturalShield;
+        public bool safeLanding = true;
         public bool boosting = false;
         public bool[] upgrades;
         public Vector3 oldNormal = Vector3.Zero;
@@ -128,6 +132,7 @@ namespace VexedCore
         public float playerHalfWidth = .35f;
         public float playerHalfHeight = .5f;
 
+        public static int flashMaxTime = 400;
         public static int jumpRecoveryMax = 300;
         public static int spinMaxTime = 200;
         public static int walkMaxTime = 800;
@@ -179,15 +184,15 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Laser);
-            secondaryAbility = new Ability(AbilityType.Boots);
+            primaryAbility = new Ability(AbilityType.DoubleJump);
+            secondaryAbility = new Ability(AbilityType.Booster);
             naturalShield = new Ability(AbilityType.Shield);
             //upgrades[(int)AbilityType.PermanentWallJump] = true;
-            /*upgrades[(int)AbilityType.WallJump] = true;
+            upgrades[(int)AbilityType.WallJump] = true;
             upgrades[(int)AbilityType.DoubleJump] = true;
             upgrades[(int)AbilityType.Boots] = true;
             upgrades[(int)AbilityType.Laser] = true;
-            upgrades[(int)AbilityType.Blaster] = true;*/
+            upgrades[(int)AbilityType.Blaster] = true;
             upgrades[(int)AbilityType.Empty] = true;
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
@@ -274,7 +279,7 @@ namespace VexedCore
         {
             get
             {
-                return _grounded;
+                return _grounded;                
             }
             set
             {
@@ -543,29 +548,51 @@ namespace VexedCore
             boostTime = maxBoostTime;
         }
 
-        public void Damage(Vector3 projection)
+        public void Damage(Vector3 projection, bool crushing)
         {
+            if (crushing == true)
+            {
+                crushCount += 2;
+                if (crushCount < maxCrushCount)
+                    return;
+            }
             idleTime = 0;
             if (state == State.Death)
                 return;
-            center.velocity += 2*maxHorizSpeed * Vector3.Normalize(projection);
-            if (primaryAbility.type == AbilityType.Shield && primaryAbility.ammo != 0)
+            center.velocity += 1.5f*maxHorizSpeed * Vector3.Normalize(projection);
+            safeLanding = false;
+            if (primaryAbility.type == AbilityType.DoubleJump)
             {
-                primaryAbility.DepleteAmmo(800);
+                primaryAbility.ammo = 0;
             }
-            else if (secondaryAbility.type == AbilityType.Shield && secondaryAbility.ammo != 0)
+            else if (secondaryAbility.type == AbilityType.DoubleJump)
             {
-                secondaryAbility.DepleteAmmo(800);
+                secondaryAbility.ammo = 0;
             }
-            else if (naturalShield.ammo != 0)
+            if (flashTime == 0)
             {
-                naturalShield.DepleteAmmo(800);
-            }
-            else
-            {
-                deathTime = 0;
-                state = State.Death;
-                lastLivingPosition = center.position;
+                if (primaryAbility.type == AbilityType.Shield && primaryAbility.ammo != 0)
+                {
+                    primaryAbility.DepleteAmmo(800);
+                    flashTime = flashMaxTime;
+                }
+                else if (secondaryAbility.type == AbilityType.Shield && secondaryAbility.ammo != 0)
+                {
+                    secondaryAbility.DepleteAmmo(800);
+                    flashTime = flashMaxTime;
+                }
+                else if (naturalShield.ammo != 0)
+                {
+                    naturalShield.DepleteAmmo(800);
+                    flashTime = flashMaxTime;
+                }
+                else
+                {
+                    deathTime = 0;
+                    flashTime = flashMaxTime;
+                    state = State.Death;
+                    lastLivingPosition = center.position;
+                }
             }
         }
 
@@ -577,6 +604,7 @@ namespace VexedCore
                 jumpDestination = center.position;
                 state = State.Spin;
                 spinUp = newUp;
+                boosting = false;
             }
         }
 
@@ -799,6 +827,11 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            crushCount--;
+            if (crushCount < 0)
+                crushCount = 0;
+            flashTime -= gameTime.ElapsedGameTime.Milliseconds;
+            if (flashTime < 0) flashTime = 0;
             wallJumpCooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (wallJumpCooldown < 0) wallJumpCooldown = 0;
             if (leftWall == true || rightWall == true)
@@ -817,8 +850,8 @@ namespace VexedCore
             {
                 float currentSpeed = Vector3.Dot(center.velocity, right);
                 Vector2 controlStick = Controls.LeftStick();
-                if (!(Game1.controller.AButton.Pressed == true ||  Controls.IsRightKeyDown() ||
-                    Controls.IsLeftKeyDown() || Math.Abs(controlStick.X) > .1f))
+                if (!(Game1.controller.JumpButtonPressed() == true ||  Controls.IsRightKeyDown() ||
+                    Controls.IsLeftKeyDown() || Math.Abs(controlStick.X) > .1f || boosting == true))
                 {
                     if (currentSpeed > referenceFrameSpeed)
                     {
@@ -1037,7 +1070,8 @@ namespace VexedCore
                         superJump = false;
                     if (jumpTime < 45 && grounded == false)
                         superJump = false;
-                    if (Game1.controller.AButton.Pressed == false && jumpTime > 45)
+                    
+                    if (Game1.controller.JumpButtonPressed() == false && jumpTime > 45)
                         superJump = false;
                 }
 
@@ -1045,10 +1079,88 @@ namespace VexedCore
                 {
                     dead = true;
                 }
-                if (Game1.controller.AButton.NewPressed && jumpRecovery == 0)
+                
+
+                if ((gamePadState.IsButtonDown(Buttons.Back)))
+                {
+                    Respawn();
+                }
+
+
+                if (boosting == false)
+                    center.velocity -= gravityAcceleration * up;
+                else
+                    center.velocity += boostAcceleration *gameTime.ElapsedGameTime.Milliseconds
+                         / 16f * right * faceDirection;
+
+                targetCameraAngle = rightStick + new Vector2(0,cameraUpTilt);
+
+                EnforceVelocityLimits();
+                jetPackThrust = false;
+                if (Game1.controller.XButton.Pressed)
+                {
+                    Doodad itemStation = null;
+                    bool stationPresent = false;
+                    foreach (Doodad d in currentRoom.doodads)
+                    {
+                        if (d.active && (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.ItemBlock))
+                        {
+                            if (Game1.controller.XButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == true)
+                            {
+                                itemStation = d;
+                            }
+                            stationPresent = true;
+                        }
+                    }
+
+                    if (stationPresent == false)
+                    {
+                        primaryAbility.Do(gameTime);
+                        if (primaryAbility.isJump == false)
+                            Game1.controller.XButton.Invalidate();
+                    }
+                    else if (itemStation != null)
+                    {
+                        AbilityType swapAbilityType = primaryAbility.type;
+                        primaryAbility = new Ability(itemStation.abilityType);
+                        itemStation.abilityType = swapAbilityType;
+                        itemStation.cooldown = itemStation.maxCooldown;
+                    }
+                }
+                if (Game1.controller.YButton.Pressed)
+                {
+                    Doodad itemStation = null;
+                    bool stationPresent = false;
+
+                    foreach (Doodad d in currentRoom.doodads)
+                    {
+                        if (d.active && (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.ItemBlock))
+                        {
+                            if (Game1.controller.YButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == true)
+                            {
+                                itemStation = d;
+                            }
+                            stationPresent = true;
+                        }
+                    }
+                    if (stationPresent == false)
+                    {
+                        secondaryAbility.Do(gameTime);
+                        if(secondaryAbility.isJump == false)
+                            Game1.controller.YButton.Invalidate();
+                    }
+                    else if (itemStation != null)
+                    {
+                        AbilityType swapAbilityType = secondaryAbility.type;
+                        secondaryAbility = new Ability(itemStation.abilityType);
+                        itemStation.abilityType = swapAbilityType;
+                        itemStation.cooldown = itemStation.maxCooldown;
+                    }
+                }
+                if (Game1.controller.JumpButtonNewPressed() && jumpRecovery == 0)
                 {
 
-                    Game1.controller.AButton.Invalidate();
+                    Game1.controller.JumpInvalidate();
                     upMagnitude = Vector3.Dot(up, center.velocity);
                     rightMagnitude = Vector3.Dot(right, center.velocity);
                     if (grounded)
@@ -1066,7 +1178,7 @@ namespace VexedCore
                     {
                         faceDirection = 1;
                         if (upMagnitude < .8f * jumpSpeed)
-                            center.velocity += (.8f*jumpSpeed - upMagnitude) * up;
+                            center.velocity += (.8f * jumpSpeed - upMagnitude) * up;
                         if (rightMagnitude < wallJumpSpeed)
                             center.velocity += (wallJumpSpeed - rightMagnitude) * right;
                         jumpRecovery = jumpRecoveryMax;
@@ -1105,80 +1217,6 @@ namespace VexedCore
                                 secondaryAbility.ammo--;
                             }
                         }
-                    }
-                }
-
-                if ((gamePadState.IsButtonDown(Buttons.Back)))
-                {
-                    Respawn();
-                }
-
-
-                if (boosting == false)
-                    center.velocity -= gravityAcceleration * up;
-                else
-                    center.velocity += boostAcceleration * right * faceDirection;
-
-                targetCameraAngle = rightStick + new Vector2(0,cameraUpTilt);
-
-                EnforceVelocityLimits();
-                jetPackThrust = false;
-                if (Game1.controller.XButton.Pressed)
-                {
-                    Doodad itemStation = null;
-                    bool stationPresent = false;
-                    foreach (Doodad d in currentRoom.doodads)
-                    {
-                        if (d.active && (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.ItemBlock))
-                        {
-                            if (Game1.controller.XButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == true)
-                            {
-                                itemStation = d;
-                            }
-                            stationPresent = true;
-                        }
-                    }
-
-                    if (stationPresent == false)
-                    {
-                        primaryAbility.Do(gameTime);
-                        Game1.controller.XButton.Invalidate();
-                    }
-                    else if (itemStation != null)
-                    {
-                        AbilityType swapAbilityType = primaryAbility.type;
-                        primaryAbility = new Ability(itemStation.abilityType);
-                        itemStation.abilityType = swapAbilityType;
-                        itemStation.cooldown = itemStation.maxCooldown;
-                    }
-                }
-                if (Game1.controller.YButton.Pressed)
-                {
-                    Doodad itemStation = null;
-                    bool stationPresent = false;
-
-                    foreach (Doodad d in currentRoom.doodads)
-                    {
-                        if (d.active && (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.ItemBlock))
-                        {
-                            if (Game1.controller.YButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == true)
-                            {
-                                itemStation = d;
-                            }
-                            stationPresent = true;
-                        }
-                    }
-                    if (stationPresent == false)
-                    {
-                        secondaryAbility.Do(gameTime);
-                        Game1.controller.YButton.Invalidate();
-                    }
-                    else if (itemStation != null)
-                    {
-                        AbilityType swapAbilityType = secondaryAbility.type;
-                        secondaryAbility = new Ability(itemStation.abilityType);
-                        itemStation.abilityType = swapAbilityType;
-                        itemStation.cooldown = itemStation.maxCooldown;
                     }
                 }
                 if (Game1.controller.BButton.Pressed)
@@ -1461,6 +1499,8 @@ namespace VexedCore
                     }
                 }
             }
+            if(safeLanding == false)
+                safeLanding = true;
         }
 
         public List<Vector3> GetCollisionRect()
@@ -1553,10 +1593,12 @@ namespace VexedCore
                     v.Update(currentRoom, 1);
                 }
             }
-            
 
 
-            currentRoom.AddTextureToTriangleList(rectVertexList, Color.White, .3f, textureTriangleList, Player.texCoordList[currentTextureIndex], true);
+            Color playerColor = Color.White;
+            playerColor.G = (Byte)(255 - (255 * flashTime *4/ flashMaxTime));
+            playerColor.B = (Byte)(255 - (255 * flashTime *4/ flashMaxTime));
+            currentRoom.AddTextureToTriangleList(rectVertexList, playerColor, .3f, textureTriangleList, Player.texCoordList[currentTextureIndex], true);
 
 
             VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();

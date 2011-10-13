@@ -22,6 +22,8 @@ namespace VexedCore
         SoundEffects,
         Transparency,
         DrawDistance,
+        FullScreen,
+        Resolution,
         Quit
     }
 
@@ -83,23 +85,27 @@ namespace VexedCore
 
         public static void Draw()
         {
+            int optionBaseX = Game1.titleSafeRect.Center.X - 100;
+            int optionBaseY = Game1.titleSafeRect.Center.Y - 80;
             if (paused == true)
             {
                 if (options == null)
                 {
                     options = new List<MenuOption>();
-                    options.Add(new MenuOption("CONTINUE", 300, 220, MenuItems.Continue));
+                    options.Add(new MenuOption("CONTINUE", optionBaseX, optionBaseY+0, MenuItems.Continue));
 
-                    options.Add(new MenuOption("RESTART ROOM", 300, 260, MenuItems.RestartRoom));
-                    options.Add(new MenuOption("LOAD LAST SAVE",300, 280, MenuItems.LoadLastSave));
-                    options.Add(new MenuOption("RETURN TO MAIN MENU",300, 300, MenuItems.MainMenu));
+                    options.Add(new MenuOption("RESTART ROOM", optionBaseX, optionBaseY+40, MenuItems.RestartRoom));
+                    options.Add(new MenuOption("LOAD LAST SAVE", optionBaseX, optionBaseY+60, MenuItems.LoadLastSave));
+                    options.Add(new MenuOption("RETURN TO MAIN MENU", optionBaseX, optionBaseY+80, MenuItems.MainMenu));
 
-                    options.Add(new MenuOption("MUSIC: ",300, 340, MenuItems.Music));
-                    options.Add(new MenuOption("SOUND EFFECTS: ",300, 360, MenuItems.SoundEffects));
-                    options.Add(new MenuOption("TRANSPARENCY: ",300, 380, MenuItems.Transparency));
-                    options.Add(new MenuOption("DRAW DISTANCE: ",300, 400, MenuItems.DrawDistance));
+                    options.Add(new MenuOption("MUSIC: ", optionBaseX, optionBaseY+120, MenuItems.Music));
+                    options.Add(new MenuOption("SOUND EFFECTS: ", optionBaseX, optionBaseY+140, MenuItems.SoundEffects));
+                    options.Add(new MenuOption("TRANSPARENCY: ", optionBaseX, optionBaseY+160, MenuItems.Transparency));
+                    options.Add(new MenuOption("DRAW DISTANCE: ", optionBaseX, optionBaseY + 180, MenuItems.DrawDistance));
+                    options.Add(new MenuOption("FULL SCREEN: ", optionBaseX, optionBaseY + 200, MenuItems.FullScreen));
+                    options.Add(new MenuOption("RESOLUTION: ", optionBaseX, optionBaseY + 220, MenuItems.Resolution));
 
-                    options.Add(new MenuOption("QUIT", 300, 440, MenuItems.Quit));
+                    options.Add(new MenuOption("QUIT", optionBaseX, optionBaseY+260, MenuItems.Quit));
                 
                 }
                 mousePos.X = Mouse.GetState().X-32;
@@ -109,7 +115,7 @@ namespace VexedCore
 
                 Engine.spriteBatch.Draw(pauseBackground, new Rectangle(Game1.graphicsDevice.Viewport.X, Game1.graphicsDevice.Viewport.Y, Game1.graphicsDevice.Viewport.Width, Game1.graphicsDevice.Viewport.Height), transparentBlack);
                 Engine.spriteBatch.Draw(mouseCursor, mousePos, Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "PAUSED", new Vector2(280, 180), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "PAUSED", new Vector2(optionBaseX-20, optionBaseY - 40), Color.YellowGreen);
 
                 for(int i = 0; i < options.Count; i++)
                 {
@@ -144,6 +150,20 @@ namespace VexedCore
                         else
                             extraData = "Off";
                     }
+                    if (options[i].type == MenuItems.FullScreen)
+                    {
+                        if (Engine.fullScreen == true)
+                            extraData = "On";
+                        else
+                            extraData = "Off";
+                    }
+                    if (options[i].type == MenuItems.Resolution)
+                    {
+                        if(Engine.res == ResolutionSettings.R_800x600)
+                            extraData = "800x600";
+                        if (Engine.res == ResolutionSettings.R_1920x1080)
+                            extraData = "1920x1080";
+                    }
                     if (options[i].type == MenuItems.DrawDistance)
                     {
                         extraData = Engine.drawDistance + "";
@@ -169,7 +189,8 @@ namespace VexedCore
 
         public static void Update(GameTime gameTime)
         {
-            
+            int optionBaseX = Game1.titleSafeRect.Center.X - 100;
+            int optionBaseY = Game1.titleSafeRect.Center.Y - 80;
             GamePadState currentGamePadState = GamePad.GetState(Game1.activePlayer);
             KeyboardState currentKeyboardState = Keyboard.GetState();
             
@@ -178,7 +199,7 @@ namespace VexedCore
                 cooldown = 0;
 
             mouseSelect = false;
-            if (mousePos.X > 280 && mousePos.X < 450 && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (mousePos.X > optionBaseX - 20 && mousePos.X < optionBaseX + 250 && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 for (int i = 0; i < options.Count; i++)
                 {
@@ -204,29 +225,30 @@ namespace VexedCore
                 if (GamePad.GetState(Game1.activePlayer).ThumbSticks.Left.Y < -.5f || currentKeyboardState.IsKeyDown(Keys.Down) || currentKeyboardState.IsKeyDown(Keys.S))
                 {
                     selectIndex++;
-                    selectIndex %= 9;
+                    selectIndex %= 11;
                     cooldown = 2*maxCooldown;
                 }
                 if (GamePad.GetState(Game1.activePlayer).ThumbSticks.Left.Y > .5f || currentKeyboardState.IsKeyDown(Keys.Up) || currentKeyboardState.IsKeyDown(Keys.W))
                 {
                     selectIndex--;
-                    selectIndex += 9;
-                    selectIndex %= 9;
+                    selectIndex += 11;
+                    selectIndex %= 11;
                     cooldown = 2*maxCooldown;
                 }
                 
                 if (mouseSelect == true || (currentGamePadState.IsButtonDown(Buttons.A) == false && prevGamePadState.IsButtonDown(Buttons.A) == true) || currentKeyboardState.IsKeyDown(Keys.Space) || currentKeyboardState.IsKeyDown(Keys.Enter))
                 {
-                    if (selectIndex == 0)
+                    MenuItems result = (MenuItems)selectIndex;
+                    if (result == MenuItems.Continue)
                         paused = false;
-                    if (selectIndex == 1)
+                    if (result == MenuItems.RestartRoom)
                     {
                         Engine.player.Respawn();
                         Physics.refresh = true;
                         Engine.reDraw = true;
                         paused = false;
                     }
-                    if (selectIndex == 2)
+                    if (result == MenuItems.LoadLastSave)
                     {
                         if (Engine.saveFileIndex != 0)
                         {
@@ -236,14 +258,16 @@ namespace VexedCore
                             paused = false;
                         }                        
                     }
-                    if (selectIndex == 3)
+                    if (result == MenuItems.MainMenu)
                     {
                         LevelLoader.Load("LevelData\\menu");
+                        WorldMap.selectedRoomIndex = 0;
+                        WorldMap.selectedSectorIndex = 0;
                         Physics.refresh = true;
                         Engine.reDraw = true;
                         paused = false;
                     }
-                    if (selectIndex == 4)
+                    if (result == MenuItems.Music)
                     {
                         Engine.musicEnabled = !Engine.musicEnabled;
                         if (Engine.musicEnabled)
@@ -252,26 +276,44 @@ namespace VexedCore
                             MusicControl.Pause();
                         cooldown = maxCooldown;
                     }
-                    if (selectIndex == 5)
+                    if (result == MenuItems.SoundEffects)
                     {
                         Engine.soundEffectsEnabled = !Engine.soundEffectsEnabled;
                         cooldown = maxCooldown;
                     }
-                    if (selectIndex == 6)
+                    if (result == MenuItems.Transparency)
                     {
                         Engine.transparencyEnabled = !Engine.transparencyEnabled;
                         Engine.reDraw = true;
                         cooldown = maxCooldown;
                     }
-                    if (selectIndex == 7)
+                    if (result == MenuItems.DrawDistance)
                     {
                         Engine.drawDistance += 1;
                         Engine.reDraw = true;
+                        cooldown = maxCooldown;
                     }
-                    if (selectIndex == 8)
+                    if (result == MenuItems.Quit)
                     {
                         Engine.quit = true;
                         paused = false;
+                    }
+                    if (result == MenuItems.FullScreen)
+                    {
+                        Engine.fullScreen = !Engine.fullScreen;
+                        Game1.SetGraphicsSettings();
+                        cooldown = maxCooldown;
+
+                    }
+                    if (result == MenuItems.Resolution)
+                    {
+                        if (Engine.res == ResolutionSettings.R_800x600)
+                            Engine.res = ResolutionSettings.R_1920x1080;
+                        else
+                            Engine.res = ResolutionSettings.R_800x600;
+                        Game1.SetGraphicsSettings();
+                        options = null;
+                        cooldown = maxCooldown;
                     }
                 }
             }

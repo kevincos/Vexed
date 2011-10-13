@@ -133,7 +133,7 @@ namespace WinFormsGraphicsDevice
             {
                 // pc = .03 -> .001
                 // laptop = .15f -> .005
-                animateSpeed = .001f + (.005f* this.speedSlider.Value / this.speedSlider.Maximum);
+                animateSpeed = .01f + (.05f* this.speedSlider.Value / this.speedSlider.Maximum);
             }
         }
 
