@@ -47,7 +47,8 @@ namespace VexedCore
         [XmlIgnore]public Monster srcMonster = null;
         public String srcMonsterId;
         public Vector3 missileTarget = Vector3.Zero;
-
+        public float missileDistance = 10000f;
+        
         public bool stopped = false;
         public bool exploding = false;
         public int explodeTime = 0;
@@ -132,8 +133,8 @@ namespace VexedCore
                     return 300;
                 else if (type == ProjectileType.Plasma)
                     return 1800;
-                else if (type == ProjectileType.Missile)
-                    return 10000;
+                else if (type == ProjectileType.Missile)                
+                    return 8000;
                 else if (type == ProjectileType.Laser)
                     return 500;
                 else if (type == ProjectileType.Bomb)
@@ -143,7 +144,7 @@ namespace VexedCore
             }
         }
 
-        public float velocity
+        public float maxVelocity
         {
             get
             {
@@ -152,13 +153,31 @@ namespace VexedCore
                 else if (type == ProjectileType.Player)
                     return .025f;
                 else if (type == ProjectileType.Missile)
+                {
+                    if (srcMonster == null)
+                        return .02f;
                     return .004f;
+                }
                 else if (type == ProjectileType.Bomb)
                     return .008f;
                 else if (type == ProjectileType.Laser)
                     return .025f;
                 else
                     return 0;
+            }
+        }
+
+        public float initVelocity
+        {
+            get
+            {
+                if (type == ProjectileType.Missile)
+                {
+                    if (srcMonster == null)
+                        return .005f;
+                }
+                return maxVelocity;
+                
             }
         }
 
@@ -412,7 +431,7 @@ namespace VexedCore
             this.position = new Vertex(position - Engine.player.platformVelocity, normal, Vector3.Zero, direction);
             Vector3 extraVelocity = direction;
             extraVelocity.Normalize();
-            this.position.velocity += extraVelocity * this.velocity;
+            this.position.velocity += extraVelocity * this.initVelocity;
             this.position.velocity += Vector3.Dot(velocity, direction) * direction;
             this.position.velocity += Engine.player.platformVelocity;
             
@@ -446,32 +465,44 @@ namespace VexedCore
             if (exploding == false && type == ProjectileType.Bomb && stopped == false)
             {
                 position.velocity+=Monster.AdjustVector(-1.5f * acceleration * Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false);
-                if (position.velocity.Length() > velocity * 1.5f)
+                if (position.velocity.Length() > maxVelocity * 1.5f)
                 {
                     position.velocity.Normalize();
-                    position.velocity *= velocity * 1.5f;
+                    position.velocity *= maxVelocity * 1.5f;
                 }
             }
 
             if (missileTarget != Vector3.Zero)
             {
-                position.velocity += .06f * this.velocity * missileTarget;
-                if (position.velocity.Length() > this.velocity)
+                position.direction += missileTarget / missileTarget.Length();
+                position.direction.Normalize();
+            }
+            if (type == ProjectileType.Missile)
+            {
+                if (position.velocity.Length() > this.maxVelocity)
                 {
                     position.velocity.Normalize();
-                    position.velocity *= this.velocity;
+                    position.velocity *= this.maxVelocity;
                 }
 
-                position.direction = missileTarget / missileTarget.Length();
+                position.velocity += position.direction * .000005f * gameTime.ElapsedGameTime.Milliseconds;
             }
             position.Update(Engine.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds);
         }
 
         public void SetTarget(Vector3 targetPos)
         {
-            missileTarget = targetPos - position.position;
-            missileTarget = missileTarget - Vector3.Dot(missileTarget, position.normal) * position.normal;
-            missileTarget.Normalize();
+            if (lifeTime > 500)
+            {
+                Vector3 newMissileTarget = targetPos - position.position;
+                if (newMissileTarget.Length() < missileDistance)
+                {
+                    missileDistance = newMissileTarget.Length();
+                    missileTarget = newMissileTarget;
+                    missileTarget = missileTarget - Vector3.Dot(missileTarget, position.normal) * position.normal;
+                    missileTarget.Normalize();
+                }
+            }
         }
 
         public void Draw(Room r)

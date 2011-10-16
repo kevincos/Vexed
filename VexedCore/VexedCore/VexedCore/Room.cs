@@ -1651,7 +1651,7 @@ namespace VexedCore
             foreach (Doodad d in doodads)
             {
 
-                if ((d.type == VexedLib.DoodadType.JumpStation || d.type == VexedLib.DoodadType.JumpPad) && d.targetRoom != null)
+                if ((d.type == VexedLib.DoodadType.JumpStation || d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.BridgeGate) && d.targetRoom != null)
                 {
                     Vector3 startLowerLeft = d.position.position + d.left + d.down;
                     Vector3 startLowerRight = d.position.position + d.right + d.down;
@@ -1662,6 +1662,22 @@ namespace VexedCore
                     Vector3 endLowerRight = d.position.position + d.right + d.down + d.position.normal * distanceToEnd;
                     Vector3 endUpperLeft = d.position.position + d.left + d.up + d.position.normal * distanceToEnd;
                     Vector3 endUpperRight = d.position.position + d.right + d.up + d.position.normal * distanceToEnd;
+
+                    if (d.type == VexedLib.DoodadType.BridgeGate)
+                    {
+                        Vector3 bridgeDirection = d.targetDoodad.position.position - d.position.position;
+                        startLowerLeft = d.position.position + d.left - d.position.normal;
+                        startLowerRight = d.position.position + d.right - d.position.normal;
+                        startUpperLeft = d.position.position + d.left + d.position.normal;
+                        startUpperRight = d.position.position + d.right + d.position.normal;
+
+                        distanceToEnd = (d.position.position - d.targetDoodad.position.position).Length() / 2;
+
+                        endLowerLeft = d.position.position + d.left - d.position.normal + d.position.direction * distanceToEnd;
+                        endLowerRight = d.position.position + d.right - d.position.normal + d.position.direction * distanceToEnd;
+                        endUpperLeft = d.position.position + d.left + d.position.normal + d.position.direction * distanceToEnd;
+                        endUpperRight = d.position.position + d.right + d.position.normal + d.position.direction * distanceToEnd;
+                    }
 
                     translucentTriangleList.Add(new VertexPositionColorNormalTexture(startLowerLeft, shellColor, d.left,new Vector2(.5f, .5f)));
                     translucentTriangleList.Add(new VertexPositionColorNormalTexture(startUpperLeft, shellColor, d.left, new Vector2(.5f, .5f)));

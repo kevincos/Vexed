@@ -632,7 +632,8 @@ namespace VexedCore
 
         public void ApplyDamage(bool armor, ProjectileType gunType)
         {
-            
+            if (flashCooldown != 0)
+                return;
             if (moveType == VexedLib.MovementType.RockBoss && rockBoss.rockHits != 0)
             {
                 armor = rockBoss.rockHits == 0;

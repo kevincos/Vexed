@@ -88,8 +88,8 @@ namespace VexedLib
     public class Doodad
     {
         public int id;
-        public String name;
-        
+        //public String name;
+        public String _name;
         public Vector3 position;
         public Vector3 up;
         public int activationCost;
@@ -103,10 +103,10 @@ namespace VexedLib
 
         public Doodad()
         {
-            name = "Doodad";
             id = IDControl.GetID();
             behaviors = new List<Behavior>();            
             type = DoodadType.PowerOrb;
+            _name = "Doodad_" + id;
         }
 
         public void Init()
@@ -116,7 +116,6 @@ namespace VexedLib
 
         public Doodad(Doodad d)
         {
-            name = d.name;
             id = d.id;
             position = d.position;
             up = d.up;
@@ -134,11 +133,17 @@ namespace VexedLib
             }
         }
 
+        public void Update()
+        {
+            //_name = name + "_" + id;
+        }
+
         public String IDString
         {
             get
             {
-                return name + "_" + id;
+                return _name;
+                //return name + "_" + id;
             }
         }
 

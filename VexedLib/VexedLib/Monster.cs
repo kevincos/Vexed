@@ -88,7 +88,8 @@ namespace VexedLib
     public class Monster
     {
         public int id;
-        public String name;
+        //public String name;
+        public String _name;
         public Vector3 position;
         public Vector3 up;
         public bool fixedPath;
@@ -104,13 +105,12 @@ namespace VexedLib
 
         public Monster()
         {
-            name = "Monster";
-            id = IDControl.GetID();            
+            id = IDControl.GetID();
+            _name = "Monster_" + id;
         }
 
         public Monster(Monster m)
         {
-            name = m.name;
             id = m.id;
             position = m.position;
             up = m.up;
@@ -122,11 +122,17 @@ namespace VexedLib
             behavior = m.behavior;
         }
 
+        public void Update()
+        {
+            //_name = name + "_" + id;
+        }
+
         public String IDString
         {
             get
             {
-                return name + "_" + id;
+                return _name;
+                //return name + "_" + id;
             }
         }
 

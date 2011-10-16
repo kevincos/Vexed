@@ -28,14 +28,15 @@ namespace VexedLib
     public class Sector
     {
         public int id;
-        public String name;
+        //public String name;
+        public String _name;
         public List<Room> rooms;
         public Vector3 center;
 
         public Sector()
         {
-            name = "Sector";
             id = IDControl.GetID();
+            _name = "Sector_" + id;
             rooms = new List<Room>();
         }
 
@@ -51,7 +52,6 @@ namespace VexedLib
 
         public Sector(Sector s)
         {
-            name = s.name;
             id = s.id;
             center = s.center;
             rooms = new List<Room>();
@@ -61,11 +61,17 @@ namespace VexedLib
             }
         }
 
+        public void Update()
+        {
+            //_name = name + "_" + id;
+        }
+
         public String IDString
         {
             get
             {
-                return name + "_" + id;
+                return _name;
+                //return name + "_" + id;
             }
         }
 
@@ -73,7 +79,7 @@ namespace VexedLib
         {
             foreach (Room r in rooms)
             {
-                if (idString == (r.name + "_" + r.id))
+                if (idString == (r.IDString))
                 {
                     return r;
                 }

@@ -698,6 +698,24 @@
       <Time>2011-09-29T17:03:36.0657945-07:00</Time>
     </Item>
     <Item>
+      <Source>mouse.png</Source>
+      <Name>mouse</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\mouse.xnb</Output>
+      <Time>2011-10-06T12:43:11.6051645-07:00</Time>
+    </Item>
+    <Item>
+      <Source>screenchangearrow.png</Source>
+      <Name>screenchangearrow</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\screenchangearrow.xnb</Output>
+      <Time>2011-10-06T16:44:02.4063292-07:00</Time>
+    </Item>
+    <Item>
       <Source>Sounds\beep.wav</Source>
       <Name>Sounds\beep</Name>
       <Importer>WavImporter</Importer>
@@ -761,24 +779,6 @@
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_menu.xnb</Output>
       <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_menu.wma</Extra>
       <Time>2011-05-31T12:30:19.3825414-07:00</Time>
-    </Item>
-    <Item>
-      <Source>mouse.png</Source>
-      <Name>mouse</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\mouse.xnb</Output>
-      <Time>2011-10-06T12:43:11.6051645-07:00</Time>
-    </Item>
-    <Item>
-      <Source>screenchangearrow.png</Source>
-      <Name>screenchangearrow</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\screenchangearrow.xnb</Output>
-      <Time>2011-10-06T16:44:02.4063292-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

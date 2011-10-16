@@ -9,7 +9,8 @@ namespace VexedLib
     public class Behavior
     {
         public int id;
-        public String name;
+        //public String name;
+        public String _name;
         public int offset;
         public int duration;
         public int period;
@@ -21,14 +22,13 @@ namespace VexedLib
 
         public Behavior()
         {
-            name = "Behavior";
             id = IDControl.GetID();
+            _name = "Behavior_"+id;
         }
 
         public Behavior(Behavior b)
         {
             id = b.id;
-            name = b.name;
             offset = b.offset;
             duration = b.duration;
             period = b.period;
@@ -39,11 +39,17 @@ namespace VexedLib
             nextBehavior = b.nextBehavior;
         }
 
+        public void Update()
+        {
+            
+        }
+
         public String IDString
         {
             get
             {
-                return name + "_" + id;
+                return _name;
+                //return name + "_" + id;
             }
         }
     }

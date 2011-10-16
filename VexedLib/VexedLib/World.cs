@@ -30,7 +30,7 @@ namespace VexedLib
         {
             foreach (Sector s in sectors)
             {
-                if (idString == (s.name + "_" + s.id))
+                if (idString == (s.IDString))
                 {
                     return s;
                 }

@@ -117,7 +117,7 @@ namespace VexedCore
                     return 20f;
                 if (gunType == VexedLib.GunType.Beam)
                     return 20f;
-                return 15f;
+                return 30f;
             }
         }
         
@@ -158,7 +158,7 @@ namespace VexedCore
                     currentAngle -= (float)Math.PI * 2;
                 if (currentAngle < 0)
                     currentAngle += (float)Math.PI * 2;
-                if (!(srcMonster.moveType == VexedLib.MovementType.Hover || srcMonster.moveType == VexedLib.MovementType.RockBoss || srcMonster.moveType == VexedLib.MovementType.SnakeBoss || srcMonster.moveType == VexedLib.MovementType.BattleBoss))
+                if (!(srcMonster.moveType == VexedLib.MovementType.Hover || srcMonster.moveType == VexedLib.MovementType.ArmorBoss || srcMonster.moveType == VexedLib.MovementType.RockBoss || srcMonster.moveType == VexedLib.MovementType.SnakeBoss || srcMonster.moveType == VexedLib.MovementType.BattleBoss))
                 {
                     if (currentAngle > Math.PI / 2 && currentAngle < Math.PI)
                         currentAngle = (float)(Math.PI / 2 - .05f);

@@ -312,181 +312,182 @@ namespace VexedCore
             #region player-block collision
 
             
-
-            for (int attempt = 0; attempt < 2; attempt++)
+            if(p.state != State.Phase && p.state != State.PhaseFail && p.state != State.Tunnel)
             {
-                playerVertexList = p.GetCollisionRect();
-                
-                List<Vector3> projectionList = new List<Vector3>();
-                List<Vector3> relVelList = new List<Vector3>();
-                List<EdgeProperties> edgePropertiesList = new List<EdgeProperties>();
-
-                foreach (Block baseBlock in r.blocks)
+                for (int attempt = 0; attempt < 2; attempt++)
                 {
-                    foreach (Block b in baseBlock.unfoldedBlocks)
-                    {
-                        if (p.CollisionFirstPass(b))
-                            continue;
+                    playerVertexList = p.GetCollisionRect();
+                
+                    List<Vector3> projectionList = new List<Vector3>();
+                    List<Vector3> relVelList = new List<Vector3>();
+                    List<EdgeProperties> edgePropertiesList = new List<EdgeProperties>();
 
-                        List<Vector3> blockVertexList = b.GetCollisionRect();
-                        Vector3 projection = Collide(playerVertexList, blockVertexList, p.center.normal);
-                        // If a collision is found, save the necessary data and continue.                        
-                        if (projection.Length() > 0f)
+                    foreach (Block baseBlock in r.blocks)
+                    {
+                        foreach (Block b in baseBlock.unfoldedBlocks)
                         {
-                            projectionList.Add(projection);
-                            relVelList.Add(b.GetVelocity());
-                            EdgeProperties eTemp = b.GetProperties(projection);
-                            edgePropertiesList.Add(b.GetProperties(projection));
+                            if (p.CollisionFirstPass(b))
+                                continue;
+
+                            List<Vector3> blockVertexList = b.GetCollisionRect();
+                            Vector3 projection = Collide(playerVertexList, blockVertexList, p.center.normal);
+                            // If a collision is found, save the necessary data and continue.                        
+                            if (projection.Length() > 0f)
+                            {
+                                projectionList.Add(projection);
+                                relVelList.Add(b.GetVelocity());
+                                EdgeProperties eTemp = b.GetProperties(projection);
+                                edgePropertiesList.Add(b.GetProperties(projection));
+                            }
+                        }
+                    }
+                    foreach (Doodad d in r.doodads)
+                    {
+                        if (p.CollisionFirstPass(d))
+                            continue;
+                        if (d.type == VexedLib.DoodadType.BridgeGate)
+                        {
+                            List<Vector3> doodadVertexList = d.GetCollisionRect();
+                            Vector3 projection = Collide(playerVertexList, doodadVertexList, p.center.normal);
+
+                            d.ActivateDoodad(r, projection.Length() > 0f);                        
+                        }
+                        if (d.hasCollisionRect && d.type != VexedLib.DoodadType.PowerPlug)
+                        {
+                            List<Vector3> doodadVertexList = d.GetCollisionRect();
+                            Vector3 projection = Collide(playerVertexList, doodadVertexList, p.center.normal);
+
+
+                            if (projection.Length() > 0f)
+                            {
+                                projectionList.Add(projection);
+                                relVelList.Add(d.position.velocity);
+                                edgePropertiesList.Add(new EdgeProperties());
+                            }
+                        }                    
+                    }
+                    foreach (Monster m in r.monsters)
+                    {
+                        if (p.CollisionFirstPass(m))
+                            continue;
+                        if (m.dead == true)
+                            continue;
+                        if (m.moveType == VexedLib.MovementType.SnakeBoss)
+                        {
+                            List<Vector3> monsterVertexList = m.GetCollisionRect();
+                            Vector3 projection = Collide(playerVertexList, monsterVertexList, Engine.player.center.normal);
+                            if (projection.Length() > 0f)
+                            {
+                                projectionList.Add(projection);
+                                relVelList.Add(m.position.velocity);
+                                edgePropertiesList.Add(new EdgeProperties());
+                            }
+                        }
+                    }
+
+                    // Compute the most powerful collision and resolve it.
+                    CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, p.center.velocity, p.HasTraction());
+
+                    if (result.properties != null && result.properties.type == VexedLib.EdgeType.Ice && Vector3.Dot(result.projection, p.center.direction) > 0)
+                        p.sliding = true;
+                    else
+                        p.sliding = false;
+                    p.center.velocity += result.velocityAdjustment;
+                    frictionAdjustment += result.frictionAdjustment;
+                    if(result.projection != Vector3.Zero)
+                    {
+                        p.center.position += result.projection;
+
+                        if (result.properties.type == VexedLib.EdgeType.Spikes || (result.properties.type == VexedLib.EdgeType.Electric && result.properties.primaryValue > 0)
+                            || (result.properties.type == VexedLib.EdgeType.Fire && result.properties.primaryValue > 0))
+                        {
+                            p.Damage(result.projection, false);
+                        }
+                        if (result.projection.Length() > p.playerHalfWidth)
+                        {
+                            if (p.boosting == true)
+                                p.boosting = false;
+                            else
+                                p.Damage(result.projection,true);
+                        }
+                    }
+                    else
+                        break;
+                }
+
+
+                List<Vector3> pVertexList = p.GetCollisionRect();
+                foreach (Projectile s in r.projectiles)
+                {
+                    if (s.active == true && s.exploding == false)
+                    {
+                        if (s.srcMonster == null && (s.type == ProjectileType.Missile || s.type == ProjectileType.Bomb))
+                            continue;
+                        s.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+                        if (p.CollisionFirstPass(s) == false)
+                        {
+                            List<Vector3> projectileVertexList = s.GetCollisionRect();
+                            Vector3 projection = Collide(pVertexList, projectileVertexList, Engine.player.center.normal);
+                            if (projection != Vector3.Zero)
+                            {
+                                p.Damage(projection,false);
+                                s.exploding = true;
+                                s.position.velocity = Vector3.Zero;
+                            }
+                        }
+                    }
+                }
+                foreach (Monster m in r.monsters)
+                {
+                    if (m.dead == true)
+                        continue;
+                    m.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+                    if (p.CollisionFirstPass(m) == false)
+                    {
+                        if (m.moveType == VexedLib.MovementType.ChaseBoss)
+                        {
+                            List<Vector3> monsterVertexList = m.GetCollisionRect();
+                            Vector3 projection = Collide(playerVertexList, monsterVertexList, Engine.player.center.normal);
+                            if (projection.Length() > 0f)
+                            {
+                                if (m.position.velocity != Vector3.Zero)
+                                    p.Damage(m.position.velocity,true);
+                                else
+                                    p.Damage(projection,false);
+                            }
+                        }
+                        else if (m.moveType != VexedLib.MovementType.SnakeBoss)
+                        {
+                            Vector3 distance = (p.center.position - m.unfoldedPosition.position);
+                            if (distance.Length() < (p.playerHalfHeight + m.halfHeight))
+                            {
+                                Vector3 projection = Vector3.Normalize(distance) * ((p.playerHalfHeight + m.halfHeight) - distance.Length());
+                                p.Damage(projection, false);
+                            }
                         }
                     }
                 }
                 foreach (Doodad d in r.doodads)
                 {
-                    if (p.CollisionFirstPass(d))
-                        continue;
-                    if (d.type == VexedLib.DoodadType.BridgeGate)
+                    if (d.type == VexedLib.DoodadType.Beam)
                     {
-                        List<Vector3> doodadVertexList = d.GetCollisionRect();
-                        Vector3 projection = Collide(playerVertexList, doodadVertexList, p.center.normal);
-
-                        d.ActivateDoodad(r, projection.Length() > 0f);                        
-                    }
-                    if (d.hasCollisionRect && d.type != VexedLib.DoodadType.PowerPlug)
-                    {
-                        List<Vector3> doodadVertexList = d.GetCollisionRect();
-                        Vector3 projection = Collide(playerVertexList, doodadVertexList, p.center.normal);
-
-
-                        if (projection.Length() > 0f)
+                        d.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
+                        if (p.CollisionFirstPass(d) == false)
                         {
-                            projectionList.Add(projection);
-                            relVelList.Add(d.position.velocity);
-                            edgePropertiesList.Add(new EdgeProperties());
-                        }
-                    }                    
-                }
-                foreach (Monster m in r.monsters)
-                {
-                    if (p.CollisionFirstPass(m))
-                        continue;
-                    if (m.dead == true)
-                        continue;
-                    if (m.moveType == VexedLib.MovementType.SnakeBoss)
-                    {
-                        List<Vector3> monsterVertexList = m.GetCollisionRect();
-                        Vector3 projection = Collide(playerVertexList, monsterVertexList, Engine.player.center.normal);
-                        if (projection.Length() > 0f)
-                        {
-                            projectionList.Add(projection);
-                            relVelList.Add(m.position.velocity);
-                            edgePropertiesList.Add(new EdgeProperties());
-                        }
-                    }
-                }
-
-                // Compute the most powerful collision and resolve it.
-                CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, p.center.velocity, p.HasTraction());
-
-                if (result.properties != null && result.properties.type == VexedLib.EdgeType.Ice && Vector3.Dot(result.projection, p.center.direction) > 0)
-                    p.sliding = true;
-                else
-                    p.sliding = false;
-                p.center.velocity += result.velocityAdjustment;
-                frictionAdjustment += result.frictionAdjustment;
-                if(result.projection != Vector3.Zero)
-                {
-                    p.center.position += result.projection;
-
-                    if (result.properties.type == VexedLib.EdgeType.Spikes || (result.properties.type == VexedLib.EdgeType.Electric && result.properties.primaryValue > 0)
-                        || (result.properties.type == VexedLib.EdgeType.Fire && result.properties.primaryValue > 0))
-                    {
-                        p.Damage(result.projection, false);
-                    }
-                    if (result.projection.Length() > p.playerHalfWidth)
-                    {
-                        if (p.boosting == true)
-                            p.boosting = false;
-                        else
-                            p.Damage(result.projection,true);
-                    }
-                }
-                else
-                    break;
-            }
-
-
-            List<Vector3> pVertexList = p.GetCollisionRect();
-            foreach (Projectile s in r.projectiles)
-            {
-                if (s.active == true && s.exploding == false)
-                {
-                    if (s.srcMonster == null && (s.type == ProjectileType.Missile || s.type == ProjectileType.Bomb))
-                        continue;
-                    s.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
-                    if (p.CollisionFirstPass(s) == false)
-                    {
-                        List<Vector3> projectileVertexList = s.GetCollisionRect();
-                        Vector3 projection = Collide(pVertexList, projectileVertexList, Engine.player.center.normal);
-                        if (projection != Vector3.Zero)
-                        {
-                            p.Damage(projection,false);
-                            s.exploding = true;
-                            s.position.velocity = Vector3.Zero;
-                        }
-                    }
-                }
-            }
-            foreach (Monster m in r.monsters)
-            {
-                if (m.dead == true)
-                    continue;
-                m.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
-                if (p.CollisionFirstPass(m) == false)
-                {
-                    if (m.moveType == VexedLib.MovementType.ChaseBoss)
-                    {
-                        List<Vector3> monsterVertexList = m.GetCollisionRect();
-                        Vector3 projection = Collide(playerVertexList, monsterVertexList, Engine.player.center.normal);
-                        if (projection.Length() > 0f)
-                        {
-                            if (m.position.velocity != Vector3.Zero)
-                                p.Damage(m.position.velocity,true);
-                            else
+                            List<Vector3> doodadVertexList = d.GetCollisionRect();
+                            Vector3 projection = Collide(pVertexList, doodadVertexList, Engine.player.center.normal);
+                            if (projection != Vector3.Zero)
+                            {
                                 p.Damage(projection,false);
+                            }
                         }
-                    }
-                    else if (m.moveType != VexedLib.MovementType.SnakeBoss)
-                    {
-                        Vector3 distance = (p.center.position - m.unfoldedPosition.position);
-                        if (distance.Length() < (p.playerHalfHeight + m.halfHeight))
-                        {
-                            Vector3 projection = Vector3.Normalize(distance) * ((p.playerHalfHeight + m.halfHeight) - distance.Length());
-                            p.Damage(projection, true);
-                        }
-                    }
+                    }                
                 }
-            }
-            foreach (Doodad d in r.doodads)
-            {
-                if (d.type == VexedLib.DoodadType.Beam)
-                {
-                    d.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
-                    if (p.CollisionFirstPass(d) == false)
-                    {
-                        List<Vector3> doodadVertexList = d.GetCollisionRect();
-                        Vector3 projection = Collide(pVertexList, doodadVertexList, Engine.player.center.normal);
-                        if (projection != Vector3.Zero)
-                        {
-                            p.Damage(projection,false);
-                        }
-                    }
-                }                
-            }
 
-            // Now that player position is stabilized, use the special rects to detect if it is grounded
-            // or prepped for a wall jump.
+                // Now that player position is stabilized, use the special rects to detect if it is grounded
+                // or prepped for a wall jump.
 
-            #region special-blocks for ground and walljump detection
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            #region special-blocks for ground and walljump detection
             playerGroundBox.Add(p.center.position + p.playerHalfWidth * right);
             playerGroundBox.Add(p.center.position - p.playerHalfWidth * right);
             playerGroundBox.Add(p.center.position - (p.playerHalfHeight + .1f) * up - p.playerHalfWidth * right);
@@ -633,11 +634,11 @@ namespace VexedCore
             }
             #endregion
             
-            // Now that we know if the player is grounded or not, we can use the walking property to determine whether or
-            // not we should apply friction.
-            if (!p.walking && !p.boosting)
-                p.center.velocity += frictionAdjustment;
-            
+                // Now that we know if the player is grounded or not, we can use the walking property to determine whether or
+                // not we should apply friction.
+                if (!p.walking && !p.boosting)
+                    p.center.velocity += frictionAdjustment;
+            }
             #endregion                        
             
             #region doodad-activation

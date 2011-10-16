@@ -75,6 +75,8 @@ Content\Skybox\DeepSpace\skybox_left.xnb
 Content\Skybox\DeepSpace\skybox_right.xnb
 Content\Skybox\DeepSpace\skybox_top.xnb
 Content\pausebackground.xnb
+Content\mouse.xnb
+Content\screenchangearrow.xnb
 Content\Sounds\beep.xnb
 Content\Sounds\bloop.xnb
 Content\Sounds\click.xnb
@@ -82,8 +84,6 @@ Content\Sounds\swoosh.xnb
 Content\Sounds\thud.xnb
 Content\Sounds\music_game.xnb
 Content\Sounds\music_menu.xnb
-Content\mouse.xnb
-Content\screenchangearrow.xnb
 Content\Sounds\music_game.wma
 Content\Sounds\music_menu.wma
 LevelData\awesome

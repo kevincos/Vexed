@@ -22,7 +22,8 @@ namespace VexedLib
     public class Edge
     {
         public int id;
-        public String name;
+        //public String name;
+        public String _name;
         public Vector3 start;
         public Vector3 end;
         public EdgeType type;
@@ -32,15 +33,14 @@ namespace VexedLib
         public Edge()
         {
             type = EdgeType.Normal;
-            name = "Edge";
             id = 0;
+            _name = "Edge_" + id;
             behaviors = new List<Behavior>();
         }
 
         public Edge(Edge e)
         {
             id = e.id;
-            name = e.name;
             start = e.start;
             end = e.end;
             type = e.type;
@@ -53,22 +53,29 @@ namespace VexedLib
 
         public void Init()
         {
-            id = IDControl.GetID();            
+            id = IDControl.GetID();
+            _name = "Edge_" + id;
             behaviors.Add(new Behavior());
+        }
+
+        public void Update()
+        {
+            //_name = name + "_" + id;
         }
 
         public String IDString
         {
             get
             {
-                return name + "_" + id;
+                return _name;
+                //return name + "_" + id;
             }
         }
 
         public Edge(Vector3 s, Vector3 e)
         {
             behaviors = new List<Behavior>();
-            name = "Edge";            
+            _name = "Edge_" + id;
             start = s;
             end = e;
         }

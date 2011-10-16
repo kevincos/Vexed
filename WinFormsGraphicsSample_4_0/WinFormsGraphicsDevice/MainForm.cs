@@ -90,8 +90,56 @@ namespace WinFormsGraphicsDevice
             this.sectorDropdown.SelectedIndex = 0;
         }
 
+        void editor_update_file(object sender, System.EventArgs e)
+        {
+            foreach (Sector s in world.sectors)
+            {
+                s.Update();
+                foreach (Room r in s.rooms)
+                {
+                    r.Update();
+                    foreach (Face f in r.faceList)
+                    {
+                        foreach (Doodad d in f.doodads)
+                        {
+                            d.Update();
+                            foreach (Behavior behavior in d.behaviors)
+                            {
+                                behavior.Update();
+                            }
+                        }
+                        foreach (Decoration d in f.decorations)
+                        {
+                            d.Update();
+                        }
+                        foreach (Monster m in f.monsters)
+                        {
+                            m.Update();
+                        }
+                        foreach (Block b in f.blocks)
+                        {
+                            b.Update();
+                            foreach (Behavior behavior in b.behaviors)
+                            {
+                                behavior.Update();
+                            }
+                            foreach (Edge edge in b.edges)
+                            {
+                                edge.Update();
+                                foreach (Behavior behavior in edge.behaviors)
+                                {
+                                    behavior.Update();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         void editor_save(object sender, System.EventArgs e)
         {
+            editor_update_file(sender, e);
             if (currentFileName == null)
                 editor_saveAs(sender, e);
             else
@@ -107,6 +155,7 @@ namespace WinFormsGraphicsDevice
 
         void editor_saveAs(object sender, System.EventArgs e)
         {
+            editor_update_file(sender, e);
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
             saveFileDialog1.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
@@ -258,7 +307,7 @@ namespace WinFormsGraphicsDevice
             if (sender == this.sectorDropdown)
             {
                 Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
-                this.sectorNameField.Text = s.name;
+                this.sectorNameField.Text = s.IDString;
 
                 this.roomDropdown.Items.Clear();
                 foreach (Room r in s.rooms)
@@ -274,7 +323,7 @@ namespace WinFormsGraphicsDevice
             {
                 Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
                 Room r = s.FindRoomByIDString((string)this.roomDropdown.Items[this.roomDropdown.SelectedIndex]);
-                this.roomNameField.Text = r.name;
+                this.roomNameField.Text = r.IDString;
                 this.roomCenterX.Text = r.centerX.ToString();
                 this.roomCenterY.Text = r.centerY.ToString();
                 this.roomCenterZ.Text = r.centerZ.ToString();
@@ -454,7 +503,7 @@ namespace WinFormsGraphicsDevice
                 this.blockPropertiesGroup.Visible = false;
                 this.decorationPropertiesGroup.Visible = false;
                 
-                this.elementNameField.Text = selectedMonster.name;
+                this.elementNameField.Text = selectedMonster.IDString;
                 this.elementIDField.Text = selectedMonster.IDString;
                 this.elementBehaviorDropdown.Items.Clear();
                 this.behaviorNameField.Text = "";
@@ -479,7 +528,7 @@ namespace WinFormsGraphicsDevice
                 this.blockPropertiesGroup.Visible = false;
                 this.monsterPropertiesGroup.Visible = false;
                 this.decorationPropertiesGroup.Visible = true;
-                this.elementNameField.Text = selectedDecoration.name;
+                this.elementNameField.Text = selectedDecoration.IDString;
                 this.elementIDField.Text = selectedDecoration.IDString;
                 this.decorationTexture.Text = selectedDecoration.texture;
             }
@@ -492,7 +541,7 @@ namespace WinFormsGraphicsDevice
                 this.blockPropertiesGroup.Visible = false;
                 this.monsterPropertiesGroup.Visible = false;
                 this.decorationPropertiesGroup.Visible = false;
-                this.elementNameField.Text = selectedDoodad.name;
+                this.elementNameField.Text = selectedDoodad.IDString;
                 this.elementIDField.Text = selectedDoodad.IDString;
                 this.elementBehaviorDropdown.Items.Clear();
                 foreach (Behavior b in selectedDoodad.behaviors)
@@ -500,7 +549,7 @@ namespace WinFormsGraphicsDevice
                     this.elementBehaviorDropdown.Items.Add(b.IDString);
                 }
                 this.elementBehaviorDropdown.SelectedIndex = 0;
-                this.behaviorNameField.Text = selectedDoodad.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]).name;
+                this.behaviorNameField.Text = selectedDoodad.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]).IDString;
 
                 this.doodadAbilityDropdown.SelectedIndex = (int)selectedDoodad.ability;
                 this.doodadTypeDropdown.SelectedIndex = (int)selectedDoodad.type;
@@ -519,7 +568,7 @@ namespace WinFormsGraphicsDevice
                 this.blockPropertiesGroup.Visible = false;
                 this.monsterPropertiesGroup.Visible = false;
                 this.decorationPropertiesGroup.Visible = false;
-                this.elementNameField.Text = selectedEdge.name;
+                this.elementNameField.Text = selectedEdge.IDString;
                 this.elementIDField.Text = selectedEdge.IDString;
                 this.elementBehaviorDropdown.Items.Clear();
                 foreach (Behavior b in selectedEdge.behaviors)
@@ -528,7 +577,7 @@ namespace WinFormsGraphicsDevice
                 }
                 this.edgeTypeDropdown.SelectedIndex = (int)selectedEdge.type;
                 this.elementBehaviorDropdown.SelectedIndex = 0;
-                this.behaviorNameField.Text = selectedEdge.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]).name;
+                this.behaviorNameField.Text = selectedEdge.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]).IDString;
             }
             else if (selectedBlock != null && MainForm.editMode == EditMode.Block)
             {
@@ -542,7 +591,7 @@ namespace WinFormsGraphicsDevice
                 this.blockColorR.Text = selectedBlock.color.R.ToString();
                 this.blockColorG.Text = selectedBlock.color.G.ToString();
                 this.blockColorB.Text = selectedBlock.color.B.ToString();
-                this.elementNameField.Text = selectedBlock.name;
+                this.elementNameField.Text = selectedBlock.IDString;
                 this.elementIDField.Text = selectedBlock.IDString;
                 this.elementBehaviorDropdown.Items.Clear();
                 foreach (Behavior b in selectedBlock.behaviors)
@@ -550,7 +599,7 @@ namespace WinFormsGraphicsDevice
                     this.elementBehaviorDropdown.Items.Add(b.IDString);
                 }
                 this.elementBehaviorDropdown.SelectedIndex = 0;
-                this.behaviorNameField.Text = selectedBlock.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]).name;                
+                this.behaviorNameField.Text = selectedBlock.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]).IDString;                
             }
             else
             {
@@ -825,14 +874,14 @@ namespace WinFormsGraphicsDevice
             if (sender == this.sectorNameField)
             {
                 Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
-                s.name = this.sectorNameField.Text;
+                s._name = this.sectorNameField.Text;
                 this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex] = s.IDString;
             }
             if (sender == this.roomNameField)
             {
                 Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
                 Room r = s.FindRoomByIDString((string)this.roomDropdown.Items[this.roomDropdown.SelectedIndex]);
-                r.name = this.roomNameField.Text;
+                r._name = this.roomNameField.Text;
                 this.roomDropdown.Items[this.roomDropdown.SelectedIndex] = r.IDString;
             }
             if (sender == this.elementNameField)
@@ -840,31 +889,31 @@ namespace WinFormsGraphicsDevice
                 if (MainForm.editMode == EditMode.Block)
                 {
                     Block b = MainForm.selectedBlock;
-                    b.name = this.elementNameField.Text;
+                    b._name = this.elementNameField.Text;
                     this.elementIDField.Text = b.IDString;
                 }
                 if (MainForm.editMode == EditMode.Line)
                 {
                     Edge edge = MainForm.selectedEdge;
-                    edge.name = this.elementNameField.Text;
+                    edge._name = this.elementNameField.Text;
                     this.elementIDField.Text = edge.IDString;
                 }
                 if (MainForm.editMode == EditMode.Doodad)
                 {
                     Doodad d = MainForm.selectedDoodad;
-                    d.name = this.elementNameField.Text;
+                    d._name = this.elementNameField.Text;
                     this.elementIDField.Text = d.IDString;
                 }
                 if (MainForm.editMode == EditMode.Monster)
                 {
                     Monster m = MainForm.selectedMonster;
-                    m.name = this.elementNameField.Text;
+                    m._name = this.elementNameField.Text;
                     this.elementIDField.Text = m.IDString;
                 }
                 if (MainForm.editMode == EditMode.Decoration)
                 {
                     Decoration d = MainForm.selectedDecoration;
-                    d.name = this.elementNameField.Text;
+                    d._name = this.elementNameField.Text;
                     this.elementIDField.Text = d.IDString;
                 }
             }
@@ -873,19 +922,19 @@ namespace WinFormsGraphicsDevice
                 if (MainForm.editMode == EditMode.Block)
                 {
                     Behavior b = MainForm.selectedBlock.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
-                    b.name = this.behaviorNameField.Text;
+                    b._name = this.behaviorNameField.Text;
                     this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex] = b.IDString;
                 }
                 if (MainForm.editMode == EditMode.Line)
                 {
                     Behavior b = MainForm.selectedEdge.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
-                    b.name = this.behaviorNameField.Text;
+                    b._name = this.behaviorNameField.Text;
                     this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex] = b.IDString;
                 }
                 if (MainForm.editMode == EditMode.Doodad)
                 {
                     Behavior b = MainForm.selectedDoodad.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]);
-                    b.name = this.behaviorNameField.Text;
+                    b._name = this.behaviorNameField.Text;
                     this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex] = b.IDString;
                 }
             }

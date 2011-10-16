@@ -184,16 +184,19 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.DoubleJump);
-            secondaryAbility = new Ability(AbilityType.Booster);
+            primaryAbility = new Ability(AbilityType.WallJump);
+            secondaryAbility = new Ability(AbilityType.Missile);
             naturalShield = new Ability(AbilityType.Shield);
             //upgrades[(int)AbilityType.PermanentWallJump] = true;
+            upgrades[(int)AbilityType.PermanentBoots] = true;
             upgrades[(int)AbilityType.WallJump] = true;
             upgrades[(int)AbilityType.DoubleJump] = true;
             upgrades[(int)AbilityType.Boots] = true;
             upgrades[(int)AbilityType.Laser] = true;
             upgrades[(int)AbilityType.Blaster] = true;
             upgrades[(int)AbilityType.Empty] = true;
+            upgrades[(int)AbilityType.Missile] = true;
+            upgrades[(int)AbilityType.Booster] = true;
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }
@@ -556,11 +559,21 @@ namespace VexedCore
                 if (crushCount < maxCrushCount)
                     return;
             }
+            
             idleTime = 0;
             if (state == State.Death)
                 return;
             center.velocity += 1.5f*maxHorizSpeed * Vector3.Normalize(projection);
             safeLanding = false;
+
+            if (crushing == true)
+            {
+                deathTime = 0;
+                flashTime = flashMaxTime;
+                state = State.Death;
+                lastLivingPosition = center.position;
+            }
+
             if (primaryAbility.type == AbilityType.DoubleJump)
             {
                 primaryAbility.ammo = 0;

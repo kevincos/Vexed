@@ -9,7 +9,8 @@ namespace VexedLib
     public class Room
     {
         public int id;
-        public String name;
+        //public String name;
+        public String _name;
         public int centerX, centerY, centerZ;
         public int sizeX, sizeY, sizeZ;
         public Color color;
@@ -18,8 +19,8 @@ namespace VexedLib
 
         public Room(Vector3 center)
         {
-            name = "Room";
             id = IDControl.GetID();
+            _name = "Room_" + id;
             centerX = (int)center.X;
             centerY = (int)center.Y;
             centerZ = (int)center.Z;
@@ -63,8 +64,8 @@ namespace VexedLib
 
         public Room()
         {
-            name = "Room";
             id = IDControl.GetID();
+            _name = "Room_" + id;
             centerX = 0;
             centerY = 0;
             centerZ = 0;
@@ -110,7 +111,6 @@ namespace VexedLib
         public Room(Room r)
         {
             id = r.id;
-            name = r.name;
             centerX = r.centerX;
             centerY = r.centerY;
             centerZ = r.centerZ;
@@ -162,12 +162,18 @@ namespace VexedLib
                 f.Resize(new Vector3(sizeX, sizeY, sizeZ));
             }
         }
-        
+
+        public void Update()
+        {
+            //_name = name + "_" + id;
+        }
+
         public String IDString
         {
             get
             {
-                return name + "_" + id;
+                return _name;
+                //return name + "_" + id;
             }
         }
     }

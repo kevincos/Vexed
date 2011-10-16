@@ -78,6 +78,7 @@ namespace VexedLib
             doodads = new List<Doodad>();
             monsters = new List<Monster>();
             decorations = new List<Decoration>();
+
         }
 
         public Face(Vector3 normal, Vector3[] pointList)

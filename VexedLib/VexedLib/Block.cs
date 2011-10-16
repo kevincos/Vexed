@@ -9,7 +9,8 @@ namespace VexedLib
     public class Block
     {
         public int id;
-        public String name;
+        //public String name;
+        public String _name;
         public List<Edge> edges;
 
         public List<Behavior> behaviors;
@@ -18,8 +19,8 @@ namespace VexedLib
         public Block()
         {
             color = Color.Black;
-            name = "Block";
             id = 0;
+            _name = "Block_" + id;
             edges = new List<Edge>();
             behaviors = new List<Behavior>();
         }
@@ -27,7 +28,6 @@ namespace VexedLib
         public Block(Block b)
         {
             id = b.id;
-            name = b.name;
             color = b.color;
             edges = new List<Edge>();
             behaviors = new List<Behavior>();
@@ -44,6 +44,7 @@ namespace VexedLib
         public void Init()
         {
             id = IDControl.GetID();
+            _name = "Block_" + id;
             foreach (Edge e in edges)
                 e.Init();
             behaviors.Add(new Behavior());
@@ -57,11 +58,17 @@ namespace VexedLib
             }
         }
 
+        public void Update()
+        {
+            //_name = name + "_" + id;
+        }
+
         public String IDString
         {
             get
             {
-                return name + "_" + id;
+                return _name;
+                //return name + "_" + id;
             }
         }
 
