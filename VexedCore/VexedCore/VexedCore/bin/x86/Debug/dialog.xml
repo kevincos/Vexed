@@ -32,7 +32,8 @@ power cubes.</string>
     <id>ChaseBoss1</id>
     <speaker>ChaseBoss</speaker>
     <textList>
-      <string>Bwahahahaha. Puny pajama man! I will crush you!</string>      
+      <string>Bwahahahaha. Puny pajama man! I will crush 
+you!</string>      
     </textList>
     <pause>true</pause>
   </DialogChunk>
@@ -216,6 +217,431 @@ while my armor regenerates!</string>
     </textList>
     <pause>true</pause>
   </DialogChunk>
+  <DialogChunk>
+    <id>YouGotDoubleJump</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You unlocked the Rocket Boots!
+      </string>
+      <string>While equipped, you'll be able to perform
+an extra jump while in mid-air.
+      </string>
+      <string>Walk to an item station and use the
+Left or Right mouse button to equip them.</string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>YouGotBlaster</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You unlocked the Blaster Gun!
+      </string>
+      <string>Once equipped, you'll be able to
+use it to destroy enemies.</string>
+      <string>Walk to an item station and use the
+Left or Right mouse button to equip it.
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>YouGotWallJump</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You unlocked the Wall Jump Boots!
+      </string>
+      <string>While equipped, you'll be able to
+jump off walls indefinitely.
+      </string>
+      <string>Walk to an item station and use the
+Left or Right mouse button to equip them.
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>YouGotGravityBoots</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You unlocked the Gravity Boots!
+      </string>
+      <string>
+        While equipped, you'll be able to walk
+on certain walls!
+      </string>
+      <string>Walk to an item station and use the
+Left or Right mouse button to equip them.
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>YouGotLaserCannon</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You unlocked the Laser Cannon!
+      </string>
+      <string>The Laser Cannon has a much longer range than
+the Blaster, and can be used to activate special switches.
+      </string>
+      <string>Walk to an item station and use the
+Left or Right mouse button to equip them.
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>YouGotThruster</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You unlocked the Thruster Pack!  </string>
+      <string>Equip and use the Thruster Pack to launch 
+yourself horizonatlly at extreme speeds.</string>
+      <string>Walk to an item station and use the
+Left or Right mouse button to equip them. </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+<DialogChunk>
+    <id>YouGotMissile</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You unlocked the Missile Launcher!  </string>
+      <string>Missiles have explosive power. Use them to
+destroy certain blocks as well as enemy armor.</string>
+      <string>Walk to an item station and use the
+Left or Right mouse button to equip them. </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+<DialogChunk>
+    <id>YouGotWallJumpModule</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You got the Wall Jump Module!  </string>
+      <string>Now you can perform wall jumps without
+taking up an inventory slot!</string>      
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+<DialogChunk>
+    <id>YouGotGravityModule</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You got the Gravity Module!  </string>
+      <string>Now you can walk on Gravity Strips
+without taking up an inventory slot!</string>      
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+<DialogChunk>
+    <id>YouGotImprovedJumpModule</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You got the Advanced Jump Module!  </string>
+      <string>Now you can jump higher without using
+an inventory slot!</string>      
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+<DialogChunk>
+    <id>YouGotSpinHook</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You unlocked the Spin Hook!  </string>
+      <string>Use it to grapple special targets and
+rotate your orientation.</string>      
+      <string>Walk to an item station and use the
+Left or Right mouse button to equip it. </string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+<DialogChunk>
+    <id>YouGotJetPack</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You unlocked the Jet Pack!  </string>
+      <string>Use it to fly high into the air. Jet
+pack fuel will regenerate while on the ground.</string>      
+      <string>Walk to an item station and use the
+Left or Right mouse button to equip it. </string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+<DialogChunk>
+    <id>YouGotPhaseBelt</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You unlocked the Phase Belt! </string>
+      <string>Use it to transform into raw energy and
+warp through entire rooms!</string>      
+      <string>Walk to an item station and use the
+Left or Right mouse button to equip it. </string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+<DialogChunk>
+    <id>YouGotYellowKey</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You got the Yellow Access Codes!  </string>
+      <string>Now you can access Yellow Switches without
+taking up an inventory slot.</string>            
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+<DialogChunk>
+    <id>YouGotRedKey</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You got the Red Access Codes!  </string>
+      <string>Now you can access Red Switches without
+taking up an inventory slot.</string>            
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+<DialogChunk>
+    <id>YouGotBlueey</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You got the Blue Access Codes!  </string>
+      <string>Now you can access Blue Switches without
+taking up an inventory slot.</string>            
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+<DialogChunk>
+    <id>pressspacebar</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Press Space Bar to begin!</string>       
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+<DialogChunk>
+    <id>intromovehelp</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Use the 'A' and 'D' keys to run, and the 'W' 
+key to jump!</string>       
+    </textList>
+    <pause>false</pause>
+</DialogChunk>
+<DialogChunk>
+    <id>introusehelp</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>To begin your adventure, walk up to a load
+station and hit the 'E' key.</string>       
+    </textList>
+    <pause>false</pause>
+</DialogChunk>
+<DialogChunk>
+    <id>introlookhelp</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Move the mouse to look around and get
+a better view of your environment.</string>       
+    </textList>
+    <pause>false</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_basiccontrols</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Hey Vex! I'm a hologram of a helpful old
+man with a totally sweet beard!</string>
+      <string>I'll be your guide as you explore the
+station. Let's start with the basics...</string>
+      <string>By now you've probably figured out that you 
+can use the 'A' and 'D' keys to run.</string>
+      <string>You can also use the 'W' key to jump, and the
+'E' key to interact with an object.</string>
+      <string>If you can interact with an object, a red 'E' 
+will appear when you stand next to it.</string>
+<string>Try to use that transport station over there.
+The one that's flashing blue.</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_powerup</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>The whole station is experiencing a massive
+power loss.</string>
+      <string>If you run into an object without power,
+you won't be able to use it.</string>
+      <string>However, you can power up the station by
+collecting yellow power cubes.</string>
+      <string>Each cube you collect returns partial power
+to the current room.</string>
+      <string>Collect enough of them and everything should
+start working again.</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_jumpstations</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Transport stations will launch you from
+room to room.</string>
+      <string>They'll be your primary means of getting
+around.</string>
+      <string>If the station is unpowered, it'll be colored
+dark gray. Find power cubes to activate it.</string>
+      <string>If the station is flashing blue, that means
+you haven't yet explored that way yet.</string>
+      <string>If a station is powered, but has already
+been explored, it'll be green.</string>      
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_onthewall</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Hey! Check that out. There's a transport
+station on the wall!</string>
+      <string>I know it sounds strange, but to access it,
+you'll need to be on the wall too.</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_bottomless</id>
+    <speaker>OldMan</speaker>
+    <textList>      
+      <string>Don't forget you can use the mouse to
+look around and get a better view of things.</string>
+      <string>Hey... is that a bottomless pit? Eh...
+you're a touch guy. You'll be fine.</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_upgrades</id>
+    <speaker>OldMan</speaker>
+    <textList>      
+      <string>You won't be able to get very far just
+running and jumping.</string>
+      <string>To explore new areas of the station, you'll
+need to get some equipment.</string>
+      <string>Gold colored doors indicate 
+Upgrade Stations. These are super important.</string>
+      <string>This Upgrade Station gives you the ability
+to equip the Rocket Boots.</string>
+      <string>To use an Upgrade Station, just walk up
+to it and hit 'E'.</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_items</id>
+    <speaker>OldMan</speaker>
+    <textList>      
+      <string>Once you have the appropriate upgrades,
+you can use Item Stations to equip stuff.</string>
+      <string>To equip an item, stand next to the station
+and hit either the Left or Right mouse button.</string>
+      <string>Once equipped, you can use the Left
+and Right Mouse Buttons to use your items.</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_jumpitems</id>
+    <speaker>OldMan</speaker>
+    <textList>      
+      <string>Certain items, such as the Rocket Boots
+are special. These are Jump Items.</string>
+      <string>Jump Items enhance your suit's natural
+jumping ability.</string>
+      <string>Because of this, you can use them either
+with a mouse button, or with the 'W' key.</string>
+      <string>It also means you can use the mouse
+buttons for basic jumping as well.</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_monsters</id>
+    <speaker>OldMan</speaker>
+    <textList>      
+      <string>Watch out, Vex. There are several
+monsters in this room!</string>
+      <string>Without some sort of weapon, there's
+not much you can do but avoid them.</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_monstercubes</id>
+    <speaker>OldMan</speaker>
+    <textList>      
+      <string>Gah... these critters have been 
+chewing on the power cables.</string>
+      <string>If you find some way to destroy them
+you'll get additional power cubes.</string>
+      <string>You should come back here after you've
+found a weapon!</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_reditemstation</id>
+    <speaker>OldMan</speaker>
+    <textList>      
+      <string>You can only use an Item Station if
+you've collected the appropriate upgrade.</string>
+      <string>If you can't use a station, it will
+be colored Red.</string>
+      <string>But if the station is green, you can
+use a Mouse button to equip an item.</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_zoom</id>
+    <speaker>OldMan</speaker>
+    <textList>      
+      <string>Watch out for those spikes!
+They look pretty painful.</string>
+    <string>Also, this room is pretty large. You might
+need to zoom out to get a better look.</string>
+    <string>Use the mouse wheel to zoom out the
+camera so you can find the power cubes.</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>tutorial_save</id>
+    <speaker>OldMan</speaker>
+    <textList>      
+      <string>I've got a bad feeling about this, Vex.</string>    
+      <string>You should check out this Save Station
+before you continue on to the next room.</string>    
+    <string>These will save your progress so that
+you can continue your adventure later.</string>    
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
 
 
 </ArrayOfDialogChunk>

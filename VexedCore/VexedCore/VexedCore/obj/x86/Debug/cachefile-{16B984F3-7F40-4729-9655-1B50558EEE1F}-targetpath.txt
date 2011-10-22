@@ -86,3 +86,17 @@ Content\Sounds\music_game.xnb
 Content\Sounds\music_game.wma
 Content\Sounds\music_menu.xnb
 Content\Sounds\music_menu.wma
+Content\mouseandkeyboard.xnb
+Content\gamepadhelp.xnb
+Content\keyboardonlyhelp.xnb
+Content\dec_arrow.xnb
+Content\dec_tree.xnb
+Content\dec_shuttle.xnb
+Content\dec_shuttle_open.xnb
+Content\dec_vinebranch.xnb
+Content\dec_watermeter.xnb
+Content\dec_waterpipes.xnb
+Content\dec_watertank.xnb
+Content\dec_leftvinebranch.xnb
+Content\dec_rightvinebranch.xnb
+Content\dec_thornwall.xnb

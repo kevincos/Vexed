@@ -43,15 +43,25 @@ namespace VexedCore
         PermanentRedKey = 20,
         Phase = 21,
         ImprovedJump = 22,
-        Ultima = 23
-
+        Ultima = 23,
+        LeftMouse = 46,
+        RightMouse = 47,
+        EKey= 48,
+        ZKey = 49,
+        CKey = 50,
+        XKey = 51,
+        MKey = 52,
+        KeyGeneric = 53,
+        CtrlKey = 54,
+        PowerCube = 37
     }
 
     public class Ability
     {
         public AbilityType type;
 
-        public int ammo = 0;        
+        public int ammo = 0;
+        public int _maxAmmo = -1;
         public int cooldown = 0;
         public int duration = 0;
 
@@ -107,11 +117,20 @@ namespace VexedCore
         {
             get
             {
-                if (type == AbilityType.Shield)
-                    return 2000;
-                if(type == AbilityType.JetPack)
-                    return 2000;
-                return 0;
+                if (_maxAmmo == -1)
+                {
+                    if (type == AbilityType.Shield)
+                        _maxAmmo = 3;
+                    else if (type == AbilityType.JetPack)
+                        _maxAmmo = 2000;
+                    else
+                        _maxAmmo = 0;
+                }
+                return _maxAmmo;                
+            }
+            set
+            {
+                _maxAmmo = value;
             }
         }
 
@@ -187,6 +206,7 @@ namespace VexedCore
         {
             ammo = a.ammo;
             cooldown = a.cooldown;
+            _maxAmmo = a._maxAmmo;
             type = a.type;
             if (type == AbilityType.JetPack)
             {
@@ -286,30 +306,45 @@ namespace VexedCore
 
         public void Draw(float xPercent, float yPercent)
         {
-            Draw(xPercent, yPercent, type, ammo, maxAmmo);
+            Draw(xPercent, yPercent, type, ammo, maxAmmo, Color.White, .1f);
         }
 
         public static void Draw(float xPercent, float yPercent, AbilityType type)
         {
-            Draw(xPercent, yPercent, type, 0, 0);
+            Draw(xPercent, yPercent, type, 0, 0, Color.White, .1f);
+        }
+
+        public static void Draw(float xPercent, float yPercent, AbilityType type, float size)
+        {
+            Draw(xPercent, yPercent, type, 0, 0, Color.White, size);
+        }
+
+        public static void Draw(float xPercent, float yPercent, AbilityType type, Color c, float size)
+        {
+            Draw(xPercent, yPercent, type, 0, 0, c, size);
         }
 
         public static void Draw(float xPercent, float yPercent, AbilityType type, int ammo, int maxAmmo)
         {
-            float iconSize = .1f;
+            Draw(xPercent, yPercent, type, ammo, maxAmmo, Color.White, .1f);
+        }
+
+        public static void Draw(float xPercent, float yPercent, AbilityType type, int ammo, int maxAmmo, Color c, float iconSize)
+        {
             float barWidth = .05f;
             float barHeight = .08f;
             int spriteX = (int)(type) % 8;
             int spriteY = (int)(type) / 8;
 
-            Byte fade = 255;
+            if (DepthControl.uiFade == true)
+            {
+                c.R = (Byte)(c.R - c.R * DepthControl.depthTimer / DepthControl.maxDepthTimer);
+                c.G = (Byte)(c.G - c.G * DepthControl.depthTimer / DepthControl.maxDepthTimer);
+                c.B = (Byte)(c.B - c.B * DepthControl.depthTimer / DepthControl.maxDepthTimer);
+                c.A = (Byte)(c.A - c.A * DepthControl.depthTimer / DepthControl.maxDepthTimer);
+            }
             
-            if(DepthControl.uiFade == true)
-                fade = (Byte)(255 - 255 * DepthControl.depthTimer / DepthControl.maxDepthTimer);
-            Color c = new Color(fade, fade, fade, fade);     
             
-            
-            Engine.spriteBatch.Begin();
             Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + xPercent * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height), (int)(iconSize * Game1.titleSafeRect.Width), (int)(iconSize * Game1.titleSafeRect.Width)), new Rectangle(128*spriteX, 128*spriteY, 128, 128), c);
             if (type == AbilityType.JetPack)
             {
@@ -322,8 +357,7 @@ namespace VexedCore
                 Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + (xPercent + .06) * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height), (int)(barWidth * Game1.titleSafeRect.Width), (int)(barHeight * Game1.titleSafeRect.Width)), new Rectangle(128 * 5, 128 * 3, 128, 128), c);
                 Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + (xPercent + .06) * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height + (barHeight * Game1.titleSafeRect.Width - (int)((1f * ammo / maxAmmo) * barHeight * Game1.titleSafeRect.Width))), (int)(barWidth * Game1.titleSafeRect.Width), (int)((1f * ammo / maxAmmo) * barHeight * Game1.titleSafeRect.Width)), new Rectangle(128 * 6, 128 * 3, 128, 128), c);
 
-            }
-            Engine.spriteBatch.End();
+            }            
         }
 
         public String FriendlyName()
@@ -369,6 +403,43 @@ namespace VexedCore
             if (type == AbilityType.Empty)
                 return "Empty";
             return "BUG";
+        }
+
+        public String GetDialogId()
+        {
+            if (type == AbilityType.DoubleJump)
+                return "YouGotDoubleJump";
+            if (type == AbilityType.Blaster)
+                return "YouGotBlaster";
+            if (type == AbilityType.WallJump)
+                return "YouGotWallJump";
+            if (type == AbilityType.Boots)
+                return "YouGotGravityBoots";
+            if (type == AbilityType.Laser)
+                return "YouGotLaserCannon";            
+            if (type == AbilityType.Booster)
+                return "YouGotThruster";
+            if (type == AbilityType.Missile)
+                return "YouGotMissile";
+            if (type == AbilityType.PermanentBoots)
+                return "YouGotGravityModule";
+            if (type == AbilityType.PermanentWallJump)
+                return "YouGotWallJumpModule";
+            if (type == AbilityType.ImprovedJump)
+                return "YouGotImprovedJumpModule";
+            if (type == AbilityType.SpinHook)
+                return "YouGotSpinHook";
+            if (type == AbilityType.JetPack)
+                return "YouGotJetPack";
+            if (type == AbilityType.Phase)
+                return "YouGotPhaseBelt";
+            if (type == AbilityType.PermanentRedKey)
+                return "YouGotRedKey";
+            if (type == AbilityType.PermanentYellowKey)
+                return "YouGotYellowKey";
+            if (type == AbilityType.PermanentBlueKey)
+                return "YouGotBlueKey";
+            return "OOPS";
         }
 
         public String Description()

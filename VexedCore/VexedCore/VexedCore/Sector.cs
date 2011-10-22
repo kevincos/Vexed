@@ -30,6 +30,12 @@ namespace VexedCore
         public int currentOrbs;
         public int maxOrbs;
 
+        public int currentBlueOrbs;
+        public int maxBlueOrbs;
+
+        public int currentRedOrbs;
+        public int maxRedOrbs;
+
         public SkyBoxType skyboxType
         {
             get
@@ -40,9 +46,9 @@ namespace VexedCore
                     return SkyBoxType.Blue;
                 if (id.Contains("Engine"))
                     return SkyBoxType.Red;
-                if (id.Contains("Solar"))
+                if (id.Contains("Command"))
                     return SkyBoxType.Solar;
-                if (id.Contains("Galaxy"))
+                if (id.Contains("Core"))
                     return SkyBoxType.Galaxy;
                 return SkyBoxType.DeepSpace;
             }

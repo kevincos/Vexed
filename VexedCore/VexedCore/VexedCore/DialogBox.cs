@@ -162,6 +162,8 @@ namespace VexedCore
 
         public bool Next()
         {
+            if (currentDialog == null)
+                return false;
             if (cooldown > 0)
                 return true;
             stage++;

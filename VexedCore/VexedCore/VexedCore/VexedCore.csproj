@@ -123,6 +123,7 @@
     <Compile Include="Collidable.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="Decoration.cs" />
+    <Compile Include="DecorationImageLibrary.cs" />
     <Compile Include="DepthControl.cs" />
     <Compile Include="DialogBox.cs" />
     <Compile Include="Edge.cs" />
@@ -132,6 +133,8 @@
     <Compile Include="GraphicsUtils.cs" />
     <Compile Include="Doodad.cs" />
     <Compile Include="GunEmplacement.cs" />
+    <Compile Include="Hud.cs" />
+    <Compile Include="IntroOverlay.cs" />
     <Compile Include="JetBoss.cs" />
     <Compile Include="LevelLoader.cs" />
     <Compile Include="Monster.cs" />

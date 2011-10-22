@@ -84,12 +84,33 @@ namespace VexedCore
                         foreach (VexedLib.Decoration xmlDecoaration in xmlFace.decorations)
                         {
                             Decoration newDecoration = new Decoration(xmlDecoaration, xmlFace.normal);
+                            newDecoration.SetTexture();
                             newRoom.decorations.Add(newDecoration);
                         }
                         foreach (VexedLib.Doodad xmlDoodad in xmlFace.doodads)
                         {
                             Doodad newDoodad = null;
 
+                            if (xmlDoodad.type == VexedLib.DoodadType.BlueCube)
+                            {
+                                newRoom.maxBlueOrbs++;
+                                newSector.maxBlueOrbs++;
+                            }
+                            if (xmlDoodad.type == VexedLib.DoodadType.RedCube)
+                            {
+                                newRoom.maxRedOrbs++;
+                                newSector.maxRedOrbs++;
+                            }
+                            if (xmlDoodad.type == VexedLib.DoodadType.BluePowerStation)
+                            {
+                                newRoom.maxBlueOrbs+=3;
+                                newSector.maxBlueOrbs+=3;
+                            }
+                            if (xmlDoodad.type == VexedLib.DoodadType.RedPowerStation)
+                            {
+                                newRoom.maxRedOrbs++;
+                                newSector.maxRedOrbs++;
+                            }
                             if (xmlDoodad.type == VexedLib.DoodadType.PowerOrb)
                             {
                                 newRoom.maxOrbs++;
@@ -169,7 +190,7 @@ namespace VexedCore
                                 newRoom.doodads.Add(rightDoor2);
                                 
                             }
-                            else if (xmlDoodad.type == VexedLib.DoodadType.JumpStation || xmlDoodad.type == VexedLib.DoodadType.ItemStation || xmlDoodad.type == VexedLib.DoodadType.SaveStation || xmlDoodad.type == VexedLib.DoodadType.WarpStation || xmlDoodad.type == VexedLib.DoodadType.SwitchStation || xmlDoodad.type == VexedLib.DoodadType.UpgradeStation || xmlDoodad.type == VexedLib.DoodadType.PowerStation || xmlDoodad.type == VexedLib.DoodadType.LoadStation || xmlDoodad.type == VexedLib.DoodadType.MenuStation)
+                            else if (xmlDoodad.type == VexedLib.DoodadType.JumpStation || xmlDoodad.type == VexedLib.DoodadType.ItemStation || xmlDoodad.type == VexedLib.DoodadType.SaveStation || xmlDoodad.type == VexedLib.DoodadType.WarpStation || xmlDoodad.type == VexedLib.DoodadType.SwitchStation || xmlDoodad.type == VexedLib.DoodadType.UpgradeStation || xmlDoodad.type == VexedLib.DoodadType.PowerStation || xmlDoodad.type == VexedLib.DoodadType.LoadStation || xmlDoodad.type == VexedLib.DoodadType.MenuStation || xmlDoodad.type == VexedLib.DoodadType.RedPowerStation || xmlDoodad.type == VexedLib.DoodadType.BluePowerStation)
                             {
                                 Vector3 right = Vector3.Cross(xmlDoodad.up, xmlFace.normal);
                                 Doodad station = new Doodad(xmlDoodad, xmlFace.normal);
@@ -183,6 +204,22 @@ namespace VexedCore
                                 newRoom.doodads.Add(icon);
                                 newRoom.doodads.Add(leftDoor);
                                 newRoom.doodads.Add(rightDoor);
+
+                                if (xmlDoodad.type == VexedLib.DoodadType.JumpPad || xmlDoodad.type == VexedLib.DoodadType.JumpStation)
+                                {
+                                    Doodad leftSide = new Doodad(VexedLib.DoodadType.RingSide, station.position.position + .8f * right, station.position.normal, station.position.direction);
+                                    Doodad rightSide = new Doodad(VexedLib.DoodadType.RingSide, station.position.position - .8f * right, station.position.normal, station.position.direction);
+                                    Doodad topSide = new Doodad(VexedLib.DoodadType.RingTop, station.position.position + .8f * station.position.direction, station.position.normal, station.position.direction);
+                                    Doodad bottomSide = new Doodad(VexedLib.DoodadType.RingTop, station.position.position - .8f * station.position.direction, station.position.normal, station.position.direction);
+                                    leftSide.targetObject = station.id;
+                                    rightSide.targetObject = station.id;
+                                    topSide.targetObject = station.id;
+                                    bottomSide.targetObject = station.id;
+                                    newRoom.doodads.Add(leftSide);
+                                    newRoom.doodads.Add(rightSide);
+                                    newRoom.doodads.Add(topSide);
+                                    newRoom.doodads.Add(bottomSide);
+                                }
                             }
                             else
                             {
@@ -267,6 +304,12 @@ namespace VexedCore
                     d.currentRoom = r;
                     if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
                     {
+                        if (d.id.Contains("Diamond"))
+                            d.doorDecal = DoorDecal.Diamond;
+                        else if (d.id.Contains("Cherry"))
+                            d.doorDecal = DoorDecal.Cherry;
+                        else
+                            d.doorDecal = DoorDecal.Target;
                         float baseLineValue = Vector3.Dot(d.position.position, d.position.normal);
                         float minPosValue = 0;
                         foreach (Room destinationRoom in roomList)

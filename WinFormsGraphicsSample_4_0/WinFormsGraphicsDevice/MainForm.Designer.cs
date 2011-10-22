@@ -170,6 +170,11 @@ namespace WinFormsGraphicsDevice
 
             this.decorationPropertiesGroup = new System.Windows.Forms.GroupBox();
             this.decorationTexture = new System.Windows.Forms.TextBox();
+            this.decorationDepth = new System.Windows.Forms.TextBox();
+            this.decorationWrap = new System.Windows.Forms.CheckBox();
+            this.decorationR = new System.Windows.Forms.TextBox();
+            this.decorationG = new System.Windows.Forms.TextBox();
+            this.decorationB = new System.Windows.Forms.TextBox();
 
             this.viewControlsGroup = new System.Windows.Forms.GroupBox();
             this.WorldPreviewControl = new WinFormsGraphicsDevice.WorldPreviewControl();
@@ -536,10 +541,36 @@ namespace WinFormsGraphicsDevice
             this.decorationPropertiesGroup.Size = new System.Drawing.Size(300, 300);
             this.decorationPropertiesGroup.Visible = false;
             this.decorationPropertiesGroup.Controls.Add(this.decorationTexture);
+            this.decorationPropertiesGroup.Controls.Add(this.decorationDepth);
+            this.decorationPropertiesGroup.Controls.Add(this.decorationWrap);
+            this.decorationPropertiesGroup.Controls.Add(this.decorationR);
+            this.decorationPropertiesGroup.Controls.Add(this.decorationG);
+            this.decorationPropertiesGroup.Controls.Add(this.decorationB);
 
             this.decorationTexture.Location = new System.Drawing.Point(10, 110);
             this.decorationTexture.Size = new System.Drawing.Size(200, 20);
             this.decorationTexture.TextChanged += new System.EventHandler(this.decoration_change);
+
+            this.decorationDepth.Location = new System.Drawing.Point(10, 85);
+            this.decorationDepth.Size = new System.Drawing.Size(200, 20);
+            this.decorationDepth.TextChanged += new System.EventHandler(this.decoration_change);
+
+            this.decorationR.Location = new System.Drawing.Point(10, 60);
+            this.decorationR.Size = new System.Drawing.Size(30, 20);
+            this.decorationR.TextChanged += new System.EventHandler(this.decoration_change);
+
+            this.decorationG.Location = new System.Drawing.Point(50, 60);
+            this.decorationG.Size = new System.Drawing.Size(30, 20);
+            this.decorationG.TextChanged += new System.EventHandler(this.decoration_change);
+
+            this.decorationB.Location = new System.Drawing.Point(90, 60);
+            this.decorationB.Size = new System.Drawing.Size(30, 20);
+            this.decorationB.TextChanged += new System.EventHandler(this.decoration_change);
+
+            this.decorationWrap.Location = new System.Drawing.Point(10, 35);
+            this.decorationWrap.Size = new System.Drawing.Size(50, 20);
+            this.decorationWrap.CheckedChanged += new System.EventHandler(this.decoration_change);
+            this.decorationWrap.Text = "Wrap Texture";
 
 
             this.doodadPropertiesGroup.Location = new System.Drawing.Point(10, 605);
@@ -558,7 +589,7 @@ namespace WinFormsGraphicsDevice
             this.doodadPropertiesGroup.Controls.Add(this.doodadTargetLabel);
 
             this.doodadTypeDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < 52; i++)
             {
                 this.doodadTypeDropdown.Items.Add((DoodadType)i);
             }
@@ -1201,7 +1232,11 @@ namespace WinFormsGraphicsDevice
 
         private System.Windows.Forms.GroupBox decorationPropertiesGroup;
         private System.Windows.Forms.TextBox decorationTexture;
-        
+        private System.Windows.Forms.TextBox decorationDepth;        
+        private System.Windows.Forms.TextBox decorationR;
+        private System.Windows.Forms.TextBox decorationG;
+        private System.Windows.Forms.TextBox decorationB;
+        private System.Windows.Forms.CheckBox decorationWrap;
 
         private System.Windows.Forms.GroupBox behaviorPropertiesGroup;
         private System.Windows.Forms.CheckBox behaviorToggle;

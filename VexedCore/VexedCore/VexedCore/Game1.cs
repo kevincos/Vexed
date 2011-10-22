@@ -28,10 +28,11 @@ namespace VexedCore
         public static Engine engine;
         public static Controls controller;
 
-  
+        public static ContentManager contentManager;
 
         public Game1()
         {
+            
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferMultiSampling = true;
             graphics.SynchronizeWithVerticalRetrace = true;
@@ -54,6 +55,8 @@ namespace VexedCore
             controller = new Controls(activePlayer);
             //bloom = new BloomComponent(this);
             Content.RootDirectory = "Content";
+
+            contentManager = Content;
             
         }
 
@@ -102,7 +105,6 @@ namespace VexedCore
             graphicsDevice = GraphicsDevice;
 
             //LevelLoader.Load("LevelData\\menu");
-            LevelLoader.Load("LevelData\\world");
             //LevelLoader.Load("LevelData\\spikeelevator");
             
             Components.Add(new FrameRateCounter(this));
@@ -149,6 +151,9 @@ namespace VexedCore
             Ability.ability_textures = Content.Load<Texture2D>("abilities");
             PauseMenu.pauseBackground = Content.Load<Texture2D>("pausebackground");
             PauseMenu.mouseCursor = Content.Load<Texture2D>("mouse");
+            PauseMenu.mouseAndKeyboardHelp = Content.Load<Texture2D>("mouseandkeyboard");
+            PauseMenu.gamePadHelp = Content.Load<Texture2D>("gamepadhelp");
+            PauseMenu.keyboardOnlyHelp = Content.Load<Texture2D>("keyboardonlyhelp");
             Decoration.defaultTexture = Content.Load<Texture2D>("abilities");
             Doodad.beam_textures = Content.Load<Texture2D>("beams");
             Monster.monsterTexture = Content.Load<Texture2D>("m_body");
@@ -156,6 +161,7 @@ namespace VexedCore
             WorldMap.changeArrow = Content.Load<Texture2D>("screenchangearrow");
             Projectile.projectileTexture = Content.Load<Texture2D>("projectiles");
             Skybox.LoadTextures(Content);
+            DecorationImage.LoadTextures(Content);
             Engine.spriteFont = Content.Load<SpriteFont>("Font");
             
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
@@ -169,10 +175,13 @@ namespace VexedCore
                                                          pp.BackBufferFormat, pp.DepthStencilFormat);
 
             SoundFX.Init(Content);
-            Mouse.SetPosition(400, 300);
+            Mouse.SetPosition(Game1.titleSafeRect.Center.X, Game1.titleSafeRect.Center.Y);
             
             MusicControl.music_menu = Content.Load<Song>("Sounds\\music_menu");
             MusicControl.music_game = Content.Load<Song>("Sounds\\music_game");
+
+            LevelLoader.Load("LevelData\\world");
+            
             // TODO: use this.Content to load your game content here
         }
 

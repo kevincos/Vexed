@@ -15,12 +15,15 @@ namespace VexedLib
         public Vector3 position;
         public Vector3 up;
         public String texture;
+        public int depth = 20;
+        public Color color = Color.White;
+        public bool wrap = false;
 
         public Decoration()
         {
             id = IDControl.GetID();
             _name = "Decoration_"+id;
-            texture = "Default";
+            texture = "Default";            
         }
 
         public void Init()
@@ -32,7 +35,9 @@ namespace VexedLib
         {
             id = d.id;
             position = d.position;
-            up = d.up;                
+            up = d.up;
+            color = d.color;
+            wrap = d.wrap;
         }
 
         public void Update()

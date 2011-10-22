@@ -451,7 +451,7 @@ namespace VexedCore
                             if (projection.Length() > 0f)
                             {
                                 if (m.position.velocity != Vector3.Zero)
-                                    p.Damage(m.position.velocity,true);
+                                    p.Damage(m.position.velocity,false);
                                 else
                                     p.Damage(projection,false);
                             }
@@ -660,7 +660,7 @@ namespace VexedCore
                 {
                     d.ActivateDoodad(r, d == p.respawnPoint);
                 }
-                if (d.type == VexedLib.DoodadType.Vortex || d.type == VexedLib.DoodadType.WarpStation || d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.ItemBlock || d.type == VexedLib.DoodadType.JumpStation || d.type == VexedLib.DoodadType.PowerStation || d.type == VexedLib.DoodadType.SwitchStation || d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.UpgradeStation || d.type == VexedLib.DoodadType.SaveStation || d.type == VexedLib.DoodadType.LoadStation || d.type == VexedLib.DoodadType.MenuStation)
+                if (d.type == VexedLib.DoodadType.Vortex || d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.ItemBlock || d.isStation)
                 {
                     d.ActivateDoodad(r, d.ActivationRange(p));
                 }
@@ -670,7 +670,7 @@ namespace VexedCore
                 }
                 if( (d.position.position - p.center.position).Length() < 3f*d.triggerDistance)
                 {
-                    if (d.type == VexedLib.DoodadType.PowerOrb)
+                    if (d.isOrb)
                     {
                         d.tracking = true;
                     }
@@ -684,9 +684,37 @@ namespace VexedCore
                             d.ActivateDoodad(r, false);
                             r.currentOrbs++;
                             r.parentSector.currentOrbs++;
-                            //Engine.reDraw = true;
                             r.refreshVertices = true;
                             p.orbsCollected++;
+                            SoundFX.CollectOrb();
+                        }
+                    }
+                    if (d.type == VexedLib.DoodadType.RedCube)
+                    {
+                        if (d.active == true)
+                        {
+                            d.ActivateDoodad(r, false);
+                            r.currentRedOrbs++;
+
+                            r.parentSector.currentRedOrbs++;
+                            r.refreshVertices = true;
+                            p.redOrbsCollected++;
+                            if (p.redOrbsCollected % 5 == 0)
+                            {
+                                p.naturalShield.maxAmmo = p.naturalShield.maxAmmo + 1;
+                                p.naturalShield.ammo = p.naturalShield.maxAmmo;
+                            }
+                            SoundFX.CollectOrb();
+                        }
+                    }
+                    if (d.type == VexedLib.DoodadType.BlueCube)
+                    {
+                        if (d.active == true)
+                        {
+                            d.ActivateDoodad(r, false);
+                            r.currentBlueOrbs++;
+                            r.parentSector.currentBlueOrbs++;
+                            r.refreshVertices = true;
                             SoundFX.CollectOrb();
                         }
                     }

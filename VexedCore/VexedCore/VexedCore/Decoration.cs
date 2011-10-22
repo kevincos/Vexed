@@ -21,9 +21,13 @@ namespace VexedCore
         public float halfHeight = .5f;
         public Vertex position;
         public string id = "";
+        public float _depth = 0f;
+        public Color color = Color.White;
+        public bool wrap = false;
 
         public Texture2D decorationTexture;
         public static Texture2D defaultTexture;
+        public string fileName = "Default";
 
         public static List<Vector2> fullTexCoords;
 
@@ -45,6 +49,9 @@ namespace VexedCore
             halfWidth = d.halfWidth;
             halfHeight = d.halfHeight;
             decorationTexture = d.decorationTexture;
+            _depth = d._depth;
+            color = d.color;
+            wrap = d.wrap;
             
         }
 
@@ -56,17 +63,23 @@ namespace VexedCore
         {
             this.position = new Vertex(xmlDecoration.position, normal, Vector3.Zero, xmlDecoration.up);
             id = xmlDecoration.IDString;
-            if ("Default" == xmlDecoration.texture)
-            {
-                decorationTexture = null;
-            }
-            else
-            {
-                halfWidth = 1f * decorationTexture.Width / 256f;
-                halfHeight = 1f * decorationTexture.Height / 256f;
-            }
+            decorationTexture = null;
+            fileName = xmlDecoration.texture;
+            _depth = (1f*xmlDecoration.depth)/100f - .5f;
+            color = xmlDecoration.color;
+            wrap = xmlDecoration.wrap;
+        }
 
-            
+        public void SetTexture()
+        {
+            decorationTexture = DecorationImage.FetchTexture(fileName);
+
+            if (decorationTexture != null)
+            {
+                halfWidth = 1f * decorationTexture.Width / 256;
+                halfHeight = 1f * decorationTexture.Height / 256;
+                position.position += position.direction * (halfHeight - .5f);
+            }
         }
 
         public float right_mag
@@ -145,7 +158,7 @@ namespace VexedCore
         {
             get
             {
-                return .5f;
+                return _depth;
             }
         }
 
@@ -164,9 +177,16 @@ namespace VexedCore
                 vList.Add(new Vertex(position, up + left));
                 vList.Add(new Vertex(position, down + left));
                 vList.Add(new Vertex(position, down + right));
+                if (wrap == true)
+                {
+                    foreach (Vertex v in vList)
+                    {
+                        v.Update(currentRoom, 1);
+                    }
+                }
 
-
-                currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth, fullTexCoords, decalList, true);
+                currentRoom.AddTextureToTriangleList(vList, color, depth, decalList, fullTexCoords, false);
+                //currentRoom.AddBlockFrontToTriangleList(vList, color, depth, fullTexCoords, decalList, true);
 
                 triangleArray = new VertexPositionColorNormalTexture[decalList.Count];
                 for (int i = 0; i < decalList.Count; i++)

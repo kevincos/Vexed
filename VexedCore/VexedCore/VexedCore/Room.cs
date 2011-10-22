@@ -82,6 +82,14 @@ namespace VexedCore
         public Color color;
         public int maxOrbs = 0;
         public int currentOrbs = 0;
+        public bool explored = false;
+
+        public int currentBlueOrbs = 0;
+        public int maxBlueOrbs = 0;
+
+        public int currentRedOrbs = 0;
+        public int maxRedOrbs = 0;
+
         public List<Block> blocks;
         public List<Doodad> doodads;
         public List<Monster> monsters;
@@ -103,7 +111,12 @@ namespace VexedCore
             id = r.id;
             currentOrbs = r.currentOrbs;
             maxOrbs = r.maxOrbs;
+            currentBlueOrbs = r.currentBlueOrbs;
+            currentRedOrbs = r.currentRedOrbs;
+            maxRedOrbs = r.maxRedOrbs;
+            maxBlueOrbs = r.maxBlueOrbs;
             sectorID = r.sectorID;
+            explored = r.explored;
 
             blocks = new List<Block>();
             foreach (Block b in r.blocks)
@@ -372,6 +385,7 @@ namespace VexedCore
         {
             Vector3 modifier = Vector3.Zero;
             Vector3 relPosition = position - center;
+            
             if (relPosition.X > size.X / 2 - roundingThreshold)
             {
                 modifier.X += distanceModifier * (relPosition.X - size.X / 2 + roundingThreshold)/roundingThreshold;
@@ -396,6 +410,7 @@ namespace VexedCore
             {
                 modifier.Z += distanceModifier * (relPosition.Z + size.Z / 2 - roundingThreshold) / roundingThreshold;
             }
+            
             return position + modifier;
         }
 
@@ -407,6 +422,13 @@ namespace VexedCore
         public VertexPositionColorNormalTexture GenerateTexturedVertex(Vector3 position, Vector2 texCoord, Color color, Vector3 normal, float distanceModifier)
         {
             return new VertexPositionColorNormalTexture(RaisedPosition(position, distanceModifier, 1f), color, normal, texCoord);
+        }
+
+        public VertexPositionColorNormalTexture GenerateTexturedVertex(Vector3 position, Vector2 texCoord, Color color, Vector3 normal, float distanceModifier, bool cornerStretch)
+        {
+            if(cornerStretch == true)
+                return new VertexPositionColorNormalTexture(RaisedPosition(position, distanceModifier, 1f), color, normal, texCoord);
+            return new VertexPositionColorNormalTexture(RaisedPosition(position, distanceModifier, .1f), color, normal, texCoord);
         }
 
         public void AddStripToTriangleListHelper(Vertex start, Vertex end, float depth, EdgeProperties properties, List<VertexPositionColorNormalTexture> triangleList)
@@ -1079,6 +1101,12 @@ namespace VexedCore
 
         public void AddBlockToTriangleList(List<Vertex> vList, Color c, float frontDepth, float backDepth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
         {
+            AddBlockToTriangleList(vList, c, frontDepth, backDepth, texCoords, triangleList, true);
+        }
+        
+
+        public void AddBlockToTriangleList(List<Vertex> vList, Color c, float frontDepth, float backDepth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList, bool cornerStretch)
+        {
             List<Vertex> points = new List<Vertex>();
             List<Vector2> pointsTexCoords = new List<Vector2>();
             
@@ -1109,21 +1137,21 @@ namespace VexedCore
                     Vector3 edgeNormal = Vector3.Cross(midPoint - vList[i].position, vList[i].normal);
                     shadedColor = FakeShader.Shade(c, edgeNormal);
 
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[1], shadedColor, edgeNormal, frontDepth));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[1], shadedColor, edgeNormal, frontDepth,cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
 
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[3], shadedColor, edgeNormal, -backDepth));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[3], shadedColor, edgeNormal, -backDepth, cornerStretch));
 
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[1], shadedColor, edgeNormal, frontDepth));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[1], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
 
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[3], shadedColor, edgeNormal, -backDepth));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[3], shadedColor, edgeNormal, -backDepth, cornerStretch));
                 }
                 else
                 {
@@ -1131,33 +1159,33 @@ namespace VexedCore
                     
                     // straight edge case
                     shadedColor = FakeShader.Shade(c, edgeNormal);
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[1], shadedColor, edgeNormal, frontDepth));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[1], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
 
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[3], shadedColor, edgeNormal, -backDepth));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[3], shadedColor, edgeNormal, -backDepth, cornerStretch));
                 }
             }
 
             if (points.Count == 4)
             {
                 shadedColor = FakeShader.Shade(c, vList[0].normal);
-                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColor, vList[0].normal, frontDepth));
-                triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], shadedColor, vList[1].normal, frontDepth));
-                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColor, vList[2].normal, frontDepth));
-                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColor, vList[0].normal,frontDepth));
-                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColor, vList[2].normal, frontDepth));
-                triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], shadedColor, vList[3].normal,frontDepth));
+                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColor, vList[0].normal, frontDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], shadedColor, vList[1].normal, frontDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColor, vList[2].normal, frontDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColor, vList[0].normal, frontDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColor, vList[2].normal, frontDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], shadedColor, vList[3].normal, frontDepth, cornerStretch));
 
                 shadedColor = FakeShader.Shade(c, -vList[0].normal);
-                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColor, vList[0].normal, -backDepth));
-                triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], shadedColor, vList[1].normal, -backDepth));
-                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColor, vList[2].normal, -backDepth));
-                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColor, vList[0].normal, -backDepth));
-                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColor, vList[2].normal, -backDepth));
-                triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], shadedColor, vList[3].normal, -backDepth));
+                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColor, vList[0].normal, -backDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], shadedColor, vList[1].normal, -backDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColor, vList[2].normal, -backDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColor, vList[0].normal, -backDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColor, vList[2].normal, -backDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], shadedColor, vList[3].normal, -backDepth, cornerStretch));
             }
             else
             {
@@ -1168,14 +1196,14 @@ namespace VexedCore
                         normal = points[(jointVertexIndex + i + 1) % 6].normal;
 
                     shadedColor = FakeShader.Shade(c, normal);
-                    triangleList.Add(GenerateTexturedVertex(points[jointVertexIndex].position, pointsTexCoords[jointVertexIndex], shadedColor, normal, frontDepth));
-                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i) % 6].position, pointsTexCoords[(jointVertexIndex + i) % 6], shadedColor, normal, frontDepth));
-                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i + 1) % 6].position, pointsTexCoords[(jointVertexIndex + i + 1) % 6], shadedColor, normal, frontDepth));
+                    triangleList.Add(GenerateTexturedVertex(points[jointVertexIndex].position, pointsTexCoords[jointVertexIndex], shadedColor, normal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i) % 6].position, pointsTexCoords[(jointVertexIndex + i) % 6], shadedColor, normal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i + 1) % 6].position, pointsTexCoords[(jointVertexIndex + i + 1) % 6], shadedColor, normal, frontDepth, cornerStretch));
 
                     shadedColor = FakeShader.Shade(c, -normal);
-                    triangleList.Add(GenerateTexturedVertex(points[jointVertexIndex].position, pointsTexCoords[jointVertexIndex], shadedColor, normal, -backDepth));
-                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i) % 6].position, pointsTexCoords[(jointVertexIndex + i) % 6], shadedColor, normal, -backDepth));
-                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i + 1) % 6].position, pointsTexCoords[(jointVertexIndex + i + 1) % 6], shadedColor, normal, -backDepth));
+                    triangleList.Add(GenerateTexturedVertex(points[jointVertexIndex].position, pointsTexCoords[jointVertexIndex], shadedColor, normal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i) % 6].position, pointsTexCoords[(jointVertexIndex + i) % 6], shadedColor, normal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i + 1) % 6].position, pointsTexCoords[(jointVertexIndex + i + 1) % 6], shadedColor, normal, -backDepth, cornerStretch));
                 }
             }
 
@@ -1430,13 +1458,21 @@ namespace VexedCore
             }
 
         }
-
+        
 
         public void DrawDecorations()
-        {
-            foreach (Decoration d in decorations)
+        {                    
+            if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || (roomHighlight == true && explored == true))
             {
-                d.Draw(this);
+                if ((center - Engine.player.currentRoom.center).Length() < Engine.drawDistance ||
+                        (Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)
+                {
+
+                    foreach (Decoration d in decorations)
+                    {
+                        d.Draw(this);
+                    }
+                }
             }
         }
 
@@ -1527,16 +1563,19 @@ namespace VexedCore
                 {
                     MapDecalHelper(mapDecalList, cameraUp, cameraRight, v, 45, true);
                 }
-                foreach (Doodad d in doodads)
+                if (explored == true)
                 {
-                    if (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.WarpStation || d.type == VexedLib.DoodadType.SaveStation)
+                    foreach (Doodad d in doodads)
                     {
-                        int decalIndex = (int)(d.abilityType);
-                        if (d.type == VexedLib.DoodadType.SaveStation)
-                            decalIndex = 43;
-                        if (d.type == VexedLib.DoodadType.WarpStation)
-                            decalIndex = 39;
-                        MapDecalHelper(mapDecalList, cameraUp, cameraRight, d.position, decalIndex, false);
+                        if (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.WarpStation || d.type == VexedLib.DoodadType.SaveStation)
+                        {
+                            int decalIndex = (int)(d.abilityType);
+                            if (d.type == VexedLib.DoodadType.SaveStation)
+                                decalIndex = 43;
+                            if (d.type == VexedLib.DoodadType.WarpStation)
+                                decalIndex = 39;
+                            MapDecalHelper(mapDecalList, cameraUp, cameraRight, d.position, decalIndex, false);
+                        }
                     }
                 }
                 mapDecalVertices = mapDecalList.ToArray();                
@@ -1558,12 +1597,13 @@ namespace VexedCore
         public List<TrasnparentSquare> GetMapBlock(Vector3 adjustedSize, Color blockColor, bool highlight)
         {
             Color shellColor = blockColor;
-            if (Engine.state == EngineState.Active)
+            if (this.sectorHighlight == true)
             {
-                shellColor.A = 128;
-                shellColor.R = (Byte)(shellColor.R /2);
-                shellColor.G = (Byte)(shellColor.G /2);
-                shellColor.B = (Byte)(shellColor.B /2);
+                shellColor = Color.White;
+                shellColor.A = (Byte)(200 * WorldMap.zoomLevel);
+                shellColor.R = (Byte)(shellColor.R * WorldMap.zoomLevel);
+                shellColor.G = (Byte)(shellColor.G * WorldMap.zoomLevel);
+                shellColor.B = (Byte)(shellColor.B * WorldMap.zoomLevel);
             }
             else if (highlight == true)
             {
@@ -1572,13 +1612,19 @@ namespace VexedCore
                 shellColor.G = (Byte)(shellColor.G * WorldMap.zoomLevel / 3);
                 shellColor.B = (Byte)(shellColor.B * WorldMap.zoomLevel / 3);
             }
-            else if (this.sectorHighlight == true)
+            else if (explored == false || parentSector != Engine.player.currentRoom.parentSector)
             {
-                shellColor = Color.White;
-                shellColor.A = (Byte)(200 * WorldMap.zoomLevel);
-                shellColor.R = (Byte)(shellColor.R * WorldMap.zoomLevel);
-                shellColor.G = (Byte)(shellColor.G * WorldMap.zoomLevel);
-                shellColor.B = (Byte)(shellColor.B * WorldMap.zoomLevel);
+                shellColor.A = 110;
+                shellColor.R = 30;
+                shellColor.G = 30;
+                shellColor.B = 30;
+            }
+            else if (Engine.state == EngineState.Active)
+            {
+                shellColor.A = 128;
+                shellColor.R = (Byte)(shellColor.R / 2);
+                shellColor.G = (Byte)(shellColor.G / 2);
+                shellColor.B = (Byte)(shellColor.B / 2);
             }
             else if (this == Engine.player.currentRoom || this.roomHighlight == true)
             {
@@ -1728,7 +1774,7 @@ namespace VexedCore
 
         public void Draw(GameTime gameTime)
         {
-            if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || roomHighlight == true)
+            if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || (roomHighlight == true && explored == true))
             {
                 if ((center - Engine.player.currentRoom.center).Length() < Engine.drawDistance ||
                         (Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)

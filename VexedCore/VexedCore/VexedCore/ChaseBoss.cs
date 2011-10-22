@@ -56,7 +56,7 @@ namespace VexedCore
                     }
                 }
             }
-            if (dialogState == 2 && Engine.player.primaryAbility.type == AbilityType.Blaster || Engine.player.secondaryAbility.type == AbilityType.Blaster)
+            if (dialogState == 2 && (Engine.player.primaryAbility.type == AbilityType.Blaster || Engine.player.secondaryAbility.type == AbilityType.Blaster))
             {
                 DialogBox.SetDialog("ChaseBoss3");
                 dialogState++;

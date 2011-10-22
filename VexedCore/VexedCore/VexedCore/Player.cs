@@ -24,7 +24,8 @@ namespace VexedCore
         Spin,
         Death,
         Dialog,
-        HookSpin
+        HookSpin,
+        Upgrade,
     }
 
     public enum HookState
@@ -104,6 +105,7 @@ namespace VexedCore
         public int lastFireTime = 0;
         public int hookTime = 0;
         public int hookHangTime = 0;
+        public int upgradeTime = 0;
         public bool superJump = false;
         public bool jetPacking = false;
         public bool jetPackThrust = false;
@@ -126,11 +128,13 @@ namespace VexedCore
         public bool[] upgrades;
         public Vector3 oldNormal = Vector3.Zero;
         public Vector3 oldUp = Vector3.Zero;
+        public Doodad upgradeStationDoodad = null;
 
         public HookState hookState = HookState.Waiting;
 
         public float playerHalfWidth = .35f;
         public float playerHalfHeight = .5f;
+
 
         public static int flashMaxTime = 400;
         public static int jumpRecoveryMax = 300;
@@ -142,6 +146,10 @@ namespace VexedCore
         public static int maxHookTime = 150;
         public static int maxHookHangTime = 100;
         public static int weaponSwitchCooldownMax = 200;
+        public static int upgradeWalkTime = 500;
+        public static int upgradeInTime = upgradeWalkTime + 300;
+        public static int upgradeWaitTime = upgradeInTime + 1000;
+        public static int upgradeOutTime = upgradeWaitTime + 500;
 
         public VexedLib.GunType gunType = VexedLib.GunType.Blaster;
         
@@ -159,8 +167,9 @@ namespace VexedCore
         public int groundTolerance = 100;
         public int groundCounter = 0;
         public int faceDirection = -1;
-        public float baseCameraDistance = 12;
+        public float _baseCameraDistance = 12;
         public int orbsCollected = 0;
+        public int redOrbsCollected = 0;
 
         public Vector2 cameraAngle;
         public Vector2 targetCameraAngle;
@@ -175,8 +184,9 @@ namespace VexedCore
         public float boundingBoxLeft;
         public float boundingBoxRight;
 
-        public static float cameraUpTilt = .2f;
+        public static float cameraUpTilt = .1f;
         public static float cameraRoundingThreshold = 5f;
+        
 
         public Player()
         {
@@ -184,10 +194,11 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.WallJump);
-            secondaryAbility = new Ability(AbilityType.Missile);
+            primaryAbility = new Ability(AbilityType.DoubleJump);
+            secondaryAbility = new Ability(AbilityType.Empty);
             naturalShield = new Ability(AbilityType.Shield);
-            //upgrades[(int)AbilityType.PermanentWallJump] = true;
+            /*upgrades[(int)AbilityType.PermanentWallJump] = true;
+            upgrades[(int)AbilityType.ImprovedJump] = true;
             upgrades[(int)AbilityType.PermanentBoots] = true;
             upgrades[(int)AbilityType.WallJump] = true;
             upgrades[(int)AbilityType.DoubleJump] = true;
@@ -196,7 +207,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.Blaster] = true;
             upgrades[(int)AbilityType.Empty] = true;
             upgrades[(int)AbilityType.Missile] = true;
-            upgrades[(int)AbilityType.Booster] = true;
+            upgrades[(int)AbilityType.Booster] = true;*/
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }
@@ -299,9 +310,58 @@ namespace VexedCore
         {
             get
             {
+                if (state == State.Upgrade && upgradeTime < upgradeWalkTime)
+                    return true;
                 Vector2 stick = Controls.LeftStick();
                 return (Controls.IsLeftKeyDown() ||
                     Controls.IsRightKeyDown() || stick.X != 0) && grounded == true;
+            }
+        }
+
+        public float depth
+        {
+            get
+            {
+                if (state == State.Upgrade && upgradeTime > upgradeWalkTime && upgradeTime < upgradeInTime)
+                {
+                    return (.3f * (upgradeInTime - upgradeTime) + .13f * (upgradeTime - upgradeWalkTime)) / (upgradeInTime - upgradeWalkTime);
+                }
+                if (state == State.Upgrade && upgradeTime >= upgradeInTime && upgradeTime < upgradeWaitTime)
+                {
+                    return .14f;
+                }
+                if (state == State.Upgrade && upgradeTime >= upgradeWaitTime && upgradeTime < upgradeOutTime)
+                {
+                    return (.14f * (upgradeTime - upgradeWaitTime) + .3f * (upgradeOutTime - upgradeTime)) / (upgradeOutTime - upgradeWaitTime);
+                }
+                
+                return .3f;
+            }
+        }
+
+        public float adjustedCameraDistance
+        {
+            get
+            {
+                if (cameraAngle.Length() > 1f)
+                    cameraAngle.Normalize();
+
+                float result = (1f - cameraAngle.Length()) * _baseCameraDistance;
+                if (result < 2f) 
+                    result = 2f;
+                return result;
+            }
+        }
+
+        public float baseCameraDistance
+        {
+            get
+            {
+                return _baseCameraDistance;
+            }
+            set
+            {
+                _baseCameraDistance = value;
             }
         }
 
@@ -313,9 +373,9 @@ namespace VexedCore
                 {
                     return currentRoom.RaisedPosition(tunnelDummy.position + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
                 }
-                if (state == State.Normal || state == State.Spin || state == State.Dialog)
+                if (state == State.Normal || state == State.Spin || state == State.Dialog || state == State.Upgrade)
                 {
-                    return currentRoom.RaisedPosition(center.position + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
+                    return currentRoom.RaisedPosition(center.position + cameraOffset, adjustedCameraDistance, cameraRoundingThreshold);
                 }
                 if (state == State.Death)
                 {
@@ -345,7 +405,7 @@ namespace VexedCore
                 {
                     return currentRoom.RaisedPosition(tunnelDummy.position, baseCameraDistance, cameraRoundingThreshold);
                 }
-                if (state == State.Normal || state == State.Spin || state == State.Dialog)
+                if (state == State.Normal || state == State.Spin || state == State.Dialog || state == State.Upgrade)
                 {
                     return currentRoom.RaisedPosition(center.position, baseCameraDistance, cameraRoundingThreshold);
                 }
@@ -375,8 +435,8 @@ namespace VexedCore
             {
                 Vector3 cameraOut = baseCameraPos - cameraTarget;
                 cameraOut.Normalize();
-                Vector3 cameraRight = Vector3.Cross(cameraUp, cameraOut);
-                return 5 * (cameraAngle.Y * cameraUp + cameraAngle.X * cameraRight);
+                Vector3 cameraRight = Vector3.Cross(cameraUp, cameraOut);                
+                return baseCameraDistance * (cameraAngle.Y * cameraUp + cameraAngle.X * cameraRight);
             }
         }
 
@@ -384,7 +444,7 @@ namespace VexedCore
         {
             get
             {
-                return 5 * (cameraUpTilt* cameraUp);
+                return baseCameraDistance * (cameraUpTilt * cameraUp);
             }
         }
 
@@ -411,7 +471,7 @@ namespace VexedCore
         {
             get
             {
-                if (state == State.Normal || state == State.Spin || state == State.Dialog)
+                if (state == State.Normal || state == State.Spin || state == State.Dialog || state == State.Upgrade)
                     return center.position;
                 else if (state == State.Tunnel)
                     return tunnelDummy.position;
@@ -596,7 +656,7 @@ namespace VexedCore
                 }
                 else if (naturalShield.ammo != 0)
                 {
-                    naturalShield.DepleteAmmo(800);
+                    naturalShield.DepleteAmmo(1);
                     flashTime = flashMaxTime;
                 }
                 else
@@ -840,6 +900,7 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            currentRoom.explored = true;
             crushCount--;
             if (crushCount < 0)
                 crushCount = 0;
@@ -892,6 +953,43 @@ namespace VexedCore
             {
                 //oldUp = center.direction;
                 //oldNormal = center.normal;
+            }
+
+            if (state == State.Upgrade)
+            {
+                upgradeTime += gameTime.ElapsedGameTime.Milliseconds;
+                if(upgradeTime < upgradeWalkTime)
+                    center.position = ((upgradeWalkTime - upgradeTime) * jumpSource + upgradeTime * upgradeStationDoodad.position.position) / upgradeWalkTime;
+                if (Vector3.Dot(right, upgradeStationDoodad.position.position - center.position) > 0)
+                    faceDirection = 1;
+                else
+                    faceDirection = -1;
+                if (upgradeTime > upgradeWalkTime)
+                {                    
+                    faceDirection = 0;                    
+                }
+                if (upgradeTime > upgradeInTime)
+                {
+                    upgradeStationDoodad.active = false;
+                }
+                if (upgradeTime > upgradeWaitTime-100)
+                {
+                    if (upgradeStationDoodad.abilityType == AbilityType.Ultima)
+                    {
+                        for (int i = 0; i < 32; i++)
+                            upgrades[i] = true;
+                    }
+                    upgrades[(int)upgradeStationDoodad.abilityType] = true;
+                    DialogBox.SetDialog((new Ability(upgradeStationDoodad.abilityType)).GetDialogId());
+                    upgradeStationDoodad.abilityType = AbilityType.Empty;
+                    upgradeTime = 0;
+                }
+                if (upgradeTime > upgradeOutTime)
+                {
+                    state = State.Normal;
+                    upgradeTime = 0;
+                }
+
             }
 
             if (hookState != HookState.Waiting)
@@ -995,6 +1093,8 @@ namespace VexedCore
                 Respawn();
             
             cameraAngle = (cameraAngle + targetCameraAngle) / 2;
+            
+                 
 
             groundCounter += gameTime.ElapsedGameTime.Milliseconds;
             if (groundCounter > groundTolerance)
@@ -1269,8 +1369,8 @@ namespace VexedCore
                                     jumpRoom = d.targetRoom;
                                     jumpSource = center.position;
                                     jumpDestination = d.targetDoodad.position.position - 2f * d.targetDoodad.upUnit;
-                                    jumpCameraSource = currentRoom.RaisedPosition(jumpSource + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
-                                    jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination + simpleCameraOffset, baseCameraDistance, cameraRoundingThreshold);
+                                    jumpCameraSource = currentRoom.RaisedPosition(jumpSource + cameraOffset, adjustedCameraDistance, cameraRoundingThreshold);
+                                    jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination + simpleCameraOffset, adjustedCameraDistance, cameraRoundingThreshold);
                                     
                                     jumpNormal = center.normal;
                                     launchTime = 0;
@@ -1306,6 +1406,34 @@ namespace VexedCore
                                     currentRoom.refreshVertices = true;
                                 }
                             }
+                            if (d.type == VexedLib.DoodadType.RedPowerStation)
+                            {
+                                if (d.orbsRemaining > 0)
+                                {
+                                    redOrbsCollected += 1;
+                                    if (redOrbsCollected % 5 == 0)
+                                    {
+                                        naturalShield.maxAmmo = naturalShield.maxAmmo + 1;
+                                        naturalShield.ammo = naturalShield.maxAmmo;
+                                    }
+                                    d.orbsRemaining--;
+                                    currentRoom.currentRedOrbs++;
+                                    currentRoom.parentSector.currentRedOrbs++;
+                                    //Engine.reDraw = true;
+                                    currentRoom.refreshVertices = true;
+                                }
+                            }
+                            if (d.type == VexedLib.DoodadType.BluePowerStation)
+                            {
+                                if (d.orbsRemaining > 0)
+                                {
+                                    d.orbsRemaining--;
+                                    currentRoom.currentBlueOrbs++;
+                                    currentRoom.parentSector.currentBlueOrbs++;
+                                    //Engine.reDraw = true;
+                                    currentRoom.refreshVertices = true;
+                                }
+                            }
                             if (d.type == VexedLib.DoodadType.SaveStation && d.cooldown == 0)
                             {
                                 d.cooldown = d.maxCooldown;
@@ -1313,18 +1441,15 @@ namespace VexedCore
                             }
                             if (d.type == VexedLib.DoodadType.UpgradeStation)
                             {
-                                if (d.abilityType == AbilityType.Ultima)
-                                {
-                                    for (int i = 0; i < 32; i++)
-                                        upgrades[i] = true;
-                                }
-                                upgrades[(int)d.abilityType] = true;
-                                d.abilityType = AbilityType.Empty;
+                                state = State.Upgrade;
+                                upgradeStationDoodad = d;
+                                jumpSource = center.position;
                             }
                             if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
                             {
-                                if (d.type == VexedLib.DoodadType.JumpPad)
-                                    d.Activate();
+                                //if (d.type == VexedLib.DoodadType.JumpPad)
+                                d.Activate();
+                                d.alreadyUsed = true;
                                 Engine.reDraw = true;
                                 SoundFX.RoomJump();
                                 jumpRoom = d.targetRoom;
@@ -1334,9 +1459,13 @@ namespace VexedCore
                                 float roomSize = Math.Abs(Vector3.Dot(jumpRoom.size / 2, center.normal));
                                 jumpSource = center.position;
                                 jumpDestination = center.position + Vector3.Dot(jumpRoom.center - center.position - roomSize * center.normal, center.normal) * center.normal;
-                                // Base Camera
-                                jumpCameraSource = currentRoom.RaisedPosition(jumpSource + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
-                                jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination + simpleCameraOffset, baseCameraDistance, cameraRoundingThreshold);
+                                
+                                // Set up Jump Camera
+                                jumpCameraSource = currentRoom.RaisedPosition(jumpSource + cameraOffset, adjustedCameraDistance, cameraRoundingThreshold);
+                                Mouse.SetPosition(Game1.titleSafeRect.Center.X, Game1.titleSafeRect.Center.Y);                                
+                                targetCameraAngle = Controls.GetStaticCameraHelper() + new Vector2(0, cameraUpTilt);
+                                cameraAngle = targetCameraAngle;
+                                jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination + cameraOffset, adjustedCameraDistance, cameraRoundingThreshold);
                                     
                                 state = State.Jump;
                                 center.velocity = Vector3.Zero;
@@ -1345,8 +1474,8 @@ namespace VexedCore
                                 jumpNormal = -center.normal;
                             }
                             if (d.type == VexedLib.DoodadType.NPC_OldMan)
-                            {
-                                DialogBox.SetDialog("Default");
+                            {                                
+                                DialogBox.SetDialog(d.id);
                                 state = State.Dialog;
                                 
                             }
@@ -1431,8 +1560,8 @@ namespace VexedCore
                             jumpDestination = d.targetDoodad.position.position - 1f * d.targetDoodad.upUnit;
 
                             // Base Camera
-                            jumpCameraSource = currentRoom.RaisedPosition(jumpSource + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
-                            jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination + simpleCameraOffset, baseCameraDistance, cameraRoundingThreshold);
+                            jumpCameraSource = currentRoom.RaisedPosition(jumpSource + cameraOffset, adjustedCameraDistance, cameraRoundingThreshold);
+                            jumpCameraDestination = jumpRoom.RaisedPosition(jumpDestination + simpleCameraOffset, adjustedCameraDistance, cameraRoundingThreshold);
                                     
                             
                             jumpNormal = center.normal;
@@ -1487,10 +1616,18 @@ namespace VexedCore
                     {
                         if(d.type == VexedLib.DoodadType.BridgeGate)
                             d.active = false;
+                        if (d.type == VexedLib.DoodadType.JumpStation || d.type == VexedLib.DoodadType.JumpPad)
+                        {
+                            if((d.position.position - center.position).Length() < 1.5f && d.powered == true)
+                            {
+                                d.alreadyUsed = true;
+                            }
+                        }
                     }
-
+                    Mouse.SetPosition(Game1.titleSafeRect.Center.X, Game1.titleSafeRect.Center.Y);
                     jumpRoom = null;
                     ResetAdjacentRooms();
+                    
 
                 }
 
@@ -1611,7 +1748,7 @@ namespace VexedCore
             Color playerColor = Color.White;
             playerColor.G = (Byte)(255 - (255 * flashTime *4/ flashMaxTime));
             playerColor.B = (Byte)(255 - (255 * flashTime *4/ flashMaxTime));
-            currentRoom.AddTextureToTriangleList(rectVertexList, playerColor, .3f, textureTriangleList, Player.texCoordList[currentTextureIndex], true);
+            currentRoom.AddTextureToTriangleList(rectVertexList, playerColor, depth, textureTriangleList, Player.texCoordList[currentTextureIndex], true);
 
 
             VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
@@ -1648,7 +1785,7 @@ namespace VexedCore
                     v.Update(currentRoom, 1);
 
 
-                currentRoom.AddTextureToTriangleList(hookVertexList, Color.White, .5f, hookTriangleList, Ability.texCoordList[7], true);
+                currentRoom.AddTextureToTriangleList(hookVertexList, Color.White, depth + .2f, hookTriangleList, Ability.texCoordList[7], true);
 
                 VertexPositionColorNormalTexture[] hookArray = hookTriangleList.ToArray();
 
@@ -1674,7 +1811,7 @@ namespace VexedCore
                     triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 if (boosting == true)
                 {
-                    float flameDepth = .35f;
+                    float flameDepth = depth + .05f;
                     if (faceDirection < 0)
                     {
                         List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();
@@ -1721,9 +1858,9 @@ namespace VexedCore
                     triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 if (jetPackThrust == true)
                 {
-                    float flameDepth = .25f;
+                    float flameDepth = depth - .05f;
                     if (faceDirection != 0)
-                        flameDepth = .35f;
+                        flameDepth = depth + .05f;
                     if (faceDirection <= 0)
                     {
                         List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();

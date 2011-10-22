@@ -169,3 +169,17 @@ E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Skybox
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\pausebackground.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\mouse.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\screenchangearrow.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\mouseandkeyboard.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\gamepadhelp.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\keyboardonlyhelp.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_arrow.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_tree.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_shuttle.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_shuttle_open.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_vinebranch.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_watermeter.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_waterpipes.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_watertank.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_leftvinebranch.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_rightvinebranch.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_thornwall.xnb

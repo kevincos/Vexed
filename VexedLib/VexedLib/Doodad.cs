@@ -48,7 +48,13 @@ namespace VexedLib
         PowerPlug = 37,
         TriggerPoint = 38,
         LoadStation = 39,
-        MenuStation = 40
+        MenuStation = 40,
+        RedCube = 41,
+        BlueCube = 42,
+        RedPowerStation = 43,
+        BluePowerStation = 44,
+        RingTop = 45,
+        RingSide = 46
     }
 
     public enum AbilityType

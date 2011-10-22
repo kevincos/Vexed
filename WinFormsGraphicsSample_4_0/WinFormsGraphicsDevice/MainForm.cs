@@ -531,6 +531,11 @@ namespace WinFormsGraphicsDevice
                 this.elementNameField.Text = selectedDecoration.IDString;
                 this.elementIDField.Text = selectedDecoration.IDString;
                 this.decorationTexture.Text = selectedDecoration.texture;
+                this.decorationDepth.Text = selectedDecoration.depth.ToString();
+                this.decorationWrap.Checked = selectedDecoration.wrap;
+                this.decorationR.Text = selectedDecoration.color.R.ToString();
+                this.decorationG.Text = selectedDecoration.color.G.ToString();
+                this.decorationB.Text = selectedDecoration.color.B.ToString();
             }
             else if (selectedDoodad != null && MainForm.editMode == EditMode.Doodad)
             {
@@ -771,10 +776,30 @@ namespace WinFormsGraphicsDevice
         {
             try
             {
-
+                
                 if (sender == this.decorationTexture)
                 {
                     selectedDecoration.texture = this.decorationTexture.Text;
+                }
+                if (sender == this.decorationWrap)
+                {
+                    selectedDecoration.wrap = this.decorationWrap.Checked;
+                }
+                if (sender == this.decorationDepth)
+                {
+                    selectedDecoration.depth = System.Convert.ToInt32(this.decorationDepth.Text);
+                }
+                if (sender == this.decorationR)
+                {
+                    selectedDecoration.color.R = System.Convert.ToByte(this.decorationR.Text);
+                }
+                if (sender == this.decorationG)
+                {
+                    selectedDecoration.color.G = System.Convert.ToByte(this.decorationG.Text);
+                }
+                if (sender == this.decorationB)
+                {
+                    selectedDecoration.color.B = System.Convert.ToByte(this.decorationB.Text);
                 }
             }
             catch { }

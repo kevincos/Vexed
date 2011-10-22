@@ -220,7 +220,7 @@ namespace VexedCore
                 {
                     if (Controls.lastMousePos == Vector2.Zero)
                         Controls.lastMousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-                    Mouse.SetPosition(400, 300);
+                    Mouse.SetPosition(Game1.titleSafeRect.Center.X, Game1.titleSafeRect.Center.Y);
                 }
                 else
                 {
@@ -246,8 +246,8 @@ namespace VexedCore
                     yShift -= 1f;
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
                     yShift += 1f;
-                xShift += .15f * (400-Mouse.GetState().X);
-                yShift -= .15f * (300-Mouse.GetState().Y);
+                xShift += .15f * (Game1.titleSafeRect.Center.X - Mouse.GetState().X);
+                yShift -= .15f * (Game1.titleSafeRect.Center.Y - Mouse.GetState().Y);
                 if (xShift > 1)
                     xShift = 1;
                 if (yShift > 1)
@@ -276,16 +276,27 @@ namespace VexedCore
                     yShift -= 1f;
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
                     yShift += 1f;
-                xShift += .0025f * (Mouse.GetState().X - 400);
-                yShift -= .0025f * (Mouse.GetState().Y - 300);
-                if (xShift > 1)
-                    xShift = 1;
-                if (yShift > 1)
-                    yShift = 1;
-                if (xShift < -1)
-                    xShift = -1;
-                if (yShift < -1)
-                    yShift = -1;
+            }
+            xShift += .0025f * (Mouse.GetState().X - Game1.titleSafeRect.Center.X);
+            yShift -= .0025f * (Mouse.GetState().Y - Game1.titleSafeRect.Center.Y);
+            if (xShift > 1)
+                xShift = 1;
+            if (yShift > 1)
+                yShift = 1;
+            if (xShift < -1)
+                xShift = -1;
+            if (yShift < -1)
+                yShift = -1;
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+            {
+                if (xShift > .5f)
+                    xShift = .5f;
+                if (yShift > .5f)
+                    yShift = .5f;
+                if (xShift < -.5f)
+                    xShift = -.5f;
+                if (yShift < -.5f)
+                    yShift = -.5f;
             }
             return new Vector2(xShift, yShift);
         }
@@ -320,6 +331,19 @@ namespace VexedCore
                         }
                     }                   
                 }
+            }
+
+            if (Engine.state == EngineState.Active && PauseMenu.paused == false)
+            {
+                if (Mouse.GetState().X < 0)
+                    Mouse.SetPosition(0, Mouse.GetState().Y);
+                if (Mouse.GetState().Y < 0)
+                    Mouse.SetPosition(Mouse.GetState().X, 0);
+                if (Mouse.GetState().X > Game1.titleSafeRect.Right)
+                    Mouse.SetPosition(Game1.titleSafeRect.Right, Mouse.GetState().Y);
+                if (Mouse.GetState().Y > Game1.titleSafeRect.Bottom)
+                    Mouse.SetPosition(Mouse.GetState().X, Game1.titleSafeRect.Bottom);
+                
             }
             
         }

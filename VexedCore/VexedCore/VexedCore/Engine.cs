@@ -27,6 +27,13 @@ namespace VexedCore
         R_1280x720        
     }
 
+    public enum ControlType
+    {
+        MouseAndKeyboard,
+        KeyboardOnly,
+        GamePad
+    }
+
     public class Engine
     {
         public static int saveFileIndex = 0;
@@ -63,6 +70,7 @@ namespace VexedCore
         public static int lightingLevel = 0;
         public static bool toonShadingEnabled = false;
         public static float drawDistance = 100f;
+        public static ControlType controlType = ControlType.MouseAndKeyboard;
         public int optionToggleCooldown = 0;
         public static bool reDraw = false;
         public static bool detailTextures = true;
@@ -293,7 +301,10 @@ namespace VexedCore
                 playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                 Engine.player.currentRoom.DrawProjectiles();
 
-                Engine.player.currentRoom.DrawDecorations();
+                foreach (Room r in Engine.roomList)
+                {
+                    r.DrawDecorations();
+                }
 
                 Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
@@ -436,10 +447,10 @@ namespace VexedCore
 
             Engine.mapShellObjects = new List<TrasnparentSquare>();
             if(Engine.detailVertexArray == null)
-                Engine.detailVertexArray = new VertexPositionColorNormalTexture[30000];
+                Engine.detailVertexArray = new VertexPositionColorNormalTexture[40000];
             detailVertexArrayCount = 0;
             if (Engine.doodadVertexArray == null)
-                Engine.doodadVertexArray = new VertexPositionColorNormalTexture[60000];
+                Engine.doodadVertexArray = new VertexPositionColorNormalTexture[100000];
             doodadVertexArrayCount = 0;
             if (Engine.decalVertexArray == null)
                 Engine.decalVertexArray = new VertexPositionColorNormalTexture[30000];
@@ -612,22 +623,7 @@ namespace VexedCore
 
             DepthControl.Draw();
 
-            if (Engine.player.secondaryAbility.isPassive == false)
-                Ability.Draw(.825f, .02f, AbilityType.YButton);
-            else
-                Ability.Draw(.825f, .02f, AbilityType.Passive);
-
-            if (Engine.player.primaryAbility.isPassive == false)            
-                Ability.Draw(.75f, .12f, AbilityType.XButton);
-            else
-                Ability.Draw(.75f, .12f, AbilityType.Passive);
-            Ability.Draw(.825f, .22f, AbilityType.AButton);
-            Ability.Draw(.9f, .12f, AbilityType.BButton);
-
-            Engine.player.secondaryAbility.Draw(.825f, .02f);
-            Engine.player.primaryAbility.Draw(.75f, .12f);
-            Ability.Draw(.825f, .22f, AbilityType.NormalJump, player.naturalShield.ammo, player.naturalShield.maxAmmo);
-            Ability.Draw(.9f, .12f, AbilityType.Use);
+            Hud.Draw();
 
             
             if (dialogBox == null)
@@ -637,6 +633,8 @@ namespace VexedCore
             saveGameText.Draw();
             WorldMap.DrawMetaData();
             PauseMenu.Draw();
+            if (Engine.player.currentRoom.id.Contains("Menu"))
+                IntroOverlay.Draw();
         }
 
 
@@ -700,6 +698,8 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            if(Engine.player.currentRoom.id.Contains("Menu"))
+                IntroOverlay.Update(gameTime);
             PauseMenu.Update(gameTime);
             if (PauseMenu.paused == true)
                 return;
@@ -723,7 +723,7 @@ namespace VexedCore
                 player.baseCameraDistance -= .03f * gameTime.ElapsedGameTime.Milliseconds;                
             }
             int currentScrollWheel = Mouse.GetState().ScrollWheelValue;
-            if (Mouse.GetState().RightButton == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+            //if (Mouse.GetState().RightButton == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.LeftControl))
             {
                 if (currentScrollWheel > Controls.scrollWheelPrev)
                 {

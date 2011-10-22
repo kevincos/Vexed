@@ -101,7 +101,14 @@ namespace VexedCore
                 leftArrowScale = 1.3f;
                 leftColorBase = 80;
             }
-            
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+            {
+                Ability.Draw(.05f, .85f, AbilityType.CtrlKey, Color.Gray, .1f);
+            }
+            else
+            {
+                Ability.Draw(.05f, .85f, AbilityType.CtrlKey, Color.White, .1f);
+            }
             if (state == ZoomState.Sector || state == ZoomState.Inventory)
             {
                 Engine.spriteBatch.Draw(changeArrow, new Vector2(Game1.titleSafeRect.Left + 25, Game1.titleSafeRect.Center.Y-20), null, new Color(leftColorBase, leftColorBase, leftColorBase), 0, new Vector2(16, 64), leftArrowScale, SpriteEffects.None, 0);
@@ -185,8 +192,21 @@ namespace VexedCore
             if(state == ZoomState.Sector)
             {
                 Room r = Engine.roomList[selectedRoomIndex];
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Room: " + r.id, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: " + r.currentOrbs + " / " + r.maxOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 140), Color.YellowGreen);                
+                if (r.explored)
+                {
+                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Room: " + r.id, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
+                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: " + r.currentOrbs + " / " + r.maxOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 140), Color.YellowGreen);
+                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Warp Cubes: " + r.currentBlueOrbs + " / " + r.maxBlueOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 160), Color.YellowGreen);
+                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Health Cubes: " + r.currentRedOrbs + " / " + r.maxRedOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 180), Color.YellowGreen);
+                }
+                else
+                {
+                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Room: ???", new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
+                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: ???", new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 140), Color.YellowGreen);
+                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Warp Cubes: ???", new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 160), Color.YellowGreen);
+                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Health Cubes: ???", new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 180), Color.YellowGreen);
+                }
+
             }
             if (state == ZoomState.World)
             {
@@ -194,7 +214,9 @@ namespace VexedCore
                 Sector s = Engine.sectorList[selectedSectorIndex];
 
                 Engine.spriteBatch.DrawString(Engine.spriteFont, "Sector: " + s.id, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: " + s.currentOrbs + " / " + s.maxOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 140), Color.YellowGreen);                
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: " + s.currentOrbs + " / " + s.maxOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 140), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Warp Level: " + s.currentBlueOrbs + " / " + s.maxBlueOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 160), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Red Cubes: " + s.currentRedOrbs + " / " + s.maxRedOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 180), Color.YellowGreen);                
             }
             if (state == ZoomState.Sector || state == ZoomState.World)
             {
@@ -391,7 +413,7 @@ namespace VexedCore
             bool rightScreenChange = false;
             bool scrollBack = (Keyboard.GetState().IsKeyDown(Keys.LeftControl) == false && Controls.scrollWheelPrev > Mouse.GetState().ScrollWheelValue);
             bool scrollForward = (Keyboard.GetState().IsKeyDown(Keys.LeftControl) == false && Controls.scrollWheelPrev < Mouse.GetState().ScrollWheelValue);
-            bool zoomOutCommand = (Keyboard.GetState().IsKeyDown(Keys.OemMinus) || (Keyboard.GetState().IsKeyDown(Keys.LeftControl) == false && Controls.scrollWheelPrev > Mouse.GetState().ScrollWheelValue) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder));
+            bool zoomOutCommand = (Keyboard.GetState().IsKeyDown(Keys.OemMinus) || Keyboard.GetState().IsKeyDown(Keys.M) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder));
 
             if (Mouse.GetState().X != Game1.titleSafeRect.Center.X || Mouse.GetState().Y != Game1.titleSafeRect.Center.Y)
                 displayMouse = true;
@@ -513,7 +535,7 @@ namespace VexedCore
                 }
                 
             }
-            if (warp == true && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || scrollForward || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && WorldMap.state == ZoomState.Sector)
+            if (warp == true && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && WorldMap.state == ZoomState.Sector)
             {
                 bool validWarpTarget = false;
                 foreach (Doodad d in Engine.roomList[selectedRoomIndex].doodads)
@@ -535,7 +557,7 @@ namespace VexedCore
                 playerCameraUp = Engine.playerCameraUp;
                 state = ZoomState.ZoomFromSector;                
             }
-            else if (warp == false && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || scrollForward || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && (WorldMap.state == ZoomState.Sector || WorldMap.state == ZoomState.Inventory))
+            else if (warp == false && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || Keyboard.GetState().IsKeyDown(Keys.M) ||  GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && (WorldMap.state == ZoomState.Sector || WorldMap.state == ZoomState.Inventory))
             {
                 state = ZoomState.ZoomFromSector;
                 sectorCameraTarget = cameraTarget;
@@ -556,7 +578,7 @@ namespace VexedCore
                 resultCooldown = 150;
 
             }
-            else if ((Keyboard.GetState().IsKeyDown(Keys.Space) || scrollForward || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A) || Keyboard.GetState().IsKeyDown(Keys.OemPlus) || rightScreenChange || Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder)) && WorldMap.state == ZoomState.World)
+            else if ((Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A) || Keyboard.GetState().IsKeyDown(Keys.OemPlus) || rightScreenChange || Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder)) && WorldMap.state == ZoomState.World)
             {
                 state = ZoomState.ZoomFromWorld;
                 worldCameraTarget = cameraTarget;
@@ -585,7 +607,7 @@ namespace VexedCore
                 Engine.state = EngineState.Map;
                 ZoomToSector();
             }
-            else if ((Keyboard.GetState().IsKeyDown(Keys.OemMinus) || scrollBack || Keyboard.GetState().IsKeyDown(Keys.OemOpenBrackets) || leftSreenChange || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder)) && WorldMap.state == ZoomState.Sector && warp == false)
+            else if ((Keyboard.GetState().IsKeyDown(Keys.OemMinus) || Keyboard.GetState().IsKeyDown(Keys.OemOpenBrackets) || leftSreenChange || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder)) && WorldMap.state == ZoomState.Sector && warp == false)
             {
                 state = ZoomState.ZoomToWorld;
                 sectorCameraTarget = cameraTarget;
