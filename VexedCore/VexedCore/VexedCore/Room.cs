@@ -1785,7 +1785,7 @@ namespace VexedCore
                     Color interiorColor = new Color(20, 20, 20);
 
                     if (innerBlockMode == 2)
-                        interiorColor.A = 150;
+                        interiorColor.A = 90;
 
 
                     #region innerBlock

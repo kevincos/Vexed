@@ -23,6 +23,7 @@ namespace VexedCore
 
     public enum DoorDecal
     {
+        Default = 0,
         Cherry = 56,
         Diamond = 57,
         Flame = 33,
@@ -207,6 +208,7 @@ namespace VexedCore
 
         public Doodad(VexedLib.DoodadType type, Vector3 position, Vector3 normal, Vector3 direction)
         {
+            id = "d_"+type.ToString();
             srcDoodad = this;
             this.type = type;
             this.position = new Vertex(position, normal, Vector3.Zero, direction);

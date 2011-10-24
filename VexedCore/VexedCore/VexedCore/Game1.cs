@@ -181,6 +181,7 @@ namespace VexedCore
             MusicControl.music_game = Content.Load<Song>("Sounds\\music_game");
 
             LevelLoader.Load("LevelData\\world");
+            //LevelLoader.Load("LevelData\\menu");
             
             // TODO: use this.Content to load your game content here
         }

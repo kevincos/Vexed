@@ -69,11 +69,11 @@ namespace VexedCore
                 state = IntroState.LookHelp;
                 DialogBox.SetDialog("intromovehelp");
             }
-            if (state == IntroState.LookHelp && introTime > moveHelpTime)
+            /*if (state == IntroState.LookHelp && introTime > moveHelpTime)
             {
                 state = IntroState.LoadHelp;
                 DialogBox.SetDialog("introlookhelp");
-            }
+            }*/
             if (state == IntroState.LoadHelp && introTime > useHelpTime)
             {
                 state = IntroState.Play;

@@ -85,6 +85,7 @@ namespace VexedCore
                         {
                             Decoration newDecoration = new Decoration(xmlDecoaration, xmlFace.normal);
                             newDecoration.SetTexture();
+                            newDecoration.UpdateSizeData();
                             newRoom.decorations.Add(newDecoration);
                         }
                         foreach (VexedLib.Doodad xmlDoodad in xmlFace.doodads)
@@ -413,8 +414,13 @@ namespace VexedCore
                             }
                         }
                     }
-                }                
+                }
+                foreach (Decoration d in r.decorations)
+                {
+                    d.SetTexture();
+                }
             }
+
             Engine.worldCenter = Engine.worldCenter / roomList.Count;
         }
 

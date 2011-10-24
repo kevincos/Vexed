@@ -48,10 +48,11 @@ namespace VexedCore
             shouldRender = d.shouldRender;
             halfWidth = d.halfWidth;
             halfHeight = d.halfHeight;
-            decorationTexture = d.decorationTexture;
+            //decorationTexture = d.decorationTexture;
             _depth = d._depth;
             color = d.color;
             wrap = d.wrap;
+            fileName = d.fileName;
             
         }
 
@@ -71,9 +72,15 @@ namespace VexedCore
         }
 
         public void SetTexture()
-        {
-            decorationTexture = DecorationImage.FetchTexture(fileName);
+        {            
+            if (decorationTexture == null)
+            {
+                decorationTexture = DecorationImage.FetchTexture(fileName);
+            }
+        }
 
+        public void UpdateSizeData()
+        {
             if (decorationTexture != null)
             {
                 halfWidth = 1f * decorationTexture.Width / 256;

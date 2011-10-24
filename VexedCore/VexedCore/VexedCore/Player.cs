@@ -194,10 +194,11 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.DoubleJump);
-            secondaryAbility = new Ability(AbilityType.Empty);
+            primaryAbility = new Ability(AbilityType.Missile);
+            secondaryAbility = new Ability(AbilityType.Booster);
             naturalShield = new Ability(AbilityType.Shield);
-            /*upgrades[(int)AbilityType.PermanentWallJump] = true;
+
+            upgrades[(int)AbilityType.PermanentWallJump] = true;
             upgrades[(int)AbilityType.ImprovedJump] = true;
             upgrades[(int)AbilityType.PermanentBoots] = true;
             upgrades[(int)AbilityType.WallJump] = true;
@@ -207,7 +208,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.Blaster] = true;
             upgrades[(int)AbilityType.Empty] = true;
             upgrades[(int)AbilityType.Missile] = true;
-            upgrades[(int)AbilityType.Booster] = true;*/
+            upgrades[(int)AbilityType.Booster] = true;
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }
@@ -955,6 +956,15 @@ namespace VexedCore
                 //oldNormal = center.normal;
             }
 
+
+            Vector2 stick = Controls.LeftStick();
+            Vector2 rightStick = Controls.GetStaticCameraHelper();
+            if (state != State.Jump && state != State.PhaseFail && state != State.PhaseFail && state != State.Tunnel)
+            {
+                targetCameraAngle = rightStick + new Vector2(0, cameraUpTilt);
+                cameraAngle = (cameraAngle + targetCameraAngle) / 2;
+            }
+
             if (state == State.Upgrade)
             {
                 upgradeTime += gameTime.ElapsedGameTime.Milliseconds;
@@ -1092,7 +1102,6 @@ namespace VexedCore
             if (dead == true)
                 Respawn();
             
-            cameraAngle = (cameraAngle + targetCameraAngle) / 2;
             
                  
 
@@ -1102,11 +1111,11 @@ namespace VexedCore
                 groundCounter = groundTolerance;
                 grounded = false;
             }
-            Vector2 stick = Controls.LeftStick();
-            //Vector2 rightStick = GamePad.GetState(Game1.activePlayer).ThumbSticks.Right;
-            Vector2 rightStick = Controls.GetStaticCameraHelper();
+
             
             GamePadState gamePadState = GamePad.GetState(Game1.activePlayer);
+
+            
 
             if (state == State.Death)
             {
@@ -1206,8 +1215,7 @@ namespace VexedCore
                     center.velocity += boostAcceleration *gameTime.ElapsedGameTime.Milliseconds
                          / 16f * right * faceDirection;
 
-                targetCameraAngle = rightStick + new Vector2(0,cameraUpTilt);
-
+                
                 EnforceVelocityLimits();
                 jetPackThrust = false;
                 if (Game1.controller.XButton.Pressed)
