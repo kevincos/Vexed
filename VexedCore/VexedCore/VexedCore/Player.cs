@@ -194,8 +194,8 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Missile);
-            secondaryAbility = new Ability(AbilityType.Booster);
+            primaryAbility = new Ability(AbilityType.SpinHook);
+            secondaryAbility = new Ability(AbilityType.Laser);
             naturalShield = new Ability(AbilityType.Shield);
 
             upgrades[(int)AbilityType.PermanentWallJump] = true;
@@ -204,6 +204,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.WallJump] = true;
             upgrades[(int)AbilityType.DoubleJump] = true;
             upgrades[(int)AbilityType.Boots] = true;
+            upgrades[(int)AbilityType.SpinHook] = true;
             upgrades[(int)AbilityType.Laser] = true;
             upgrades[(int)AbilityType.Blaster] = true;
             upgrades[(int)AbilityType.Empty] = true;

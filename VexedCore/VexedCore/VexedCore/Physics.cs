@@ -1107,7 +1107,7 @@ namespace VexedCore
                 {
                     b.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
 
-                    if (b.hasCollisionRect || (b.type == VexedLib.DoodadType.LaserSwitch && s.type == ProjectileType.Laser && b.active == false))
+                    if ((b.hasCollisionRect && b.type != VexedLib.DoodadType.PowerPlug) || (b.type == VexedLib.DoodadType.LaserSwitch && s.type == ProjectileType.Laser && b.active == false))
                     {
                         if (s.CollisionFirstPass(b))
                             continue;
@@ -1115,7 +1115,7 @@ namespace VexedCore
                         Vector3 projection = Collide(doodadVertexList, brickVertexList, p.center.normal);
                         if (projection != Vector3.Zero)
                         {
-                            //if (s.type == ProjectileType.Bomb)A
+                            //if (s.type == ProjectileType.Bomb)
                                 //s.stopped = true;
                             //else
                                 s.exploding = true;

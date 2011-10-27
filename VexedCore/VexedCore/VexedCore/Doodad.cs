@@ -1059,7 +1059,7 @@ namespace VexedCore
                 else if (type == VexedLib.DoodadType.TunnelSide || type == VexedLib.DoodadType.TunnelTop)
                 {
                     float roomSize = .5f*Math.Abs(Vector3.Dot(currentRoom.size, position.normal));
-                    currentRoom.AddBlockToTriangleList(vList, activeColor, depth, roomSize, Room.plateTexCoords, baseTriangleList);
+                    currentRoom.AddBlockToTriangleList(vList, activeColor, depth, roomSize, Room.plateTexCoords, baseTriangleList,false);
                 }
                 else if ((type == VexedLib.DoodadType.RingSide || type == VexedLib.DoodadType.RingTop) && targetDoodad.targetRoom != null)
                 {                    
