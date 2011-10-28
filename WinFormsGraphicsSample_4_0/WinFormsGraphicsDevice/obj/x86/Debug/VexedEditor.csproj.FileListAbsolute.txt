@@ -26,4 +26,3 @@ E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debu
 E:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\VexedLib.pdb
 C:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\VexedLib.dll
 C:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\VexedLib.pdb
-C:\git_projects\Vexed\WinFormsGraphicsSample_4_0\WinFormsGraphicsDevice\bin\Debug\hudFont.xnb
