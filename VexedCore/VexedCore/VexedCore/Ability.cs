@@ -243,7 +243,7 @@ namespace VexedCore
             }
             if (type == AbilityType.JetPack)
             {
-                if (Engine.player.grounded == true)
+                if (Engine.player.grounded == true && Engine.player.flashTime == 0)
                 {
                     ammo += gameTime.ElapsedGameTime.Milliseconds;
                     if (ammo > maxAmmo)
