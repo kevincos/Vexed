@@ -447,19 +447,19 @@ namespace VexedCore
 
             Engine.mapShellObjects = new List<TrasnparentSquare>();
             if(Engine.detailVertexArray == null)
-                Engine.detailVertexArray = new VertexPositionColorNormalTexture[40000];
+                Engine.detailVertexArray = new VertexPositionColorNormalTexture[80000];
             detailVertexArrayCount = 0;
             if (Engine.doodadVertexArray == null)
-                Engine.doodadVertexArray = new VertexPositionColorNormalTexture[100000];
+                Engine.doodadVertexArray = new VertexPositionColorNormalTexture[150000];
             doodadVertexArrayCount = 0;
             if (Engine.decalVertexArray == null)
-                Engine.decalVertexArray = new VertexPositionColorNormalTexture[30000];
+                Engine.decalVertexArray = new VertexPositionColorNormalTexture[60000];
             decalVertexArrayCount = 0;
             if (Engine.spriteVertexArray == null)
-                Engine.spriteVertexArray = new VertexPositionColorNormalTexture[30000];
+                Engine.spriteVertexArray = new VertexPositionColorNormalTexture[60000];
             spriteVertexArrayCount = 0;
             if (Engine.beamVertexArray == null)
-                Engine.beamVertexArray = new VertexPositionColorNormalTexture[30000];
+                Engine.beamVertexArray = new VertexPositionColorNormalTexture[60000];
             beamVertexArrayCount = 0;
             if (Engine.translucentBlockVertexArray == null)
             {
