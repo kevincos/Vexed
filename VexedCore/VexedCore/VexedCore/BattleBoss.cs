@@ -23,8 +23,18 @@ namespace VexedCore
             aimDirection = Engine.player.center.position - srcMonster.position.position;
             aimDirection.Normalize();
 
+            
+
             Vector3 direction = nextWaypointTarget - srcMonster.position.position;
             float distance = direction.Length();
+
+            float playerdistance = (Engine.player.center.position - srcMonster.position.position).Length();
+            if (playerdistance > 8f)
+                srcMonster.speedType = VexedLib.MonsterSpeed.Fast;
+            else if (playerdistance > 3f)
+                srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
+            else
+                srcMonster.speedType = VexedLib.MonsterSpeed.Slow;
 
             if (nextWaypointIndex == 0 || Vector3.Dot(srcMonster.position.velocity, direction) < 0f)
             {
@@ -33,22 +43,25 @@ namespace VexedCore
                 srcMonster.position.velocity = Vector3.Zero;
 
                 nextWaypointIndex++;
-                if (nextWaypointIndex == 9) nextWaypointIndex = 1;
+                if (nextWaypointIndex == 13) nextWaypointIndex = 1;
                 nextWaypointTarget = GetWaypointTarget();
                 srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
             }
     
             Vector3 targetUp = Vector3.Cross(srcMonster.position.normal, aimDirection);
+            float tiltVelocity = .009f;
+            if (playerdistance > 1)
+                tiltVelocity = .013f;
             if (Vector3.Dot(targetUp, srcMonster.rightUnit) > .1f)
             {
                 //tilt up
-                srcMonster.position.direction -= .013f * srcMonster.rightUnit;
+                srcMonster.position.direction += tiltVelocity * srcMonster.rightUnit;
                 srcMonster.position.direction.Normalize();
             }
             else
             {
                 //tilt down
-                srcMonster.position.direction += .013f*srcMonster.rightUnit;
+                srcMonster.position.direction -= tiltVelocity * srcMonster.rightUnit;
                 srcMonster.position.direction.Normalize();
             }
             

@@ -105,7 +105,7 @@ namespace VexedCore
             graphicsDevice = GraphicsDevice;
 
             //LevelLoader.Load("LevelData\\menu");
-            //LevelLoader.Load("LevelData\\spikeelevator");
+            
             
             Components.Add(new FrameRateCounter(this));
             //Components.Add(bloom);
@@ -181,6 +181,7 @@ namespace VexedCore
             MusicControl.music_game = Content.Load<Song>("Sounds\\music_game");
 
             LevelLoader.Load("LevelData\\world");
+            //LevelLoader.Load("LevelData\\spikeelevator");
             //LevelLoader.Load("LevelData\\menu");
             
             // TODO: use this.Content to load your game content here

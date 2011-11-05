@@ -196,11 +196,11 @@ namespace VexedCore
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
             primaryAbility = new Ability(AbilityType.Laser);
-            secondaryAbility = new Ability(AbilityType.SpinHook);
+            secondaryAbility = new Ability(AbilityType.Booster);
             naturalShield = new Ability(AbilityType.Shield);
 
             upgrades[(int)AbilityType.PermanentWallJump] = true;
-            //upgrades[(int)AbilityType.ImprovedJump] = true;
+            upgrades[(int)AbilityType.ImprovedJump] = true;
             upgrades[(int)AbilityType.PermanentBoots] = true;
             upgrades[(int)AbilityType.WallJump] = true;
             upgrades[(int)AbilityType.DoubleJump] = true;

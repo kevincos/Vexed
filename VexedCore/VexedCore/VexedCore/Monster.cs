@@ -1486,7 +1486,7 @@ namespace VexedCore
                 if (rockBoss.rockHits == 0 && rockBoss.rockHitCooldown != 0)
                     r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, snowCrackBreakTexCoords, rightFacing);
             }
-            if (moveType == VexedLib.MovementType.ChaseBoss || moveType == VexedLib.MovementType.JetBoss)
+            if (moveType == VexedLib.MovementType.ChaseBoss || moveType == VexedLib.MovementType.JetBoss || moveType == VexedLib.MovementType.BattleBoss)
             {
                 List<Vertex> spikeShieldVertexList = new List<Vertex>();
                 Vector3 forward = Vector3.Cross(position.direction, position.normal);
@@ -1503,7 +1503,7 @@ namespace VexedCore
                 }
                 if(moveType == VexedLib.MovementType.ChaseBoss)
                     r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + .09f, textureTriangleList, spikeShieldTexCoords, rightFacing);
-                if(moveType == VexedLib.MovementType.JetBoss)
+                if(moveType == VexedLib.MovementType.JetBoss || moveType == VexedLib.MovementType.BattleBoss)
                     r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + .09f, textureTriangleList, jetArmorTexCoords, rightFacing);
 
             }
@@ -1524,10 +1524,6 @@ namespace VexedCore
                 }
             }
 
-            if (moveType == VexedLib.MovementType.BattleBoss)
-            {
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, bossShieldTexCoords, rightFacing);
-            }
             if (moveType == VexedLib.MovementType.ArmorBoss)
             {
                 r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, bossArmorTexCoords, rightFacing);
