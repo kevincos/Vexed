@@ -194,7 +194,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Missile);
+            primaryAbility = new Ability(AbilityType.Laser);
             secondaryAbility = new Ability(AbilityType.JetPack);
             naturalShield = new Ability(AbilityType.Shield);
 
@@ -211,6 +211,10 @@ namespace VexedCore
             upgrades[(int)AbilityType.Missile] = true;
             upgrades[(int)AbilityType.Booster] = true;
             upgrades[(int)AbilityType.JetPack] = true;
+            upgrades[(int)AbilityType.Phase] = true;
+            upgrades[(int)AbilityType.PermanentBlueKey] = true;
+            upgrades[(int)AbilityType.PermanentRedKey] = true;
+            upgrades[(int)AbilityType.PermanentYellowKey] = true;
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }

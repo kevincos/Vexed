@@ -641,6 +641,64 @@ you can continue your adventure later.</string>
     </textList>
     <pause>true</pause>
 </DialogChunk>
+<DialogChunk>
+    <id>FinalBoss1</id>
+    <speaker>FinalBoss</speaker>
+    <textList>              
+    <string>I'm impressed you've made it this far.</string>    
+    <string>But your efforts are in vain! I've already begun
+my journey to the third dimension!</string>    
+    <string>Your puny two dimensional form has no hope of
+stopping me now!</string>    
+    <string>Guards! Destroy him!</string>    
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+<DialogChunk>
+    <id>FinalBoss2</id>
+    <speaker>FinalBoss</speaker>
+    <textList>              
+    <string>Impossible! How did you do that?</string>    
+    <string>Grrrrr! I will not be denied. The third
+dimension is MINE!</string>    
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+<DialogChunk>
+    <id>FinalBoss3</id>
+    <speaker>FinalBoss</speaker>
+    <textList>              
+    <string>Noooooo... What have you done?!?</string>    
+    <string>Fool! You've destabilized the dimensional
+rift.</string>
+    <string>Hahahaha...</string>
+    <string>I may be defeated... but you'll never make it out
+here alive! Hahahahaha...</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>FinalArmor1</id>
+    <speaker>ArmorBoss</speaker>
+    <textList>              
+    <string>Well, well, well. Look who we have here.</string>    
+    <string>You may have defeated Armortron...</string>    
+    <string>You may have defeated the Armortron brothers...</string>    
+    <string>But now you face the combined might of the 
+Armortron COUSINS!!!</string>    
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>FinalArmorDead</id>
+    <speaker>ArmorBoss</speaker>
+    <textList>              
+    <string>Nooooo... Cousins... avenge me!</string>    
+    </textList>
+    <pause>false</pause>
+</DialogChunk>
 
 
 

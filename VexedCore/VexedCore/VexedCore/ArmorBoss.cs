@@ -52,25 +52,60 @@ namespace VexedCore
         public void Update(int time, Monster srcMonster)
         {
 
-            if (dialogState == 0 && Engine.player.state == State.Normal)
+            if (srcMonster.id.Contains("Basic"))
             {
-                DialogBox.SetDialog("ArmorBoss1");
-                dialogState++;
+                if (dialogState == 0 && Engine.player.state == State.Normal)
+                {
+                    DialogBox.SetDialog("ArmorBoss1");
+                    dialogState++;
+                }
+                if (dialogState == 1 && srcMonster.baseHP < srcMonster.startingBaseHP)
+                {
+                    DialogBox.SetDialog("ArmorBoss2");
+                    dialogState++;
+                }
+                if (dialogState == 2 && srcMonster.baseHP < 1 * srcMonster.startingBaseHP / 2)
+                {
+                    DialogBox.SetDialog("ArmorBoss3");
+                    dialogState++;
+                }
+                if (dialogState < 10 && srcMonster.dead)
+                {
+                    DialogBox.SetDialog("ArmorBoss4");
+                    dialogState = 10;
+                }
             }
-            if (dialogState == 1 && srcMonster.baseHP < srcMonster.startingBaseHP)
+            if(srcMonster.id.Contains("AdvancedMain"))
             {
-                DialogBox.SetDialog("ArmorBoss2");
-                dialogState++;
+                if (dialogState == 0 && Engine.player.state == State.Normal)
+                {
+                    DialogBox.SetDialog("FinalArmor1");
+                    dialogState++;
+                }
             }
-            if (dialogState == 2 && srcMonster.baseHP < 1 * srcMonster.startingBaseHP / 2)
+            if (srcMonster.id.Contains("Advanced"))
             {
-                DialogBox.SetDialog("ArmorBoss3");
-                dialogState++;
+                if (dialogState < 10 && srcMonster.dead == true)
+                {
+                    DialogBox.SetDialog("FinalArmorDead");
+                    dialogState=10;
+                }
             }
-            if (dialogState < 10 && srcMonster.dead)
+            if (srcMonster.id.Contains("MediumMain"))
             {
-                DialogBox.SetDialog("ArmorBoss4");
-                dialogState = 10;
+                if (dialogState == 0 && Engine.player.state == State.Normal)
+                {
+                    DialogBox.SetDialog("MedArmor1");
+                    dialogState++;
+                }
+            }
+            if (srcMonster.id.Contains("Medium"))
+            {
+                if (dialogState < 10 && srcMonster.dead == true)
+                {
+                    DialogBox.SetDialog("MedArmorDead");
+                    dialogState = 10;
+                }
             }
 
             if (srcMonster.id.Contains("Basic") && srcMonster.baseHP < 1*srcMonster.startingBaseHP / 2)

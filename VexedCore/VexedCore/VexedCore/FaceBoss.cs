@@ -31,6 +31,8 @@ namespace VexedCore
         int damageCooldown = 0;
         int damageCooldownMax = 500;
 
+        public int dialogState = 0;
+
         public FaceState state = FaceState.Exploding;
 
         public bool PhaseTest()
@@ -41,6 +43,22 @@ namespace VexedCore
 
         public void Update(int time, Monster srcMonster)
         {
+            if (dialogState == 0 && Engine.player.state == State.Normal && state == FaceState.Rebuilding)
+            {
+                DialogBox.SetDialog("FinalBoss1");
+                dialogState++;
+            }
+            if (dialogState == 1 && srcMonster.baseHP != srcMonster.startingBaseHP && damageCooldown == 0)
+            {
+                DialogBox.SetDialog("FinalBoss2");
+                dialogState++;
+            }
+            if (dialogState == 2 && srcMonster.baseHP ==0)
+            {
+                DialogBox.SetDialog("FinalBoss3");
+                dialogState++;
+            }
+
             damageCooldown -= time;
             if (damageCooldown < 0)
                 damageCooldown = 0;
@@ -79,7 +97,7 @@ namespace VexedCore
                     }
                 }
 
-                if(damageCooldown == 0 && Engine.player.state == State.Phase && (Engine.player.jumpPosition - Engine.player.currentRoom.center).Length() < 6f)
+                if(damageCooldown == 0 && (Engine.player.state == State.Phase || Engine.player.state == State.PhaseFail) && (Engine.player.jumpPosition - Engine.player.currentRoom.center).Length() < 6f)
                 {
                     srcMonster.impactVector = new Vector3(1, 0, 0);
                     srcMonster.lastHitType = ProjectileType.Plasma;
@@ -90,15 +108,19 @@ namespace VexedCore
             else if (state == FaceState.Armored)
             {
                 bool explode = true;
-                foreach (Monster m in Engine.player.currentRoom.monsters)
+                if (srcMonster.startingBaseHP != 0)
                 {
-                    if (m.dead == false && m.id.Contains("Guardian"))
-                        explode = false;
-                }
-                if (explode == true)
-                {
-                    state = FaceState.Exploding;
-                }
+
+                    foreach (Monster m in Engine.player.currentRoom.monsters)
+                    {
+                        if (m.dead == false && m.id.Contains("Guardian"))
+                            explode = false;
+                    }
+                    if (explode == true)
+                    {
+                        state = FaceState.Exploding;
+                    }
+                }                
             }
 
         }
