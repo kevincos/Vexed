@@ -66,7 +66,7 @@ namespace VexedCore
                 DialogBox.SetDialog("ChaseBoss4");
                 dialogState = 9;
             }
-            if (dialogState < 10 && srcMonster.dead == true)
+            if (dialogState < 10 && !srcMonster.id.Contains("Fire") && srcMonster.dead == true)
             {
                 DialogBox.SetDialog("ChaseBoss5");
                 dialogState = 10;

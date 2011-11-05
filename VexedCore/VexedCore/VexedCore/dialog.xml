@@ -719,6 +719,57 @@ Armortron COUSINS!!!</string>
     <pause>false</pause>
 </DialogChunk>
 
+  <DialogChunk>
+    <id>CommandBoss1</id>
+    <speaker>RockBoss</speaker>
+    <textList>
+      <string>You'll never break through my
+laser-proof armor!</string>
+      <string>Prepare to be destroyed!</string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+    <DialogChunk>
+    <id>CommandBoss2</id>
+    <speaker>RockBoss</speaker>
+    <textList>
+      <string>Ack!</string>      
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>CommandBoss3</id>
+    <speaker>RockBoss</speaker>
+    <textList>
+      <string>Curses! My armor!</string>      
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+    <DialogChunk>
+    <id>CommandBoss4</id>
+    <speaker>RockBoss</speaker>
+    <textList>
+      <string>You'll pay for that!</string>      
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+    <DialogChunk>
+    <id>CommandBoss5</id>
+    <speaker>RockBoss</speaker>
+    <textList>
+      <string>Nooooo! I've been defeated!</string>      
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+    <DialogChunk>
+    <id>FireChase1</id>
+    <speaker>FireBoss</speaker>
+    <textList>
+      <string>Hahahaha... you'll never escape me!</string>      
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
 
 
 </ArrayOfDialogChunk>

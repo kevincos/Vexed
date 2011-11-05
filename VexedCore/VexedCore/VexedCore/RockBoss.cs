@@ -29,7 +29,12 @@ namespace VexedCore
         Snow_Battle1,
         Snow_Flee1,
         Snow_Fight2,
-        Snow_Battle2
+        Snow_Battle2,
+        Command_Fight1,
+        Command_Battle1,
+        Command_Flee1,
+        Command_Fight2,
+        Command_Battle2,
     }
 
     public class RockBoss
@@ -63,6 +68,10 @@ namespace VexedCore
             if (state == RockBossState.Snow_Flee1)
             {
                 targetDoodadId = "SnowFlee";
+            }
+            if(state == RockBossState.Command_Flee1)
+            {
+                targetDoodadId = "CommandFlee";
             }
             if (state == RockBossState.FleeA)
             {
@@ -98,6 +107,11 @@ namespace VexedCore
 
         public void Update(int time, Monster srcMonster)
         {
+            if (srcMonster.id.Contains("CommandBoss") && state == RockBossState.Snow_Fight1)
+            {
+                state = RockBossState.Command_Fight1;
+            }
+
             srcMonster.huntMinDistance = 4.5f;
             if (srcMonster.id.Contains("Snow"))
             {
@@ -124,6 +138,29 @@ namespace VexedCore
                 if (dialogState == 4 && srcMonster.baseHP == 0)
                 {
                     DialogBox.SetDialog("SnowMan6");
+                    dialogState++;
+                }
+            }
+            if (srcMonster.id.Contains("CommandBoss"))
+            {
+                if (dialogState == 0 && rockHits != maxRockHits)
+                {
+                    DialogBox.SetDialog("CommandBoss2");
+                    dialogState++;
+                }
+                if (dialogState == 1 && state == RockBossState.Command_Battle1)
+                {
+                    DialogBox.SetDialog("CommandBoss3");
+                    dialogState++;
+                }
+                if (dialogState == 2 && state == RockBossState.Command_Fight2)
+                {
+                    DialogBox.SetDialog("CommandBoss4");
+                    dialogState++;
+                }
+                if (dialogState == 3 && srcMonster.baseHP == 0)
+                {
+                    DialogBox.SetDialog("CommandBoss5");
                     dialogState++;
                 }
             }
@@ -208,9 +245,30 @@ namespace VexedCore
                 srcMonster.aiType = VexedLib.AIType.Hunter;                
 
             }
+            else if (state == RockBossState.Command_Fight1 && rockHits == 0)
+            {
+                state = RockBossState.Command_Battle1;
+                srcMonster.speedType = VexedLib.MonsterSpeed.Slow;
+                srcMonster.aiType = VexedLib.AIType.Hunter;
+
+            }
+            else if (state == RockBossState.Command_Fight2 && rockHits == 0)
+            {
+                state = RockBossState.Command_Battle2;
+                srcMonster.speedType = VexedLib.MonsterSpeed.Slow;
+                srcMonster.aiType = VexedLib.AIType.Hunter;
+
+            }
             else if (state == RockBossState.Snow_Battle1 && srcMonster.baseHP == 0)
             {
                 state = RockBossState.Snow_Flee1;
+                srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
+                nextWaypointTarget = GetWaypointTarget();
+                srcMonster.position.velocity = Vector3.Zero;
+            }
+            else if (state == RockBossState.Command_Battle1 && srcMonster.baseHP == 0)
+            {
+                state = RockBossState.Command_Flee1;
                 srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
                 nextWaypointTarget = GetWaypointTarget();
                 srcMonster.position.velocity = Vector3.Zero;
@@ -234,6 +292,17 @@ namespace VexedCore
             else if (state == RockBossState.Snow_Flee1 && distance < 1f)
             {
                 state = RockBossState.Snow_Fight2;
+                rockHits = maxRockHits;
+                srcMonster.baseHP = srcMonster.startingBaseHP;
+                srcMonster.position.position = nextWaypointTarget;
+                srcMonster.position.velocity = Vector3.Zero;
+                srcMonster.aiType = VexedLib.AIType.Stationary;
+
+                nextWaypointTarget = GetWaypointTarget();
+            }
+            else if (state == RockBossState.Command_Flee1 && distance < 1f)
+            {
+                state = RockBossState.Command_Fight2;
                 rockHits = maxRockHits;
                 srcMonster.baseHP = srcMonster.startingBaseHP;
                 srcMonster.position.position = nextWaypointTarget;

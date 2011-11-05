@@ -255,8 +255,8 @@ namespace VexedCore
                 }
                 else
                 {
-                    guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(1.3f, .3f), .7f * halfWidth, .05f, BaseType.Rock));
-                    guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(-1.3f, .3f), .7f * halfWidth, .05f, BaseType.Rock));
+                    guns.Add(new GunEmplacement(VexedLib.TrackType.Fast, VexedLib.GunType.Blaster, new Vector2(1.3f, .3f), .7f * halfWidth, .05f, BaseType.Rock));
+                    guns.Add(new GunEmplacement(VexedLib.TrackType.Fast, VexedLib.GunType.Blaster, new Vector2(-1.3f, .3f), .7f * halfWidth, .05f, BaseType.Rock));
                 }
             }
             else if (moveType == VexedLib.MovementType.ChaseBoss)
@@ -673,9 +673,11 @@ namespace VexedCore
             {
                 if (moveType == VexedLib.MovementType.SnakeBoss)
                     dead = false;
-                else if (moveType == VexedLib.MovementType.RockBoss && !id.Contains("Snow") && rockBoss.state != RockBossState.Fight3)
+                else if (moveType == VexedLib.MovementType.RockBoss && id.Contains("Standard") && rockBoss.state != RockBossState.Fight3)
                     dead = false;
                 else if (moveType == VexedLib.MovementType.RockBoss && id.Contains("Snow") && rockBoss.state != RockBossState.Snow_Battle2)
+                    dead = false;
+                else if (moveType == VexedLib.MovementType.RockBoss && id.Contains("CommandBoss") && rockBoss.state != RockBossState.Command_Battle2)
                     dead = false;
                 else
                     dead = true;
@@ -1109,7 +1111,7 @@ namespace VexedCore
                     }
                 }
 
-                if ((moveType == VexedLib.MovementType.RockBoss || aiType != VexedLib.AIType.Wander) && moveType != VexedLib.MovementType.BattleBoss && moveType != VexedLib.MovementType.JetBoss && moveType != VexedLib.MovementType.SnakeBoss && position.direction != Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false))
+                if ((moveType == VexedLib.MovementType.RockBoss || aiType != VexedLib.AIType.Wander) && moveType != VexedLib.MovementType.BattleBoss && moveType != VexedLib.MovementType.JetBoss && moveType != VexedLib.MovementType.SnakeBoss && Engine.player.spinRecovery == 0 && position.direction != Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false))
                 {
                     spinUp = Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false);
                 }

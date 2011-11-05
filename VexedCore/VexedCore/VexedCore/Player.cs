@@ -106,6 +106,7 @@ namespace VexedCore
         public int hookTime = 0;
         public int hookHangTime = 0;
         public int upgradeTime = 0;
+        public int spinRecovery = 0;
         public bool superJump = false;
         public bool jetPacking = false;
         public bool jetPackThrust = false;
@@ -195,11 +196,11 @@ namespace VexedCore
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
             primaryAbility = new Ability(AbilityType.Laser);
-            secondaryAbility = new Ability(AbilityType.JetPack);
+            secondaryAbility = new Ability(AbilityType.SpinHook);
             naturalShield = new Ability(AbilityType.Shield);
 
             upgrades[(int)AbilityType.PermanentWallJump] = true;
-            upgrades[(int)AbilityType.ImprovedJump] = true;
+            //upgrades[(int)AbilityType.ImprovedJump] = true;
             upgrades[(int)AbilityType.PermanentBoots] = true;
             upgrades[(int)AbilityType.WallJump] = true;
             upgrades[(int)AbilityType.DoubleJump] = true;
@@ -907,6 +908,14 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            if (state == State.Spin)
+                spinRecovery = 50;
+            else
+            {
+                spinRecovery -= gameTime.ElapsedGameTime.Milliseconds;
+                if (spinRecovery < 0)
+                    spinRecovery = 0;
+            }
             currentRoom.explored = true;
             crushCount--;
             if (crushCount < 0)
