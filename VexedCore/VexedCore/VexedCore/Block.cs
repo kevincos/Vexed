@@ -298,6 +298,7 @@ namespace VexedCore
             
             if (baseTriangleList == null || staticObject == false)
             {
+                Engine.debug_blocksGenerated++;
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
             
                 List<Vertex> vList = new List<Vertex>();

@@ -1774,6 +1774,7 @@ namespace VexedCore
 
         public void Draw(GameTime gameTime)
         {
+            
             if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || (roomHighlight == true && explored == true))
             {
                 if ((center - Engine.player.currentRoom.center).Length() < Engine.drawDistance ||

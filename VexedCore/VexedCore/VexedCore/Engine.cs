@@ -36,6 +36,10 @@ namespace VexedCore
 
     public class Engine
     {
+
+        public static int debug_blocksGenerated;
+        public static int debug_updateDoodadVertexData;
+
         public static int saveFileIndex = 0;
 
         public static EngineState state = EngineState.Active;
@@ -698,6 +702,7 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            Engine.debug_updateDoodadVertexData = 0;
             if(Engine.player.currentRoom.id.Contains("Menu"))
                 IntroOverlay.Update(gameTime);
             PauseMenu.Update(gameTime);

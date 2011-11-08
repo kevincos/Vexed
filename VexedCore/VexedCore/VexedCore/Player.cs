@@ -195,12 +195,12 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Laser);
-            secondaryAbility = new Ability(AbilityType.Booster);
+            primaryAbility = new Ability(AbilityType.Empty);
+            secondaryAbility = new Ability(AbilityType.Empty);
             naturalShield = new Ability(AbilityType.Shield);
 
-            upgrades[(int)AbilityType.PermanentWallJump] = true;
-            upgrades[(int)AbilityType.ImprovedJump] = true;
+            /*upgrades[(int)AbilityType.PermanentWallJump] = true;
+            //upgrades[(int)AbilityType.ImprovedJump] = true;
             upgrades[(int)AbilityType.PermanentBoots] = true;
             upgrades[(int)AbilityType.WallJump] = true;
             upgrades[(int)AbilityType.DoubleJump] = true;
@@ -212,10 +212,10 @@ namespace VexedCore
             upgrades[(int)AbilityType.Missile] = true;
             upgrades[(int)AbilityType.Booster] = true;
             upgrades[(int)AbilityType.JetPack] = true;
-            upgrades[(int)AbilityType.Phase] = true;
-            upgrades[(int)AbilityType.PermanentBlueKey] = true;
-            upgrades[(int)AbilityType.PermanentRedKey] = true;
-            upgrades[(int)AbilityType.PermanentYellowKey] = true;
+            upgrades[(int)AbilityType.Phase] = true;*/
+            //upgrades[(int)AbilityType.PermanentBlueKey] = true;
+            //upgrades[(int)AbilityType.PermanentRedKey] = true;
+            //upgrades[(int)AbilityType.PermanentYellowKey] = true;
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }
@@ -241,6 +241,8 @@ namespace VexedCore
             leftWall = p.leftWall;
             rightWall = p.rightWall;
             jumpTime = p.jumpTime;
+            redOrbsCollected = p.redOrbsCollected;
+            orbsCollected = p.orbsCollected;
             weaponSwitchCooldown = p.weaponSwitchCooldown;
             gunType = p.gunType;
             currentRoomId = p.currentRoomId;

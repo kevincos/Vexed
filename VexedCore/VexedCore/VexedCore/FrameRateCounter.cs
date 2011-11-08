@@ -65,6 +65,9 @@ namespace VexedCore
 
             string score = "Score: " + Engine.player.orbsCollected;
 
+            string blockDrawInfo = "Blocks Generated: " + Engine.debug_blocksGenerated;
+            string doodadDrawInfo = "Doodads Generated: " + Engine.debug_updateDoodadVertexData;
+
             spriteBatch.Begin();
 
             spriteBatch.DrawString(spriteFont, fps, new Vector2(33, 33), Color.Black);
@@ -72,6 +75,9 @@ namespace VexedCore
 
             spriteBatch.DrawString(spriteFont, score, new Vector2(33, 53), Color.Black);
             spriteBatch.DrawString(spriteFont, score, new Vector2(32, 52), Color.White);
+
+            spriteBatch.DrawString(spriteFont, doodadDrawInfo, new Vector2(33, 73), Color.Black);
+            spriteBatch.DrawString(spriteFont, doodadDrawInfo, new Vector2(32, 72), Color.White);
 
 
             spriteBatch.End();            

@@ -616,6 +616,19 @@ use a Mouse button to equip an item.</string>
 </DialogChunk>
 
 <DialogChunk>
+    <id>tutorial_redorbs</id>
+    <speaker>OldMan</speaker>
+    <textList>      
+      <string>This station stores a special Red power cube.</string>
+    <string>Red Power Cubes enhance your suit's shielding 
+capabilities.</string>
+    <string>If you collect 5 Red Cubes, you'll increase
+your health meter.</string>
+    </textList>
+    <pause>true</pause>
+</DialogChunk>
+
+<DialogChunk>
     <id>tutorial_zoom</id>
     <speaker>OldMan</speaker>
     <textList>      

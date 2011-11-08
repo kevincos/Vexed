@@ -341,7 +341,7 @@ namespace VexedCore
                 {
                     if (currentRoom.currentOrbs >= activationCost)
                     {
-                        if (_powered == false)
+                        if (_powered == false && activationCost > 0)
                         {
                             _powered = true;
                             refreshVertexData = true;
@@ -945,6 +945,7 @@ namespace VexedCore
         {
             if (baseTriangleList == null || Engine.staticDoodadsInitialized == false || dynamic == true || refreshVertexData == true)
             {
+                Engine.debug_updateDoodadVertexData++;
                 refreshVertexData = false;
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
                 decalList = new List<VertexPositionColorNormalTexture>();
@@ -1073,8 +1074,7 @@ namespace VexedCore
                         currentRoom.AddBlockToTriangleList(vList, currentRoom.currentColor, ringMod,  -ringMod +.2f, Room.plateTexCoords, baseTriangleList,false);
                     }
                     if(ringMod >= 10f && distanceToNextRoom/2 -20 > .2f)
-                        currentRoom.AddBlockToTriangleList(vList, currentRoom.currentColor, 20f, -(distanceToNextRoom / 2), Room.plateTexCoords, baseTriangleList, false);
-                    
+                        currentRoom.AddBlockToTriangleList(vList, currentRoom.currentColor, 20f, -(distanceToNextRoom / 2), Room.plateTexCoords, baseTriangleList, false);                    
                     
                     
                 }
