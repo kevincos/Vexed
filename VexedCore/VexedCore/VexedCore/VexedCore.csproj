@@ -122,6 +122,7 @@
     <Compile Include="ChaseBoss.cs" />
     <Compile Include="Collidable.cs" />
     <Compile Include="Controls.cs" />
+    <Compile Include="DebugDataMonitor.cs" />
     <Compile Include="Decoration.cs" />
     <Compile Include="DecorationImageLibrary.cs" />
     <Compile Include="DepthControl.cs" />

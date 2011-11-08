@@ -1869,7 +1869,7 @@ namespace VexedCore
                         vList.Add(b.edges[2].start);
                         vList.Add(b.edges[3].start);
 
-                        if (b.staticObject == false)
+                        if (b.staticObject == false && this == Engine.player.currentRoom)
                         {
                             b.UpdateVertexData(this);
                             b.Draw(this);

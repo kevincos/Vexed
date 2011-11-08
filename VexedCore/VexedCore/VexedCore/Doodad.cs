@@ -319,6 +319,18 @@ namespace VexedCore
             active = futureState;
         }
 
+        public bool Animated
+        {
+            get
+            {
+                if (type == VexedLib.DoodadType.Beam)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
         public bool _powered = false;
 
         public bool powered
@@ -943,8 +955,9 @@ namespace VexedCore
 
         public void UpdateVertexData(Room currentRoom)
         {
-            if (baseTriangleList == null || Engine.staticDoodadsInitialized == false || dynamic == true || refreshVertexData == true)
+            if (baseTriangleList == null || dynamic == true || refreshVertexData == true)
             {
+
                 Engine.debug_updateDoodadVertexData++;
                 refreshVertexData = false;
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
@@ -1246,13 +1259,16 @@ namespace VexedCore
                     
                 }
             }
-            
-            animationTime += gameTime.ElapsedGameTime.Milliseconds;
-            if (animationTime > 100)
+
+            if (Animated)
             {
-                refreshVertexData = true;
-                animationFrame++;
-                animationTime = 0;
+                animationTime += gameTime.ElapsedGameTime.Milliseconds;
+                if (animationTime > 100)
+                {
+                    refreshVertexData = true;
+                    animationFrame++;
+                    animationTime = 0;
+                }
             }
             animationFrame %= 2;
             if (isOrb && tracking == true && active == true)

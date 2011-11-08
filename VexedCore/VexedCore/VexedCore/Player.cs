@@ -540,7 +540,7 @@ namespace VexedCore
                 {
                     currentRoom = targetRoom;
                     Physics.refresh = true;
-                    Engine.reDraw = true;
+                    //Engine.reDraw = true;
                     center = new Vertex(d.position.position, d.position.normal, Vector3.Zero, d.position.direction);
                     state = State.Normal;
                 }
@@ -568,7 +568,7 @@ namespace VexedCore
         public void Respawn()
         {
             LevelLoader.QuickLoad();
-            Engine.reDraw = true;
+            //Engine.reDraw = true;
             Physics.refresh = true;
             
             Engine.player.currentRoom.Reset();
@@ -1417,7 +1417,7 @@ namespace VexedCore
                                     Engine.saveFileIndex = 4;
                                 LevelLoader.LoadFromDisk(Engine.saveFileIndex);
                                 Physics.refresh = true;
-                                Engine.reDraw = true;
+                                //Engine.reDraw = true;
                             }
                             if (d.type == VexedLib.DoodadType.PowerStation)
                             {

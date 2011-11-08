@@ -39,6 +39,9 @@ namespace VexedCore
 
         public static int debug_blocksGenerated;
         public static int debug_updateDoodadVertexData;
+        public static DebugDataMonitor debug_doodadVertexUpdateMonitor;
+        public static int debug_physicsRefresh;
+        public static DebugDataMonitor debug_physicsRefreshMonitor;
 
         public static int saveFileIndex = 0;
 
@@ -145,6 +148,7 @@ namespace VexedCore
 
         public void Init()
         {
+            debug_doodadVertexUpdateMonitor = new DebugDataMonitor();
             translucentEffect = new BasicEffect(Game1.graphicsDevice);
             translucentEffect.VertexColorEnabled = true;
             translucentEffect.Alpha = 1f;
@@ -702,7 +706,10 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            Engine.debug_doodadVertexUpdateMonitor.AddData(Engine.debug_updateDoodadVertexData);
+            Engine.debug_doodadVertexUpdateMonitor.Update(gameTime);
             Engine.debug_updateDoodadVertexData = 0;
+
             if(Engine.player.currentRoom.id.Contains("Menu"))
                 IntroOverlay.Update(gameTime);
             PauseMenu.Update(gameTime);

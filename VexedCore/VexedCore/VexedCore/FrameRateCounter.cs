@@ -66,7 +66,7 @@ namespace VexedCore
             string score = "Score: " + Engine.player.orbsCollected;
 
             string blockDrawInfo = "Blocks Generated: " + Engine.debug_blocksGenerated;
-            string doodadDrawInfo = "Doodads Generated: " + Engine.debug_updateDoodadVertexData;
+            string doodadDrawInfo = "Doodads Generated: " + Engine.debug_doodadVertexUpdateMonitor.Average();
 
             spriteBatch.Begin();
 
