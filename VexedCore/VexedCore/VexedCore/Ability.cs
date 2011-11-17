@@ -268,16 +268,19 @@ namespace VexedCore
                 else
                     shootDirection = -Engine.player.right / Engine.player.right.Length();
 
+                Vector3 relVelocity = Engine.player.center.velocity - Vector3.Dot(Engine.player.platformVelocity,Engine.player.right) * Engine.player.right;
                 if (type == AbilityType.SpinHook)
-                     Engine.player.SpinHook();
+                {
+                    Engine.player.SpinHook();
+                }
                 if (type == AbilityType.Blaster)
-                    Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Player, Engine.player.center.position, Engine.player.center.velocity, Engine.player.center.normal, shootDirection));
+                    Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Player, Engine.player.center.position, relVelocity, Engine.player.center.normal, shootDirection));
                 if (type == AbilityType.Missile)
-                    Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Missile, Engine.player.center.position + .5f * shootDirection, Engine.player.center.velocity, Engine.player.center.normal, shootDirection));
+                    Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Missile, Engine.player.center.position + .5f * shootDirection, relVelocity, Engine.player.center.normal, shootDirection));
                 if (type == AbilityType.Bomb)
-                    Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Bomb, Engine.player.center.position + .5f * shootDirection, Engine.player.center.velocity, Engine.player.center.normal, shootDirection));
+                    Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Bomb, Engine.player.center.position + .5f * shootDirection, relVelocity, Engine.player.center.normal, shootDirection));
                 if (type == AbilityType.Laser)
-                    Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Laser, Engine.player.center.position, Engine.player.center.velocity, Engine.player.center.normal, shootDirection));
+                    Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Laser, Engine.player.center.position, relVelocity, Engine.player.center.normal, shootDirection));
 
                 if (type == AbilityType.Laser || type == AbilityType.Blaster || type == AbilityType.Missile || type == AbilityType.Bomb)
                     Engine.player.lastFireTime = 0;

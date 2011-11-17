@@ -658,10 +658,13 @@ namespace VexedCore
             }
             else if (gunType == ProjectileType.Missile || gunType == ProjectileType.Bomb)
             {
-                armorHP--;
-                if (armorHP == 0)
+                if (armorType != VexedLib.ArmorType.FullSuper && armorType != VexedLib.ArmorType.ShieldSuper && armorType != VexedLib.ArmorType.TopSuper)
                 {
-                    armorType = VexedLib.ArmorType.None;
+                    armorHP--;
+                    if (armorHP == 0)
+                    {
+                        armorType = VexedLib.ArmorType.None;
+                    }
                 }
             }
             if (gunType == ProjectileType.Spikes)

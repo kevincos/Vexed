@@ -207,6 +207,11 @@ namespace VexedCore
             return Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D);
         }
 
+        public static void CenterMouse()
+        {
+            Mouse.SetPosition(Game1.titleSafeRect.Center.X, Game1.titleSafeRect.Center.Y);
+        }
+        
         public static void ResetMouse()
         {
             Controls.scrollWheelPrev = Mouse.GetState().ScrollWheelValue;

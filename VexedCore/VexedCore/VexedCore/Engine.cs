@@ -76,7 +76,7 @@ namespace VexedCore
         public static bool transparencyEnabled = true;
         public static int lightingLevel = 0;
         public static bool toonShadingEnabled = false;
-        public static float drawDistance = 100f;
+        public static float drawDistance = 150f;
         public static ControlType controlType = ControlType.MouseAndKeyboard;
         public int optionToggleCooldown = 0;
         public static bool reDraw = false;
@@ -555,7 +555,7 @@ namespace VexedCore
 
             DepthControl.Update(gameTime);
             float cameraDistance = (cameraTarget - cameraPos).Length();
-            projectionMatrix = ((1f - DepthControl.DepthFactor) * projectionMatrix + DepthControl.DepthFactor * Matrix.CreateOrthographic(cameraDistance * aspect, cameraDistance, 1, 1000)) / 2f;
+            projectionMatrix = ((1f - DepthControl.DepthFactor) * projectionMatrix + DepthControl.DepthFactor * Matrix.CreateOrthographic(cameraDistance * aspect, cameraDistance, 1, 2000)) / 2f;
             
             translucentEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
             translucentEffect.View = Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp);

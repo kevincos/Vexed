@@ -59,11 +59,14 @@ namespace VexedCore
         public static List<int> inventoryIndexList;
 
         public static bool warp = false;
+        public static bool zoomToPlayer = false;
 
         public static float zoomLevel = 0f;
         public static float zoomSpeed = .001f;
 
         public static float worldZoomLevel = 0f;
+        public static float worldCameraDefaultZoom = 800f;
+        public static float sectorCameraDefaultZoom = 200f;
 
         public static Vector2 mousePos;
         public static bool displayMouse = false;
@@ -72,7 +75,7 @@ namespace VexedCore
 
         public static int selectedRoomIndex = 0;
         public static int selectedSectorIndex = 0;
-
+        
         public static bool skipToInventory = false;
 
         public static List<DirectionalMapping> directionList;
@@ -227,16 +230,37 @@ namespace VexedCore
             Engine.spriteBatch.End();
         }
 
+        public static void SelectPlayerRoom()
+        {
+            for (int i = 0; i < Engine.roomList.Count; i++)
+                if (Engine.roomList[i] == Engine.player.currentRoom)
+                    selectedRoomIndex = i;
+            for (int i = 0; i < Engine.sectorList.Count; i++)
+                if (Engine.sectorList[i] == Engine.player.currentRoom.parentSector)
+                    selectedSectorIndex = i;   
+        }
+
         public static ZoomState Update(GameTime gameTime)
         {
+            if (state == ZoomState.None)
+            {
+                SelectPlayerRoom();             
+            }
             if (state == ZoomState.Sector)
             {
-                Vector3 idealTarget = Engine.roomList[selectedRoomIndex].center;
+                Vector3 idealTarget = Engine.sectorList[selectedSectorIndex].center;
+                if (cameraDistance < 140f)
+                {
+                    idealTarget = Engine.roomList[selectedRoomIndex].center;
+
+                }
                 Vector3 dif = (idealTarget - cameraTarget);
                 if (dif.Length() > 4)
                 {
                     dif.Normalize();
                     cameraTarget += .1f * dif * gameTime.ElapsedGameTime.Milliseconds;
+                    if(Math.Abs(cameraDistance - 140f) > 5)
+                        cameraDistance = (cameraPosition - cameraTarget).Length();
                 }
             }
 
@@ -258,6 +282,14 @@ namespace VexedCore
             {
                 cameraDistance += .5f * gameTime.ElapsedGameTime.Milliseconds;
             }
+            if ((state == ZoomState.World) && currentScrollWheel > Controls.scrollWheelPrev)
+            {
+                cameraDistance -= 2f * gameTime.ElapsedGameTime.Milliseconds;
+            }
+            if ((state == ZoomState.World) && currentScrollWheel < Controls.scrollWheelPrev)
+            {
+                cameraDistance += 2f * gameTime.ElapsedGameTime.Milliseconds;
+            }
 
             if (state == ZoomState.ZoomToWorld)
             {
@@ -265,7 +297,7 @@ namespace VexedCore
                 WorldMap.worldZoomLevel += WorldMap.zoomSpeed * gameTime.ElapsedGameTime.Milliseconds;
                 cameraPosition = (1-worldZoomLevel) * sectorCameraPosition + (worldZoomLevel) * worldCameraPosition;
                 cameraTarget = (1-worldZoomLevel) * sectorCameraTarget + (worldZoomLevel) * worldCameraTarget;
-                cameraDistance = (1 - worldZoomLevel) * 150 + (worldZoomLevel) * 500;
+                cameraDistance = (1 - worldZoomLevel) * cameraDistance + (worldZoomLevel) * worldCameraDefaultZoom;
                 if (WorldMap.worldZoomLevel > 1f)
                 {
                     WorldMap.worldZoomLevel = 1f;
@@ -278,7 +310,7 @@ namespace VexedCore
                 WorldMap.worldZoomLevel -= WorldMap.zoomSpeed * gameTime.ElapsedGameTime.Milliseconds;
                 cameraPosition = (1 - worldZoomLevel) * sectorCameraPosition + (worldZoomLevel) * worldCameraPosition;
                 cameraTarget = (1 - worldZoomLevel) * sectorCameraTarget + (worldZoomLevel) * worldCameraTarget;
-                cameraDistance = (1 - worldZoomLevel) * 150 + (worldZoomLevel) * 500;
+                cameraDistance = (1 - worldZoomLevel) * sectorCameraDefaultZoom + (worldZoomLevel) * cameraDistance;
                 if (WorldMap.worldZoomLevel < 0f)
                 {
                     WorldMap.worldZoomLevel = 0f;                    
@@ -295,7 +327,8 @@ namespace VexedCore
                 cameraUp = (1 - zoomLevel) * playerCameraUp + (zoomLevel) * sectorCameraUp;
                 if (WorldMap.zoomLevel > 1f)
                 {
-                    //cameraDistance = 150f;
+                    //cameraDistance = sectorCameraDefaultZoom;
+                    
                     WorldMap.zoomLevel = 1f;
                     state = ZoomState.Sector;
                     if (skipToInventory == true)
@@ -315,6 +348,8 @@ namespace VexedCore
                 {
                     WorldMap.zoomLevel = 0f;
                     state = ZoomState.None;
+                    Engine.reDraw = true;
+                    Controls.CenterMouse();
                     Engine.state = EngineState.Active;
                     Engine.roomList[selectedRoomIndex].roomHighlight = false;
                 }
@@ -334,7 +369,22 @@ namespace VexedCore
                     Vector3 right = Vector3.Cross(-dif, cameraUp);
 
                     Vector2 shift = Controls.GetCameraHelper();
-                    
+                    if (Mouse.GetState().X < 10)
+                    {
+                        shift.X = -.6f;
+                    }
+                    if (Mouse.GetState().Y < 10)
+                    {
+                        shift.Y = .6f;
+                    }
+                    if (Mouse.GetState().X > Game1.titleSafeRect.Width-10)
+                    {
+                        shift.X = .6f;
+                    }
+                    if (Mouse.GetState().Y > Game1.titleSafeRect.Height-10)
+                    {
+                        shift.Y = -.6f;
+                    }
 
                     right.Normalize();
                     dif.Normalize();
@@ -400,9 +450,10 @@ namespace VexedCore
             sectorCameraTarget = Engine.sectorList[selectedSectorIndex].center;
             Vector3 dif = Engine.player.center.normal + 1.1f * Engine.player.up + 1.4f * Engine.player.right;
             dif.Normalize();
-            cameraDistance = 150f;
+            cameraDistance = sectorCameraDefaultZoom;
             sectorCameraPosition = sectorCameraTarget + dif * cameraDistance;
             state = ZoomState.ZoomToSector;
+            zoomToPlayer = false;
             displayMouse = false;
         }
 
@@ -419,8 +470,9 @@ namespace VexedCore
                 displayMouse = true;
             
             // Generate room projections
-            if (state == ZoomState.Sector && (Mouse.GetState().LeftButton == ButtonState.Pressed || Controls.LeftStick().Length() > .1f || Controls.IsLeftKeyDown() || Controls.IsRightKeyDown() || Controls.IsUpKeyDown() || Controls.IsDownKeyDown()))
+            if (state == ZoomState.Sector && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
+
                 float bestDistance = 10000;
 
                 int newSelectedIndex = -1;
@@ -431,7 +483,7 @@ namespace VexedCore
                         
                         Vector3 projection = Game1.graphicsDevice.Viewport.Project(Engine.roomList[i].center, Engine.playerTextureEffect.Projection, Engine.playerTextureEffect.View, Engine.playerTextureEffect.World);
                         Engine.roomList[i].mapPosition2D = new Vector2(projection.X, projection.Y);
-                        if ((Engine.roomList[i].mapPosition2D - mousePos).Length() < 40)
+                        if ((Engine.roomList[i].mapPosition2D - mousePos).Length() < 60)
                         {
                             float distance = (Engine.roomList[i].center - cameraPosition).Length();
                             if (distance < bestDistance)
@@ -555,17 +607,29 @@ namespace VexedCore
                 playerCameraPosition = Engine.playerCameraPos;
                 playerCameraTarget = Engine.playerCameraTarget;
                 playerCameraUp = Engine.playerCameraUp;
-                state = ZoomState.ZoomFromSector;                
-            }
-            else if (warp == false && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || Keyboard.GetState().IsKeyDown(Keys.M) ||  GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && (WorldMap.state == ZoomState.Sector || WorldMap.state == ZoomState.Inventory))
-            {
                 state = ZoomState.ZoomFromSector;
-                sectorCameraTarget = cameraTarget;
-                sectorCameraPosition = cameraPosition;
-                sectorCameraUp = cameraUp;
-                playerCameraPosition = Engine.playerCameraPos;
-                playerCameraTarget = Engine.playerCameraTarget;
-                playerCameraUp = Engine.playerCameraUp;
+                SelectPlayerRoom();
+            }
+            else if (warp == false && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || Keyboard.GetState().IsKeyDown(Keys.M) || zoomToPlayer == true ||  GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && (WorldMap.state == ZoomState.Sector || WorldMap.state == ZoomState.Inventory))
+            {
+                if (Engine.player.currentRoom.parentSector == Engine.sectorList[selectedSectorIndex])
+                {
+                    state = ZoomState.ZoomFromSector;
+                    sectorCameraTarget = cameraTarget;
+                    sectorCameraPosition = cameraPosition;
+                    sectorCameraUp = cameraUp;
+                    playerCameraPosition = Engine.playerCameraPos;
+                    playerCameraTarget = Engine.playerCameraTarget;
+                    playerCameraUp = Engine.playerCameraUp;                    
+                }
+                else
+                {
+                    zoomToPlayer = true;
+                    state = ZoomState.ZoomToWorld;
+                    sectorCameraTarget = cameraTarget;
+                    sectorCameraPosition = cameraPosition;
+                    sectorCameraUp = cameraUp;
+                }
             }
             else if (warp == false && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder) || rightScreenChange || Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets)) && WorldMap.state == ZoomState.Sector)
             {
@@ -578,15 +642,20 @@ namespace VexedCore
                 resultCooldown = 150;
 
             }
-            else if ((Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A) || Keyboard.GetState().IsKeyDown(Keys.OemPlus) || rightScreenChange || Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder)) && WorldMap.state == ZoomState.World)
+            else if ((zoomToPlayer == true || Keyboard.GetState().IsKeyDown(Keys.Space) || Keyboard.GetState().IsKeyDown(Keys.M) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A) || Keyboard.GetState().IsKeyDown(Keys.OemPlus) || rightScreenChange || Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder)) && WorldMap.state == ZoomState.World)
             {
+                if(Keyboard.GetState().IsKeyDown(Keys.M) || zoomToPlayer == true)
+                {
+                    zoomToPlayer = true;
+                    SelectPlayerRoom();
+                }
                 state = ZoomState.ZoomFromWorld;
                 worldCameraTarget = cameraTarget;
                 worldCameraPosition = cameraPosition;
                 sectorCameraTarget = Engine.sectorList[selectedSectorIndex].center;
                 Vector3 dif = cameraPosition - cameraTarget;
                 dif.Normalize();
-                sectorCameraPosition = sectorCameraTarget + dif * 150f;
+                sectorCameraPosition = sectorCameraTarget + dif * sectorCameraDefaultZoom;
                 UnHightlightSector();
                 for (int i = 0; i < Engine.roomList.Count; i++)
                 {
@@ -615,50 +684,40 @@ namespace VexedCore
                 worldCameraTarget = Engine.worldCenter;
                 Vector3 dif = cameraPosition - cameraTarget;
                 dif.Normalize();
-                worldCameraPosition = worldCameraTarget + dif * 500f;
+                worldCameraPosition = worldCameraTarget + dif * worldCameraDefaultZoom;
                 Engine.roomList[selectedRoomIndex].roomHighlight = false;
                 HightlightSector();
                 
             }
             else if ((Controls.IsRightKeyDown() || Controls.IsLeftKeyDown() || Controls.IsUpKeyDown() || Controls.IsDownKeyDown() || Controls.LeftStick().Length() > .1f) && state == ZoomState.Sector)
             {
-                Vector2 moveDir = Controls.LeftStick();
-                moveDir.Y = -moveDir.Y;
-                if (Controls.IsLeftKeyDown())
-                    moveDir.X -= 1;
-                if (Controls.IsRightKeyDown())
-                    moveDir.X += 1;
-                if (Controls.IsUpKeyDown())
-                    moveDir.Y += 1;
-                if (Controls.IsDownKeyDown())
-                    moveDir.Y -= 1;
-                moveDir.Normalize();
-                float bestAngleMatch = -1f;
-                string bestRoomId = Engine.roomList[selectedRoomIndex].id;
-                foreach (DirectionalMapping d in directionList)
+                // Key move sequentially through list.
+                if(Controls.IsRightKeyDown() || Controls.IsUpKeyDown() || Controls.LeftStick().X > 0)
                 {
-                    float result = Vector2.Dot(d.direction, moveDir);
-                    if (result > bestAngleMatch)
+                    selectedRoomIndex++;
+                    selectedRoomIndex %= Engine.roomList.Count;
+                    while (Engine.roomList[selectedRoomIndex].parentSector != Engine.sectorList[selectedSectorIndex])
                     {
-                        bestAngleMatch = result;
-                        bestRoomId = d.roomId;
+                        selectedRoomIndex++;
+                        selectedRoomIndex %= Engine.roomList.Count;
                     }
                 }
-                for (int i = 0; i < Engine.roomList.Count; i++)
+                else
                 {
-                    if (Engine.roomList[i].id == bestRoomId)
+                    selectedRoomIndex--;
+                    selectedRoomIndex += Engine.roomList.Count;
+                    selectedRoomIndex %= Engine.roomList.Count;
+                    while (Engine.roomList[selectedRoomIndex].parentSector != Engine.sectorList[selectedSectorIndex])
                     {
-                        Engine.roomList[selectedRoomIndex].roomHighlight = false;
-                        selectedRoomIndex = i;
-                        Engine.reDraw = true;
-                        Engine.roomList[selectedRoomIndex].roomHighlight = true;
-                        resultCooldown = 100;
+                        selectedRoomIndex--;
+                        selectedRoomIndex += Engine.roomList.Count;                
+                        selectedRoomIndex %= Engine.roomList.Count;
                     }
                 }
-
+                resultCooldown = 100;
 
             }
-            else if ((Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D) || Controls.LeftStick().X > .1f))
+            else if (Controls.IsRightKeyDown() || Controls.IsUpKeyDown() || Controls.LeftStick().X > .1f)
             {
                 if (state == ZoomState.Sector && selectedRoomIndex != -1)
                 {
@@ -674,7 +733,7 @@ namespace VexedCore
 
                     Engine.roomList[selectedRoomIndex].roomHighlight = true;
                     Engine.reDraw = true;
-                    resultCooldown = 100;
+                    resultCooldown = 150;
                 }
                 if (state == ZoomState.World && selectedSectorIndex != -1)
                 {
@@ -683,11 +742,11 @@ namespace VexedCore
                     selectedSectorIndex %= Engine.sectorList.Count();
 
                     Engine.reDraw = true;
-                    resultCooldown = 100;
+                    resultCooldown = 150;
                     HightlightSector();
                 }
             }
-            else if ((Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A) || Controls.LeftStick().X < -.1f))
+            else if (Controls.IsLeftKeyDown() || Controls.IsDownKeyDown() || Controls.LeftStick().X < -.1f)
             {
                 if (state == ZoomState.Sector && selectedRoomIndex != -1)
                 {
@@ -710,7 +769,7 @@ namespace VexedCore
                     }*/
                     Engine.roomList[selectedRoomIndex].roomHighlight = true;
                     Engine.reDraw = true;
-                    resultCooldown = 100;
+                    resultCooldown = 150;
                 }
                 if (state == ZoomState.World && selectedSectorIndex != -1)
                 {
@@ -720,7 +779,7 @@ namespace VexedCore
                     selectedSectorIndex %= Engine.sectorList.Count();
 
                     Engine.reDraw = true;
-                    resultCooldown = 100;
+                    resultCooldown = 150;
                     HightlightSector();
                 }
             }

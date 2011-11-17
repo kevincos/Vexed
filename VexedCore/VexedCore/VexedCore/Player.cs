@@ -77,6 +77,7 @@ namespace VexedCore
         public Vertex center;
         public Vertex tunnelDummy;
         public Vertex hookShot;
+        public Doodad hookShotTarget;
         public Vector3 hookLand;
         [XmlIgnore]public Room currentRoom;
         public string currentRoomId;
@@ -88,6 +89,7 @@ namespace VexedCore
         public Vector3 jumpPosition;
         public Vector3 jumpNormal;
         public Vector3 platformVelocity;
+        public Vector3 lastKnownPlatformVelocity;
         public float referenceFrameSpeed;
         public int currentObjective = 0;
         public Vector3 spinUp;
@@ -161,6 +163,7 @@ namespace VexedCore
         
         public float wallJumpSpeed = .01f;
         public float maxHorizSpeed = .01f;
+        public float maxBoostHorizSpeed = .03f;
         
         public float gravityAcceleration = .0009f;
         public float boostAcceleration = .002f;
@@ -195,20 +198,22 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Empty);
-            secondaryAbility = new Ability(AbilityType.Empty);
+            primaryAbility = new Ability(AbilityType.WallJump);
+            secondaryAbility = new Ability(AbilityType.Boots);
             naturalShield = new Ability(AbilityType.Shield);
+            upgrades[(int)AbilityType.Laser] = true;
+            upgrades[(int)AbilityType.Boots] = true;
+            upgrades[(int)AbilityType.Empty] = true;
+            
 
-            /*upgrades[(int)AbilityType.PermanentWallJump] = true;
-            //upgrades[(int)AbilityType.ImprovedJump] = true;
-            upgrades[(int)AbilityType.PermanentBoots] = true;
             upgrades[(int)AbilityType.WallJump] = true;
             upgrades[(int)AbilityType.DoubleJump] = true;
-            upgrades[(int)AbilityType.Boots] = true;
-            upgrades[(int)AbilityType.SpinHook] = true;
-            upgrades[(int)AbilityType.Laser] = true;
             upgrades[(int)AbilityType.Blaster] = true;
-            upgrades[(int)AbilityType.Empty] = true;
+            /*upgrades[(int)AbilityType.PermanentWallJump] = true;
+            upgrades[(int)AbilityType.PermanentBoots] = true;
+            upgrades[(int)AbilityType.ImprovedJump] = true;
+            upgrades[(int)AbilityType.SpinHook] = true;
+            
             upgrades[(int)AbilityType.Missile] = true;
             upgrades[(int)AbilityType.Booster] = true;
             upgrades[(int)AbilityType.JetPack] = true;
@@ -579,13 +584,157 @@ namespace VexedCore
             return primaryAbility.type == AbilityType.Boots || secondaryAbility.type == AbilityType.Boots || upgrades[(int)AbilityType.PermanentBoots];
         }
 
+        public void SpinHookUpdate(GameTime gameTime)
+        {
+            if (hookState != HookState.Waiting)
+            {
+                if (hookState == HookState.Hook && state != State.Spin)
+                    hookHangTime += gameTime.ElapsedGameTime.Milliseconds;
+                else if (hookState == HookState.Out)
+                    hookTime += gameTime.ElapsedGameTime.Milliseconds;
+                else if (hookState == HookState.In)
+                    hookTime -= gameTime.ElapsedGameTime.Milliseconds;
+                if (hookState == HookState.Out)
+                {
+                    if (hookShotTarget != null)
+                    {
+                        Vector3 dir = hookShotTarget.position.position - (center.position + .5f * right * faceDirection);
+                        dir.Normalize();
+                        dir *= .014f;
+
+                        hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, dir, center.direction);
+                    }
+                    else
+                    {
+                        hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
+                    }
+                    hookShot.Update(currentRoom, hookTime);
+                    foreach (Doodad d in currentRoom.doodads)
+                    {
+                        if (d.type == VexedLib.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
+                        {
+                            center.velocity = Vector3.Zero;
+                            jumpSource = center.position;
+                            jumpDestination = d.position.position + right * faceDirection - up;
+                            state = State.Spin;
+                            spinUp = -faceDirection * right;
+                            hookHangTime = 0;
+                            hookState = HookState.Hook;
+                        }
+                    }
+                }
+                if (hookState == HookState.In)
+                {
+                    if (hookShotTarget != null)
+                    {
+                        Vector3 dir = hookShotTarget.position.position - (center.position + .5f * right * faceDirection);
+                        dir.Normalize();
+                        dir *= .014f;
+
+                        hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, dir, center.direction);
+                    }
+                    else
+                    {
+                        hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
+                    } 
+                    hookShot.Update(currentRoom, hookTime);
+                }
+
+                if (hookState == HookState.Hook)
+                {
+                    foreach (Doodad d in currentRoom.doodads)
+                    {
+                        if (d.type == VexedLib.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
+                        {
+                            Vector3 vel = .01f * up + .01f * right * faceDirection;
+
+                            float distance = (d.position.position - (center.position + .5f * right * faceDirection)).Length();
+                            hookTime = (int)(distance / vel.Length());                            
+
+                            hookShot = new Vertex(d.position.position, center.normal, Vector3.Zero, center.direction);
+                        }
+                    }
+                    if (state != State.Spin)
+                    {
+                        if (hookShotTarget != null)
+                        {
+                            Vector3 dir = hookShotTarget.position.position - (center.position + .5f * right * faceDirection);
+                            dir.Normalize();
+                            dir *= .014f;
+
+                            
+                            if ((hookShotTarget.position.position - hookShot.position).Length() < .8f)
+                                hookShot = new Vertex(hookShotTarget.position.position, center.normal, Vector3.Zero, center.direction);
+                            else
+                                hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, dir, center.direction);
+                        }
+                        else
+                        {
+                            hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
+                        }
+                        hookShot.Update(currentRoom, hookTime);
+                    }
+
+                }
+
+
+                if (hookTime > maxHookTime && hookState == HookState.Out)
+                {
+                    hookLand = hookShot.position;
+                    hookShot.velocity = -hookShot.velocity;
+                    hookHangTime = 0;
+                    hookState = HookState.Hook;
+                }
+                if (hookTime < 0 && hookState == HookState.In)
+                {
+                    hookState = HookState.Waiting;
+                }
+                if (hookHangTime > maxHookHangTime && hookState == HookState.Hook)
+                {
+                    hookState = HookState.In;
+                }
+            }
+        }
+
         public void SpinHook()
         {
             if (hookState == HookState.Waiting)
             {
                 hookState = HookState.Out;
-                hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
+                if (hookShotTarget != null)
+                {
+                    Vector3 dir = hookShotTarget.position.position - (center.position + .5f * right * faceDirection);
+                    dir.Normalize();
+                    dir *= .014f;
+
+                    hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, dir, center.direction);
+                }
+                else
+                {
+                    hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
+                }
+                hookShot.Update(currentRoom, maxHookTime/2);
                 hookTime = 0;
+                hookShotTarget = null;
+                foreach (Doodad d in currentRoom.doodads)
+                {
+                    if (d.type == VexedLib.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < 2f)
+                    {
+                        hookShotTarget = d;                        
+                    }
+                }
+                if (hookShotTarget != null)
+                {
+                    Vector3 dir = hookShotTarget.position.position - (center.position + .5f * right * faceDirection);
+                    dir.Normalize();
+                    dir *= .014f;
+
+                    hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, dir, center.direction);
+                }
+                else
+                {
+                    hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
+                }
             }
             else
             {
@@ -758,6 +907,14 @@ namespace VexedCore
             if (rightMagnitude < -maxHorizSpeed && boosting == false)
             {
                 center.velocity -= (maxHorizSpeed + rightMagnitude) * right;
+            }
+            if (rightMagnitude > maxBoostHorizSpeed && boosting == true)
+            {
+                center.velocity -= (rightMagnitude - maxBoostHorizSpeed) * right;
+            }
+            if (rightMagnitude < -maxBoostHorizSpeed && boosting == true)
+            {
+                center.velocity -= (maxBoostHorizSpeed + rightMagnitude) * right;
             }
         }
 
@@ -933,6 +1090,16 @@ namespace VexedCore
             else
                 wallTime = 0;
 
+            if (jetPacking == true)
+            {
+                if (platformVelocity.Length() > 0)
+                {
+                    platformVelocity -= .005f * platformVelocity;
+                    if (platformVelocity.Length() < .01f)
+                        platformVelocity = Vector3.Zero;
+                }
+                
+            }
             if (grounded == true)
             {
                 wallTime = 0;
@@ -940,6 +1107,16 @@ namespace VexedCore
             }
             else
             {
+                if(referenceFrameSpeed > 0)
+                {
+                    referenceFrameSpeed -= .0001f;
+                    if (referenceFrameSpeed < 0) referenceFrameSpeed = 0;
+                }
+                if (referenceFrameSpeed < 0)
+                {
+                    referenceFrameSpeed += .0001f;
+                    if (referenceFrameSpeed > 0) referenceFrameSpeed = 0;
+                }
                 float currentSpeed = Vector3.Dot(center.velocity, right);
                 Vector2 controlStick = Controls.LeftStick();
                 if (!(Game1.controller.JumpButtonPressed() == true ||  Controls.IsRightKeyDown() ||
@@ -1019,77 +1196,8 @@ namespace VexedCore
 
             }
 
-            if (hookState != HookState.Waiting)
-            {
-                if(hookState == HookState.Hook && state != State.Spin)
-                    hookHangTime += gameTime.ElapsedGameTime.Milliseconds;
-                else if (hookState == HookState.Out)
-                    hookTime += gameTime.ElapsedGameTime.Milliseconds;
-                else if (hookState == HookState.In)
-                    hookTime -= gameTime.ElapsedGameTime.Milliseconds;
-                if (hookState == HookState.Out)
-                {
-                    hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
-                    hookShot.Update(currentRoom, hookTime);
-                    foreach (Doodad d in currentRoom.doodads)
-                    {
-                        if (d.type == VexedLib.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
-                        {
-                            center.velocity = Vector3.Zero;
-                            jumpSource = center.position;
-                            jumpDestination = d.position.position + right * faceDirection - up;
-                            state = State.Spin;
-                            spinUp = -faceDirection * right;
-                            hookHangTime = 0;
-                            hookState = HookState.Hook;
-                        }
-                    }
-                }                    
-                if (hookState == HookState.In)
-                {
-                    hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
-                    hookShot.Update(currentRoom, hookTime);
-                }
-
-                if (hookState == HookState.Hook)
-                {
-                    foreach (Doodad d in currentRoom.doodads)
-                    {
-                        if (d.type == VexedLib.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
-                        {
-                            Vector3 vel = .01f * up + .01f * right * faceDirection;
-
-                            float distance = (d.position.position - (center.position + .5f * right * faceDirection)).Length();
-                            hookTime = (int)(distance / vel.Length());
-
-                            hookShot = new Vertex(d.position.position, center.normal, Vector3.Zero, center.direction);
-                        }
-                    }
-                    if (state != State.Spin)
-                    {
-                        hookShot = new Vertex(center.position + .5f * right * faceDirection, center.normal, .01f * up + .01f * right * faceDirection, center.direction);
-                        hookShot.Update(currentRoom, hookTime);
-                    }
-
-                }
-
-                    
-                if (hookTime > maxHookTime && hookState == HookState.Out)
-                {
-                    hookLand = hookShot.position;
-                    hookShot.velocity = -hookShot.velocity;
-                    hookHangTime = 0;                            
-                    hookState = HookState.Hook;
-                }
-                if (hookTime < 0 && hookState == HookState.In)
-                {
-                    hookState = HookState.Waiting;
-                }
-                if (hookHangTime > maxHookHangTime && hookState == HookState.Hook)
-                {                    
-                    hookState = HookState.In;
-                } 
-            }
+            SpinHookUpdate(gameTime);
+            
 
             SetAnimationState();
             primaryAbility.Update(gameTime);
@@ -1171,7 +1279,8 @@ namespace VexedCore
                 {
                     if (Controls.IsLeftKeyDown())
                     {
-                        faceDirection = -1;
+                        if(hookState == HookState.Waiting)
+                            faceDirection = -1;
                         if (grounded == true)
                             center.velocity -= walkSpeed * right;
                         else
@@ -1179,7 +1288,8 @@ namespace VexedCore
                     }
                     if (Controls.IsRightKeyDown())
                     {
-                        faceDirection = 1;
+                        if (hookState == HookState.Waiting)
+                            faceDirection = 1;
                         if (grounded == true)
                             center.velocity += walkSpeed * right;
                         else
@@ -1191,8 +1301,11 @@ namespace VexedCore
                             center.velocity += walkSpeed * stick.X * right;
                         else
                             center.velocity += airSpeed * stick.X * right;
-                        if (stick.X > .2) faceDirection = 1;
-                        if (stick.X < -.2) faceDirection = -1;
+                        if (hookState == HookState.Waiting)
+                        {
+                            if (stick.X > .2) faceDirection = 1;
+                            if (stick.X < -.2) faceDirection = -1;
+                        }
                     }
                 }
 
@@ -1312,7 +1425,7 @@ namespace VexedCore
                             jumpRecovery = jumpRecoveryMax;
                         }
                     }
-                    else if (leftWall && faceDirection < 0 && (upgrades[(int)AbilityType.PermanentWallJump] == true || primaryAbility.type == AbilityType.WallJump || secondaryAbility.type == AbilityType.WallJump))
+                    else if (hookState == HookState.Waiting && leftWall && faceDirection < 0 && (upgrades[(int)AbilityType.PermanentWallJump] == true || primaryAbility.type == AbilityType.WallJump || secondaryAbility.type == AbilityType.WallJump))
                     {
                         faceDirection = 1;
                         if (upMagnitude < .8f * jumpSpeed)
@@ -1323,7 +1436,7 @@ namespace VexedCore
                         wallJumpCooldown = wallJumpCooldownMax;
 
                     }
-                    else if (rightWall && faceDirection > 0 && (upgrades[(int)AbilityType.PermanentWallJump] == true || primaryAbility.type == AbilityType.WallJump || secondaryAbility.type == AbilityType.WallJump))
+                    else if (hookState == HookState.Waiting && rightWall && faceDirection > 0 && (upgrades[(int)AbilityType.PermanentWallJump] == true || primaryAbility.type == AbilityType.WallJump || secondaryAbility.type == AbilityType.WallJump))
                     {
                         faceDirection = -1;
                         if (upMagnitude < .8f * jumpSpeed)

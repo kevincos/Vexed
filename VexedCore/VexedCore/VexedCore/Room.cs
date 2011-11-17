@@ -1528,7 +1528,16 @@ namespace VexedCore
             if (objective == true)
             {
                 iconDistance = 5f;
-                iconSize = 2f + ObjectiveControl.oscillate * 3f / ObjectiveControl.maxOscillate;
+                iconSize = 3f + ObjectiveControl.oscillate * 3f / ObjectiveControl.maxOscillate;
+            }
+            if (decalIndex == 44)
+            {
+                iconSize = 4f;
+            }
+            if (WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomFromWorld || WorldMap.state == ZoomState.ZoomToWorld)
+            {
+                iconDistance *= (3 * WorldMap.worldZoomLevel);
+                iconSize *= (5 * WorldMap.worldZoomLevel);
             }
             Vector3 offset = Vector3.Zero;
             
@@ -1558,12 +1567,19 @@ namespace VexedCore
                 Vector3 cameraRight = Vector3.Cross(cameraUp, WorldMap.cameraPosition - WorldMap.cameraTarget);
                 cameraRight.Normalize();
 
-                MapDecalHelper(mapDecalList, cameraUp, cameraRight, Engine.player.center, 44, true);
-                foreach (Vertex v in ObjectiveControl.GetObjectiveLocations())
+                if (parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] || WorldMap.state == ZoomState.World)
                 {
-                    MapDecalHelper(mapDecalList, cameraUp, cameraRight, v, 45, true);
+                    if (Engine.player.currentRoom == this)
+                    {
+                        MapDecalHelper(mapDecalList, cameraUp, cameraRight, Engine.player.center, 44, true);
+                        foreach (Vertex v in ObjectiveControl.GetObjectiveLocations())
+                        {
+                            MapDecalHelper(mapDecalList, cameraUp, cameraRight, v, 45, true);
+                        }
+                    }
                 }
-                if (explored == true)
+
+                if (explored == true && parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld))
                 {
                     foreach (Doodad d in doodads)
                     {
@@ -1597,7 +1613,11 @@ namespace VexedCore
         public List<TrasnparentSquare> GetMapBlock(Vector3 adjustedSize, Color blockColor, bool highlight)
         {
             Color shellColor = blockColor;
-            if (this.sectorHighlight == true)
+            if (parentSector != Engine.sectorList[WorldMap.selectedSectorIndex] && WorldMap.state != ZoomState.None && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld))
+            {
+                return new List<TrasnparentSquare>();
+            }
+            else if (this.sectorHighlight == true)
             {
                 shellColor = Color.White;
                 shellColor.A = (Byte)(200 * WorldMap.zoomLevel);
@@ -1605,19 +1625,28 @@ namespace VexedCore
                 shellColor.G = (Byte)(shellColor.G * WorldMap.zoomLevel);
                 shellColor.B = (Byte)(shellColor.B * WorldMap.zoomLevel);
             }
-            else if (highlight == true)
+            else if (highlight == true && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld))
             {
                 shellColor.A = (Byte)(200 * WorldMap.zoomLevel / 3);
                 shellColor.R = (Byte)(shellColor.R * WorldMap.zoomLevel / 3);
                 shellColor.G = (Byte)(shellColor.G * WorldMap.zoomLevel / 3);
                 shellColor.B = (Byte)(shellColor.B * WorldMap.zoomLevel / 3);
             }
-            else if (explored == false || parentSector != Engine.player.currentRoom.parentSector)
+            else if (explored == false && parentSector == Engine.sectorList[WorldMap.selectedSectorIndex])
             {
-                shellColor.A = 110;
-                shellColor.R = 30;
-                shellColor.G = 30;
-                shellColor.B = 30;
+
+                shellColor.A = (Byte)(110);
+                shellColor.R = (Byte)(30);
+                shellColor.G = (Byte)(30);
+                shellColor.B = (Byte)(30);
+            }
+            else if (explored == false && parentSector != Engine.sectorList[WorldMap.selectedSectorIndex])
+            {
+
+                shellColor.A = (Byte)(WorldMap.worldZoomLevel * 110);
+                shellColor.R = (Byte)(WorldMap.worldZoomLevel * 30);
+                shellColor.G = (Byte)(WorldMap.worldZoomLevel * 30);
+                shellColor.B = (Byte)(WorldMap.worldZoomLevel * 30);
             }
             else if (Engine.state == EngineState.Active)
             {
@@ -1776,133 +1805,133 @@ namespace VexedCore
         {
             
             if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || (roomHighlight == true && explored == true))
-            {
+            {                
                 if ((center - Engine.player.currentRoom.center).Length() < Engine.drawDistance ||
                         (Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)
                 {
-                    float cameraLineDistance = Vector3.Dot(center - Engine.player.center.position, Vector3.Normalize(Engine.player.cameraTarget - Engine.player.cameraPos));
-
-                
-                    Color interiorColor = new Color(20, 20, 20);
-
-                    if (innerBlockMode == 2)
-                        interiorColor.A = 90;
-
-
-                    #region innerBlock
-                    Vector3 adjustedSize = new Vector3(size.X - .1f, size.Y - .1f, size.Z - .1f);
-                    if (translucentBoxVertices == null)
+                    if (WorldMap.state == ZoomState.None || parentSector == Engine.sectorList[WorldMap.selectedSectorIndex])
                     {
-                        translucentBoxVertices = new List<VertexPositionColorNormalTexture>();
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
+                        float cameraLineDistance = Vector3.Dot(center - Engine.player.center.position, Vector3.Normalize(Engine.player.cameraTarget - Engine.player.cameraPos));
 
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
 
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+                        Color interiorColor = new Color(20, 20, 20);
 
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+                        if (innerBlockMode == 2)
+                            interiorColor.A = 90;
 
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
 
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
-
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
-
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
-
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
-
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
-
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
-
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
-                        translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
-
-                        transparentSquareList = new List<TrasnparentSquare>();
-                        for (int i = 0; i < translucentBoxVertices.Count(); i += 6)
+                        #region innerBlock
+                        Vector3 adjustedSize = new Vector3(size.X - .1f, size.Y - .1f, size.Z - .1f);
+                        if (translucentBoxVertices == null)
                         {
-                            TrasnparentSquare t = new TrasnparentSquare(translucentBoxVertices[i], translucentBoxVertices[i + 1], translucentBoxVertices[i + 2], translucentBoxVertices[i + 3], translucentBoxVertices[i + 4], translucentBoxVertices[i + 5]);
-                            transparentSquareList.Add(t);
-                        }
-                    }
-                    if (Engine.staticObjectsInitialized == false)
-                    {
-                        for (int i = 0; i < transparentSquareList.Count(); i++)
-                        {
-                            Engine.staticTranslucentObjects.Add(transparentSquareList[i]);
-                        }
-                    }
-                
-                    #endregion
+                            translucentBoxVertices = new List<VertexPositionColorNormalTexture>();
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
 
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
 
-                    #region Blocks
-                    foreach (Block b in blocks)
-                    {
-                        List<Vertex> vList = new List<Vertex>();
-                        vList.Add(b.edges[0].start);
-                        vList.Add(b.edges[1].start);
-                        vList.Add(b.edges[2].start);
-                        vList.Add(b.edges[3].start);
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
 
-                        if (b.staticObject == false && this == Engine.player.currentRoom)
-                        {
-                            b.UpdateVertexData(this);
-                            b.Draw(this);
-                            foreach (Edge e in b.edges)
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
+
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
+
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
+
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
+
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
+
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
+
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
+
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
+                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
+
+                            transparentSquareList = new List<TrasnparentSquare>();
+                            for (int i = 0; i < translucentBoxVertices.Count(); i += 6)
                             {
-                                e.UpdateVertexData(this, true);
-                                e.Draw(this);
+                                TrasnparentSquare t = new TrasnparentSquare(translucentBoxVertices[i], translucentBoxVertices[i + 1], translucentBoxVertices[i + 2], translucentBoxVertices[i + 3], translucentBoxVertices[i + 4], translucentBoxVertices[i + 5]);
+                                transparentSquareList.Add(t);
                             }
                         }
-                        else
+                        if (Engine.staticObjectsInitialized == false)
                         {
-                            if (Engine.staticObjectsInitialized == false || this == Engine.player.currentRoom)
+                            for (int i = 0; i < transparentSquareList.Count(); i++)
+                            {
+                                Engine.staticTranslucentObjects.Add(transparentSquareList[i]);
+                            }
+                        }
+
+                        #endregion
+
+
+                        #region Blocks
+                        foreach (Block b in blocks)
+                        {
+                            List<Vertex> vList = new List<Vertex>();
+                            vList.Add(b.edges[0].start);
+                            vList.Add(b.edges[1].start);
+                            vList.Add(b.edges[2].start);
+                            vList.Add(b.edges[3].start);
+
+                            if (b.staticObject == false && this == Engine.player.currentRoom)
                             {
                                 b.UpdateVertexData(this);
                                 b.Draw(this);
+                                foreach (Edge e in b.edges)
+                                {
+                                    e.UpdateVertexData(this, true);
+                                    e.Draw(this);
+                                }
                             }
-
-                            foreach (Edge e in b.edges)
+                            else
                             {
-                                e.UpdateVertexData(this, false);
-                                e.Draw(this);
+                                if (Engine.staticObjectsInitialized == false || this == Engine.player.currentRoom)
+                                {
+                                    b.UpdateVertexData(this);
+                                    b.Draw(this);
+                                }
+
+                                foreach (Edge e in b.edges)
+                                {
+                                    e.UpdateVertexData(this, false);
+                                    e.Draw(this);
+                                }
                             }
+
+
+
+
                         }
+                        #endregion
 
 
-
-
-                    }
-                    #endregion
-                
-
-                    //if (Engine.staticDoodadsInitialized == false || cameraLineDistance >= -10)
-                    {
                         #region Doodads
                         foreach (Doodad d in doodads)
                         {
@@ -1917,7 +1946,7 @@ namespace VexedCore
 
             Vector3 outerAdjustedSize = new Vector3(size.X + 5f, size.Y + 5f, size.Z + 5f);
             //if (innerBlockMode > 0 && Engine.state != EngineState.Active)
-            if (innerBlockMode > 0)
+            if (innerBlockMode > 0)             
             {
                 Engine.mapShellObjects.AddRange(GetMapBlock(outerAdjustedSize, currentColor));
             }

@@ -48,6 +48,8 @@ namespace VexedCore
         public String srcMonsterId;
         public Vector3 missileTarget = Vector3.Zero;
         public float missileDistance = 10000f;
+
+        public float referenceFrameSpeed = 0f;
         
         public bool stopped = false;
         public bool exploding = false;
@@ -155,7 +157,7 @@ namespace VexedCore
                 else if (type == ProjectileType.Missile)
                 {
                     if (srcMonster == null)
-                        return .02f;
+                        return .007f;
                     return .004f;
                 }
                 else if (type == ProjectileType.Bomb)
@@ -164,6 +166,24 @@ namespace VexedCore
                     return .025f;
                 else
                     return 0;
+            }
+        }
+
+        public float missileTurnSpeed
+        {
+            get
+            {
+                if (srcMonster == null)
+                    return .008f;
+                return .05f;
+            }
+        }
+
+        public float missileSideResistance
+        {
+            get
+            {
+                return .009f;
             }
         }
 
@@ -434,12 +454,14 @@ namespace VexedCore
             this.position.velocity += extraVelocity * this.initVelocity;
             this.position.velocity += Vector3.Dot(velocity, direction) * direction;
             this.position.velocity += Engine.player.platformVelocity;
+            this.referenceFrameSpeed = this.position.velocity.Length();
             
         }
 
         public Projectile(Projectile p, Room r, Vector3 n, Vector3 u)
         {
             position = p.position.Unfold(r,n,u);
+            referenceFrameSpeed = p.referenceFrameSpeed;
             srcProjectile = p;
             type = p.type;
         }
@@ -474,18 +496,22 @@ namespace VexedCore
 
             if (missileTarget != Vector3.Zero)
             {
-                position.direction += missileTarget / missileTarget.Length();
+                position.direction += missileTurnSpeed * gameTime.ElapsedGameTime.Milliseconds * missileTarget / missileTarget.Length();
                 position.direction.Normalize();
             }
             if (type == ProjectileType.Missile)
             {
-                if (position.velocity.Length() > this.maxVelocity)
+
+                float currentSpeed = Vector3.Dot(position.velocity, position.direction);
+                if (currentSpeed > this.maxVelocity + referenceFrameSpeed)
                 {
                     position.velocity.Normalize();
                     position.velocity *= this.maxVelocity;
                 }
 
                 position.velocity += position.direction * .000005f * gameTime.ElapsedGameTime.Milliseconds;
+                Vector3 sideDir = Vector3.Cross(position.direction, position.normal);
+                position.velocity -= missileSideResistance * gameTime.ElapsedGameTime.Milliseconds * Vector3.Dot(position.velocity, sideDir) * sideDir;
             }
             position.Update(Engine.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds);
         }
@@ -495,7 +521,7 @@ namespace VexedCore
             if (lifeTime > 500)
             {
                 Vector3 newMissileTarget = targetPos - position.position;
-                if (newMissileTarget.Length() < missileDistance)
+                //if (newMissileTarget.Length() < missileDistance)
                 {
                     missileDistance = newMissileTarget.Length();
                     missileTarget = newMissileTarget;

@@ -1260,7 +1260,7 @@ namespace VexedCore
                 }
             }
 
-            if (Animated)
+            //if (Animated)
             {
                 animationTime += gameTime.ElapsedGameTime.Milliseconds;
                 if (animationTime > 100)

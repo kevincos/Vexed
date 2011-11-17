@@ -312,7 +312,7 @@ namespace VexedCore
             #region player-block collision
 
             
-            if(p.state != State.Phase && p.state != State.PhaseFail && p.state != State.Tunnel)
+            if(p.state != State.Phase && p.state != State.PhaseFail && p.state != State.Tunnel && p.state != State.Jump)
             {
                 for (int attempt = 0; attempt < 2; attempt++)
                 {
@@ -504,7 +504,7 @@ namespace VexedCore
             p.leftWall = false;
             p.rightWall = false;
 
-            p.platformVelocity = Vector3.Zero;
+            //p.platformVelocity = Vector3.Zero;
             foreach (Block baseBlock in r.blocks)
             {
                 foreach (Block b in baseBlock.unfoldedBlocks)
