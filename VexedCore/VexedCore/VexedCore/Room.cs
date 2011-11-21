@@ -248,6 +248,13 @@ namespace VexedCore
                 m.baseHP = m.startingBaseHP;
                 m.armorHP = m.startingArmorHP;
                 m.dead = false;
+                m.state = MonsterState.Spawn;
+                m.spawnTime = 0;
+                m.armorBreakTime = 0;
+                m.deathTime = Monster.maxDeathTime;
+                m.armorState = ArmorState.Normal;
+                foreach (GunEmplacement g in m.guns)
+                    g.Reset(m);
             }
             foreach (Monster m in monsters)
             {

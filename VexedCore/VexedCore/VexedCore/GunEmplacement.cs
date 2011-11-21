@@ -42,16 +42,25 @@ namespace VexedCore
         {
         }
 
-        public GunEmplacement(VexedLib.TrackType trackType, VexedLib.GunType gunType, Vector2 positionOffset, float radius, float depthOffset, BaseType baseType)
+        public GunEmplacement(VexedLib.TrackType trackType, VexedLib.GunType gunType, Vector2 positionOffset, float radius, float depthOffset, BaseType baseType, Monster srcMonster)
         {
             this.gunType = gunType;
             this.trackType = trackType;
             this.positionOffset = positionOffset;
-            position = new Vertex();
             this.radius = radius;
             this.baseRadius = .75f * radius;
             this.depthOffset = depthOffset;
             this.baseType = baseType;
+            this.gunLine = srcMonster.position.direction;
+            this.gunNormal = Vector3.Cross(gunLine, srcMonster.position.normal);
+            this.position = srcMonster.position;
+        }
+
+        public void Reset(Monster srcMonster)
+        {
+            this.gunLine = srcMonster.position.direction;
+            this.gunNormal = Vector3.Cross(gunLine, srcMonster.position.normal);
+            this.position = srcMonster.position;
         }
 
         public GunEmplacement(GunEmplacement g)

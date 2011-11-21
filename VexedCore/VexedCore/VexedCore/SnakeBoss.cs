@@ -109,7 +109,7 @@ namespace VexedCore
             if (chainIndex % 5 == 1)
             {
                 if (srcMonster.guns.Count == 0)
-                    srcMonster.guns.Add(new GunEmplacement(VexedLib.TrackType.Fast, VexedLib.GunType.None, Vector2.Zero, .7f * srcMonster.halfWidth, .01f, BaseType.Ice));
+                    srcMonster.guns.Add(new GunEmplacement(VexedLib.TrackType.Fast, VexedLib.GunType.None, Vector2.Zero, .7f * srcMonster.halfWidth, .01f, BaseType.Ice, srcMonster));
                 else if (srcMonster.baseHP <= 1)
                 {
                     if (gunDialog == false)
