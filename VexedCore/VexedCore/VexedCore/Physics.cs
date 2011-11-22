@@ -312,7 +312,7 @@ namespace VexedCore
             #region player-block collision
 
             
-            if(p.state != State.Phase && p.state != State.PhaseFail && p.state != State.Tunnel && p.state != State.Jump)
+            if(p.state != State.Phase && p.state != State.PhaseFail && p.state != State.Tunnel && p.state != State.Jump && p.state != State.Death)
             {
                 for (int attempt = 0; attempt < 2; attempt++)
                 {

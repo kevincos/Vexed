@@ -93,7 +93,7 @@ namespace VexedCore
         public float referenceFrameSpeed;
         public int currentObjective = 0;
         public Vector3 spinUp;
-        public Vector3 lastLivingPosition;
+        public Vertex lastLivingPosition;
         [XmlIgnore]
         public Doodad tunnelExit;
         [XmlIgnore]public Room jumpRoom;
@@ -144,7 +144,7 @@ namespace VexedCore
         public static int spinMaxTime = 200;
         public static int walkMaxTime = 800;
         public static int launchMaxTime = 1000;
-        public static int maxBoostTime = 300;
+        public static int maxBoostTime = 350;
         public static int maxDeathTime = 1000;
         public static int maxHookTime = 150;
         public static int maxHookHangTime = 100;
@@ -198,8 +198,8 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Missile);
-            secondaryAbility = new Ability(AbilityType.Boots);
+            primaryAbility = new Ability(AbilityType.Booster);
+            secondaryAbility = new Ability(AbilityType.Missile);
             naturalShield = new Ability(AbilityType.Shield);
             upgrades[(int)AbilityType.Laser] = true;
             upgrades[(int)AbilityType.Boots] = true;
@@ -213,10 +213,10 @@ namespace VexedCore
             upgrades[(int)AbilityType.PermanentBoots] = true;
             upgrades[(int)AbilityType.ImprovedJump] = true;
             upgrades[(int)AbilityType.SpinHook] = true;
-            
+            */
             upgrades[(int)AbilityType.Missile] = true;
             upgrades[(int)AbilityType.Booster] = true;
-            upgrades[(int)AbilityType.JetPack] = true;
+            /*upgrades[(int)AbilityType.JetPack] = true;
             upgrades[(int)AbilityType.Phase] = true;*/
             //upgrades[(int)AbilityType.PermanentBlueKey] = true;
             //upgrades[(int)AbilityType.PermanentRedKey] = true;
@@ -394,7 +394,7 @@ namespace VexedCore
                 }
                 if (state == State.Death)
                 {
-                    return currentRoom.RaisedPosition(lastLivingPosition + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
+                    return currentRoom.RaisedPosition(lastLivingPosition.position + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
                 }
                 if (state == State.BridgeJump)
                 {
@@ -426,7 +426,7 @@ namespace VexedCore
                 }
                 else if (state == State.Death)
                 {
-                    return currentRoom.RaisedPosition(lastLivingPosition, baseCameraDistance, cameraRoundingThreshold);
+                    return currentRoom.RaisedPosition(lastLivingPosition.position, baseCameraDistance, cameraRoundingThreshold);
                 }
                 if (state == State.BridgeJump)
                 {
@@ -474,7 +474,7 @@ namespace VexedCore
                     return ((spinMaxTime - spinTime) * oldUp + spinTime * newUp) / spinMaxTime;
                 }
                 else if(state == State.Death)
-                    return currentRoom.AdjustedUp(lastLivingPosition, center.direction, center.normal, 1f);
+                    return currentRoom.AdjustedUp(lastLivingPosition.position, lastLivingPosition.direction, lastLivingPosition.normal, 1f);
                 else if (state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
                     return currentRoom.AdjustedUp(tunnelDummy.position, tunnelDummy.direction, tunnelDummy.normal, 1f);
                 else
@@ -491,7 +491,7 @@ namespace VexedCore
                 else if (state == State.Tunnel)
                     return tunnelDummy.position;
                 else if (state == State.Death)
-                    return lastLivingPosition;
+                    return lastLivingPosition.position;
                 else
                     return jumpPosition;
             }
@@ -790,7 +790,7 @@ namespace VexedCore
                 deathTime = 0;
                 flashTime = flashMaxTime;
                 state = State.Death;
-                lastLivingPosition = center.position;
+                lastLivingPosition = new Vertex(center);
             }
 
             if (primaryAbility.type == AbilityType.DoubleJump)
@@ -823,7 +823,7 @@ namespace VexedCore
                     deathTime = 0;
                     flashTime = flashMaxTime;
                     state = State.Death;
-                    lastLivingPosition = center.position;
+                    lastLivingPosition = new Vertex(center);
                 }
             }
         }

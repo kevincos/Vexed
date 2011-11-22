@@ -826,8 +826,7 @@ namespace VexedCore
 
                 player.currentRoom.UpdateMonsters(gameTime);
 
-                if(Engine.player.state != State.Death)
-                    Physics.CollisionCheck(player.currentRoom, player, gameTime);
+                Physics.CollisionCheck(player.currentRoom, player, gameTime);
             }
 
 

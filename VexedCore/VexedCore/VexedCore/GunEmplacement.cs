@@ -126,6 +126,8 @@ namespace VexedCore
                     return 20f;
                 if (gunType == VexedLib.GunType.Beam)
                     return 20f;
+                if (gunType == VexedLib.GunType.Blaster)
+                    return 15f;
                 return 30f;
             }
         }
