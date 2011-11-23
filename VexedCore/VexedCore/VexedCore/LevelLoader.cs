@@ -454,6 +454,11 @@ namespace VexedCore
             }
         }
 
+        public static void PreLoad()
+        {
+            lastSave = worldPreLoad;
+        }
+
         public static void SaveToDisk(int saveFileIndex)
         {
             QuickSave();
@@ -475,8 +480,9 @@ namespace VexedCore
 
         public static void LoadFromDisk(int saveFileIndex)
         {
-            LevelLoader.Load("LevelData\\world");
-
+            LevelLoader.PreLoad();
+            QuickLoad();
+            
             if (File.Exists("altSaveFile" + saveFileIndex))
             {
                 /*Stream stream = new FileStream("saveFile" + saveFileIndex, FileMode.Open, FileAccess.ReadWrite);
@@ -490,11 +496,13 @@ namespace VexedCore
                 CompactSaveData loadData = (CompactSaveData)altSerializer.Deserialize(altStream);                
                 altStream.Close();
                 loadData.LoadCompactSaveData();
-                FixDoodads(Engine.roomList);
-                QuickSave();
-                QuickLoad();
-                Engine.reDraw = true;
             }
+
+            FixDoodads(Engine.roomList);
+            QuickSave();
+            QuickLoad();
+            Engine.reDraw = true;
+
             
         }
 

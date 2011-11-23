@@ -10,7 +10,7 @@
     <Rm>
       <cbo>0</cbo>
       <cro>0</cro>
-      <co>16</co>
+      <co>4</co>
       <e>true</e>
     </Rm>
     <Rm>
@@ -1131,7 +1131,7 @@
       <to>false</to>
       <au>false</au>
       <st>0</st>
-      <ac>false</ac>
+      <ac>true</ac>
     </Dd>
     <Dd>
       <cbi>Behavior_185</cbi>
@@ -1139,7 +1139,7 @@
       <to>false</to>
       <au>false</au>
       <st>0</st>
-      <ac>false</ac>
+      <ac>true</ac>
     </Dd>
     <Dd>
       <cbi>Behavior_187</cbi>
@@ -1163,7 +1163,7 @@
       <to>false</to>
       <au>false</au>
       <st>0</st>
-      <ac>false</ac>
+      <ac>true</ac>
     </Dd>
     <Dd>
       <cbi>Behavior_195</cbi>
@@ -1189,16 +1189,16 @@
     </Dd>
     <Dd>
       <or>10</or>
-      <to>false</to>
+      <to>true</to>
       <au>false</au>
-      <st>0.8799999</st>
+      <st>1</st>
       <ac>false</ac>
     </Dd>
     <Dd>
       <or>10</or>
-      <to>false</to>
+      <to>true</to>
       <au>false</au>
-      <st>0.8799999</st>
+      <st>1</st>
       <ac>false</ac>
     </Dd>
     <Dd>
@@ -1263,7 +1263,7 @@
       <to>false</to>
       <au>false</au>
       <st>0</st>
-      <ac>false</ac>
+      <ac>true</ac>
     </Dd>
     <Dd>
       <cbi>Behavior_201</cbi>
@@ -1271,7 +1271,7 @@
       <to>false</to>
       <au>false</au>
       <st>0</st>
-      <ac>false</ac>
+      <ac>true</ac>
     </Dd>
     <Dd>
       <cbi>Behavior_203</cbi>
@@ -1279,7 +1279,7 @@
       <to>false</to>
       <au>false</au>
       <st>0</st>
-      <ac>false</ac>
+      <ac>true</ac>
     </Dd>
     <Dd>
       <or>10</or>
@@ -1359,7 +1359,7 @@
       <to>false</to>
       <au>false</au>
       <st>0</st>
-      <ac>false</ac>
+      <ac>true</ac>
     </Dd>
     <Dd>
       <cbi>Behavior_177</cbi>
@@ -1367,7 +1367,7 @@
       <to>false</to>
       <au>false</au>
       <st>0</st>
-      <ac>false</ac>
+      <ac>true</ac>
     </Dd>
     <Dd>
       <cbi>Behavior_179</cbi>
@@ -1375,7 +1375,7 @@
       <to>false</to>
       <au>false</au>
       <st>0</st>
-      <ac>false</ac>
+      <ac>true</ac>
     </Dd>
     <Dd>
       <cbi>Behavior_181</cbi>
@@ -1383,7 +1383,7 @@
       <to>false</to>
       <au>false</au>
       <st>0</st>
-      <ac>false</ac>
+      <ac>true</ac>
     </Dd>
     <Dd>
       <cbi>Behavior_197</cbi>
@@ -1391,7 +1391,7 @@
       <to>false</to>
       <au>false</au>
       <st>0</st>
-      <ac>false</ac>
+      <ac>true</ac>
     </Dd>
     <Dd>
       <cbi>Behavior_199</cbi>
@@ -1399,7 +1399,7 @@
       <to>false</to>
       <au>false</au>
       <st>0</st>
-      <ac>false</ac>
+      <ac>true</ac>
     </Dd>
     <Dd>
       <or>10</or>
@@ -50610,7 +50610,7 @@
       <to>true</to>
       <au>false</au>
       <st>1</st>
-      <ac>true</ac>
+      <ac>false</ac>
     </Dd>
     <Dd>
       <or>10</or>
@@ -50638,7 +50638,7 @@
       <to>true</to>
       <au>false</au>
       <st>1</st>
-      <ac>true</ac>
+      <ac>false</ac>
     </Dd>
     <Dd>
       <or>10</or>
@@ -78853,8 +78853,8 @@
     <center>
       <position>
         <X>35</X>
-        <Y>2.65400028</Y>
-        <Z>0.5</Z>
+        <Y>2.61399984</Y>
+        <Z>0.4856</Z>
       </position>
       <normal>
         <X>1</X>
@@ -78869,7 +78869,7 @@
       <velocity>
         <X>0</X>
         <Y>0</Y>
-        <Z>-0.0009</Z>
+        <Z>-0.0018</Z>
       </velocity>
     </center>
     <hookLand>
@@ -78881,17 +78881,17 @@
     <jumpRecovery>0</jumpRecovery>
     <jumpDestination>
       <X>25</X>
-      <Y>4.82799959</Y>
+      <Y>4.34</Y>
       <Z>-1.5144</Z>
     </jumpDestination>
     <jumpSource>
       <X>5</X>
-      <Y>4.82799959</Y>
+      <Y>4.34</Y>
       <Z>-1.5144</Z>
     </jumpSource>
     <jumpCameraDestination>
       <X>14.2</X>
-      <Y>10.9364786</Y>
+      <Y>9.394401</Y>
       <Z>-0.993503869</Z>
     </jumpCameraDestination>
     <jumpCameraSource>
@@ -78901,7 +78901,7 @@
     </jumpCameraSource>
     <jumpPosition>
       <X>24.7</X>
-      <Y>4.82799959</Y>
+      <Y>4.34</Y>
       <Z>-1.51440012</Z>
     </jumpPosition>
     <jumpNormal>
@@ -78941,7 +78941,7 @@
     <jetPacking>false</jetPacking>
     <jetPackThrust>false</jetPackThrust>
     <sliding>false</sliding>
-    <walkTime>192</walkTime>
+    <walkTime>752</walkTime>
     <crushCount>0</crushCount>
     <idleTime>0</idleTime>
     <boostTime>0</boostTime>
@@ -79068,7 +79068,7 @@
     <groundCounter>0</groundCounter>
     <faceDirection>-1</faceDirection>
     <_baseCameraDistance>12</_baseCameraDistance>
-    <orbsCollected>16</orbsCollected>
+    <orbsCollected>4</orbsCollected>
     <redOrbsCollected>0</redOrbsCollected>
     <cameraAngle>
       <X>0</X>
