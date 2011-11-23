@@ -109,14 +109,14 @@ namespace VexedCore
             if (chainIndex % 5 == 1)
             {
                 if (srcMonster.guns.Count == 0)
-                    srcMonster.guns.Add(new GunEmplacement(VexedLib.TrackType.Fast, VexedLib.GunType.None, Vector2.Zero, .7f * srcMonster.halfWidth, .01f, BaseType.Ice, srcMonster));
+                    srcMonster.guns.Add(new GunEmplacement(VL.TrackType.Fast, VL.GunType.None, Vector2.Zero, .7f * srcMonster.halfWidth, .01f, BaseType.Ice, srcMonster));
                 else if (srcMonster.baseHP <= 1)
                 {
                     if (gunDialog == false)
                     {
                         DialogBox.SetDialog("IceSnake3");
                         gunDialog = true;
-                        srcMonster.guns[0].gunType = VexedLib.GunType.Blaster;
+                        srcMonster.guns[0].gunType = VL.GunType.Blaster;
                     }
                 }
 
@@ -141,7 +141,7 @@ namespace VexedCore
                 nextWaypointIndex++;
                 if (nextWaypointIndex == 19) nextWaypointIndex = 1;
                 nextWaypointTarget = GetWaypointTarget();
-                srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
+                srcMonster.speedType = VL.MonsterSpeed.Medium;
                 if(nextSnakeLink != null)
                     waitingForNext = true;
                 if(tail==false)

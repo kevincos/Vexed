@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-
-namespace VexedLib
+using System.Runtime.Serialization;
+namespace VL
 {
     public enum DoodadType
     {
@@ -91,6 +91,7 @@ namespace VexedLib
         Ultima = 23,        
     }
 
+    //[Serializable]
     public class Doodad
     {
         public int id;

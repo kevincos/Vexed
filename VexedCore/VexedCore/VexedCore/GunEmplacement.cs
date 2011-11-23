@@ -26,12 +26,12 @@ namespace VexedCore
     {
         public float currentAngle = .5f;
         public int fireCooldown = 0;
-        public VexedLib.TrackType trackType;
+        public VL.TrackType trackType;
         public Vector2 positionOffset;
         public Vertex position;
         public Vector3 gunLine = Vector3.Zero;
         public Vector3 gunNormal = Vector3.Zero;
-        public VexedLib.GunType gunType;
+        public VL.GunType gunType;
         public float radius = .5f;
         public float baseRadius = .5f;
         public float depthOffset = 0f;
@@ -42,7 +42,7 @@ namespace VexedCore
         {
         }
 
-        public GunEmplacement(VexedLib.TrackType trackType, VexedLib.GunType gunType, Vector2 positionOffset, float radius, float depthOffset, BaseType baseType, Monster srcMonster)
+        public GunEmplacement(VL.TrackType trackType, VL.GunType gunType, Vector2 positionOffset, float radius, float depthOffset, BaseType baseType, Monster srcMonster)
         {
             this.gunType = gunType;
             this.trackType = trackType;
@@ -84,15 +84,15 @@ namespace VexedCore
         {
             get
             {
-                if (trackType == VexedLib.TrackType.Slow)
+                if (trackType == VL.TrackType.Slow)
                 {
                     return .01f;
                 }
-                if (trackType == VexedLib.TrackType.Normal)
+                if (trackType == VL.TrackType.Normal)
                 {
                     return .03f;
                 }
-                if (trackType == VexedLib.TrackType.Fast)
+                if (trackType == VL.TrackType.Fast)
                 {
                     return .1f;
                 }
@@ -105,13 +105,13 @@ namespace VexedCore
         {
             get
             {
-                if (gunType == VexedLib.GunType.Blaster || gunType == VexedLib.GunType.Spread)
+                if (gunType == VL.GunType.Blaster || gunType == VL.GunType.Spread)
                     return 2000;
-                if (gunType == VexedLib.GunType.Missile)
+                if (gunType == VL.GunType.Missile)
                     return 4000;
-                if (gunType == VexedLib.GunType.Beam)
+                if (gunType == VL.GunType.Beam)
                     return 2000;
-                if (gunType == VexedLib.GunType.Repeater)
+                if (gunType == VL.GunType.Repeater)
                     return 200;
                 return 0;
             }
@@ -122,11 +122,11 @@ namespace VexedCore
         {
             get
             {
-                if (gunType == VexedLib.GunType.Missile)
+                if (gunType == VL.GunType.Missile)
                     return 20f;
-                if (gunType == VexedLib.GunType.Beam)
+                if (gunType == VL.GunType.Beam)
                     return 20f;
-                if (gunType == VexedLib.GunType.Blaster)
+                if (gunType == VL.GunType.Blaster)
                     return 15f;
                 return 30f;
             }
@@ -169,7 +169,7 @@ namespace VexedCore
                     currentAngle -= (float)Math.PI * 2;
                 if (currentAngle < 0)
                     currentAngle += (float)Math.PI * 2;
-                if (!(srcMonster.moveType == VexedLib.MovementType.Hover || srcMonster.moveType == VexedLib.MovementType.ArmorBoss || srcMonster.moveType == VexedLib.MovementType.RockBoss || srcMonster.moveType == VexedLib.MovementType.SnakeBoss || srcMonster.moveType == VexedLib.MovementType.BattleBoss))
+                if (!(srcMonster.moveType == VL.MovementType.Hover || srcMonster.moveType == VL.MovementType.ArmorBoss || srcMonster.moveType == VL.MovementType.RockBoss || srcMonster.moveType == VL.MovementType.SnakeBoss || srcMonster.moveType == VL.MovementType.BattleBoss))
                 {
                     if (currentAngle > Math.PI / 2 && currentAngle < Math.PI)
                         currentAngle = (float)(Math.PI / 2 - .05f);
@@ -177,23 +177,23 @@ namespace VexedCore
                         currentAngle = (float)(3 * Math.PI / 2 + .05f);
                 }
             }
-            else if (trackType == VexedLib.TrackType.Up)
+            else if (trackType == VL.TrackType.Up)
             {
                 currentAngle = 0f;
             }
-            else if (trackType == VexedLib.TrackType.UpLeft)
+            else if (trackType == VL.TrackType.UpLeft)
             {
                 currentAngle = (float)(7 * Math.PI / 4);
             }
-            else if (trackType == VexedLib.TrackType.UpRight)
+            else if (trackType == VL.TrackType.UpRight)
             {
                 currentAngle = (float)(Math.PI / 4);
             }
-            else if (trackType == VexedLib.TrackType.Left)
+            else if (trackType == VL.TrackType.Left)
             {
                 currentAngle = (float)(3 * Math.PI / 2);
             }
-            else if (trackType == VexedLib.TrackType.Right)
+            else if (trackType == VL.TrackType.Right)
             {
                 currentAngle = (float)(Math.PI / 2);
             }
@@ -207,9 +207,9 @@ namespace VexedCore
             gunLine.Normalize();
             gunNormal.Normalize();
 
-            //if (srcMonster.moveType == VexedLib.MovementType.RockBoss && srcMonster.rockBoss.state != RockBossState.Fight1 && srcMonster.rockBoss.state != RockBossState.Fight2 && srcMonster.rockBoss.state != RockBossState.Fight3)
+            //if (srcMonster.moveType == VL.MovementType.RockBoss && srcMonster.rockBoss.state != RockBossState.Fight1 && srcMonster.rockBoss.state != RockBossState.Fight2 && srcMonster.rockBoss.state != RockBossState.Fight3)
                 //return;
-            if (srcMonster.moveType == VexedLib.MovementType.RockBoss && (srcMonster.rockBoss.state == RockBossState.Snow_Flee1))
+            if (srcMonster.moveType == VL.MovementType.RockBoss && (srcMonster.rockBoss.state == RockBossState.Snow_Flee1))
                 return;
 
             if (fireCooldown == 0)
@@ -218,19 +218,19 @@ namespace VexedCore
                 projectileVelocity.Normalize();
 
                 fireCooldown = fireTime;
-                if (gunType == VexedLib.GunType.Blaster || gunType == VexedLib.GunType.Repeater)
+                if (gunType == VL.GunType.Blaster || gunType == VL.GunType.Repeater)
                 {
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Plasma, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity));
                 }
-                if (gunType == VexedLib.GunType.Beam)
+                if (gunType == VL.GunType.Beam)
                 {
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Laser, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity));
                 }
-                if (gunType == VexedLib.GunType.Missile)
+                if (gunType == VL.GunType.Missile)
                 {
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Missile, position.position + radius * gunLine, position.velocity, position.normal, projectileVelocity));
                 }
-                if (gunType == VexedLib.GunType.Spread)
+                if (gunType == VL.GunType.Spread)
                 {
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Plasma, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity + .5f * gunNormal));
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Plasma, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity - .5f * gunNormal));

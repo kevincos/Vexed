@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
-namespace VexedLib
+using System.Runtime.Serialization;
+namespace VL
 {
+    //[Serializable]
     public class Face
     {
         public Vector3 normal;        

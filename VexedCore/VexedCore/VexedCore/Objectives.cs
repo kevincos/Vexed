@@ -142,7 +142,7 @@ namespace VexedCore
                 {
                     foreach (Doodad d in r.doodads)
                     {
-                        if (d.type == VexedLib.DoodadType.UpgradeStation && d.originalAbilityType == i)
+                        if (d.type == VL.DoodadType.UpgradeStation && d.originalAbilityType == i)
                         {
                             targets.Add(d.position);
                         }

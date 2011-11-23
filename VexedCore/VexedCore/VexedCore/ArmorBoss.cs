@@ -109,7 +109,7 @@ namespace VexedCore
             }
 
             if (srcMonster.id.Contains("Basic") && srcMonster.baseHP < 1*srcMonster.startingBaseHP / 2)
-                srcMonster.guns[0].gunType = VexedLib.GunType.Missile;
+                srcMonster.guns[0].gunType = VL.GunType.Missile;
 
             if (aimDirection == Vector3.Zero)
                 Rotate(srcMonster);

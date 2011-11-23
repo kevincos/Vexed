@@ -30,11 +30,11 @@ namespace VexedCore
 
             float playerdistance = (Engine.player.center.position - srcMonster.position.position).Length();
             if (playerdistance > 8f)
-                srcMonster.speedType = VexedLib.MonsterSpeed.Fast;
+                srcMonster.speedType = VL.MonsterSpeed.Fast;
             else if (playerdistance > 3f)
-                srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
+                srcMonster.speedType = VL.MonsterSpeed.Medium;
             else
-                srcMonster.speedType = VexedLib.MonsterSpeed.Slow;
+                srcMonster.speedType = VL.MonsterSpeed.Slow;
 
             if (nextWaypointIndex == 0 || Vector3.Dot(srcMonster.position.velocity, direction) < 0f)
             {
@@ -45,7 +45,7 @@ namespace VexedCore
                 nextWaypointIndex++;
                 if (nextWaypointIndex == 13) nextWaypointIndex = 1;
                 nextWaypointTarget = GetWaypointTarget();
-                srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
+                srcMonster.speedType = VL.MonsterSpeed.Medium;
             }
     
             Vector3 targetUp = Vector3.Cross(srcMonster.position.normal, aimDirection);

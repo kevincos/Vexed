@@ -507,7 +507,7 @@ namespace VexedCore
                 directionList = new List<DirectionalMapping>();
                 foreach (Doodad d in Engine.roomList[selectedRoomIndex].doodads)
                 {
-                    if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
+                    if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation)
                     {
                         if (d.targetRoom != null)
                         {
@@ -592,7 +592,7 @@ namespace VexedCore
                 bool validWarpTarget = false;
                 foreach (Doodad d in Engine.roomList[selectedRoomIndex].doodads)
                 {
-                    if (d.type == VexedLib.DoodadType.WarpStation && d.powered == true)
+                    if (d.type == VL.DoodadType.WarpStation && d.powered == true)
                     {
                         validWarpTarget = true;
                     }

@@ -154,7 +154,7 @@ namespace VexedCore
             decorations = new List<Decoration>();
         }
 
-        public Room(VexedLib.Room xmlRoom)
+        public Room(VL.Room xmlRoom)
         {
             id = xmlRoom.IDString;
             center = new Vector3(xmlRoom.centerX, xmlRoom.centerY, xmlRoom.centerZ);
@@ -165,6 +165,15 @@ namespace VexedCore
             projectiles = new List<Projectile>();
             decorations = new List<Decoration>();
         }
+
+        public void Load(Rm r)
+        {
+            explored = r.e;
+            currentOrbs = r.co;
+            currentBlueOrbs = r.cbo;
+            currentRedOrbs = r.cro;
+        }
+
 
         public static List<Vector2> LoadTexCoords(int x, int y, float epsilonX, float epsilonY)
         {
@@ -258,16 +267,16 @@ namespace VexedCore
             }
             foreach (Monster m in monsters)
             {
-                if(m.moveType == VexedLib.MovementType.SnakeBoss)
+                if(m.moveType == VL.MovementType.SnakeBoss)
                     m.snakeBoss.InitializeLinks(m, this);                
             }
             foreach (Doodad d in doodads)
             {
                 d.position = new Vertex(d.spawnPosition);
                 d.abilityType = d.originalAbilityType;
-                if (d.type == VexedLib.DoodadType.Brick)
+                if (d.type == VL.DoodadType.Brick)
                     d.active = false;
-                if (d.type == VexedLib.DoodadType.PowerPlug)
+                if (d.type == VL.DoodadType.PowerPlug)
                     d.active = false;
             }
         }
@@ -445,23 +454,23 @@ namespace VexedCore
             edgeNormal.Normalize();
             edgeDir.Normalize();
             Color baseColor = Color.White;
-            if(properties.type == VexedLib.EdgeType.Ice)
+            if(properties.type == VL.EdgeType.Ice)
                 baseColor = Color.White;
-            if (properties.type == VexedLib.EdgeType.Magnet)
+            if (properties.type == VL.EdgeType.Magnet)
                 baseColor = Color.Gray;
-            if (properties.type == VexedLib.EdgeType.Bounce)
+            if (properties.type == VL.EdgeType.Bounce)
                 baseColor = Color.Magenta;
-            if (properties.type == VexedLib.EdgeType.Electric)
+            if (properties.type == VL.EdgeType.Electric)
             {
                 if (properties.primaryValue == 0)
                     baseColor = new Color(40, 40, 40);
                 else
                     baseColor = Color.Yellow;
             }
-            if (properties.type == VexedLib.EdgeType.ConveyorBelt)
+            if (properties.type == VL.EdgeType.ConveyorBelt)
                 baseColor = Color.DarkGray;
             
-            if (properties.type != VexedLib.EdgeType.Spikes)
+            if (properties.type != VL.EdgeType.Spikes)
             {
                 float epsilon = .01f;
 
@@ -483,7 +492,7 @@ namespace VexedCore
                 triangleList.Add(GenerateTexturedVertex(start.position + epsilon * edgeNormal, blankTexCoords[1], baseColor, edgeNormal, -depth));
                 triangleList.Add(GenerateTexturedVertex(end.position + epsilon * edgeNormal, blankTexCoords[1], baseColor, edgeNormal, depth + epsilon));
             }
-            if (properties.type == VexedLib.EdgeType.Spikes)
+            if (properties.type == VL.EdgeType.Spikes)
             {
                 int numSpikes = 2 * (int)(end.position - start.position).Length();
                 float spikeHeight = .75f;
@@ -519,7 +528,7 @@ namespace VexedCore
                 }
             
             }
-            if (properties.type == VexedLib.EdgeType.ConveyorBelt)
+            if (properties.type == VL.EdgeType.ConveyorBelt)
             {
                 int numSegments = (int)(end.position - start.position).Length();
                 float segmentWidth = (end.position - start.position).Length() / numSegments;
@@ -659,7 +668,7 @@ namespace VexedCore
                 foreach (Vertex v in subList)
                     v.Update(this, 0);*/
 
-                if (e.properties.type == VexedLib.EdgeType.Ice)
+                if (e.properties.type == VL.EdgeType.Ice)
                 {
                     #region ice
                     if (i == width - 1)
@@ -679,7 +688,7 @@ namespace VexedCore
                     }
                     #endregion
                 }
-                else if (e.properties.type == VexedLib.EdgeType.Bounce)
+                else if (e.properties.type == VL.EdgeType.Bounce)
                 {
                     #region bounce
                     float treadRise = .1f;
@@ -761,7 +770,7 @@ namespace VexedCore
                     }
 #endregion
                 }
-                else if (e.properties.type == VexedLib.EdgeType.ConveyorBelt)
+                else if (e.properties.type == VL.EdgeType.ConveyorBelt)
                 {
                     #region conveyorbelt
                     float beltOffset = .0000125f * beltAnimation * e.properties.primaryValue;
@@ -854,7 +863,7 @@ namespace VexedCore
                     }
                     #endregion
                 }
-                else if (e.properties.type == VexedLib.EdgeType.Electric && e.properties.primaryValue == 0)
+                else if (e.properties.type == VL.EdgeType.Electric && e.properties.primaryValue == 0)
                 {
                     #region electric off
                     if (i == width - 1)
@@ -874,7 +883,7 @@ namespace VexedCore
                     }
                     #endregion
                 }
-                else if (e.properties.type == VexedLib.EdgeType.Electric && e.properties.primaryValue != 0)
+                else if (e.properties.type == VL.EdgeType.Electric && e.properties.primaryValue != 0)
                 {
                     #region electric on
                     if (i == width - 1)
@@ -894,7 +903,7 @@ namespace VexedCore
                     }
                     #endregion
                 }
-                else if (e.properties.type == VexedLib.EdgeType.Fire && e.properties.primaryValue == 0)
+                else if (e.properties.type == VL.EdgeType.Fire && e.properties.primaryValue == 0)
                 {
                     #region lava off
                     if (i == width - 1)
@@ -914,7 +923,7 @@ namespace VexedCore
                     }
                     #endregion
                 }
-                else if (e.properties.type == VexedLib.EdgeType.Fire && e.properties.primaryValue != 0)
+                else if (e.properties.type == VL.EdgeType.Fire && e.properties.primaryValue != 0)
                 {
                     #region lava on
                     if (i == width - 1)
@@ -1590,12 +1599,12 @@ namespace VexedCore
                 {
                     foreach (Doodad d in doodads)
                     {
-                        if (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.WarpStation || d.type == VexedLib.DoodadType.SaveStation)
+                        if (d.type == VL.DoodadType.ItemStation || d.type == VL.DoodadType.WarpStation || d.type == VL.DoodadType.SaveStation)
                         {
                             int decalIndex = (int)(d.abilityType);
-                            if (d.type == VexedLib.DoodadType.SaveStation)
+                            if (d.type == VL.DoodadType.SaveStation)
                                 decalIndex = 43;
-                            if (d.type == VexedLib.DoodadType.WarpStation)
+                            if (d.type == VL.DoodadType.WarpStation)
                                 decalIndex = 39;
                             MapDecalHelper(mapDecalList, cameraUp, cameraRight, d.position, decalIndex, false);
                         }
@@ -1733,7 +1742,7 @@ namespace VexedCore
             foreach (Doodad d in doodads)
             {
 
-                if ((d.type == VexedLib.DoodadType.JumpStation || d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.BridgeGate) && d.targetRoom != null)
+                if ((d.type == VL.DoodadType.JumpStation || d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.BridgeGate) && d.targetRoom != null)
                 {
                     Vector3 startLowerLeft = d.position.position + d.left + d.down;
                     Vector3 startLowerRight = d.position.position + d.right + d.down;
@@ -1745,7 +1754,7 @@ namespace VexedCore
                     Vector3 endUpperLeft = d.position.position + d.left + d.up + d.position.normal * distanceToEnd;
                     Vector3 endUpperRight = d.position.position + d.right + d.up + d.position.normal * distanceToEnd;
 
-                    if (d.type == VexedLib.DoodadType.BridgeGate)
+                    if (d.type == VL.DoodadType.BridgeGate)
                     {
                         Vector3 bridgeDirection = d.targetDoodad.position.position - d.position.position;
                         startLowerLeft = d.position.position + d.left - d.position.normal;

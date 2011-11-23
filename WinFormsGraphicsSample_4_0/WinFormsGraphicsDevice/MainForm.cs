@@ -12,7 +12,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
-using VexedLib;
+using VL;
+using System.Runtime.Serialization.Formatters.Binary;
 #endregion
 
 namespace WinFormsGraphicsDevice
@@ -149,6 +150,7 @@ namespace WinFormsGraphicsDevice
                 serializer.Serialize(currentStream, world);
                 // Code to write the stream goes here.
                 currentStream.Close();
+                Stream altStream = new FileStream(currentFileName+"_binaryBlob.txt", FileMode.Create);
             }
 
         }
@@ -170,7 +172,7 @@ namespace WinFormsGraphicsDevice
                     XmlSerializer serializer = new XmlSerializer(typeof(World));
                     serializer.Serialize(currentStream, world);
                     // Code to write the stream goes here.
-                    currentStream.Close();
+                    currentStream.Close();                    
                 }
             }
 

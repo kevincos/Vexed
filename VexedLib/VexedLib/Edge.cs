@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-
-namespace VexedLib
+using System.Runtime.Serialization;
+namespace VL
 {
     public enum EdgeType
     {
@@ -19,6 +19,7 @@ namespace VexedLib
         Monster = 8
     }
 
+    //[Serializable]
     public class Edge
     {
         public int id;

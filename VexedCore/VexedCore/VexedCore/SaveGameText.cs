@@ -32,27 +32,31 @@ namespace VexedCore
 
         public SaveGameText()
         {
+            int totalOrbs = 0;
+            for(int i = 0; i < LevelLoader.worldPreLoad.roomList.Count; i++)
+            {
+                totalOrbs += LevelLoader.worldPreLoad.roomList[i].maxOrbs;
+            }
             saveSummaryData = new List<SaveSummary>();
             for (int saveSlot = 1; saveSlot < 5; saveSlot++)
             {
                 SaveSummary summary = new SaveSummary();
-                if (File.Exists("saveFile" + saveSlot))
+                if (File.Exists("altSaveFile" + saveSlot))
                 {
-                    Stream stream = new FileStream("saveFile" + saveSlot, FileMode.Open, FileAccess.ReadWrite);
-                    XmlSerializer serializer = new XmlSerializer(typeof(SaveData));
-                    SaveData saveFile = (SaveData)serializer.Deserialize(stream);
+                    Stream stream = new FileStream("altSaveFile" + saveSlot, FileMode.Open, FileAccess.ReadWrite);
+                    XmlSerializer serializer = new XmlSerializer(typeof(CompactSaveData));
+                    CompactSaveData saveFile = (CompactSaveData)serializer.Deserialize(stream);
                     stream.Close();
                     for (int i = 0; i < saveFile.player.upgrades.Length; i++)
                     {
                         if(saveFile.player.upgrades[i] == true)
                         summary.equipment++;
                     }
-                    int totalOrbs = 0;
+                    
                     int playerOrbs = 0;
-                    foreach (Room r in saveFile.roomList)
+                    foreach (Rm r in saveFile.rmLst)
                     {
-                        totalOrbs += r.maxOrbs;
-                        playerOrbs += r.currentOrbs;
+                        playerOrbs += r.co;
                     }
                     summary.completionPercentage = 100*playerOrbs / totalOrbs;
                     summary.empty = false;
@@ -73,7 +77,7 @@ namespace VexedCore
 
             foreach (Doodad d in Engine.player.currentRoom.doodads)
             {
-                if (d.type == VexedLib.DoodadType.LoadStation && d.active == true)
+                if (d.type == VL.DoodadType.LoadStation && d.active == true)
                 {
                     int saveSlot = 0;
                     if(d.id.Contains("Slot1"))

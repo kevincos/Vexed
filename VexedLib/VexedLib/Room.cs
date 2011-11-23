@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using System.Runtime.Serialization;
 
-namespace VexedLib
+namespace VL
 {
+    //[Serializable]
     public class Room
     {
         public int id;
@@ -16,6 +18,7 @@ namespace VexedLib
         public Color color;
 
         public Face[] faceList;
+
 
         public Room(Vector3 center)
         {

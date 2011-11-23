@@ -60,7 +60,7 @@ namespace VexedCore
         {
         }
 
-        public Decoration(VexedLib.Decoration xmlDecoration, Vector3 normal)
+        public Decoration(VL.Decoration xmlDecoration, Vector3 normal)
         {
             this.position = new Vertex(xmlDecoration.position, normal, Vector3.Zero, xmlDecoration.up);
             id = xmlDecoration.IDString;

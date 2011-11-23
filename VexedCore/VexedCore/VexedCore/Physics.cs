@@ -196,7 +196,7 @@ namespace VexedCore
                 //Vector3 frictionDirection = Vector3.Cross(Vector3.Dot(projectionDirection, p.center.direction) * p.center.direction, p.center.normal);
                 Vector3 frictionDirection = Vector3.Cross(projectionDirection, Engine.player.center.normal);
 
-                if (edgeProperties.type == VexedLib.EdgeType.ConveyorBelt)
+                if (edgeProperties.type == VL.EdgeType.ConveyorBelt)
                 {
                     relVel += .001f * edgeProperties.primaryValue * frictionDirection;
                 }
@@ -205,7 +205,7 @@ namespace VexedCore
 
                 if (badVelocityComponent < -0.0f)
                 {
-                    if (edgeProperties.type == VexedLib.EdgeType.Bounce)
+                    if (edgeProperties.type == VL.EdgeType.Bounce)
                     {
                         result.velocityAdjustment -= badVelocityComponent * projectionDirection;
                         result.velocityAdjustment += Engine.player.jumpSpeed * projectionDirection;
@@ -234,9 +234,9 @@ namespace VexedCore
                     {
                         result.frictionAdjustment += .02f * frictionDirection;
                     }
-                    if (edgeProperties.type == VexedLib.EdgeType.Ice && traction == false)
+                    if (edgeProperties.type == VL.EdgeType.Ice && traction == false)
                         result.frictionAdjustment = Vector3.Zero;
-                    if (edgeProperties.type == VexedLib.EdgeType.Bounce)
+                    if (edgeProperties.type == VL.EdgeType.Bounce)
                         result.frictionAdjustment = Vector3.Zero;
                 }
             }
@@ -345,14 +345,14 @@ namespace VexedCore
                     {
                         if (p.CollisionFirstPass(d))
                             continue;
-                        if (d.type == VexedLib.DoodadType.BridgeGate)
+                        if (d.type == VL.DoodadType.BridgeGate)
                         {
                             List<Vector3> doodadVertexList = d.GetCollisionRect();
                             Vector3 projection = Collide(playerVertexList, doodadVertexList, p.center.normal);
 
                             d.ActivateDoodad(r, projection.Length() > 0f);                        
                         }
-                        if (d.hasCollisionRect && d.type != VexedLib.DoodadType.PowerPlug)
+                        if (d.hasCollisionRect && d.type != VL.DoodadType.PowerPlug)
                         {
                             List<Vector3> doodadVertexList = d.GetCollisionRect();
                             Vector3 projection = Collide(playerVertexList, doodadVertexList, p.center.normal);
@@ -372,7 +372,7 @@ namespace VexedCore
                             continue;
                         if (m.dead == true)
                             continue;
-                        if (m.moveType == VexedLib.MovementType.SnakeBoss)
+                        if (m.moveType == VL.MovementType.SnakeBoss)
                         {
                             List<Vector3> monsterVertexList = m.GetCollisionRect();
                             Vector3 projection = Collide(playerVertexList, monsterVertexList, Engine.player.center.normal);
@@ -388,7 +388,7 @@ namespace VexedCore
                     // Compute the most powerful collision and resolve it.
                     CollisionResult result = ResolveCollision(projectionList, relVelList, edgePropertiesList, p.center.velocity, p.HasTraction());
 
-                    if (result.properties != null && result.properties.type == VexedLib.EdgeType.Ice && Vector3.Dot(result.projection, p.center.direction) > 0)
+                    if (result.properties != null && result.properties.type == VL.EdgeType.Ice && Vector3.Dot(result.projection, p.center.direction) > 0)
                         p.sliding = true;
                     else
                         p.sliding = false;
@@ -398,8 +398,8 @@ namespace VexedCore
                     {
                         p.center.position += result.projection;
 
-                        if (result.properties.type == VexedLib.EdgeType.Spikes || (result.properties.type == VexedLib.EdgeType.Electric && result.properties.primaryValue > 0)
-                            || (result.properties.type == VexedLib.EdgeType.Fire && result.properties.primaryValue > 0))
+                        if (result.properties.type == VL.EdgeType.Spikes || (result.properties.type == VL.EdgeType.Electric && result.properties.primaryValue > 0)
+                            || (result.properties.type == VL.EdgeType.Fire && result.properties.primaryValue > 0))
                         {
                             p.Damage(result.projection, false);
                         }
@@ -444,7 +444,7 @@ namespace VexedCore
                     m.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
                     if (p.CollisionFirstPass(m) == false)
                     {
-                        if (m.moveType == VexedLib.MovementType.ChaseBoss)
+                        if (m.moveType == VL.MovementType.ChaseBoss)
                         {
                             List<Vector3> monsterVertexList = m.GetCollisionRect();
                             Vector3 projection = Collide(playerVertexList, monsterVertexList, Engine.player.center.normal);
@@ -456,7 +456,7 @@ namespace VexedCore
                                     p.Damage(projection,false);
                             }
                         }
-                        else if (m.moveType != VexedLib.MovementType.SnakeBoss)
+                        else if (m.moveType != VL.MovementType.SnakeBoss)
                         {
                             Vector3 distance = (p.center.position - m.unfoldedPosition.position);
                             if (distance.Length() < (p.playerHalfHeight + m.halfHeight))
@@ -469,7 +469,7 @@ namespace VexedCore
                 }
                 foreach (Doodad d in r.doodads)
                 {
-                    if (d.type == VexedLib.DoodadType.Beam)
+                    if (d.type == VL.DoodadType.Beam)
                     {
                         d.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
                         if (p.CollisionFirstPass(d) == false)
@@ -529,7 +529,7 @@ namespace VexedCore
                         p.grounded = true;
                         EdgeProperties properties = b.GetProperties(groundProjection);
                         p.platformVelocity = b.GetVelocity();
-                        if (properties.type == VexedLib.EdgeType.ConveyorBelt)
+                        if (properties.type == VL.EdgeType.ConveyorBelt)
                         {
                             Vector3 lateralDirection = Vector3.Cross(groundProjection, p.center.normal);
                             lateralDirection.Normalize();
@@ -541,7 +541,7 @@ namespace VexedCore
                         p.leftWall = true;
                         EdgeProperties properties = b.GetProperties(leftProjection);
                         p.platformVelocity = b.GetVelocity();
-                        if (properties.type == VexedLib.EdgeType.Magnet)
+                        if (properties.type == VL.EdgeType.Magnet)
                         {
                             p.Spin(leftProjection / leftProjection.Length());
                         }
@@ -551,7 +551,7 @@ namespace VexedCore
                         p.rightWall = true;
                         EdgeProperties properties = b.GetProperties(rightProjection);
                         p.platformVelocity = b.GetVelocity();
-                        if (properties.type == VexedLib.EdgeType.Magnet)
+                        if (properties.type == VL.EdgeType.Magnet)
                         {
                             p.Spin(rightProjection / rightProjection.Length());
                         }
@@ -561,7 +561,7 @@ namespace VexedCore
             
             foreach (Doodad b in r.doodads)
             {
-                if (b.hasCollisionRect && b.type != VexedLib.DoodadType.PowerPlug)
+                if (b.hasCollisionRect && b.type != VL.DoodadType.PowerPlug)
                 {
                     b.UpdateBoundingBox(p.center.direction, p.right);
                     if (p.boundingBoxBottom > b.boundingBoxTop +2f ||
@@ -600,7 +600,7 @@ namespace VexedCore
                     continue;
                 if (m.dead == true)
                     continue;
-                if (m.moveType == VexedLib.MovementType.SnakeBoss || m.moveType == VexedLib.MovementType.ChaseBoss)
+                if (m.moveType == VL.MovementType.SnakeBoss || m.moveType == VL.MovementType.ChaseBoss)
                 {
                     m.UpdateBoundingBox(p.center.direction, p.right);
                     if (p.boundingBoxBottom > m.boundingBoxTop + 2f ||
@@ -646,7 +646,7 @@ namespace VexedCore
 
             foreach (Doodad d in r.doodads)
             {
-                if (d.type == VexedLib.DoodadType.TriggerPoint)
+                if (d.type == VL.DoodadType.TriggerPoint)
                 {
                     if (d.active == false && d.id.Contains("Dialog") && d.ActivationRange(p))
                     {
@@ -656,15 +656,15 @@ namespace VexedCore
                     if (d.id.Contains("Rock2Trigger") && d.ActivationRange(p))
                         RockBoss.triggered = true;
                 }
-                if (d.type == VexedLib.DoodadType.Checkpoint)
+                if (d.type == VL.DoodadType.Checkpoint)
                 {
                     d.ActivateDoodad(r, d == p.respawnPoint);
                 }
-                if (d.type == VexedLib.DoodadType.Vortex || d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.ItemBlock || d.isStation)
+                if (d.type == VL.DoodadType.Vortex || d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.ItemBlock || d.isStation)
                 {
                     d.ActivateDoodad(r, d.ActivationRange(p));
                 }
-                if (d.type == VexedLib.DoodadType.NPC_OldMan)
+                if (d.type == VL.DoodadType.NPC_OldMan)
                 {
                     d.ActivateDoodad(r, d.ActivationRange(p));
                 }
@@ -677,7 +677,7 @@ namespace VexedCore
                 }
                 if ((d.position.position - p.center.position).Length() < d.triggerDistance)
                 {
-                    if (d.type == VexedLib.DoodadType.PowerOrb)
+                    if (d.type == VL.DoodadType.PowerOrb)
                     {
                         if(d.active == true)
                         {
@@ -689,7 +689,7 @@ namespace VexedCore
                             SoundFX.CollectOrb();
                         }
                     }
-                    if (d.type == VexedLib.DoodadType.RedCube)
+                    if (d.type == VL.DoodadType.RedCube)
                     {
                         if (d.active == true)
                         {
@@ -707,7 +707,7 @@ namespace VexedCore
                             SoundFX.CollectOrb();
                         }
                     }
-                    if (d.type == VexedLib.DoodadType.BlueCube)
+                    if (d.type == VL.DoodadType.BlueCube)
                     {
                         if (d.active == true)
                         {
@@ -718,7 +718,7 @@ namespace VexedCore
                             SoundFX.CollectOrb();
                         }
                     }
-                    if (d.type == VexedLib.DoodadType.Checkpoint)
+                    if (d.type == VL.DoodadType.Checkpoint)
                     {
                         if (p.respawnPoint != d)
                         {
@@ -730,7 +730,7 @@ namespace VexedCore
                         }
 
                     }
-                    if(d.type == VexedLib.DoodadType.WallSwitch)
+                    if(d.type == VL.DoodadType.WallSwitch)
                     {
                         d.Activate();                        
                     }
@@ -814,11 +814,11 @@ namespace VexedCore
                     {
                         if ((d.position.position - b.position.position).Length() < b.triggerDistance)
                         {
-                            if (b.type == VexedLib.DoodadType.WallSwitch)
+                            if (b.type == VL.DoodadType.WallSwitch)
                             {
                                 b.Activate();
                             }
-                            if (b.type == VexedLib.DoodadType.PlugSlot && d.type == VexedLib.DoodadType.PowerPlug)
+                            if (b.type == VL.DoodadType.PlugSlot && d.type == VL.DoodadType.PowerPlug)
                             {
                                 d.active = true;
                                 d.position.position = b.position.position;
@@ -837,7 +837,7 @@ namespace VexedCore
 
             foreach (Monster m in r.monsters)
             {
-                if (m.moveType == VexedLib.MovementType.FaceBoss)
+                if (m.moveType == VL.MovementType.FaceBoss)
                     continue;
                 if (m.dead == true)
                     continue;
@@ -874,24 +874,24 @@ namespace VexedCore
                     {
                         b.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
 
-                        if (b.hasCollisionRect && b.type != VexedLib.DoodadType.PowerPlug)
+                        if (b.hasCollisionRect && b.type != VL.DoodadType.PowerPlug)
                         {
                             if (m.CollisionFirstPass(b))
                                 continue;
 
-                            if (m.moveType == VexedLib.MovementType.RockBoss && b.id.Contains("RockBarrier"))
+                            if (m.moveType == VL.MovementType.RockBoss && b.id.Contains("RockBarrier"))
                             {
                                 smashRockBarrier = true;
                             }
-                            if (m.moveType == VexedLib.MovementType.ChaseBoss && b.id.Contains("ChaseBarrier"))
+                            if (m.moveType == VL.MovementType.ChaseBoss && b.id.Contains("ChaseBarrier"))
                             {
                                 smashRockBarrier = true;
                             }
-                            if (m.moveType == VexedLib.MovementType.ChaseBoss && b.id.Contains("ChaseStop"))
+                            if (m.moveType == VL.MovementType.ChaseBoss && b.id.Contains("ChaseStop"))
                             {
                                 ChaseBoss.studder = true;
                             }
-                            if (m.moveType == VexedLib.MovementType.ChaseBoss && b.type == VexedLib.DoodadType.Brick)
+                            if (m.moveType == VL.MovementType.ChaseBoss && b.type == VL.DoodadType.Brick)
                             {
                                 b.ActivateDoodad(r, true);
                                 continue;
@@ -902,7 +902,7 @@ namespace VexedCore
 
                             if (projection.Length() > 0f)
                             {
-                                if (m.moveType == VexedLib.MovementType.RockBoss && b.type == VexedLib.DoodadType.Crate)
+                                if (m.moveType == VL.MovementType.RockBoss && b.type == VL.DoodadType.Crate)
                                 {
                                     if (m.rockBoss.rockHits > 0)
                                     {
@@ -925,7 +925,7 @@ namespace VexedCore
                         m.position.Update(p.currentRoom, 0);
                         m.unfoldedPosition.position += result.projection;
                         m.unfoldedPosition.velocity += result.velocityAdjustment;
-                        if (result.properties.type == VexedLib.EdgeType.Spikes)
+                        if (result.properties.type == VL.EdgeType.Spikes)
                         {
                             m.impactVector = Monster.AdjustVector(result.projection, m.position.normal, Engine.player.center.normal, Engine.player.center.direction, true);
                             m.lastHitType = ProjectileType.Spikes;
@@ -955,7 +955,7 @@ namespace VexedCore
                 {
                     if (m == m2 || m2.dead == true)
                         continue;
-                    if (m.moveType == VexedLib.MovementType.SnakeBoss && m2.moveType == VexedLib.MovementType.SnakeBoss)
+                    if (m.moveType == VL.MovementType.SnakeBoss && m2.moveType == VL.MovementType.SnakeBoss)
                         continue;
                     m2.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
 
@@ -982,7 +982,7 @@ namespace VexedCore
                         s.SetTarget(m.position.position);
                     }
                     //if (s.active == true || m != s.srcMonster)
-                    if (s.srcMonster != null && s.srcMonster.moveType == VexedLib.MovementType.SnakeBoss && m.moveType == VexedLib.MovementType.SnakeBoss)
+                    if (s.srcMonster != null && s.srcMonster.moveType == VL.MovementType.SnakeBoss && m.moveType == VL.MovementType.SnakeBoss)
                         continue;
                     if (m != s.srcMonster)
                     {
@@ -1107,7 +1107,7 @@ namespace VexedCore
                 {
                     b.UpdateBoundingBox(p.center.direction, Vector3.Cross(p.center.direction, p.center.normal));
 
-                    if ((b.hasCollisionRect && b.type != VexedLib.DoodadType.PowerPlug) || (b.type == VexedLib.DoodadType.LaserSwitch && s.type == ProjectileType.Laser && b.active == false))
+                    if ((b.hasCollisionRect && b.type != VL.DoodadType.PowerPlug) || (b.type == VL.DoodadType.LaserSwitch && s.type == ProjectileType.Laser && b.active == false))
                     {
                         if (s.CollisionFirstPass(b))
                             continue;
@@ -1121,12 +1121,12 @@ namespace VexedCore
                                 s.exploding = true;
                             s.position.velocity = Vector3.Zero;
 
-                            if (b.type == VexedLib.DoodadType.LaserSwitch && s.type == ProjectileType.Laser)
+                            if (b.type == VL.DoodadType.LaserSwitch && s.type == ProjectileType.Laser)
                             {
                                 b.ActivateDoodad(r, true);
                                 b.SetTargetBehavior();
                             }
-                            if ((s.type == ProjectileType.Bomb || s.type == ProjectileType.Missile) && s.exploding == true && b.type == VexedLib.DoodadType.Brick)
+                            if ((s.type == ProjectileType.Bomb || s.type == ProjectileType.Missile) && s.exploding == true && b.type == VL.DoodadType.Brick)
                             {
                                 b.ActivateDoodad(r, true);
                             }

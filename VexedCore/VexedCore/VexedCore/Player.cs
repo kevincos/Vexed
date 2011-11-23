@@ -154,7 +154,7 @@ namespace VexedCore
         public static int upgradeWaitTime = upgradeInTime + 1000;
         public static int upgradeOutTime = upgradeWaitTime + 500;
 
-        public VexedLib.GunType gunType = VexedLib.GunType.Blaster;
+        public VL.GunType gunType = VL.GunType.Blaster;
         
         
         public float walkSpeed = .001f;
@@ -271,13 +271,13 @@ namespace VexedCore
         {
             get
             {
-                if (gunType == VexedLib.GunType.Blaster || gunType == VexedLib.GunType.Spread)
+                if (gunType == VL.GunType.Blaster || gunType == VL.GunType.Spread)
                     return 1000;
-                if (gunType == VexedLib.GunType.Missile)
+                if (gunType == VL.GunType.Missile)
                     return 4000;
-                if (gunType == VexedLib.GunType.Beam)
+                if (gunType == VL.GunType.Beam)
                     return 2000;
-                if (gunType == VexedLib.GunType.Repeater)
+                if (gunType == VL.GunType.Repeater)
                     return 200;
                 return 0;
             }
@@ -541,7 +541,7 @@ namespace VexedCore
         {
             foreach (Doodad d in targetRoom.doodads)
             {
-                if (d.type == VexedLib.DoodadType.WarpStation)
+                if (d.type == VL.DoodadType.WarpStation)
                 {
                     currentRoom = targetRoom;
                     Physics.refresh = true;
@@ -611,7 +611,7 @@ namespace VexedCore
                     hookShot.Update(currentRoom, hookTime);
                     foreach (Doodad d in currentRoom.doodads)
                     {
-                        if (d.type == VexedLib.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
+                        if (d.type == VL.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
                         {
                             center.velocity = Vector3.Zero;
                             jumpSource = center.position;
@@ -644,7 +644,7 @@ namespace VexedCore
                 {
                     foreach (Doodad d in currentRoom.doodads)
                     {
-                        if (d.type == VexedLib.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
+                        if (d.type == VL.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
                         {
                             Vector3 vel = .01f * up + .01f * right * faceDirection;
 
@@ -718,7 +718,7 @@ namespace VexedCore
                 hookShotTarget = null;
                 foreach (Doodad d in currentRoom.doodads)
                 {
-                    if (d.type == VexedLib.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < 2f)
+                    if (d.type == VL.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < 2f)
                     {
                         hookShotTarget = d;                        
                     }
@@ -740,7 +740,7 @@ namespace VexedCore
             {
                 foreach (Doodad d in currentRoom.doodads)
                 {
-                    if (d.type == VexedLib.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
+                    if (d.type == VL.DoodadType.HookTarget && (d.position.position - hookShot.position).Length() < .8f)
                     {
                         center.velocity = Vector3.Zero;
                         jumpSource = center.position;
@@ -856,7 +856,7 @@ namespace VexedCore
             Monster finalBoss = null;
             foreach (Monster m in currentRoom.monsters)
             {
-                if (m.moveType == VexedLib.MovementType.FaceBoss)
+                if (m.moveType == VL.MovementType.FaceBoss)
                     finalBoss = m;
             }
             
@@ -1046,7 +1046,7 @@ namespace VexedCore
             }
             foreach (Doodad d in currentRoom.doodads)
             {
-                if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
+                if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation)
                 {
                     if(d.targetRoom != null)
                         d.targetRoom.adjacent = true;
@@ -1056,7 +1056,7 @@ namespace VexedCore
             {
                 foreach (Doodad d in jumpRoom.doodads)
                 {
-                    if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
+                    if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation)
                     {
                         if (d.targetRoom != null)
                             d.targetRoom.adjacent = true;
@@ -1354,7 +1354,7 @@ namespace VexedCore
                     bool stationPresent = false;
                     foreach (Doodad d in currentRoom.doodads)
                     {
-                        if (d.active && (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.ItemBlock))
+                        if (d.active && (d.type == VL.DoodadType.ItemStation || d.type == VL.DoodadType.ItemBlock))
                         {
                             if (Game1.controller.XButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == true)
                             {
@@ -1385,7 +1385,7 @@ namespace VexedCore
 
                     foreach (Doodad d in currentRoom.doodads)
                     {
-                        if (d.active && (d.type == VexedLib.DoodadType.ItemStation || d.type == VexedLib.DoodadType.ItemBlock))
+                        if (d.active && (d.type == VL.DoodadType.ItemStation || d.type == VL.DoodadType.ItemBlock))
                         {
                             if (Game1.controller.YButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == true)
                             {
@@ -1481,7 +1481,7 @@ namespace VexedCore
                         }
                         if (d.active)
                         {
-                            if (d.type == VexedLib.DoodadType.Vortex && (d.position.position - center.position).Length() < .3f)
+                            if (d.type == VL.DoodadType.Vortex && (d.position.position - center.position).Length() < .3f)
                             {
                                 d.targetDoodad.ActivateDoodad(currentRoom, true);
                                 tunnelExit = d.targetDoodad;
@@ -1500,7 +1500,7 @@ namespace VexedCore
                                 launchTime = 0;
                                 d.targetDoodad.active = false;
                             }
-                            if (d.type == VexedLib.DoodadType.BridgeGate)
+                            if (d.type == VL.DoodadType.BridgeGate)
                             {
                                 if (Vector3.Dot(center.velocity, d.position.direction) > 0)
                                 {
@@ -1518,7 +1518,7 @@ namespace VexedCore
                                     d.targetDoodad.active = false;
                                 }
                             }
-                            if (d.type == VexedLib.DoodadType.LoadStation)
+                            if (d.type == VL.DoodadType.LoadStation)
                             {
                                 if (d.id.Contains("Slot1"))
                                     Engine.saveFileIndex = 1;
@@ -1532,7 +1532,7 @@ namespace VexedCore
                                 Physics.refresh = true;
                                 //Engine.reDraw = true;
                             }
-                            if (d.type == VexedLib.DoodadType.PowerStation)
+                            if (d.type == VL.DoodadType.PowerStation)
                             {
                                 if (d.orbsRemaining > 0)
                                 {
@@ -1544,7 +1544,7 @@ namespace VexedCore
                                     currentRoom.refreshVertices = true;
                                 }
                             }
-                            if (d.type == VexedLib.DoodadType.RedPowerStation)
+                            if (d.type == VL.DoodadType.RedPowerStation)
                             {
                                 if (d.orbsRemaining > 0)
                                 {
@@ -1561,7 +1561,7 @@ namespace VexedCore
                                     currentRoom.refreshVertices = true;
                                 }
                             }
-                            if (d.type == VexedLib.DoodadType.BluePowerStation)
+                            if (d.type == VL.DoodadType.BluePowerStation)
                             {
                                 if (d.orbsRemaining > 0)
                                 {
@@ -1572,20 +1572,20 @@ namespace VexedCore
                                     currentRoom.refreshVertices = true;
                                 }
                             }
-                            if (d.type == VexedLib.DoodadType.SaveStation && d.cooldown == 0)
+                            if (d.type == VL.DoodadType.SaveStation && d.cooldown == 0)
                             {
                                 d.cooldown = d.maxCooldown;
                                 SaveGame();
                             }
-                            if (d.type == VexedLib.DoodadType.UpgradeStation)
+                            if (d.type == VL.DoodadType.UpgradeStation)
                             {
                                 state = State.Upgrade;
                                 upgradeStationDoodad = d;
                                 jumpSource = center.position;
                             }
-                            if (d.type == VexedLib.DoodadType.JumpPad || d.type == VexedLib.DoodadType.JumpStation)
+                            if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation)
                             {
-                                //if (d.type == VexedLib.DoodadType.JumpPad)
+                                //if (d.type == VL.DoodadType.JumpPad)
                                 d.Activate();
                                 d.alreadyUsed = true;
                                 Engine.reDraw = true;
@@ -1611,13 +1611,13 @@ namespace VexedCore
                                 d.active = false;
                                 jumpNormal = -center.normal;
                             }
-                            if (d.type == VexedLib.DoodadType.NPC_OldMan)
+                            if (d.type == VL.DoodadType.NPC_OldMan)
                             {                                
                                 DialogBox.SetDialog(d.id);
                                 state = State.Dialog;
                                 
                             }
-                            if (d.type == VexedLib.DoodadType.SwitchStation)
+                            if (d.type == VL.DoodadType.SwitchStation)
                             {
                                 bool locked = false;
                                 if (d.abilityType == AbilityType.RedKey && !(primaryAbility.type == AbilityType.RedKey || secondaryAbility.type == AbilityType.RedKey || upgrades[(int)AbilityType.PermanentRedKey] == true))
@@ -1670,7 +1670,7 @@ namespace VexedCore
                                     }
                                 }
                             }
-                            if (d.type == VexedLib.DoodadType.WarpStation)
+                            if (d.type == VL.DoodadType.WarpStation)
                             {
                                 Engine.state = EngineState.Map;
                                 WorldMap.state = ZoomState.ZoomToSector;
@@ -1690,7 +1690,7 @@ namespace VexedCore
                 {
                     if (d.active)
                     {
-                        if (d.type == VexedLib.DoodadType.BridgeGate)
+                        if (d.type == VL.DoodadType.BridgeGate)
                         {
                             jumpRoom = d.targetRoom;
                             jumpRoom.Reset();
@@ -1752,9 +1752,9 @@ namespace VexedCore
                     Engine.reDraw = true;
                     foreach (Doodad d in jumpRoom.doodads)
                     {
-                        if(d.type == VexedLib.DoodadType.BridgeGate)
+                        if(d.type == VL.DoodadType.BridgeGate)
                             d.active = false;
-                        if (d.type == VexedLib.DoodadType.JumpStation || d.type == VexedLib.DoodadType.JumpPad)
+                        if (d.type == VL.DoodadType.JumpStation || d.type == VL.DoodadType.JumpPad)
                         {
                             if((d.position.position - center.position).Length() < 1.5f && d.powered == true)
                             {

@@ -42,7 +42,7 @@ namespace VexedCore
         {
             foreach (Doodad d in Engine.player.currentRoom.doodads)
             {
-                if (d.active == false && d.type == VexedLib.DoodadType.TriggerPoint)
+                if (d.active == false && d.type == VL.DoodadType.TriggerPoint)
                 {
                     if (d.id.Contains("ChaseTalk"))
                     {
@@ -91,9 +91,9 @@ namespace VexedCore
                 srcMonster.position.velocity = Vector3.Zero;
                 nextWaypointIndex++;
                 nextWaypointTarget = GetWaypointTarget();
-                srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
+                srcMonster.speedType = VL.MonsterSpeed.Medium;
                 if(nextWaypointIndex > 27)
-                    srcMonster.speedType = VexedLib.MonsterSpeed.Fast;
+                    srcMonster.speedType = VL.MonsterSpeed.Fast;
             }
         }
     }

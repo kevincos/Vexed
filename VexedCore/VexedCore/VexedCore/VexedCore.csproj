@@ -121,6 +121,7 @@
     <Compile Include="BloomComponent.cs" />
     <Compile Include="ChaseBoss.cs" />
     <Compile Include="Collidable.cs" />
+    <Compile Include="CompactSaveData.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="DebugDataMonitor.cs" />
     <Compile Include="Decoration.cs" />

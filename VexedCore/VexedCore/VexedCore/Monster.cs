@@ -77,15 +77,15 @@ namespace VexedCore
         public int currentWaypointIndex = 0;
         public int wayPointDirection = 1;
         public bool waypointLoop = false;
-        public VexedLib.AIType aiType;
-        public VexedLib.MovementType moveType;
-        public VexedLib.MonsterHealth healthType;
-        public VexedLib.MonsterSpeed speedType;
-        public VexedLib.MonsterSize sizeType;
-        public VexedLib.TrackType trackType;
-        public VexedLib.ArmorType startingArmorType;
-        public VexedLib.ArmorType armorType;
-        public VexedLib.GunType gunType;
+        public VL.AIType aiType;
+        public VL.MovementType moveType;
+        public VL.MonsterHealth healthType;
+        public VL.MonsterSpeed speedType;
+        public VL.MonsterSize sizeType;
+        public VL.TrackType trackType;
+        public VL.ArmorType startingArmorType;
+        public VL.ArmorType armorType;
+        public VL.GunType gunType;
         public Vector3 groundProjection;
         public Vector3 forwardGroundProjection;
         public Vector3 forwardProjection;
@@ -246,7 +246,7 @@ namespace VexedCore
         {
         }
 
-        public Monster(VexedLib.Monster xmlMonster, Vector3 normal)
+        public Monster(VL.Monster xmlMonster, Vector3 normal)
         {
             snakeBoss = new SnakeBoss();
             rockBoss = new RockBoss();
@@ -270,53 +270,57 @@ namespace VexedCore
             gunType = xmlMonster.weapon;
             id = xmlMonster.IDString;
             guns = new List<GunEmplacement>();
-            if (moveType == VexedLib.MovementType.RockBoss)
+            if (moveType == VL.MovementType.RockBoss)
             {
                 if (id.Contains("Snow"))
                 {
-                    guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(1.3f, .3f), .7f * halfWidth, .05f, BaseType.Snow, this));
-                    guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(-1.3f, .3f), .7f * halfWidth, .05f, BaseType.Snow, this));
+                    guns.Add(new GunEmplacement(VL.TrackType.Normal, VL.GunType.Blaster, new Vector2(1.3f, .3f), .7f * halfWidth, .05f, BaseType.Snow, this));
+                    guns.Add(new GunEmplacement(VL.TrackType.Normal, VL.GunType.Blaster, new Vector2(-1.3f, .3f), .7f * halfWidth, .05f, BaseType.Snow, this));
                 }
                 else
                 {
-                    guns.Add(new GunEmplacement(VexedLib.TrackType.Fast, VexedLib.GunType.Blaster, new Vector2(1.3f, .3f), .7f * halfWidth, .05f, BaseType.Rock, this));
-                    guns.Add(new GunEmplacement(VexedLib.TrackType.Fast, VexedLib.GunType.Blaster, new Vector2(-1.3f, .3f), .7f * halfWidth, .05f, BaseType.Rock, this));
+                    guns.Add(new GunEmplacement(VL.TrackType.Fast, VL.GunType.Blaster, new Vector2(1.3f, .3f), .7f * halfWidth, .05f, BaseType.Rock, this));
+                    guns.Add(new GunEmplacement(VL.TrackType.Fast, VL.GunType.Blaster, new Vector2(-1.3f, .3f), .7f * halfWidth, .05f, BaseType.Rock, this));
                 }
             }
-            else if (moveType == VexedLib.MovementType.ChaseBoss)
+            else if (moveType == VL.MovementType.ChaseBoss)
             {
                 rightFacing = true;
                 armorHP = 1;
-                startingArmorType = VexedLib.ArmorType.ShieldSuper;
+                startingArmorType = VL.ArmorType.ShieldSuper;
             }
-            else if (moveType == VexedLib.MovementType.SnakeBoss)
+            else if (moveType == VL.MovementType.SnakeBoss)
             {
                 
             }
-            else if (moveType == VexedLib.MovementType.BattleBoss)
+            else if (moveType == VL.MovementType.BattleBoss)
             {
-                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(.3f, 1.3f), .7f * halfWidth, .05f, BaseType.Standard, this));
-                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(.3f, -1.3f), .7f * halfWidth, .05f, BaseType.Standard, this));
+                guns.Add(new GunEmplacement(VL.TrackType.Normal, VL.GunType.Blaster, new Vector2(.3f, 1.3f), .7f * halfWidth, .05f, BaseType.Standard, this));
+                guns.Add(new GunEmplacement(VL.TrackType.Normal, VL.GunType.Blaster, new Vector2(.3f, -1.3f), .7f * halfWidth, .05f, BaseType.Standard, this));
             }
-            else if (moveType == VexedLib.MovementType.JetBoss)
+            else if (moveType == VL.MovementType.JetBoss)
             {
-                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(.3f, -1.3f), .7f * halfWidth, .05f, BaseType.Standard, this));
+                guns.Add(new GunEmplacement(VL.TrackType.Normal, VL.GunType.Blaster, new Vector2(.3f, -1.3f), .7f * halfWidth, .05f, BaseType.Standard, this));
             }
-            else if (moveType == VexedLib.MovementType.ArmorBoss)
+            else if (moveType == VL.MovementType.ArmorBoss)
             {
                 if (id.Contains("Basic"))
                 {
 
                 }
                 rightFacing = true;
-                startingArmorType = VexedLib.ArmorType.ShieldSuper;
-                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(.3f, -1.3f), .7f * halfWidth, .05f, BaseType.Standard, this));
-                guns.Add(new GunEmplacement(VexedLib.TrackType.Normal, VexedLib.GunType.Blaster, new Vector2(.3f, 1.3f), .7f * halfWidth, .05f, BaseType.Standard, this));
+                startingArmorType = VL.ArmorType.ShieldSuper;
+                guns.Add(new GunEmplacement(VL.TrackType.Normal, VL.GunType.Blaster, new Vector2(.3f, -1.3f), .7f * halfWidth, .05f, BaseType.Standard, this));
+                guns.Add(new GunEmplacement(VL.TrackType.Normal, VL.GunType.Blaster, new Vector2(.3f, 1.3f), .7f * halfWidth, .05f, BaseType.Standard, this));
             }
-            else if(gunType != VexedLib.GunType.None)
+            else if(gunType != VL.GunType.None)
                 guns.Add(new GunEmplacement(trackType, gunType, Vector2.Zero, halfWidth, -.05f, BaseType.None, this));            
         }
 
+        public void Load(Mo m)
+        {
+            hasOrbs = m.ho;
+        }
 
         public void ResetBossState()
         {
@@ -353,21 +357,21 @@ namespace VexedCore
         {
             get
             {
-                if (moveType == VexedLib.MovementType.ArmorBoss)
+                if (moveType == VL.MovementType.ArmorBoss)
                 {
                     if (id.Contains("Basic"))
                         return 16;
                     return 6;
                 }
-                if (moveType == VexedLib.MovementType.JetBoss)
+                if (moveType == VL.MovementType.JetBoss)
                     return 48;
-                if (moveType == VexedLib.MovementType.SnakeBoss)
+                if (moveType == VL.MovementType.SnakeBoss)
                     return 4;
-                if (healthType == VexedLib.MonsterHealth.Weak)
+                if (healthType == VL.MonsterHealth.Weak)
                     return 1;
-                if (healthType == VexedLib.MonsterHealth.Normal)
+                if (healthType == VL.MonsterHealth.Normal)
                     return 4;
-                if (healthType == VexedLib.MonsterHealth.Tough)
+                if (healthType == VL.MonsterHealth.Tough)
                     return 8;
                 
                 return 4;
@@ -387,40 +391,40 @@ namespace VexedCore
         {
             get
             {
-                if (moveType == VexedLib.MovementType.SnakeBoss)
+                if (moveType == VL.MovementType.SnakeBoss)
                 {
                     if (baseHP > 0)
                         return new Color(60, 60, 100);
                     else
                         return new Color(60, 60, 60);
                 }
-                if (moveType == VexedLib.MovementType.RockBoss)
+                if (moveType == VL.MovementType.RockBoss)
                 {
                     if (id.Contains("Snow"))
                         return new Color(60, 60, 150);
                     return Color.OrangeRed;
                 }
-                if (gunType == VexedLib.GunType.None)
+                if (gunType == VL.GunType.None)
                 {
                     return new Color(60, 60, 60);
                 }
-                if (gunType == VexedLib.GunType.Blaster)
+                if (gunType == VL.GunType.Blaster)
                 {
                     return Color.Red;
                 }
-                if (gunType == VexedLib.GunType.Beam)
+                if (gunType == VL.GunType.Beam)
                 {
                     return Color.Blue;
                 }
-                if (gunType == VexedLib.GunType.Missile)
+                if (gunType == VL.GunType.Missile)
                 {
                     return Color.Gray;
                 }
-                if (gunType == VexedLib.GunType.Spread)
+                if (gunType == VL.GunType.Spread)
                 {
                     return Color.Green;
                 }
-                if (gunType == VexedLib.GunType.Repeater)
+                if (gunType == VL.GunType.Repeater)
                 {
                     return Color.Orange;
                 }
@@ -448,11 +452,11 @@ namespace VexedCore
         {
             get
             {                
-                if(speedType == VexedLib.MonsterSpeed.Medium)
+                if(speedType == VL.MonsterSpeed.Medium)
                     return .009f;
-                if (speedType == VexedLib.MonsterSpeed.Slow)
+                if (speedType == VL.MonsterSpeed.Slow)
                     return .002f;
-                if (speedType == VexedLib.MonsterSpeed.Fast)
+                if (speedType == VL.MonsterSpeed.Fast)
                     return .015f;
                 return 0f;
             }
@@ -609,13 +613,13 @@ namespace VexedCore
         {
             get
             {
-                if (moveType == VexedLib.MovementType.ChaseBoss)
+                if (moveType == VL.MovementType.ChaseBoss)
                     return 2.4f;
-                if (sizeType == VexedLib.MonsterSize.Normal)
+                if (sizeType == VL.MonsterSize.Normal)
                     return .5f;
-                if (sizeType == VexedLib.MonsterSize.Large)
+                if (sizeType == VL.MonsterSize.Large)
                     return 1f;
-                if (sizeType == VexedLib.MonsterSize.Huge)
+                if (sizeType == VL.MonsterSize.Huge)
                     return 1.5f;
                 return .5f;                
             }
@@ -624,13 +628,13 @@ namespace VexedCore
         {
             get
             {
-                if (moveType == VexedLib.MovementType.ChaseBoss)
+                if (moveType == VL.MovementType.ChaseBoss)
                     return 2.4f;
-                if (sizeType == VexedLib.MonsterSize.Normal)
+                if (sizeType == VL.MonsterSize.Normal)
                     return .5f;
-                if (sizeType == VexedLib.MonsterSize.Large)
+                if (sizeType == VL.MonsterSize.Large)
                     return 1f;
-                if (sizeType == VexedLib.MonsterSize.Huge)
+                if (sizeType == VL.MonsterSize.Huge)
                     return 1.5f;
                 return .5f;
             }
@@ -648,9 +652,9 @@ namespace VexedCore
         {
             get
             {
-                if (gunType == VexedLib.GunType.Missile)
+                if (gunType == VL.GunType.Missile)
                     return 20f;
-                if (gunType == VexedLib.GunType.Beam)
+                if (gunType == VL.GunType.Beam)
                     return 20f;
                 return 15f;
             }
@@ -660,7 +664,7 @@ namespace VexedCore
         {
             if (flashCooldown != 0)
                 return;
-            if (moveType == VexedLib.MovementType.RockBoss && rockBoss.rockHits != 0)
+            if (moveType == VL.MovementType.RockBoss && rockBoss.rockHits != 0)
             {
                 armor = rockBoss.rockHits == 0;
                 if (gunType == ProjectileType.Impact)
@@ -677,14 +681,14 @@ namespace VexedCore
                     baseHP--;
                     flashCooldown = maxFlashCooldown;
                 }
-                if (moveType == VexedLib.MovementType.ArmorBoss)
+                if (moveType == VL.MovementType.ArmorBoss)
                 {
                     armorBoss.Rotate(this);
                 }
             }
             else if (gunType == ProjectileType.Missile || gunType == ProjectileType.Bomb)
             {
-                if (armorType != VexedLib.ArmorType.FullSuper && armorType != VexedLib.ArmorType.ShieldSuper && armorType != VexedLib.ArmorType.TopSuper)
+                if (armorType != VL.ArmorType.FullSuper && armorType != VL.ArmorType.ShieldSuper && armorType != VL.ArmorType.TopSuper)
                 {
                     armorHP--;
                     if (armorHP == 0)
@@ -700,13 +704,13 @@ namespace VexedCore
             }
             if (baseHP == 0)
             {
-                if (moveType == VexedLib.MovementType.SnakeBoss)
+                if (moveType == VL.MovementType.SnakeBoss)
                     dead = false;
-                else if (moveType == VexedLib.MovementType.RockBoss && id.Contains("Standard") && rockBoss.state != RockBossState.Fight3)
+                else if (moveType == VL.MovementType.RockBoss && id.Contains("Standard") && rockBoss.state != RockBossState.Fight3)
                     dead = false;
-                else if (moveType == VexedLib.MovementType.RockBoss && id.Contains("Snow") && rockBoss.state != RockBossState.Snow_Battle2)
+                else if (moveType == VL.MovementType.RockBoss && id.Contains("Snow") && rockBoss.state != RockBossState.Snow_Battle2)
                     dead = false;
-                else if (moveType == VexedLib.MovementType.RockBoss && id.Contains("CommandBoss") && rockBoss.state != RockBossState.Command_Battle2)
+                else if (moveType == VL.MovementType.RockBoss && id.Contains("CommandBoss") && rockBoss.state != RockBossState.Command_Battle2)
                     dead = false;
                 else
                 {
@@ -718,11 +722,11 @@ namespace VexedCore
 
                 if (hasOrbs == true)
                 {
-                    Doodad bonusOrb1 = new Doodad(VexedLib.DoodadType.PowerOrb, position.position + .3f * upUnit, position.normal, position.direction);
-                    Doodad bonusOrb2 = new Doodad(VexedLib.DoodadType.PowerOrb, position.position - .3f * upUnit, position.normal, position.direction);
-                    Doodad bonusOrb3 = new Doodad(VexedLib.DoodadType.PowerOrb, position.position + .3f * rightUnit, position.normal, position.direction);
-                    Doodad bonusOrb4 = new Doodad(VexedLib.DoodadType.PowerOrb, position.position - .3f * rightUnit, position.normal, position.direction);
-                    Doodad bonusOrb5 = new Doodad(VexedLib.DoodadType.PowerOrb, position.position, position.normal, position.direction);
+                    Doodad bonusOrb1 = new Doodad(VL.DoodadType.PowerOrb, position.position + .3f * upUnit, position.normal, position.direction);
+                    Doodad bonusOrb2 = new Doodad(VL.DoodadType.PowerOrb, position.position - .3f * upUnit, position.normal, position.direction);
+                    Doodad bonusOrb3 = new Doodad(VL.DoodadType.PowerOrb, position.position + .3f * rightUnit, position.normal, position.direction);
+                    Doodad bonusOrb4 = new Doodad(VL.DoodadType.PowerOrb, position.position - .3f * rightUnit, position.normal, position.direction);
+                    Doodad bonusOrb5 = new Doodad(VL.DoodadType.PowerOrb, position.position, position.normal, position.direction);
                     bonusOrb1.tracking = true;
                     bonusOrb1.currentRoom = Engine.player.currentRoom;
                     bonusOrb1.position.velocity += .3f * upUnit;
@@ -742,9 +746,9 @@ namespace VexedCore
                     Engine.player.currentRoom.doodads.Add(bonusOrb3);
                     Engine.player.currentRoom.doodads.Add(bonusOrb4);
                     Engine.player.currentRoom.doodads.Add(bonusOrb5);
-                    if (moveType == VexedLib.MovementType.RockBoss && !id.Contains("Snow") && rockBoss.state != RockBossState.Fight3)
+                    if (moveType == VL.MovementType.RockBoss && !id.Contains("Snow") && rockBoss.state != RockBossState.Fight3)
                         hasOrbs = true;
-                    else if (moveType == VexedLib.MovementType.RockBoss && id.Contains("Snow") && rockBoss.state != RockBossState.Snow_Battle2)
+                    else if (moveType == VL.MovementType.RockBoss && id.Contains("Snow") && rockBoss.state != RockBossState.Snow_Battle2)
                         hasOrbs = true;
                     else
                         hasOrbs = false;
@@ -760,7 +764,7 @@ namespace VexedCore
                 if (armorBreakTime > maxArmorBreakTime)
                 {
                     armorBreakTime = maxArmorBreakTime;
-                    armorType = VexedLib.ArmorType.None;                        
+                    armorType = VL.ArmorType.None;                        
                 }
             }
             if (state == MonsterState.Spawn)
@@ -782,31 +786,31 @@ namespace VexedCore
                 }
                 return;
             }
-            if (moveType == VexedLib.MovementType.SnakeBoss)
+            if (moveType == VL.MovementType.SnakeBoss)
             {
                 snakeBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
             }
-            if (moveType == VexedLib.MovementType.RockBoss)
+            if (moveType == VL.MovementType.RockBoss)
             {
                 rockBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
             }
-            if (moveType == VexedLib.MovementType.ChaseBoss)
+            if (moveType == VL.MovementType.ChaseBoss)
             {
                 chaseBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
             }
-            if (moveType == VexedLib.MovementType.BattleBoss)
+            if (moveType == VL.MovementType.BattleBoss)
             {
                 battleBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
             }
-            if (moveType == VexedLib.MovementType.ArmorBoss)
+            if (moveType == VL.MovementType.ArmorBoss)
             {
                 armorBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
             }
-            if (moveType == VexedLib.MovementType.FaceBoss)
+            if (moveType == VL.MovementType.FaceBoss)
             {
                 faceBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
             }
-            if (moveType == VexedLib.MovementType.JetBoss)
+            if (moveType == VL.MovementType.JetBoss)
             {
                 jetBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
             }
@@ -817,7 +821,7 @@ namespace VexedCore
             }
 
             Vector3 effectiveUp = Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false);
-            if ((moveType == VexedLib.MovementType.Tank || moveType == VexedLib.MovementType.Spider) && prevUp != Engine.player.center.direction)
+            if ((moveType == VL.MovementType.Tank || moveType == VL.MovementType.Spider) && prevUp != Engine.player.center.direction)
             {
                 prevUp = Engine.player.center.direction;
                 position.velocity = Vector3.Zero;                
@@ -837,13 +841,13 @@ namespace VexedCore
             {
                 impactVector.Normalize();
                 bool armorBlock = true;
-                if (armorType == VexedLib.ArmorType.None)
+                if (armorType == VL.ArmorType.None)
                     armorBlock = false;
-                else if ((armorType == VexedLib.ArmorType.Top || armorType == VexedLib.ArmorType.TopSuper) && Vector3.Dot(impactVector, position.direction) > .5f)
+                else if ((armorType == VL.ArmorType.Top || armorType == VL.ArmorType.TopSuper) && Vector3.Dot(impactVector, position.direction) > .5f)
                     armorBlock = false;
-                else if (rightFacing == true && (armorType == VexedLib.ArmorType.Shield || armorType == VexedLib.ArmorType.ShieldSuper) && Vector3.Dot(impactVector, rightUnit) > 0)
+                else if (rightFacing == true && (armorType == VL.ArmorType.Shield || armorType == VL.ArmorType.ShieldSuper) && Vector3.Dot(impactVector, rightUnit) > 0)
                     armorBlock = false;
-                else if (rightFacing == false && (armorType == VexedLib.ArmorType.Shield || armorType == VexedLib.ArmorType.ShieldSuper) && Vector3.Dot(impactVector, -rightUnit) > 0)
+                else if (rightFacing == false && (armorType == VL.ArmorType.Shield || armorType == VL.ArmorType.ShieldSuper) && Vector3.Dot(impactVector, -rightUnit) > 0)
                     armorBlock = false;
 
                 
@@ -859,7 +863,7 @@ namespace VexedCore
                 position.Update(Engine.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds, true);
 
             Vector3 direction = Vector3.Zero;
-            if (aiType == VexedLib.AIType.Waypoint)
+            if (aiType == VL.AIType.Waypoint)
             {
                 Vector3 target = waypoints[currentWaypointIndex];
                 direction = target - position.position;
@@ -891,7 +895,7 @@ namespace VexedCore
                         direction.Normalize();
                 }
             }
-            if (aiType == VexedLib.AIType.Hunter)
+            if (aiType == VL.AIType.Hunter)
             {
 
                 Vector3 target = Engine.player.center.position;
@@ -904,7 +908,7 @@ namespace VexedCore
                     {
                         direction *= -1;
                     }
-                    if (guns.Count != 0 && moveType != VexedLib.MovementType.Jump && direction.Length() < huntMinDistance)
+                    if (guns.Count != 0 && moveType != VL.MovementType.Jump && direction.Length() < huntMinDistance)
                     {
                         directionChangeCooldown = 300;
                         direction *= -1;
@@ -915,13 +919,13 @@ namespace VexedCore
                         direction.Normalize();
                 }
             }
-            if (aiType == VexedLib.AIType.Wander)
+            if (aiType == VL.AIType.Wander)
             {
                 direction = currentDirection * rightUnit;
                 if ( 
-                    ((moveType == VexedLib.MovementType.Spider && groundProjection!=Vector3.Zero)&& (forwardProjection != Vector3.Zero || forwardGroundProjection == Vector3.Zero)) ||
-                    ((moveType == VexedLib.MovementType.Tank && Vector3.Dot(groundProjection, effectiveUp) > 0) && (forwardProjection != Vector3.Zero || forwardGroundProjection == Vector3.Zero)) ||
-                    (moveType == VexedLib.MovementType.Hover && forwardProjection != Vector3.Zero))
+                    ((moveType == VL.MovementType.Spider && groundProjection!=Vector3.Zero)&& (forwardProjection != Vector3.Zero || forwardGroundProjection == Vector3.Zero)) ||
+                    ((moveType == VL.MovementType.Tank && Vector3.Dot(groundProjection, effectiveUp) > 0) && (forwardProjection != Vector3.Zero || forwardGroundProjection == Vector3.Zero)) ||
+                    (moveType == VL.MovementType.Hover && forwardProjection != Vector3.Zero))
                 {
 
                     position.velocity -= 2*Vector3.Dot(position.velocity, rightUnit)*rightUnit;
@@ -930,7 +934,7 @@ namespace VexedCore
             }
             
             
-            if (moveType == VexedLib.MovementType.RockBoss)
+            if (moveType == VL.MovementType.RockBoss)
             {
                 if (rockBoss.nextWaypointTarget != Vector3.Zero)
                 {
@@ -941,7 +945,7 @@ namespace VexedCore
                         direction.Normalize();
                 }
             }
-            if (moveType == VexedLib.MovementType.ChaseBoss)
+            if (moveType == VL.MovementType.ChaseBoss)
             {
                 if (chaseBoss.nextWaypointTarget != Vector3.Zero)
                 {
@@ -949,7 +953,7 @@ namespace VexedCore
                     direction = direction - Vector3.Dot(direction, position.normal) * position.normal;                    
                 }
             }
-            if (moveType == VexedLib.MovementType.SnakeBoss)
+            if (moveType == VL.MovementType.SnakeBoss)
             {
                 if (snakeBoss.nextWaypointTarget != Vector3.Zero && snakeBoss.waiting == false)
                 {
@@ -957,7 +961,7 @@ namespace VexedCore
                     direction = direction - Vector3.Dot(direction, position.normal) * position.normal;
                 }
             }
-            if (moveType == VexedLib.MovementType.BattleBoss)
+            if (moveType == VL.MovementType.BattleBoss)
             {
                 if (battleBoss.nextWaypointTarget != Vector3.Zero)
                 {
@@ -965,7 +969,7 @@ namespace VexedCore
                     direction = direction - Vector3.Dot(direction, position.normal) * position.normal;
                 }
             }
-            if (moveType == VexedLib.MovementType.JetBoss)
+            if (moveType == VL.MovementType.JetBoss)
             {
                 if (jetBoss.nextWaypointTarget != Vector3.Zero)
                 {
@@ -977,7 +981,7 @@ namespace VexedCore
             foreach (GunEmplacement g in guns)
                 g.Upgate(gameTime, this);
             
-            if (moveType == VexedLib.MovementType.Tank)
+            if (moveType == VL.MovementType.Tank)
             {
 
                 if (groundProjection != Vector3.Zero)
@@ -1027,14 +1031,14 @@ namespace VexedCore
                     }
                 }
             }
-            else if (moveType == VexedLib.MovementType.Spider)
+            else if (moveType == VL.MovementType.Spider)
             {
                 if (groundProjection != Vector3.Zero)
                 {
                     position.velocity += acceleration * direction;
                     Vector3 groundDirection = groundProjection / groundProjection.Length();
                     position.velocity -= Vector3.Dot(position.direction, position.velocity) * position.direction;
-                    if (aiType == VexedLib.AIType.Stationary)
+                    if (aiType == VL.AIType.Stationary)
                         position.velocity = Vector3.Zero;
                 }
                 else
@@ -1064,7 +1068,7 @@ namespace VexedCore
                     position.velocity *= maxSpeed;
                 }
             }
-            else if (moveType == VexedLib.MovementType.Jump)
+            else if (moveType == VL.MovementType.Jump)
             {
                 if (Vector3.Dot(rightUnit, position.velocity) > 0)
                     rightFacing = true;
@@ -1139,9 +1143,9 @@ namespace VexedCore
 
                 }
             }
-            else if (moveType == VexedLib.MovementType.Hover || moveType == VexedLib.MovementType.RockBoss || moveType == VexedLib.MovementType.ChaseBoss || moveType == VexedLib.MovementType.SnakeBoss|| moveType == VexedLib.MovementType.BattleBoss || moveType == VexedLib.MovementType.JetBoss)
+            else if (moveType == VL.MovementType.Hover || moveType == VL.MovementType.RockBoss || moveType == VL.MovementType.ChaseBoss || moveType == VL.MovementType.SnakeBoss|| moveType == VL.MovementType.BattleBoss || moveType == VL.MovementType.JetBoss)
             {
-                if (moveType != VexedLib.MovementType.BattleBoss && moveType != VexedLib.MovementType.JetBoss && moveType != VexedLib.MovementType.ArmorBoss)
+                if (moveType != VL.MovementType.BattleBoss && moveType != VL.MovementType.JetBoss && moveType != VL.MovementType.ArmorBoss)
                 {
                     if (directionChangeCooldown == 0)
                     {
@@ -1155,7 +1159,7 @@ namespace VexedCore
                     if (Vector3.Dot(rightUnit, position.velocity) < 0)
                         rightMoving = false;
 
-                    if ((moveType == VexedLib.MovementType.ChaseBoss) && spinUp == Vector3.Zero)
+                    if ((moveType == VL.MovementType.ChaseBoss) && spinUp == Vector3.Zero)
                     {
                         Vector3 forward = rightUnit;
                         if (rightFacing == false)
@@ -1173,7 +1177,7 @@ namespace VexedCore
                     }
                 }
 
-                if ((moveType == VexedLib.MovementType.RockBoss || aiType != VexedLib.AIType.Wander) && moveType != VexedLib.MovementType.BattleBoss && moveType != VexedLib.MovementType.JetBoss && moveType != VexedLib.MovementType.SnakeBoss && Engine.player.spinRecovery == 0 && position.direction != Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false))
+                if ((moveType == VL.MovementType.RockBoss || aiType != VL.AIType.Wander) && moveType != VL.MovementType.BattleBoss && moveType != VL.MovementType.JetBoss && moveType != VL.MovementType.SnakeBoss && Engine.player.spinRecovery == 0 && position.direction != Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false))
                 {
                     spinUp = Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false);
                 }
@@ -1460,7 +1464,7 @@ namespace VexedCore
                 armorScale = 1f + (.5f * armorBreakTime) / (.5f * maxArmorBreakTime);
             }
 
-            if (moveType == VexedLib.MovementType.FaceBoss)
+            if (moveType == VL.MovementType.FaceBoss)
             {
                 faceBoss.Render();
                 return;
@@ -1534,11 +1538,11 @@ namespace VexedCore
                 }
             }
 
-            if (moveType == VexedLib.MovementType.Tank)
+            if (moveType == VL.MovementType.Tank)
                 r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, textureTriangleList, treadsTexCoords, rightFacing);
-            else if (moveType == VexedLib.MovementType.Spider)
+            else if (moveType == VL.MovementType.Spider)
                 r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, textureTriangleList, spiderTexCoords, rightFacing);
-            else if (moveType == VexedLib.MovementType.Jump)
+            else if (moveType == VL.MovementType.Jump)
                 r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, textureTriangleList, legsTexCoords, rightFacing);
 
             float bossAdjustment = 0f;
@@ -1550,7 +1554,7 @@ namespace VexedCore
                 Color flashColor = new Color(255, 255, 0, (Byte)(flashCooldown / maxFlashCooldown));
                 r.AddTextureToTriangleList(rectVertexList, flashColor, depth + bossAdjustment, textureTriangleList, flashTexCoords, rightFacing);
             }
-            if (moveType == VexedLib.MovementType.RockBoss && !id.Contains("Snow"))
+            if (moveType == VL.MovementType.RockBoss && !id.Contains("Snow"))
             {
                 if(rockBoss.rockHits == 2 && rockBoss.rockHitCooldown == 0)
                     r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth, textureTriangleList, stoneSolidTexCoords, rightFacing);
@@ -1561,7 +1565,7 @@ namespace VexedCore
                 if (rockBoss.rockHits == 0 && rockBoss.rockHitCooldown != 0)
                     r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth, textureTriangleList, stoneCrackBreakTexCoords, rightFacing);
             }
-            if (moveType == VexedLib.MovementType.RockBoss && id.Contains("Snow"))
+            if (moveType == VL.MovementType.RockBoss && id.Contains("Snow"))
             {
                 if (rockBoss.rockHits == 2 && rockBoss.rockHitCooldown == 0)
                     r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth, textureTriangleList, snowSolidTexCoords, rightFacing);
@@ -1572,7 +1576,7 @@ namespace VexedCore
                 if (rockBoss.rockHits == 0 && rockBoss.rockHitCooldown != 0)
                     r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth, textureTriangleList, snowCrackBreakTexCoords, rightFacing);
             }
-            if (moveType == VexedLib.MovementType.ChaseBoss || moveType == VexedLib.MovementType.JetBoss || moveType == VexedLib.MovementType.BattleBoss)
+            if (moveType == VL.MovementType.ChaseBoss || moveType == VL.MovementType.JetBoss || moveType == VL.MovementType.BattleBoss)
             {
                 List<Vertex> spikeShieldVertexList = new List<Vertex>();
                 Vector3 forward = Vector3.Cross(position.direction, position.normal);
@@ -1587,14 +1591,14 @@ namespace VexedCore
                 {
                     v.Update(Engine.player.currentRoom, 1);
                 }
-                if(moveType == VexedLib.MovementType.ChaseBoss)
+                if(moveType == VL.MovementType.ChaseBoss)
                     r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + .09f, textureTriangleList, spikeShieldTexCoords, rightFacing);
-                if(moveType == VexedLib.MovementType.JetBoss || moveType == VexedLib.MovementType.BattleBoss)
+                if(moveType == VL.MovementType.JetBoss || moveType == VL.MovementType.BattleBoss)
                     r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + .09f, textureTriangleList, jetArmorTexCoords, rightFacing);
 
             }
 
-            if (moveType == VexedLib.MovementType.SnakeBoss)
+            if (moveType == VL.MovementType.SnakeBoss)
             {
                 if (baseHP > 3)
                 {
@@ -1610,35 +1614,35 @@ namespace VexedCore
                 }
             }
 
-            if (moveType == VexedLib.MovementType.ArmorBoss)
+            if (moveType == VL.MovementType.ArmorBoss)
             {
                 r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, bossArmorTexCoords, rightFacing);
             }
 
-            if (moveType != VexedLib.MovementType.ChaseBoss && moveType != VexedLib.MovementType.RockBoss && moveType != VexedLib.MovementType.ArmorBoss && moveType != VexedLib.MovementType.BattleBoss && moveType != VexedLib.MovementType.JetBoss && moveType != VexedLib.MovementType.ArmorBoss)
+            if (moveType != VL.MovementType.ChaseBoss && moveType != VL.MovementType.RockBoss && moveType != VL.MovementType.ArmorBoss && moveType != VL.MovementType.BattleBoss && moveType != VL.MovementType.JetBoss && moveType != VL.MovementType.ArmorBoss)
             {
                 List<Vector2> currentArmorTexCoords = new List<Vector2>();
-                if (armorType == VexedLib.ArmorType.Full)
+                if (armorType == VL.ArmorType.Full)
                 {
                     currentArmorTexCoords = fullArmorTexCoords;
                 }
-                if (armorType == VexedLib.ArmorType.Top)
+                if (armorType == VL.ArmorType.Top)
                 {
                     currentArmorTexCoords = topArmorTexCoords;
                 }
-                if (armorType == VexedLib.ArmorType.Shield)
+                if (armorType == VL.ArmorType.Shield)
                 {
                     currentArmorTexCoords = frontArmorTexCoords;                    
                 }
-                if (armorType == VexedLib.ArmorType.FullSuper)
+                if (armorType == VL.ArmorType.FullSuper)
                 {
                     currentArmorTexCoords = fullSuperArmorTexCoords;
                 }
-                if (armorType == VexedLib.ArmorType.TopSuper)
+                if (armorType == VL.ArmorType.TopSuper)
                 {
                     currentArmorTexCoords = topSuperArmorTexCoords;
                 }
-                if (armorType == VexedLib.ArmorType.ShieldSuper)
+                if (armorType == VL.ArmorType.ShieldSuper)
                 {
                     currentArmorTexCoords = frontSuperArmorTexCoords;
                 }
@@ -1651,16 +1655,16 @@ namespace VexedCore
             }
             
 
-            if (moveType != VexedLib.MovementType.ChaseBoss && moveType != VexedLib.MovementType.SnakeBoss && moveType != VexedLib.MovementType.BattleBoss && moveType != VexedLib.MovementType.JetBoss && moveType != VexedLib.MovementType.ArmorBoss)
+            if (moveType != VL.MovementType.ChaseBoss && moveType != VL.MovementType.SnakeBoss && moveType != VL.MovementType.BattleBoss && moveType != VL.MovementType.JetBoss && moveType != VL.MovementType.ArmorBoss)
                 r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, eyesTexCoords, rightFacing);
-            if (moveType == VexedLib.MovementType.SnakeBoss && snakeBoss.chainIndex == 0)
+            if (moveType == VL.MovementType.SnakeBoss && snakeBoss.chainIndex == 0)
                 r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, eyesTexCoords, rightFacing);
 
-            if(moveType == VexedLib.MovementType.Tank)
+            if(moveType == VL.MovementType.Tank)
                 r.AddTextureToTriangleList(rectVertexList, Color.White, depth+.1f, textureTriangleList, treadsTexCoords, rightFacing);
-            else if (moveType == VexedLib.MovementType.Spider)
+            else if (moveType == VL.MovementType.Spider)
                 r.AddTextureToTriangleList(rectVertexList, Color.White, depth+.1f, textureTriangleList, spiderTexCoords, rightFacing);
-            else if (moveType == VexedLib.MovementType.Jump)
+            else if (moveType == VL.MovementType.Jump)
                 r.AddTextureToTriangleList(rectVertexList, Color.White, depth+.1f, textureTriangleList, legsTexCoords, rightFacing);
 
             

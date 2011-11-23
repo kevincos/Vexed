@@ -15,7 +15,7 @@ namespace VexedCore
 {
     public class EdgeProperties
     {
-        public VexedLib.EdgeType type = VexedLib.EdgeType.Normal;
+        public VL.EdgeType type = VL.EdgeType.Normal;
         public int primaryValue =0;
         public int secondaryValue =0;
     }
@@ -42,7 +42,7 @@ namespace VexedCore
             start = new Vertex();
             end = new Vertex();
             properties = new EdgeProperties();
-            properties.type = VexedLib.EdgeType.Normal;
+            properties.type = VL.EdgeType.Normal;
             behaviors = new List<Behavior>();
         }
 
@@ -67,7 +67,7 @@ namespace VexedCore
             }
         }
 
-        public Edge(VexedLib.Edge xmlEdge, Vector3 normal)
+        public Edge(VL.Edge xmlEdge, Vector3 normal)
         {
             start = new Vertex(xmlEdge.start, normal, Vector3.Zero, xmlEdge.end - xmlEdge.start);
             end = new Vertex(xmlEdge.end, normal, Vector3.Zero, xmlEdge.start - xmlEdge.end);
@@ -96,7 +96,7 @@ namespace VexedCore
             end.normal.Normalize();
 
             properties = new EdgeProperties();
-            properties.type = VexedLib.EdgeType.Normal;
+            properties.type = VL.EdgeType.Normal;
 
             behaviors = new List<Behavior>();
         }
@@ -200,13 +200,13 @@ namespace VexedCore
 
         public void UpdateVertexData(Room currentRoom, bool dynamic)
         {
-            if (Engine.staticObjectsInitialized == false || baseTriangleList == null || dynamic == true || refreshVertices == true || properties.type == VexedLib.EdgeType.ConveyorBelt)
+            if (Engine.staticObjectsInitialized == false || baseTriangleList == null || dynamic == true || refreshVertices == true || properties.type == VL.EdgeType.ConveyorBelt)
             {
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
             
-                if (properties.type == VexedLib.EdgeType.Spikes)
+                if (properties.type == VL.EdgeType.Spikes)
                     currentRoom.AddSpikesToTriangleList(this, .5f, baseTriangleList);
-                else if (properties.type != VexedLib.EdgeType.Normal)
+                else if (properties.type != VL.EdgeType.Normal)
                     currentRoom.AddStripToTriangleList2(this, .5f, baseTriangleList);
             }
             refreshVertices = false;

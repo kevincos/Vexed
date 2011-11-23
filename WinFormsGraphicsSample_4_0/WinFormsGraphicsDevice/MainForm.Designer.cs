@@ -1,7 +1,7 @@
 using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
-using VexedLib;
+using VL;
 
 namespace WinFormsGraphicsDevice
 {

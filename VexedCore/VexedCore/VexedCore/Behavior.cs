@@ -41,7 +41,7 @@ namespace VexedCore
             secondaryValue = b.secondaryValue;
         }
 
-        public Behavior(VexedLib.Behavior xmlBehavior)
+        public Behavior(VL.Behavior xmlBehavior)
         {
             id = xmlBehavior.IDString;
             destination = xmlBehavior.destination;

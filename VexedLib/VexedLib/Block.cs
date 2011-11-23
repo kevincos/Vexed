@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using System.Runtime.Serialization;
 
-namespace VexedLib
+namespace VL
 {
+    //[Serializable]
     public class Block
     {
         public int id;

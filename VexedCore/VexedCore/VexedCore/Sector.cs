@@ -75,7 +75,7 @@ namespace VexedCore
             }
         }
 
-        public Sector(VexedLib.Sector xmlSector)
+        public Sector(VL.Sector xmlSector)
         {
             id = xmlSector.IDString;
             center = xmlSector.center;

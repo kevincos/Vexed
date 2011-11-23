@@ -179,7 +179,7 @@ namespace VexedCore
             }            
             else if (state == RockBossState.FleeA && distance < .5f)
             {
-                srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
+                srcMonster.speedType = VL.MonsterSpeed.Medium;
                 srcMonster.position.position = nextWaypointTarget;
                 state = RockBossState.FleeB;
                 nextWaypointTarget = GetWaypointTarget();
@@ -205,7 +205,7 @@ namespace VexedCore
                 srcMonster.position.velocity = Vector3.Zero;
                 srcMonster.baseHP = srcMonster.startingBaseHP;
                 rockHits = maxRockHits;
-                srcMonster.aiType = VexedLib.AIType.Stationary;
+                srcMonster.aiType = VL.AIType.Stationary;
                 
             }
             else if (state == RockBossState.Wait && triggered == true)
@@ -216,8 +216,8 @@ namespace VexedCore
                 srcMonster.position.velocity = Vector3.Zero;
                 srcMonster.baseHP = srcMonster.startingBaseHP;
                 rockHits = maxRockHits;
-                srcMonster.speedType = VexedLib.MonsterSpeed.Slow;
-                srcMonster.aiType = VexedLib.AIType.Hunter;
+                srcMonster.speedType = VL.MonsterSpeed.Slow;
+                srcMonster.aiType = VL.AIType.Hunter;
                 foreach (Doodad d in Engine.player.currentRoom.doodads)
                 {
                     if (d.id.Contains("RockDoor"))
@@ -234,49 +234,49 @@ namespace VexedCore
             else if (state == RockBossState.Snow_Fight1 && rockHits == 0)
             {
                 state = RockBossState.Snow_Battle1;
-                srcMonster.speedType = VexedLib.MonsterSpeed.Slow;
-                srcMonster.aiType = VexedLib.AIType.Hunter;                
+                srcMonster.speedType = VL.MonsterSpeed.Slow;
+                srcMonster.aiType = VL.AIType.Hunter;                
 
             }
             else if (state == RockBossState.Snow_Fight2 && rockHits == 0)
             {
                 state = RockBossState.Snow_Battle2;
-                srcMonster.speedType = VexedLib.MonsterSpeed.Slow;
-                srcMonster.aiType = VexedLib.AIType.Hunter;                
+                srcMonster.speedType = VL.MonsterSpeed.Slow;
+                srcMonster.aiType = VL.AIType.Hunter;                
 
             }
             else if (state == RockBossState.Command_Fight1 && rockHits == 0)
             {
                 state = RockBossState.Command_Battle1;
-                srcMonster.speedType = VexedLib.MonsterSpeed.Slow;
-                srcMonster.aiType = VexedLib.AIType.Hunter;
+                srcMonster.speedType = VL.MonsterSpeed.Slow;
+                srcMonster.aiType = VL.AIType.Hunter;
 
             }
             else if (state == RockBossState.Command_Fight2 && rockHits == 0)
             {
                 state = RockBossState.Command_Battle2;
-                srcMonster.speedType = VexedLib.MonsterSpeed.Slow;
-                srcMonster.aiType = VexedLib.AIType.Hunter;
+                srcMonster.speedType = VL.MonsterSpeed.Slow;
+                srcMonster.aiType = VL.AIType.Hunter;
 
             }
             else if (state == RockBossState.Snow_Battle1 && srcMonster.baseHP == 0)
             {
                 state = RockBossState.Snow_Flee1;
-                srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
+                srcMonster.speedType = VL.MonsterSpeed.Medium;
                 nextWaypointTarget = GetWaypointTarget();
                 srcMonster.position.velocity = Vector3.Zero;
             }
             else if (state == RockBossState.Command_Battle1 && srcMonster.baseHP == 0)
             {
                 state = RockBossState.Command_Flee1;
-                srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
+                srcMonster.speedType = VL.MonsterSpeed.Medium;
                 nextWaypointTarget = GetWaypointTarget();
                 srcMonster.position.velocity = Vector3.Zero;
             }
             else if (state == RockBossState.Fight2 && srcMonster.baseHP == 0)
             {
                 state = RockBossState.FleeC2;
-                srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
+                srcMonster.speedType = VL.MonsterSpeed.Medium;
                 nextWaypointTarget = GetWaypointTarget();
                 srcMonster.position.velocity = Vector3.Zero;
 
@@ -296,7 +296,7 @@ namespace VexedCore
                 srcMonster.baseHP = srcMonster.startingBaseHP;
                 srcMonster.position.position = nextWaypointTarget;
                 srcMonster.position.velocity = Vector3.Zero;
-                srcMonster.aiType = VexedLib.AIType.Stationary;
+                srcMonster.aiType = VL.AIType.Stationary;
 
                 nextWaypointTarget = GetWaypointTarget();
             }
@@ -307,7 +307,7 @@ namespace VexedCore
                 srcMonster.baseHP = srcMonster.startingBaseHP;
                 srcMonster.position.position = nextWaypointTarget;
                 srcMonster.position.velocity = Vector3.Zero;
-                srcMonster.aiType = VexedLib.AIType.Stationary;
+                srcMonster.aiType = VL.AIType.Stationary;
 
                 nextWaypointTarget = GetWaypointTarget();
             }
@@ -320,7 +320,7 @@ namespace VexedCore
                 state = RockBossState.Wait2;
                 nextWaypointTarget = Vector3.Zero;
                 triggered = false;
-                srcMonster.aiType = VexedLib.AIType.Stationary;
+                srcMonster.aiType = VL.AIType.Stationary;
             }
             else if (state == RockBossState.Wait2 && triggered == true)
             {
@@ -331,8 +331,8 @@ namespace VexedCore
                 srcMonster.baseHP = srcMonster.startingBaseHP;
                 srcMonster.huntMinDistance = 5f;
                 rockHits = maxRockHits;
-                srcMonster.speedType = VexedLib.MonsterSpeed.Slow;
-                srcMonster.aiType = VexedLib.AIType.Hunter;
+                srcMonster.speedType = VL.MonsterSpeed.Slow;
+                srcMonster.aiType = VL.AIType.Hunter;
             }
         }
     }

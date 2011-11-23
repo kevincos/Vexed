@@ -69,13 +69,45 @@ namespace VexedCore
             }
         }
 
-        public Block(VexedLib.Block xmlBlock)
+        public Block(VL.Block xmlBlock)
         {
             unfoldedBlocks = new List<Block>();
             edges = new List<Edge>();
             behaviors = new List<Behavior>();
             color = xmlBlock.color;
             id = xmlBlock.IDString;
+        }
+
+        public void Load(Bl b)
+        {
+            currentBehaviorId = b.cbi;
+            edges[0].start = new Vertex(b.e1.vs);
+            edges[0].end = new Vertex(b.e1.ve);
+            edges[0].currentBehaviorId = b.e1.cbi;
+            edges[0].properties.primaryValue = b.e1.pv;
+            edges[0].properties.secondaryValue = b.e1.sv;
+            edges[0].toggleOn = b.e1.to;
+
+            edges[1].start = new Vertex(b.e2.vs);
+            edges[1].end = new Vertex(b.e2.ve);
+            edges[1].currentBehaviorId = b.e2.cbi;
+            edges[1].properties.primaryValue = b.e2.pv;
+            edges[1].properties.secondaryValue = b.e2.sv;
+            edges[1].toggleOn = b.e2.to;
+
+            edges[2].start = new Vertex(b.e3.vs);
+            edges[2].end = new Vertex(b.e3.ve);
+            edges[2].currentBehaviorId = b.e3.cbi;
+            edges[2].properties.primaryValue = b.e3.pv;
+            edges[2].properties.secondaryValue = b.e3.sv;
+            edges[2].toggleOn = b.e3.to;
+
+            edges[3].start = new Vertex(b.e4.vs);
+            edges[3].end = new Vertex(b.e4.ve);
+            edges[3].currentBehaviorId = b.e4.cbi;
+            edges[3].properties.primaryValue = b.e4.pv;
+            edges[3].properties.secondaryValue = b.e4.sv;
+            edges[3].toggleOn = b.e4.to;
         }
 
         public void UpdateUnfoldedBlocks(Room r, Vector3 normal, Vector3 up)
@@ -182,7 +214,7 @@ namespace VexedCore
         public EdgeProperties GetProperties(Vector3 projection)
         {
             EdgeProperties properties = new EdgeProperties();
-            properties.type = VexedLib.EdgeType.Normal;
+            properties.type = VL.EdgeType.Normal;
             foreach (Edge e in edges)
             {
                 Vector3 edgeNormal = Vector3.Cross(e.start.normal, e.start.position - e.end.position);

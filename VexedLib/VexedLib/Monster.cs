@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.Serialization;
 using Microsoft.Xna.Framework;
 
-namespace VexedLib
+namespace VL
 {
     public enum MovementType
     {        
@@ -85,6 +86,7 @@ namespace VexedLib
         Waypoint=3
     }
 
+    //[Serializable]
     public class Monster
     {
         public int id;

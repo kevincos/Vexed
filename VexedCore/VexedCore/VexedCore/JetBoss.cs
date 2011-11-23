@@ -67,7 +67,7 @@ namespace VexedCore
                 }
             
                 nextWaypointTarget = GetWaypointTarget();
-                srcMonster.speedType = VexedLib.MonsterSpeed.Medium;
+                srcMonster.speedType = VL.MonsterSpeed.Medium;
             }
 
 

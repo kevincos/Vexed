@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.Serialization;
 using Microsoft.Xna.Framework;
 
-namespace VexedLib
+namespace VL
 {
+    //[Serializable]
     public class Behavior
     {
         public int id;
