@@ -421,6 +421,10 @@ namespace VexedCore
                     {
                         return Color.DarkGoldenrod;
                     }
+                    if (targetDoodad.type == VL.DoodadType.HealthStation)
+                    {
+                        return Color.White;
+                    }
                     if (targetDoodad.type == VL.DoodadType.JumpStation && targetDoodad.alreadyUsed == false)
                     {
                         float x = (1f*(maxFlashTime - flashTime))/(1f*maxFlashTime);
@@ -507,7 +511,7 @@ namespace VexedCore
                     if (targetDoodad.powered == false)
                         return new Color(50, 50, 50);
                     if (targetDoodad.type == VL.DoodadType.UpgradeStation)
-                        return Color.DarkGoldenrod;                                                               
+                        return Color.DarkGoldenrod;                              
                     if (available == false)
                     {
                         if (targetDoodad.type == VL.DoodadType.ItemStation)
@@ -869,7 +873,7 @@ namespace VexedCore
         {
             get
             {
-                return type == VL.DoodadType.JumpStation || type == VL.DoodadType.ItemStation || type == VL.DoodadType.WarpStation || type == VL.DoodadType.SwitchStation || type == VL.DoodadType.UpgradeStation || type == VL.DoodadType.PowerStation || type == VL.DoodadType.RedPowerStation || type == VL.DoodadType.BluePowerStation || type == VL.DoodadType.SaveStation || type == VL.DoodadType.LoadStation || type == VL.DoodadType.MenuStation;
+                return type == VL.DoodadType.HealthStation || type == VL.DoodadType.JumpStation || type == VL.DoodadType.ItemStation || type == VL.DoodadType.WarpStation || type == VL.DoodadType.SwitchStation || type == VL.DoodadType.UpgradeStation || type == VL.DoodadType.PowerStation || type == VL.DoodadType.RedPowerStation || type == VL.DoodadType.BluePowerStation || type == VL.DoodadType.SaveStation || type == VL.DoodadType.LoadStation || type == VL.DoodadType.MenuStation;
             }
         }
 
@@ -1190,6 +1194,11 @@ namespace VexedCore
                     {
                         decalIndex = 37;
                         iconColor = Color.Blue;
+                    }
+                    if (targetDoodad.type == VL.DoodadType.HealthStation)
+                    {
+                        decalIndex = 55;
+                        iconColor = Color.White;
                     }
                     if (targetDoodad.type == VL.DoodadType.WarpStation)
                         decalIndex = 39;

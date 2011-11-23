@@ -198,7 +198,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Booster);
+            primaryAbility = new Ability(AbilityType.DoubleJump);
             secondaryAbility = new Ability(AbilityType.Missile);
             naturalShield = new Ability(AbilityType.Shield);
             upgrades[(int)AbilityType.Laser] = true;
@@ -209,8 +209,8 @@ namespace VexedCore
             upgrades[(int)AbilityType.WallJump] = true;
             upgrades[(int)AbilityType.DoubleJump] = true;
             upgrades[(int)AbilityType.Blaster] = true;
-            /*upgrades[(int)AbilityType.PermanentWallJump] = true;
             upgrades[(int)AbilityType.PermanentBoots] = true;
+            /*upgrades[(int)AbilityType.PermanentWallJump] = true;
             upgrades[(int)AbilityType.ImprovedJump] = true;
             upgrades[(int)AbilityType.SpinHook] = true;
             */
@@ -1582,6 +1582,10 @@ namespace VexedCore
                                 state = State.Upgrade;
                                 upgradeStationDoodad = d;
                                 jumpSource = center.position;
+                            }
+                            if (d.type == VL.DoodadType.HealthStation)
+                            {
+                                naturalShield.ammo = naturalShield.maxAmmo;
                             }
                             if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation)
                             {

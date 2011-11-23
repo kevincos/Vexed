@@ -198,7 +198,7 @@ namespace VexedCore
                     currentMonster++;
                 }
                 foreach (Doodad d in Engine.roomList[i].doodads)
-                {
+                {                    
                     d.Load(ddLst[currentDoodad]);
                     currentDoodad++;
                 }

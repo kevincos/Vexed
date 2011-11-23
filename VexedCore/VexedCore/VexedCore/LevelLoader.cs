@@ -192,7 +192,7 @@ namespace VexedCore
                                 newRoom.doodads.Add(rightDoor2);
                                 
                             }
-                            else if (xmlDoodad.type == VL.DoodadType.JumpStation || xmlDoodad.type == VL.DoodadType.ItemStation || xmlDoodad.type == VL.DoodadType.SaveStation || xmlDoodad.type == VL.DoodadType.WarpStation || xmlDoodad.type == VL.DoodadType.SwitchStation || xmlDoodad.type == VL.DoodadType.UpgradeStation || xmlDoodad.type == VL.DoodadType.PowerStation || xmlDoodad.type == VL.DoodadType.LoadStation || xmlDoodad.type == VL.DoodadType.MenuStation || xmlDoodad.type == VL.DoodadType.RedPowerStation || xmlDoodad.type == VL.DoodadType.BluePowerStation)
+                            else if (xmlDoodad.type == VL.DoodadType.JumpStation || xmlDoodad.type == VL.DoodadType.HealthStation || xmlDoodad.type == VL.DoodadType.ItemStation || xmlDoodad.type == VL.DoodadType.SaveStation || xmlDoodad.type == VL.DoodadType.WarpStation || xmlDoodad.type == VL.DoodadType.SwitchStation || xmlDoodad.type == VL.DoodadType.UpgradeStation || xmlDoodad.type == VL.DoodadType.PowerStation || xmlDoodad.type == VL.DoodadType.LoadStation || xmlDoodad.type == VL.DoodadType.MenuStation || xmlDoodad.type == VL.DoodadType.RedPowerStation || xmlDoodad.type == VL.DoodadType.BluePowerStation)
                             {
                                 Vector3 right = Vector3.Cross(xmlDoodad.up, xmlFace.normal);
                                 Doodad station = new Doodad(xmlDoodad, xmlFace.normal);

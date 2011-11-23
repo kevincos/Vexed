@@ -54,7 +54,8 @@ namespace VL
         RedPowerStation = 43,
         BluePowerStation = 44,
         RingTop = 45,
-        RingSide = 46
+        RingSide = 46,
+        HealthStation = 47
     }
 
     public enum AbilityType

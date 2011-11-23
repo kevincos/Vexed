@@ -184,7 +184,7 @@ namespace VexedCore
             LevelLoader.QuickSave(true);
             
             //LevelLoader.Load("LevelData\\spikeelevator");
-            LevelLoader.Load("LevelData\\menu");
+            //LevelLoader.Load("LevelData\\menu");
             
             // TODO: use this.Content to load your game content here
         }

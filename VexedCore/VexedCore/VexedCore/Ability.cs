@@ -53,6 +53,7 @@ namespace VexedCore
         MKey = 52,
         KeyGeneric = 53,
         CtrlKey = 54,
+        Health = 55,
         PowerCube = 37
     }
 
