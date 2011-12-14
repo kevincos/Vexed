@@ -121,7 +121,7 @@ namespace VexedCore
                 if (_maxAmmo == -1)
                 {
                     if (type == AbilityType.Shield)
-                        _maxAmmo = 3;
+                        _maxAmmo = 9;
                     else if (type == AbilityType.JetPack)
                         _maxAmmo = 2000;
                     else
@@ -258,6 +258,8 @@ namespace VexedCore
         {
             if (cooldown == 0)
             {
+                if (Engine.player.faceDirection == 0)
+                    Engine.player.faceDirection = 1;
                 cooldown = maxCooldown;
                 Vector3 shootDirection;
                 if (Engine.player.grounded == false && Engine.player.leftWall == true)

@@ -18,12 +18,44 @@ namespace VexedCore
         public int nextWaypointIndex = 0;
         public Vector3 nextWaypointTarget = Vector3.Zero;
 
+        public int phase = 0;
+        public bool dialogStarted = false;
+
         public void Update(int time, Monster srcMonster)
         {
+            if (phase == 0 && srcMonster.state == MonsterState.Normal && dialogStarted == false)
+            {
+                dialogStarted = true;
+                DialogBox.SetDialog("JetBoss1");
+            }
+
+
             aimDirection = Engine.player.center.position - srcMonster.position.position;
             aimDirection.Normalize();
 
-            
+            if (srcMonster.baseHP == 0)
+            {
+                srcMonster.hasOrbs = true;
+                if (phase == 0)
+                {
+                    srcMonster.guns[0].gunType = VL.GunType.Repeater;
+                    DialogBox.SetDialog("JetBoss2");
+                }
+                if (phase == 1)
+                {
+                    srcMonster.guns[1].gunType = VL.GunType.Repeater;
+                    srcMonster.guns[1].fireCooldown = 0;
+                    srcMonster.guns[0].fireCooldown = 0;
+                    DialogBox.SetDialog("JetBoss3");
+                }
+                if (phase == 2)
+                {
+                    DialogBox.SetDialog("JetBoss4");
+                    Engine.player.currentRoom.bossCleared = true;
+                }
+                phase++;
+                srcMonster.baseHP = srcMonster.startingBaseHP;
+            }
 
             Vector3 direction = nextWaypointTarget - srcMonster.position.position;
             float distance = direction.Length();
@@ -31,7 +63,7 @@ namespace VexedCore
             float playerdistance = (Engine.player.center.position - srcMonster.position.position).Length();
             if (playerdistance > 8f)
                 srcMonster.speedType = VL.MonsterSpeed.Fast;
-            else if (playerdistance > 3f)
+            else if (playerdistance > 3.5f)
                 srcMonster.speedType = VL.MonsterSpeed.Medium;
             else
                 srcMonster.speedType = VL.MonsterSpeed.Slow;

@@ -198,8 +198,8 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.DoubleJump);
-            secondaryAbility = new Ability(AbilityType.Missile);
+            primaryAbility = new Ability(AbilityType.Laser);
+            secondaryAbility = new Ability(AbilityType.Phase);
             naturalShield = new Ability(AbilityType.Shield);
             upgrades[(int)AbilityType.Laser] = true;
             upgrades[(int)AbilityType.Boots] = true;
@@ -210,17 +210,17 @@ namespace VexedCore
             upgrades[(int)AbilityType.DoubleJump] = true;
             upgrades[(int)AbilityType.Blaster] = true;
             upgrades[(int)AbilityType.PermanentBoots] = true;
-            /*upgrades[(int)AbilityType.PermanentWallJump] = true;
+            upgrades[(int)AbilityType.PermanentWallJump] = true;
             upgrades[(int)AbilityType.ImprovedJump] = true;
             upgrades[(int)AbilityType.SpinHook] = true;
-            */
+            
             upgrades[(int)AbilityType.Missile] = true;
             upgrades[(int)AbilityType.Booster] = true;
-            /*upgrades[(int)AbilityType.JetPack] = true;
-            upgrades[(int)AbilityType.Phase] = true;*/
+            upgrades[(int)AbilityType.JetPack] = true;
+            upgrades[(int)AbilityType.Phase] = true;
             //upgrades[(int)AbilityType.PermanentBlueKey] = true;
             //upgrades[(int)AbilityType.PermanentRedKey] = true;
-            //upgrades[(int)AbilityType.PermanentYellowKey] = true;
+            upgrades[(int)AbilityType.PermanentYellowKey] = true;
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }
@@ -545,7 +545,7 @@ namespace VexedCore
                 {
                     currentRoom = targetRoom;
                     Physics.refresh = true;
-                    //Engine.reDraw = true;
+                    Engine.reDraw = true;
                     center = new Vertex(d.position.position, d.position.normal, Vector3.Zero, d.position.direction);
                     state = State.Normal;
                 }
@@ -842,6 +842,8 @@ namespace VexedCore
 
         public void AttemptPhase()
         {
+            if (state == State.Spin || state == State.Upgrade)
+                return;
             float throughDistance = Math.Abs(Vector3.Dot(center.normal, currentRoom.size));
             float sideSize = .5f * Math.Abs(Vector3.Dot(right, currentRoom.size));
             float sideDistance = Vector3.Dot(currentRoom.center - center.position, right) + sideSize;

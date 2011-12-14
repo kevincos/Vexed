@@ -82,7 +82,7 @@ namespace VexedCore
 
         public void Update(int time, Monster srcMonster)
         {
-            if (SnakeBoss.totalLife == 0)
+            if (SnakeBoss.totalLife == 0 && Engine.player.currentRoom.bossCleared == false)
             {
                 if (dialogState < 9)
                 {
@@ -114,16 +114,28 @@ namespace VexedCore
                 {
                     if (gunDialog == false)
                     {
-                        DialogBox.SetDialog("IceSnake3");
-                        gunDialog = true;
-                        srcMonster.guns[0].gunType = VL.GunType.Blaster;
+                        //DialogBox.SetDialog("IceSnake3");
+                        gunDialog = true;                        
                     }
+                    srcMonster.guns[0].gunType = VL.GunType.Blaster;
                 }
 
             }
             Vector3 direction = nextWaypointTarget - srcMonster.position.position;
             float distance = direction.Length();
-            
+
+            if (SnakeBoss.totalLife == 0 && Engine.player.currentRoom.bossCleared == false)
+            {
+                Engine.player.currentRoom.bossCleared = true;
+                foreach (Monster m in Engine.player.currentRoom.monsters)
+                {                    
+                    if (m.moveType == VL.MovementType.SnakeBoss)
+                    {
+                        m.dead = true;
+                        m.state = MonsterState.Death;
+                    }
+                }
+            }
 
 
             if (nextWaypointIndex == 0f || Vector3.Dot(srcMonster.position.velocity, direction) < 0f)

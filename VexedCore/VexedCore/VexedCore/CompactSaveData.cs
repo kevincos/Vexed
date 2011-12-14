@@ -36,6 +36,7 @@ namespace VexedCore
         public int cbo; //current blue orbs
         public int cro; //current red orbs 
         public int co; //current orbs
+        public bool bc; //boss cleared
         public bool e; //explored
 
         public Rm()
@@ -47,6 +48,7 @@ namespace VexedCore
             cbo = r.currentBlueOrbs;
             cro = r.currentRedOrbs;
             co = r.currentOrbs;
+            bc = r.bossCleared;
             e = r.explored;
         }
     }

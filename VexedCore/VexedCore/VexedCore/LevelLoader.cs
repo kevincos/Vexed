@@ -60,15 +60,21 @@ namespace VexedCore
                                 newSector.maxOrbs += 10;
                                 newRoom.monsters.Add(new Monster(xmlMonster, xmlFace.normal));
                             }
+                            else if (xmlMonster.movement == VL.MovementType.BattleBoss)
+                            {
+                                newRoom.maxOrbs += 15;
+                                newSector.maxOrbs += 15;
+                                newRoom.monsters.Add(new Monster(xmlMonster, xmlFace.normal));
+                            }
                             else if (xmlMonster.movement == VL.MovementType.SnakeBoss)
                             {
-                                
+
                                 int snakeLen = 20;
-                                newRoom.maxOrbs += 5*snakeLen;
+                                newRoom.maxOrbs += 5 * snakeLen;
                                 for (int i = 0; i < snakeLen; i++)
                                 {
                                     Monster snakeLink = new Monster(xmlMonster, xmlFace.normal);
-                                    if(i == snakeLen-1)
+                                    if (i == snakeLen - 1)
                                         snakeLink.id = "TS" + i + "_X";
                                     else
                                         snakeLink.id = "S" + i + "_X";
@@ -105,8 +111,8 @@ namespace VexedCore
                             }
                             if (xmlDoodad.type == VL.DoodadType.BluePowerStation)
                             {
-                                newRoom.maxBlueOrbs+=3;
-                                newSector.maxBlueOrbs+=3;
+                                newRoom.maxBlueOrbs++;
+                                newSector.maxBlueOrbs++;
                             }
                             if (xmlDoodad.type == VL.DoodadType.RedPowerStation)
                             {
@@ -237,7 +243,10 @@ namespace VexedCore
                             }
 
                             if (xmlDoodad.type == VL.DoodadType.WarpStation)
+                            {
                                 newRoom.hasWarp = true;
+                                newRoom.warpCost = xmlDoodad.activationCost;
+                            }
                             
                             if (newDoodad != null)
                             {

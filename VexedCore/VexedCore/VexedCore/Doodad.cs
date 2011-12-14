@@ -196,7 +196,7 @@ namespace VexedCore
             if (isOrb)
                 active = true;
             if (type == VL.DoodadType.BluePowerStation)
-                orbsRemaining = 3;
+                orbsRemaining = 1;
             if (type == VL.DoodadType.RedPowerStation)
                 orbsRemaining = 1;
 

@@ -112,13 +112,16 @@ namespace VexedCore
             {
                 Ability.Draw(.05f, .85f, AbilityType.CtrlKey, Color.White, .1f);
             }
-            if (state == ZoomState.Sector || state == ZoomState.Inventory)
+            if (warp == false)
             {
-                Engine.spriteBatch.Draw(changeArrow, new Vector2(Game1.titleSafeRect.Left + 25, Game1.titleSafeRect.Center.Y-20), null, new Color(leftColorBase, leftColorBase, leftColorBase), 0, new Vector2(16, 64), leftArrowScale, SpriteEffects.None, 0);
-            }
-            if (state == ZoomState.Sector || state == ZoomState.World)
-            {
-                Engine.spriteBatch.Draw(changeArrow, new Vector2(Game1.titleSafeRect.Right - 35, Game1.titleSafeRect.Center.Y-20), null, new Color(rightColorBase, rightColorBase, rightColorBase), 0, new Vector2(16, 64), rightArrowScale, SpriteEffects.FlipHorizontally, 0);
+                if (state == ZoomState.Sector || state == ZoomState.Inventory)
+                {
+                    Engine.spriteBatch.Draw(changeArrow, new Vector2(Game1.titleSafeRect.Left + 25, Game1.titleSafeRect.Center.Y - 20), null, new Color(leftColorBase, leftColorBase, leftColorBase), 0, new Vector2(16, 64), leftArrowScale, SpriteEffects.None, 0);
+                }
+                if (state == ZoomState.Sector || state == ZoomState.World)
+                {
+                    Engine.spriteBatch.Draw(changeArrow, new Vector2(Game1.titleSafeRect.Right - 35, Game1.titleSafeRect.Center.Y - 20), null, new Color(rightColorBase, rightColorBase, rightColorBase), 0, new Vector2(16, 64), rightArrowScale, SpriteEffects.FlipHorizontally, 0);
+                }
             }
 
             if(Keyboard.GetState().IsKeyDown(Keys.LeftControl) == false && displayMouse == true)
@@ -195,21 +198,23 @@ namespace VexedCore
             if(state == ZoomState.Sector)
             {
                 Room r = Engine.roomList[selectedRoomIndex];
+                Sector s = r.parentSector;
                 if (r.explored)
                 {
                     Engine.spriteBatch.DrawString(Engine.spriteFont, "Room: " + r.id, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
-                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: " + r.currentOrbs + " / " + r.maxOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 140), Color.YellowGreen);
-                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Warp Cubes: " + r.currentBlueOrbs + " / " + r.maxBlueOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 160), Color.YellowGreen);
-                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Health Cubes: " + r.currentRedOrbs + " / " + r.maxRedOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 180), Color.YellowGreen);
                 }
                 else
                 {
                     Engine.spriteBatch.DrawString(Engine.spriteFont, "Room: ???", new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
-                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: ???", new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 140), Color.YellowGreen);
-                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Warp Cubes: ???", new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 160), Color.YellowGreen);
-                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Health Cubes: ???", new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 180), Color.YellowGreen);
                 }
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: " + r.currentOrbs + " / " + r.maxOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 140), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Warp Cubes: " + r.currentBlueOrbs + " / " + r.maxBlueOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 160), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(Engine.spriteFont, "Health Cubes: " + r.currentRedOrbs + " / " + r.maxRedOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 180), Color.YellowGreen);
 
+                if (r.hasWarp == true)
+                {
+                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Warp Access: " +  s.currentBlueOrbs + " / " + r.warpCost, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 210), Color.YellowGreen);
+                }
             }
             if (state == ZoomState.World)
             {
@@ -587,7 +592,7 @@ namespace VexedCore
                 }
                 
             }
-            if (warp == true && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && WorldMap.state == ZoomState.Sector)
+            if (warp == true && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || Keyboard.GetState().IsKeyDown(Keys.M) || Keyboard.GetState().IsKeyDown(Keys.Space) || Keyboard.GetState().IsKeyDown(Keys.Enter) ||  GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && WorldMap.state == ZoomState.Sector)
             {
                 bool validWarpTarget = false;
                 foreach (Doodad d in Engine.roomList[selectedRoomIndex].doodads)
@@ -604,9 +609,9 @@ namespace VexedCore
                 sectorCameraTarget = cameraTarget;
                 sectorCameraPosition = cameraPosition;
                 sectorCameraUp = cameraUp;
-                playerCameraPosition = Engine.playerCameraPos;
-                playerCameraTarget = Engine.playerCameraTarget;
-                playerCameraUp = Engine.playerCameraUp;
+                playerCameraPosition = Engine.player.cameraPos; // playerCameraPos;
+                playerCameraTarget = Engine.player.cameraTarget;  //playerCameraTarget;
+                playerCameraUp = Engine.player.cameraUp;   //playerCameraUp;
                 state = ZoomState.ZoomFromSector;
                 SelectPlayerRoom();
             }
@@ -689,7 +694,7 @@ namespace VexedCore
                 HightlightSector();
                 
             }
-            else if ((Controls.IsRightKeyDown() || Controls.IsLeftKeyDown() || Controls.IsUpKeyDown() || Controls.IsDownKeyDown() || Controls.LeftStick().Length() > .1f) && state == ZoomState.Sector)
+            else if ((Controls.IsRightKeyDown() || Controls.IsLeftKeyDown() || Controls.IsUpKeyDown() || Controls.IsDownKeyDown() || Controls.LeftStick().Length() > .1f) && state == ZoomState.Sector && warp == false)
             {
                 // Key move sequentially through list.
                 if(Controls.IsRightKeyDown() || Controls.IsUpKeyDown() || Controls.LeftStick().X > 0)
@@ -717,25 +722,37 @@ namespace VexedCore
                 resultCooldown = 100;
 
             }
-            else if (Controls.IsRightKeyDown() || Controls.IsUpKeyDown() || Controls.LeftStick().X > .1f)
+            else if ((Controls.IsRightKeyDown() || Controls.IsLeftKeyDown() || Controls.IsUpKeyDown() || Controls.IsDownKeyDown() || Controls.LeftStick().Length() > .1f) && state == ZoomState.Sector && warp == true)
             {
-                if (state == ZoomState.Sector && selectedRoomIndex != -1)
+                // Key move sequentially through list.
+                if (Controls.IsRightKeyDown() || Controls.IsUpKeyDown() || Controls.LeftStick().X > 0)
                 {
-                    Engine.roomList[selectedRoomIndex].roomHighlight = false;
                     selectedRoomIndex++;
-                    selectedRoomIndex %= Engine.roomList.Count();
-
-                    while (Engine.roomList[selectedRoomIndex].parentSector != Engine.sectorList[selectedSectorIndex] || (warp == true && Engine.roomList[selectedRoomIndex].hasWarp == false))
+                    selectedRoomIndex %= Engine.roomList.Count;
+                    while (Engine.roomList[selectedRoomIndex].parentSector != Engine.sectorList[selectedSectorIndex] || Engine.roomList[selectedRoomIndex].hasWarp == false)
                     {
                         selectedRoomIndex++;
-                        selectedRoomIndex %= Engine.roomList.Count();
+                        selectedRoomIndex %= Engine.roomList.Count;
                     }
-
-                    Engine.roomList[selectedRoomIndex].roomHighlight = true;
-                    Engine.reDraw = true;
-                    resultCooldown = 150;
                 }
-                if (state == ZoomState.World && selectedSectorIndex != -1)
+                else
+                {
+                    selectedRoomIndex--;
+                    selectedRoomIndex += Engine.roomList.Count;
+                    selectedRoomIndex %= Engine.roomList.Count;
+                    while (Engine.roomList[selectedRoomIndex].parentSector != Engine.sectorList[selectedSectorIndex] || Engine.roomList[selectedRoomIndex].hasWarp == false)
+                    {
+                        selectedRoomIndex--;
+                        selectedRoomIndex += Engine.roomList.Count;
+                        selectedRoomIndex %= Engine.roomList.Count;
+                    }
+                }
+                resultCooldown = 100;
+
+            }
+            else if ((Controls.IsRightKeyDown() || Controls.IsUpKeyDown() || Controls.LeftStick().X > .1f) && state == ZoomState.World)
+            {
+                if (selectedSectorIndex != -1)
                 {
                     UnHightlightSector();
                     selectedSectorIndex++;

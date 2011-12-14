@@ -166,6 +166,7 @@
   <ItemGroup>
     <Content Include="dialog.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />

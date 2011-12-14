@@ -83,16 +83,22 @@ namespace VexedCore
             else if (state == FaceState.Angry)
             {
                 timer -= time;
-                if (timer < 0)
+                if (dialogState < 3)
                 {
-                    timer = timerMax;
-                    state = FaceState.Rebuilding;
-                    foreach (Monster m in Engine.player.currentRoom.monsters)
+                    if (timer < 0)
                     {
-                        if (m.id.Contains("Guardian"))
+                        timer = timerMax;
+                        state = FaceState.Rebuilding;
+                        foreach (Monster m in Engine.player.currentRoom.monsters)
                         {
-                            m.baseHP = m.startingBaseHP;
-                            m.dead = false;
+                            if (m.id.Contains("Guardian"))
+                            {
+                                m.baseHP = m.startingBaseHP;
+                                m.dead = false;
+                                m.state = MonsterState.Spawn;
+                                m.spawnTime = 0;
+                                m.deathTime = Monster.maxDeathTime;
+                            }
                         }
                     }
                 }

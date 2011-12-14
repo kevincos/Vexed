@@ -181,12 +181,9 @@ quest ends here! The third dimension will be ours!
     <id>SnowMan3</id>
     <speaker>SnowMan</speaker>
     <textList>
-      <string>Curses! You've broken through my armor!
-      </string>
-      <string>I'll just have to deal with you the old fashioned way
-while my armor regenerates!</string>
+      <string>Curses! You've broken through my armor!</string>
     </textList>
-    <pause>true</pause>
+    <pause>false</pause>
   </DialogChunk>
   <DialogChunk>
     <id>SnowMan4</id>
@@ -708,7 +705,16 @@ Armortron COUSINS!!!</string>
     <id>FinalArmorDead</id>
     <speaker>ArmorBoss</speaker>
     <textList>              
-    <string>Nooooo... Cousins... avenge me!</string>    
+    <string>Yearg!!!</string>    
+    </textList>
+    <pause>false</pause>
+</DialogChunk>
+
+<DialogChunk>
+    <id>FinalArmorLastDead</id>
+    <speaker>ArmorBoss</speaker>
+    <textList>              
+    <string>We've all been destroyed!?! Inconceivable!</string>    
     </textList>
     <pause>false</pause>
 </DialogChunk>
@@ -731,10 +737,18 @@ Armortron COUSINS!!!</string>
     </textList>
     <pause>false</pause>
 </DialogChunk>
+<DialogChunk>
+    <id>MedArmorLastDead</id>
+    <speaker>ArmorBoss</speaker>
+    <textList>              
+    <string>Nooooo... Cousins... avenge me!</string>    
+    </textList>
+    <pause>false</pause>
+</DialogChunk>
 
   <DialogChunk>
     <id>CommandBoss1</id>
-    <speaker>RockBoss</speaker>
+    <speaker>CommandBoss</speaker>
     <textList>
       <string>You'll never break through my
 laser-proof armor!</string>
@@ -744,7 +758,7 @@ laser-proof armor!</string>
   </DialogChunk>
     <DialogChunk>
     <id>CommandBoss2</id>
-    <speaker>RockBoss</speaker>
+    <speaker>CommandBoss</speaker>
     <textList>
       <string>Ack!</string>      
     </textList>
@@ -752,7 +766,7 @@ laser-proof armor!</string>
   </DialogChunk>
   <DialogChunk>
     <id>CommandBoss3</id>
-    <speaker>RockBoss</speaker>
+    <speaker>CommandBoss</speaker>
     <textList>
       <string>Curses! My armor!</string>      
     </textList>
@@ -760,7 +774,7 @@ laser-proof armor!</string>
   </DialogChunk>
     <DialogChunk>
     <id>CommandBoss4</id>
-    <speaker>RockBoss</speaker>
+    <speaker>CommandBoss</speaker>
     <textList>
       <string>You'll pay for that!</string>      
     </textList>
@@ -768,7 +782,7 @@ laser-proof armor!</string>
   </DialogChunk>
     <DialogChunk>
     <id>CommandBoss5</id>
-    <speaker>RockBoss</speaker>
+    <speaker>CommandBoss</speaker>
     <textList>
       <string>Nooooo! I've been defeated!</string>      
     </textList>
@@ -781,6 +795,39 @@ laser-proof armor!</string>
       <string>Hahahaha... you'll never escape me!</string>      
     </textList>
     <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>JetBoss1</id>
+    <speaker>JetBoss</speaker>
+    <textList>
+      <string>Hahahaha. Your journey ends here!</string>      
+      <string>Come and get me!</string>      
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>JetBoss2</id>
+    <speaker>JetBoss</speaker>
+    <textList>
+      <string>Grrr! I'll get you!</string>      
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>JetBoss3</id>
+    <speaker>JetBoss</speaker>
+    <textList>
+      <string>All guns, open fire!</string>      
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>JetBoss4</id>
+    <speaker>JetBoss</speaker>
+    <textList>
+      <string>Nooo. I've failed.</string>      
+    </textList>
+    <pause>false</pause>
   </DialogChunk>
 
 

@@ -73,6 +73,7 @@ namespace VexedCore
                 {
                     DialogBox.SetDialog("ArmorBoss4");
                     dialogState = 10;
+                    Engine.player.currentRoom.bossCleared = true;
                 }
             }
             if(srcMonster.id.Contains("AdvancedMain"))
@@ -87,8 +88,25 @@ namespace VexedCore
             {
                 if (dialogState < 10 && srcMonster.dead == true)
                 {
-                    DialogBox.SetDialog("FinalArmorDead");
-                    dialogState=10;
+                    int bossesRemaining = 0;
+                    foreach (Monster m in Engine.player.currentRoom.monsters)
+                    {
+                        if (m.id.Contains("Advanced") && m.dead == false)
+                        {
+                            bossesRemaining++;
+                        }
+                    }
+                    if (bossesRemaining == 0)
+                    {
+                        Engine.player.currentRoom.bossCleared = true;
+                        DialogBox.SetDialog("FinalArmorLastDead");
+                        dialogState = 10;
+                    }
+                    else
+                    {
+                        DialogBox.SetDialog("FinalArmorDead");
+                        dialogState = 10;
+                    }
                 }
             }
             if (srcMonster.id.Contains("MediumMain"))
@@ -103,8 +121,25 @@ namespace VexedCore
             {
                 if (dialogState < 10 && srcMonster.dead == true)
                 {
-                    DialogBox.SetDialog("MedArmorDead");
-                    dialogState = 10;
+                    int bossesRemaining = 0;
+                    foreach (Monster m in Engine.player.currentRoom.monsters)
+                    {
+                        if (m.id.Contains("Medium") && m.dead == false)
+                        {
+                            bossesRemaining++;
+                        }
+                    }
+                    if (bossesRemaining == 0)
+                    {
+                        Engine.player.currentRoom.bossCleared = true;
+                        DialogBox.SetDialog("MedArmorLastDead");
+                        dialogState = 10;
+                    }
+                    else
+                    {
+                        DialogBox.SetDialog("MedArmorDead");
+                        dialogState = 10;
+                    }
                 }
             }
 

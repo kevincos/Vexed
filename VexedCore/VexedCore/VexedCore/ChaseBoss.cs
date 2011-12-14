@@ -56,6 +56,11 @@ namespace VexedCore
                     }
                 }
             }
+            if (dialogState == 0 && srcMonster.id.Contains("Fire") && srcMonster.state == MonsterState.Normal)
+            {
+                DialogBox.SetDialog("FireChase1");
+                dialogState++;
+            }
             if (dialogState == 2 && (Engine.player.primaryAbility.type == AbilityType.Blaster || Engine.player.secondaryAbility.type == AbilityType.Blaster))
             {
                 DialogBox.SetDialog("ChaseBoss3");
@@ -69,6 +74,12 @@ namespace VexedCore
             if (dialogState < 10 && !srcMonster.id.Contains("Fire") && srcMonster.dead == true)
             {
                 DialogBox.SetDialog("ChaseBoss5");
+                Engine.player.currentRoom.bossCleared = true;
+                dialogState = 10;
+            }
+            if (dialogState < 10 && srcMonster.id.Contains("Fire") && srcMonster.dead == true)
+            {
+                Engine.player.currentRoom.bossCleared = true;
                 dialogState = 10;
             }
             float distance = (srcMonster.position.position - nextWaypointTarget).Length();

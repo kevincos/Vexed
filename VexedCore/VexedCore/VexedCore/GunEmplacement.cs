@@ -36,7 +36,7 @@ namespace VexedCore
         public float baseRadius = .5f;
         public float depthOffset = 0f;
         public BaseType baseType = BaseType.None;
-
+        public int repeaterCount = 0;
 
         public GunEmplacement()
         {
@@ -112,7 +112,11 @@ namespace VexedCore
                 if (gunType == VL.GunType.Beam)
                     return 2000;
                 if (gunType == VL.GunType.Repeater)
+                {
+                    if (repeaterCount == 0)
+                        return 3000;
                     return 200;
+                }
                 return 0;
             }
         }
@@ -137,6 +141,7 @@ namespace VexedCore
             position = new Vertex(srcMonster.position);
             position.velocity = positionOffset.X * srcMonster.rightUnit - positionOffset.Y * srcMonster.upUnit;
             position.Update(Engine.player.currentRoom, 1);
+            position.velocity = srcMonster.position.velocity;
 
             if ((Engine.player.center.position - position.position).Length() < weaponRange)
                 fireCooldown -= gameTime.ElapsedGameTime.Milliseconds;
@@ -221,6 +226,11 @@ namespace VexedCore
                 if (gunType == VL.GunType.Blaster || gunType == VL.GunType.Repeater)
                 {
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Plasma, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity));
+                    if (gunType == VL.GunType.Repeater)
+                    {
+                        repeaterCount++;
+                        repeaterCount %= 4;
+                    }
                 }
                 if (gunType == VL.GunType.Beam)
                 {

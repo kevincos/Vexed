@@ -79,10 +79,12 @@ namespace VexedCore
         public Vector3 center;
         public Vector3 size;
         public bool hasWarp = false;
+        public int warpCost = 0;
         public Color color;
         public int maxOrbs = 0;
         public int currentOrbs = 0;
         public bool explored = false;
+        public bool bossCleared = false;
 
         public int currentBlueOrbs = 0;
         public int maxBlueOrbs = 0;
@@ -117,6 +119,7 @@ namespace VexedCore
             maxBlueOrbs = r.maxBlueOrbs;
             sectorID = r.sectorID;
             explored = r.explored;
+            bossCleared = r.bossCleared;
 
             blocks = new List<Block>();
             foreach (Block b in r.blocks)
@@ -168,6 +171,7 @@ namespace VexedCore
 
         public void Load(Rm r)
         {
+            bossCleared = r.bc;
             explored = r.e;
             currentOrbs = r.co;
             currentBlueOrbs = r.cbo;
@@ -251,6 +255,13 @@ namespace VexedCore
             SnakeBoss.Init();
             foreach (Monster m in monsters)
             {
+                if(bossCleared == true && (m.moveType == VL.MovementType.ArmorBoss || m.moveType == VL.MovementType.BattleBoss || m.moveType == VL.MovementType.ChaseBoss || m.moveType == VL.MovementType.FaceBoss ||
+                    m.moveType == VL.MovementType.JetBoss || m.moveType == VL.MovementType.RockBoss || m.moveType == VL.MovementType.SnakeBoss))
+                {
+                    m.dead = true;
+                    m.baseHP = 0;
+                    continue;
+                }
                 m.ResetBossState();
                 m.position = new Vertex(m.spawnPosition);
                 m.armorType = m.startingArmorType;

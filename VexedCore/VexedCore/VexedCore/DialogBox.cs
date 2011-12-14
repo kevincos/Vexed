@@ -84,6 +84,14 @@ namespace VexedCore
                     portraitIndex = 4;
                 else if (currentDialog.speaker == "SnowMan")
                     portraitIndex = 5;
+                else if (currentDialog.speaker == "JetBoss")
+                    portraitIndex = 6;
+                else if (currentDialog.speaker == "FireMan")
+                    portraitIndex = 7;
+                else if (currentDialog.speaker == "CommandBoss")
+                    portraitIndex = 8;
+                else if (currentDialog.speaker == "FinalBoss")
+                    portraitIndex = 9;
                 else
                     portraitIndex = 0;
                 Engine.spriteBatch.Draw(portraits, new Rectangle(0,0,64,64), new Rectangle((portraitIndex % 8) * 64, (portraitIndex / 8) * 64, 64, 64), Color.White);
