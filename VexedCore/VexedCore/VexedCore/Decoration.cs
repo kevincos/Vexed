@@ -24,8 +24,14 @@ namespace VexedCore
         public float _depth = 0f;
         public Color color = Color.White;
         public bool wrap = false;
+        public int frame = 0;
+        public int maxFrame = 1;
+        public int animationTime = 0;
+        public int maxAnimationTime = 20;
+        public bool freeSpin = false;
+        public int spinTargetFrame = 0;
 
-        public Texture2D decorationTexture;
+        public List<Texture2D> decorationTexture;
         public static Texture2D defaultTexture;
         public string fileName = "Default";
 
@@ -53,6 +59,8 @@ namespace VexedCore
             color = d.color;
             wrap = d.wrap;
             fileName = d.fileName;
+            freeSpin = d.freeSpin;
+            frame = d.frame;
             
         }
 
@@ -69,6 +77,8 @@ namespace VexedCore
             _depth = (1f*xmlDecoration.depth)/100f - .5f;
             color = xmlDecoration.color;
             wrap = xmlDecoration.wrap;
+            freeSpin = xmlDecoration.freespin;
+            frame = xmlDecoration.startFrame;
         }
 
         public void SetTexture()
@@ -76,6 +86,8 @@ namespace VexedCore
             if (decorationTexture == null)
             {
                 decorationTexture = DecorationImage.FetchTexture(fileName);
+                if(decorationTexture != null)
+                    maxFrame = decorationTexture.Count;
             }
         }
 
@@ -83,8 +95,8 @@ namespace VexedCore
         {
             if (decorationTexture != null)
             {
-                halfWidth = 1f * decorationTexture.Width / 256;
-                halfHeight = 1f * decorationTexture.Height / 256;
+                halfWidth = 1f * decorationTexture[frame].Width / 256;
+                halfHeight = 1f * decorationTexture[frame].Height / 256;
                 position.position += position.direction * (halfHeight - .5f);
             }
         }
@@ -203,6 +215,59 @@ namespace VexedCore
             }
         }
 
+        public void Update(GameTime gameTime)
+        {
+            if(freeSpin == false)
+            {
+                animationTime += gameTime.ElapsedGameTime.Milliseconds;
+                if (animationTime > maxAnimationTime)
+                {
+                    animationTime = 0;
+                    frame++;
+                    frame %= maxFrame;
+                }
+            }
+            else
+            {
+                Vector3 effectiveUp = Monster.AdjustVector(Engine.player.center.direction, position.normal, Engine.player.center.normal, Engine.player.center.direction, false);
+                if (Vector3.Dot(effectiveUp, upUnit) > .95f)
+                {
+                    spinTargetFrame = 0;
+                }
+                else if (Vector3.Dot(effectiveUp, upUnit) < -.95f)
+                {
+                    spinTargetFrame = 4;
+                }
+                else if (Vector3.Dot(effectiveUp, rightUnit) > .95f)
+                {
+                    spinTargetFrame = 2;
+                }
+                else if (Vector3.Dot(effectiveUp, rightUnit) < -.95f)
+                {
+                    spinTargetFrame = 6;
+                }
+                animationTime += gameTime.ElapsedGameTime.Milliseconds;
+                if (animationTime > maxAnimationTime)
+                {
+                    animationTime = 0;
+                    if (spinTargetFrame == frame)
+                    {
+                    }
+                    else if ( (spinTargetFrame - frame + maxFrame) % maxFrame > maxFrame/2)
+                    {
+                        frame--;
+                        frame += maxFrame;                        
+                        frame %= maxFrame;
+                    }
+                    else
+                    {
+                        frame++;
+                        frame %= maxFrame;
+                    }
+                }
+            }            
+        }
+
         public void Draw(Room currentRoom)
         {
             if (shouldRender == true)
@@ -210,7 +275,7 @@ namespace VexedCore
                 UpdateVertexData(currentRoom);
 
                 if (decorationTexture != null)
-                    Engine.playerTextureEffect.Texture = decorationTexture;
+                    Engine.playerTextureEffect.Texture = decorationTexture[frame];
                 else
                     Engine.playerTextureEffect.Texture = defaultTexture;
                 Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();

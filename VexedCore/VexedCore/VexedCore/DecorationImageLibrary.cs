@@ -17,12 +17,25 @@ namespace VexedCore
     public class DecorationTexture
     {
         public string fileName;
-        public Texture2D texture;
+        public List<Texture2D> texture;
+        public int frameCount = 1;
 
         public DecorationTexture(string fileName, ContentManager Content)
         {
             this.fileName = fileName;
-            this.texture = Content.Load<Texture2D>(fileName);
+            this.texture = new List<Texture2D>();
+            texture.Add(Content.Load<Texture2D>(fileName));
+        }
+
+        public DecorationTexture(string fileName, ContentManager Content, int frameCount)
+        {
+            this.frameCount = frameCount;
+            this.fileName = fileName;
+            this.texture = new List<Texture2D>();
+            for (int i = 0; i < frameCount; i++)
+            {
+                texture.Add(Content.Load<Texture2D>(fileName+"_"+i));
+            }
         }
     }
 
@@ -45,9 +58,13 @@ namespace VexedCore
             textureLibrary.Add(new DecorationTexture("dec_shuttle", Content));
             textureLibrary.Add(new DecorationTexture("dec_shuttle_open", Content));
             textureLibrary.Add(new DecorationTexture("dec_thornwall", Content));
+
+            textureLibrary.Add(new DecorationTexture("dec_piston", Content,11));
+            textureLibrary.Add(new DecorationTexture("dec_colorwheel", Content, 8));
+            
         }
 
-        public static Texture2D FetchTexture(string fileName)
+        public static List<Texture2D> FetchTexture(string fileName)
         {
             foreach (DecorationTexture tex in textureLibrary)
             {

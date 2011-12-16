@@ -825,6 +825,7 @@ namespace VexedCore
                     r.Update(gameTime);
 
                 player.currentRoom.UpdateMonsters(gameTime);
+                player.currentRoom.UpdateDecorations(gameTime);
 
                 Physics.CollisionCheck(player.currentRoom, player, gameTime);
             }

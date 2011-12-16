@@ -115,7 +115,10 @@ namespace VexedCore
             {
                 if (d.id.Contains("SaveInfo"))
                 {
-                    d.decorationTexture = textRenderTarget;
+                    if (d.decorationTexture == null)
+                    {
+                        d.decorationTexture.Add(textRenderTarget);
+                    }
                     d.halfWidth = 7;
                     d.halfHeight = 3.5f;
                 }

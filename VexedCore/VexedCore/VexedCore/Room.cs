@@ -1503,6 +1503,14 @@ namespace VexedCore
             }
         }
 
+        public void UpdateDecorations(GameTime gameTime)
+        {
+            foreach (Decoration d in decorations)
+            {
+                d.Update(gameTime);
+            }
+        }
+
         public void DrawMonsters()
         {
             foreach (Monster m in monsters)

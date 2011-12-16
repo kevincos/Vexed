@@ -534,7 +534,9 @@ namespace WinFormsGraphicsDevice
                 this.elementIDField.Text = selectedDecoration.IDString;
                 this.decorationTexture.Text = selectedDecoration.texture;
                 this.decorationDepth.Text = selectedDecoration.depth.ToString();
+                this.decorationStartFrame.Text = selectedDecoration.startFrame.ToString();
                 this.decorationWrap.Checked = selectedDecoration.wrap;
+                this.decorationSpin.Checked = selectedDecoration.freespin;
                 this.decorationR.Text = selectedDecoration.color.R.ToString();
                 this.decorationG.Text = selectedDecoration.color.G.ToString();
                 this.decorationB.Text = selectedDecoration.color.B.ToString();
@@ -783,9 +785,17 @@ namespace WinFormsGraphicsDevice
                 {
                     selectedDecoration.texture = this.decorationTexture.Text;
                 }
+                if (sender == this.decorationStartFrame)
+                {
+                    selectedDecoration.startFrame = System.Convert.ToInt32(this.decorationStartFrame.Text);
+                }
                 if (sender == this.decorationWrap)
                 {
                     selectedDecoration.wrap = this.decorationWrap.Checked;
+                }
+                if (sender == this.decorationSpin)
+                {
+                    selectedDecoration.freespin = this.decorationSpin.Checked;
                 }
                 if (sender == this.decorationDepth)
                 {

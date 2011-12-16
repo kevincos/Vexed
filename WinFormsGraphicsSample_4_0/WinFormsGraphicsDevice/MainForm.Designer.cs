@@ -172,6 +172,8 @@ namespace WinFormsGraphicsDevice
             this.decorationTexture = new System.Windows.Forms.TextBox();
             this.decorationDepth = new System.Windows.Forms.TextBox();
             this.decorationWrap = new System.Windows.Forms.CheckBox();
+            this.decorationStartFrame = new System.Windows.Forms.TextBox();
+            this.decorationSpin = new System.Windows.Forms.CheckBox();
             this.decorationR = new System.Windows.Forms.TextBox();
             this.decorationG = new System.Windows.Forms.TextBox();
             this.decorationB = new System.Windows.Forms.TextBox();
@@ -543,6 +545,8 @@ namespace WinFormsGraphicsDevice
             this.decorationPropertiesGroup.Controls.Add(this.decorationTexture);
             this.decorationPropertiesGroup.Controls.Add(this.decorationDepth);
             this.decorationPropertiesGroup.Controls.Add(this.decorationWrap);
+            this.decorationPropertiesGroup.Controls.Add(this.decorationSpin);
+            this.decorationPropertiesGroup.Controls.Add(this.decorationStartFrame);
             this.decorationPropertiesGroup.Controls.Add(this.decorationR);
             this.decorationPropertiesGroup.Controls.Add(this.decorationG);
             this.decorationPropertiesGroup.Controls.Add(this.decorationB);
@@ -552,8 +556,12 @@ namespace WinFormsGraphicsDevice
             this.decorationTexture.TextChanged += new System.EventHandler(this.decoration_change);
 
             this.decorationDepth.Location = new System.Drawing.Point(10, 85);
-            this.decorationDepth.Size = new System.Drawing.Size(200, 20);
+            this.decorationDepth.Size = new System.Drawing.Size(80, 20);
             this.decorationDepth.TextChanged += new System.EventHandler(this.decoration_change);
+
+            this.decorationStartFrame.Location = new System.Drawing.Point(110, 85);
+            this.decorationStartFrame.Size = new System.Drawing.Size(60, 20);
+            this.decorationStartFrame.TextChanged += new System.EventHandler(this.decoration_change);
 
             this.decorationR.Location = new System.Drawing.Point(10, 60);
             this.decorationR.Size = new System.Drawing.Size(30, 20);
@@ -568,9 +576,14 @@ namespace WinFormsGraphicsDevice
             this.decorationB.TextChanged += new System.EventHandler(this.decoration_change);
 
             this.decorationWrap.Location = new System.Drawing.Point(10, 35);
-            this.decorationWrap.Size = new System.Drawing.Size(50, 20);
+            this.decorationWrap.Size = new System.Drawing.Size(60, 20);
             this.decorationWrap.CheckedChanged += new System.EventHandler(this.decoration_change);
-            this.decorationWrap.Text = "Wrap Texture";
+            this.decorationWrap.Text = "Wrap";
+
+            this.decorationSpin.Location = new System.Drawing.Point(80, 35);
+            this.decorationSpin.Size = new System.Drawing.Size(60, 20);
+            this.decorationSpin.CheckedChanged += new System.EventHandler(this.decoration_change);
+            this.decorationSpin.Text = "Spin";
 
 
             this.doodadPropertiesGroup.Location = new System.Drawing.Point(10, 605);
@@ -1232,11 +1245,13 @@ namespace WinFormsGraphicsDevice
 
         private System.Windows.Forms.GroupBox decorationPropertiesGroup;
         private System.Windows.Forms.TextBox decorationTexture;
-        private System.Windows.Forms.TextBox decorationDepth;        
+        private System.Windows.Forms.TextBox decorationDepth;
         private System.Windows.Forms.TextBox decorationR;
         private System.Windows.Forms.TextBox decorationG;
         private System.Windows.Forms.TextBox decorationB;
         private System.Windows.Forms.CheckBox decorationWrap;
+        private System.Windows.Forms.CheckBox decorationSpin;
+        private System.Windows.Forms.TextBox decorationStartFrame;        
 
         private System.Windows.Forms.GroupBox behaviorPropertiesGroup;
         private System.Windows.Forms.CheckBox behaviorToggle;

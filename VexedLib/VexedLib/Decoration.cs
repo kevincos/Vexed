@@ -19,6 +19,8 @@ namespace VL
         public int depth = 20;
         public Color color = Color.White;
         public bool wrap = false;
+        public int startFrame = 0;
+        public bool freespin = false;
 
         public Decoration()
         {
@@ -39,6 +41,8 @@ namespace VL
             up = d.up;
             color = d.color;
             wrap = d.wrap;
+            freespin = d.freespin;
+            startFrame = 0;
         }
 
         public void Update()

@@ -121,7 +121,7 @@ namespace VexedCore
                 if (_maxAmmo == -1)
                 {
                     if (type == AbilityType.Shield)
-                        _maxAmmo = 9;
+                        _maxAmmo = 3;
                     else if (type == AbilityType.JetPack)
                         _maxAmmo = 2000;
                     else
