@@ -969,6 +969,11 @@ namespace VexedCore
         public List<VertexPositionColorNormalTexture> spriteList;
         public List<VertexPositionColorNormalTexture> beamList;
 
+        public VertexPositionColorNormalTexture[] baseTriangleArray;
+        public VertexPositionColorNormalTexture[] decalArray;
+        public VertexPositionColorNormalTexture[] spriteArray;
+        public VertexPositionColorNormalTexture[] beamArray;
+
         public void UpdateVertexData(Room currentRoom)
         {
             if (baseTriangleList == null || dynamic == true || refreshVertexData == true)
@@ -998,11 +1003,11 @@ namespace VexedCore
                         BButtonList.Add(new Vertex(position, size * down + size * left + up + 2.3f * right));
                         BButtonList.Add(new Vertex(position, size * down + size * right + up + 2.3f * right));
                         if(Engine.controlType == ControlType.GamePad)
-                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.White, .5f, Ability.texCoordList[24], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.White, .55f, Ability.texCoordList[24], decalList, true);
                         if (Engine.controlType == ControlType.KeyboardOnly )
-                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .5f, Ability.texCoordList[50], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .55f, Ability.texCoordList[50], decalList, true);
                         if (Engine.controlType == ControlType.MouseAndKeyboard)
-                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .5f, Ability.texCoordList[48], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .55f, Ability.texCoordList[48], decalList, true);
 
                     }
                     if (type == VL.DoodadType.ItemStation)
@@ -1021,13 +1026,13 @@ namespace VexedCore
                         YButtonList.Add(new Vertex(position, size * down + size * right + 3 * up));
                         if (Engine.controlType == ControlType.GamePad)
                         {
-                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.White, .5f, Ability.texCoordList[25], decalList, true);
-                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.White, .5f, Ability.texCoordList[27], decalList, true);                        
+                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.White, .55f, Ability.texCoordList[25], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.White, .55f, Ability.texCoordList[27], decalList, true);                        
                         }
                         if (Engine.controlType == ControlType.KeyboardOnly)
                         {
-                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .5f, Ability.texCoordList[49], decalList, true);
-                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .5f, Ability.texCoordList[51], decalList, true);                        
+                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, Ability.texCoordList[49], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, Ability.texCoordList[51], decalList, true);                        
                         }
                         if (Engine.controlType == ControlType.MouseAndKeyboard)
                         {
@@ -1042,8 +1047,8 @@ namespace VexedCore
                             YButtonList.Add(new Vertex(position, size * down + size * left + 2.5f * up + 1f * right));
                             YButtonList.Add(new Vertex(position, size * down + size * right + 2.5f * up + 1f * right));
                         
-                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .5f, Ability.texCoordList[46], decalList, true);
-                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .5f, Ability.texCoordList[47], decalList, true);                        
+                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, Ability.texCoordList[46], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, Ability.texCoordList[47], decalList, true);                        
                         }
 
                     }
@@ -1058,38 +1063,64 @@ namespace VexedCore
                 else if (isPowerStation)
                 {
                     if (orbsRemaining > 0)
+                    {
                         currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                    }
                     else
+                    {
                         currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                    }
                 }
                 else if (type == VL.DoodadType.SwitchStation)
                 {
                     if (targetDoodad != null)
                     {
                         if (targetDoodad.currentBehavior.id == targetBehavior)
+                        {
                             currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                        }
                         else
+                        {
                             currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                        }
                     }
                     if (targetBlock != null)
                     {
                         if (targetBlock.currentBehavior.id == targetBehavior)
+                        {
                             currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                        }
                         else
+                        {
                             currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                        }
                     }
                     if (targetEdge != null)
                     {
                         if (targetEdge.currentBehavior.id == targetBehavior)
+                        {
                             currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                        }
                         else
+                        {
                             currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                        }
                     }
                 }
                 else if (type == VL.DoodadType.TunnelSide || type == VL.DoodadType.TunnelTop)
                 {
                     float roomSize = .5f*Math.Abs(Vector3.Dot(currentRoom.size, position.normal));
                     currentRoom.AddBlockToTriangleList(vList, activeColor, depth, roomSize, Room.plateTexCoords, baseTriangleList,false);
+                    currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, roomSize, Room.plateTexCoords, baseTriangleList, false);
+
                 }
                 else if ((type == VL.DoodadType.RingSide || type == VL.DoodadType.RingTop) && targetDoodad.targetRoom != null)
                 {                    
@@ -1101,18 +1132,28 @@ namespace VexedCore
                     for (; ringMod < Math.Min(20f, distanceToNextRoom / 2); ringMod += 4)
                     {
                         currentRoom.AddBlockToTriangleList(vList, currentRoom.currentColor, ringMod,  -ringMod +.2f, Room.plateTexCoords, baseTriangleList,false);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, currentRoom.currentColor, ringMod, -ringMod + .2f, Room.plateTexCoords, baseTriangleList);                        
                     }
-                    if(ringMod >= 10f && distanceToNextRoom/2 -20 > .2f)
-                        currentRoom.AddBlockToTriangleList(vList, currentRoom.currentColor, 20f, -(distanceToNextRoom / 2), Room.plateTexCoords, baseTriangleList, false);                    
+                    if (ringMod >= 10f && distanceToNextRoom / 2 - 20 > .2f)
+                    {
+                        currentRoom.AddBlockToTriangleList(vList, currentRoom.currentColor, 20f, -(distanceToNextRoom / 2), Room.plateTexCoords, baseTriangleList, false);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, currentRoom.currentColor, 20f, -(distanceToNextRoom / 2), Room.plateTexCoords, baseTriangleList, false);
+                    }
                     
                     
                 }
                 else if (type != VL.DoodadType.NPC_OldMan && type != VL.DoodadType.Beam && type != VL.DoodadType.PowerPlug)
                 {
                     if (active)
+                    {
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                    }
                     else
+                    {
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                    }
                 }
 
                 if (type == VL.DoodadType.ItemBlock || isStation)
@@ -1128,11 +1169,13 @@ namespace VexedCore
                     if (active == true)
                     {
                         currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[34], decalList, true);
                     }
                     else
                     {
                         currentRoom.AddBlockToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[34], decalList, true);
                     }
                 }
@@ -1145,22 +1188,26 @@ namespace VexedCore
                     if (active == true)
                     {
                         currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[35], decalList, true);
                     }
                     else
                     {                        
                         currentRoom.AddBlockToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[35], decalList, true);
                     }
                 }
                 if (type == VL.DoodadType.HookTarget)
                 {
                     currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                    currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                     currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth, Ability.texCoordList[7], decalList, true);                
                 }
                 if (type == VL.DoodadType.PlugSlot)
                 {
                     currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                    currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                     currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Ability.texCoordList[42], decalList, true);
                 }
                 if (type == VL.DoodadType.LaserSwitch)
@@ -1224,6 +1271,11 @@ namespace VexedCore
                     else
                         currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Ability.texCoordList[41], decalList, true);
                 }
+
+                baseTriangleArray = baseTriangleList.ToArray();
+                decalArray = decalList.ToArray();
+                spriteArray = spriteList.ToArray();
+                beamArray = beamList.ToArray();
                 
             }
         }
@@ -1233,7 +1285,41 @@ namespace VexedCore
             if (shouldRender == true)
             {
                 UpdateVertexData(currentRoom);
-                for (int i = 0; i < baseTriangleList.Count; i++)
+
+                if (baseTriangleList.Count > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.wallTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        baseTriangleArray, 0, baseTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                
+                if (decalList.Count > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Ability.ability_textures;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        decalArray, 0, decalList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+
+                if (spriteList.Count > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Ability.ability_textures;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        spriteArray, 0, spriteList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                
+                if (beamList.Count > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Doodad.beam_textures;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        beamArray, 0, beamList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+
+
+                /*for (int i = 0; i < baseTriangleList.Count; i++)
                 {
                     Engine.doodadVertexArray[Engine.doodadVertexArrayCount + i] = baseTriangleList[i];
                 }
@@ -1252,7 +1338,7 @@ namespace VexedCore
                 {
                     Engine.beamVertexArray[Engine.beamVertexArrayCount + i] = beamList[i];
                 }
-                Engine.beamVertexArrayCount += beamList.Count;
+                Engine.beamVertexArrayCount += beamList.Count;*/
             }
         }
 

@@ -110,13 +110,13 @@ namespace VexedCore
             int r = c.R;
             int g = c.G;
             int b = c.B;
-            if (n == Vector3.UnitX || n == -Vector3.UnitX)
+            if (Vector3.Dot(n, Vector3.UnitX) > .95f || Vector3.Dot(n, Vector3.UnitX) < -.95f)
             {
                 r += 2*alt/3;
                 g += 2 * alt / 3;
                 b += 2 * alt / 3;
             }
-            if (n == Vector3.UnitZ || n == -Vector3.UnitZ)
+            if (Vector3.Dot(n,Vector3.UnitZ) > .95f || Vector3.Dot(n, -Vector3.UnitZ) < -.95f)
             {
                 r -= alt;
                 b -= alt;

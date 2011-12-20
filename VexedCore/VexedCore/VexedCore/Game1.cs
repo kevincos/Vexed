@@ -160,6 +160,11 @@ namespace VexedCore
             Monster.monsterTextureDetail = Content.Load<Texture2D>("m_body_detail");
             WorldMap.changeArrow = Content.Load<Texture2D>("screenchangearrow");
             Projectile.projectileTexture = Content.Load<Texture2D>("projectiles");
+            Block.wallTexture = Content.Load<Texture2D>("wall_texture");
+            Block.circuitTexture = Content.Load<Texture2D>("circuit_wall");
+            Block.vineTexture = Content.Load<Texture2D>("vine_wall");
+            Block.cobblestoneTexture = Content.Load<Texture2D>("cobblestone_wall");
+            Block.fancyPlateTexture = Content.Load<Texture2D>("fancyPlate_wall");
             Skybox.LoadTextures(Content);
             DecorationImage.LoadTextures(Content);
             Engine.spriteFont = Content.Load<SpriteFont>("Font");

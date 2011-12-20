@@ -283,6 +283,13 @@ namespace VexedCore
                                 newBlock.behaviors.Add(newBehavior);
                             }
                             newBlock.UpdateBehavior();
+                            newBlock.length = (xmlBlock.edges[0].end - xmlBlock.edges[0].start).Length();
+                            newBlock.height = (xmlBlock.edges[1].end - xmlBlock.edges[1].start).Length();
+                            newBlock.area = newBlock.length * newBlock.height;
+                            newBlock.depth = xmlBlock.depth;
+                            newBlock.scales = xmlBlock.scales;
+                            newBlock.wallType = xmlBlock.type;
+                            
                             newRoom.blocks.Add(newBlock);
                         }
                     }

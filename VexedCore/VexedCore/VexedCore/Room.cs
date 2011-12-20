@@ -64,7 +64,12 @@ namespace VexedCore
 
         public static List<Vector2> plateTexCoords;
         public static List<Vector2> blankTexCoords;
-        public static float plateTexWidth = .25f;
+        public static List<Vector2> fullTexCoords;
+        public static List<Vector2> midTexCoords = new List<Vector2>();
+        public static List<Vector2> startTexCoords = new List<Vector2>();
+        public static List<Vector2> endTexCoords = new List<Vector2>();
+
+        public static float plateTexWidth = 1f;
 
         public static int texGridCount = 8;
 
@@ -247,6 +252,24 @@ namespace VexedCore
             beltTopEndTexCoords = LoadTexCoords(4, 4, .003f, .003f);
             beltSideSmallTexCoords = LoadTexCoords(5, 6, .0f, .003f);
             beltSideSmallEndTexCoords = LoadTexCoords(4, 6, .003f, .003f);
+
+            midTexCoords = new List<Vector2>();
+            midTexCoords.Add(new Vector2(.7f, 0));
+            midTexCoords.Add(new Vector2(.3f, 0));
+            midTexCoords.Add(new Vector2(.3f, 1));
+            midTexCoords.Add(new Vector2(.7f, 1));
+
+            endTexCoords = new List<Vector2>();
+            endTexCoords.Add(new Vector2(1, 0));
+            endTexCoords.Add(new Vector2(.15f, 0));
+            endTexCoords.Add(new Vector2(.15f, 1));
+            endTexCoords.Add(new Vector2(1, 1));
+
+            startTexCoords = new List<Vector2>();
+            startTexCoords.Add(new Vector2(.85f, 0));
+            startTexCoords.Add(new Vector2(0, 0));
+            startTexCoords.Add(new Vector2(0, 1));
+            startTexCoords.Add(new Vector2(.85f, 1));
         }
 
         public void Reset()
@@ -1066,60 +1089,147 @@ namespace VexedCore
             }
         }
 
+        public void AddSingleBlockSideToTriangleList(Vertex v1, Vertex v2, Color c, float depth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
+        {
+            Color shadedColor = Color.Blue;
+            if (v1.normal != v2.normal)
+            {
+                // corner edge case
+                Vector3 fullEdge = v2.position - v1.position;
+                Vector3 currentComponent = Vector3.Dot(v2.normal, fullEdge) * v2.normal;
+                Vector3 nextComponent = Vector3.Dot(v1.normal, fullEdge) * v1.normal;
+                Vector3 constantComponent = Vector3.Dot(Vector3.Cross(v2.normal, v1.normal), fullEdge) * Vector3.Cross(v2.normal, v1.normal);
+                float currentPercent = currentComponent.Length() / (currentComponent.Length() + nextComponent.Length());
+
+                Vector3 midPoint = v1.position + currentComponent + currentPercent * constantComponent;
+
+                Vector3 edgeNormal = Vector3.Cross(midPoint - v1.position, v1.normal);
+                edgeNormal.Normalize();
+                shadedColor = FakeShader.Shade(c, edgeNormal);
+
+                triangleList.Add(GenerateTexturedVertex(v1.position, texCoords[1], shadedColor, edgeNormal, depth));
+                triangleList.Add(GenerateTexturedVertex(v1.position, texCoords[2], shadedColor, edgeNormal, -depth));
+                triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[0], shadedColor, edgeNormal, depth));
+
+                triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[0], shadedColor, edgeNormal, depth));
+                triangleList.Add(GenerateTexturedVertex(v1.position, texCoords[2], shadedColor, edgeNormal, -depth));
+                triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[3], shadedColor, edgeNormal, -depth));
+
+                triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[1], shadedColor, edgeNormal, depth));
+                triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[2], shadedColor, edgeNormal, -depth));
+                triangleList.Add(GenerateTexturedVertex(v2.position, texCoords[0], shadedColor, edgeNormal, depth));
+
+                triangleList.Add(GenerateTexturedVertex(v2.position, texCoords[0], shadedColor, edgeNormal, depth));
+                triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[2], shadedColor, edgeNormal, -depth));
+                triangleList.Add(GenerateTexturedVertex(v2.position, texCoords[3], shadedColor, edgeNormal, -depth));
+            }
+            else
+            {
+
+                Vector3 edgeNormal = Vector3.Cross(v2.position - v1.position, v1.normal);
+                edgeNormal.Normalize();
+                shadedColor = FakeShader.Shade(c, edgeNormal);
+                // straight edge case
+                triangleList.Add(GenerateTexturedVertex(v1.position, texCoords[1], shadedColor, edgeNormal, depth));
+                triangleList.Add(GenerateTexturedVertex(v1.position, texCoords[2], shadedColor, edgeNormal, -depth));
+                triangleList.Add(GenerateTexturedVertex(v2.position, texCoords[0], shadedColor, edgeNormal, depth));
+
+                triangleList.Add(GenerateTexturedVertex(v2.position, texCoords[0], shadedColor, edgeNormal, depth));
+                triangleList.Add(GenerateTexturedVertex(v1.position, texCoords[2], shadedColor, edgeNormal, -depth));
+                triangleList.Add(GenerateTexturedVertex(v2.position, texCoords[3], shadedColor, edgeNormal, -depth));
+            }
+        }
 
         public void AddBlockSidesToTriangleList(List<Vertex> vList, Color c, float depth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
+        {            
+            for (int i = 0; i < 4; i++)
+            {
+                Vertex vs = vList[i];
+                Vertex ve = vList[(i + 1) % 4];
+                float fullLength = (vs.position - ve.position).Length();
+                if (fullLength < 3)
+                {
+                    AddSingleBlockSideToTriangleList(vs, ve, c, depth, texCoords, triangleList);
+                }
+                else if (vs.normal == ve.normal)
+                {
+                    Vertex v3 = new Vertex((1.5f * vs.position + (fullLength-1.5f)*ve.position) / fullLength, vs.normal, Vector3.Zero, vs.direction);
+                    Vertex v2 = new Vertex(((fullLength - 1.5f) * vs.position + 1.5f * ve.position) / fullLength, vs.normal, Vector3.Zero, vs.direction);
+
+
+
+
+                    AddSingleBlockSideToTriangleList(vs, v2, c, depth, startTexCoords, triangleList);
+                    AddSingleBlockSideToTriangleList(v2, v3, c, depth, midTexCoords, triangleList);
+                    AddSingleBlockSideToTriangleList(v3, ve, c, depth, endTexCoords, triangleList);
+                }
+            }
+        }
+
+        public void BasicAddBlockSidesToTriangleList(List<Vertex> vList, Color c, float frontDepth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
+        {
+            BasicAddBlockSidesToTriangleList(vList, c, frontDepth, frontDepth, texCoords, triangleList);
+        }
+
+        public void BasicAddBlockSidesToTriangleList(List<Vertex> vList, Color c, float frontDepth, float backDepth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
+        {
+            BasicAddBlockSidesToTriangleList(vList, c, frontDepth, backDepth, texCoords, triangleList, true);
+        }
+
+        public void BasicAddBlockSidesToTriangleList(List<Vertex> vList, Color c, float frontDepth, float backDepth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList, bool cornerStretch)
         {
             Color shadedColor = Color.Blue;
             for (int i = 0; i < 4; i++)
             {
-                if (vList[i].normal != vList[(i + 1) % 4].normal)
+                if (vList[i].normal != vList[(i+1)%4].normal)
                 {
                     // corner edge case
-                    Vector3 fullEdge = vList[(i + 1) % 4].position - vList[i].position;
-                    Vector3 currentComponent = Vector3.Dot(vList[(i + 1) % 4].normal, fullEdge) * vList[(i + 1) % 4].normal;
+                    Vector3 fullEdge = vList[(i+1)%4].position - vList[i].position;
+                    Vector3 currentComponent = Vector3.Dot(vList[(i+1)%4].normal, fullEdge) * vList[(i+1)%4].normal;
                     Vector3 nextComponent = Vector3.Dot(vList[i].normal, fullEdge) * vList[i].normal;
-                    Vector3 constantComponent = Vector3.Dot(Vector3.Cross(vList[(i + 1) % 4].normal, vList[i].normal), fullEdge) * Vector3.Cross(vList[(i + 1) % 4].normal, vList[i].normal);
+                    Vector3 constantComponent = Vector3.Dot(Vector3.Cross(vList[(i+1)%4].normal, vList[i].normal), fullEdge) * Vector3.Cross(vList[(i+1)%4].normal, vList[i].normal);
                     float currentPercent = currentComponent.Length() / (currentComponent.Length() + nextComponent.Length());
 
                     Vector3 midPoint = vList[i].position + currentComponent + currentPercent * constantComponent;
-                    
+
                     Vector3 edgeNormal = Vector3.Cross(midPoint - vList[i].position, vList[i].normal);
-                    edgeNormal.Normalize();
                     shadedColor = FakeShader.Shade(c, edgeNormal);
 
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[1], shadedColor, edgeNormal, depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[0], shadedColor, edgeNormal, depth));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, texCoords[1], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, texCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
 
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[0], shadedColor, edgeNormal, depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[3], shadedColor, edgeNormal, -depth));
-                    
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[1], shadedColor, edgeNormal, depth));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[2], shadedColor, edgeNormal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, depth));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, texCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[3], shadedColor, edgeNormal, -backDepth, cornerStretch));
 
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, depth));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[2], shadedColor, edgeNormal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[3], shadedColor, edgeNormal, -depth));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[1], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, texCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
+
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, texCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, texCoords[3], shadedColor, edgeNormal, -backDepth, cornerStretch));
                 }
                 else
                 {
+                    Vector3 edgeNormal = Vector3.Cross(vList[(i+1)%4].position - vList[i].position, vList[i].normal);
                     
-                    Vector3 edgeNormal = Vector3.Cross(vList[(i + 1) % 4].position - vList[i].position, vList[i].normal);
-                    edgeNormal.Normalize();
-                    shadedColor = FakeShader.Shade(c, edgeNormal);
                     // straight edge case
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[1], shadedColor, edgeNormal, depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, depth));
+                    shadedColor = FakeShader.Shade(c, edgeNormal);
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, texCoords[1], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, texCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, texCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
 
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[3], shadedColor, edgeNormal, -depth));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, texCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[i].position, texCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, texCoords[3], shadedColor, edgeNormal, -backDepth, cornerStretch));
                 }
             }
         }
+
+
+
 
         public void AddBlockToTriangleList(List<Vertex> vList, Color c, float frontDepth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
         {
@@ -1129,8 +1239,7 @@ namespace VexedCore
         public void AddBlockToTriangleList(List<Vertex> vList, Color c, float frontDepth, float backDepth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
         {
             AddBlockToTriangleList(vList, c, frontDepth, backDepth, texCoords, triangleList, true);
-        }
-        
+        }       
 
         public void AddBlockToTriangleList(List<Vertex> vList, Color c, float frontDepth, float backDepth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList, bool cornerStretch)
         {
@@ -1145,55 +1254,7 @@ namespace VexedCore
             {
                 points.Add(vList[i]);
                 pointsTexCoords.Add(texCoords[i]);
-                count++;
-                if (vList[i].normal != vList[(i+1)%4].normal)
-                {
-                    // corner edge case
-                    Vector3 fullEdge = vList[(i+1)%4].position - vList[i].position;
-                    Vector3 currentComponent = Vector3.Dot(vList[(i+1)%4].normal, fullEdge) * vList[(i+1)%4].normal;
-                    Vector3 nextComponent = Vector3.Dot(vList[i].normal, fullEdge) * vList[i].normal;
-                    Vector3 constantComponent = Vector3.Dot(Vector3.Cross(vList[(i+1)%4].normal, vList[i].normal), fullEdge) * Vector3.Cross(vList[(i+1)%4].normal, vList[i].normal);
-                    float currentPercent = currentComponent.Length() / (currentComponent.Length() + nextComponent.Length());
-
-                    Vector3 midPoint = vList[i].position + currentComponent + currentPercent * constantComponent;
-                    points.Add(new Vertex(midPoint, Vector3.Zero, Vector3.Zero, Vector3.Zero));
-                    pointsTexCoords.Add((1 - currentPercent) * texCoords[i] + currentPercent * texCoords[(i + 1) % 4]);
-                    jointVertexIndex = count;
-                    count++;
-
-                    Vector3 edgeNormal = Vector3.Cross(midPoint - vList[i].position, vList[i].normal);
-                    shadedColor = FakeShader.Shade(c, edgeNormal);
-
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[1], shadedColor, edgeNormal, frontDepth,cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
-
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[3], shadedColor, edgeNormal, -backDepth, cornerStretch));
-
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[1], shadedColor, edgeNormal, frontDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
-
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[3], shadedColor, edgeNormal, -backDepth, cornerStretch));
-                }
-                else
-                {
-                    Vector3 edgeNormal = Vector3.Cross(vList[(i+1)%4].position - vList[i].position, vList[i].normal);
-                    
-                    // straight edge case
-                    shadedColor = FakeShader.Shade(c, edgeNormal);
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[1], shadedColor, edgeNormal, frontDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
-
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(vList[i].position, Room.blankTexCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, Room.blankTexCoords[3], shadedColor, edgeNormal, -backDepth, cornerStretch));
-                }
+                count++;                
             }
 
             if (points.Count == 4)
@@ -1314,7 +1375,7 @@ namespace VexedCore
 
         public void AddBlockToTriangleList2(List<Vertex> vList, Color c, float depth, List<VertexPositionColorNormalTexture> triangleList)
         {
-            AddBlockSidesToTriangleList(vList, c, depth, Room.blankTexCoords, triangleList);
+            //AddBlockSidesToTriangleList(vList, c, depth, Room.blankTexCoords, triangleList);
             
             List<Vertex> points = new List<Vertex>();
             List<Vector2> pointsTexCoords = new List<Vector2>();
@@ -1836,7 +1897,7 @@ namespace VexedCore
         List<VertexPositionColorNormalTexture> translucentBoxVertices;
         List<TrasnparentSquare> transparentSquareList;
 
-        public void Draw(GameTime gameTime)
+        public void Draw()
         {
             
             if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || (roomHighlight == true && explored == true))
@@ -1935,7 +1996,14 @@ namespace VexedCore
                             vList.Add(b.edges[2].start);
                             vList.Add(b.edges[3].start);
 
-                            if (b.staticObject == false && this == Engine.player.currentRoom)
+                            b.UpdateVertexData(this);
+                            b.Draw(this);
+                            foreach (Edge e in b.edges)
+                            {
+                                e.UpdateVertexData(this, true);
+                                e.Draw(this);
+                            }
+                            /*if (b.staticObject == false && this == Engine.player.currentRoom)
                             {
                                 b.UpdateVertexData(this);
                                 b.Draw(this);
@@ -1958,7 +2026,7 @@ namespace VexedCore
                                     e.UpdateVertexData(this, false);
                                     e.Draw(this);
                                 }
-                            }
+                            }*/
 
 
 

@@ -197,10 +197,11 @@ namespace VexedCore
 
 
         public List<VertexPositionColorNormalTexture> baseTriangleList;
+        public VertexPositionColorNormalTexture[] baseTriangleArray;
 
         public void UpdateVertexData(Room currentRoom, bool dynamic)
         {
-            if (Engine.staticObjectsInitialized == false || baseTriangleList == null || dynamic == true || refreshVertices == true || properties.type == VL.EdgeType.ConveyorBelt)
+            if (Engine.staticObjectsInitialized == false || baseTriangleList == null || refreshVertices == true || properties.type == VL.EdgeType.ConveyorBelt)
             {
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
             
@@ -208,17 +209,29 @@ namespace VexedCore
                     currentRoom.AddSpikesToTriangleList(this, .5f, baseTriangleList);
                 else if (properties.type != VL.EdgeType.Normal)
                     currentRoom.AddStripToTriangleList2(this, .5f, baseTriangleList);
+
+                baseTriangleArray = baseTriangleList.ToArray();
             }
             refreshVertices = false;
         }
 
         public void Draw(Room currentRoom)
         {
-            for (int i = 0; i < baseTriangleList.Count; i++)
+            if (baseTriangleArray.Length > 0)
+            {
+                Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
+                Engine.playerTextureEffect.Texture = Room.blockTexture;
+                Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    baseTriangleArray, 0, baseTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                Game1.graphicsDevice.BlendState = BlendState.Opaque;                
+            }
+
+            /*for (int i = 0; i < baseTriangleList.Count; i++)
             {
                 Engine.detailVertexArray[Engine.detailVertexArrayCount + i] = baseTriangleList[i];
             }
-            Engine.detailVertexArrayCount += baseTriangleList.Count;
+            Engine.detailVertexArrayCount += baseTriangleList.Count;*/
 
         }
     }

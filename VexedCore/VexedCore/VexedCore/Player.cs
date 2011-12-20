@@ -141,7 +141,7 @@ namespace VexedCore
 
         public static int flashMaxTime = 400;
         public static int jumpRecoveryMax = 300;
-        public static int spinMaxTime = 200;
+        public static int spinMaxTime = 270;
         public static int walkMaxTime = 800;
         public static int launchMaxTime = 1000;
         public static int maxBoostTime = 350;
@@ -198,8 +198,8 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.SpinHook);
-            secondaryAbility = new Ability(AbilityType.Boots);
+            primaryAbility = new Ability(AbilityType.Laser);
+            secondaryAbility = new Ability(AbilityType.JetPack);
             naturalShield = new Ability(AbilityType.Shield);
 
             //upgrades[(int)AbilityType.Laser] = true;
@@ -208,8 +208,8 @@ namespace VexedCore
             //upgrades[(int)AbilityType.WallJump] = true;
             //upgrades[(int)AbilityType.DoubleJump] = true;
             //upgrades[(int)AbilityType.Blaster] = true;
-            //upgrades[(int)AbilityType.PermanentBoots] = true;
-            //upgrades[(int)AbilityType.PermanentWallJump] = true;
+            upgrades[(int)AbilityType.PermanentBoots] = true;
+            upgrades[(int)AbilityType.PermanentWallJump] = true;
             //upgrades[(int)AbilityType.ImprovedJump] = true;
             //upgrades[(int)AbilityType.SpinHook] = true;
             

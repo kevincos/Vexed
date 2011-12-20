@@ -600,6 +600,10 @@ namespace WinFormsGraphicsDevice
                 this.blockColorR.Text = selectedBlock.color.R.ToString();
                 this.blockColorG.Text = selectedBlock.color.G.ToString();
                 this.blockColorB.Text = selectedBlock.color.B.ToString();
+                this.blockScale.Checked = selectedBlock.scales;
+                this.blockDepth.Text = selectedBlock.depth.ToString();
+                this.blockType.SelectedIndex = (int)selectedBlock.type;
+                
                 this.elementNameField.Text = selectedBlock.IDString;
                 this.elementIDField.Text = selectedBlock.IDString;
                 this.elementBehaviorDropdown.Items.Clear();
@@ -771,6 +775,18 @@ namespace WinFormsGraphicsDevice
                 if (sender == this.blockColorB)
                 {
                     selectedBlock.color.B = System.Convert.ToByte(this.blockColorB.Text);
+                }
+                if (sender == this.blockType)
+                {
+                    selectedBlock.type = (WallType)(this.blockType.SelectedIndex);
+                }
+                if (sender == this.blockScale)
+                {
+                    selectedBlock.scales = this.blockScale.Checked;
+                }
+                if (sender == this.blockDepth)
+                {
+                    selectedBlock.depth = (float)System.Convert.ToDouble(this.blockDepth.Text);
                 }
             }
             catch { }

@@ -7,6 +7,18 @@ using System.Runtime.Serialization;
 
 namespace VL
 {
+    public enum WallType
+    {
+        Plate,
+        Circuit,
+        Rock,
+        FancyPlate,
+        Cobblestone,
+        Rusty,
+        Ice,
+        Vines
+    }
+
     //[Serializable]
     public class Block
     {
@@ -17,6 +29,9 @@ namespace VL
 
         public List<Behavior> behaviors;
         public Color color;
+        public WallType type;
+        public bool scales = true;
+        public float depth = .5f;
 
         public Block()
         {

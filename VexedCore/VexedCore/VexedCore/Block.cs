@@ -12,6 +12,17 @@ using Microsoft.Xna.Framework.Media;
 
 namespace VexedCore
 {
+    public enum ScaleType
+    {
+        None,
+        Scale
+    }
+
+    public enum BlockSize
+    {
+        Standard,
+    }
+
     public class Block
     {
         public bool staticObject = true;
@@ -31,6 +42,19 @@ namespace VexedCore
         public int currentTime = 0;
         public Color color;
         public String id;
+
+        public float length;
+        public float height;
+        public float area;
+        public float depth;
+        public VL.WallType wallType;
+        public bool scales = true;
+
+        public static Texture2D wallTexture;
+        public static Texture2D circuitTexture;
+        public static Texture2D cobblestoneTexture;
+        public static Texture2D fancyPlateTexture;
+        public static Texture2D vineTexture;
 
         public Block()
         {
@@ -312,6 +336,10 @@ namespace VexedCore
         }
 
         public List<VertexPositionColorNormalTexture> baseTriangleList;
+        public VertexPositionColorNormalTexture[] baseTriangleArray;
+
+        public List<VertexPositionColorNormalTexture> sideTriangleList;
+        public VertexPositionColorNormalTexture[] sideTriangleArray;
 
         public Color GetCurrentColor(Room currentRoom)
         {
@@ -332,6 +360,7 @@ namespace VexedCore
             {
                 Engine.debug_blocksGenerated++;
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
+                sideTriangleList = new List<VertexPositionColorNormalTexture>();
             
                 List<Vertex> vList = new List<Vertex>();
                 vList.Add(edges[0].start);
@@ -339,19 +368,39 @@ namespace VexedCore
                 vList.Add(edges[2].start);
                 vList.Add(edges[3].start);
                 Color powerUpColor = GetCurrentColor(currentRoom);
-                currentRoom.AddBlockToTriangleList2(vList, powerUpColor, .5f, baseTriangleList);
+                if (scales)
+                {
+                    currentRoom.AddBlockToTriangleList2(vList, powerUpColor, .5f, baseTriangleList);
+                    currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, sideTriangleList);
+                }
+                else
+                {
+                    currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, baseTriangleList);
+                    currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, sideTriangleList);
+                }
+                baseTriangleArray = baseTriangleList.ToArray();
+                sideTriangleArray = sideTriangleList.ToArray();
             }
             if (currentRoom.refreshVertices == true)
             {
-                List<VertexPositionColorNormalTexture> newColors = new List<VertexPositionColorNormalTexture>();
+                List<VertexPositionColorNormalTexture> newColorsBase = new List<VertexPositionColorNormalTexture>();
+                List<VertexPositionColorNormalTexture> newColorsSide = new List<VertexPositionColorNormalTexture>();
                 Color powerUpColor = GetCurrentColor(currentRoom);
 
                 for (int i = 0; i < baseTriangleList.Count; i++)
                 {
-                    newColors.Add(new VertexPositionColorNormalTexture(baseTriangleList[i].Position, FakeShader.Shade(powerUpColor,baseTriangleList[i].Normal) , baseTriangleList[i].Normal, baseTriangleList[i].TextureCoordinates));
+                    newColorsBase.Add(new VertexPositionColorNormalTexture(baseTriangleList[i].Position, FakeShader.Shade(powerUpColor,baseTriangleList[i].Normal) , baseTriangleList[i].Normal, baseTriangleList[i].TextureCoordinates));                    
+                }
+                for (int i = 0; i < sideTriangleList.Count; i++)
+                {
+                    newColorsSide.Add(new VertexPositionColorNormalTexture(sideTriangleList[i].Position, FakeShader.Shade(powerUpColor, sideTriangleList[i].Normal), sideTriangleList[i].Normal, sideTriangleList[i].TextureCoordinates));
                 }
                 baseTriangleList.Clear();
-                baseTriangleList = newColors;
+                baseTriangleList = newColorsBase;
+                baseTriangleArray = baseTriangleList.ToArray();
+                sideTriangleList.Clear();
+                sideTriangleList = newColorsSide;
+                sideTriangleArray = sideTriangleList.ToArray();
                 Engine.reDraw = true;
             }
         }
@@ -359,7 +408,34 @@ namespace VexedCore
         public void Draw(Room currentRoom)
         {
             UpdateVertexData(currentRoom);
-            if (staticObject == true && Engine.player.currentRoom != currentRoom)
+            //List<VertexPositionColorNormalTexture> textureTriangleList = new List<VertexPositionColorNormalTexture>();
+            if (wallType == VL.WallType.Plate)
+                Engine.playerTextureEffect.Texture = wallTexture;
+            else if (wallType == VL.WallType.Circuit)
+                Engine.playerTextureEffect.Texture = circuitTexture;
+            else if (wallType == VL.WallType.Cobblestone)
+                Engine.playerTextureEffect.Texture = cobblestoneTexture;
+            else if (wallType == VL.WallType.FancyPlate)
+                Engine.playerTextureEffect.Texture = fancyPlateTexture;
+            else if (wallType == VL.WallType.Vines)
+                Engine.playerTextureEffect.Texture = vineTexture;
+            else
+                Engine.playerTextureEffect.Texture = wallTexture;
+            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                baseTriangleArray, 0, baseTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+
+            if (scales)
+            {
+                Engine.playerTextureEffect.Texture = fancyPlateTexture;
+                Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            }
+            if (sideTriangleList.Count > 0)
+            {
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    sideTriangleArray, 0, sideTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
+            /*if (staticObject == true && Engine.player.currentRoom != currentRoom)
             {
                 for (int i = 0; i < baseTriangleList.Count; i++)
                 {
@@ -374,7 +450,7 @@ namespace VexedCore
                     Engine.dynamicBlockVertexArray[Engine.dynamicBlockVertexArrayCount + i] = baseTriangleList[i];
                 }
                 Engine.dynamicBlockVertexArrayCount += baseTriangleList.Count;
-            }
+            }*/
         }
 
     

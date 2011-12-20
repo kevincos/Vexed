@@ -187,6 +187,9 @@ namespace WinFormsGraphicsDevice
             this.blockColorR = new System.Windows.Forms.TextBox();
             this.blockColorG = new System.Windows.Forms.TextBox();
             this.blockColorB = new System.Windows.Forms.TextBox();
+            this.blockType = new System.Windows.Forms.ComboBox();
+            this.blockScale = new System.Windows.Forms.CheckBox();
+            this.blockDepth = new System.Windows.Forms.TextBox();
 
             #endregion
 
@@ -401,6 +404,9 @@ namespace WinFormsGraphicsDevice
             this.blockPropertiesGroup.Controls.Add(this.blockColorR);
             this.blockPropertiesGroup.Controls.Add(this.blockColorG);
             this.blockPropertiesGroup.Controls.Add(this.blockColorB);
+            this.blockPropertiesGroup.Controls.Add(this.blockDepth);
+            this.blockPropertiesGroup.Controls.Add(this.blockScale);
+            this.blockPropertiesGroup.Controls.Add(this.blockType);
             this.blockPropertiesGroup.Visible = false;
 
             this.blockColorR.Location = new System.Drawing.Point(10, 10);
@@ -411,7 +417,26 @@ namespace WinFormsGraphicsDevice
             this.blockColorG.TextChanged += new System.EventHandler(this.block_change);
             this.blockColorB.Location = new System.Drawing.Point(130, 10);
             this.blockColorB.Size = new System.Drawing.Size(50, 20);
-            this.blockColorB.TextChanged += new System.EventHandler(this.block_change);            
+            this.blockColorB.TextChanged += new System.EventHandler(this.block_change);
+
+            this.blockDepth.Location = new System.Drawing.Point(140, 30);
+            this.blockDepth.Size = new System.Drawing.Size(50, 20);
+            this.blockDepth.TextChanged += new System.EventHandler(this.block_change);
+
+            this.blockScale.Location = new System.Drawing.Point(80, 30);
+            this.blockScale.Size = new System.Drawing.Size(60, 20);
+            this.blockScale.Text = "Scales";
+            this.blockScale.CheckStateChanged += new System.EventHandler(this.block_change);
+
+            this.blockType.Location = new System.Drawing.Point(10, 30);
+            this.blockType.Size = new System.Drawing.Size(60, 20);
+            this.blockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 8; i++)
+            {
+                this.blockType.Items.Add((WallType)i);
+            }
+            this.blockType.SelectedIndex = 0;
+            this.blockType.SelectedIndexChanged += new System.EventHandler(this.block_change);
 
             this.behaviorPropertiesGroup.Location = new System.Drawing.Point(230, 470);
             this.behaviorPropertiesGroup.Size = new System.Drawing.Size(110, 300);
@@ -1216,6 +1241,9 @@ namespace WinFormsGraphicsDevice
         private System.Windows.Forms.TextBox blockColorR;
         private System.Windows.Forms.TextBox blockColorG;
         private System.Windows.Forms.TextBox blockColorB;
+        private System.Windows.Forms.CheckBox blockScale;
+        private System.Windows.Forms.ComboBox blockType;
+        private System.Windows.Forms.TextBox blockDepth;
 
         private System.Windows.Forms.GroupBox doodadPropertiesGroup;
         private System.Windows.Forms.ComboBox doodadTypeDropdown;

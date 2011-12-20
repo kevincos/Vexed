@@ -314,6 +314,11 @@ namespace VexedCore
                     r.DrawDecorations();
                 }
 
+                foreach (Room r in roomList)
+                {
+                    r.Draw();
+                }
+
                 Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
                 if (player.insideBox == true)
@@ -584,10 +589,10 @@ namespace VexedCore
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
             
             
-            foreach (Room r in roomList)
-            {
-                r.Draw(gameTime);
-            }
+            //foreach (Room r in roomList)
+            //{
+                //r.Draw(gameTime);
+            //}
 
 
 
