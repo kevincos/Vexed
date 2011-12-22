@@ -162,6 +162,7 @@ namespace VexedCore
             Projectile.projectileTexture = Content.Load<Texture2D>("projectiles");
             Block.wallTexture = Content.Load<Texture2D>("wall_texture");
             Block.circuitTexture = Content.Load<Texture2D>("circuit_wall");
+            Block.crackedTexture = Content.Load<Texture2D>("cracked_wall");
             Block.vineTexture = Content.Load<Texture2D>("vine_wall");
             Block.cobblestoneTexture = Content.Load<Texture2D>("cobblestone_wall");
             Block.fancyPlateTexture = Content.Load<Texture2D>("fancyPlate_wall");

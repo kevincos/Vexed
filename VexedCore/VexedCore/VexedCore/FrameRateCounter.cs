@@ -76,8 +76,8 @@ namespace VexedCore
             spriteBatch.DrawString(spriteFont, score, new Vector2(33, 53), Color.Black);
             spriteBatch.DrawString(spriteFont, score, new Vector2(32, 52), Color.White);
 
-            spriteBatch.DrawString(spriteFont, doodadDrawInfo, new Vector2(33, 73), Color.Black);
-            spriteBatch.DrawString(spriteFont, doodadDrawInfo, new Vector2(32, 72), Color.White);
+            //spriteBatch.DrawString(spriteFont, doodadDrawInfo, new Vector2(33, 73), Color.Black);
+            //spriteBatch.DrawString(spriteFont, doodadDrawInfo, new Vector2(32, 72), Color.White);
 
 
             spriteBatch.End();            

@@ -19,6 +19,7 @@ namespace VexedCore
         public string fileName;
         public List<Texture2D> texture;
         public int frameCount = 1;
+        public bool forceSpin = false;
 
         public DecorationTexture(string fileName, ContentManager Content)
         {
@@ -37,6 +38,18 @@ namespace VexedCore
                 texture.Add(Content.Load<Texture2D>(fileName+"_"+i));
             }
         }
+
+        public DecorationTexture(string fileName, ContentManager Content, int frameCount, bool forceSpin)
+        {
+            this.forceSpin = forceSpin;
+            this.frameCount = frameCount;
+            this.fileName = fileName;
+            this.texture = new List<Texture2D>();
+            for (int i = 0; i < frameCount; i++)
+            {
+                texture.Add(Content.Load<Texture2D>(fileName + "_" + i));
+            }
+        }
     }
 
     public class DecorationImage
@@ -49,27 +62,32 @@ namespace VexedCore
                 textureLibrary = new List<DecorationTexture>();
             textureLibrary.Add(new DecorationTexture("dec_arrow", Content));
             textureLibrary.Add(new DecorationTexture("dec_tree", Content));
-            textureLibrary.Add(new DecorationTexture("dec_vinebranch", Content));
-            textureLibrary.Add(new DecorationTexture("dec_leftvinebranch", Content));
-            textureLibrary.Add(new DecorationTexture("dec_rightvinebranch", Content));
             textureLibrary.Add(new DecorationTexture("dec_watermeter", Content));
-            textureLibrary.Add(new DecorationTexture("dec_watertank", Content));
+            
             textureLibrary.Add(new DecorationTexture("dec_waterpipes", Content));
             textureLibrary.Add(new DecorationTexture("dec_shuttle", Content));
             textureLibrary.Add(new DecorationTexture("dec_shuttle_open", Content));
             textureLibrary.Add(new DecorationTexture("dec_thornwall", Content));
+            textureLibrary.Add(new DecorationTexture("dec_onionrack", Content));
+            textureLibrary.Add(new DecorationTexture("dec_veggietube", Content));
+            textureLibrary.Add(new DecorationTexture("dec_tomatotank", Content));
 
             textureLibrary.Add(new DecorationTexture("dec_piston", Content,11));
             textureLibrary.Add(new DecorationTexture("dec_colorwheel", Content, 8));
+            textureLibrary.Add(new DecorationTexture("dec_vinebranch", Content, 8, true));
+            textureLibrary.Add(new DecorationTexture("dec_watertank", Content, 8, true));
+            textureLibrary.Add(new DecorationTexture("dec_leftvinebranch", Content,8,true));
+            textureLibrary.Add(new DecorationTexture("dec_rightvinebranch", Content,8,true));
+            
             
         }
 
-        public static List<Texture2D> FetchTexture(string fileName)
+        public static DecorationTexture FetchTexture(string fileName)
         {
             foreach (DecorationTexture tex in textureLibrary)
             {
                 if (tex.fileName == fileName)
-                    return tex.texture;
+                    return tex;
             }
             return null;
         }

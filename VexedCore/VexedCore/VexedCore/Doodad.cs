@@ -1059,6 +1059,8 @@ namespace VexedCore
                 {
                     currentRoom.AddBlockToTriangleList(vList, baseColor, .5f, -.6f, Room.plateTexCoords, baseTriangleList);
                     currentRoom.AddBlockToTriangleList(vList, baseColor, -.5f, .6f, Room.plateTexCoords, baseTriangleList);
+                    currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, .5f, -.6f, Room.plateTexCoords, baseTriangleList);
+                    currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, -.5f, .6f, Room.plateTexCoords, baseTriangleList);
                 }
                 else if (isPowerStation)
                 {
@@ -1132,7 +1134,7 @@ namespace VexedCore
                     for (; ringMod < Math.Min(20f, distanceToNextRoom / 2); ringMod += 4)
                     {
                         currentRoom.AddBlockToTriangleList(vList, currentRoom.currentColor, ringMod,  -ringMod +.2f, Room.plateTexCoords, baseTriangleList,false);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, currentRoom.currentColor, ringMod, -ringMod + .2f, Room.plateTexCoords, baseTriangleList);                        
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, currentRoom.currentColor, ringMod, -ringMod + .2f, Room.plateTexCoords, baseTriangleList,false);                        
                     }
                     if (ringMod >= 10f && distanceToNextRoom / 2 - 20 > .2f)
                     {
@@ -1169,13 +1171,13 @@ namespace VexedCore
                     if (active == true)
                     {
                         currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[34], decalList, true);
                     }
                     else
                     {
                         currentRoom.AddBlockToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[34], decalList, true);
                     }
                 }
@@ -1188,13 +1190,13 @@ namespace VexedCore
                     if (active == true)
                     {
                         currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[35], decalList, true);
                     }
                     else
                     {                        
                         currentRoom.AddBlockToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[35], decalList, true);
                     }
                 }
@@ -1288,7 +1290,10 @@ namespace VexedCore
 
                 if (baseTriangleList.Count > 0)
                 {
-                    Engine.playerTextureEffect.Texture = Block.wallTexture;
+                    if(type == VL.DoodadType.Brick)
+                        Engine.playerTextureEffect.Texture = Block.crackedTexture;
+                    else
+                        Engine.playerTextureEffect.Texture = Block.wallTexture;
                     Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         baseTriangleArray, 0, baseTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);

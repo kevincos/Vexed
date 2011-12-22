@@ -85,9 +85,16 @@ namespace VexedCore
         {            
             if (decorationTexture == null)
             {
-                decorationTexture = DecorationImage.FetchTexture(fileName);
-                if(decorationTexture != null)
+                DecorationTexture imageData = DecorationImage.FetchTexture(fileName);
+
+
+                if (imageData != null)
+                {
+                    decorationTexture = imageData.texture;
+                    if (imageData.forceSpin)
+                        freeSpin = true;
                     maxFrame = decorationTexture.Count;
+                }
             }
         }
 

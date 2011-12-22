@@ -55,6 +55,7 @@ namespace VexedCore
         public static Texture2D cobblestoneTexture;
         public static Texture2D fancyPlateTexture;
         public static Texture2D vineTexture;
+        public static Texture2D crackedTexture;
 
         public Block()
         {
@@ -73,6 +74,12 @@ namespace VexedCore
             id = b.id;
             staticObject = b.staticObject;
             nextBehavior = b.nextBehavior;
+            depth = b.depth;
+            length = b.length;
+            height = b.height;
+            area = b.area;
+            wallType = b.wallType;
+            scales = b.scales;
             color = b.color;
             currentTime = b.currentTime;
             currentBehaviorId = b.currentBehaviorId;
@@ -370,7 +377,7 @@ namespace VexedCore
                 Color powerUpColor = GetCurrentColor(currentRoom);
                 if (scales)
                 {
-                    currentRoom.AddBlockToTriangleList2(vList, powerUpColor, .5f, baseTriangleList);
+                    currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, baseTriangleList);
                     currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, sideTriangleList);
                 }
                 else
