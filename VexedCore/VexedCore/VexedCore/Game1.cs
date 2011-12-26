@@ -67,6 +67,11 @@ namespace VexedCore
                 Engine.resWidth = 800;
                 Engine.resHeight = 600;
             }
+            if (Engine.res == ResolutionSettings.R_1024x768)
+            {
+                Engine.resWidth = 1024;
+                Engine.resHeight = 768;
+            }
             if (Engine.res == ResolutionSettings.R_1920x1080)
             {
                 Engine.resWidth = 1920;

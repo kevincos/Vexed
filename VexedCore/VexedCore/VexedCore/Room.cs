@@ -107,6 +107,15 @@ namespace VexedCore
         [XmlIgnore]public Sector parentSector;
         [XmlIgnore]public Vector2 mapPosition2D;
 
+        public List<VertexPositionColorNormalTexture> staticPlate;
+        public List<VertexPositionColorNormalTexture> staticFancyPlate;
+        public VertexPositionColorNormalTexture[] fancyPlateTriangleArray;
+        public VertexPositionColorNormalTexture[] plateTriangleArray;
+        public VertexPositionColorNormalTexture[] circuitTriangleArray;
+        public VertexPositionColorNormalTexture[] vinesTriangleArray;
+        public List<VertexPositionColorNormalTexture> staticVines;
+        public List<VertexPositionColorNormalTexture> staticCircuit;
+
         public bool refreshVertices = false;
 
         public Room(Room r)
@@ -1988,6 +1997,13 @@ namespace VexedCore
 
 
                         #region Blocks
+                        if (staticFancyPlate == null || refreshVertices == true)
+                        {
+                            staticFancyPlate = new List<VertexPositionColorNormalTexture>();
+                            staticCircuit = new List<VertexPositionColorNormalTexture>();
+                            staticVines = new List<VertexPositionColorNormalTexture>();
+                            staticPlate = new List<VertexPositionColorNormalTexture>();
+                        }
                         foreach (Block b in blocks)
                         {
                             List<Vertex> vList = new List<Vertex>();
@@ -2002,35 +2018,44 @@ namespace VexedCore
                             {
                                 e.UpdateVertexData(this, true);
                                 e.Draw(this);
-                            }
-                            /*if (b.staticObject == false && this == Engine.player.currentRoom)
-                            {
-                                b.UpdateVertexData(this);
-                                b.Draw(this);
-                                foreach (Edge e in b.edges)
-                                {
-                                    e.UpdateVertexData(this, true);
-                                    e.Draw(this);
-                                }
-                            }
-                            else
-                            {
-                                if (Engine.staticObjectsInitialized == false || this == Engine.player.currentRoom)
-                                {
-                                    b.UpdateVertexData(this);
-                                    b.Draw(this);
-                                }
+                            }                            
 
-                                foreach (Edge e in b.edges)
-                                {
-                                    e.UpdateVertexData(this, false);
-                                    e.Draw(this);
-                                }
-                            }*/
-
-
-
-
+                        }
+                        
+                        if (fancyPlateTriangleArray == null || refreshVertices == true)
+                        {
+                            fancyPlateTriangleArray = staticFancyPlate.ToArray();
+                            circuitTriangleArray = staticCircuit.ToArray();
+                            vinesTriangleArray = staticVines.ToArray();
+                            plateTriangleArray = staticPlate.ToArray();                            
+                        }
+                        if (fancyPlateTriangleArray.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.fancyPlateTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                fancyPlateTriangleArray, 0, fancyPlateTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                        if (vinesTriangleArray.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.vineTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                vinesTriangleArray, 0, vinesTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                        if (plateTriangleArray.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.wallTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                plateTriangleArray, 0, plateTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                        if (circuitTriangleArray.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.circuitTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                circuitTriangleArray, 0, circuitTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                         }
                         #endregion
 
