@@ -121,7 +121,9 @@ Content\dec_vinebranch_4.xnb
 Content\dec_vinebranch_5.xnb
 Content\dec_vinebranch_6.xnb
 Content\dec_vinebranch_7.xnb
+Content\dec_watertank_0.xnb
 Content\dec_watertank_1.xnb
+Content\dec_watertank_2.xnb
 Content\dec_watertank_3.xnb
 Content\dec_watertank_4.xnb
 Content\dec_watertank_5.xnb
@@ -143,10 +145,6 @@ Content\dec_rightvinebranch_4.xnb
 Content\dec_rightvinebranch_5.xnb
 Content\dec_rightvinebranch_6.xnb
 Content\dec_rightvinebranch_7.xnb
-<<<<<<< HEAD
-Content\dec_watertank_2.xnb
-Content\dec_watertank_0.xnb
-=======
 Content\Font.xnb
 Content\BloomCombine.xnb
 Content\BloomExtract.xnb
@@ -160,7 +158,6 @@ Content\Sounds\swoosh.xnb
 Content\Sounds\thud.xnb
 Content\Sounds\music_game.xnb
 Content\Sounds\music_menu.xnb
->>>>>>> 09a9ecc52b8d307b0f29f80b9f869c8670066e55
 Content\Sounds\music_game.wma
 Content\Sounds\music_menu.wma
 LevelData\awesome

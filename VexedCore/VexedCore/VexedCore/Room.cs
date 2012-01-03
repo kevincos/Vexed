@@ -1717,11 +1717,7 @@ namespace VexedCore
 
         public List<TrasnparentSquare> GetMapBlock(Vector3 adjustedSize, Color blockColor, bool highlight)
         {
-<<<<<<< HEAD
-            if(WorldMap.state == ZoomState.None)
-=======
             if (WorldMap.state == ZoomState.None)
->>>>>>> 09a9ecc52b8d307b0f29f80b9f869c8670066e55
                 return new List<TrasnparentSquare>();
             Color shellColor = blockColor;
             if (parentSector != Engine.sectorList[WorldMap.selectedSectorIndex] && WorldMap.state != ZoomState.None && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld))
