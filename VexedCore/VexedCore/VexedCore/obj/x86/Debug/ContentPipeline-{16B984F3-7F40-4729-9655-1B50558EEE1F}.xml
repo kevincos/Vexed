@@ -971,125 +971,6 @@
       <Time>2011-12-16T11:10:31.5906022-08:00</Time>
     </Item>
     <Item>
-      <Source>Font.spritefont</Source>
-      <Name>Font</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Font.xnb</Output>
-      <Time>2011-07-01T14:35:12.2506609-07:00</Time>
-    </Item>
-    <Item>
-      <Source>BloomCombine.fx</Source>
-      <Name>BloomCombine</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomCombine.xnb</Output>
-      <Time>2011-07-06T12:32:50.1567887-07:00</Time>
-    </Item>
-    <Item>
-      <Source>BloomExtract.fx</Source>
-      <Name>BloomExtract</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomExtract.xnb</Output>
-      <Time>2011-07-06T12:32:50.1577888-07:00</Time>
-    </Item>
-    <Item>
-      <Source>GaussianBlur.fx</Source>
-      <Name>GaussianBlur</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\GaussianBlur.xnb</Output>
-      <Time>2011-07-06T12:32:50.1577888-07:00</Time>
-    </Item>
-    <Item>
-      <Source>CartoonEffect.Fx</Source>
-      <Name>CartoonEffect</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\CartoonEffect.xnb</Output>
-      <Time>2011-07-27T12:11:10.3515098-07:00</Time>
-    </Item>
-    <Item>
-      <Source>PostprocessEffect.Fx</Source>
-      <Name>PostprocessEffect</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\PostprocessEffect.xnb</Output>
-      <Time>2010-09-15T15:28:32-07:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\beep.wav</Source>
-      <Name>Sounds\beep</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\beep.xnb</Output>
-      <Time>2000-11-23T06:33:52-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\bloop.wav</Source>
-      <Name>Sounds\bloop</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\bloop.xnb</Output>
-      <Time>2000-11-23T06:37:50-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\click.wav</Source>
-      <Name>Sounds\click</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\click.xnb</Output>
-      <Time>2011-05-20T15:08:50.1305954-07:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\swoosh.wav</Source>
-      <Name>Sounds\swoosh</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\swoosh.xnb</Output>
-      <Time>2000-11-23T06:30:54-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\thud.wav</Source>
-      <Name>Sounds\thud</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\thud.xnb</Output>
-      <Time>2011-09-23T11:57:26.9930819-07:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\music_game.mp3</Source>
-      <Name>Sounds\music_game</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_game.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_game.wma</Extra>
-      <Time>2011-05-31T12:30:19.3215384-07:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\music_menu.mp3</Source>
-      <Name>Sounds\music_menu</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_menu.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_menu.wma</Extra>
-      <Time>2011-05-31T12:30:19.3825414-07:00</Time>
-    </Item>
-    <Item>
       <Source>circuit_wall.png</Source>
       <Name>circuit_wall</Name>
       <Importer>TextureImporter</Importer>
@@ -1249,6 +1130,15 @@
       <Time>2011-12-21T17:18:44.9219528-08:00</Time>
     </Item>
     <Item>
+      <Source>dec_watertank_0.png</Source>
+      <Name>dec_watertank_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_watertank_0.xnb</Output>
+      <Time>2011-12-22T22:06:54.7860747-08:00</Time>
+    </Item>
+    <Item>
       <Source>dec_watertank_1.png</Source>
       <Name>dec_watertank_1</Name>
       <Importer>TextureImporter</Importer>
@@ -1256,6 +1146,15 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_watertank_1.xnb</Output>
       <Time>2011-12-21T17:40:06.136259-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_watertank_2.png</Source>
+      <Name>dec_watertank_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_watertank_2.xnb</Output>
+      <Time>2011-12-21T17:40:05.1041991-08:00</Time>
     </Item>
     <Item>
       <Source>dec_watertank_3.png</Source>
@@ -1447,28 +1346,129 @@
       <Time>2011-12-21T18:02:24.5538827-08:00</Time>
     </Item>
     <Item>
-      <Source>dec_watertank_2.png</Source>
-      <Name>dec_watertank_2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+      <Source>Font.spritefont</Source>
+      <Name>Font</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_watertank_2.xnb</Output>
-      <Time>2011-12-21T17:40:05.1041991-08:00</Time>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Font.xnb</Output>
+      <Time>2011-07-01T14:35:12.2506609-07:00</Time>
     </Item>
     <Item>
-      <Source>dec_watertank_0.png</Source>
-      <Name>dec_watertank_0</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+      <Source>BloomCombine.fx</Source>
+      <Name>BloomCombine</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
       <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_watertank_0.xnb</Output>
-      <Time>2011-12-22T22:06:54.7860747-08:00</Time>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomCombine.xnb</Output>
+      <Time>2011-07-06T12:32:50.1567887-07:00</Time>
+    </Item>
+    <Item>
+      <Source>BloomExtract.fx</Source>
+      <Name>BloomExtract</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\BloomExtract.xnb</Output>
+      <Time>2011-07-06T12:32:50.1577888-07:00</Time>
+    </Item>
+    <Item>
+      <Source>GaussianBlur.fx</Source>
+      <Name>GaussianBlur</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\GaussianBlur.xnb</Output>
+      <Time>2011-07-06T12:32:50.1577888-07:00</Time>
+    </Item>
+    <Item>
+      <Source>CartoonEffect.Fx</Source>
+      <Name>CartoonEffect</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\CartoonEffect.xnb</Output>
+      <Time>2011-07-27T12:11:10.3515098-07:00</Time>
+    </Item>
+    <Item>
+      <Source>PostprocessEffect.Fx</Source>
+      <Name>PostprocessEffect</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\PostprocessEffect.xnb</Output>
+      <Time>2010-09-15T15:28:32-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\beep.wav</Source>
+      <Name>Sounds\beep</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\beep.xnb</Output>
+      <Time>2000-11-23T06:33:52-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\bloop.wav</Source>
+      <Name>Sounds\bloop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\bloop.xnb</Output>
+      <Time>2000-11-23T06:37:50-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\click.wav</Source>
+      <Name>Sounds\click</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\click.xnb</Output>
+      <Time>2011-05-20T15:08:50.1305954-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\swoosh.wav</Source>
+      <Name>Sounds\swoosh</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\swoosh.xnb</Output>
+      <Time>2000-11-23T06:30:54-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\thud.wav</Source>
+      <Name>Sounds\thud</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\thud.xnb</Output>
+      <Time>2011-09-23T11:57:26.9930819-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\music_game.mp3</Source>
+      <Name>Sounds\music_game</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_game.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_game.wma</Extra>
+      <Time>2011-05-31T12:30:19.3215384-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\music_menu.mp3</Source>
+      <Name>Sounds\music_menu</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_menu.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\music_menu.wma</Extra>
+      <Time>2011-05-31T12:30:19.3825414-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{16B984F3-7F40-4729-9655-1B50558EEE1F}</ContentProjectGUID>
       <TargetPlatform>Windows</TargetPlatform>
-      <TargetProfile>HiDef</TargetProfile>
+      <TargetProfile>Reach</TargetProfile>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
       <RootDirectory>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCoreContent\</RootDirectory>
