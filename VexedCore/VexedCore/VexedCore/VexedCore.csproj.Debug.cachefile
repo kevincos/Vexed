@@ -134,9 +134,7 @@ Content\dec_vinebranch_4.xnb
 Content\dec_vinebranch_5.xnb
 Content\dec_vinebranch_6.xnb
 Content\dec_vinebranch_7.xnb
-Content\dec_watertank_0.xnb
 Content\dec_watertank_1.xnb
-Content\dec_watertank_2.xnb
 Content\dec_watertank_3.xnb
 Content\dec_watertank_4.xnb
 Content\dec_watertank_5.xnb
@@ -158,6 +156,8 @@ Content\dec_rightvinebranch_4.xnb
 Content\dec_rightvinebranch_5.xnb
 Content\dec_rightvinebranch_6.xnb
 Content\dec_rightvinebranch_7.xnb
+Content\dec_watertank_2.xnb
+Content\dec_watertank_0.xnb
 Content\Sounds\music_game.wma
 Content\Sounds\music_menu.wma
 dialog.xml

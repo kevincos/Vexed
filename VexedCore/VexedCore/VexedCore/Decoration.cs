@@ -281,6 +281,8 @@ namespace VexedCore
             {
                 UpdateVertexData(currentRoom);
 
+                //Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
+
                 if (decorationTexture != null)
                     Engine.playerTextureEffect.Texture = decorationTexture[frame];
                 else
@@ -288,6 +290,8 @@ namespace VexedCore
                 Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                 Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                     triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+
+                //Game1.graphicsDevice.BlendState = BlendState.Opaque;
             }
         }
     }

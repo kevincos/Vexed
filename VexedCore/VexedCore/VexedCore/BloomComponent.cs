@@ -151,6 +151,7 @@ namespace VexedCore
 
             // Look up the resolution and format of our main backbuffer.
             PresentationParameters pp = GraphicsDevice.PresentationParameters;
+            
 
             int width = pp.BackBufferWidth;
             int height = pp.BackBufferHeight;

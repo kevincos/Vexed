@@ -1708,6 +1708,8 @@ namespace VexedCore
 
         public List<TrasnparentSquare> GetMapBlock(Vector3 adjustedSize, Color blockColor, bool highlight)
         {
+            if(WorldMap.state == ZoomState.None)
+                return new List<TrasnparentSquare>();
             Color shellColor = blockColor;
             if (parentSector != Engine.sectorList[WorldMap.selectedSectorIndex] && WorldMap.state != ZoomState.None && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld))
             {
@@ -1891,7 +1893,7 @@ namespace VexedCore
                 TrasnparentSquare t = new TrasnparentSquare(translucentTriangleList[i], translucentTriangleList[i + 1], translucentTriangleList[i + 2], translucentTriangleList[i + 3], translucentTriangleList[i + 4], translucentTriangleList[i + 5]);
                 squareList.Add(t);
             }
-            return squareList;
+            return squareList;            
         }
 
         List<VertexPositionColorNormalTexture> translucentBoxVertices;

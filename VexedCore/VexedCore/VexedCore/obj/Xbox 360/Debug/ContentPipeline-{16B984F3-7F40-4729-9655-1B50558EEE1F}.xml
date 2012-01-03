@@ -8,7 +8,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_watertank.xnb</Output>
-      <Time>2011-12-21T17:40:16.1598403-08:00</Time>
+      <Time>2011-12-22T22:06:16.8778762-08:00</Time>
     </Item>
     <Item>
       <Source>p_fall.png</Source>
@@ -1249,15 +1249,6 @@
       <Time>2011-12-21T17:18:44.9219528-08:00</Time>
     </Item>
     <Item>
-      <Source>dec_watertank_0.png</Source>
-      <Name>dec_watertank_0</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_watertank_0.xnb</Output>
-      <Time>2011-12-21T17:40:13.9897144-08:00</Time>
-    </Item>
-    <Item>
       <Source>dec_watertank_1.png</Source>
       <Name>dec_watertank_1</Name>
       <Importer>TextureImporter</Importer>
@@ -1265,15 +1256,6 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_watertank_1.xnb</Output>
       <Time>2011-12-21T17:40:06.136259-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_watertank_2.png</Source>
-      <Name>dec_watertank_2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_watertank_2.xnb</Output>
-      <Time>2011-12-21T17:40:05.1041991-08:00</Time>
     </Item>
     <Item>
       <Source>dec_watertank_3.png</Source>
@@ -1463,6 +1445,24 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_rightvinebranch_7.xnb</Output>
       <Time>2011-12-21T18:02:24.5538827-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_watertank_2.png</Source>
+      <Name>dec_watertank_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_watertank_2.xnb</Output>
+      <Time>2011-12-21T17:40:05.1041991-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_watertank_0.png</Source>
+      <Name>dec_watertank_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_watertank_0.xnb</Output>
+      <Time>2011-12-22T22:06:54.7860747-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
