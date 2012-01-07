@@ -27,7 +27,7 @@ namespace VexedCore
         public int frame = 0;
         public int maxFrame = 1;
         public int animationTime = 0;
-        public int maxAnimationTime = 20;
+        public int maxAnimationTime = 24;
         public bool freeSpin = false;
         public int spinTargetFrame = 0;
 

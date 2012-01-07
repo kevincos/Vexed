@@ -109,13 +109,25 @@ namespace VexedCore
 
         public List<VertexPositionColorNormalTexture> staticPlate;
         public List<VertexPositionColorNormalTexture> staticFancyPlate;
+        public List<VertexPositionColorNormalTexture> staticVines;
+        public List<VertexPositionColorNormalTexture> staticCircuit;
+        public List<VertexPositionColorNormalTexture> staticCargo;
+        public List<VertexPositionColorNormalTexture> staticCrate;
+        public List<VertexPositionColorNormalTexture> staticCobblestone;
+        public List<VertexPositionColorNormalTexture> staticCrystal;
+        public List<VertexPositionColorNormalTexture> staticIce;
+
         public VertexPositionColorNormalTexture[] fancyPlateTriangleArray;
         public VertexPositionColorNormalTexture[] plateTriangleArray;
         public VertexPositionColorNormalTexture[] circuitTriangleArray;
         public VertexPositionColorNormalTexture[] vinesTriangleArray;
-        public List<VertexPositionColorNormalTexture> staticVines;
-        public List<VertexPositionColorNormalTexture> staticCircuit;
+        public VertexPositionColorNormalTexture[] cargoTriangleArray;
+        public VertexPositionColorNormalTexture[] crateTriangleArray;
+        public VertexPositionColorNormalTexture[] crystalTriangleArray;
+        public VertexPositionColorNormalTexture[] iceTriangleArray;
+        public VertexPositionColorNormalTexture[] cobblestoneTriangleArray;
 
+        
         public bool refreshVertices = false;
 
         public Room(Room r)
@@ -1155,22 +1167,52 @@ namespace VexedCore
             {
                 Vertex vs = vList[i];
                 Vertex ve = vList[(i + 1) % 4];
-                float fullLength = (vs.position - ve.position).Length();
-                if (fullLength < 3)
+                
+                if (vs.normal != ve.normal)
                 {
-                    AddSingleBlockSideToTriangleList(vs, ve, c, depth, texCoords, triangleList);
-                }
+                    Vertex vCorner1 = new Vertex(vs.position + Vector3.Dot(vs.direction, ve.position - vs.position) * vs.direction, vs.normal, vs.velocity, vs.direction);
+                    Vertex vCorner2 = new Vertex(vCorner1.position, ve.normal, ve.velocity, ve.direction);
+
+                    float halfLength1 = (vCorner1.position - vs.position).Length();
+                    if (halfLength1 < 1.5f)
+                    {
+                        AddSingleBlockSideToTriangleList(vs, vCorner1, c, depth, startTexCoords, triangleList);
+                    }
+                    else
+                    {
+                        Vertex v2 = new Vertex((1.5f * vs.position + (halfLength1 - 1.5f) * vCorner1.position) / halfLength1, vs.normal, Vector3.Zero, vs.direction);
+                        AddSingleBlockSideToTriangleList(vs, v2, c, depth, startTexCoords, triangleList);
+                        AddSingleBlockSideToTriangleList(v2, vCorner1, c, depth, midTexCoords, triangleList);
+                    }
+                    
+
+                    float halfLength2 = (ve.position - vCorner2.position).Length();
+                    if (halfLength2 < 1.5f)
+                    {
+                        AddSingleBlockSideToTriangleList(vCorner2, ve, c, depth, endTexCoords, triangleList);
+                    }
+                    else
+                    {
+                        Vertex v2 = new Vertex((1.5f * vCorner2.position + (halfLength2 - 1.5f) * ve.position) / halfLength2, vs.normal, Vector3.Zero, vs.direction);
+                        AddSingleBlockSideToTriangleList(vCorner2, v2, c, depth, midTexCoords, triangleList);
+                        AddSingleBlockSideToTriangleList(v2, ve, c, depth, endTexCoords, triangleList);
+
+                    }
+                    
+                }                
                 else if (vs.normal == ve.normal)
                 {
-                    Vertex v3 = new Vertex((1.5f * vs.position + (fullLength-1.5f)*ve.position) / fullLength, vs.normal, Vector3.Zero, vs.direction);
-                    Vertex v2 = new Vertex(((fullLength - 1.5f) * vs.position + 1.5f * ve.position) / fullLength, vs.normal, Vector3.Zero, vs.direction);
-
-
-
-
-                    AddSingleBlockSideToTriangleList(vs, v2, c, depth, startTexCoords, triangleList);
-                    AddSingleBlockSideToTriangleList(v2, v3, c, depth, midTexCoords, triangleList);
-                    AddSingleBlockSideToTriangleList(v3, ve, c, depth, endTexCoords, triangleList);
+                    float fullLength = (vs.position - ve.position).Length();
+                    if (fullLength < 3)
+                        AddSingleBlockSideToTriangleList(vs, ve, c, depth, texCoords, triangleList);
+                    else
+                    {
+                        Vertex v3 = new Vertex((1.5f * vs.position + (fullLength - 1.5f) * ve.position) / fullLength, vs.normal, Vector3.Zero, vs.direction);
+                        Vertex v2 = new Vertex(((fullLength - 1.5f) * vs.position + 1.5f * ve.position) / fullLength, vs.normal, Vector3.Zero, vs.direction);
+                        AddSingleBlockSideToTriangleList(vs, v2, c, depth, startTexCoords, triangleList);
+                        AddSingleBlockSideToTriangleList(v2, v3, c, depth, midTexCoords, triangleList);
+                        AddSingleBlockSideToTriangleList(v3, ve, c, depth, endTexCoords, triangleList);
+                    }
                 }
             }
         }
@@ -1204,20 +1246,24 @@ namespace VexedCore
                     Vector3 edgeNormal = Vector3.Cross(midPoint - vList[i].position, vList[i].normal);
                     shadedColor = FakeShader.Shade(c, edgeNormal);
 
+                    Vector2 texCoordMidFront = (1-currentPercent) * texCoords[1] + (currentPercent) * texCoords[0];
+                    Vector2 texCoordMidBack = (1-currentPercent) * texCoords[2] + (currentPercent) * texCoords[3];
+
                     triangleList.Add(GenerateTexturedVertex(vList[i].position, texCoords[1], shadedColor, edgeNormal, frontDepth, cornerStretch));
                     triangleList.Add(GenerateTexturedVertex(vList[i].position, texCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoordMidFront, shadedColor, edgeNormal, frontDepth, cornerStretch));
 
-                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoordMidFront, shadedColor, edgeNormal, frontDepth, cornerStretch));
                     triangleList.Add(GenerateTexturedVertex(vList[i].position, texCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[3], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoordMidBack, shadedColor, edgeNormal, -backDepth, cornerStretch));
 
-                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[1], shadedColor, edgeNormal, frontDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+
+                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoordMidFront, shadedColor, edgeNormal, frontDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoordMidBack, shadedColor, edgeNormal, -backDepth, cornerStretch));
                     triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, texCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
 
                     triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, texCoords[0], shadedColor, edgeNormal, frontDepth, cornerStretch));
-                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoords[2], shadedColor, edgeNormal, -backDepth, cornerStretch));
+                    triangleList.Add(GenerateTexturedVertex(midPoint, texCoordMidBack, shadedColor, edgeNormal, -backDepth, cornerStretch));
                     triangleList.Add(GenerateTexturedVertex(vList[(i + 1) % 4].position, texCoords[3], shadedColor, edgeNormal, -backDepth, cornerStretch));
                 }
                 else
@@ -1263,7 +1309,23 @@ namespace VexedCore
             {
                 points.Add(vList[i]);
                 pointsTexCoords.Add(texCoords[i]);
-                count++;                
+                count++;
+
+                if (vList[i].normal != vList[(i + 1) % 4].normal)
+                {
+                    // corner edge case
+                    Vector3 fullEdge = vList[(i + 1) % 4].position - vList[i].position;
+                    Vector3 currentComponent = Vector3.Dot(vList[(i + 1) % 4].normal, fullEdge) * vList[(i + 1) % 4].normal;
+                    Vector3 nextComponent = Vector3.Dot(vList[i].normal, fullEdge) * vList[i].normal;
+                    Vector3 constantComponent = Vector3.Dot(Vector3.Cross(vList[(i + 1) % 4].normal, vList[i].normal), fullEdge) * Vector3.Cross(vList[(i + 1) % 4].normal, vList[i].normal);
+                    float currentPercent = currentComponent.Length() / (currentComponent.Length() + nextComponent.Length());
+
+                    Vector3 midPoint = vList[i].position + currentComponent + currentPercent * constantComponent;
+                    points.Add(new Vertex(midPoint, Vector3.Zero, Vector3.Zero, Vector3.Zero));
+                    pointsTexCoords.Add((1 - currentPercent) * texCoords[i] + currentPercent * texCoords[(i + 1) % 4]);
+                    jointVertexIndex = count;
+                    count++;
+                }     
             }
 
             if (points.Count == 4)
@@ -2005,6 +2067,11 @@ namespace VexedCore
                             staticCircuit = new List<VertexPositionColorNormalTexture>();
                             staticVines = new List<VertexPositionColorNormalTexture>();
                             staticPlate = new List<VertexPositionColorNormalTexture>();
+                            staticCrate = new List<VertexPositionColorNormalTexture>();
+                            staticCargo = new List<VertexPositionColorNormalTexture>();
+                            staticCrystal = new List<VertexPositionColorNormalTexture>();
+                            staticIce = new List<VertexPositionColorNormalTexture>();
+                            staticCobblestone = new List<VertexPositionColorNormalTexture>();
                         }
                         foreach (Block b in blocks)
                         {
@@ -2016,11 +2083,6 @@ namespace VexedCore
 
                             b.UpdateVertexData(this);
                             b.Draw(this);
-                            foreach (Edge e in b.edges)
-                            {
-                                e.UpdateVertexData(this, true);
-                                e.Draw(this);
-                            }                            
 
                         }
                         
@@ -2029,7 +2091,12 @@ namespace VexedCore
                             fancyPlateTriangleArray = staticFancyPlate.ToArray();
                             circuitTriangleArray = staticCircuit.ToArray();
                             vinesTriangleArray = staticVines.ToArray();
-                            plateTriangleArray = staticPlate.ToArray();                            
+                            plateTriangleArray = staticPlate.ToArray();
+                            cargoTriangleArray = staticCargo.ToArray();
+                            crateTriangleArray = staticCrate.ToArray();
+                            crystalTriangleArray = staticCrystal.ToArray();
+                            cobblestoneTriangleArray = staticCobblestone.ToArray();
+                            iceTriangleArray = staticIce.ToArray();
                         }
                         if (fancyPlateTriangleArray.Count() > 0)
                         {
@@ -2058,6 +2125,51 @@ namespace VexedCore
                             Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                                 circuitTriangleArray, 0, circuitTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                        if (cargoTriangleArray.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.cargoTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                cargoTriangleArray, 0, cargoTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                        if (cobblestoneTriangleArray.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.cobblestoneTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                cobblestoneTriangleArray, 0, cobblestoneTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                        if (crateTriangleArray.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.crateTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                crateTriangleArray, 0, crateTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                        if (iceTriangleArray.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.iceTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                iceTriangleArray, 0, iceTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                        if (crystalTriangleArray.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.crystalTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                crystalTriangleArray, 0, crystalTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+
+                        foreach (Block b in blocks)
+                        {                           
+                            foreach (Edge e in b.edges)
+                            {
+                                e.UpdateVertexData(this, !b.staticObject);
+                                e.Draw(this);
+                            }
+
                         }
                         #endregion
 

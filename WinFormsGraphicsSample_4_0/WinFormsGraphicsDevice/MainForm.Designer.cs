@@ -431,7 +431,7 @@ namespace WinFormsGraphicsDevice
             this.blockType.Location = new System.Drawing.Point(10, 30);
             this.blockType.Size = new System.Drawing.Size(60, 20);
             this.blockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 11; i++)
             {
                 this.blockType.Items.Add((WallType)i);
             }

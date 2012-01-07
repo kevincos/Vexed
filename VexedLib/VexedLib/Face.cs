@@ -457,6 +457,10 @@ namespace VL
             {
                 d.Move(delta);
             }
+            foreach (Decoration d in decorations)
+            {
+                d.Move(delta);
+            }
         }
 
         public void Resize(Vector3 newSize)

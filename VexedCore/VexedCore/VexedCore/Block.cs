@@ -56,6 +56,10 @@ namespace VexedCore
         public static Texture2D fancyPlateTexture;
         public static Texture2D vineTexture;
         public static Texture2D crackedTexture;
+        public static Texture2D cargoTexture;
+        public static Texture2D crateTexture;
+        public static Texture2D iceTexture;
+        public static Texture2D crystalTexture;
 
         public Block()
         {
@@ -404,6 +408,31 @@ namespace VexedCore
                             currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, currentRoom.staticCircuit);
                             currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticCircuit);
                         }
+                        else if (wallType == VL.WallType.Cargo)
+                        {
+                            currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, currentRoom.staticCargo);
+                            currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticFancyPlate);
+                        }
+                        else if (wallType == VL.WallType.Cobblestone)
+                        {
+                            currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, currentRoom.staticCobblestone);
+                            currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticCobblestone);
+                        }
+                        else if (wallType == VL.WallType.Crate)
+                        {
+                            currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, currentRoom.staticCrate);
+                            currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticFancyPlate);
+                        }
+                        else if (wallType == VL.WallType.Ice)
+                        {
+                            currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, currentRoom.staticIce);
+                            currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticIce);
+                        }
+                        else if (wallType == VL.WallType.Crystal)
+                        {
+                            currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, currentRoom.staticCrystal);
+                            currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticCrystal);
+                        }
                         else
                         {
                             currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, baseTriangleList);
@@ -435,10 +464,35 @@ namespace VexedCore
                             currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticVines);
                             currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticVines);
                         }
+                        else if (wallType == VL.WallType.Cobblestone)
+                        {
+                            currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticCobblestone);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticCobblestone);
+                        }
                         else if (wallType == VL.WallType.Circuit)
                         {
                             currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticCircuit);
                             currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticCircuit);
+                        }
+                        else if (wallType == VL.WallType.Cargo)
+                        {
+                            currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticCargo);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticFancyPlate);
+                        }
+                        else if (wallType == VL.WallType.Crate)
+                        {
+                            currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticCrate);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticFancyPlate);
+                        }
+                        else if (wallType == VL.WallType.Ice)
+                        {
+                            currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticIce);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticIce);
+                        }
+                        else if (wallType == VL.WallType.Crystal)
+                        {
+                            currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticCrystal);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticCrystal);
                         }
                         else
                         {
@@ -492,8 +546,16 @@ namespace VexedCore
                 Engine.playerTextureEffect.Texture = fancyPlateTexture;
             else if (wallType == VL.WallType.Vines)
                 Engine.playerTextureEffect.Texture = vineTexture;
+            else if (wallType == VL.WallType.Cargo)
+                Engine.playerTextureEffect.Texture = cargoTexture;
+            else if (wallType == VL.WallType.Ice)
+                Engine.playerTextureEffect.Texture = iceTexture;
+            else if (wallType == VL.WallType.Crystal)
+                Engine.playerTextureEffect.Texture = crystalTexture;
+            else if (wallType == VL.WallType.Crate)
+                Engine.playerTextureEffect.Texture = crateTexture;
             else
-                Engine.playerTextureEffect.Texture = wallTexture;
+                Engine.playerTextureEffect.Texture = fancyPlateTexture;
             Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                 baseTriangleArray, 0, baseTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);

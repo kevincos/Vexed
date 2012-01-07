@@ -16,7 +16,10 @@ namespace VL
         Cobblestone,
         Rusty,
         Ice,
-        Vines
+        Vines,
+        Crate,
+        Cargo,
+        Crystal
     }
 
     //[Serializable]

@@ -77,7 +77,7 @@ namespace VexedCore
         public static bool transparencyEnabled = true;
         public static int lightingLevel = 0;
         public static bool toonShadingEnabled = false;
-        public static float drawDistance = 1f;
+        public static float drawDistance = 100f;
         public static ControlType controlType = ControlType.MouseAndKeyboard;
         public int optionToggleCooldown = 0;
         public static bool reDraw = false;

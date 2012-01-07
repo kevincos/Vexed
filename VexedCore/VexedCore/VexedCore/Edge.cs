@@ -201,7 +201,7 @@ namespace VexedCore
 
         public void UpdateVertexData(Room currentRoom, bool dynamic)
         {
-            if (Engine.staticObjectsInitialized == false || baseTriangleList == null || refreshVertices == true || properties.type == VL.EdgeType.ConveyorBelt)
+            if (Engine.staticObjectsInitialized == false || baseTriangleList == null || refreshVertices == true || dynamic == true || properties.type == VL.EdgeType.ConveyorBelt)
             {
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
             
