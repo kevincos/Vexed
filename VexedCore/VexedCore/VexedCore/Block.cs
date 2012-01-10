@@ -60,6 +60,7 @@ namespace VexedCore
         public static Texture2D crateTexture;
         public static Texture2D iceTexture;
         public static Texture2D crystalTexture;
+        public static Texture2D gearslotTexture;
 
         public Block()
         {
@@ -398,6 +399,11 @@ namespace VexedCore
                             currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, currentRoom.staticPlate);
                             currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticFancyPlate);
                         }
+                        else if (wallType == VL.WallType.Gearslot)
+                        {
+                            currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, currentRoom.staticFancyPlate);
+                            currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticGearslot);
+                        }
                         else if (wallType == VL.WallType.Vines)
                         {
                             currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, currentRoom.staticVines);
@@ -458,6 +464,11 @@ namespace VexedCore
                         {
                             currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticPlate);
                             currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticFancyPlate);
+                        }
+                        else if (wallType == VL.WallType.Gearslot)
+                        {
+                            currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticFancyPlate);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticGearslot);
                         }
                         else if (wallType == VL.WallType.Vines)
                         {

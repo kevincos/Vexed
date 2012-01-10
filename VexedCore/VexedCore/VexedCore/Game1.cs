@@ -175,6 +175,7 @@ namespace VexedCore
             Block.crateTexture = Content.Load<Texture2D>("crate_wall");
             Block.iceTexture = Content.Load<Texture2D>("ice_wall");
             Block.crystalTexture = Content.Load<Texture2D>("crystal_wall");
+            Block.gearslotTexture = Content.Load<Texture2D>("gearslot_wall");
             Skybox.LoadTextures(Content);
             DecorationImage.LoadTextures(Content);
             Engine.spriteFont = Content.Load<SpriteFont>("Font");

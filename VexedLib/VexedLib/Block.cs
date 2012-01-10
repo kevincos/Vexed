@@ -14,7 +14,7 @@ namespace VL
         Rock,
         FancyPlate,
         Cobblestone,
-        Rusty,
+        Gearslot,
         Ice,
         Vines,
         Crate,

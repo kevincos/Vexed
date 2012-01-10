@@ -204,3 +204,16 @@ Content\dec_hotmeter_4.xnb
 Content\dec_hotmeter_5.xnb
 Content\dec_hotmeter_6.xnb
 Content\dec_hotmeter_7.xnb
+Content\dec_largegear_0.xnb
+Content\dec_largegear_1.xnb
+Content\dec_largegear_2.xnb
+Content\dec_largegear_3.xnb
+Content\dec_chains_0.xnb
+Content\dec_chains_1.xnb
+Content\dec_chains_2.xnb
+Content\dec_chains_3.xnb
+Content\gearslot_wall.xnb
+Content\dec_furnace_0.xnb
+Content\dec_furnace_1.xnb
+Content\dec_furnace_2.xnb
+Content\dec_furnace_3.xnb

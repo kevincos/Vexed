@@ -537,6 +537,7 @@ namespace WinFormsGraphicsDevice
                 this.decorationStartFrame.Text = selectedDecoration.startFrame.ToString();
                 this.decorationWrap.Checked = selectedDecoration.wrap;
                 this.decorationSpin.Checked = selectedDecoration.freespin;
+                this.decorationReverse.Checked = selectedDecoration.reverseAnimation;
                 this.decorationR.Text = selectedDecoration.color.R.ToString();
                 this.decorationG.Text = selectedDecoration.color.G.ToString();
                 this.decorationB.Text = selectedDecoration.color.B.ToString();
@@ -812,6 +813,10 @@ namespace WinFormsGraphicsDevice
                 if (sender == this.decorationSpin)
                 {
                     selectedDecoration.freespin = this.decorationSpin.Checked;
+                }
+                if (sender == this.decorationReverse)
+                {
+                    selectedDecoration.reverseAnimation = this.decorationReverse.Checked;
                 }
                 if (sender == this.decorationDepth)
                 {

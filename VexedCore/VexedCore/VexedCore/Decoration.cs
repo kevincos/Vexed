@@ -30,6 +30,7 @@ namespace VexedCore
         public int maxAnimationTime = 24;
         public bool freeSpin = false;
         public int spinTargetFrame = 0;
+        public bool reverseAnimation = false;
 
         public List<Texture2D> decorationTexture;
         public static Texture2D defaultTexture;
@@ -61,6 +62,7 @@ namespace VexedCore
             fileName = d.fileName;
             freeSpin = d.freeSpin;
             frame = d.frame;
+            reverseAnimation = d.reverseAnimation;
             
         }
 
@@ -79,6 +81,7 @@ namespace VexedCore
             wrap = xmlDecoration.wrap;
             freeSpin = xmlDecoration.freespin;
             frame = xmlDecoration.startFrame;
+            reverseAnimation = xmlDecoration.reverseAnimation;
         }
 
         public void SetTexture()
@@ -229,9 +232,19 @@ namespace VexedCore
                 animationTime += gameTime.ElapsedGameTime.Milliseconds;
                 if (animationTime > maxAnimationTime)
                 {
-                    animationTime = 0;
-                    frame++;
-                    frame %= maxFrame;
+                    if (reverseAnimation == false)
+                    {
+                        animationTime = 0;
+                        frame++;
+                        frame %= maxFrame;
+                    }
+                    else
+                    {
+                        animationTime = 0;
+                        frame--;
+                        frame += maxFrame;
+                        frame %= maxFrame;
+                    }
                 }
             }
             else

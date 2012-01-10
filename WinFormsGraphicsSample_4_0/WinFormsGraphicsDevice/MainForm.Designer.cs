@@ -174,6 +174,7 @@ namespace WinFormsGraphicsDevice
             this.decorationWrap = new System.Windows.Forms.CheckBox();
             this.decorationStartFrame = new System.Windows.Forms.TextBox();
             this.decorationSpin = new System.Windows.Forms.CheckBox();
+            this.decorationReverse = new System.Windows.Forms.CheckBox();
             this.decorationR = new System.Windows.Forms.TextBox();
             this.decorationG = new System.Windows.Forms.TextBox();
             this.decorationB = new System.Windows.Forms.TextBox();
@@ -571,6 +572,7 @@ namespace WinFormsGraphicsDevice
             this.decorationPropertiesGroup.Controls.Add(this.decorationDepth);
             this.decorationPropertiesGroup.Controls.Add(this.decorationWrap);
             this.decorationPropertiesGroup.Controls.Add(this.decorationSpin);
+            this.decorationPropertiesGroup.Controls.Add(this.decorationReverse);
             this.decorationPropertiesGroup.Controls.Add(this.decorationStartFrame);
             this.decorationPropertiesGroup.Controls.Add(this.decorationR);
             this.decorationPropertiesGroup.Controls.Add(this.decorationG);
@@ -609,6 +611,11 @@ namespace WinFormsGraphicsDevice
             this.decorationSpin.Size = new System.Drawing.Size(60, 20);
             this.decorationSpin.CheckedChanged += new System.EventHandler(this.decoration_change);
             this.decorationSpin.Text = "Spin";
+
+            this.decorationReverse.Location = new System.Drawing.Point(150, 35);
+            this.decorationReverse.Size = new System.Drawing.Size(60, 20);
+            this.decorationReverse.CheckedChanged += new System.EventHandler(this.decoration_change);
+            this.decorationReverse.Text = "Reverse";
 
 
             this.doodadPropertiesGroup.Location = new System.Drawing.Point(10, 605);
@@ -1279,6 +1286,7 @@ namespace WinFormsGraphicsDevice
         private System.Windows.Forms.TextBox decorationB;
         private System.Windows.Forms.CheckBox decorationWrap;
         private System.Windows.Forms.CheckBox decorationSpin;
+        private System.Windows.Forms.CheckBox decorationReverse;
         private System.Windows.Forms.TextBox decorationStartFrame;        
 
         private System.Windows.Forms.GroupBox behaviorPropertiesGroup;

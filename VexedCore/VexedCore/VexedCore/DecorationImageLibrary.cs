@@ -82,6 +82,9 @@ namespace VexedCore
             textureLibrary.Add(new DecorationTexture("dec_shortcargo", Content));
             textureLibrary.Add(new DecorationTexture("dec_snowman", Content));
             textureLibrary.Add(new DecorationTexture("dec_gear", Content, 4));
+            textureLibrary.Add(new DecorationTexture("dec_chains", Content, 4));
+            textureLibrary.Add(new DecorationTexture("dec_furnace", Content, 4));
+            textureLibrary.Add(new DecorationTexture("dec_largegear", Content,4));            
             textureLibrary.Add(new DecorationTexture("dec_lightpost", Content, 8));
 
             textureLibrary.Add(new DecorationTexture("dec_piston", Content,11));

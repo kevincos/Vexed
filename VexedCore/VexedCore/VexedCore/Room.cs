@@ -116,6 +116,7 @@ namespace VexedCore
         public List<VertexPositionColorNormalTexture> staticCobblestone;
         public List<VertexPositionColorNormalTexture> staticCrystal;
         public List<VertexPositionColorNormalTexture> staticIce;
+        public List<VertexPositionColorNormalTexture> staticGearslot;
 
         public VertexPositionColorNormalTexture[] fancyPlateTriangleArray;
         public VertexPositionColorNormalTexture[] plateTriangleArray;
@@ -126,6 +127,7 @@ namespace VexedCore
         public VertexPositionColorNormalTexture[] crystalTriangleArray;
         public VertexPositionColorNormalTexture[] iceTriangleArray;
         public VertexPositionColorNormalTexture[] cobblestoneTriangleArray;
+        public VertexPositionColorNormalTexture[] gearslotTriangleArray;
 
         
         public bool refreshVertices = false;
@@ -1113,6 +1115,7 @@ namespace VexedCore
         public void AddSingleBlockSideToTriangleList(Vertex v1, Vertex v2, Color c, float depth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
         {
             Color shadedColor = Color.Blue;
+            Color shadedColorBack = Color.Blue;
             if (v1.normal != v2.normal)
             {
                 // corner edge case
@@ -1302,6 +1305,7 @@ namespace VexedCore
             List<Vector2> pointsTexCoords = new List<Vector2>();
             
             Color shadedColor = Color.Blue;
+            Color shadedColorBack = Color.Blue;
             int jointVertexIndex = 0;
             int count = 0;
 
@@ -1339,12 +1343,15 @@ namespace VexedCore
                 triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], shadedColor, vList[3].normal, frontDepth, cornerStretch));
 
                 shadedColor = FakeShader.Shade(c, -vList[0].normal);
-                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColor, vList[0].normal, -backDepth, cornerStretch));
-                triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], shadedColor, vList[1].normal, -backDepth, cornerStretch));
-                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColor, vList[2].normal, -backDepth, cornerStretch));
-                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColor, vList[0].normal, -backDepth, cornerStretch));
-                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColor, vList[2].normal, -backDepth, cornerStretch));
-                triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], shadedColor, vList[3].normal, -backDepth, cornerStretch));
+                shadedColorBack = FakeShader.RearShade(shadedColor);
+
+
+                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColorBack, vList[0].normal, -backDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], shadedColorBack, vList[1].normal, -backDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColorBack, vList[2].normal, -backDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColorBack, vList[0].normal, -backDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColorBack, vList[2].normal, -backDepth, cornerStretch));
+                triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], shadedColorBack, vList[3].normal, -backDepth, cornerStretch));
             }
             else
             {
@@ -1376,6 +1383,7 @@ namespace VexedCore
             int jointVertexIndex = 0;
             int count = 0;
             Color shadedColor = Color.Blue;
+            Color shadedColorBack = Color.Red;
             for (int i = 0; i < 4; i++)
             {
                 points.Add(vList[i]);
@@ -1411,12 +1419,14 @@ namespace VexedCore
                 if (outsideOnly == false)
                 {
                     shadedColor = FakeShader.Shade(c, -vList[0].normal);
-                    triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColor, vList[0].normal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], shadedColor, vList[1].normal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColor, vList[2].normal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColor, vList[0].normal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColor, vList[2].normal, -depth));
-                    triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], shadedColor, vList[3].normal, -depth));
+                    shadedColorBack = FakeShader.RearShade(shadedColor);
+
+                    triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColorBack, vList[0].normal, -depth));
+                    triangleList.Add(GenerateTexturedVertex(vList[1].position, texCoords[1], shadedColorBack, vList[1].normal, -depth));
+                    triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColorBack, vList[2].normal, -depth));
+                    triangleList.Add(GenerateTexturedVertex(vList[0].position, texCoords[0], shadedColorBack, vList[0].normal, -depth));
+                    triangleList.Add(GenerateTexturedVertex(vList[2].position, texCoords[2], shadedColorBack, vList[2].normal, -depth));
+                    triangleList.Add(GenerateTexturedVertex(vList[3].position, texCoords[3], shadedColorBack, vList[3].normal, -depth));
                 }
             }
             else
@@ -1427,6 +1437,7 @@ namespace VexedCore
                     if (normal == Vector3.Zero)
                         normal = points[(jointVertexIndex + i + 1) % 6].normal;
                     shadedColor = FakeShader.Shade(c, normal);
+                    
                     triangleList.Add(GenerateTexturedVertex(points[jointVertexIndex].position, pointsTexCoords[jointVertexIndex], shadedColor, normal, depth));
                     triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i) % 6].position, pointsTexCoords[(jointVertexIndex + i) % 6], shadedColor, normal, depth));
                     triangleList.Add(GenerateTexturedVertex(points[(jointVertexIndex + i + 1) % 6].position, pointsTexCoords[(jointVertexIndex + i + 1) % 6], shadedColor, normal, depth));
@@ -2072,6 +2083,7 @@ namespace VexedCore
                             staticCrystal = new List<VertexPositionColorNormalTexture>();
                             staticIce = new List<VertexPositionColorNormalTexture>();
                             staticCobblestone = new List<VertexPositionColorNormalTexture>();
+                            staticGearslot = new List<VertexPositionColorNormalTexture>();
                         }
                         foreach (Block b in blocks)
                         {
@@ -2094,6 +2106,7 @@ namespace VexedCore
                             plateTriangleArray = staticPlate.ToArray();
                             cargoTriangleArray = staticCargo.ToArray();
                             crateTriangleArray = staticCrate.ToArray();
+                            gearslotTriangleArray = staticGearslot.ToArray();
                             crystalTriangleArray = staticCrystal.ToArray();
                             cobblestoneTriangleArray = staticCobblestone.ToArray();
                             iceTriangleArray = staticIce.ToArray();
@@ -2139,6 +2152,13 @@ namespace VexedCore
                             Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                                 cobblestoneTriangleArray, 0, cobblestoneTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                        if (gearslotTriangleArray.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.gearslotTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                gearslotTriangleArray, 0, gearslotTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                         }
                         if (crateTriangleArray.Count() > 0)
                         {

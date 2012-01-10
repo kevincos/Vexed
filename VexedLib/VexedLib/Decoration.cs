@@ -21,6 +21,7 @@ namespace VL
         public bool wrap = false;
         public int startFrame = 0;
         public bool freespin = false;
+        public bool reverseAnimation = false;
 
         public Decoration()
         {
@@ -43,6 +44,7 @@ namespace VL
             wrap = d.wrap;
             freespin = d.freespin;
             startFrame = 0;
+            reverseAnimation = d.reverseAnimation;
         }
 
         public void Update()

@@ -1433,7 +1433,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_gear_0.xnb</Output>
-      <Time>2012-01-03T13:46:42.2689809-08:00</Time>
+      <Time>2012-01-09T10:38:31.6449023-08:00</Time>
     </Item>
     <Item>
       <Source>dec_gear_1.png</Source>
@@ -1442,7 +1442,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_gear_1.xnb</Output>
-      <Time>2012-01-03T13:46:44.0100819-08:00</Time>
+      <Time>2012-01-09T10:37:24.7860247-08:00</Time>
     </Item>
     <Item>
       <Source>dec_gear_2.png</Source>
@@ -1451,7 +1451,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_gear_2.xnb</Output>
-      <Time>2012-01-03T13:46:43.2610385-08:00</Time>
+      <Time>2012-01-09T10:38:04.9733554-08:00</Time>
     </Item>
     <Item>
       <Source>dec_gear_3.png</Source>
@@ -1460,7 +1460,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_gear_3.xnb</Output>
-      <Time>2012-01-03T13:46:44.6431186-08:00</Time>
+      <Time>2012-01-09T10:37:50.2955041-08:00</Time>
     </Item>
     <Item>
       <Source>dec_girder.png</Source>
@@ -1478,7 +1478,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_largegear.xnb</Output>
-      <Time>2012-01-03T13:58:38.2055028-08:00</Time>
+      <Time>2012-01-09T11:17:20.1669487-08:00</Time>
     </Item>
     <Item>
       <Source>dec_cables.png</Source>
@@ -1859,6 +1859,126 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_hotmeter_7.xnb</Output>
       <Time>2012-01-06T17:59:51.2109388-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_largegear_0.png</Source>
+      <Name>dec_largegear_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_largegear_0.xnb</Output>
+      <Time>2012-01-09T11:19:30.093484-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_largegear_1.png</Source>
+      <Name>dec_largegear_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_largegear_1.xnb</Output>
+      <Time>2012-01-09T11:21:56.4399716-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_largegear_2.png</Source>
+      <Name>dec_largegear_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_largegear_2.xnb</Output>
+      <Time>2012-01-09T11:20:50.443144-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_largegear_3.png</Source>
+      <Name>dec_largegear_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_largegear_3.xnb</Output>
+      <Time>2012-01-09T11:22:37.9083766-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_chains_0.png</Source>
+      <Name>dec_chains_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_chains_0.xnb</Output>
+      <Time>2012-01-09T12:03:18.2659092-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_chains_1.png</Source>
+      <Name>dec_chains_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_chains_1.xnb</Output>
+      <Time>2012-01-09T12:03:13.7426468-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_chains_2.png</Source>
+      <Name>dec_chains_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_chains_2.xnb</Output>
+      <Time>2012-01-09T12:03:19.9710081-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_chains_3.png</Source>
+      <Name>dec_chains_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_chains_3.xnb</Output>
+      <Time>2012-01-09T12:03:17.0968414-08:00</Time>
+    </Item>
+    <Item>
+      <Source>gearslot_wall.png</Source>
+      <Name>gearslot_wall</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\gearslot_wall.xnb</Output>
+      <Time>2012-01-09T12:25:58.9228227-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_furnace_0.png</Source>
+      <Name>dec_furnace_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_furnace_0.xnb</Output>
+      <Time>2012-01-09T15:13:04.0772479-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_furnace_1.png</Source>
+      <Name>dec_furnace_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_furnace_1.xnb</Output>
+      <Time>2012-01-09T15:22:46.8000439-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_furnace_2.png</Source>
+      <Name>dec_furnace_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_furnace_2.xnb</Output>
+      <Time>2012-01-09T15:17:49.612808-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_furnace_3.png</Source>
+      <Name>dec_furnace_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_furnace_3.xnb</Output>
+      <Time>2012-01-09T15:22:50.5872635-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
