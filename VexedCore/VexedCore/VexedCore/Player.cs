@@ -198,8 +198,8 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Laser);
-            secondaryAbility = new Ability(AbilityType.JetPack);
+            primaryAbility = new Ability(AbilityType.Missile);
+            secondaryAbility = new Ability(AbilityType.Booster);
             naturalShield = new Ability(AbilityType.Shield);
 
             //upgrades[(int)AbilityType.Laser] = true;
@@ -1471,6 +1471,13 @@ namespace VexedCore
                         }
                     }
                 }
+                // CHEAT CODES
+                if (Keyboard.GetState().IsKeyDown(Keys.K))
+                {
+                    currentRoom.currentOrbs++;
+                    currentRoom.refreshVertices = true;
+                }
+
                 if (Game1.controller.BButton.Pressed)
                 {
 

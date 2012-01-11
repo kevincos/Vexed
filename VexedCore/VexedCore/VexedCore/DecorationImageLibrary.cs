@@ -93,6 +93,8 @@ namespace VexedCore
             textureLibrary.Add(new DecorationTexture("dec_hotmeter", Content, 8));
             textureLibrary.Add(new DecorationTexture("dec_vinebranch", Content, 8, true));
             textureLibrary.Add(new DecorationTexture("dec_watertank", Content, 8, true));
+            textureLibrary.Add(new DecorationTexture("dec_lavatank", Content, 8, true));
+            textureLibrary.Add(new DecorationTexture("dec_bowl", Content, 8, true));
             textureLibrary.Add(new DecorationTexture("dec_leftvinebranch", Content,8,true));
             textureLibrary.Add(new DecorationTexture("dec_rightvinebranch", Content,8,true));
             
