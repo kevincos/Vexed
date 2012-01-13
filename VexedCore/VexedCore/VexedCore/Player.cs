@@ -198,28 +198,28 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Missile);
-            secondaryAbility = new Ability(AbilityType.Booster);
+            primaryAbility = new Ability(AbilityType.JetPack);
+            secondaryAbility = new Ability(AbilityType.SpinHook);
             naturalShield = new Ability(AbilityType.Shield);
 
-            //upgrades[(int)AbilityType.Laser] = true;
-            //upgrades[(int)AbilityType.Boots] = true;
-            //upgrades[(int)AbilityType.Empty] = true;
-            //upgrades[(int)AbilityType.WallJump] = true;
-            //upgrades[(int)AbilityType.DoubleJump] = true;
-            //upgrades[(int)AbilityType.Blaster] = true;
+            upgrades[(int)AbilityType.Laser] = true;
+            upgrades[(int)AbilityType.Boots] = true;
+            upgrades[(int)AbilityType.Empty] = true;
+            upgrades[(int)AbilityType.WallJump] = true;
+            upgrades[(int)AbilityType.DoubleJump] = true;
+            upgrades[(int)AbilityType.Blaster] = true;
             upgrades[(int)AbilityType.PermanentBoots] = true;
             upgrades[(int)AbilityType.PermanentWallJump] = true;
-            //upgrades[(int)AbilityType.ImprovedJump] = true;
-            //upgrades[(int)AbilityType.SpinHook] = true;
+            upgrades[(int)AbilityType.ImprovedJump] = true;
+            upgrades[(int)AbilityType.SpinHook] = true;
             
-            //upgrades[(int)AbilityType.Missile] = true;
-            //upgrades[(int)AbilityType.Booster] = true;
-            //upgrades[(int)AbilityType.JetPack] = true;
-            //upgrades[(int)AbilityType.Phase] = true;
-            //upgrades[(int)AbilityType.PermanentBlueKey] = true;
-            //upgrades[(int)AbilityType.PermanentRedKey] = true;
-            //upgrades[(int)AbilityType.PermanentYellowKey] = true;
+            upgrades[(int)AbilityType.Missile] = true;
+            upgrades[(int)AbilityType.Booster] = true;
+            upgrades[(int)AbilityType.JetPack] = true;
+            upgrades[(int)AbilityType.Phase] = true;
+            upgrades[(int)AbilityType.PermanentBlueKey] = true;
+            upgrades[(int)AbilityType.PermanentRedKey] = true;
+            upgrades[(int)AbilityType.PermanentYellowKey] = true;
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }

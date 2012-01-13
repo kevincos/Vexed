@@ -77,15 +77,22 @@ namespace VexedCore
             textureLibrary.Add(new DecorationTexture("dec_icicle", Content));
             textureLibrary.Add(new DecorationTexture("dec_icecolumn", Content));
             textureLibrary.Add(new DecorationTexture("dec_hotpipe", Content));
+            textureLibrary.Add(new DecorationTexture("dec_damagedjet", Content));
+            textureLibrary.Add(new DecorationTexture("dec_jet", Content));
             textureLibrary.Add(new DecorationTexture("dec_cargo", Content));
             textureLibrary.Add(new DecorationTexture("dec_crate", Content));
             textureLibrary.Add(new DecorationTexture("dec_shortcargo", Content));
+            textureLibrary.Add(new DecorationTexture("dec_starship", Content));
+            textureLibrary.Add(new DecorationTexture("dec_damagedstarship", Content));
+            textureLibrary.Add(new DecorationTexture("dec_clasp", Content));
             textureLibrary.Add(new DecorationTexture("dec_snowman", Content));
             textureLibrary.Add(new DecorationTexture("dec_gear", Content, 4));
             textureLibrary.Add(new DecorationTexture("dec_chains", Content, 4));
             textureLibrary.Add(new DecorationTexture("dec_furnace", Content, 4));
             textureLibrary.Add(new DecorationTexture("dec_largegear", Content,4));            
             textureLibrary.Add(new DecorationTexture("dec_lightpost", Content, 8));
+            textureLibrary.Add(new DecorationTexture("dec_monitor", Content, 8, true));
+            textureLibrary.Add(new DecorationTexture("dec_crane", Content, 8, true));
 
             textureLibrary.Add(new DecorationTexture("dec_piston", Content,11));
             textureLibrary.Add(new DecorationTexture("dec_colorwheel", Content, 8));

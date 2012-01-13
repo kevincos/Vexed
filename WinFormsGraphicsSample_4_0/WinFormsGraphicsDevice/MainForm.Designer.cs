@@ -121,6 +121,7 @@ namespace WinFormsGraphicsDevice
             this.elementBehaviorAdd = new System.Windows.Forms.Button();
             this.elementBehaviorDelete = new System.Windows.Forms.Button();
             this.elementDelete = new System.Windows.Forms.Button();
+            this.elementCopy = new System.Windows.Forms.Button();
             this.behaviorNameField = new System.Windows.Forms.TextBox();
             
             this.behaviorPrimaryValue = new System.Windows.Forms.TextBox();
@@ -383,6 +384,10 @@ namespace WinFormsGraphicsDevice
             this.elementDelete.Size = new System.Drawing.Size(70, 20);
             this.elementDelete.Click += new System.EventHandler(this.world_delete);
             this.elementDelete.Text = "Delete";
+            this.elementCopy.Location = new System.Drawing.Point(80, 35);
+            this.elementCopy.Size = new System.Drawing.Size(70, 20);
+            this.elementCopy.Click += new System.EventHandler(this.world_copy);
+            this.elementCopy.Text = "Copy";
             this.elementBehaviorAdd.Location = new System.Drawing.Point(10, 85);
             this.elementBehaviorAdd.Size = new System.Drawing.Size(70, 20);
             this.elementBehaviorAdd.Click += new System.EventHandler(this.world_create_new);
@@ -755,6 +760,7 @@ namespace WinFormsGraphicsDevice
             this.elementGroup.Controls.Add(this.behaviorNameField);
             this.elementGroup.Controls.Add(this.elementBehaviorDelete);
             this.elementGroup.Controls.Add(this.elementDelete);
+            this.elementGroup.Controls.Add(this.elementCopy);
 
             #endregion
 
@@ -1236,6 +1242,7 @@ namespace WinFormsGraphicsDevice
         private System.Windows.Forms.TextBox elementNameField;
         private System.Windows.Forms.TextBox elementIDField;
         private System.Windows.Forms.Button elementDelete;
+        private System.Windows.Forms.Button elementCopy;
         private System.Windows.Forms.ComboBox elementBehaviorDropdown;
         private System.Windows.Forms.Button elementBehaviorAdd;
         private System.Windows.Forms.Button elementBehaviorDelete;

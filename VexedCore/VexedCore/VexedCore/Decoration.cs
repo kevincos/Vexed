@@ -28,6 +28,7 @@ namespace VexedCore
         public int maxFrame = 1;
         public int animationTime = 0;
         public int maxAnimationTime = 24;
+        public int maxSpinAnimationTime = 35;
         public bool freeSpin = false;
         public int spinTargetFrame = 0;
         public bool reverseAnimation = false;
@@ -267,7 +268,7 @@ namespace VexedCore
                     spinTargetFrame = 6;
                 }
                 animationTime += gameTime.ElapsedGameTime.Milliseconds;
-                if (animationTime > maxAnimationTime)
+                if (animationTime > maxSpinAnimationTime)
                 {
                     animationTime = 0;
                     if (spinTargetFrame == frame)
@@ -294,7 +295,7 @@ namespace VexedCore
             {
                 UpdateVertexData(currentRoom);
 
-                //Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
+                Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
                 if (decorationTexture != null)
                     Engine.playerTextureEffect.Texture = decorationTexture[frame];
@@ -304,7 +305,7 @@ namespace VexedCore
                 Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                     triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
 
-                //Game1.graphicsDevice.BlendState = BlendState.Opaque;
+                Game1.graphicsDevice.BlendState = BlendState.Opaque;
             }
         }
     }

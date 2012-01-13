@@ -51,6 +51,9 @@ namespace VL
             color = b.color;
             edges = new List<Edge>();
             behaviors = new List<Behavior>();
+            scales = b.scales;
+            depth = b.depth;
+            type = b.type;
             foreach (Edge e in b.edges)
             {
                 edges.Add(new Edge(e));
@@ -67,7 +70,11 @@ namespace VL
             _name = "Block_" + id;
             foreach (Edge e in edges)
                 e.Init();
-            behaviors.Add(new Behavior());
+            if (behaviors.Count == 0)
+                behaviors.Add(new Behavior());
+            else
+                foreach (Behavior be in behaviors)
+                    be.Init();
         }
 
         public void Move(Vector3 delta)

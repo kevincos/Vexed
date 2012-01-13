@@ -74,7 +74,7 @@ namespace VexedCore
         public Effect postprocessEffect = null;
 
 
-        public static bool transparencyEnabled = true;
+        public static bool transparencyEnabled = false;
         public static int lightingLevel = 0;
         public static bool toonShadingEnabled = false;
         public static float drawDistance = 100f;
@@ -310,14 +310,16 @@ namespace VexedCore
                 playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                 Engine.player.currentRoom.DrawProjectiles();
 
-                foreach (Room r in Engine.roomList)
-                {
-                    r.DrawDecorations();
-                }
+                
 
                 foreach (Room r in roomList)
                 {
                     r.Draw();
+                }
+
+                foreach (Room r in Engine.roomList)
+                {
+                    r.DrawDecorations();
                 }
 
                 Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
@@ -374,7 +376,7 @@ namespace VexedCore
             }
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
             
-            if (transparencyEnabled == true)
+            //if (transparencyEnabled == true)
             {
                 //Game1.graphicsDevice.DepthStencilState = DepthStencilState.None;
                 if (WorldMap.state != ZoomState.None)

@@ -119,7 +119,13 @@ namespace VL
 
         public void Init()
         {
-            behaviors.Add(new Behavior());
+            id = IDControl.GetID();
+            _name = "Doodad_" + id;
+            if (behaviors.Count == 0)
+                behaviors.Add(new Behavior());
+            else
+                foreach (Behavior be in behaviors)
+                    be.Init();
         }
 
         public Doodad(Doodad d)

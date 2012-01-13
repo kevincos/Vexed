@@ -124,6 +124,12 @@ namespace VL
             behavior = m.behavior;
         }
 
+        public void Init()
+        {
+            id = IDControl.GetID();
+            _name = "Monster" + id;
+        }
+
         public void Update()
         {
             //_name = name + "_" + id;

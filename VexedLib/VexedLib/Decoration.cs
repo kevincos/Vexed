@@ -32,11 +32,13 @@ namespace VL
 
         public void Init()
         {
-                
+            id = IDControl.GetID();
+            _name = "Decoration_" + id;
         }
 
         public Decoration(Decoration d)
         {
+            texture = d.texture;
             id = d.id;
             position = d.position;
             up = d.up;

@@ -388,6 +388,42 @@ namespace WinFormsGraphicsDevice
             }
         }
 
+        void world_copy(object sender, System.EventArgs e)
+        {
+            if (sender == this.elementCopy)
+            {
+                if (editMode == EditMode.Monster)
+                {
+                    undoWorld = new World(world);
+                    Monster newMonster = new Monster(selectedMonster);
+                    newMonster.Init();                   
+                    selectedFace.monsters.Add(newMonster);
+                }
+                if (editMode == EditMode.Block)
+                {
+                    undoWorld = new World(world);
+                    Block newBlock = new Block(selectedBlock);
+                    newBlock.Init();
+                    selectedFace.blocks.Add(newBlock);
+                }
+                if (editMode == EditMode.Doodad)
+                {
+                    undoWorld = new World(world);
+                    Doodad newDoodad = new Doodad(selectedDoodad);
+                    newDoodad.Init();
+                    selectedFace.doodads.Add(newDoodad);
+                }
+                if (editMode == EditMode.Decoration)
+                {
+                    undoWorld = new World(world);
+                    Decoration newDecoration = new Decoration(selectedDecoration);
+                    newDecoration.Init();
+                    selectedFace.decorations.Add(newDecoration);
+                }
+            }
+        }
+
+
         void world_delete(object sender, System.EventArgs e)
         {
             if (sender == this.sectorDelete)

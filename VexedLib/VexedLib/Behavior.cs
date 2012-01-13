@@ -30,6 +30,7 @@ namespace VL
 
         public Behavior(Behavior b)
         {
+            _name = b._name;
             id = b.id;
             offset = b.offset;
             duration = b.duration;
@@ -39,6 +40,13 @@ namespace VL
             secondaryValue = b.secondaryValue;
             toggle = b.toggle;
             nextBehavior = b.nextBehavior;
+        }
+
+        public void Init()
+        {
+            id = IDControl.GetID();
+            if(_name == null)
+                _name = "Behavior_" + id;
         }
 
         public void Update()

@@ -34,9 +34,7 @@ namespace VexedCore
             Engine.sectorList = new List<Sector>();
             Engine.roomList = new List<Room>();
             Engine.player = new Player();
-            
-            //FileStream stream = new FileStream(filename, FileMode.Open);
-            
+                        
             Stream stream = TitleContainer.OpenStream(filename);
             XmlSerializer serializer = new XmlSerializer(typeof(VL.World));
 
