@@ -199,7 +199,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
             primaryAbility = new Ability(AbilityType.JetPack);
-            secondaryAbility = new Ability(AbilityType.SpinHook);
+            secondaryAbility = new Ability(AbilityType.Laser);
             naturalShield = new Ability(AbilityType.Shield);
 
             upgrades[(int)AbilityType.Laser] = true;
@@ -1935,7 +1935,7 @@ namespace VexedCore
                     v.Update(currentRoom, 1);
 
 
-                currentRoom.AddTextureToTriangleList(hookVertexList, Color.White, depth + .2f, hookTriangleList, Ability.texCoordList[7], true);
+                currentRoom.AddTextureToTriangleList(hookVertexList, Color.White, depth + .075f, hookTriangleList, Ability.texCoordList[7], true);
 
                 VertexPositionColorNormalTexture[] hookArray = hookTriangleList.ToArray();
 

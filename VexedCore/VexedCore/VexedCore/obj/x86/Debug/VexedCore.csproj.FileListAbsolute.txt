@@ -451,3 +451,16 @@ E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_cr
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_crane_7.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_damagedstarship.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_damagedjet.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_prompt_0.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_prompt_1.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_prompt_2.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_prompt_3.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_prompt_4.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_prompt_5.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_prompt_6.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_prompt_7.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_rackfront.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_rackrear.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_rackterminal.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_terminal.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_earthterminal.xnb

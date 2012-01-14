@@ -77,6 +77,12 @@ namespace VexedCore
             textureLibrary.Add(new DecorationTexture("dec_icicle", Content));
             textureLibrary.Add(new DecorationTexture("dec_icecolumn", Content));
             textureLibrary.Add(new DecorationTexture("dec_hotpipe", Content));
+            textureLibrary.Add(new DecorationTexture("dec_earthterminal", Content));
+            textureLibrary.Add(new DecorationTexture("dec_terminal", Content));
+            textureLibrary.Add(new DecorationTexture("dec_rackfront", Content));
+            textureLibrary.Add(new DecorationTexture("dec_rackrear", Content));
+            textureLibrary.Add(new DecorationTexture("dec_rackterminal", Content));
+            textureLibrary.Add(new DecorationTexture("dec_prompt", Content,8));
             textureLibrary.Add(new DecorationTexture("dec_damagedjet", Content));
             textureLibrary.Add(new DecorationTexture("dec_jet", Content));
             textureLibrary.Add(new DecorationTexture("dec_cargo", Content));
