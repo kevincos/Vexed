@@ -518,7 +518,7 @@ namespace VexedCore
                     sideTriangleArray = sideTriangleList.ToArray();
                 }                                
             }
-            if (currentRoom.refreshVertices == true)
+            if (currentRoom.refreshVertices == true && staticObject == true)
             {
                 List<VertexPositionColorNormalTexture> newColorsBase = new List<VertexPositionColorNormalTexture>();
                 List<VertexPositionColorNormalTexture> newColorsSide = new List<VertexPositionColorNormalTexture>();

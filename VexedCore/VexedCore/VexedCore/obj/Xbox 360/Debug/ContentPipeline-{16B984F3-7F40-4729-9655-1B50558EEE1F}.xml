@@ -1418,33 +1418,6 @@
       <Time>2012-01-03T13:23:00.96455-08:00</Time>
     </Item>
     <Item>
-      <Source>dec_bracer.png</Source>
-      <Name>dec_bracer</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_bracer.xnb</Output>
-      <Time>2012-01-03T13:04:08.9778986-08:00</Time>
-    </Item>
-    <Item>
-      <Source>cargo_wall.png</Source>
-      <Name>cargo_wall</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\cargo_wall.xnb</Output>
-      <Time>2012-01-04T16:48:52.2276286-08:00</Time>
-    </Item>
-    <Item>
-      <Source>crate_wall.png</Source>
-      <Name>crate_wall</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\crate_wall.xnb</Output>
-      <Time>2012-01-04T16:51:16.2939839-08:00</Time>
-    </Item>
-    <Item>
       <Source>dec_icecolumn.png</Source>
       <Name>dec_icecolumn</Name>
       <Importer>TextureImporter</Importer>
@@ -1515,168 +1488,6 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_snowman.xnb</Output>
       <Time>2012-01-05T21:41:53.4828998-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotpipe.png</Source>
-      <Name>dec_hotpipe</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipe.xnb</Output>
-      <Time>2012-01-06T15:48:28.6847788-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotpipesteam_0.png</Source>
-      <Name>dec_hotpipesteam_0</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_0.xnb</Output>
-      <Time>2012-01-06T15:55:46.5471733-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotpipesteam_1.png</Source>
-      <Name>dec_hotpipesteam_1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_1.xnb</Output>
-      <Time>2012-01-06T15:55:41.6678904-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotpipesteam_2.png</Source>
-      <Name>dec_hotpipesteam_2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_2.xnb</Output>
-      <Time>2012-01-06T15:55:45.1510924-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotpipesteam_3.png</Source>
-      <Name>dec_hotpipesteam_3</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_3.xnb</Output>
-      <Time>2012-01-06T15:55:43.1119741-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotpipesteam_4.png</Source>
-      <Name>dec_hotpipesteam_4</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_4.xnb</Output>
-      <Time>2012-01-06T15:55:45.7951297-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotpipesteam_5.png</Source>
-      <Name>dec_hotpipesteam_5</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_5.xnb</Output>
-      <Time>2012-01-06T15:55:44.3480458-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotpipesteam_6.png</Source>
-      <Name>dec_hotpipesteam_6</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_6.xnb</Output>
-      <Time>2012-01-06T15:55:43.7420107-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotpipesteam_7.png</Source>
-      <Name>dec_hotpipesteam_7</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_7.xnb</Output>
-      <Time>2012-01-06T15:55:42.4179339-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotmeter.png</Source>
-      <Name>dec_hotmeter</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter.xnb</Output>
-      <Time>2012-01-06T17:59:56.0622202-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotmeter_0.png</Source>
-      <Name>dec_hotmeter_0</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_0.xnb</Output>
-      <Time>2012-01-06T18:01:38.2701479-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotmeter_1.png</Source>
-      <Name>dec_hotmeter_1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_1.xnb</Output>
-      <Time>2012-01-06T17:59:47.4717219-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotmeter_2.png</Source>
-      <Name>dec_hotmeter_2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_2.xnb</Output>
-      <Time>2012-01-06T17:59:48.490781-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotmeter_3.png</Source>
-      <Name>dec_hotmeter_3</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_3.xnb</Output>
-      <Time>2012-01-06T18:01:25.3994014-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotmeter_4.png</Source>
-      <Name>dec_hotmeter_4</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_4.xnb</Output>
-      <Time>2012-01-06T17:59:54.8601504-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotmeter_5.png</Source>
-      <Name>dec_hotmeter_5</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_5.xnb</Output>
-      <Time>2012-01-06T17:59:53.9500977-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotmeter_6.png</Source>
-      <Name>dec_hotmeter_6</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_6.xnb</Output>
-      <Time>2012-01-06T17:59:52.8430335-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_hotmeter_7.png</Source>
-      <Name>dec_hotmeter_7</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_7.xnb</Output>
-      <Time>2012-01-06T17:59:51.2109388-08:00</Time>
     </Item>
     <Item>
       <Source>Font.spritefont</Source>
@@ -1988,78 +1799,6 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_lavatank_7.xnb</Output>
       <Time>2012-01-10T14:12:30.7347311-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_monitor_0.png</Source>
-      <Name>dec_monitor_0</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_0.xnb</Output>
-      <Time>2012-01-11T15:00:49.1489328-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_monitor_1.png</Source>
-      <Name>dec_monitor_1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_1.xnb</Output>
-      <Time>2012-01-11T15:00:55.3672934-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_monitor_2.png</Source>
-      <Name>dec_monitor_2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_2.xnb</Output>
-      <Time>2012-01-11T15:00:45.7457354-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_monitor_3.png</Source>
-      <Name>dec_monitor_3</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_3.xnb</Output>
-      <Time>2012-01-11T15:00:43.4656031-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_monitor_4.png</Source>
-      <Name>dec_monitor_4</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_4.xnb</Output>
-      <Time>2012-01-11T15:00:52.1661077-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_monitor_5.png</Source>
-      <Name>dec_monitor_5</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_5.xnb</Output>
-      <Time>2012-01-11T15:00:50.6950224-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_monitor_6.png</Source>
-      <Name>dec_monitor_6</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_6.xnb</Output>
-      <Time>2012-01-11T15:00:53.653194-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_monitor_7.png</Source>
-      <Name>dec_monitor_7</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_7.xnb</Output>
-      <Time>2012-01-11T15:00:47.4098319-08:00</Time>
     </Item>
     <Item>
       <Source>dec_starship.png</Source>
@@ -2501,6 +2240,390 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_rackterminal.xnb</Output>
       <Time>2012-01-13T13:12:59.0580363-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_cruiserfront.png</Source>
+      <Name>dec_cruiserfront</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_cruiserfront.xnb</Output>
+      <Time>2012-01-16T10:39:54.7620267-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_cruisermid.png</Source>
+      <Name>dec_cruisermid</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_cruisermid.xnb</Output>
+      <Time>2012-01-16T09:44:38.1746758-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_cruiserrear.png</Source>
+      <Name>dec_cruiserrear</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_cruiserrear.xnb</Output>
+      <Time>2012-01-16T10:52:55.9493329-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_bracer.png</Source>
+      <Name>dec_bracer</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_bracer.xnb</Output>
+      <Time>2012-01-03T13:04:08.9778986-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_monitor_0.png</Source>
+      <Name>dec_monitor_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_0.xnb</Output>
+      <Time>2012-01-11T15:00:49.1489328-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_monitor_1.png</Source>
+      <Name>dec_monitor_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_1.xnb</Output>
+      <Time>2012-01-11T15:00:55.3672934-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_monitor_2.png</Source>
+      <Name>dec_monitor_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_2.xnb</Output>
+      <Time>2012-01-11T15:00:45.7457354-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_monitor_3.png</Source>
+      <Name>dec_monitor_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_3.xnb</Output>
+      <Time>2012-01-11T15:00:43.4656031-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_monitor_4.png</Source>
+      <Name>dec_monitor_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_4.xnb</Output>
+      <Time>2012-01-11T15:00:52.1661077-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_monitor_5.png</Source>
+      <Name>dec_monitor_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_5.xnb</Output>
+      <Time>2012-01-11T15:00:50.6950224-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_monitor_6.png</Source>
+      <Name>dec_monitor_6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_6.xnb</Output>
+      <Time>2012-01-11T15:00:53.653194-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_monitor_7.png</Source>
+      <Name>dec_monitor_7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_monitor_7.xnb</Output>
+      <Time>2012-01-11T15:00:47.4098319-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotpipe.png</Source>
+      <Name>dec_hotpipe</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipe.xnb</Output>
+      <Time>2012-01-06T15:48:28.6847788-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotpipesteam_0.png</Source>
+      <Name>dec_hotpipesteam_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_0.xnb</Output>
+      <Time>2012-01-06T15:55:46.5471733-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotpipesteam_1.png</Source>
+      <Name>dec_hotpipesteam_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_1.xnb</Output>
+      <Time>2012-01-06T15:55:41.6678904-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotpipesteam_2.png</Source>
+      <Name>dec_hotpipesteam_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_2.xnb</Output>
+      <Time>2012-01-06T15:55:45.1510924-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotpipesteam_3.png</Source>
+      <Name>dec_hotpipesteam_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_3.xnb</Output>
+      <Time>2012-01-06T15:55:43.1119741-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotpipesteam_4.png</Source>
+      <Name>dec_hotpipesteam_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_4.xnb</Output>
+      <Time>2012-01-06T15:55:45.7951297-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotpipesteam_5.png</Source>
+      <Name>dec_hotpipesteam_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_5.xnb</Output>
+      <Time>2012-01-06T15:55:44.3480458-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotpipesteam_6.png</Source>
+      <Name>dec_hotpipesteam_6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_6.xnb</Output>
+      <Time>2012-01-06T15:55:43.7420107-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotpipesteam_7.png</Source>
+      <Name>dec_hotpipesteam_7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotpipesteam_7.xnb</Output>
+      <Time>2012-01-06T15:55:42.4179339-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotmeter.png</Source>
+      <Name>dec_hotmeter</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter.xnb</Output>
+      <Time>2012-01-06T17:59:56.0622202-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotmeter_0.png</Source>
+      <Name>dec_hotmeter_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_0.xnb</Output>
+      <Time>2012-01-06T18:01:38.2701479-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotmeter_1.png</Source>
+      <Name>dec_hotmeter_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_1.xnb</Output>
+      <Time>2012-01-06T17:59:47.4717219-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotmeter_2.png</Source>
+      <Name>dec_hotmeter_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_2.xnb</Output>
+      <Time>2012-01-06T17:59:48.490781-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotmeter_3.png</Source>
+      <Name>dec_hotmeter_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_3.xnb</Output>
+      <Time>2012-01-06T18:01:25.3994014-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotmeter_4.png</Source>
+      <Name>dec_hotmeter_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_4.xnb</Output>
+      <Time>2012-01-06T17:59:54.8601504-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotmeter_5.png</Source>
+      <Name>dec_hotmeter_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_5.xnb</Output>
+      <Time>2012-01-06T17:59:53.9500977-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotmeter_6.png</Source>
+      <Name>dec_hotmeter_6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_6.xnb</Output>
+      <Time>2012-01-06T17:59:52.8430335-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_hotmeter_7.png</Source>
+      <Name>dec_hotmeter_7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_hotmeter_7.xnb</Output>
+      <Time>2012-01-06T17:59:51.2109388-08:00</Time>
+    </Item>
+    <Item>
+      <Source>cargo_wall.png</Source>
+      <Name>cargo_wall</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\cargo_wall.xnb</Output>
+      <Time>2012-01-04T16:48:52.2276286-08:00</Time>
+    </Item>
+    <Item>
+      <Source>crate_wall.png</Source>
+      <Name>crate_wall</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\crate_wall.xnb</Output>
+      <Time>2012-01-04T16:51:16.2939839-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
