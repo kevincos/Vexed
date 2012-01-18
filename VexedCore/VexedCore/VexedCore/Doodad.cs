@@ -92,8 +92,11 @@ namespace VexedCore
         public float stateTransitionVelocity = .005f;
         public int stateTransitionDir = 0;
 
-        public static Texture2D beam_textures;
+        //public static Texture2D beam_textures;
+        public static List<Texture2D> flame_beam_textures;
+        public static List<Texture2D> electric_beam_textures;
         public static List<List<Vector2>> texCoordList;
+        public static List<Vector2> beamTexCoords;
 
         public static int texGridCount = 8;
 
@@ -120,6 +123,23 @@ namespace VexedCore
             }
         }
 
+        public static void InitBeamTextures(ContentManager Content)
+        {
+            flame_beam_textures = new List<Texture2D>();
+            electric_beam_textures = new List<Texture2D>();
+            flame_beam_textures.Add(Content.Load<Texture2D>("beam_flame_0"));
+            flame_beam_textures.Add(Content.Load<Texture2D>("beam_flame_1"));
+            electric_beam_textures.Add(Content.Load<Texture2D>("beam_electric_0"));
+            electric_beam_textures.Add(Content.Load<Texture2D>("beam_electric_1"));
+            beamTexCoords = new List<Vector2>();
+            beamTexCoords.Add(new Vector2(.75f, 0));
+            beamTexCoords.Add(new Vector2(.25f, 0));
+            beamTexCoords.Add(new Vector2(.25f, 1));
+            beamTexCoords.Add(new Vector2(.75f, 1));
+
+            
+
+        }
 
         public Doodad(Doodad d)
         {
@@ -706,9 +726,13 @@ namespace VexedCore
         {
             get
             {
-                if (type == VL.DoodadType.Door || type == VL.DoodadType.Beam)
+                if (type == VL.DoodadType.Door)
                 {
                     return -.5f + stateTransition * 3f;
+                }
+                if(type == VL.DoodadType.Beam)
+                {
+                    return -.3f + stateTransition * 3.2f;
                 }
                 if (type == VL.DoodadType.WallSwitch)
                 {
@@ -721,6 +745,10 @@ namespace VexedCore
         {
             get
             {
+                if (type == VL.DoodadType.Beam)
+                {
+                    return -.3f;
+                }
                 return -halfHeight;
             }
         }
@@ -1264,7 +1292,8 @@ namespace VexedCore
                 }
                 if (type == VL.DoodadType.Beam)
                 {
-                    currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth, Doodad.texCoordList[styleSpriteIndex+animationFrame], beamList, true);
+                    //currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth, Doodad.texCoordList[styleSpriteIndex+animationFrame], beamList, true);
+                    currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth, beamTexCoords, beamList, true);
                 }
                 if (type == VL.DoodadType.PowerPlug)
                 {
@@ -1282,7 +1311,7 @@ namespace VexedCore
             }
         }
 
-        public void Draw(Room currentRoom)
+        public void DrawSolids(Room currentRoom)
         {
             if (shouldRender == true)
             {
@@ -1307,6 +1336,16 @@ namespace VexedCore
                         decalArray, 0, decalList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
+            }
+        }
+
+        public void DrawSprites(Room currentRoom)
+        {
+            if (shouldRender == true)
+            {
+                UpdateVertexData(currentRoom);
+
+                Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
                 if (spriteList.Count > 0)
                 {
                     Engine.playerTextureEffect.Texture = Ability.ability_textures;
@@ -1314,36 +1353,20 @@ namespace VexedCore
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         spriteArray, 0, spriteList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
-                
+
                 if (beamList.Count > 0)
                 {
-                    Engine.playerTextureEffect.Texture = Doodad.beam_textures;
+                    
+                    if (styleSpriteIndex == 0)
+                        Engine.playerTextureEffect.Texture = Doodad.electric_beam_textures[animationFrame];
+                    else
+                        Engine.playerTextureEffect.Texture = Doodad.flame_beam_textures[animationFrame];
                     Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        beamArray, 0, beamList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        beamArray, 0, beamList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);                    
                 }
 
-
-                /*for (int i = 0; i < baseTriangleList.Count; i++)
-                {
-                    Engine.doodadVertexArray[Engine.doodadVertexArrayCount + i] = baseTriangleList[i];
-                }
-                Engine.doodadVertexArrayCount += baseTriangleList.Count;                
-                for (int i = 0; i < decalList.Count; i++)
-                {
-                    Engine.decalVertexArray[Engine.decalVertexArrayCount + i] = decalList[i];
-                }
-                Engine.decalVertexArrayCount += decalList.Count;
-                for (int i = 0; i < spriteList.Count; i++)
-                {
-                    Engine.spriteVertexArray[Engine.spriteVertexArrayCount + i] = spriteList[i];
-                }
-                Engine.spriteVertexArrayCount += spriteList.Count;
-                for (int i = 0; i < beamList.Count; i++)
-                {
-                    Engine.beamVertexArray[Engine.beamVertexArrayCount + i] = beamList[i];
-                }
-                Engine.beamVertexArrayCount += beamList.Count;*/
+                Game1.graphicsDevice.BlendState = BlendState.Opaque;
             }
         }
 

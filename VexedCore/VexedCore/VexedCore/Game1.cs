@@ -160,7 +160,7 @@ namespace VexedCore
             PauseMenu.gamePadHelp = Content.Load<Texture2D>("gamepadhelp");
             PauseMenu.keyboardOnlyHelp = Content.Load<Texture2D>("keyboardonlyhelp");
             Decoration.defaultTexture = Content.Load<Texture2D>("abilities");
-            Doodad.beam_textures = Content.Load<Texture2D>("beams");
+            //Doodad.beam_textures = Content.Load<Texture2D>("beams");
             Monster.monsterTexture = Content.Load<Texture2D>("m_body");
             Monster.monsterTextureDetail = Content.Load<Texture2D>("m_body_detail");
             WorldMap.changeArrow = Content.Load<Texture2D>("screenchangearrow");
@@ -179,6 +179,7 @@ namespace VexedCore
             Skybox.LoadTextures(Content);
             DecorationImage.LoadTextures(Content);
             Engine.spriteFont = Content.Load<SpriteFont>("Font");
+            Doodad.InitBeamTextures(Content);
             
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
 

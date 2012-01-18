@@ -1645,6 +1645,10 @@ namespace VexedCore
                     {
                         d.Draw(this);
                     }
+                    foreach (Doodad d in doodads)
+                    {
+                        d.DrawSprites(this);
+                    }
                 }
             }
         }
@@ -2200,7 +2204,7 @@ namespace VexedCore
                         #region Doodads
                         foreach (Doodad d in doodads)
                         {
-                            d.Draw(this);
+                            d.DrawSolids(this);
                         }
                         #endregion
                     }

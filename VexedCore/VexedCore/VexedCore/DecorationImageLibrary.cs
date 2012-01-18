@@ -60,23 +60,34 @@ namespace VexedCore
         {
             if(textureLibrary == null)
                 textureLibrary = new List<DecorationTexture>();
+
+
+            textureLibrary.Add(new DecorationTexture("beam_electric_src", Content));
+            textureLibrary.Add(new DecorationTexture("beam_flame_src", Content));
+
             textureLibrary.Add(new DecorationTexture("dec_arrow", Content));
             textureLibrary.Add(new DecorationTexture("dec_tree", Content));
             textureLibrary.Add(new DecorationTexture("dec_watermeter", Content));
             
             textureLibrary.Add(new DecorationTexture("dec_waterpipes", Content));
             textureLibrary.Add(new DecorationTexture("dec_shuttle", Content));
+            
             textureLibrary.Add(new DecorationTexture("dec_shuttle_open", Content));
             textureLibrary.Add(new DecorationTexture("dec_thornwall", Content));
+            textureLibrary.Add(new DecorationTexture("dec_grapevine", Content));
             textureLibrary.Add(new DecorationTexture("dec_onionrack", Content));
             textureLibrary.Add(new DecorationTexture("dec_veggietube", Content));
             textureLibrary.Add(new DecorationTexture("dec_tomatotank", Content));
             textureLibrary.Add(new DecorationTexture("dec_bracer", Content));
+            textureLibrary.Add(new DecorationTexture("dec_winerack", Content));
+            textureLibrary.Add(new DecorationTexture("dec_winebarrels", Content));
             textureLibrary.Add(new DecorationTexture("dec_girder", Content));
             textureLibrary.Add(new DecorationTexture("dec_cables", Content));
             textureLibrary.Add(new DecorationTexture("dec_icicle", Content));
             textureLibrary.Add(new DecorationTexture("dec_icecolumn", Content));
             textureLibrary.Add(new DecorationTexture("dec_hotpipe", Content));
+            textureLibrary.Add(new DecorationTexture("dec_garbage", Content));
+            textureLibrary.Add(new DecorationTexture("dec_dumpster", Content));
             textureLibrary.Add(new DecorationTexture("dec_earthterminal", Content));
             textureLibrary.Add(new DecorationTexture("dec_terminal", Content));
             textureLibrary.Add(new DecorationTexture("dec_cruisermid", Content));
@@ -86,6 +97,9 @@ namespace VexedCore
             textureLibrary.Add(new DecorationTexture("dec_rackrear", Content));
             textureLibrary.Add(new DecorationTexture("dec_rackterminal", Content));
             textureLibrary.Add(new DecorationTexture("dec_prompt", Content,8));
+            textureLibrary.Add(new DecorationTexture("dec_corepillar", Content, 8));
+            textureLibrary.Add(new DecorationTexture("dec_corewall", Content,8));
+            textureLibrary.Add(new DecorationTexture("dec_reactornode", Content, 8));
             textureLibrary.Add(new DecorationTexture("dec_damagedjet", Content));
             textureLibrary.Add(new DecorationTexture("dec_jet", Content));
             textureLibrary.Add(new DecorationTexture("dec_cargo", Content));

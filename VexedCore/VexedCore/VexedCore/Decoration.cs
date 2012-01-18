@@ -71,6 +71,20 @@ namespace VexedCore
         {
         }
 
+        public Decoration(Vector3 position, Vector3 normal, Vector3 up, String texture, float depth)
+        {
+            this.position = new Vertex(position, normal, Vector3.Zero, up);
+            id = "BeamBase";
+            decorationTexture = null;
+            fileName = texture;
+            _depth = (1f * depth) / 100f - .5f;
+            color = Color.White;
+            wrap = true;
+            freeSpin = false;
+            frame = 0;
+            reverseAnimation = false;
+        }
+
         public Decoration(VL.Decoration xmlDecoration, Vector3 normal)
         {
             this.position = new Vertex(xmlDecoration.position, normal, Vector3.Zero, xmlDecoration.up);

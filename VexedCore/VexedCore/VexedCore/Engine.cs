@@ -288,14 +288,14 @@ namespace VexedCore
                         spriteVertexArray, 0, spriteVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
-                playerTextureEffect.Texture = Doodad.beam_textures;
+                /*playerTextureEffect.Texture = Doodad.beam_textures;
                 playerTextureEffect.CurrentTechnique.Passes[0].Apply();
 
                 if (beamVertexArrayCount > 0)
                 {
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         beamVertexArray, 0, beamVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }
+                }*/
 
 
                 
@@ -313,14 +313,16 @@ namespace VexedCore
                 
 
                 foreach (Room r in roomList)
-                {
+                {                    
                     r.Draw();
                 }
 
                 foreach (Room r in Engine.roomList)
                 {
-                    r.DrawDecorations();
+                    if(r != player.currentRoom)
+                        r.DrawDecorations();
                 }
+                player.currentRoom.DrawDecorations();
 
                 Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 

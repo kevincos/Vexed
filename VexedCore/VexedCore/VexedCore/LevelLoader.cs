@@ -235,9 +235,18 @@ namespace VexedCore
                             if (newDoodad != null && newDoodad.type == VL.DoodadType.Beam)
                             {
                                 if (xmlDoodad.behaviors[0].secondaryValue == 1)
+                                {
                                     newDoodad.style = RoomStyle.Flame;
+                                    Decoration flameSrc = new Decoration(xmlDoodad.position, xmlFace.normal, xmlDoodad.up, "beam_flame_src", 75f);
+                                    newRoom.decorations.Add(flameSrc);
+                                    
+                                }
                                 else
+                                {
                                     newDoodad.style = RoomStyle.Electric;
+                                    Decoration electricSrc = new Decoration(xmlDoodad.position, xmlFace.normal, xmlDoodad.up, "beam_electric_src", 75f);
+                                    newRoom.decorations.Add(electricSrc);
+                                }
                             }
 
                             if (xmlDoodad.type == VL.DoodadType.WarpStation)
