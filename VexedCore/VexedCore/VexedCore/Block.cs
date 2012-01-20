@@ -117,12 +117,15 @@ namespace VexedCore
         public void Load(Bl b)
         {
             currentBehaviorId = b.cbi;
+            currentTime = b.ct;
             edges[0].start = new Vertex(b.e1.vs);
             edges[0].end = new Vertex(b.e1.ve);
             edges[0].currentBehaviorId = b.e1.cbi;
             edges[0].properties.primaryValue = b.e1.pv;
             edges[0].properties.secondaryValue = b.e1.sv;
             edges[0].toggleOn = b.e1.to;
+            edges[0].currentTime = b.e1.ct;
+            edges[0].behaviorStarted = b.e1.bs;
 
             edges[1].start = new Vertex(b.e2.vs);
             edges[1].end = new Vertex(b.e2.ve);
@@ -130,6 +133,8 @@ namespace VexedCore
             edges[1].properties.primaryValue = b.e2.pv;
             edges[1].properties.secondaryValue = b.e2.sv;
             edges[1].toggleOn = b.e2.to;
+            edges[1].currentTime = b.e2.ct;
+            edges[1].behaviorStarted = b.e2.bs;
 
             edges[2].start = new Vertex(b.e3.vs);
             edges[2].end = new Vertex(b.e3.ve);
@@ -137,6 +142,8 @@ namespace VexedCore
             edges[2].properties.primaryValue = b.e3.pv;
             edges[2].properties.secondaryValue = b.e3.sv;
             edges[2].toggleOn = b.e3.to;
+            edges[2].currentTime = b.e3.ct;
+            edges[2].behaviorStarted = b.e3.bs;
 
             edges[3].start = new Vertex(b.e4.vs);
             edges[3].end = new Vertex(b.e4.ve);
@@ -144,6 +151,8 @@ namespace VexedCore
             edges[3].properties.primaryValue = b.e4.pv;
             edges[3].properties.secondaryValue = b.e4.sv;
             edges[3].toggleOn = b.e4.to;
+            edges[3].currentTime = b.e4.ct;
+            edges[3].behaviorStarted = b.e4.bs;
         }
 
         public void UpdateUnfoldedBlocks(Room r, Vector3 normal, Vector3 up)

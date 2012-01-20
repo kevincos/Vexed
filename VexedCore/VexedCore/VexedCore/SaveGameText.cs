@@ -105,6 +105,7 @@ namespace VexedCore
                     int playerOrbs = 0;
                     int playerRedOrbs = 0;
                     int playerBlueOrbs = 0;
+                    int playerRoomsExplored = 0;
                     for(int i = 0; i < saveFile.rmLst.Count; i++)
                     {
                         Rm r = saveFile.rmLst[i];
@@ -112,11 +113,17 @@ namespace VexedCore
                         playerOrbs += r.co;
                         playerRedOrbs += r.cro;
                         playerBlueOrbs += r.cbo;
+                        if(r.e)
+                            playerRoomsExplored++;
+                        
                     }
+                    summary.redOrbs = playerRedOrbs;
+                    summary.blueOrbs = playerBlueOrbs;
                     summary.completionPercentage = 100 * playerOrbs / totalOrbs;
                     summary.gameTime = saveFile.player.totalGameTime;
                     summary.empty = false;
                     summary.expertMode = saveFile.player.expertLevel;
+                    summary.explorePercentage = (100 * playerRoomsExplored) / saveFile.rmLst.Count;
                 }
                 saveSummaryData.Add(summary);
             }

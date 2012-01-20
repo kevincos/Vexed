@@ -1031,15 +1031,6 @@
       <Time>2011-12-20T21:53:53.0565356-08:00</Time>
     </Item>
     <Item>
-      <Source>dec_onionrack.png</Source>
-      <Name>dec_onionrack</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_onionrack.xnb</Output>
-      <Time>2011-12-21T14:49:48.3166598-08:00</Time>
-    </Item>
-    <Item>
       <Source>dec_tomatotank.png</Source>
       <Name>dec_tomatotank</Name>
       <Importer>TextureImporter</Importer>
@@ -3236,6 +3227,18 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\LoadFontBold.xnb</Output>
       <Time>2012-01-19T11:48:34.94259-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_onionrack.png</Source>
+      <Name>dec_onionrack</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\dec_onionrack.xnb</Output>
+      <Time>2011-12-21T14:49:48.3166598-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

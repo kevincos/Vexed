@@ -780,6 +780,7 @@
       <Name>dec_onionrack</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
     <Compile Include="dec_tomatotank.png">
       <Name>dec_tomatotank</Name>

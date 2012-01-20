@@ -250,6 +250,9 @@ namespace VexedCore
             currentBehaviorId = d.cbi;
             toggleOn = d.to;
             active = d.ac;
+            currentTime = d.ct;
+            behaviorStarted = d.bs;
+
         }
 
         public Doodad()
@@ -732,7 +735,7 @@ namespace VexedCore
                 }
                 if(type == VL.DoodadType.Beam)
                 {
-                    return -.3f + stateTransition * 3.2f;
+                    return -.3f + stateTransition * 3f;
                 }
                 if (type == VL.DoodadType.WallSwitch)
                 {
@@ -1742,6 +1745,7 @@ namespace VexedCore
                     if (b.id == currentBehavior.nextBehavior)
                     {
                         currentBehavior = b;
+                        currentBehaviorId = currentBehavior.id;
                         break;
                     }
                 }
@@ -1822,6 +1826,7 @@ namespace VexedCore
         public void SetBehavior(Behavior b)
         {           
             currentBehavior = b;
+            currentBehaviorId = currentBehavior.id;
             if (currentBehavior.toggle)
                 Activate();
             else
@@ -1836,6 +1841,7 @@ namespace VexedCore
             if (currentBehavior == null)
             {
                 currentBehavior = behaviors[0];
+                currentBehaviorId = currentBehavior.id;
                 if (currentBehavior.offSet == 0)
                 {
                     //properties.primaryValue = currentBehavior.primaryValue;

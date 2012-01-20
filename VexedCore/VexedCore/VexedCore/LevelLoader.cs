@@ -407,8 +407,46 @@ namespace VexedCore
                         }
                     }
                 }
+                // FIX BEHAVIORS
                 foreach (Doodad d in r.doodads)
                 {
+                    if (d.currentBehaviorId != null && d.currentBehavior != null && d.currentBehaviorId != d.currentBehavior.id)
+                    {
+                        foreach (Behavior b in d.behaviors)
+                        {
+                            if (b.id == d.currentBehaviorId)
+                                d.currentBehavior = b;
+                        }
+                    }
+                }
+                foreach (Block block in r.blocks)
+                {
+                    if (block.currentBehaviorId != null && block.currentBehavior != null && block.currentBehaviorId != block.currentBehavior.id)
+                    {
+                        foreach (Behavior b in block.behaviors)
+                        {
+                            if (b.id == block.currentBehaviorId)
+                                block.currentBehavior = b;
+                        }
+                    }
+                    foreach (Edge e in block.edges)
+                    {
+                        if (e.currentBehaviorId != null && e.currentBehavior != null && e.currentBehaviorId != e.currentBehavior.id)
+                        {
+                            foreach (Behavior b in e.behaviors)
+                            {
+                                if (b.id == e.currentBehaviorId)
+                                    e.currentBehavior = b;
+                            }
+                        }
+                    }
+                }
+
+
+
+                foreach (Doodad d in r.doodads)
+                {
+                    
                     d.Update(new GameTime(TimeSpan.Zero, TimeSpan.Zero));
                 }
                 foreach (Monster m in r.monsters)
@@ -525,6 +563,7 @@ namespace VexedCore
             QuickSave();
             QuickLoad();
             Engine.reDraw = true;
+
 
             
         }

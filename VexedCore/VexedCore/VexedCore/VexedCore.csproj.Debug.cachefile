@@ -110,7 +110,6 @@ Content\cobblestone_wall.xnb
 Content\fancyplate_wall.xnb
 Content\vine_wall.xnb
 Content\cracked_wall.xnb
-Content\dec_onionrack.xnb
 Content\dec_tomatotank.xnb
 Content\dec_veggietube.xnb
 Content\dec_vinebranch_0.xnb
@@ -316,6 +315,7 @@ Content\icon_expert.xnb
 Content\icon_select.xnb
 Content\icon_load.xnb
 Content\LoadFontBold.xnb
+Content\dec_onionrack.xnb
 Content\Sounds\music_game.wma
 Content\Sounds\music_menu.wma
 dialog.xml

@@ -61,6 +61,8 @@ namespace VexedCore
         public bool au; //already used
         public float st; //state transition
         public bool ac; //active
+        public int ct; // current time
+        public bool bs;
 
         public Dd()
         {
@@ -69,11 +71,13 @@ namespace VexedCore
         public Dd(Doodad d)
         {
             cbi = d.currentBehaviorId;
+            bs = d.behaviorStarted;
             or = d.orbsRemaining;
             to = d.toggleOn;
             au = d.alreadyUsed;
             st = d.stateTransition;
             ac = d.active;
+            ct = d.currentTime;
         }
     }
 
@@ -94,6 +98,7 @@ namespace VexedCore
     public class Bl // Block
     {
         public string cbi; //current behavior id
+        public int ct; //current time
         public Ed e1; //edge 1
         public Ed e2; //edge 2
         public Ed e3; //edge 3
@@ -106,6 +111,7 @@ namespace VexedCore
         public Bl(Block b)
         {
             cbi = b.currentBehaviorId;
+            ct = b.currentTime;            
             e1 = new Ed(b.edges[0]);
             e2 = new Ed(b.edges[1]);
             e3 = new Ed(b.edges[2]);
@@ -116,11 +122,13 @@ namespace VexedCore
     public class Ed // Edge
     {
         public string cbi; //current behavior id
+        public int ct; // current time
         public Vertex vs; //start vertex
         public Vertex ve; //end vertex
         public int pv; //primary value;
         public int sv; //secondary value;
         public bool to; // toggle on;
+        public bool bs;
 
         public Ed()
         {
@@ -129,6 +137,8 @@ namespace VexedCore
         public Ed(Edge e)
         {
             cbi = e.currentBehaviorId;
+            ct = e.currentTime;
+            bs = e.behaviorStarted;
             vs = new Vertex(e.start);
             ve = new Vertex(e.end);
             pv = e.properties.primaryValue;
