@@ -290,9 +290,17 @@ namespace VexedCore
                 {
                     MenuItems result = (MenuItems)selectIndex;
                     if (result == MenuItems.Continue)
+                    {
+                        Game1.controller.AButton.Invalidate();
+                        Game1.controller.XButton.Invalidate();
+                        Game1.controller.YButton.Invalidate();
                         paused = false;
+                    }
                     if (result == MenuItems.RestartRoom)
                     {
+                        Game1.controller.AButton.Invalidate();
+                        Game1.controller.XButton.Invalidate();
+                        Game1.controller.YButton.Invalidate();
                         Engine.player.Respawn();
                         Physics.refresh = true;
                         Engine.reDraw = true;
@@ -302,6 +310,9 @@ namespace VexedCore
                     {
                         if (Engine.saveFileIndex != 0)
                         {
+                            Game1.controller.AButton.Invalidate();
+                            Game1.controller.XButton.Invalidate();
+                            Game1.controller.YButton.Invalidate();
                             LevelLoader.LoadFromDisk(Engine.saveFileIndex);
                             Physics.refresh = true;
                             Engine.reDraw = true;
@@ -310,6 +321,10 @@ namespace VexedCore
                     }
                     if (result == MenuItems.MainMenu)
                     {
+                        Game1.controller.AButton.Invalidate();
+                        Game1.controller.XButton.Invalidate();
+                        Game1.controller.YButton.Invalidate();
+                        SaveGameText.GenerateSummaries();
                         LevelLoader.Load("LevelData\\menu");
                         WorldMap.selectedRoomIndex = 0;
                         WorldMap.selectedSectorIndex = 0;

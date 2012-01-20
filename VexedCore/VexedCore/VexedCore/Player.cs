@@ -48,6 +48,8 @@ namespace VexedCore
         public static Texture2D player_booster_textures;
         public static List<List<Vector2>> texCoordList;
 
+        public int totalGameTime = 0;
+
         public static int texGridCount = 8;
 
         public static List<Vector2> LoadTexCoords(int x, int y)
@@ -137,6 +139,7 @@ namespace VexedCore
 
         public float playerHalfWidth = .35f;
         public float playerHalfHeight = .5f;
+        public bool expertLevel = false;
 
 
         public static int flashMaxTime = 400;
@@ -240,8 +243,10 @@ namespace VexedCore
             spinTime = p.spinTime;
             launchTime = p.launchTime;
             walkTime = p.walkTime;
+            totalGameTime = p.totalGameTime;
             boostTime = p.boostTime;
             fireCooldown = p.fireCooldown;
+            expertLevel = p.expertLevel;
             leftWall = p.leftWall;
             rightWall = p.rightWall;
             jumpTime = p.jumpTime;
@@ -1068,6 +1073,7 @@ namespace VexedCore
 
         public void Update(GameTime gameTime)
         {
+            totalGameTime += gameTime.ElapsedGameTime.Milliseconds;
             if (state == State.Spin)
                 spinRecovery = 50;
             else
@@ -1349,13 +1355,29 @@ namespace VexedCore
                 
                 EnforceVelocityLimits();
                 jetPackThrust = false;
+                #region XButton
+                if (Game1.controller.XButton.NewPressed)
+                {
+                    foreach (Doodad d in currentRoom.doodads)
+                    {
+                        if (d.active && (d.type == VL.DoodadType.LoadStation))
+                        {
+                            SaveGameText.Confirm();
+                            Game1.controller.XButton.Invalidate();
+                        }
+                    }
+                }
                 if (Game1.controller.XButton.Pressed)
                 {
                     Doodad itemStation = null;
                     bool stationPresent = false;
                     foreach (Doodad d in currentRoom.doodads)
                     {
-                        if (d.active && (d.type == VL.DoodadType.ItemStation || d.type == VL.DoodadType.ItemBlock))
+                        if (d.active && (d.type == VL.DoodadType.LoadStation))
+                        {
+                            stationPresent = true;
+                        }
+                        else if (d.active && (d.type == VL.DoodadType.ItemStation || d.type == VL.DoodadType.ItemBlock))
                         {
                             if (Game1.controller.XButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == true)
                             {
@@ -1379,6 +1401,20 @@ namespace VexedCore
                         itemStation.cooldown = itemStation.maxCooldown;
                     }
                 }
+                #endregion
+                #region YButton
+                if (Game1.controller.YButton.NewPressed)
+                {
+                    foreach (Doodad d in currentRoom.doodads)
+                    {
+                        if (d.active && (d.type == VL.DoodadType.LoadStation))
+                        {
+                            // Cancel Load
+                            SaveGameText.Cancel();
+                            Game1.controller.YButton.Invalidate();
+                        }
+                    }
+                }
                 if (Game1.controller.YButton.Pressed)
                 {
                     Doodad itemStation = null;
@@ -1386,7 +1422,11 @@ namespace VexedCore
 
                     foreach (Doodad d in currentRoom.doodads)
                     {
-                        if (d.active && (d.type == VL.DoodadType.ItemStation || d.type == VL.DoodadType.ItemBlock))
+                        if (d.active && (d.type == VL.DoodadType.LoadStation))
+                        {
+                            stationPresent = true;
+                        }
+                        else if (d.active && (d.type == VL.DoodadType.ItemStation || d.type == VL.DoodadType.ItemBlock))
                         {
                             if (Game1.controller.YButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == true)
                             {
@@ -1409,6 +1449,7 @@ namespace VexedCore
                         itemStation.cooldown = itemStation.maxCooldown;
                     }
                 }
+                #endregion
                 if (Game1.controller.JumpButtonNewPressed() && jumpRecovery == 0)
                 {
 
@@ -1478,6 +1519,7 @@ namespace VexedCore
                     currentRoom.refreshVertices = true;
                 }
 
+                #region BButton
                 if (Game1.controller.BButton.Pressed)
                 {
 
@@ -1528,17 +1570,8 @@ namespace VexedCore
                             }
                             if (d.type == VL.DoodadType.LoadStation)
                             {
-                                if (d.id.Contains("Slot1"))
-                                    Engine.saveFileIndex = 1;
-                                if (d.id.Contains("Slot2"))
-                                    Engine.saveFileIndex = 2;
-                                if (d.id.Contains("Slot3"))
-                                    Engine.saveFileIndex = 3;
-                                if (d.id.Contains("Slot4"))
-                                    Engine.saveFileIndex = 4;
-                                LevelLoader.LoadFromDisk(Engine.saveFileIndex);
-                                Physics.refresh = true;
-                                //Engine.reDraw = true;
+                                // Extra Load
+                                SaveGameText.Extra();                         
                             }
                             if (d.type == VL.DoodadType.PowerStation)
                             {
@@ -1698,6 +1731,7 @@ namespace VexedCore
                         }
                     }
                 }
+                #endregion
                 foreach (Doodad d in currentRoom.doodads)
                 {
                     if (d.active)

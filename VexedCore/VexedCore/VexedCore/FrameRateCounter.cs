@@ -35,6 +35,7 @@ namespace VexedCore
         {
                 spriteBatch = new SpriteBatch(GraphicsDevice);
                 spriteFont = content.Load<SpriteFont>("Font");
+                
         }
 
 

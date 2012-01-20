@@ -176,10 +176,20 @@ namespace VexedCore
             Block.iceTexture = Content.Load<Texture2D>("ice_wall");
             Block.crystalTexture = Content.Load<Texture2D>("crystal_wall");
             Block.gearslotTexture = Content.Load<Texture2D>("gearslot_wall");
+            Edge.iceEdge = Content.Load<Texture2D>("ice_edge");
+            Edge.spikeEdge = Content.Load<Texture2D>("spike_edge");
+            Edge.magnetEdge = Content.Load<Texture2D>("magnet_edge");
+            Edge.lavaCoolEdge = Content.Load<Texture2D>("lavacool_edge");
+            Edge.lavaHotEdge = Content.Load<Texture2D>("lavahot_edge");
             Skybox.LoadTextures(Content);
             DecorationImage.LoadTextures(Content);
             Engine.spriteFont = Content.Load<SpriteFont>("Font");
+            Engine.loadFont = Content.Load<SpriteFont>("LoadFont");
+            Engine.loadFontBold = Content.Load<SpriteFont>("LoadFontBold");
             Doodad.InitBeamTextures(Content);
+            SaveGameText.confirmOptions = Content.Load<Texture2D>("icon_confirm");
+            SaveGameText.loadOptions = Content.Load<Texture2D>("icon_load");
+            SaveGameText.InitTexCoords();
             
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
 
@@ -201,7 +211,7 @@ namespace VexedCore
             LevelLoader.QuickSave(true);
             
             //LevelLoader.Load("LevelData\\spikeelevator");
-            //LevelLoader.Load("LevelData\\menu");
+            LevelLoader.Load("LevelData\\menu");
             
             // TODO: use this.Content to load your game content here
         }
@@ -240,6 +250,7 @@ namespace VexedCore
             AnimationControl.Update(gameTime);
             controller.Update(gameTime);
             engine.Update(gameTime);
+            SaveGameText.Update(gameTime);
             ObjectiveControl.UpdateObjectiveStatus(gameTime);
             Controls.ResetMouse();
             base.Update(gameTime);

@@ -57,6 +57,8 @@ namespace VexedCore
         public static Player player;
         public static DialogBox dialogBox;
         public static SpriteFont spriteFont;
+        public static SpriteFont loadFont;
+        public static SpriteFont loadFontBold;
 
         public SaveGameText saveGameText;
 
@@ -66,7 +68,8 @@ namespace VexedCore
         
         public static SpriteBatch spriteBatch;
         public BasicEffect translucentEffect = null;
-        public BasicEffect mapEffect = null;
+        public static BasicEffect mapEffect = null;
+        public static BasicEffect loadMapEffect = null;
         public static AlphaTestEffect playerTextureEffect = null;
         public BasicEffect worldTextureEffect = null;
         public BasicEffect skyBoxEffect = null;
@@ -87,11 +90,6 @@ namespace VexedCore
         public static int resHeight = 1280;
         public static ResolutionSettings res = ResolutionSettings.R_800x600;
         
-
-        /*public static List<VertexPositionColorNormalTexture> staticOpaqueObjects;
-        public static List<VertexPositionColorNormalTexture> dynamicOpaqueObjects;
-        public static List<VertexPositionColorNormalTexture> staticDetailObjects;
-        public static List<VertexPositionColorNormalTexture> dynamicDetailObjects;*/
 
 
         public static VertexPositionColorNormalTexture[] detailVertexArray;
@@ -174,6 +172,23 @@ namespace VexedCore
             mapEffect.LightingEnabled = true;
             mapEffect.DirectionalLight1.Enabled = true;
             mapEffect.DirectionalLight0.Enabled = true;
+
+            loadMapEffect = new BasicEffect(Game1.graphicsDevice);
+            loadMapEffect.VertexColorEnabled = true;
+            loadMapEffect.Alpha = 1f;
+            loadMapEffect.SpecularPower = 0.1f;
+            loadMapEffect.AmbientLightColor = new Vector3(.7f, .7f, .7f);
+            loadMapEffect.DiffuseColor = new Vector3(1, 1, 1);
+            loadMapEffect.SpecularColor = new Vector3(1f, 1f, 1f);
+            loadMapEffect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-10, -5, -1));
+            loadMapEffect.DirectionalLight0.DiffuseColor = Color.Gray.ToVector3();
+            loadMapEffect.DirectionalLight0.SpecularColor = Color.Black.ToVector3();
+            loadMapEffect.DirectionalLight1.Direction = Vector3.Normalize(new Vector3(10, 5, 1));
+            loadMapEffect.DirectionalLight1.DiffuseColor = Color.Gray.ToVector3();
+            loadMapEffect.DirectionalLight1.SpecularColor = Color.Black.ToVector3();
+            loadMapEffect.LightingEnabled = true;
+            loadMapEffect.DirectionalLight1.Enabled = true;
+            loadMapEffect.DirectionalLight0.Enabled = true;
             /*if (Engine.lightingLevel > 0)
                 mapEffect.LightingEnabled = true;
             if (Engine.lightingLevel > 1)
@@ -573,6 +588,7 @@ namespace VexedCore
             mapEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
             mapEffect.View = Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp);
             mapEffect.Projection = projectionMatrix;
+
 
 
             playerTextureEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);

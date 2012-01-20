@@ -503,3 +503,16 @@ E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\beam_e
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\beam_flame_0.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\beam_flame_1.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\beam_flame_src.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\ice_edge.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\lavacool_edge.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\lavahot_edge.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\magnet_edge.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\spike_edge.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\LoadFont.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\icon_cancel.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\icon_clear.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\icon_confirm.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\icon_expert.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\icon_select.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\icon_load.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\LoadFontBold.xnb

@@ -1274,24 +1274,6 @@
       <Time>2012-01-03T13:23:00.96455-08:00</Time>
     </Item>
     <Item>
-      <Source>dec_icecolumn.png</Source>
-      <Name>dec_icecolumn</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_icecolumn.xnb</Output>
-      <Time>2012-01-06T10:44:38.2084725-08:00</Time>
-    </Item>
-    <Item>
-      <Source>dec_icicle.png</Source>
-      <Name>dec_icicle</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_icicle.xnb</Output>
-      <Time>2012-01-04T16:34:54.1070204-08:00</Time>
-    </Item>
-    <Item>
       <Source>dec_cargo.png</Source>
       <Name>dec_cargo</Name>
       <Importer>TextureImporter</Importer>
@@ -3097,7 +3079,163 @@
       </Parameters>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\beam_flame_src.xnb</Output>
-      <Time>2012-01-18T14:34:02.4162865-08:00</Time>
+      <Time>2012-01-18T16:20:46.7577167-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_icecolumn.png</Source>
+      <Name>dec_icecolumn</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_icecolumn.xnb</Output>
+      <Time>2012-01-06T10:44:38.2084725-08:00</Time>
+    </Item>
+    <Item>
+      <Source>dec_icicle.png</Source>
+      <Name>dec_icicle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\dec_icicle.xnb</Output>
+      <Time>2012-01-04T16:34:54.1070204-08:00</Time>
+    </Item>
+    <Item>
+      <Source>ice_edge.png</Source>
+      <Name>ice_edge</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\ice_edge.xnb</Output>
+      <Time>2012-01-18T15:51:52.2921235-08:00</Time>
+    </Item>
+    <Item>
+      <Source>lavacool_edge.png</Source>
+      <Name>lavacool_edge</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\lavacool_edge.xnb</Output>
+      <Time>2012-01-18T15:07:31.1427858-08:00</Time>
+    </Item>
+    <Item>
+      <Source>lavahot_edge.png</Source>
+      <Name>lavahot_edge</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\lavahot_edge.xnb</Output>
+      <Time>2012-01-18T15:08:21.8237252-08:00</Time>
+    </Item>
+    <Item>
+      <Source>magnet_edge.png</Source>
+      <Name>magnet_edge</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\magnet_edge.xnb</Output>
+      <Time>2012-01-18T15:06:30.3332591-08:00</Time>
+    </Item>
+    <Item>
+      <Source>spike_edge.png</Source>
+      <Name>spike_edge</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\spike_edge.xnb</Output>
+      <Time>2012-01-18T16:22:03.4271633-08:00</Time>
+    </Item>
+    <Item>
+      <Source>LoadFont.spritefont</Source>
+      <Name>LoadFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\LoadFont.xnb</Output>
+      <Time>2012-01-19T11:36:29.3425076-08:00</Time>
+    </Item>
+    <Item>
+      <Source>icon_cancel.png</Source>
+      <Name>icon_cancel</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\icon_cancel.xnb</Output>
+      <Time>2012-01-19T09:20:36.8106882-08:00</Time>
+    </Item>
+    <Item>
+      <Source>icon_clear.png</Source>
+      <Name>icon_clear</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\icon_clear.xnb</Output>
+      <Time>2012-01-19T09:19:17.1900705-08:00</Time>
+    </Item>
+    <Item>
+      <Source>icon_confirm.png</Source>
+      <Name>icon_confirm</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\icon_confirm.xnb</Output>
+      <Time>2012-01-19T11:56:31.5572321-08:00</Time>
+    </Item>
+    <Item>
+      <Source>icon_expert.png</Source>
+      <Name>icon_expert</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\icon_expert.xnb</Output>
+      <Time>2012-01-19T09:25:17.8739889-08:00</Time>
+    </Item>
+    <Item>
+      <Source>icon_select.png</Source>
+      <Name>icon_select</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\icon_select.xnb</Output>
+      <Time>2012-01-19T09:18:11.2692473-08:00</Time>
+    </Item>
+    <Item>
+      <Source>icon_load.png</Source>
+      <Name>icon_load</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\icon_load.xnb</Output>
+      <Time>2012-01-19T09:45:30.6283246-08:00</Time>
+    </Item>
+    <Item>
+      <Source>LoadFontBold.spritefont</Source>
+      <Name>LoadFontBold</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\LoadFontBold.xnb</Output>
+      <Time>2012-01-19T11:48:34.94259-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

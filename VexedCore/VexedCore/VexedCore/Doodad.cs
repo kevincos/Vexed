@@ -994,6 +994,8 @@ namespace VexedCore
 
         public List<VertexPositionColorNormalTexture> baseTriangleList;
         public List<VertexPositionColorNormalTexture> decalList;
+        public List<VertexPositionColorNormalTexture> loadButtonsList;
+        public List<VertexPositionColorNormalTexture> confirmButtonsList;
         public List<VertexPositionColorNormalTexture> spriteList;
         public List<VertexPositionColorNormalTexture> beamList;
 
@@ -1011,6 +1013,8 @@ namespace VexedCore
                 refreshVertexData = false;
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
                 decalList = new List<VertexPositionColorNormalTexture>();
+                confirmButtonsList = new List<VertexPositionColorNormalTexture>();
+                loadButtonsList = new List<VertexPositionColorNormalTexture>();
                 spriteList = new List<VertexPositionColorNormalTexture>();
                 beamList = new List<VertexPositionColorNormalTexture>();
 
@@ -1022,7 +1026,66 @@ namespace VexedCore
 
                 if (helpIconTime != 0)
                 {
-                    if ((isStation == true && type != VL.DoodadType.ItemStation) || type == VL.DoodadType.NPC_OldMan)
+                    if (type == VL.DoodadType.LoadStation)
+                    {
+                        float size = 2*((float)(helpIconTime)) / helpIconMaxTime;
+
+                        List<Vertex> XButtonList = new List<Vertex>();
+                        XButtonList.Add(new Vertex(position, size * up + size * right + up + 2f * left));
+                        XButtonList.Add(new Vertex(position, size * up + size * left + up + 2f * left));
+                        XButtonList.Add(new Vertex(position, size * down + size * left + up + 2f * left));
+                        XButtonList.Add(new Vertex(position, size * down + size * right + up + 2f * left));
+                        List<Vertex> YButtonList = new List<Vertex>();
+                        YButtonList.Add(new Vertex(position, size * up + size * right + 3 * up));
+                        YButtonList.Add(new Vertex(position, size * up + size * left + 3 * up));
+                        YButtonList.Add(new Vertex(position, size * down + size * left + 3 * up));
+                        YButtonList.Add(new Vertex(position, size * down + size * right + 3 * up));
+                        List<Vertex> BButtonList = new List<Vertex>();
+                        BButtonList.Add(new Vertex(position, size * up + size * right + 5f * up + 2f * right));
+                        BButtonList.Add(new Vertex(position, size * up + size * left + 5f * up + 2f * right));
+                        BButtonList.Add(new Vertex(position, size * down + size * left + 5f * up + 2f * right));
+                        BButtonList.Add(new Vertex(position, size * down + size * right + 5f * up + 2f * right));
+                        if (Engine.controlType == ControlType.GamePad)
+                        {
+                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.White, .55f, Ability.texCoordList[25], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.White, .55f, Ability.texCoordList[27], decalList, true);
+                        }
+                        if (Engine.controlType == ControlType.KeyboardOnly)
+                        {
+                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, Ability.texCoordList[49], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, Ability.texCoordList[51], decalList, true);
+                        }
+                        if (Engine.controlType == ControlType.MouseAndKeyboard)
+                        {
+                            XButtonList = new List<Vertex>();
+                            XButtonList.Add(new Vertex(position, size * up + size * right + 5f * up + 2f * left));
+                            XButtonList.Add(new Vertex(position, size * up + size * left + 5f * up + 2f * left));
+                            XButtonList.Add(new Vertex(position, size * down + size * left + 5f * up + 2f * left));
+                            XButtonList.Add(new Vertex(position, size * down + size * right + 5f * up + 2f * left));
+                            YButtonList = new List<Vertex>();
+                            YButtonList.Add(new Vertex(position, size * up + size * right + 5f * up + 2f * right));
+                            YButtonList.Add(new Vertex(position, size * up + size * left + 5f * up + 2f * right));
+                            YButtonList.Add(new Vertex(position, size * down + size * left + 5f * up + 2f * right));
+                            YButtonList.Add(new Vertex(position, size * down + size * right + 5f * up + 2f * right));
+                            BButtonList = new List<Vertex>();
+                            BButtonList.Add(new Vertex(position, size * up + size * right - 2.5f * up + 2f * right));
+                            BButtonList.Add(new Vertex(position, size * up + size * left - 2.5f * up + 2f * left));
+                            BButtonList.Add(new Vertex(position, size * down + size * left - 2.5f * up + 2f * left));
+                            BButtonList.Add(new Vertex(position, size * down + size * right - 2.5f * up + 2f * right));
+
+
+                            /*currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, SaveGameText.okTexCoords, loadButtonsList, true);
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, SaveGameText.cancelTexCoords, loadButtonsList, true);
+                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .55f, SaveGameText.extraTexCoords, loadButtonsList, true);*/
+
+                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, SaveGameText.okTexCoords, loadButtonsList, true);
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, SaveGameText.cancelTexCoords, loadButtonsList, true);
+                            if(SaveGameText.expertAvailable && SaveGameText.activeSaveSlot > -1 && SaveGameText.saveSummaryData[SaveGameText.activeSaveSlot].empty)
+                                currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .55f, SaveGameText.extraTexCoords, loadButtonsList, true);
+                        }
+
+                    }
+                    else if ((isStation == true && type != VL.DoodadType.ItemStation) || type == VL.DoodadType.NPC_OldMan || type == VL.DoodadType.Vortex)
                     {
                         float size = ((float)(helpIconTime)) / helpIconMaxTime;
                         List<Vertex> BButtonList = new List<Vertex>();
@@ -1030,18 +1093,18 @@ namespace VexedCore
                         BButtonList.Add(new Vertex(position, size * up + size * left + up + 2.3f * right));
                         BButtonList.Add(new Vertex(position, size * down + size * left + up + 2.3f * right));
                         BButtonList.Add(new Vertex(position, size * down + size * right + up + 2.3f * right));
-                        if(Engine.controlType == ControlType.GamePad)
+                        if (Engine.controlType == ControlType.GamePad)
                             currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.White, .55f, Ability.texCoordList[24], decalList, true);
-                        if (Engine.controlType == ControlType.KeyboardOnly )
+                        if (Engine.controlType == ControlType.KeyboardOnly)
                             currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .55f, Ability.texCoordList[50], decalList, true);
                         if (Engine.controlType == ControlType.MouseAndKeyboard)
                             currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .55f, Ability.texCoordList[48], decalList, true);
 
                     }
-                    if (type == VL.DoodadType.ItemStation)
+                    else if (type == VL.DoodadType.ItemStation)
                     {
                         float size = ((float)(helpIconTime)) / helpIconMaxTime;
-                        
+
                         List<Vertex> XButtonList = new List<Vertex>();
                         XButtonList.Add(new Vertex(position, size * up + size * right + up + 2f * left));
                         XButtonList.Add(new Vertex(position, size * up + size * left + up + 2f * left));
@@ -1055,28 +1118,28 @@ namespace VexedCore
                         if (Engine.controlType == ControlType.GamePad)
                         {
                             currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.White, .55f, Ability.texCoordList[25], decalList, true);
-                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.White, .55f, Ability.texCoordList[27], decalList, true);                        
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.White, .55f, Ability.texCoordList[27], decalList, true);
                         }
                         if (Engine.controlType == ControlType.KeyboardOnly)
                         {
                             currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, Ability.texCoordList[49], decalList, true);
-                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, Ability.texCoordList[51], decalList, true);                        
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, Ability.texCoordList[51], decalList, true);
                         }
                         if (Engine.controlType == ControlType.MouseAndKeyboard)
                         {
                             XButtonList = new List<Vertex>();
-                            XButtonList.Add(new Vertex(position, size * up + size * right + 2.5f*up + 1f * left));
+                            XButtonList.Add(new Vertex(position, size * up + size * right + 2.5f * up + 1f * left));
                             XButtonList.Add(new Vertex(position, size * up + size * left + 2.5f * up + 1f * left));
                             XButtonList.Add(new Vertex(position, size * down + size * left + 2.5f * up + 1f * left));
                             XButtonList.Add(new Vertex(position, size * down + size * right + 2.5f * up + 1f * left));
                             YButtonList = new List<Vertex>();
-                            YButtonList.Add(new Vertex(position, size * up + size * right + 2.5f * up + 1f *right));
+                            YButtonList.Add(new Vertex(position, size * up + size * right + 2.5f * up + 1f * right));
                             YButtonList.Add(new Vertex(position, size * up + size * left + 2.5f * up + 1f * right));
                             YButtonList.Add(new Vertex(position, size * down + size * left + 2.5f * up + 1f * right));
                             YButtonList.Add(new Vertex(position, size * down + size * right + 2.5f * up + 1f * right));
-                        
+
                             currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, Ability.texCoordList[46], decalList, true);
-                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, Ability.texCoordList[47], decalList, true);                        
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, Ability.texCoordList[47], decalList, true);
                         }
 
                     }
@@ -1364,6 +1427,21 @@ namespace VexedCore
                     Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         beamArray, 0, beamList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);                    
+                }
+
+                if (loadButtonsList.Count > 0)
+                {
+                    if (SaveGameText.state == LoadState.Normal)
+                    {
+                        Engine.playerTextureEffect.Texture = SaveGameText.loadOptions;
+                    }
+                    else
+                    {
+                        Engine.playerTextureEffect.Texture = SaveGameText.confirmOptions;
+                    }
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        loadButtonsList.ToArray(), 0, loadButtonsList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
                 Game1.graphicsDevice.BlendState = BlendState.Opaque;
@@ -1692,18 +1770,7 @@ namespace VexedCore
                     if (toggleOn)
                         Deactivate();
                     else
-                        Activate();
-                    
-                    if (!toggleOn)
-                    {
-                        //properties.primaryValue = 0;
-                        //properties.secondaryValue = 0;
-                    }
-                    else
-                    {
-                        //properties.primaryValue = currentBehavior.primaryValue;
-                        //properties.secondaryValue = currentBehavior.secondaryValue;
-                    }
+                        Activate();                   
                 }
             }
             return gameTime.ElapsedGameTime.Milliseconds;
