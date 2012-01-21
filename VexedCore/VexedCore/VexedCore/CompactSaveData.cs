@@ -62,7 +62,8 @@ namespace VexedCore
         public float st; //state transition
         public bool ac; //active
         public int ct; // current time
-        public bool bs;
+        public bool bs; // behaviorstarted
+        public bool i; // idle
 
         public Dd()
         {
@@ -78,6 +79,7 @@ namespace VexedCore
             st = d.stateTransition;
             ac = d.active;
             ct = d.currentTime;
+            i = d.idle;
         }
     }
 
@@ -156,7 +158,7 @@ namespace VexedCore
         public List<Mo> moLst;
         public List<Bl> blLst;
         public List<Sr> srLst;
-        public Player player;
+        public Player player;      
 
         public CompactSaveData()
         {

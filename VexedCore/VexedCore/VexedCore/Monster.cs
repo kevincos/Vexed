@@ -731,30 +731,54 @@ namespace VexedCore
 
                 if (hasOrbs == true)
                 {
-                    Doodad bonusOrb1 = new Doodad(VL.DoodadType.PowerOrb, position.position + .3f * upUnit, position.normal, position.direction);
+                    /*Doodad bonusOrb1 = new Doodad(VL.DoodadType.PowerOrb, position.position + .3f * upUnit, position.normal, position.direction);
                     Doodad bonusOrb2 = new Doodad(VL.DoodadType.PowerOrb, position.position - .3f * upUnit, position.normal, position.direction);
                     Doodad bonusOrb3 = new Doodad(VL.DoodadType.PowerOrb, position.position + .3f * rightUnit, position.normal, position.direction);
                     Doodad bonusOrb4 = new Doodad(VL.DoodadType.PowerOrb, position.position - .3f * rightUnit, position.normal, position.direction);
-                    Doodad bonusOrb5 = new Doodad(VL.DoodadType.PowerOrb, position.position, position.normal, position.direction);
+                    Doodad bonusOrb5 = new Doodad(VL.DoodadType.PowerOrb, position.position, position.normal, position.direction);*/
+                    Doodad bonusOrb1 = Engine.player.currentRoom.ActivateMonsterOrb();
+                    Doodad bonusOrb2 = Engine.player.currentRoom.ActivateMonsterOrb();
+                    Doodad bonusOrb3 = Engine.player.currentRoom.ActivateMonsterOrb();
+                    Doodad bonusOrb4 = Engine.player.currentRoom.ActivateMonsterOrb();
+                    Doodad bonusOrb5 = Engine.player.currentRoom.ActivateMonsterOrb();
                     bonusOrb1.tracking = true;
                     bonusOrb1.currentRoom = Engine.player.currentRoom;
                     bonusOrb1.position.velocity += .3f * upUnit;
+                    bonusOrb1.position.position = position.position + .3f * upUnit;
+                    bonusOrb1.position.normal = position.normal;
+                    bonusOrb1.position.direction = position.direction;
+
                     bonusOrb2.tracking = true;
                     bonusOrb2.currentRoom = Engine.player.currentRoom;
                     bonusOrb2.position.velocity -= .3f * upUnit;
+                    bonusOrb2.position.position = position.position - .3f * upUnit;
+                    bonusOrb2.position.normal = position.normal;
+                    bonusOrb2.position.direction = position.direction; bonusOrb3.tracking = true;
+
                     bonusOrb3.tracking = true;
                     bonusOrb3.currentRoom = Engine.player.currentRoom;
+                    bonusOrb3.position.position = position.position + .3f * rightUnit;
                     bonusOrb3.position.velocity += .3f * rightUnit;
+                    bonusOrb3.position.normal = position.normal;
+                    bonusOrb3.position.direction = position.direction; bonusOrb3.position.position = position.position + .3f * rightUnit;
+
                     bonusOrb4.tracking = true;
                     bonusOrb4.currentRoom = Engine.player.currentRoom;
                     bonusOrb4.position.velocity -= .3f * rightUnit;
+                    bonusOrb4.position.position = position.position - .3f * rightUnit;
+                    bonusOrb4.position.normal = position.normal;
+                    bonusOrb4.position.direction = position.direction; bonusOrb5.tracking = true;
+
                     bonusOrb5.tracking = true;
                     bonusOrb5.currentRoom = Engine.player.currentRoom;
-                    Engine.player.currentRoom.doodads.Add(bonusOrb1);
+                    bonusOrb5.position.position = position.position;
+                    bonusOrb5.position.normal = position.normal;
+                    bonusOrb5.position.direction = position.direction;
+                    /*Engine.player.currentRoom.doodads.Add(bonusOrb1);
                     Engine.player.currentRoom.doodads.Add(bonusOrb2);
                     Engine.player.currentRoom.doodads.Add(bonusOrb3);
                     Engine.player.currentRoom.doodads.Add(bonusOrb4);
-                    Engine.player.currentRoom.doodads.Add(bonusOrb5);
+                    Engine.player.currentRoom.doodads.Add(bonusOrb5);*/
                     if (moveType == VL.MovementType.RockBoss && !id.Contains("Snow") && rockBoss.state != RockBossState.Fight3)
                         hasOrbs = true;
                     else

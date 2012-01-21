@@ -51,7 +51,8 @@ namespace VexedCore
 
         public void Update(int time, Monster srcMonster)
         {
-
+            if (Engine.player.currentRoom.bossCleared == true)                            
+                return;            
             if (srcMonster.id.Contains("Basic"))
             {
                 if (dialogState == 0 && Engine.player.state == State.Normal)
@@ -73,7 +74,7 @@ namespace VexedCore
                 {
                     DialogBox.SetDialog("ArmorBoss4");
                     dialogState = 10;
-                    Engine.player.currentRoom.bossCleared = true;
+                    Engine.player.currentRoom.bossCleared = true;                    
                 }
             }
             if(srcMonster.id.Contains("AdvancedMain"))

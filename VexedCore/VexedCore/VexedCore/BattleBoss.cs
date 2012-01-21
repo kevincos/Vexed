@@ -23,6 +23,8 @@ namespace VexedCore
 
         public void Update(int time, Monster srcMonster)
         {
+            if (Engine.player.currentRoom.bossCleared == true)
+                return;
             if (phase == 0 && srcMonster.state == MonsterState.Normal && dialogStarted == false)
             {
                 dialogStarted = true;

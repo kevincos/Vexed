@@ -26,6 +26,7 @@ namespace VexedCore
         Dialog,
         HookSpin,
         Upgrade,
+        Save,
     }
 
     public enum HookState
@@ -84,6 +85,7 @@ namespace VexedCore
         [XmlIgnore]public Room currentRoom;
         public string currentRoomId;
         public int jumpRecovery = 0;
+        public bool saveComplete = false;
         public Vector3 jumpDestination;
         public Vector3 jumpSource;
         public Vector3 jumpCameraDestination;
@@ -134,6 +136,7 @@ namespace VexedCore
         public Vector3 oldNormal = Vector3.Zero;
         public Vector3 oldUp = Vector3.Zero;
         public Doodad upgradeStationDoodad = null;
+        public String upgradeStationDoodadId = "";
 
         public HookState hookState = HookState.Waiting;
 
@@ -141,6 +144,17 @@ namespace VexedCore
         public float playerHalfHeight = .5f;
         public bool expertLevel = false;
 
+        // Boss victory flags
+        public bool chaseBoss1 = false;
+        public bool chaseBoss2 = false;
+        public bool armorBoss1 = false;
+        public bool armorBoss2 = false;
+        public bool armorBoss3 = false;
+        public bool rockBoss1 = false;
+        public bool rockBoss2 = false;
+        public bool jetBoss = false;
+        public bool snakeBoss = false;
+        public bool faceBoss = false; 
 
         public static int flashMaxTime = 400;
         public static int jumpRecoveryMax = 300;
@@ -253,8 +267,12 @@ namespace VexedCore
             redOrbsCollected = p.redOrbsCollected;
             orbsCollected = p.orbsCollected;
             weaponSwitchCooldown = p.weaponSwitchCooldown;
+            
             gunType = p.gunType;
             currentRoomId = p.currentRoomId;
+            upgradeStationDoodadId = p.upgradeStationDoodadId;
+            upgradeTime = p.upgradeTime;
+            saveComplete = p.saveComplete;
             primaryAbility = new Ability(p.primaryAbility);
             secondaryAbility = new Ability(p.secondaryAbility);
             naturalShield = new Ability(p.naturalShield);
@@ -268,6 +286,8 @@ namespace VexedCore
 
             if (p.currentRoom != null)
                 currentRoomId = p.currentRoom.id;
+            if (p.upgradeStationDoodad != null)
+                upgradeStationDoodadId = p.upgradeStationDoodad.id;
 
         }
 
@@ -329,7 +349,7 @@ namespace VexedCore
         {
             get
             {
-                if (state == State.Upgrade && upgradeTime < upgradeWalkTime)
+                if ((state == State.Upgrade || state == State.Save) && upgradeTime < upgradeWalkTime)
                     return true;
                 Vector2 stick = Controls.LeftStick();
                 return (Controls.IsLeftKeyDown() ||
@@ -341,17 +361,17 @@ namespace VexedCore
         {
             get
             {
-                if (state == State.Upgrade && upgradeTime > upgradeWalkTime && upgradeTime < upgradeInTime)
+                if ((state == State.Upgrade || state == State.Save) && upgradeTime > upgradeWalkTime && upgradeTime < upgradeInTime)
                 {
                     return (.3f * (upgradeInTime - upgradeTime) + .13f * (upgradeTime - upgradeWalkTime)) / (upgradeInTime - upgradeWalkTime);
                 }
-                if (state == State.Upgrade && upgradeTime >= upgradeInTime && upgradeTime < upgradeWaitTime)
+                if ((state == State.Upgrade || state == State.Save) && upgradeTime >= upgradeInTime && upgradeTime < upgradeWaitTime)
                 {
                     return .14f;
                 }
-                if (state == State.Upgrade && upgradeTime >= upgradeWaitTime && upgradeTime < upgradeOutTime)
+                if ((state == State.Upgrade || state == State.Save) && upgradeTime >= upgradeWaitTime && upgradeTime < upgradeOutTime)
                 {
-                    return (.14f * (upgradeTime - upgradeWaitTime) + .3f * (upgradeOutTime - upgradeTime)) / (upgradeOutTime - upgradeWaitTime);
+                    return (.3f * (upgradeTime - upgradeWaitTime) + .14f * (upgradeOutTime - upgradeTime)) / (upgradeOutTime - upgradeWaitTime);
                 }
                 
                 return .3f;
@@ -392,7 +412,7 @@ namespace VexedCore
                 {
                     return currentRoom.RaisedPosition(tunnelDummy.position + cameraOffset, baseCameraDistance, cameraRoundingThreshold);
                 }
-                if (state == State.Normal || state == State.Spin || state == State.Dialog || state == State.Upgrade)
+                if (state == State.Normal || state == State.Spin || state == State.Dialog || state == State.Upgrade || state == State.Save)
                 {
                     return currentRoom.RaisedPosition(center.position + cameraOffset, adjustedCameraDistance, cameraRoundingThreshold);
                 }
@@ -424,7 +444,7 @@ namespace VexedCore
                 {
                     return currentRoom.RaisedPosition(tunnelDummy.position, baseCameraDistance, cameraRoundingThreshold);
                 }
-                if (state == State.Normal || state == State.Spin || state == State.Dialog || state == State.Upgrade)
+                if (state == State.Normal || state == State.Spin || state == State.Dialog || state == State.Upgrade || state == State.Save)
                 {
                     return currentRoom.RaisedPosition(center.position, baseCameraDistance, cameraRoundingThreshold);
                 }
@@ -490,7 +510,7 @@ namespace VexedCore
         {
             get
             {
-                if (state == State.Normal || state == State.Spin || state == State.Dialog || state == State.Upgrade)
+                if (state == State.Normal || state == State.Spin || state == State.Dialog || state == State.Upgrade || state == State.Save)
                     return center.position;
                 else if (state == State.Tunnel)
                     return tunnelDummy.position;
@@ -846,7 +866,7 @@ namespace VexedCore
 
         public void AttemptPhase()
         {
-            if (state == State.Spin || state == State.Upgrade)
+            if (state == State.Spin || state == State.Upgrade || state == State.Save)
                 return;
             float throughDistance = Math.Abs(Vector3.Dot(center.normal, currentRoom.size));
             float sideSize = .5f * Math.Abs(Vector3.Dot(right, currentRoom.size));
@@ -1166,6 +1186,7 @@ namespace VexedCore
                 cameraAngle = (cameraAngle + targetCameraAngle) / 2;
             }
 
+            /// Upgrade / Save Logic
             if (state == State.Upgrade)
             {
                 upgradeTime += gameTime.ElapsedGameTime.Milliseconds;
@@ -1191,16 +1212,58 @@ namespace VexedCore
                             upgrades[i] = true;
                     }
                     upgrades[(int)upgradeStationDoodad.abilityType] = true;
-                    DialogBox.SetDialog((new Ability(upgradeStationDoodad.abilityType)).GetDialogId());
                     upgradeStationDoodad.abilityType = AbilityType.Empty;
-                    upgradeTime = 0;
+                    //upgradeTime = 0;
                 }
                 if (upgradeTime > upgradeOutTime)
                 {
                     state = State.Normal;
                     upgradeTime = 0;
+                    DialogBox.SetDialog((new Ability(upgradeStationDoodad.originalAbilityType)).GetDialogId());
+                    
                 }
-
+            }
+            if (state == State.Save)
+            {
+                upgradeTime += gameTime.ElapsedGameTime.Milliseconds;
+                if (upgradeTime < upgradeWalkTime)
+                    center.position = ((upgradeWalkTime - upgradeTime) * jumpSource + upgradeTime * upgradeStationDoodad.position.position) / upgradeWalkTime;
+                if (Vector3.Dot(right, upgradeStationDoodad.position.position - center.position) > 0)
+                    faceDirection = 1;
+                else
+                    faceDirection = -1;
+                if (upgradeTime > upgradeWalkTime)
+                {
+                    faceDirection = 0;
+                }
+                if (upgradeTime > upgradeInTime && upgradeTime < upgradeWaitTime - 100)
+                {
+                    upgradeStationDoodad.active = false;
+                }
+                //if (upgradeTime > upgradeWaitTime - 100)
+                if (upgradeTime < upgradeOutTime)
+                {
+                    DialogBox.SetDialog("Saving");
+                }
+                if (upgradeTime > upgradeWaitTime-100)
+                {
+                    if(saveComplete==false)
+                    {
+                        upgradeTime = upgradeWaitTime - 200;
+                        saveComplete = true;
+                        upgradeStationDoodad.stateTransition = 0;
+                        
+                        SaveGame();                        
+                    }
+                    
+                }
+                if (upgradeTime > upgradeOutTime)
+                {
+                    state = State.Normal;
+                    upgradeTime = 0;
+                    DialogBox.SetDialog("SaveComplete");
+                    
+                }
             }
 
             SpinHookUpdate(gameTime);
@@ -1615,8 +1678,22 @@ namespace VexedCore
                             }
                             if (d.type == VL.DoodadType.SaveStation && d.cooldown == 0)
                             {
-                                d.cooldown = d.maxCooldown;
-                                SaveGame();
+                                bool orbsTracking = false;
+                                foreach (Doodad orb in Engine.player.currentRoom.doodads)
+                                {
+                                    if (orb.active == true && orb.tracking)
+                                        orbsTracking = true;
+
+                                }
+                                if (orbsTracking == false)
+                                {
+                                    d.cooldown = d.maxCooldown;
+                                    state = State.Save;
+                                    saveComplete = false;
+                                    upgradeStationDoodad = d;
+                                    jumpSource = center.position;
+                                    //SaveGame();
+                                }
                             }
                             if (d.type == VL.DoodadType.UpgradeStation)
                             {

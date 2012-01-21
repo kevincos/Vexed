@@ -40,6 +40,8 @@ namespace VexedCore
 
         public void Update(int time, Monster srcMonster)
         {
+            if (Engine.player.currentRoom.bossCleared == true)
+                return;
             foreach (Doodad d in Engine.player.currentRoom.doodads)
             {
                 if (d.active == false && d.type == VL.DoodadType.TriggerPoint)

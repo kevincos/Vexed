@@ -24,6 +24,8 @@ namespace VexedCore
 
         public void Update(int time, Monster srcMonster)
         {
+            if (Engine.player.currentRoom.bossCleared == true)
+                return;
             int behaviorType = (srcMonster.baseHP / 3) % 4;
             if (behaviorType != currentBehaviorType)
             {

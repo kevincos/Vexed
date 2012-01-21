@@ -20,6 +20,22 @@ because I've got this sweet beard.</string>
     <pause>true</pause>
   </DialogChunk>
   <DialogChunk>
+    <id>Saving</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Saving... Don't turn off your computer!</string>      
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
+    <id>SaveComplete</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Save Successful</string>      
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+  <DialogChunk>
     <id>PowerUp</id>
     <speaker>System</speaker>
     <textList>

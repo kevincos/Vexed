@@ -249,6 +249,19 @@ namespace VexedCore
             startTexCoords.Add(new Vector2(.85f, 1));
         }
 
+        public Doodad ActivateMonsterOrb()
+        {
+            foreach (Doodad d in doodads)
+            {
+                if (d.idle == true)
+                {
+                    d.idle = false;
+                    return d;
+                }
+            }
+            return null;
+        }
+
         public void Reset()
         {
             projectiles.Clear();
@@ -259,6 +272,8 @@ namespace VexedCore
                     m.moveType == VL.MovementType.JetBoss || m.moveType == VL.MovementType.RockBoss || m.moveType == VL.MovementType.SnakeBoss))
                 {
                     m.dead = true;
+                    m.deathTime = 0;
+                    m.state = MonsterState.Death;
                     m.baseHP = 0;
                     continue;
                 }

@@ -70,6 +70,7 @@ namespace VexedCore
         public string targetRoomId;
 
         public DoorDecal doorDecal = 0;
+        public bool idle = false;
 
         public int animationFrame = 0;
         public int animationTime = 0;
@@ -152,6 +153,7 @@ namespace VexedCore
 
             available = d.available;
             id = d.id;
+            idle = d.idle;
             targetBehavior = d.targetBehavior;
             targetObject = d.targetObject;
             expectedBehavior = d.expectedBehavior;
@@ -252,6 +254,7 @@ namespace VexedCore
             active = d.ac;
             currentTime = d.ct;
             behaviorStarted = d.bs;
+            idle = d.i;
 
         }
 
@@ -412,7 +415,7 @@ namespace VexedCore
         {
             get
             {
-                if (type == VL.DoodadType.PowerOrb || type == VL.DoodadType.RedCube || type == VL.DoodadType.BlueCube)
+                if (idle == false && (type == VL.DoodadType.PowerOrb || type == VL.DoodadType.RedCube || type == VL.DoodadType.BlueCube))
                     return true;
                 return false;
             }
@@ -636,6 +639,8 @@ namespace VexedCore
         {
             get
             {
+                if (idle == true)
+                    return false;
                 if (type == VL.DoodadType.TriggerPoint)
                     return false;
                 if (type == VL.DoodadType.Vortex)
@@ -735,7 +740,7 @@ namespace VexedCore
                 }
                 if(type == VL.DoodadType.Beam)
                 {
-                    return -.3f + stateTransition * 3f;
+                    return -.3f + stateTransition * 2.7f;
                 }
                 if (type == VL.DoodadType.WallSwitch)
                 {

@@ -55,6 +55,12 @@ namespace VexedCore
                             if (xmlMonster.movement == VL.MovementType.RockBoss && xmlMonster.IDString.Contains("Snow"))
                             {
                                 newRoom.maxOrbs += 10;
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    Doodad idleOrb = new Doodad(VL.DoodadType.PowerOrb, Vector3.Zero, Vector3.Zero, Vector3.Zero);
+                                    idleOrb.idle = true;
+                                    newRoom.doodads.Add(idleOrb);
+                                }
                                 newSector.maxOrbs += 10;
                                 newRoom.monsters.Add(new Monster(xmlMonster, xmlFace.normal));
                             }
@@ -62,6 +68,12 @@ namespace VexedCore
                             {
                                 newRoom.maxOrbs += 15;
                                 newSector.maxOrbs += 15;
+                                for (int i = 0; i < 15; i++)
+                                {
+                                    Doodad idleOrb = new Doodad(VL.DoodadType.PowerOrb, Vector3.Zero, Vector3.Zero, Vector3.Zero);
+                                    idleOrb.idle = true;
+                                    newRoom.doodads.Add(idleOrb);
+                                }
                                 newRoom.monsters.Add(new Monster(xmlMonster, xmlFace.normal));
                             }
                             else if (xmlMonster.movement == VL.MovementType.SnakeBoss)
@@ -69,6 +81,12 @@ namespace VexedCore
 
                                 int snakeLen = 20;
                                 newRoom.maxOrbs += 5 * snakeLen;
+                                for (int i = 0; i < 5 * snakeLen; i++)
+                                {
+                                    Doodad idleOrb = new Doodad(VL.DoodadType.PowerOrb, Vector3.Zero, Vector3.Zero, Vector3.Zero);
+                                    idleOrb.idle = true;
+                                    newRoom.doodads.Add(idleOrb);
+                                }
                                 for (int i = 0; i < snakeLen; i++)
                                 {
                                     Monster snakeLink = new Monster(xmlMonster, xmlFace.normal);
@@ -83,6 +101,12 @@ namespace VexedCore
                             {
                                 newRoom.maxOrbs += 5;
                                 newSector.maxOrbs += 5;
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    Doodad idleOrb = new Doodad(VL.DoodadType.PowerOrb, Vector3.Zero, Vector3.Zero, Vector3.Zero);
+                                    idleOrb.idle = true;
+                                    newRoom.doodads.Add(idleOrb);
+                                }
                                 newRoom.monsters.Add(new Monster(xmlMonster, xmlFace.normal));
                             }
                         }
@@ -327,6 +351,11 @@ namespace VexedCore
                 foreach (Doodad d in r.doodads)
                 {
                     d.currentRoom = r;
+                    if (r == Engine.player.currentRoom && d.id == Engine.player.upgradeStationDoodadId)
+                    {
+                        Engine.player.upgradeStationDoodad = d;
+                    }
+
                     if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation)
                     {
                         if (d.id.Contains("Diamond"))
