@@ -59,7 +59,8 @@ namespace VexedCore
         YellowLock,
         Leaf,
         Lander,
-        Skull
+        Skull,
+        Switch
     }
    
     public class Doodad
@@ -203,7 +204,8 @@ namespace VexedCore
             decalTextures[(int)Decal.YellowKey] = Content.Load<Texture2D>("decal_yellowkey");
             decalTextures[(int)Decal.YellowLock] = Content.Load<Texture2D>("decal_yellowlock");
             decalTextures[(int)Decal.Lander] = Content.Load<Texture2D>("decal_lander");
-            decalTextures[(int)Decal.Skull] = Content.Load<Texture2D>("decal_skull");      
+            decalTextures[(int)Decal.Skull] = Content.Load<Texture2D>("decal_skull");
+            decalTextures[(int)Decal.Switch] = Content.Load<Texture2D>("decal_switch");    
         }
 
         public static void InitBeamTextures(ContentManager Content)
@@ -571,6 +573,8 @@ namespace VexedCore
                     }
                     if (targetDoodad.type == VL.DoodadType.SaveStation)
                         return decalTextures[(int)Decal.Save];
+                    if (targetDoodad.type == VL.DoodadType.SwitchStation)
+                        return decalTextures[(int)Decal.Switch];
                     if (targetDoodad.type == VL.DoodadType.HealthStation)
                         return decalTextures[(int)Decal.Health];
                     if (targetDoodad.type == VL.DoodadType.PowerStation || targetDoodad.type == VL.DoodadType.RedPowerStation || targetDoodad.type == VL.DoodadType.BluePowerStation)
@@ -841,6 +845,8 @@ namespace VexedCore
                 if (type == VL.DoodadType.TriggerPoint)
                     return false;
                 if (type == VL.DoodadType.Vortex)
+                    return false;
+                if (type == VL.DoodadType.BridgeSide || type == VL.DoodadType.BridgeBack)
                     return false;
                 if ((type == VL.DoodadType.Door || type == VL.DoodadType.Beam) && stateTransition == 0)
                     return false;

@@ -4005,6 +4005,18 @@
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_skull.xnb</Output>
       <Time>2012-01-23T13:24:23.9401442-08:00</Time>
     </Item>
+    <Item>
+      <Source>decal_switch.png</Source>
+      <Name>decal_switch</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_switch.xnb</Output>
+      <Time>2012-01-24T15:08:09.567119-08:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{16B984F3-7F40-4729-9655-1B50558EEE1F}</ContentProjectGUID>

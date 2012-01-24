@@ -115,6 +115,7 @@
     <Compile Include="Skybox.cs" />
     <Compile Include="SnakeBoss.cs" />
     <Compile Include="SoundFX.cs" />
+    <Compile Include="Tunnel.cs" />
     <Compile Include="Vertex.cs" />
     <Compile Include="WorldMap.cs" />
     <Compile Include="WorldSave.cs" />

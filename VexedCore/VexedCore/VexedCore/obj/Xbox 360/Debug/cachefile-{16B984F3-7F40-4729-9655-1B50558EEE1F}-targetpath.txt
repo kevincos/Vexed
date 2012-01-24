@@ -358,3 +358,4 @@ Content\decal_ekey.xnb
 Content\decal_leftbutton.xnb
 Content\decal_rightbutton.xnb
 Content\decal_skull.xnb
+Content\decal_switch.xnb

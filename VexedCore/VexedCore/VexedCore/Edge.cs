@@ -233,7 +233,7 @@ namespace VexedCore
                     Engine.playerTextureEffect.Texture = Edge.magnetEdge;
                 if (properties.type == VL.EdgeType.Fire)
                 {
-                    if (toggleOn)
+                    if (properties.primaryValue > 0)
                         Engine.playerTextureEffect.Texture = Edge.lavaHotEdge;
                     else
                         Engine.playerTextureEffect.Texture = Edge.lavaCoolEdge;

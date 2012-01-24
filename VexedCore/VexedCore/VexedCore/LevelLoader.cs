@@ -171,7 +171,6 @@ namespace VexedCore
                                 
                                 Vector3 right = Vector3.Cross(xmlDoodad.up, xmlFace.normal);
                                 newRoom.doodads.Add(new Doodad(VL.DoodadType.BridgeBack, xmlDoodad.position + 1.25f*xmlDoodad.up, xmlFace.normal, xmlDoodad.up));
-                                newRoom.doodads.Add(new Doodad(VL.DoodadType.BridgeCover, xmlDoodad.position + .5f * xmlDoodad.up, xmlFace.normal, xmlDoodad.up));
                                 newRoom.doodads.Add(new Doodad(VL.DoodadType.BridgeSide, xmlDoodad.position + 1.25f * right + .25f * xmlDoodad.up, xmlFace.normal, xmlDoodad.up));
                                 newRoom.doodads.Add(new Doodad(VL.DoodadType.BridgeSide, xmlDoodad.position - 1.25f * right + .25f * xmlDoodad.up, xmlFace.normal, xmlDoodad.up));                                
                             }
@@ -206,16 +205,16 @@ namespace VexedCore
 
                                 newRoom.doodads.Add(entrance);
                                 newRoom.doodads.Add(exit);
-                                newRoom.doodads.Add(leftSide1);
-                                newRoom.doodads.Add(rightSide1);
-                                newRoom.doodads.Add(topSide1);
-                                newRoom.doodads.Add(bottomSide1);
+                                //newRoom.doodads.Add(leftSide1);
+                                //newRoom.doodads.Add(rightSide1);
+                                //newRoom.doodads.Add(topSide1);
+                                //newRoom.doodads.Add(bottomSide1);
                                 newRoom.doodads.Add(leftDoor1);
                                 newRoom.doodads.Add(rightDoor1);
-                                newRoom.doodads.Add(leftSide2);
-                                newRoom.doodads.Add(rightSide2);
-                                newRoom.doodads.Add(topSide2);
-                                newRoom.doodads.Add(bottomSide2);
+                                //newRoom.doodads.Add(leftSide2);
+                                //newRoom.doodads.Add(rightSide2);
+                                //newRoom.doodads.Add(topSide2);
+                                //newRoom.doodads.Add(bottomSide2);
                                 newRoom.doodads.Add(leftDoor2);
                                 newRoom.doodads.Add(rightDoor2);
                                 
@@ -233,23 +232,7 @@ namespace VexedCore
                                 newRoom.doodads.Add(station);
                                 newRoom.doodads.Add(icon);
                                 newRoom.doodads.Add(leftDoor);
-                                newRoom.doodads.Add(rightDoor);
-
-                                /*if (xmlDoodad.type == VL.DoodadType.JumpPad || xmlDoodad.type == VL.DoodadType.JumpStation)
-                                {
-                                    Doodad leftSide = new Doodad(VL.DoodadType.RingSide, station.position.position + .8f * right, station.position.normal, station.position.direction);
-                                    Doodad rightSide = new Doodad(VL.DoodadType.RingSide, station.position.position - .8f * right, station.position.normal, station.position.direction);
-                                    Doodad topSide = new Doodad(VL.DoodadType.RingTop, station.position.position + .8f * station.position.direction, station.position.normal, station.position.direction);
-                                    Doodad bottomSide = new Doodad(VL.DoodadType.RingTop, station.position.position - .8f * station.position.direction, station.position.normal, station.position.direction);
-                                    leftSide.targetObject = station.id;
-                                    rightSide.targetObject = station.id;
-                                    topSide.targetObject = station.id;
-                                    bottomSide.targetObject = station.id;
-                                    newRoom.doodads.Add(leftSide);
-                                    newRoom.doodads.Add(rightSide);
-                                    newRoom.doodads.Add(topSide);
-                                    newRoom.doodads.Add(bottomSide);                                    
-                                }*/
+                                newRoom.doodads.Add(rightDoor);  
                             }
                             else
                             {
@@ -348,6 +331,7 @@ namespace VexedCore
                         r.parentSector = s;
                     }
                 }
+                int roomTunnelCount = 0;
                 foreach (Doodad d in r.doodads)
                 {
                     d.currentRoom = r;
@@ -355,7 +339,14 @@ namespace VexedCore
                     {
                         Engine.player.upgradeStationDoodad = d;
                     }
-
+                    if (d.type == VL.DoodadType.Vortex)
+                    {
+                        float roomSize = Math.Abs(Vector3.Dot(r.size/2, d.position.normal));
+                        float radiusMod = ((int)(roomTunnelCount / 2)) * .01f;
+                        r.jumpRings.Add(new JumpRing(RingType.TunnelTube, d.position.position - (roomSize) * d.position.normal, d.position.direction, d.position.normal, (roomSize-.5f), 1.2f+radiusMod));
+                        r.jumpRings.Add(new JumpRing(RingType.TunnelRing, d.position.position - .5f * d.position.normal, d.position.direction, d.position.normal, .6f, 1.2f + radiusMod));
+                        roomTunnelCount++;
+                    }
                     if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation)
                     {
                         if (d.id.Contains("Cherry"))
@@ -408,14 +399,17 @@ namespace VexedCore
 
                             float ringMod = 3f;
                             float lastRingMod = 0f;
+                            //r.jumpRings.Add(new JumpRing(RingType.JumpRing, d.position.position -.08f * d.position.normal, d.position.direction, d.position.normal,.15f,1.3f));
+                            //r.jumpRings.Add(new JumpRing(RingType.JumpRing, d.position.position - .08f * d.position.normal, d.position.direction, d.position.normal, .15f, 1.65f));
+                            r.jumpRings.Add(new JumpRing(RingType.JumpRing, d.position.position -.3f * d.position.normal, d.position.direction, d.position.normal,.15f,1.3f));
                             for (; ringMod < Math.Min(20f, distanceToNextRoom / 2); ringMod += 4)
                             {
-                                r.jumpRings.Add(new JumpRing(d.position.position + ringMod * d.position.normal, d.position.direction, d.position.normal));
+                                r.jumpRings.Add(new JumpRing(RingType.JumpRing, d.position.position + ringMod * d.position.normal, d.position.direction, d.position.normal));
                                 lastRingMod = ringMod;
                             }
                             if (ringMod >= 10f && distanceToNextRoom / 2 - 20 > .2f)
                             {
-                                r.jumpRings.Add(new JumpRing(d.position.position + (lastRingMod + .5f) * d.position.normal, d.position.direction, d.position.normal, distanceToNextRoom / 2 - ((lastRingMod + .5f))));
+                                r.jumpRings.Add(new JumpRing(RingType.JumpTube, d.position.position + (lastRingMod + .5f) * d.position.normal, d.position.direction, d.position.normal, distanceToNextRoom / 2 - ((lastRingMod + .5f))));
                             }
                         }
                     }
@@ -432,6 +426,10 @@ namespace VexedCore
                                 }
                             }
                         }
+                        
+                        r.jumpRings.Add(new JumpRing(RingType.BridgeRing, d.position.position - 1f * d.position.direction, Vector3.Cross(d.position.normal, d.position.direction), d.position.direction,1.8f,1.65f));
+                        r.jumpRings.Add(new JumpRing(RingType.BridgeBack, d.position.position + .8f * d.position.direction, Vector3.Cross(d.position.normal, d.position.direction), d.position.direction, .2f, 1.65f));
+                        r.jumpRings.Add(new JumpRing(RingType.BridgeWarp, d.position.position - .4f * d.position.direction, Vector3.Cross(d.position.normal, d.position.direction), d.position.direction, .2f, 1.1f));
                     }
                     else if (d.type == VL.DoodadType.Checkpoint)
                     {

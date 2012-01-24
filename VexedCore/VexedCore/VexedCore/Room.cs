@@ -68,6 +68,7 @@ namespace VexedCore
         public List<Block> blocks;
         public List<Doodad> doodads;
         public List<JumpRing> jumpRings;
+        public List<Tunnel> tunnels;
         public List<Monster> monsters;
         public List<Projectile> projectiles;
         public List<Decoration> decorations;
@@ -86,7 +87,7 @@ namespace VexedCore
         public List<VertexPositionColorNormalTexture> staticCrystal;
         public List<VertexPositionColorNormalTexture> staticIce;
         public List<VertexPositionColorNormalTexture> staticGearslot;
-        public List<VertexPositionColorNormalTexture> staticRings;
+        public List<VertexPositionColorNormalTexture> staticRings;        
 
         public VertexPositionColorNormalTexture[] fancyPlateTriangleArray;
         public VertexPositionColorNormalTexture[] plateTriangleArray;
@@ -131,10 +132,15 @@ namespace VexedCore
                 doodads.Add(new Doodad(d));
             }
             jumpRings = new List<JumpRing>();
-            foreach (JumpRing j in r.jumpRings)
+            /*foreach (JumpRing j in r.jumpRings)
             {
                 jumpRings.Add(new JumpRing(j));
-            }
+            }*/
+            tunnels = new List<Tunnel>();
+            /*foreach (Tunnel t in r.tunnels)
+            {
+                tunnels.Add(new Tunnel(t));
+            }*/
             monsters = new List<Monster>();
             foreach (Monster m in r.monsters)
             {
@@ -160,6 +166,7 @@ namespace VexedCore
             projectiles = new List<Projectile>();
             decorations = new List<Decoration>();
             jumpRings = new List<JumpRing>();
+            tunnels = new List<Tunnel>();
         }
 
         public Room(VL.Room xmlRoom)
@@ -173,6 +180,7 @@ namespace VexedCore
             projectiles = new List<Projectile>();
             decorations = new List<Decoration>();
             jumpRings = new List<JumpRing>();
+            tunnels = new List<Tunnel>();
         }
 
         public void Load(Rm r)
@@ -2094,6 +2102,10 @@ namespace VexedCore
                         foreach (JumpRing j in jumpRings)
                         {
                             j.Draw(this);
+                        }
+                        foreach (Tunnel t in tunnels)
+                        {
+                            t.Draw(this);
                         }
                         
                         if (fancyPlateTriangleArray == null || refreshVertices == true)
