@@ -21,14 +21,45 @@ namespace VexedCore
         Blade
     }
 
-    public enum DoorDecal
+    public enum Decal
     {
-        Default = 0,
-        Cherry = 56,
-        Diamond = 57,
-        Flame = 33,
-        Cube = 37,
-        Target = 38
+        Save = 0,
+        Health = 1,
+        BlueKey,
+        BlueLock,
+        Booster,
+        Boots,
+        Cherry,
+        DoubleJump,
+        HookTarget,
+        ImprovedJump,
+        JetPack,
+        JumpPad,
+        Laser,
+        LaserSwitch,
+        Missile,
+        Onion,
+        BlueCodes,
+        PermanantBoots,
+        RedCodes,
+        PermanantWallJump,
+        YellowCodes,
+        Phase,
+        Blaster,
+        PlugSlot,
+        PowerOrb,
+        PowerPlug,
+        RainDrop,
+        RedKey,
+        RedLock,
+        Station,
+        WallJump,
+        Warp,
+        YellowKey,
+        YellowLock,
+        Leaf,
+        Lander,
+        Skull
     }
    
     public class Doodad
@@ -69,7 +100,7 @@ namespace VexedCore
         public string targetEdgeId;
         public string targetRoomId;
 
-        public DoorDecal doorDecal = 0;
+        public Decal doorDecal = 0;
         public bool idle = false;
 
         public int animationFrame = 0;
@@ -99,6 +130,12 @@ namespace VexedCore
         public static List<List<Vector2>> texCoordList;
         public static List<Vector2> beamTexCoords;
 
+        public static List<Texture2D> decalTextures;
+
+        public static Texture2D useButton;
+        public static Texture2D leftButton;
+        public static Texture2D rightButton;
+
         public static int texGridCount = 8;
 
         public static List<Vector2> LoadTexCoords(int x, int y)
@@ -122,6 +159,51 @@ namespace VexedCore
                     texCoordList.Add(LoadTexCoords(x, y));
                 }
             }
+        }
+
+        public static void InitDecalTextures(ContentManager Content)
+        {
+            decalTextures = new List<Texture2D>();
+            for (int i = 0; i < 60; i++)
+            {
+                decalTextures.Add(null);
+            }
+            decalTextures[(int)Decal.Save] = Content.Load<Texture2D>("decal_save");
+            decalTextures[(int)Decal.Health] = Content.Load<Texture2D>("decal_health");
+            decalTextures[(int)Decal.BlueKey] = Content.Load<Texture2D>("decal_bluekey");
+            decalTextures[(int)Decal.BlueLock] = Content.Load<Texture2D>("decal_bluelock");
+            decalTextures[(int)Decal.Booster] = Content.Load<Texture2D>("decal_booster");
+            decalTextures[(int)Decal.Boots] = Content.Load<Texture2D>("decal_boots");
+            decalTextures[(int)Decal.Cherry] = Content.Load<Texture2D>("decal_cherry");
+            decalTextures[(int)Decal.DoubleJump] = Content.Load<Texture2D>("decal_doublejump");
+            decalTextures[(int)Decal.HookTarget] = Content.Load<Texture2D>("decal_hooktarget");
+            decalTextures[(int)Decal.ImprovedJump] = Content.Load<Texture2D>("decal_improvedjump");
+            decalTextures[(int)Decal.JetPack] = Content.Load<Texture2D>("decal_jetpack");
+            decalTextures[(int)Decal.JumpPad] = Content.Load<Texture2D>("decal_jump");
+            decalTextures[(int)Decal.Laser] = Content.Load<Texture2D>("decal_laser");
+            decalTextures[(int)Decal.LaserSwitch] = Content.Load<Texture2D>("decal_laserswitch");
+            decalTextures[(int)Decal.Missile] = Content.Load<Texture2D>("decal_missile");
+            decalTextures[(int)Decal.Onion] = Content.Load<Texture2D>("decal_onion");
+            decalTextures[(int)Decal.BlueCodes] = Content.Load<Texture2D>("decal_permanantbluekey");
+            decalTextures[(int)Decal.PermanantBoots] = Content.Load<Texture2D>("decal_permanantboots");
+            decalTextures[(int)Decal.RedCodes] = Content.Load<Texture2D>("decal_permanantredkey");
+            decalTextures[(int)Decal.PermanantWallJump] = Content.Load<Texture2D>("decal_permanantwalljump");
+            decalTextures[(int)Decal.YellowCodes] = Content.Load<Texture2D>("decal_permanantyellowkey");
+            decalTextures[(int)Decal.Phase] = Content.Load<Texture2D>("decal_phase");
+            decalTextures[(int)Decal.Blaster] = Content.Load<Texture2D>("decal_plasma");
+            decalTextures[(int)Decal.PlugSlot] = Content.Load<Texture2D>("decal_plugslot");
+            decalTextures[(int)Decal.PowerOrb] = Content.Load<Texture2D>("decal_powerorb");
+            decalTextures[(int)Decal.PowerPlug] = Content.Load<Texture2D>("decal_powerplug");
+            decalTextures[(int)Decal.RainDrop] = Content.Load<Texture2D>("decal_raindrop");
+            decalTextures[(int)Decal.RedKey] = Content.Load<Texture2D>("decal_redkey");
+            decalTextures[(int)Decal.RedLock] = Content.Load<Texture2D>("decal_redlock");
+            decalTextures[(int)Decal.Station] = Content.Load<Texture2D>("decal_station");
+            decalTextures[(int)Decal.WallJump] = Content.Load<Texture2D>("decal_walljump");
+            decalTextures[(int)Decal.Warp] = Content.Load<Texture2D>("decal_warp");
+            decalTextures[(int)Decal.YellowKey] = Content.Load<Texture2D>("decal_yellowkey");
+            decalTextures[(int)Decal.YellowLock] = Content.Load<Texture2D>("decal_yellowlock");
+            decalTextures[(int)Decal.Lander] = Content.Load<Texture2D>("decal_lander");
+            decalTextures[(int)Decal.Skull] = Content.Load<Texture2D>("decal_skull");      
         }
 
         public static void InitBeamTextures(ContentManager Content)
@@ -164,6 +246,7 @@ namespace VexedCore
             if(d.currentBehavior != null)
                 currentBehaviorId = d.currentBehavior.id;
             orbsRemaining = d.orbsRemaining;
+            doorDecal = d.doorDecal;
             currentTime = d.currentTime;
             nextBehavior = d.nextBehavior;
             behaviorStarted = d.behaviorStarted;
@@ -430,6 +513,120 @@ namespace VexedCore
                 if (type == VL.DoodadType.Crate || type== VL.DoodadType.PowerPlug)                
                     return true;                
                 return false;
+            }
+        }
+
+        public Color iconColor
+        {
+            get
+            {
+                if (type == VL.DoodadType.StationIcon)
+                {
+                    if (targetDoodad.type == VL.DoodadType.PowerStation)
+                        return Color.Yellow;
+                    if (targetDoodad.type == VL.DoodadType.RedPowerStation)
+                        return Color.Red;
+                    if (targetDoodad.type == VL.DoodadType.BluePowerStation)
+                        return Color.Blue;
+                    
+                    return Color.White;
+                }
+                return Color.White;
+            }
+        }
+
+        public Texture2D currentDecalTexture
+        {
+            get
+            {
+                if (isStation)
+                {
+                    return decalTextures[(int)Decal.Station];
+                }
+                if (type == VL.DoodadType.HookTarget)
+                {
+                    return decalTextures[(int)Decal.HookTarget];
+                }
+                if (type == VL.DoodadType.PlugSlot)
+                {
+                    return decalTextures[(int)Decal.PlugSlot];
+                }
+                if (type == VL.DoodadType.PowerPlug)
+                {
+                    return decalTextures[(int)Decal.PowerPlug];
+                }
+                if (type == VL.DoodadType.LaserSwitch)
+                {
+                    return decalTextures[(int)Decal.LaserSwitch];
+                }
+                if (type == VL.DoodadType.JumpPad)
+                {
+                    return decalTextures[(int)Decal.JumpPad];
+                }
+                if (type == VL.DoodadType.StationIcon)
+                {
+                    if (targetDoodad.type == VL.DoodadType.JumpStation)
+                    {
+                        return decalTextures[(int)targetDoodad.doorDecal];
+                    }
+                    if (targetDoodad.type == VL.DoodadType.SaveStation)
+                        return decalTextures[(int)Decal.Save];
+                    if (targetDoodad.type == VL.DoodadType.HealthStation)
+                        return decalTextures[(int)Decal.Health];
+                    if (targetDoodad.type == VL.DoodadType.PowerStation || targetDoodad.type == VL.DoodadType.RedPowerStation || targetDoodad.type == VL.DoodadType.BluePowerStation)
+                        return decalTextures[(int)Decal.PowerOrb];
+                    if (targetDoodad.type == VL.DoodadType.WarpStation)
+                        return decalTextures[(int)Decal.Warp];
+                    if (targetDoodad.type == VL.DoodadType.SwitchStation)
+                    {
+                        if (targetDoodad.abilityType == AbilityType.RedKey)
+                            return decalTextures[(int)Decal.RedLock];
+                        if (targetDoodad.abilityType == AbilityType.BlueKey)
+                            return decalTextures[(int)Decal.BlueLock];
+                        if (targetDoodad.abilityType == AbilityType.YellowKey)
+                            return decalTextures[(int)Decal.YellowLock];
+                    }
+                    if (targetDoodad.type == VL.DoodadType.UpgradeStation || targetDoodad.type == VL.DoodadType.ItemStation)
+                    {
+                        if (targetDoodad.abilityType == AbilityType.RedKey)
+                            return decalTextures[(int)Decal.RedKey];
+                        if (targetDoodad.abilityType == AbilityType.BlueKey)
+                            return decalTextures[(int)Decal.BlueKey];
+                        if (targetDoodad.abilityType == AbilityType.YellowKey)
+                            return decalTextures[(int)Decal.YellowKey];
+                        if (targetDoodad.abilityType == AbilityType.Laser)
+                            return decalTextures[(int)Decal.Laser];
+                        if (targetDoodad.abilityType == AbilityType.Blaster)
+                            return decalTextures[(int)Decal.Blaster];
+                        if (targetDoodad.abilityType == AbilityType.Boots)
+                            return decalTextures[(int)Decal.Boots];
+                        if (targetDoodad.abilityType == AbilityType.JetPack)
+                            return decalTextures[(int)Decal.JetPack];
+                        if (targetDoodad.abilityType == AbilityType.Phase)
+                            return decalTextures[(int)Decal.Phase];
+                        if (targetDoodad.abilityType == AbilityType.Booster)
+                            return decalTextures[(int)Decal.Booster];
+                        if (targetDoodad.abilityType == AbilityType.DoubleJump)
+                            return decalTextures[(int)Decal.DoubleJump];
+                        if (targetDoodad.abilityType == AbilityType.WallJump)
+                            return decalTextures[(int)Decal.WallJump];
+                        if (targetDoodad.abilityType == AbilityType.Missile)
+                            return decalTextures[(int)Decal.Missile];
+                        if (targetDoodad.abilityType == AbilityType.PermanentBoots)
+                            return decalTextures[(int)Decal.PermanantBoots];
+                        if (targetDoodad.abilityType == AbilityType.PermanentWallJump)
+                            return decalTextures[(int)Decal.PermanantWallJump];
+                        if (targetDoodad.abilityType == AbilityType.ImprovedJump)
+                            return decalTextures[(int)Decal.ImprovedJump];
+                        if (targetDoodad.abilityType == AbilityType.PermanentRedKey)
+                            return decalTextures[(int)Decal.RedCodes];
+                        if (targetDoodad.abilityType == AbilityType.PermanentBlueKey)
+                            return decalTextures[(int)Decal.BlueCodes];
+                        if (targetDoodad.abilityType == AbilityType.PermanentYellowKey)
+                            return decalTextures[(int)Decal.YellowCodes];
+                    }                    
+                }
+                return decalTextures[(int)Decal.Save];
             }
         }
         
@@ -1003,6 +1200,9 @@ namespace VexedCore
         public List<VertexPositionColorNormalTexture> baseTriangleList;
         public List<VertexPositionColorNormalTexture> decalList;
         public List<VertexPositionColorNormalTexture> loadButtonsList;
+        public List<VertexPositionColorNormalTexture> useButtonList;
+        public List<VertexPositionColorNormalTexture> xEquipButtonList;
+        public List<VertexPositionColorNormalTexture> yEquipButtonList;
         public List<VertexPositionColorNormalTexture> confirmButtonsList;
         public List<VertexPositionColorNormalTexture> spriteList;
         public List<VertexPositionColorNormalTexture> beamList;
@@ -1023,6 +1223,9 @@ namespace VexedCore
                 decalList = new List<VertexPositionColorNormalTexture>();
                 confirmButtonsList = new List<VertexPositionColorNormalTexture>();
                 loadButtonsList = new List<VertexPositionColorNormalTexture>();
+                useButtonList = new List<VertexPositionColorNormalTexture>();
+                xEquipButtonList = new List<VertexPositionColorNormalTexture>();
+                yEquipButtonList = new List<VertexPositionColorNormalTexture>();
                 spriteList = new List<VertexPositionColorNormalTexture>();
                 beamList = new List<VertexPositionColorNormalTexture>();
 
@@ -1081,11 +1284,6 @@ namespace VexedCore
                             BButtonList.Add(new Vertex(position, size * down + size * left - 2.5f * up + 2f * left));
                             BButtonList.Add(new Vertex(position, size * down + size * right - 2.5f * up + 2f * right));
 
-
-                            /*currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, SaveGameText.okTexCoords, loadButtonsList, true);
-                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, SaveGameText.cancelTexCoords, loadButtonsList, true);
-                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .55f, SaveGameText.extraTexCoords, loadButtonsList, true);*/
-
                             currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, SaveGameText.okTexCoords, loadButtonsList, true);
                             currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, SaveGameText.cancelTexCoords, loadButtonsList, true);
                             if(SaveGameText.expertAvailable && SaveGameText.activeSaveSlot > -1 && SaveGameText.saveSummaryData[SaveGameText.activeSaveSlot].empty)
@@ -1102,11 +1300,11 @@ namespace VexedCore
                         BButtonList.Add(new Vertex(position, size * down + size * left + up + 2.3f * right));
                         BButtonList.Add(new Vertex(position, size * down + size * right + up + 2.3f * right));
                         if (Engine.controlType == ControlType.GamePad)
-                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.White, .55f, Ability.texCoordList[24], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.White, .55f, Room.plateTexCoords, useButtonList, true);
                         if (Engine.controlType == ControlType.KeyboardOnly)
-                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .55f, Ability.texCoordList[50], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .55f, Room.plateTexCoords, useButtonList, true);
                         if (Engine.controlType == ControlType.MouseAndKeyboard)
-                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .55f, Ability.texCoordList[48], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .55f, Room.plateTexCoords, useButtonList, true);
 
                     }
                     else if (type == VL.DoodadType.ItemStation)
@@ -1125,13 +1323,13 @@ namespace VexedCore
                         YButtonList.Add(new Vertex(position, size * down + size * right + 3 * up));
                         if (Engine.controlType == ControlType.GamePad)
                         {
-                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.White, .55f, Ability.texCoordList[25], decalList, true);
-                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.White, .55f, Ability.texCoordList[27], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.White, .55f, Room.plateTexCoords, xEquipButtonList, true);
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.White, .55f, Room.plateTexCoords, yEquipButtonList, true);
                         }
                         if (Engine.controlType == ControlType.KeyboardOnly)
                         {
-                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, Ability.texCoordList[49], decalList, true);
-                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, Ability.texCoordList[51], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, Room.plateTexCoords, xEquipButtonList, true);
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, Room.plateTexCoords, yEquipButtonList, true);
                         }
                         if (Engine.controlType == ControlType.MouseAndKeyboard)
                         {
@@ -1146,8 +1344,8 @@ namespace VexedCore
                             YButtonList.Add(new Vertex(position, size * down + size * left + 2.5f * up + 1f * right));
                             YButtonList.Add(new Vertex(position, size * down + size * right + 2.5f * up + 1f * right));
 
-                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, Ability.texCoordList[46], decalList, true);
-                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, Ability.texCoordList[47], decalList, true);
+                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, Room.plateTexCoords, xEquipButtonList, true);
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, Room.plateTexCoords, yEquipButtonList, true);
                         }
 
                     }
@@ -1243,7 +1441,7 @@ namespace VexedCore
                     
                     
                 }
-                else if (type != VL.DoodadType.NPC_OldMan && type != VL.DoodadType.Beam && type != VL.DoodadType.PowerPlug)
+                else if (type != VL.DoodadType.NPC_OldMan && type != VL.DoodadType.Beam && type != VL.DoodadType.PowerPlug && type != VL.DoodadType.LaserSwitch)
                 {
                     if (active)
                     {
@@ -1259,7 +1457,7 @@ namespace VexedCore
 
                 if (type == VL.DoodadType.ItemBlock || isStation)
                 {
-                    currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[34], decalList, true);
+                    currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Room.plateTexCoords, decalList, true);
                 }
                 if (type == VL.DoodadType.JumpStation)
                 {
@@ -1271,13 +1469,13 @@ namespace VexedCore
                     {
                         currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[34], decalList, true);
+                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Room.plateTexCoords, decalList, true);
                     }
                     else
                     {
                         currentRoom.AddBlockToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[34], decalList, true);
+                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Room.plateTexCoords, decalList, true);
                     }
                 }
                 if (type == VL.DoodadType.JumpPad)
@@ -1290,71 +1488,39 @@ namespace VexedCore
                     {
                         currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[35], decalList, true);
+                        currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth + maxExtend * stateTransition + .01f, Room.plateTexCoords, decalList, true);
                     }
                     else
                     {                        
                         currentRoom.AddBlockToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Ability.texCoordList[35], decalList, true);
+                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Room.plateTexCoords, decalList, true);
                     }
                 }
                 if (type == VL.DoodadType.HookTarget)
                 {
                     currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                     currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                    currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth, Ability.texCoordList[7], decalList, true);                
+                    currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth, Room.plateTexCoords, decalList, true);                
                 }
                 if (type == VL.DoodadType.PlugSlot)
                 {
                     currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                     currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                    currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Ability.texCoordList[42], decalList, true);
+                    currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Room.plateTexCoords, decalList, true);
                 }
                 if (type == VL.DoodadType.LaserSwitch)
                 {
                     currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                     if (active)
-                        currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth, Ability.texCoordList[40], decalList, true);
+                        currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth, Room.plateTexCoords, decalList, true);
                     else
-                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Ability.texCoordList[40], decalList, true);
+                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Room.plateTexCoords, decalList, true);
                 }
 
                 if (type == VL.DoodadType.StationIcon)
-                {
-                    int decalIndex = (int)targetDoodad.abilityType;
-                    Color iconColor = Color.White;
-                    if (targetDoodad.type == VL.DoodadType.JumpStation)
-                    {
-                        decalIndex = (int)targetDoodad.doorDecal;
-                    }
-                    if (targetDoodad.type == VL.DoodadType.PowerStation)
-                    {
-                        decalIndex = 37;
-                        iconColor = Color.Yellow;
-                    }
-                    if (targetDoodad.type == VL.DoodadType.RedPowerStation)
-                    {
-                        decalIndex = 37;
-                        iconColor = Color.Red;
-                    }
-                    if (targetDoodad.type == VL.DoodadType.BluePowerStation)
-                    {
-                        decalIndex = 37;
-                        iconColor = Color.Blue;
-                    }
-                    if (targetDoodad.type == VL.DoodadType.HealthStation)
-                    {
-                        decalIndex = 55;
-                        iconColor = Color.White;
-                    }
-                    if (targetDoodad.type == VL.DoodadType.WarpStation)
-                        decalIndex = 39;
-                    if (targetDoodad.type == VL.DoodadType.SaveStation || targetDoodad.type == VL.DoodadType.LoadStation)
-                        decalIndex = 43;
-                    if (targetDoodad.type == VL.DoodadType.SwitchStation && targetDoodad.abilityType != AbilityType.RedKey && targetDoodad.abilityType != AbilityType.BlueKey && targetDoodad.abilityType != AbilityType.YellowKey)
-                        decalIndex = 31;
-                    currentRoom.AddBlockFrontToTriangleList(vList, iconColor, depth + .01f, Ability.texCoordList[decalIndex], decalList, true);
+                {                    
+                    currentRoom.AddBlockFrontToTriangleList(vList, iconColor, depth + .01f, Room.plateTexCoords, decalList, true);
                 }
 
                 if (type == VL.DoodadType.NPC_OldMan)
@@ -1363,15 +1529,14 @@ namespace VexedCore
                 }
                 if (type == VL.DoodadType.Beam)
                 {
-                    //currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth, Doodad.texCoordList[styleSpriteIndex+animationFrame], beamList, true);
                     currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth, beamTexCoords, beamList, true);
                 }
                 if (type == VL.DoodadType.PowerPlug)
                 {
                     if(active == true)
-                        currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth, Ability.texCoordList[41], decalList, true);
+                        currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth, Room.plateTexCoords, decalList, true);
                     else
-                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Ability.texCoordList[41], decalList, true);
+                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Room.plateTexCoords, decalList, true);
                 }
 
                 baseTriangleArray = baseTriangleList.ToArray();
@@ -1401,7 +1566,7 @@ namespace VexedCore
                 
                 if (decalList.Count > 0)
                 {
-                    Engine.playerTextureEffect.Texture = Ability.ability_textures;
+                    Engine.playerTextureEffect.Texture = currentDecalTexture;
                     Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         decalArray, 0, decalList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
@@ -1416,7 +1581,6 @@ namespace VexedCore
             {
                 UpdateVertexData(currentRoom);
 
-                Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
                 if (spriteList.Count > 0)
                 {
                     Engine.playerTextureEffect.Texture = Ability.ability_textures;
@@ -1452,7 +1616,33 @@ namespace VexedCore
                         loadButtonsList.ToArray(), 0, loadButtonsList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
-                Game1.graphicsDevice.BlendState = BlendState.Opaque;
+                if (useButtonList.Count > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Doodad.useButton;
+                    
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        useButtonList.ToArray(), 0, useButtonList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+
+                if (xEquipButtonList.Count > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Doodad.leftButton;
+
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        xEquipButtonList.ToArray(), 0, xEquipButtonList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+
+
+                if (yEquipButtonList.Count > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Doodad.rightButton;
+
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        yEquipButtonList.ToArray(), 0, yEquipButtonList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
             }
         }
 

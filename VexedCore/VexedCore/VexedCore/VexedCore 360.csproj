@@ -93,6 +93,7 @@
     <Compile Include="Hud.cs" />
     <Compile Include="IntroOverlay.cs" />
     <Compile Include="JetBoss.cs" />
+    <Compile Include="JumpRing.cs" />
     <Compile Include="LevelLoader.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="MusicControl.cs" />

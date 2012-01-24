@@ -294,24 +294,14 @@ namespace VexedCore
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         decalVertexArray, 0, decalVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
-
-                Game1.graphicsDevice.BlendState = BlendState.Opaque;
-
+                
                 if (spriteVertexArrayCount > 0)
                 {
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         spriteVertexArray, 0, spriteVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
-                /*playerTextureEffect.Texture = Doodad.beam_textures;
-                playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-
-                if (beamVertexArrayCount > 0)
-                {
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        beamVertexArray, 0, beamVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }*/
-
+                Game1.graphicsDevice.BlendState = BlendState.Opaque;
 
                 
                 if (detailTextures)
@@ -325,7 +315,8 @@ namespace VexedCore
                 playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                 Engine.player.currentRoom.DrawProjectiles();
 
-                
+                Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
+
 
                 foreach (Room r in roomList)
                 {                    
@@ -387,7 +378,7 @@ namespace VexedCore
                     }
                     Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
                 }
-
+                //Game1.graphicsDevice.BlendState = BlendState.Opaque;
                 if (player.insideBox == false)
                     player.DrawTexture(playerTextureEffect);
             }

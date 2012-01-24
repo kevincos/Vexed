@@ -225,8 +225,6 @@ namespace VexedCore
         {
             if (baseTriangleArray.Length > 0)
             {
-                Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
-                //Engine.playerTextureEffect.Texture = Room.blockTexture;
                 if(properties.type == VL.EdgeType.Spikes)
                     Engine.playerTextureEffect.Texture = Edge.spikeEdge;
                 if(properties.type == VL.EdgeType.Ice)
@@ -243,7 +241,6 @@ namespace VexedCore
                 Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                 Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                     baseTriangleArray, 0, baseTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                Game1.graphicsDevice.BlendState = BlendState.Opaque;                
             }
         }
     }

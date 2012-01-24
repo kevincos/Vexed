@@ -67,6 +67,7 @@ namespace VexedCore
 
         public List<Block> blocks;
         public List<Doodad> doodads;
+        public List<JumpRing> jumpRings;
         public List<Monster> monsters;
         public List<Projectile> projectiles;
         public List<Decoration> decorations;
@@ -85,6 +86,7 @@ namespace VexedCore
         public List<VertexPositionColorNormalTexture> staticCrystal;
         public List<VertexPositionColorNormalTexture> staticIce;
         public List<VertexPositionColorNormalTexture> staticGearslot;
+        public List<VertexPositionColorNormalTexture> staticRings;
 
         public VertexPositionColorNormalTexture[] fancyPlateTriangleArray;
         public VertexPositionColorNormalTexture[] plateTriangleArray;
@@ -96,6 +98,7 @@ namespace VexedCore
         public VertexPositionColorNormalTexture[] iceTriangleArray;
         public VertexPositionColorNormalTexture[] cobblestoneTriangleArray;
         public VertexPositionColorNormalTexture[] gearslotTriangleArray;
+        public VertexPositionColorNormalTexture[] ringTriangleArray;
 
         
         public bool refreshVertices = false;
@@ -127,6 +130,11 @@ namespace VexedCore
             {
                 doodads.Add(new Doodad(d));
             }
+            jumpRings = new List<JumpRing>();
+            foreach (JumpRing j in r.jumpRings)
+            {
+                jumpRings.Add(new JumpRing(j));
+            }
             monsters = new List<Monster>();
             foreach (Monster m in r.monsters)
             {
@@ -151,6 +159,7 @@ namespace VexedCore
             monsters = new List<Monster>();
             projectiles = new List<Projectile>();
             decorations = new List<Decoration>();
+            jumpRings = new List<JumpRing>();
         }
 
         public Room(VL.Room xmlRoom)
@@ -163,6 +172,7 @@ namespace VexedCore
             monsters = new List<Monster>();
             projectiles = new List<Projectile>();
             decorations = new List<Decoration>();
+            jumpRings = new List<JumpRing>();
         }
 
         public void Load(Rm r)
@@ -344,7 +354,7 @@ namespace VexedCore
                         }
                         //}
                     }
-
+                    
                     if (this == Engine.player.currentRoom)
                     {
                         foreach (Doodad d in doodads)
@@ -1892,7 +1902,7 @@ namespace VexedCore
         }
 
         public List<TrasnparentSquare> GetMapBlock(Vector3 adjustedSize, Color blockColor, bool highlight)
-        {
+        {            
             if (WorldMap.state == ZoomState.None)
                 return new List<TrasnparentSquare>();
             Color shellColor = blockColor;
@@ -2067,6 +2077,7 @@ namespace VexedCore
                             staticIce = new List<VertexPositionColorNormalTexture>();
                             staticCobblestone = new List<VertexPositionColorNormalTexture>();
                             staticGearslot = new List<VertexPositionColorNormalTexture>();
+                            staticRings = new List<VertexPositionColorNormalTexture>();
                         }
                         foreach (Block b in blocks)
                         {
@@ -2079,6 +2090,10 @@ namespace VexedCore
                             b.UpdateVertexData(this);
                             b.Draw(this);
 
+                        }
+                        foreach (JumpRing j in jumpRings)
+                        {
+                            j.Draw(this);
                         }
                         
                         if (fancyPlateTriangleArray == null || refreshVertices == true)
@@ -2093,6 +2108,14 @@ namespace VexedCore
                             crystalTriangleArray = staticCrystal.ToArray();
                             cobblestoneTriangleArray = staticCobblestone.ToArray();
                             iceTriangleArray = staticIce.ToArray();
+                            ringTriangleArray = staticRings.ToArray();
+                        }
+                        if (ringTriangleArray.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.fancyPlateTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                ringTriangleArray, 0, ringTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                         }
                         if (fancyPlateTriangleArray.Count() > 0)
                         {
@@ -2182,6 +2205,7 @@ namespace VexedCore
                         {
                             d.DrawSolids(this);
                         }
+
                         #endregion
                     }
 

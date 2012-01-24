@@ -235,7 +235,7 @@ namespace VexedCore
                                 newRoom.doodads.Add(leftDoor);
                                 newRoom.doodads.Add(rightDoor);
 
-                                if (xmlDoodad.type == VL.DoodadType.JumpPad || xmlDoodad.type == VL.DoodadType.JumpStation)
+                                /*if (xmlDoodad.type == VL.DoodadType.JumpPad || xmlDoodad.type == VL.DoodadType.JumpStation)
                                 {
                                     Doodad leftSide = new Doodad(VL.DoodadType.RingSide, station.position.position + .8f * right, station.position.normal, station.position.direction);
                                     Doodad rightSide = new Doodad(VL.DoodadType.RingSide, station.position.position - .8f * right, station.position.normal, station.position.direction);
@@ -248,8 +248,8 @@ namespace VexedCore
                                     newRoom.doodads.Add(leftSide);
                                     newRoom.doodads.Add(rightSide);
                                     newRoom.doodads.Add(topSide);
-                                    newRoom.doodads.Add(bottomSide);
-                                }
+                                    newRoom.doodads.Add(bottomSide);                                    
+                                }*/
                             }
                             else
                             {
@@ -358,12 +358,20 @@ namespace VexedCore
 
                     if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation)
                     {
-                        if (d.id.Contains("Diamond"))
-                            d.doorDecal = DoorDecal.Diamond;
-                        else if (d.id.Contains("Cherry"))
-                            d.doorDecal = DoorDecal.Cherry;
+                        if (d.id.Contains("Cherry"))
+                            d.doorDecal = Decal.Cherry;
+                        else if (d.id.Contains("RainDrop"))
+                            d.doorDecal = Decal.RainDrop;
+                        else if (d.id.Contains("Onion"))
+                            d.doorDecal = Decal.Onion;
+                        else if (d.id.Contains("Leaf"))
+                            d.doorDecal = Decal.Leaf;
+                        else if (d.id.Contains("Lander"))
+                            d.doorDecal = Decal.Lander;
+                        else if (d.id.Contains("Skull"))
+                            d.doorDecal = Decal.Skull;
                         else
-                            d.doorDecal = DoorDecal.Target;
+                            d.doorDecal = Decal.JumpPad;
                         float baseLineValue = Vector3.Dot(d.position.position, d.position.normal);
                         float minPosValue = 0;
                         foreach (Room destinationRoom in roomList)
@@ -389,6 +397,25 @@ namespace VexedCore
                                         d.targetRoom = destinationRoom;
                                     }
                                 }
+                            }
+                        }
+                        // Add rings
+                        if (d.targetRoom != null)
+                        {
+                            float nextRoomSize = .5f * Math.Abs(Vector3.Dot(d.targetRoom.size, d.position.normal));
+                            float currentRoomSize = .5f * Math.Abs(Vector3.Dot(r.size, d.position.normal));
+                            float distanceToNextRoom = Math.Abs(Vector3.Dot(d.position.normal, (d.targetRoom.center - d.currentRoom.center))) - nextRoomSize - currentRoomSize;
+
+                            float ringMod = 3f;
+                            float lastRingMod = 0f;
+                            for (; ringMod < Math.Min(20f, distanceToNextRoom / 2); ringMod += 4)
+                            {
+                                r.jumpRings.Add(new JumpRing(d.position.position + ringMod * d.position.normal, d.position.direction, d.position.normal));
+                                lastRingMod = ringMod;
+                            }
+                            if (ringMod >= 10f && distanceToNextRoom / 2 - 20 > .2f)
+                            {
+                                r.jumpRings.Add(new JumpRing(d.position.position + (lastRingMod + .5f) * d.position.normal, d.position.direction, d.position.normal, distanceToNextRoom / 2 - ((lastRingMod + .5f))));
                             }
                         }
                     }

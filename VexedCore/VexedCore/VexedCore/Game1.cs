@@ -190,6 +190,10 @@ namespace VexedCore
             SaveGameText.confirmOptions = Content.Load<Texture2D>("icon_confirm");
             SaveGameText.loadOptions = Content.Load<Texture2D>("icon_load");
             SaveGameText.InitTexCoords();
+            Doodad.InitDecalTextures(Content);
+            Doodad.useButton = Content.Load<Texture2D>("decal_ekey");
+            Doodad.leftButton = Content.Load<Texture2D>("decal_leftbutton");
+            Doodad.rightButton = Content.Load<Texture2D>("decal_rightbutton");
             
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
 
