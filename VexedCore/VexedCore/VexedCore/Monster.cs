@@ -684,6 +684,7 @@ namespace VexedCore
             {
                 if (baseHP > 0)
                 {
+                    SoundFX.MonsterHit();
                     baseHP--;
                     flashCooldown = maxFlashCooldown;
                 }
@@ -699,14 +700,21 @@ namespace VexedCore
                     armorHP--;
                     if (armorHP == 0)
                     {
+                        SoundFX.ArmorBreak();
                         armorState = ArmorState.Break;
                     }
                 }
             }
+            else
+            {
+                SoundFX.ArmorHit();
+            }
+
             if (gunType == ProjectileType.Spikes)
             {
                 baseHP = 0;
                 armorHP = 0;
+                SoundFX.ArmorBreak();
             }
             if (baseHP == 0)
             {
@@ -723,6 +731,7 @@ namespace VexedCore
                 else
                 {
                     dead = true;
+                    SoundFX.MonsterDeath();
 
                     state = MonsterState.Death;
                     if (armorState == ArmorState.Normal)

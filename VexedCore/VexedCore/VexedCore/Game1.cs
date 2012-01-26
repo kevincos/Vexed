@@ -210,6 +210,20 @@ namespace VexedCore
             
             MusicControl.music_menu = Content.Load<Song>("Sounds\\music_menu");
             MusicControl.music_game = Content.Load<Song>("Sounds\\music_game");
+            MusicControl.greenSector = Content.Load<Song>("Sounds\\GreenMusic");
+            MusicControl.hubSector = Content.Load<Song>("Sounds\\HubMusic");
+            MusicControl.storageSector = Content.Load<Song>("Sounds\\StorageMusic");
+            MusicControl.engineSector = Content.Load<Song>("Sounds\\EngineMusic");
+            MusicControl.coreSector = Content.Load<Song>("Sounds\\CoreMusic");
+
+            MusicControl.boss = Content.Load<Song>("Sounds\\BossMusic");
+            MusicControl.finalBoss = Content.Load<Song>("Sounds\\FinalBoss");
+            MusicControl.firstLoad = Content.Load<Song>("Sounds\\FirstLoad");
+            MusicControl.itemRoom = Content.Load<Song>("Sounds\\ItemRoomPreUpgrade");
+            MusicControl.upgrade = Content.Load<Song>("Sounds\\UpgradeMusic");
+            MusicControl.intro = Content.Load<Song>("Sounds\\IntroMusic");
+            MusicControl.death = Content.Load<Song>("Sounds\\DeathMusic");
+
 
             LevelLoader.Load("LevelData\\world");
             LevelLoader.QuickSave(true);
@@ -257,6 +271,7 @@ namespace VexedCore
             SaveGameText.Update(gameTime);
             ObjectiveControl.UpdateObjectiveStatus(gameTime);
             Controls.ResetMouse();
+            MusicControl.PlayGameMusic();
             base.Update(gameTime);
         }
 

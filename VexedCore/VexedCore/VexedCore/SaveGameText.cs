@@ -400,6 +400,7 @@ namespace VexedCore
                 {
                     Engine.saveFileIndex = activeSaveSlot + 1;
                     LevelLoader.LoadFromDisk(Engine.saveFileIndex);
+                    MusicControl.loadedMusic = true;
                     Physics.refresh = true;
                 }
                 else if (state == LoadState.ConfirmNewGameExpert)
@@ -407,6 +408,7 @@ namespace VexedCore
                     Engine.saveFileIndex = activeSaveSlot + 1;
                     LevelLoader.LoadFromDisk(Engine.saveFileIndex);
                     Physics.refresh = true;
+                    MusicControl.loadedMusic = true;
                     Engine.player.expertLevel = true;
                 }
                 else if (state == LoadState.Normal)

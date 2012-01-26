@@ -35,6 +35,16 @@ because I've got this sweet beard.</string>
     </textList>
     <pause>false</pause>
   </DialogChunk>
+
+  <DialogChunk>
+    <id>LoadComplete</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Load Successful</string>      
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+
   <DialogChunk>
     <id>PowerUp</id>
     <speaker>System</speaker>

@@ -273,17 +273,26 @@ namespace VexedCore
 
                 Vector3 relVelocity = Engine.player.center.velocity - Vector3.Dot(Engine.player.platformVelocity,Engine.player.right) * Engine.player.right;
                 if (type == AbilityType.SpinHook)
-                {
+                {                    
                     Engine.player.SpinHook();
                 }
                 if (type == AbilityType.Blaster)
+                {
+                    SoundFX.FireBlaster();
                     Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Player, Engine.player.center.position, relVelocity, Engine.player.center.normal, shootDirection));
+                }
                 if (type == AbilityType.Missile)
+                {
+                    SoundFX.FireMissile();
                     Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Missile, Engine.player.center.position + .5f * shootDirection, relVelocity, Engine.player.center.normal, shootDirection));
+                }
                 if (type == AbilityType.Bomb)
                     Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Bomb, Engine.player.center.position + .5f * shootDirection, relVelocity, Engine.player.center.normal, shootDirection));
                 if (type == AbilityType.Laser)
+                {
+                    SoundFX.FireLaser();
                     Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Laser, Engine.player.center.position, relVelocity, Engine.player.center.normal, shootDirection));
+                }
 
                 if (type == AbilityType.Laser || type == AbilityType.Blaster || type == AbilityType.Missile || type == AbilityType.Bomb)
                     Engine.player.lastFireTime = 0;
@@ -294,6 +303,7 @@ namespace VexedCore
                 }
                 if (type == AbilityType.Booster)
                 {
+                    SoundFX.StartBooster();
                     Engine.player.Boost();               
                 }
                 if (type == AbilityType.JetPack)
@@ -303,7 +313,10 @@ namespace VexedCore
                         Engine.player.jetPacking = true;
                         Engine.player.jetPackThrust = true;
                         Engine.player.center.velocity += .002f * Engine.player.up;
+                        SoundFX.StartJetPack();
                     }
+                    else
+                        SoundFX.EndJetPack();
                     ammo -= gameTime.ElapsedGameTime.Milliseconds;
                     if (ammo < 0) ammo = 0;
                 }

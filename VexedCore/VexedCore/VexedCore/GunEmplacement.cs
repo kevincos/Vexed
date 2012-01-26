@@ -225,6 +225,7 @@ namespace VexedCore
                 fireCooldown = fireTime;
                 if (gunType == VL.GunType.Blaster || gunType == VL.GunType.Repeater)
                 {
+                    SoundFX.FireBlaster();
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Plasma, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity));
                     if (gunType == VL.GunType.Repeater)
                     {
@@ -234,14 +235,19 @@ namespace VexedCore
                 }
                 if (gunType == VL.GunType.Beam)
                 {
+                    SoundFX.FireLaser();
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Laser, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity));
                 }
                 if (gunType == VL.GunType.Missile)
                 {
+                    SoundFX.FireMissile();
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Missile, position.position + radius * gunLine, position.velocity, position.normal, projectileVelocity));
                 }
                 if (gunType == VL.GunType.Spread)
                 {
+                    SoundFX.FireBlaster();
+                    SoundFX.FireBlaster();
+                    SoundFX.FireBlaster();
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Plasma, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity + .5f * gunNormal));
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Plasma, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity - .5f * gunNormal));
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Plasma, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity));

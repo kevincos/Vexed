@@ -60,7 +60,8 @@ namespace VexedCore
         Leaf,
         Lander,
         Skull,
-        Switch
+        Switch,
+        Empty
     }
    
     public class Doodad
@@ -205,7 +206,8 @@ namespace VexedCore
             decalTextures[(int)Decal.YellowLock] = Content.Load<Texture2D>("decal_yellowlock");
             decalTextures[(int)Decal.Lander] = Content.Load<Texture2D>("decal_lander");
             decalTextures[(int)Decal.Skull] = Content.Load<Texture2D>("decal_skull");
-            decalTextures[(int)Decal.Switch] = Content.Load<Texture2D>("decal_switch");    
+            decalTextures[(int)Decal.Switch] = Content.Load<Texture2D>("decal_switch");
+            decalTextures[(int)Decal.Empty] = Content.Load<Texture2D>("decal_empty");    
         }
 
         public static void InitBeamTextures(ContentManager Content)
@@ -432,9 +434,26 @@ namespace VexedCore
             if (powered == false)
                 futureState = false;
 
+            if (type == VL.DoodadType.UpgradeStation && abilityType == AbilityType.Empty)
+                futureState = false;
+
             if (futureState != active)
             {
                 refreshVertexData = true;
+            }
+
+            if (isStation == true || type == VL.DoodadType.Vortex)
+            {
+                if (active == true && futureState == false)
+                {                
+                    if(Engine.player.state != State.Tunnel)
+                        SoundFX.CloseDoor();
+                }
+                if (active == false && futureState == true)
+                {
+                    if(Engine.player.state != State.Jump && Engine.player.state != State.Upgrade && Engine.player.state != State.Tunnel && Engine.player.state != State.Save && Engine.player.state != State.Dialog)
+                        SoundFX.OpenDoor();
+                }
             }
 
             active = futureState;
@@ -571,7 +590,7 @@ namespace VexedCore
                     {
                         return decalTextures[(int)targetDoodad.doorDecal];
                     }
-                    if (targetDoodad.type == VL.DoodadType.SaveStation)
+                    if (targetDoodad.type == VL.DoodadType.LoadStation || targetDoodad.type == VL.DoodadType.SaveStation)
                         return decalTextures[(int)Decal.Save];
                     if (targetDoodad.type == VL.DoodadType.SwitchStation)
                         return decalTextures[(int)Decal.Switch];
@@ -628,9 +647,10 @@ namespace VexedCore
                             return decalTextures[(int)Decal.BlueCodes];
                         if (targetDoodad.abilityType == AbilityType.PermanentYellowKey)
                             return decalTextures[(int)Decal.YellowCodes];
+
                     }                    
                 }
-                return decalTextures[(int)Decal.Save];
+                return decalTextures[(int)Decal.Empty];
             }
         }
         

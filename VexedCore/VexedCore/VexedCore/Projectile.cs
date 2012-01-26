@@ -466,6 +466,21 @@ namespace VexedCore
             type = p.type;
         }
 
+        public void Detonate()
+        {
+            if (exploding == false)
+            {
+                if (type == ProjectileType.Missile)
+                    SoundFX.MissileExplode();
+                if (type == ProjectileType.Laser)
+                    SoundFX.LaserExplode();
+                if (type == ProjectileType.Player || type == ProjectileType.Plasma)
+                    SoundFX.BlasterExplode();
+            }
+
+            exploding = true;
+        }
+
         public void Update(GameTime gameTime)
         {
             if (exploding == true)
@@ -477,7 +492,8 @@ namespace VexedCore
             lifeTime += gameTime.ElapsedGameTime.Milliseconds;
             if (lifeTime > maxLife)
             {
-                exploding = true;
+                Detonate();
+
                 position.velocity = Vector3.Zero;
             }
             if (exploding == false && srcMonster != null && type == ProjectileType.Missile)

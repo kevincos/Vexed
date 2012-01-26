@@ -63,7 +63,8 @@ namespace VexedCore
         public SaveGameText saveGameText;
 
         public static bool soundEffectsEnabled = true;
-        public static bool musicEnabled = false;
+        public static bool musicEnabled = true;
+        public static bool justLoaded = false;
 
         
         public static SpriteBatch spriteBatch;
@@ -739,6 +740,9 @@ namespace VexedCore
 
             if (Keyboard.GetState().IsKeyDown(Keys.PageDown))
                 return;
+
+            if (player.state == State.Normal)
+                justLoaded = false;
 
             optionToggleCooldown -= gameTime.ElapsedGameTime.Milliseconds;
             if (optionToggleCooldown < 0) optionToggleCooldown = 0;

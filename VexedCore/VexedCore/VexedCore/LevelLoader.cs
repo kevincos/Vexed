@@ -401,7 +401,7 @@ namespace VexedCore
                             float lastRingMod = 0f;
                             //r.jumpRings.Add(new JumpRing(RingType.JumpRing, d.position.position -.08f * d.position.normal, d.position.direction, d.position.normal,.15f,1.3f));
                             //r.jumpRings.Add(new JumpRing(RingType.JumpRing, d.position.position - .08f * d.position.normal, d.position.direction, d.position.normal, .15f, 1.65f));
-                            r.jumpRings.Add(new JumpRing(RingType.JumpRing, d.position.position -.3f * d.position.normal, d.position.direction, d.position.normal,.15f,1.3f));
+                            r.jumpRings.Add(new JumpRing(RingType.JumpRing, d.position.position -.29f * d.position.normal, d.position.direction, d.position.normal,.14f,1.3f));
                             for (; ringMod < Math.Min(20f, distanceToNextRoom / 2); ringMod += 4)
                             {
                                 r.jumpRings.Add(new JumpRing(RingType.JumpRing, d.position.position + ringMod * d.position.normal, d.position.direction, d.position.normal));
@@ -672,6 +672,7 @@ namespace VexedCore
                 }
             }
             FixDoodads(Engine.roomList);
+            Engine.justLoaded = true;
         }
     }
 }

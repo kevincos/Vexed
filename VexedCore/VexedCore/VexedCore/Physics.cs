@@ -431,7 +431,8 @@ namespace VexedCore
                             if (projection != Vector3.Zero)
                             {
                                 p.Damage(projection,false);
-                                s.exploding = true;
+                                s.Detonate();
+                                
                                 s.position.velocity = Vector3.Zero;
                             }
                         }
@@ -661,7 +662,7 @@ namespace VexedCore
                     d.ActivateDoodad(r, d == p.respawnPoint);
                 }
                 if (d.type == VL.DoodadType.Vortex || d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.ItemBlock || d.isStation)
-                {
+                {                    
                     d.ActivateDoodad(r, d.ActivationRange(p));
                 }
                 if (d.type == VL.DoodadType.NPC_OldMan)
@@ -993,7 +994,7 @@ namespace VexedCore
                             Vector3 projection = Collide(mVertexList, projectileVertexList, Engine.player.center.normal);
                             if (projection != Vector3.Zero)
                             {
-                                s.exploding = true;
+                                s.Detonate();
                                 m.impactVector = Monster.AdjustVector(s.position.velocity, m.position.normal, Engine.player.center.normal, Engine.player.center.direction, true);
                                 m.lastHitType = s.type;
                                 s.position.velocity = Vector3.Zero;                                
@@ -1094,10 +1095,7 @@ namespace VexedCore
                         Vector3 projection = Collide(doodadVertexList, blockVertexList, p.center.normal);
                         if (projection != Vector3.Zero)
                         {
-                            //if (s.type == ProjectileType.Bomb)
-                            //s.stopped = true;
-                            //else
-                            s.exploding = true;
+                            s.Detonate();
                             s.position.velocity = Vector3.Zero;
                         }
                     }
@@ -1115,10 +1113,7 @@ namespace VexedCore
                         Vector3 projection = Collide(doodadVertexList, brickVertexList, p.center.normal);
                         if (projection != Vector3.Zero)
                         {
-                            //if (s.type == ProjectileType.Bomb)
-                                //s.stopped = true;
-                            //else
-                                s.exploding = true;
+                            s.Detonate();
                             s.position.velocity = Vector3.Zero;
 
                             if (b.type == VL.DoodadType.LaserSwitch && s.type == ProjectileType.Laser)

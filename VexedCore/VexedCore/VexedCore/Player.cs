@@ -137,6 +137,7 @@ namespace VexedCore
         public Vector3 oldUp = Vector3.Zero;
         public Doodad upgradeStationDoodad = null;
         public String upgradeStationDoodadId = "";
+        public int upgradeStage = 0;
 
         public HookState hookState = HookState.Waiting;
 
@@ -644,6 +645,7 @@ namespace VexedCore
                             spinUp = -faceDirection * right;
                             hookHangTime = 0;
                             hookState = HookState.Hook;
+                            SoundFX.HookLock();
                         }
                     }
                 }
@@ -724,6 +726,7 @@ namespace VexedCore
         {
             if (hookState == HookState.Waiting)
             {
+                SoundFX.LaunchHook();
                 hookState = HookState.Out;
                 if (hookShotTarget != null)
                 {
@@ -769,10 +772,15 @@ namespace VexedCore
                         center.velocity = Vector3.Zero;
                         jumpSource = center.position;
                         jumpDestination = d.position.position + right * faceDirection - up;
+                        if (state != State.Spin)
+                        {
+                            SoundFX.PlayMove();
+                        }
                         state = State.Spin;
                         spinUp = -faceDirection * right;
                         hookHangTime = 0;
                         hookState = HookState.Hook;
+
                     }
                 }
             }
@@ -814,6 +822,7 @@ namespace VexedCore
                 deathTime = 0;
                 flashTime = flashMaxTime;
                 state = State.Death;
+                SoundFX.PlayerHit();
                 lastLivingPosition = new Vertex(center);
             }
 
@@ -839,6 +848,7 @@ namespace VexedCore
                 }
                 else if (naturalShield.ammo != 0)
                 {
+                    SoundFX.PlayerHit();
                     naturalShield.DepleteAmmo(1);
                     flashTime = flashMaxTime;
                 }
@@ -858,6 +868,8 @@ namespace VexedCore
             {
                 jumpSource = center.position;
                 jumpDestination = center.position;
+                if (state != State.Spin)
+                    SoundFX.BootSpin();
                 state = State.Spin;
                 spinUp = newUp;
                 boosting = false;
@@ -908,7 +920,7 @@ namespace VexedCore
                 state = State.PhaseFail;
                 tunnelDummy = new Vertex(center.position, center.normal, Vector3.Zero, center.direction);
             }
-
+            SoundFX.Phase();
             launchTime = 0;
         }
 
@@ -945,7 +957,7 @@ namespace VexedCore
         }
 
         public void SetAnimationState()
-        {
+        {            
             if (state == State.Dialog)
             {
                 if (faceDirection < 0)
@@ -1117,6 +1129,15 @@ namespace VexedCore
             else
                 wallTime = 0;
 
+            if (jetPackThrust == false)
+            {
+                SoundFX.EndJetPack();
+            }
+            if (boosting == false)
+            {
+                SoundFX.EndBooster();
+            }
+
             if (jetPacking == true)
             {
                 if (platformVelocity.Length() > 0)
@@ -1190,8 +1211,11 @@ namespace VexedCore
             if (state == State.Upgrade)
             {
                 upgradeTime += gameTime.ElapsedGameTime.Milliseconds;
-                if(upgradeTime < upgradeWalkTime)
+                if (upgradeTime < upgradeWalkTime)
+                {
+                    upgradeStage = 0;
                     center.position = ((upgradeWalkTime - upgradeTime) * jumpSource + upgradeTime * upgradeStationDoodad.position.position) / upgradeWalkTime;
+                }
                 if (Vector3.Dot(right, upgradeStationDoodad.position.position - center.position) > 0)
                     faceDirection = 1;
                 else
@@ -1202,6 +1226,11 @@ namespace VexedCore
                 }
                 if (upgradeTime > upgradeInTime)
                 {
+                    if (upgradeStage == 0)
+                    {
+                        SoundFX.CloseDoor();
+                        upgradeStage = 1;
+                    }
                     upgradeStationDoodad.active = false;
                 }
                 if (upgradeTime > upgradeWaitTime-100)
@@ -1213,6 +1242,11 @@ namespace VexedCore
                     }
                     upgrades[(int)upgradeStationDoodad.abilityType] = true;
                     upgradeStationDoodad.abilityType = AbilityType.Empty;
+                    if (upgradeStage == 1)
+                    {
+                        SoundFX.OpenDoor();
+                        upgradeStage = 2;
+                    }
                     //upgradeTime = 0;
                 }
                 if (upgradeTime > upgradeOutTime)
@@ -1227,7 +1261,10 @@ namespace VexedCore
             {
                 upgradeTime += gameTime.ElapsedGameTime.Milliseconds;
                 if (upgradeTime < upgradeWalkTime)
+                {
                     center.position = ((upgradeWalkTime - upgradeTime) * jumpSource + upgradeTime * upgradeStationDoodad.position.position) / upgradeWalkTime;
+                    upgradeStage = 0;
+                }
                 if (Vector3.Dot(right, upgradeStationDoodad.position.position - center.position) > 0)
                     faceDirection = 1;
                 else
@@ -1238,12 +1275,18 @@ namespace VexedCore
                 }
                 if (upgradeTime > upgradeInTime && upgradeTime < upgradeWaitTime - 100)
                 {
+                    if (upgradeStage == 0)
+                    {
+                        SoundFX.CloseDoor();
+                        upgradeStage = 1;
+                    }
                     upgradeStationDoodad.active = false;
                 }
                 //if (upgradeTime > upgradeWaitTime - 100)
                 if (upgradeTime < upgradeOutTime)
                 {
-                    DialogBox.SetDialog("Saving");
+                    if (Engine.justLoaded == false)
+                        DialogBox.SetDialog("Saving");
                 }
                 if (upgradeTime > upgradeWaitTime-100)
                 {
@@ -1253,7 +1296,12 @@ namespace VexedCore
                         saveComplete = true;
                         upgradeStationDoodad.stateTransition = 0;
                         
-                        SaveGame();                        
+                        SaveGame();
+                        if (upgradeStage == 1)
+                        {
+                            SoundFX.OpenDoor();
+                            upgradeStage = 2;
+                        }
                     }
                     
                 }
@@ -1261,8 +1309,9 @@ namespace VexedCore
                 {
                     state = State.Normal;
                     upgradeTime = 0;
-                    DialogBox.SetDialog("SaveComplete");
-                    
+                    if(Engine.justLoaded == false)
+                        DialogBox.SetDialog("SaveComplete");
+
                 }
             }
 
@@ -1528,6 +1577,7 @@ namespace VexedCore
                             jetPacking = false;
                             //center.velocity += (jumpSpeed - upMagnitude) * up;
                             jumpRecovery = jumpRecoveryMax;
+                            SoundFX.JumpSound();
                         }
                     }
                     else if (hookState == HookState.Waiting && leftWall && faceDirection < 0 && (upgrades[(int)AbilityType.PermanentWallJump] == true || primaryAbility.type == AbilityType.WallJump || secondaryAbility.type == AbilityType.WallJump))
@@ -1539,6 +1589,7 @@ namespace VexedCore
                             center.velocity += (wallJumpSpeed - rightMagnitude) * right;
                         jumpRecovery = jumpRecoveryMax;
                         wallJumpCooldown = wallJumpCooldownMax;
+                        SoundFX.JumpSound();
 
                     }
                     else if (hookState == HookState.Waiting && rightWall && faceDirection > 0 && (upgrades[(int)AbilityType.PermanentWallJump] == true || primaryAbility.type == AbilityType.WallJump || secondaryAbility.type == AbilityType.WallJump))
@@ -1550,6 +1601,7 @@ namespace VexedCore
                             center.velocity -= (wallJumpSpeed + rightMagnitude) * right;
                         jumpRecovery = jumpRecoveryMax;
                         wallJumpCooldown = wallJumpCooldownMax;
+                        SoundFX.JumpSound();
                     }
                     else
                     {
@@ -1561,6 +1613,7 @@ namespace VexedCore
                                 center.velocity += (jumpSpeed - upMagnitude) * up;
                                 jumpRecovery = jumpRecoveryMax;
                                 primaryAbility.ammo--;
+                                SoundFX.RocketJump();
                             }
                         }
                         else if (secondaryAbility.type == AbilityType.DoubleJump && secondaryAbility.ammo != 0)
@@ -1571,6 +1624,7 @@ namespace VexedCore
                                 center.velocity += (jumpSpeed - upMagnitude) * up;
                                 jumpRecovery = jumpRecoveryMax;
                                 secondaryAbility.ammo--;
+                                SoundFX.RocketJump();
                             }
                         }
                     }
@@ -1596,6 +1650,7 @@ namespace VexedCore
                         {
                             if (d.type == VL.DoodadType.Vortex && (d.position.position - center.position).Length() < .3f)
                             {
+                                SoundFX.TunnelWoosh();
                                 d.targetDoodad.ActivateDoodad(currentRoom, true);
                                 tunnelExit = d.targetDoodad;
                                 state = State.Tunnel;
@@ -1617,6 +1672,7 @@ namespace VexedCore
                             {
                                 if (Vector3.Dot(center.velocity, d.position.direction) > 0)
                                 {
+                                    SoundFX.TunnelWoosh();
                                     jumpRoom = d.targetRoom;
                                     jumpSource = center.position;
                                     jumpDestination = d.targetDoodad.position.position - 2f * d.targetDoodad.upUnit;
@@ -1815,6 +1871,7 @@ namespace VexedCore
                     {
                         if (d.type == VL.DoodadType.BridgeGate)
                         {
+                            SoundFX.BridgeWarp();
                             jumpRoom = d.targetRoom;
                             jumpRoom.Reset();
                             jumpSource = center.position;
