@@ -796,11 +796,11 @@ namespace VexedCore
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(int gameTime)
         {
             if (armorState == ArmorState.Break)
             {
-                armorBreakTime += gameTime.ElapsedGameTime.Milliseconds;
+                armorBreakTime += gameTime;
                 if (armorBreakTime > maxArmorBreakTime)
                 {
                     armorBreakTime = maxArmorBreakTime;
@@ -809,7 +809,7 @@ namespace VexedCore
             }
             if (state == MonsterState.Spawn)
             {
-                spawnTime += gameTime.ElapsedGameTime.Milliseconds;
+                spawnTime += gameTime;
                 if (spawnTime > maxSpawnTime)
                     state = MonsterState.Normal;
                 return;
@@ -817,39 +817,39 @@ namespace VexedCore
 
             if (moveType == VL.MovementType.SnakeBoss)
             {
-                snakeBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+                snakeBoss.Update(gameTime, this);
             }
             if (moveType == VL.MovementType.RockBoss)
             {
-                rockBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+                rockBoss.Update(gameTime, this);
             }
             if (moveType == VL.MovementType.ChaseBoss)
             {
-                chaseBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+                chaseBoss.Update(gameTime, this);
             }
             if (moveType == VL.MovementType.BattleBoss)
             {
-                battleBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+                battleBoss.Update(gameTime, this);
             }
             if (moveType == VL.MovementType.ArmorBoss)
             {
-                armorBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+                armorBoss.Update(gameTime, this);
             }
             if (moveType == VL.MovementType.FaceBoss)
             {
-                faceBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+                faceBoss.Update(gameTime, this);
             }
             if (moveType == VL.MovementType.JetBoss)
             {
-                jetBoss.Update(gameTime.ElapsedGameTime.Milliseconds, this);
+                jetBoss.Update(gameTime, this);
             }
 
             if (state == MonsterState.Death)
             {
-                deathTime -= gameTime.ElapsedGameTime.Milliseconds;
+                deathTime -= gameTime;
                 if (deathTime < 0)
                     deathTime = 0;
-                flashCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+                flashCooldown -= gameTime;
                 if (flashCooldown < 0)
                 {
                     flashCooldown = 0;
@@ -857,7 +857,7 @@ namespace VexedCore
                 return;
             }
 
-            flashCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            flashCooldown -= gameTime;
             if (flashCooldown < 0)
             {
                 flashCooldown = 0;
@@ -869,12 +869,12 @@ namespace VexedCore
                 prevUp = Engine.player.center.direction;
                 position.velocity = Vector3.Zero;                
             }
-            spinRecovery -= gameTime.ElapsedGameTime.Milliseconds;
+            spinRecovery -= gameTime;
             if (spinRecovery < 0) spinRecovery = 0;
 
             if (dead == true)
                 return;
-            directionChangeCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            directionChangeCooldown -= gameTime;
             if (directionChangeCooldown < 0)
                 directionChangeCooldown = 0;
 
@@ -901,9 +901,9 @@ namespace VexedCore
             }
 
             if(rockBoss.phasing == true)
-                position.Update(Engine.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds,false);
+                position.Update(Engine.player.currentRoom, gameTime,false);
             else
-                position.Update(Engine.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds, true);
+                position.Update(Engine.player.currentRoom, gameTime, true);
 
             Vector3 direction = Vector3.Zero;
             if (aiType == VL.AIType.Waypoint)
@@ -1130,7 +1130,7 @@ namespace VexedCore
                 }
                 if (spinUp != Vector3.Zero)
                 {
-                    spinTime += gameTime.ElapsedGameTime.Milliseconds;
+                    spinTime += gameTime;
                     if (spinTime > spinMaxTime)
                     {
                         spinTime = 0;
@@ -1141,7 +1141,7 @@ namespace VexedCore
 
                 if (groundProjection != Vector3.Zero)
                 {
-                    jumpCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+                    jumpCooldown -= gameTime;
                     if (jumpCooldown < 0) jumpCooldown = 0;
 
                     if (jumpTime > 10)
@@ -1150,7 +1150,7 @@ namespace VexedCore
                         jumping = false;
                     }
                     if (jumping == true)
-                        jumpTime += gameTime.ElapsedGameTime.Milliseconds;
+                        jumpTime += gameTime;
                 }
                 else
                 {
@@ -1230,7 +1230,7 @@ namespace VexedCore
                 }
                 if (spinUp != Vector3.Zero)
                 {
-                    spinTime += gameTime.ElapsedGameTime.Milliseconds;
+                    spinTime += gameTime;
                     if (spinTime > spinMaxTime)
                     {
                         spinTime = 0;

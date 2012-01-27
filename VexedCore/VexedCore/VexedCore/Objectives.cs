@@ -178,9 +178,9 @@ namespace VexedCore
             return targets;
         }
 
-        public static void UpdateObjectiveStatus(GameTime gameTime)
+        public static void UpdateObjectiveStatus(int gameTime)
         {
-            oscillate += gameTime.ElapsedGameTime.Milliseconds;
+            oscillate += gameTime;
             if (oscillate > maxOscillate)
             {
                 oscillate = 0;

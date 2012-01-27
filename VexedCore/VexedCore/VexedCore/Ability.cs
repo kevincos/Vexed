@@ -229,9 +229,9 @@ namespace VexedCore
                 ammo = 0;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(int gameTime)
         {
-            cooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            cooldown -= gameTime;
             if (cooldown < 0) cooldown = 0;
 
             if (type == AbilityType.DoubleJump)
@@ -246,7 +246,7 @@ namespace VexedCore
             {
                 if (Engine.player.grounded == true && Engine.player.flashTime == 0)
                 {
-                    ammo += gameTime.ElapsedGameTime.Milliseconds;
+                    ammo += gameTime;
                     if (ammo > maxAmmo)
                         ammo = maxAmmo;
                 }
@@ -254,7 +254,7 @@ namespace VexedCore
 
         }
 
-        public void Do(GameTime gameTime)
+        public void Do(int gameTime)
         {
             if (cooldown == 0)
             {
@@ -278,19 +278,19 @@ namespace VexedCore
                 }
                 if (type == AbilityType.Blaster)
                 {
-                    SoundFX.FireBlaster();
+                    SoundFX.FireBlaster(Engine.player.center.position);
                     Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Player, Engine.player.center.position, relVelocity, Engine.player.center.normal, shootDirection));
                 }
                 if (type == AbilityType.Missile)
                 {
-                    SoundFX.FireMissile();
+                    SoundFX.FireMissile(Engine.player.center.position);
                     Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Missile, Engine.player.center.position + .5f * shootDirection, relVelocity, Engine.player.center.normal, shootDirection));
                 }
                 if (type == AbilityType.Bomb)
                     Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Bomb, Engine.player.center.position + .5f * shootDirection, relVelocity, Engine.player.center.normal, shootDirection));
                 if (type == AbilityType.Laser)
                 {
-                    SoundFX.FireLaser();
+                    SoundFX.FireLaser(Engine.player.center.position);
                     Engine.player.currentRoom.projectiles.Add(new Projectile(null, ProjectileType.Laser, Engine.player.center.position, relVelocity, Engine.player.center.normal, shootDirection));
                 }
 
@@ -317,7 +317,7 @@ namespace VexedCore
                     }
                     else
                         SoundFX.EndJetPack();
-                    ammo -= gameTime.ElapsedGameTime.Milliseconds;
+                    ammo -= gameTime;
                     if (ammo < 0) ammo = 0;
                 }
             }

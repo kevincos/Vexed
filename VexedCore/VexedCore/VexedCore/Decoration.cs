@@ -240,11 +240,11 @@ namespace VexedCore
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(int gameTime)
         {
             if(freeSpin == false)
             {
-                animationTime += gameTime.ElapsedGameTime.Milliseconds;
+                animationTime += gameTime;
                 if (animationTime > maxAnimationTime)
                 {
                     if (reverseAnimation == false)
@@ -281,7 +281,7 @@ namespace VexedCore
                 {
                     spinTargetFrame = 6;
                 }
-                animationTime += gameTime.ElapsedGameTime.Milliseconds;
+                animationTime += gameTime;
                 if (animationTime > maxSpinAnimationTime)
                 {
                     animationTime = 0;

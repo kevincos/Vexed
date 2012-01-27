@@ -181,10 +181,10 @@ namespace VexedCore
             return true;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(int gameTime)
         {
-            lifeTime += gameTime.ElapsedGameTime.Milliseconds;
-            cooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            lifeTime += gameTime;
+            cooldown -= gameTime;
             if (cooldown < 0)
                 cooldown = 0;
         }

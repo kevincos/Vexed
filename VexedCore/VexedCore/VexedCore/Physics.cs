@@ -285,7 +285,7 @@ namespace VexedCore
 
         /* Test for collision between player and blocks, and adjust player's position and velocity accordingly.
          * There's some tricky order of operations here that is explained inline*/
-        public static void CollisionCheck(Room r, Player p, GameTime gameTime)
+        public static void CollisionCheck(Room r, Player p, int gameTime)
         {
             // Variables used for entire collision test method.
             Physics.BlockUnfold(r, p.center.normal, p.center.direction);
@@ -663,7 +663,8 @@ namespace VexedCore
                 }
                 if (d.type == VL.DoodadType.Vortex || d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.ItemBlock || d.isStation)
                 {                    
-                    d.ActivateDoodad(r, d.ActivationRange(p));
+                    if(Engine.player.state != State.Upgrade && Engine.player.state != State.Save)
+                        d.ActivateDoodad(r, d.ActivationRange(p));
                 }
                 if (d.type == VL.DoodadType.NPC_OldMan)
                 {
@@ -821,9 +822,13 @@ namespace VexedCore
                             }
                             if (b.type == VL.DoodadType.PlugSlot && d.type == VL.DoodadType.PowerPlug)
                             {
-                                d.active = true;
                                 d.position.position = b.position.position;
-                                d.SetTargetBehavior();
+                                if (d.active == false)
+                                {
+                                    d.SetTargetBehavior();
+                                }
+                                d.active = true;
+                                
                             }
                         }
                     }

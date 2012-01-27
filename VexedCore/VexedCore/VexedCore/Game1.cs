@@ -28,6 +28,8 @@ namespace VexedCore
         public static Engine engine;
         public static Controls controller;
 
+        public static bool resetTimer = false;
+
         public static ContentManager contentManager;
 
         public Game1()
@@ -260,24 +262,34 @@ namespace VexedCore
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            
             // Allows the game to exit
             if (Engine.quit == true)
                 this.Exit();
             
 
-            AnimationControl.Update(gameTime);
-            controller.Update(gameTime);
-            engine.Update(gameTime);
-            SaveGameText.Update(gameTime);
-            ObjectiveControl.UpdateObjectiveStatus(gameTime);
+            int elapsedTime = gameTime.ElapsedGameTime.Milliseconds;
+            if (resetTimer)
+            {
+                resetTimer = false;
+                elapsedTime = 0;
+            }
+
+            AnimationControl.Update(elapsedTime);
+            controller.Update(elapsedTime);
+            engine.Update(elapsedTime);
+            SaveGameText.Update(elapsedTime);
+            ObjectiveControl.UpdateObjectiveStatus(elapsedTime);
             Controls.ResetMouse();
             MusicControl.PlayGameMusic();
             base.Update(gameTime);
+            
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            engine.Draw(gameTime);
+            int elapsedTime = gameTime.ElapsedGameTime.Milliseconds;
+            engine.Draw(elapsedTime);
 
             base.Draw(gameTime);
         }

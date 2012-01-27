@@ -43,6 +43,8 @@ namespace VexedCore
         public Color color;
         public String id;
 
+        public Vector3 averagePosition;
+
         public float length;
         public float height;
         public float area;
@@ -274,20 +276,36 @@ namespace VexedCore
             return properties;
         }
 
-        public int UpdateBehavior(GameTime gameTime)
+        public int UpdateBehavior(int gameTime)
         {
+            averagePosition = Vector3.Zero;
+            foreach (Edge e in edges)
+            {
+                averagePosition += e.start.position;
+            }
+            averagePosition = averagePosition / 4;
             if (currentBehavior == null)
                 return 0;
             if (nextBehavior == true)
             {
+
                 foreach (Behavior b in behaviors)
                 {
                     if (b.id == currentBehavior.nextBehavior)
                     {
+                        if (b.duration != 0)
+                        {
+                            SoundFX.PlatformMove(averagePosition);
+                        }
+                        else if (currentBehavior.duration != 0)
+                        {
+                            SoundFX.PlatformStop(averagePosition);
+                        }
                         currentBehavior = b;
                         break;
                     }
                 }
+
                 foreach (Edge e in edges)
                 {
                     if (currentBehavior.duration != 0)
@@ -301,25 +319,37 @@ namespace VexedCore
                         e.end.velocity = Vector3.Zero;
                     }
                 }
-                currentTime = gameTime.ElapsedGameTime.Milliseconds;
+                currentTime = gameTime;
                 nextBehavior = false;
-                return gameTime.ElapsedGameTime.Milliseconds;
+                return gameTime;
             }
-            currentTime += gameTime.ElapsedGameTime.Milliseconds;
+            currentTime += gameTime;
             if (currentTime > currentBehavior.duration)
             {                
                 nextBehavior = true;
-                return currentBehavior.duration - (currentTime - gameTime.ElapsedGameTime.Milliseconds);
+                return currentBehavior.duration - (currentTime - gameTime);
             }
-            return gameTime.ElapsedGameTime.Milliseconds;
+            return gameTime;
         }
 
         public void SetBehavior(Behavior b)
         {
+
+            if (b.duration != 0)
+            {
+                SoundFX.PlatformMove(averagePosition);
+            }
+            else if (currentBehavior.duration != 0)
+            {
+                SoundFX.PlatformStop(averagePosition);
+            }
+
             currentBehavior = b;
             
             currentTime = 0;
             nextBehavior = false;
+
+
 
             foreach (Edge e in edges)
             {
@@ -341,6 +371,7 @@ namespace VexedCore
             if (currentBehavior == null)
             {
                 currentBehavior = behaviors[0];
+
                 if (currentBehavior.destination != Vector3.Zero)
                 {
                     foreach (Edge e in edges)

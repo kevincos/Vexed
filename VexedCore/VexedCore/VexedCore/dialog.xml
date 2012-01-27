@@ -46,6 +46,26 @@ because I've got this sweet beard.</string>
   </DialogChunk>
 
   <DialogChunk>
+    <id>RedPowerStation</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You've collected a Health Cube. Collect
+several of these to increase your health.</string>      
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
+  <DialogChunk>
+    <id>BluePowerStation</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>You've collected a Warp Cube. Collect
+more to activate this sector's warp network.</string>      
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
+  <DialogChunk>
     <id>PowerUp</id>
     <speaker>System</speaker>
     <textList>

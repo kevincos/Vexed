@@ -136,7 +136,7 @@ namespace VexedCore
             }
         }
         
-        public void Upgate(GameTime gameTime, Monster srcMonster)
+        public void Upgate(int gameTime, Monster srcMonster)
         {
             position = new Vertex(srcMonster.position);
             position.velocity = positionOffset.X * srcMonster.rightUnit - positionOffset.Y * srcMonster.upUnit;
@@ -144,7 +144,7 @@ namespace VexedCore
             position.velocity = srcMonster.position.velocity;
 
             if ((Engine.player.center.position - position.position).Length() < weaponRange)
-                fireCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+                fireCooldown -= gameTime;
             if (fireCooldown < 0)
                 fireCooldown = 0;
 
@@ -225,7 +225,7 @@ namespace VexedCore
                 fireCooldown = fireTime;
                 if (gunType == VL.GunType.Blaster || gunType == VL.GunType.Repeater)
                 {
-                    SoundFX.FireBlaster();
+                    SoundFX.FireBlaster(position.position);
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Plasma, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity));
                     if (gunType == VL.GunType.Repeater)
                     {
@@ -235,19 +235,19 @@ namespace VexedCore
                 }
                 if (gunType == VL.GunType.Beam)
                 {
-                    SoundFX.FireLaser();
+                    SoundFX.FireLaser(position.position);
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Laser, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity));
                 }
                 if (gunType == VL.GunType.Missile)
                 {
-                    SoundFX.FireMissile();
+                    SoundFX.FireMissile(position.position);
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Missile, position.position + radius * gunLine, position.velocity, position.normal, projectileVelocity));
                 }
                 if (gunType == VL.GunType.Spread)
                 {
-                    SoundFX.FireBlaster();
-                    SoundFX.FireBlaster();
-                    SoundFX.FireBlaster();
+                    SoundFX.FireBlaster(position.position);
+                    SoundFX.FireBlaster(position.position);
+                    SoundFX.FireBlaster(position.position);
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Plasma, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity + .5f * gunNormal));
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Plasma, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity - .5f * gunNormal));
                     Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.Plasma, position.position + radius * gunLine, Vector3.Zero, position.normal, projectileVelocity));

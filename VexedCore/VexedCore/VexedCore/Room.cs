@@ -340,7 +340,7 @@ namespace VexedCore
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(int gameTime)
         {
             if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || roomHighlight == true)
             {
@@ -348,7 +348,7 @@ namespace VexedCore
                         //(Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)
                 if(this == Engine.player.currentRoom || adjacent == true)
                 {
-                    beltAnimation += gameTime.ElapsedGameTime.Milliseconds;
+                    beltAnimation += gameTime;
                     foreach (Block b in blocks)
                     {
                         //if (b.staticObject == false)
@@ -369,7 +369,7 @@ namespace VexedCore
                         {
                             if (d.freeMotion)
                             {
-                                d.position.Update(this, gameTime.ElapsedGameTime.Milliseconds);
+                                d.position.Update(this, gameTime);
                                 Vector3 gravityDirection = Engine.player.center.direction;
                                 if (d.position.normal == Engine.player.center.direction)
                                 {
@@ -1640,7 +1640,7 @@ namespace VexedCore
             }
         }
 
-        public void UpdateDecorations(GameTime gameTime)
+        public void UpdateDecorations(int gameTime)
         {
             foreach (Decoration d in decorations)
             {
@@ -1664,7 +1664,7 @@ namespace VexedCore
             }
         }
 
-        public void UpdateMonsters(GameTime gameTime)
+        public void UpdateMonsters(int gameTime)
         {
             if (Engine.player.state != State.Dialog)
             {

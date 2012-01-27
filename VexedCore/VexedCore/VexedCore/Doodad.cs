@@ -47,7 +47,17 @@ namespace VexedCore
         Phase,
         Blaster,
         PlugSlot,
-        PowerOrb,
+        PowerOrb_0,
+        PowerOrb_1,
+        PowerOrb_2,
+        PowerOrb_3,
+        PowerOrb_4,
+        PowerOrb_5,
+        PowerOrb_6,
+        PowerOrb_7,
+        PowerOrb_8,
+        PowerOrb_9,
+        PowerOrb_10,
         PowerPlug,
         RainDrop,
         RedKey,
@@ -104,6 +114,7 @@ namespace VexedCore
 
         public Decal doorDecal = 0;
         public bool idle = false;
+        public bool doorState = false;
 
         public int animationFrame = 0;
         public int animationTime = 0;
@@ -194,7 +205,17 @@ namespace VexedCore
             decalTextures[(int)Decal.Phase] = Content.Load<Texture2D>("decal_phase");
             decalTextures[(int)Decal.Blaster] = Content.Load<Texture2D>("decal_plasma");
             decalTextures[(int)Decal.PlugSlot] = Content.Load<Texture2D>("decal_plugslot");
-            decalTextures[(int)Decal.PowerOrb] = Content.Load<Texture2D>("decal_powerorb");
+            decalTextures[(int)Decal.PowerOrb_0] = Content.Load<Texture2D>("decal_powerorb_0");
+            decalTextures[(int)Decal.PowerOrb_1] = Content.Load<Texture2D>("decal_powerorb_1");
+            decalTextures[(int)Decal.PowerOrb_2] = Content.Load<Texture2D>("decal_powerorb_2");
+            decalTextures[(int)Decal.PowerOrb_3] = Content.Load<Texture2D>("decal_powerorb_3");
+            decalTextures[(int)Decal.PowerOrb_4] = Content.Load<Texture2D>("decal_powerorb_4");
+            decalTextures[(int)Decal.PowerOrb_5] = Content.Load<Texture2D>("decal_powerorb_5");
+            decalTextures[(int)Decal.PowerOrb_6] = Content.Load<Texture2D>("decal_powerorb_6");
+            decalTextures[(int)Decal.PowerOrb_7] = Content.Load<Texture2D>("decal_powerorb_7");
+            decalTextures[(int)Decal.PowerOrb_8] = Content.Load<Texture2D>("decal_powerorb_8");
+            decalTextures[(int)Decal.PowerOrb_9] = Content.Load<Texture2D>("decal_powerorb_9");
+            decalTextures[(int)Decal.PowerOrb_10] = Content.Load<Texture2D>("decal_powerorb_10");
             decalTextures[(int)Decal.PowerPlug] = Content.Load<Texture2D>("decal_powerplug");
             decalTextures[(int)Decal.RainDrop] = Content.Load<Texture2D>("decal_raindrop");
             decalTextures[(int)Decal.RedKey] = Content.Load<Texture2D>("decal_redkey");
@@ -276,6 +297,7 @@ namespace VexedCore
             stateTransition = d.stateTransition;
             stateTransitionDir = d.stateTransitionDir;
             stateTransitionVelocity = d.stateTransitionVelocity;
+            _powered = d._powered;
             behaviors = new List<Behavior>();
             foreach (Behavior b in d.behaviors)
             {
@@ -434,7 +456,14 @@ namespace VexedCore
             if (powered == false)
                 futureState = false;
 
+            if (type == VL.DoodadType.WallSwitch)
+            {
+                SoundFX.WallSwitchOff(position.position);
+            }
+
             if (type == VL.DoodadType.UpgradeStation && abilityType == AbilityType.Empty)
+                futureState = false;
+            if ((type == VL.DoodadType.PowerStation || type == VL.DoodadType.RedPowerStation || type == VL.DoodadType.BluePowerStation) && orbsRemaining ==0)
                 futureState = false;
 
             if (futureState != active)
@@ -442,21 +471,8 @@ namespace VexedCore
                 refreshVertexData = true;
             }
 
-            if (isStation == true || type == VL.DoodadType.Vortex)
-            {
-                if (active == true && futureState == false)
-                {                
-                    if(Engine.player.state != State.Tunnel)
-                        SoundFX.CloseDoor();
-                }
-                if (active == false && futureState == true)
-                {
-                    if(Engine.player.state != State.Jump && Engine.player.state != State.Upgrade && Engine.player.state != State.Tunnel && Engine.player.state != State.Save && Engine.player.state != State.Dialog)
-                        SoundFX.OpenDoor();
-                }
-            }
-
-            active = futureState;
+            if(active != futureState)
+                active = futureState;
         }
 
         public bool Animated
@@ -473,6 +489,20 @@ namespace VexedCore
 
         public bool _powered = false;
 
+        public void InitializePowerState()
+        {
+            if (type == VL.DoodadType.WarpStation)
+            {
+                if (currentRoom.parentSector.currentBlueOrbs >= activationCost)                
+                    _powered = true;                 
+            }
+            else
+            {
+                if (currentRoom.currentOrbs >= activationCost)
+                        _powered = true;                      
+            }
+        }
+
         public bool powered
         {
             get
@@ -483,7 +513,9 @@ namespace VexedCore
                     {
                         if (_powered == false)
                         {
-                            _powered = true;
+                            if(Engine.justLoaded == false)
+                                SoundFX.StationPowerUp();
+                            _powered = true;                            
                             refreshVertexData = true;
                         }
                         return true;
@@ -495,6 +527,8 @@ namespace VexedCore
                     {
                         if (_powered == false && activationCost > 0)
                         {
+                            if(Engine.justLoaded == false)
+                                SoundFX.StationPowerUp();
                             _powered = true;
                             refreshVertexData = true;
                         }
@@ -592,12 +626,15 @@ namespace VexedCore
                     }
                     if (targetDoodad.type == VL.DoodadType.LoadStation || targetDoodad.type == VL.DoodadType.SaveStation)
                         return decalTextures[(int)Decal.Save];
-                    if (targetDoodad.type == VL.DoodadType.SwitchStation)
-                        return decalTextures[(int)Decal.Switch];
+
                     if (targetDoodad.type == VL.DoodadType.HealthStation)
                         return decalTextures[(int)Decal.Health];
-                    if (targetDoodad.type == VL.DoodadType.PowerStation || targetDoodad.type == VL.DoodadType.RedPowerStation || targetDoodad.type == VL.DoodadType.BluePowerStation)
-                        return decalTextures[(int)Decal.PowerOrb];
+                    if (targetDoodad.type == VL.DoodadType.RedPowerStation || targetDoodad.type == VL.DoodadType.BluePowerStation)
+                        return decalTextures[(int)Decal.PowerOrb_0];
+                    if (targetDoodad.type == VL.DoodadType.PowerStation)
+                    {
+                        return decalTextures[(int)Decal.PowerOrb_0 + (10-targetDoodad.orbsRemaining)];
+                    }
                     if (targetDoodad.type == VL.DoodadType.WarpStation)
                         return decalTextures[(int)Decal.Warp];
                     if (targetDoodad.type == VL.DoodadType.SwitchStation)
@@ -608,6 +645,7 @@ namespace VexedCore
                             return decalTextures[(int)Decal.BlueLock];
                         if (targetDoodad.abilityType == AbilityType.YellowKey)
                             return decalTextures[(int)Decal.YellowLock];
+                        return decalTextures[(int)Decal.Switch];
                     }
                     if (targetDoodad.type == VL.DoodadType.UpgradeStation || targetDoodad.type == VL.DoodadType.ItemStation)
                     {
@@ -1142,6 +1180,12 @@ namespace VexedCore
             {
                 if (type == VL.DoodadType.ItemBlock || type == VL.DoodadType.ItemStation)
                     return 500;
+                if (type == VL.DoodadType.PowerStation)
+                    return 50;
+                if (type == VL.DoodadType.HealthStation)
+                    return 80;
+                if (type == VL.DoodadType.SwitchStation)
+                    return 300;
                 return 0;
             }
         }
@@ -1467,9 +1511,9 @@ namespace VexedCore
                     
                     
                 }
-                else if (type != VL.DoodadType.NPC_OldMan && type != VL.DoodadType.Beam && type != VL.DoodadType.PowerPlug && type != VL.DoodadType.LaserSwitch)
+                else if (type != VL.DoodadType.NPC_OldMan && type != VL.DoodadType.Beam && type != VL.DoodadType.PowerPlug)
                 {
-                    if (active)
+                    if (active && type != VL.DoodadType.LaserSwitch)
                     {
                         currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
@@ -1672,11 +1716,11 @@ namespace VexedCore
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(int gameTime)
         {
             if (alreadyUsed == false)
             {
-                flashTime += gameTime.ElapsedGameTime.Milliseconds;
+                flashTime += gameTime;
                 if (flashTime > maxFlashTime)
                     flashTime = 0;
             }
@@ -1686,12 +1730,12 @@ namespace VexedCore
                     refreshVertexData = true;
                 if (!ActivationRange(Engine.player) || Engine.player.state != State.Normal)
                 {
-                    helpIconTime -= gameTime.ElapsedGameTime.Milliseconds;
+                    helpIconTime -= gameTime;
                     if (helpIconTime < 0) helpIconTime = 0;
                 }
                 else
                 {
-                    helpIconTime += gameTime.ElapsedGameTime.Milliseconds;
+                    helpIconTime += gameTime;
                     if (helpIconTime > helpIconMaxTime) helpIconTime = helpIconMaxTime;
                     
                 }
@@ -1699,7 +1743,7 @@ namespace VexedCore
 
             //if (Animated)
             {
-                animationTime += gameTime.ElapsedGameTime.Milliseconds;
+                animationTime += gameTime;
                 if (animationTime > 100)
                 {
                     refreshVertexData = true;
@@ -1713,7 +1757,7 @@ namespace VexedCore
                 Vector3 dir = Engine.player.center.position - position.position;
                 dir.Normalize();
                 position.velocity += .018f * dir;
-                position.Update(currentRoom, gameTime.ElapsedGameTime.Milliseconds);
+                position.Update(currentRoom, gameTime);
                 refreshVertexData = true;
             }
             
@@ -1793,14 +1837,28 @@ namespace VexedCore
 
             if (type == VL.DoodadType.LeftDoor || type == VL.DoodadType.RightDoor)
             {
-                if (targetDoodad.active == true || targetDoodad.available == false)
+                bool currentDoorState = targetDoodad.active == true || targetDoodad.available == false;
+                if (currentDoorState != doorState)
+                {
+                    if(Engine.player.state != State.Jump && Engine.player.state != State.Tunnel)
+                        SoundFX.OpenDoor(position.position);
+                    doorState = currentDoorState;
+                }
+                if (currentDoorState)
                     Activate();
                 else
                     Deactivate();
             }
             if (type == VL.DoodadType.LeftTunnelDoor || type == VL.DoodadType.RightTunnelDoor)
             {
-                if (targetDoodad.active == true || targetDoodad.available == false)
+                bool currentDoorState = targetDoodad.active == true || targetDoodad.available == false;
+                if (currentDoorState != doorState)
+                {
+                    if (Engine.player.state != State.Jump && Engine.player.state != State.Tunnel)
+                        SoundFX.OpenDoor(position.position);
+                    doorState = currentDoorState;
+                }
+                if (currentDoorState)
                     Activate();
                 else
                     Deactivate();
@@ -1824,10 +1882,10 @@ namespace VexedCore
                 }
             }
 
-            cooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            cooldown -= gameTime;
             if (cooldown < 0) cooldown = 0;
 
-            stateTransition += gameTime.ElapsedGameTime.Milliseconds * stateTransitionDir * stateTransitionVelocity;
+            stateTransition += gameTime * stateTransitionDir * stateTransitionVelocity;
             if (stateTransitionDir == 1 && stateTransition > 1)
             {
                 toggleOn = true;
@@ -1860,6 +1918,7 @@ namespace VexedCore
                             {
                                 if (b.id == targetBehavior)
                                 {
+                                    SoundFX.WallSwitch();
                                     targetDoodad.SetBehavior(b);
                                     stateTransitionDir = 0;
 
@@ -1875,6 +1934,7 @@ namespace VexedCore
                             {
                                 if (b.id == targetBehavior)
                                 {
+                                    SoundFX.WallSwitch();
                                     targetBlock.SetBehavior(b);
                                     stateTransitionDir = 0;
 
@@ -1890,6 +1950,7 @@ namespace VexedCore
                             {
                                 if (b.id == targetBehavior)
                                 {
+                                    SoundFX.WallSwitch();
                                     targetEdge.SetBehavior(b);
                                     stateTransitionDir = 0;
 
@@ -1902,6 +1963,7 @@ namespace VexedCore
                 {
                     if (targetDoodad.currentBehavior.id == expectedBehavior && stateTransition == 1f && stateTransitionDir == 0)
                     {
+                        SoundFX.WallSwitchOff(position.position);
                         stateTransitionDir = -1;
                     }
                 }
@@ -1909,14 +1971,18 @@ namespace VexedCore
                 {
                     if (targetBlock.currentBehavior.id == expectedBehavior && stateTransition == 1f && stateTransitionDir == 0)
                     {
+                        SoundFX.WallSwitchOff(position.position);
                         stateTransitionDir = -1;
+                        
                     }
                 }
                 if (targetEdge != null)
                 {
                     if (targetEdge.currentBehavior.id == expectedBehavior && stateTransition == 1f && stateTransitionDir == 0)
                     {
+                        SoundFX.WallSwitchOff(position.position);
                         stateTransitionDir = -1;
+                        
                     }
                 }
             }
@@ -1928,6 +1994,18 @@ namespace VexedCore
         {
             if(stateTransition < 1)
             {
+                if (stateTransition == 0 && type == VL.DoodadType.WallSwitch)
+                {
+                    SoundFX.WallSwitchOff(position.position);
+                }
+                if (stateTransition == 0 && type == VL.DoodadType.Beam && styleSpriteIndex == 0)
+                {
+                    SoundFX.ElectricOn(position.position);
+                }
+                if (stateTransition == 0 && type == VL.DoodadType.Beam && styleSpriteIndex == 8)
+                {
+                    SoundFX.FlameOn(position.position);
+                }
                 stateTransitionDir = 1;
                 refreshVertexData = true;
             }
@@ -1936,13 +2014,52 @@ namespace VexedCore
         {
             if (stateTransition > 0)
             {
+                if (stateTransition == 1 && type == VL.DoodadType.Beam && styleSpriteIndex == 0)
+                {
+                    SoundFX.ElectricOff(position.position);
+                }
+                if (stateTransition == 1 && type == VL.DoodadType.Beam && styleSpriteIndex == 8)
+                {
+                    SoundFX.FlameOff(position.position);
+                }
                 stateTransitionDir = -1;
                 refreshVertexData = true;
             }
         }
 
 
-        public int UpdateBehavior(GameTime gameTime)
+        public void BehaviorChange(Behavior b1, Behavior b2)
+        {
+            if (type == VL.DoodadType.Door)
+            {
+                if (b1.toggle != b2.toggle)
+                {
+                    SoundFX.OpenDoor(position.position);
+                }
+            }
+            if (type == VL.DoodadType.Beam && styleSpriteIndex == 0)
+            {
+                if (b1.toggle != b2.toggle)
+                {
+                    if(b1.toggle)
+                        SoundFX.ElectricOn(position.position);
+                    else
+                        SoundFX.ElectricOff(position.position);
+                }
+            }
+            if (type == VL.DoodadType.Beam && styleSpriteIndex == 1)
+            {
+                if (b1.toggle != b2.toggle)
+                {
+                    if (b1.toggle)
+                        SoundFX.FlameOn(position.position);
+                    else
+                        SoundFX.FlameOff(position.position);
+                }
+            }
+        }
+
+        public int UpdateBehavior(int gameTime)
         {
             if (currentBehavior == null)
                 return 0;
@@ -1954,7 +2071,7 @@ namespace VexedCore
                     Activate();
                 else
                     Deactivate();
-                currentTime = gameTime.ElapsedGameTime.Milliseconds;
+                currentTime = gameTime;
                 behaviorStarted = true;
                 nextBehavior = false;
             }
@@ -1965,6 +2082,7 @@ namespace VexedCore
                 {
                     if (b.id == currentBehavior.nextBehavior)
                     {
+                        BehaviorChange(currentBehavior, b);
                         currentBehavior = b;
                         currentBehaviorId = currentBehavior.id;
                         break;
@@ -1979,26 +2097,26 @@ namespace VexedCore
 
                 currentTime = 0;
                 nextBehavior = false;
-                return gameTime.ElapsedGameTime.Milliseconds;
+                return gameTime;
             }
-            currentTime += gameTime.ElapsedGameTime.Milliseconds;
+            currentTime += gameTime;
             if (behaviorStarted)
             {
                 if (currentBehavior.duration != 0 && currentTime > currentBehavior.duration)
                 {
                     nextBehavior = true;
-                    return currentBehavior.duration - (currentTime - gameTime.ElapsedGameTime.Milliseconds);
+                    return currentBehavior.duration - (currentTime - gameTime);
                 }
                 if (currentBehavior.period != 0 && currentTime > currentBehavior.period)
                 {
                     currentTime = 0;
-                    if (toggleOn)
-                        Deactivate();
+                    if (toggleOn)                    
+                        Deactivate();                    
                     else
                         Activate();                   
                 }
             }
-            return gameTime.ElapsedGameTime.Milliseconds;
+            return gameTime;
         }
 
         public void SetTargetBehavior()
@@ -2011,6 +2129,14 @@ namespace VexedCore
                     {
                         if (behavior.id == targetBehavior)
                         {
+                            if (type == VL.DoodadType.LaserSwitch)
+                            {
+                                SoundFX.ActivateLaserSwitch();
+                            }
+                            if (type == VL.DoodadType.PowerPlug)
+                            {
+                                SoundFX.ActivatePlug();
+                            }
                             targetDoodad.SetBehavior(behavior);
                         }
                     }
@@ -2024,6 +2150,14 @@ namespace VexedCore
                     {
                         if (behavior.id == targetBehavior)
                         {
+                            if (type == VL.DoodadType.LaserSwitch)
+                            {
+                                SoundFX.ActivateLaserSwitch();
+                            }
+                            if (type == VL.DoodadType.PowerPlug)
+                            {
+                                SoundFX.ActivatePlug();
+                            }
                             targetBlock.SetBehavior(behavior);
                         }
                     }
@@ -2037,6 +2171,14 @@ namespace VexedCore
                     {
                         if (behavior.id == targetBehavior)
                         {
+                            if (type == VL.DoodadType.LaserSwitch)
+                            {
+                                SoundFX.ActivateLaserSwitch();
+                            }
+                            if (type == VL.DoodadType.PowerPlug)
+                            {
+                                SoundFX.ActivatePlug();
+                            }
                             targetEdge.SetBehavior(behavior);
                         }
                     }
@@ -2045,7 +2187,8 @@ namespace VexedCore
         }
 
         public void SetBehavior(Behavior b)
-        {           
+        {
+            BehaviorChange(currentBehavior, b);
             currentBehavior = b;
             currentBehaviorId = currentBehavior.id;
             if (currentBehavior.toggle)

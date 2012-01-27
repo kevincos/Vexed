@@ -465,7 +465,7 @@ namespace VexedCore
             }
         }
 
-        public void Draw(GameTime gameTime)
+        public void Draw(int gameTime)
         {
             saveGameText.RenderTextures();
             DialogBox.RenderTextures();
@@ -722,7 +722,7 @@ namespace VexedCore
             spriteBatch.End();
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(int gameTime)
         {
             Engine.debug_doodadVertexUpdateMonitor.AddData(Engine.debug_updateDoodadVertexData);
             Engine.debug_doodadVertexUpdateMonitor.Update(gameTime);
@@ -744,27 +744,27 @@ namespace VexedCore
             if (player.state == State.Normal)
                 justLoaded = false;
 
-            optionToggleCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            optionToggleCooldown -= gameTime;
             if (optionToggleCooldown < 0) optionToggleCooldown = 0;
 
             if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftTrigger) || Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets))
             {
-                player.baseCameraDistance += .03f * gameTime.ElapsedGameTime.Milliseconds;                
+                player.baseCameraDistance += .03f * gameTime;                
             }
             if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightTrigger) || Keyboard.GetState().IsKeyDown(Keys.OemOpenBrackets))
             {
-                player.baseCameraDistance -= .03f * gameTime.ElapsedGameTime.Milliseconds;                
+                player.baseCameraDistance -= .03f * gameTime;                
             }
             int currentScrollWheel = Mouse.GetState().ScrollWheelValue;
             //if (Mouse.GetState().RightButton == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.LeftControl))
             {
                 if (currentScrollWheel > Controls.scrollWheelPrev)
                 {
-                    player.baseCameraDistance -= .1f * gameTime.ElapsedGameTime.Milliseconds;
+                    player.baseCameraDistance -= .1f * gameTime;
                 }
                 if (currentScrollWheel < Controls.scrollWheelPrev)
                 {
-                    player.baseCameraDistance += .1f * gameTime.ElapsedGameTime.Milliseconds;
+                    player.baseCameraDistance += .1f * gameTime;
                 }
             }
             if (player.baseCameraDistance < 5f) player.baseCameraDistance = 5f;

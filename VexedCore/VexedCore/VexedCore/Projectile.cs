@@ -471,25 +471,25 @@ namespace VexedCore
             if (exploding == false)
             {
                 if (type == ProjectileType.Missile)
-                    SoundFX.MissileExplode();
+                    SoundFX.MissileExplode(position.position);
                 if (type == ProjectileType.Laser)
-                    SoundFX.LaserExplode();
+                    SoundFX.LaserExplode(position.position);
                 if (type == ProjectileType.Player || type == ProjectileType.Plasma)
-                    SoundFX.BlasterExplode();
+                    SoundFX.BlasterExplode(position.position);
             }
 
             exploding = true;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(int gameTime)
         {
             if (exploding == true)
             {
-                explodeTime += gameTime.ElapsedGameTime.Milliseconds;
+                explodeTime += gameTime;
                 if (explodeTime > maxExplodeTime)
                     exploded = true;
             }
-            lifeTime += gameTime.ElapsedGameTime.Milliseconds;
+            lifeTime += gameTime;
             if (lifeTime > maxLife)
             {
                 Detonate();
@@ -512,7 +512,7 @@ namespace VexedCore
 
             if (missileTarget != Vector3.Zero)
             {
-                position.direction += missileTurnSpeed * gameTime.ElapsedGameTime.Milliseconds * missileTarget / missileTarget.Length();
+                position.direction += missileTurnSpeed * gameTime * missileTarget / missileTarget.Length();
                 position.direction.Normalize();
             }
             if (type == ProjectileType.Missile)
@@ -525,11 +525,11 @@ namespace VexedCore
                     position.velocity *= this.maxVelocity;
                 }
 
-                position.velocity += position.direction * .000005f * gameTime.ElapsedGameTime.Milliseconds;
+                position.velocity += position.direction * .000005f * gameTime;
                 Vector3 sideDir = Vector3.Cross(position.direction, position.normal);
-                position.velocity -= missileSideResistance * gameTime.ElapsedGameTime.Milliseconds * Vector3.Dot(position.velocity, sideDir) * sideDir;
+                position.velocity -= missileSideResistance * gameTime * Vector3.Dot(position.velocity, sideDir) * sideDir;
             }
-            position.Update(Engine.player.currentRoom, gameTime.ElapsedGameTime.Milliseconds);
+            position.Update(Engine.player.currentRoom, gameTime);
         }
 
         public void SetTarget(Vector3 targetPos)

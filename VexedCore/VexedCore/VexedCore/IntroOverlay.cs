@@ -43,7 +43,7 @@ namespace VexedCore
             Engine.spriteBatch.End();
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(int gameTime)
         {
             if (state == IntroState.FadeIn || state == IntroState.SpaceBar)
             {
@@ -51,7 +51,7 @@ namespace VexedCore
             }
             if (state != IntroState.SpaceBar)
             {
-                introTime += gameTime.ElapsedGameTime.Milliseconds;
+                introTime += gameTime;
             }
             if (state == IntroState.FadeIn && introTime > fadeTime)
             {

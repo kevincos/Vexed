@@ -245,7 +245,7 @@ namespace VexedCore
                     selectedSectorIndex = i;   
         }
 
-        public static ZoomState Update(GameTime gameTime)
+        public static ZoomState Update(int gameTime)
         {
             if (state == ZoomState.None)
             {
@@ -263,7 +263,7 @@ namespace VexedCore
                 if (dif.Length() > 4)
                 {
                     dif.Normalize();
-                    cameraTarget += .1f * dif * gameTime.ElapsedGameTime.Milliseconds;
+                    cameraTarget += .1f * dif * gameTime;
                     if(Math.Abs(cameraDistance - 140f) > 5)
                         cameraDistance = (cameraPosition - cameraTarget).Length();
                 }
@@ -272,34 +272,34 @@ namespace VexedCore
 
             if (state == ZoomState.Sector && GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftTrigger))
             {
-                cameraDistance += .1f * gameTime.ElapsedGameTime.Milliseconds;
+                cameraDistance += .1f * gameTime;
             }
             if (state == ZoomState.Sector && GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightTrigger))
             {
-                cameraDistance -= .1f * gameTime.ElapsedGameTime.Milliseconds;
+                cameraDistance -= .1f * gameTime;
             }
             int currentScrollWheel = Mouse.GetState().ScrollWheelValue;
             if (state == ZoomState.Sector && currentScrollWheel > Controls.scrollWheelPrev)
             {
-                cameraDistance -= .5f * gameTime.ElapsedGameTime.Milliseconds;
+                cameraDistance -= .5f * gameTime;
             }
             if (state == ZoomState.Sector && currentScrollWheel < Controls.scrollWheelPrev)
             {
-                cameraDistance += .5f * gameTime.ElapsedGameTime.Milliseconds;
+                cameraDistance += .5f * gameTime;
             }
             if ((state == ZoomState.World) && currentScrollWheel > Controls.scrollWheelPrev)
             {
-                cameraDistance -= 2f * gameTime.ElapsedGameTime.Milliseconds;
+                cameraDistance -= 2f * gameTime;
             }
             if ((state == ZoomState.World) && currentScrollWheel < Controls.scrollWheelPrev)
             {
-                cameraDistance += 2f * gameTime.ElapsedGameTime.Milliseconds;
+                cameraDistance += 2f * gameTime;
             }
 
             if (state == ZoomState.ZoomToWorld)
             {
 
-                WorldMap.worldZoomLevel += WorldMap.zoomSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                WorldMap.worldZoomLevel += WorldMap.zoomSpeed * gameTime;
                 cameraPosition = (1-worldZoomLevel) * sectorCameraPosition + (worldZoomLevel) * worldCameraPosition;
                 cameraTarget = (1-worldZoomLevel) * sectorCameraTarget + (worldZoomLevel) * worldCameraTarget;
                 cameraDistance = (1 - worldZoomLevel) * cameraDistance + (worldZoomLevel) * worldCameraDefaultZoom;
@@ -312,7 +312,7 @@ namespace VexedCore
             if (state == ZoomState.ZoomFromWorld)
             {
 
-                WorldMap.worldZoomLevel -= WorldMap.zoomSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                WorldMap.worldZoomLevel -= WorldMap.zoomSpeed * gameTime;
                 cameraPosition = (1 - worldZoomLevel) * sectorCameraPosition + (worldZoomLevel) * worldCameraPosition;
                 cameraTarget = (1 - worldZoomLevel) * sectorCameraTarget + (worldZoomLevel) * worldCameraTarget;
                 cameraDistance = (1 - worldZoomLevel) * sectorCameraDefaultZoom + (worldZoomLevel) * cameraDistance;
@@ -326,7 +326,7 @@ namespace VexedCore
             if (state == ZoomState.ZoomToSector)
             {
                 
-                WorldMap.zoomLevel += WorldMap.zoomSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                WorldMap.zoomLevel += WorldMap.zoomSpeed * gameTime;
                 cameraPosition = (1 - zoomLevel) * playerCameraPosition + (zoomLevel) * sectorCameraPosition;
                 cameraTarget = (1 - zoomLevel) * playerCameraTarget + (zoomLevel) * sectorCameraTarget;
                 cameraUp = (1 - zoomLevel) * playerCameraUp + (zoomLevel) * sectorCameraUp;
@@ -345,7 +345,7 @@ namespace VexedCore
             if (state == ZoomState.ZoomFromSector)
             {
                 if(WorldMap.zoomLevel == 1f) Engine.reDraw = true;
-                WorldMap.zoomLevel -= WorldMap.zoomSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                WorldMap.zoomLevel -= WorldMap.zoomSpeed * gameTime;
                 cameraPosition = (1 - zoomLevel) * playerCameraPosition + (zoomLevel) * sectorCameraPosition;
                 cameraTarget = (1 - zoomLevel) * playerCameraTarget + (zoomLevel) * sectorCameraTarget;
                 cameraUp = (1 - zoomLevel) * playerCameraUp + (zoomLevel) * sectorCameraUp;
@@ -363,7 +363,7 @@ namespace VexedCore
             return state;
         }
 
-        public static void RotateWorldMap(GameTime gameTime)
+        public static void RotateWorldMap(int gameTime)
         {
             if (state == ZoomState.Sector || state == ZoomState.World || state == ZoomState.Inventory)
             {
@@ -393,7 +393,7 @@ namespace VexedCore
 
                     right.Normalize();
                     dif.Normalize();
-                    dif += gameTime.ElapsedGameTime.Milliseconds * .0025f * cameraUp * shift.Y + gameTime.ElapsedGameTime.Milliseconds * .0025f * right * shift.X;
+                    dif += gameTime * .0025f * cameraUp * shift.Y + gameTime * .0025f * right * shift.X;
                     dif.Normalize();
                     cameraPosition = cameraTarget + dif * cameraDistance;
                     cameraUp = Vector3.Cross(right, -dif);

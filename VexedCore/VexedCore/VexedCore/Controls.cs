@@ -307,7 +307,7 @@ namespace VexedCore
         }
 
 
-        public void Update(GameTime gameTime)
+        public void Update(int gameTime)
         {
             GamePadState gamePadState = GamePad.GetState(Game1.activePlayer);
             KeyboardState keyboardState = Keyboard.GetState();
@@ -318,7 +318,7 @@ namespace VexedCore
                 {
                     if (b.buttonTime == 0)
                         b.pressed = true;
-                    b.buttonTime += gameTime.ElapsedGameTime.Milliseconds;
+                    b.buttonTime += gameTime;
                 }
                 else
                 {

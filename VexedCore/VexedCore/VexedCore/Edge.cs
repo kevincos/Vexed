@@ -107,7 +107,7 @@ namespace VexedCore
             behaviors = new List<Behavior>();
         }
 
-        public int UpdateBehavior(GameTime gameTime)
+        public int UpdateBehavior(int gameTime)
         {
             if (currentBehavior == null)
                 return 0;
@@ -116,7 +116,7 @@ namespace VexedCore
                 properties.primaryValue = currentBehavior.primaryValue;
                 properties.secondaryValue = currentBehavior.secondaryValue;
                 refreshVertices = true;
-                currentTime = gameTime.ElapsedGameTime.Milliseconds;
+                currentTime = gameTime;
                 behaviorStarted = true;
                 nextBehavior = false;
             }
@@ -136,15 +136,15 @@ namespace VexedCore
                 refreshVertices = true;
                 currentTime = 0;
                 nextBehavior = false;
-                return gameTime.ElapsedGameTime.Milliseconds;
+                return gameTime;
             }
-            currentTime += gameTime.ElapsedGameTime.Milliseconds;
+            currentTime += gameTime;
             if (behaviorStarted)
             {
                 if (currentBehavior.duration != 0 && currentTime > currentBehavior.duration)
                 {
                     nextBehavior = true;
-                    return currentBehavior.duration - (currentTime - gameTime.ElapsedGameTime.Milliseconds);
+                    return currentBehavior.duration - (currentTime - gameTime);
                 }
                 if (currentBehavior.period != 0 && currentTime > currentBehavior.period)
                 {
@@ -164,7 +164,7 @@ namespace VexedCore
                     }                    
                 }
             }
-            return gameTime.ElapsedGameTime.Milliseconds;
+            return gameTime;
         }
 
         public void SetBehavior(Behavior b)

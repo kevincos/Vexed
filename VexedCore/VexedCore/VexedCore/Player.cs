@@ -609,16 +609,16 @@ namespace VexedCore
             return primaryAbility.type == AbilityType.Boots || secondaryAbility.type == AbilityType.Boots || upgrades[(int)AbilityType.PermanentBoots];
         }
 
-        public void SpinHookUpdate(GameTime gameTime)
+        public void SpinHookUpdate(int gameTime)
         {
             if (hookState != HookState.Waiting)
             {
                 if (hookState == HookState.Hook && state != State.Spin)
-                    hookHangTime += gameTime.ElapsedGameTime.Milliseconds;
+                    hookHangTime += gameTime;
                 else if (hookState == HookState.Out)
-                    hookTime += gameTime.ElapsedGameTime.Milliseconds;
+                    hookTime += gameTime;
                 else if (hookState == HookState.In)
-                    hookTime -= gameTime.ElapsedGameTime.Milliseconds;
+                    hookTime += gameTime;
                 if (hookState == HookState.Out)
                 {
                     if (hookShotTarget != null)
@@ -1103,14 +1103,14 @@ namespace VexedCore
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(int gameTime)
         {
-            totalGameTime += gameTime.ElapsedGameTime.Milliseconds;
+            totalGameTime += gameTime;
             if (state == State.Spin)
                 spinRecovery = 50;
             else
             {
-                spinRecovery -= gameTime.ElapsedGameTime.Milliseconds;
+                spinRecovery -= gameTime;
                 if (spinRecovery < 0)
                     spinRecovery = 0;
             }
@@ -1118,13 +1118,13 @@ namespace VexedCore
             crushCount--;
             if (crushCount < 0)
                 crushCount = 0;
-            flashTime -= gameTime.ElapsedGameTime.Milliseconds;
+            flashTime -= gameTime;
             if (flashTime < 0) flashTime = 0;
-            wallJumpCooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            wallJumpCooldown -= gameTime;
             if (wallJumpCooldown < 0) wallJumpCooldown = 0;
             if (leftWall == true || rightWall == true)
             {
-                wallTime += gameTime.ElapsedGameTime.Milliseconds;
+                wallTime += gameTime;
             }
             else
                 wallTime = 0;
@@ -1186,7 +1186,7 @@ namespace VexedCore
             if (state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
             {
                 if (launchTime > launchMaxTime / 4 && launchTime < 3 * launchMaxTime / 4)
-                    tunnelDummy.Update(currentRoom, gameTime.ElapsedGameTime.Milliseconds);
+                    tunnelDummy.Update(currentRoom, gameTime);
                 if (launchTime > 3 * launchMaxTime / 4 && tunnelExit != null)
                     tunnelExit.ActivateDoodad(currentRoom, true);
                 oldUp = tunnelDummy.direction;
@@ -1210,7 +1210,7 @@ namespace VexedCore
             /// Upgrade / Save Logic
             if (state == State.Upgrade)
             {
-                upgradeTime += gameTime.ElapsedGameTime.Milliseconds;
+                upgradeTime += gameTime;
                 if (upgradeTime < upgradeWalkTime)
                 {
                     upgradeStage = 0;
@@ -1225,41 +1225,68 @@ namespace VexedCore
                     faceDirection = 0;                    
                 }
                 if (upgradeTime > upgradeInTime)
-                {
-                    if (upgradeStage == 0)
-                    {
-                        SoundFX.CloseDoor();
-                        upgradeStage = 1;
-                    }
+                {                    
                     upgradeStationDoodad.active = false;
                 }
                 if (upgradeTime > upgradeWaitTime-100)
                 {
-                    if (upgradeStationDoodad.abilityType == AbilityType.Ultima)
+                    if (upgradeStationDoodad.type == VL.DoodadType.UpgradeStation)
                     {
-                        for (int i = 0; i < 32; i++)
-                            upgrades[i] = true;
+                        if (upgradeStationDoodad.abilityType == AbilityType.Ultima)
+                        {
+                            for (int i = 0; i < 32; i++)
+                                upgrades[i] = true;
+                        }
+                        upgrades[(int)upgradeStationDoodad.abilityType] = true;
+                        upgradeStationDoodad.abilityType = AbilityType.Empty;
                     }
-                    upgrades[(int)upgradeStationDoodad.abilityType] = true;
-                    upgradeStationDoodad.abilityType = AbilityType.Empty;
-                    if (upgradeStage == 1)
+                    if (upgradeStationDoodad.type == VL.DoodadType.RedPowerStation)
                     {
-                        SoundFX.OpenDoor();
-                        upgradeStage = 2;
+                        if (upgradeStationDoodad.orbsRemaining > 0)
+                        {
+                            redOrbsCollected += 1;
+                            if (redOrbsCollected % 5 == 0)
+                            {
+                                naturalShield.maxAmmo = naturalShield.maxAmmo + 1;
+                                naturalShield.ammo = naturalShield.maxAmmo;
+                            }
+                            upgradeStationDoodad.orbsRemaining--;
+                            currentRoom.currentRedOrbs++;
+                            currentRoom.parentSector.currentRedOrbs++;
+                            //Engine.reDraw = true;
+                            currentRoom.refreshVertices = true;
+                        }
                     }
+                    if (upgradeStationDoodad.type == VL.DoodadType.BluePowerStation)
+                    {
+                        if (upgradeStationDoodad.orbsRemaining > 0)
+                        {
+                            upgradeStationDoodad.orbsRemaining--;
+                            currentRoom.currentBlueOrbs++;
+                            currentRoom.parentSector.currentBlueOrbs++;
+                            //Engine.reDraw = true;
+                            currentRoom.refreshVertices = true;
+                        }
+                    }
+
                     //upgradeTime = 0;
                 }
                 if (upgradeTime > upgradeOutTime)
                 {
                     state = State.Normal;
                     upgradeTime = 0;
-                    DialogBox.SetDialog((new Ability(upgradeStationDoodad.originalAbilityType)).GetDialogId());
+                    if(upgradeStationDoodad.type == VL.DoodadType.UpgradeStation)
+                        DialogBox.SetDialog((new Ability(upgradeStationDoodad.originalAbilityType)).GetDialogId());
+                    if (upgradeStationDoodad.type == VL.DoodadType.RedPowerStation)
+                        DialogBox.SetDialog("RedPowerStation");
+                    if (upgradeStationDoodad.type == VL.DoodadType.BluePowerStation)
+                        DialogBox.SetDialog("BluePowerStation");
                     
                 }
             }
             if (state == State.Save)
             {
-                upgradeTime += gameTime.ElapsedGameTime.Milliseconds;
+                upgradeTime += gameTime;
                 if (upgradeTime < upgradeWalkTime)
                 {
                     center.position = ((upgradeWalkTime - upgradeTime) * jumpSource + upgradeTime * upgradeStationDoodad.position.position) / upgradeWalkTime;
@@ -1273,14 +1300,12 @@ namespace VexedCore
                 {
                     faceDirection = 0;
                 }
-                if (upgradeTime > upgradeInTime && upgradeTime < upgradeWaitTime - 100)
-                {
-                    if (upgradeStage == 0)
-                    {
-                        SoundFX.CloseDoor();
-                        upgradeStage = 1;
-                    }
-                    upgradeStationDoodad.active = false;
+                if (upgradeTime > upgradeInTime)
+                {                    
+                    //upgradeStationDoodad.active = false;
+                    if(saveComplete == false)
+                        upgradeStationDoodad.ActivateDoodad(currentRoom, false);
+                    //upgradeStationDoodad.doorState = false;
                 }
                 //if (upgradeTime > upgradeWaitTime - 100)
                 if (upgradeTime < upgradeOutTime)
@@ -1288,25 +1313,26 @@ namespace VexedCore
                     if (Engine.justLoaded == false)
                         DialogBox.SetDialog("Saving");
                 }
-                if (upgradeTime > upgradeWaitTime-100)
+                if (upgradeTime > upgradeWaitTime - 300)
                 {
                     if(saveComplete==false)
                     {
-                        upgradeTime = upgradeWaitTime - 200;
-                        saveComplete = true;
-                        upgradeStationDoodad.stateTransition = 0;
-                        
                         SaveGame();
-                        if (upgradeStage == 1)
-                        {
-                            SoundFX.OpenDoor();
-                            upgradeStage = 2;
-                        }
+                        Game1.resetTimer = true;
+
+                        saveComplete = true;
+                        upgradeTime = upgradeWaitTime - 300;
                     }
                     
+                    
                 }
-                if (upgradeTime > upgradeOutTime)
+                if (upgradeTime > upgradeWaitTime-200)
                 {
+                    upgradeStationDoodad.ActivateDoodad(currentRoom, true);
+                }
+                    
+                if (upgradeTime > upgradeOutTime)
+                {                    
                     state = State.Normal;
                     upgradeTime = 0;
                     if(Engine.justLoaded == false)
@@ -1323,21 +1349,21 @@ namespace VexedCore
             secondaryAbility.Update(gameTime);
 
             if (grounded && !walking)
-                idleTime += gameTime.ElapsedGameTime.Milliseconds;
+                idleTime += gameTime;
             else
                 idleTime = 0;
 
-            lastFireTime += gameTime.ElapsedGameTime.Milliseconds;
+            lastFireTime += gameTime;
 
             if (idleTime > 2000)
             {
                 if (primaryAbility.type == AbilityType.Shield)
                 {
-                    primaryAbility.AddAmmo(gameTime.ElapsedGameTime.Milliseconds);
+                    primaryAbility.AddAmmo(gameTime);
                 }
                 if (secondaryAbility.type == AbilityType.Shield)
                 {
-                    secondaryAbility.AddAmmo(gameTime.ElapsedGameTime.Milliseconds);
+                    secondaryAbility.AddAmmo(gameTime);
                 }
             }
             if (grounded)
@@ -1349,7 +1375,7 @@ namespace VexedCore
             
                  
 
-            groundCounter += gameTime.ElapsedGameTime.Milliseconds;
+            groundCounter += gameTime;
             if (groundCounter > groundTolerance)
             {
                 groundCounter = groundTolerance;
@@ -1363,10 +1389,10 @@ namespace VexedCore
 
             if (state == State.Death)
             {
-                center.position += center.velocity * gameTime.ElapsedGameTime.Milliseconds;
+                center.position += center.velocity * gameTime;
                 center.velocity -= gravityAcceleration * up;
                 EnforceVelocityLimits();
-                deathTime += gameTime.ElapsedGameTime.Milliseconds;
+                deathTime += gameTime;
                 if (deathTime > maxDeathTime)
                 {
                     Respawn();
@@ -1378,12 +1404,12 @@ namespace VexedCore
                 float upMagnitude = 0;
                 float rightMagnitude = 0;
 
-                walkTime += gameTime.ElapsedGameTime.Milliseconds;
+                walkTime += gameTime;
                 if (walkTime > walkMaxTime) walkTime -= walkMaxTime;
-                center.Update(currentRoom, gameTime.ElapsedGameTime.Milliseconds);
-                jumpRecovery -= gameTime.ElapsedGameTime.Milliseconds;
+                center.Update(currentRoom, gameTime);
+                jumpRecovery -= gameTime;
                 if (jumpRecovery < 0) jumpRecovery = 0;
-                boostTime -= gameTime.ElapsedGameTime.Milliseconds;
+                boostTime -= gameTime;
                 if (boostTime < 0) boostTime = 0;
                 if (boostTime == 0)
                     boosting = false;
@@ -1430,7 +1456,7 @@ namespace VexedCore
 
                 if (superJump == true)
                 {
-                    jumpTime += gameTime.ElapsedGameTime.Milliseconds;
+                    jumpTime += gameTime;
 
                     if (jumpTime > 45 && grounded == true)
                         center.velocity += (jumpSpeed - upMagnitude) * up;
@@ -1461,7 +1487,7 @@ namespace VexedCore
                 if (boosting == false)
                     center.velocity -= gravityAcceleration * up;
                 else
-                    center.velocity += boostAcceleration *gameTime.ElapsedGameTime.Milliseconds
+                    center.velocity += boostAcceleration *gameTime
                          / 16f * right * faceDirection;
 
                 
@@ -1511,6 +1537,8 @@ namespace VexedCore
                         primaryAbility = new Ability(itemStation.abilityType);
                         itemStation.abilityType = swapAbilityType;
                         itemStation.cooldown = itemStation.maxCooldown;
+                        SoundFX.EquipItem();
+                        Game1.controller.JumpInvalidate();
                     }
                 }
                 #endregion
@@ -1559,6 +1587,8 @@ namespace VexedCore
                         secondaryAbility = new Ability(itemStation.abilityType);
                         itemStation.abilityType = swapAbilityType;
                         itemStation.cooldown = itemStation.maxCooldown;
+                        SoundFX.EquipItem();
+                        Game1.controller.JumpInvalidate();
                     }
                 }
                 #endregion
@@ -1692,10 +1722,12 @@ namespace VexedCore
                                 // Extra Load
                                 SaveGameText.Extra();                         
                             }
-                            if (d.type == VL.DoodadType.PowerStation)
+                            if (d.type == VL.DoodadType.PowerStation && d.cooldown == 0)
                             {
                                 if (d.orbsRemaining > 0)
                                 {
+                                    d.cooldown = d.maxCooldown;
+                                    SoundFX.PlayScore();
                                     orbsCollected += 1;
                                     d.orbsRemaining--;
                                     currentRoom.currentOrbs++;
@@ -1706,31 +1738,19 @@ namespace VexedCore
                             }
                             if (d.type == VL.DoodadType.RedPowerStation)
                             {
-                                if (d.orbsRemaining > 0)
-                                {
-                                    redOrbsCollected += 1;
-                                    if (redOrbsCollected % 5 == 0)
-                                    {
-                                        naturalShield.maxAmmo = naturalShield.maxAmmo + 1;
-                                        naturalShield.ammo = naturalShield.maxAmmo;
-                                    }
-                                    d.orbsRemaining--;
-                                    currentRoom.currentRedOrbs++;
-                                    currentRoom.parentSector.currentRedOrbs++;
-                                    //Engine.reDraw = true;
-                                    currentRoom.refreshVertices = true;
-                                }
+                                
+                                state = State.Upgrade;
+                                upgradeStationDoodad = d;
+                                upgradeTime = 0;
+                                jumpSource = center.position;
                             }
                             if (d.type == VL.DoodadType.BluePowerStation)
                             {
-                                if (d.orbsRemaining > 0)
-                                {
-                                    d.orbsRemaining--;
-                                    currentRoom.currentBlueOrbs++;
-                                    currentRoom.parentSector.currentBlueOrbs++;
-                                    //Engine.reDraw = true;
-                                    currentRoom.refreshVertices = true;
-                                }
+
+                                state = State.Upgrade;
+                                upgradeStationDoodad = d;
+                                upgradeTime = 0;
+                                jumpSource = center.position;
                             }
                             if (d.type == VL.DoodadType.SaveStation && d.cooldown == 0)
                             {
@@ -1759,7 +1779,16 @@ namespace VexedCore
                             }
                             if (d.type == VL.DoodadType.HealthStation)
                             {
-                                naturalShield.ammo = naturalShield.maxAmmo;
+                                if (d.cooldown == 0)
+                                {
+                                    
+                                    d.cooldown = d.maxCooldown;
+                                    if (naturalShield.ammo < naturalShield.maxAmmo)
+                                    {
+                                        SoundFX.Heal();
+                                        naturalShield.ammo++;
+                                    }
+                                }
                             }
                             if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation)
                             {
@@ -1795,7 +1824,7 @@ namespace VexedCore
                                 state = State.Dialog;
                                 
                             }
-                            if (d.type == VL.DoodadType.SwitchStation)
+                            if (d.type == VL.DoodadType.SwitchStation && d.cooldown == 0)
                             {
                                 bool locked = false;
                                 if (d.abilityType == AbilityType.RedKey && !(primaryAbility.type == AbilityType.RedKey || secondaryAbility.type == AbilityType.RedKey || upgrades[(int)AbilityType.PermanentRedKey] == true))
@@ -1804,50 +1833,75 @@ namespace VexedCore
                                     locked = true;
                                 if (d.abilityType == AbilityType.YellowKey && !(primaryAbility.type == AbilityType.YellowKey || secondaryAbility.type == AbilityType.YellowKey || upgrades[(int)AbilityType.PermanentYellowKey] == true))
                                     locked = true;
-                                if (locked == false)
-                                {
 
-                                    if (d.targetDoodad != null)
+                                if (d.targetDoodad != null)
+                                {
+                                    if (d.targetDoodad.currentBehavior.id == d.expectedBehavior)
                                     {
-                                        if (d.targetDoodad.currentBehavior.id == d.expectedBehavior)
+                                        foreach (Behavior b in d.targetDoodad.behaviors)
                                         {
-                                            foreach (Behavior b in d.targetDoodad.behaviors)
+                                            if (b.id == d.targetBehavior)
                                             {
-                                                if (b.id == d.targetBehavior)
+                                                if (locked == false)
                                                 {
+                                                    SoundFX.ActivateSwitchStation();
                                                     d.targetDoodad.SetBehavior(b);
                                                 }
-                                            }
-                                        }
-                                    }
-                                    if (d.targetBlock != null)
-                                    {
-                                        if (d.targetBlock.currentBehavior.id == d.expectedBehavior)
-                                        {
-                                            foreach (Behavior b in d.targetBlock.behaviors)
-                                            {
-                                                if (b.id == d.targetBehavior)
+                                                else
                                                 {
-                                                    d.targetBlock.SetBehavior(b);
+                                                    SoundFX.LockedSwitch();
+                                                    d.cooldown = d.maxCooldown;
                                                 }
                                             }
                                         }
                                     }
-                                    if (d.targetEdge != null)
+                                }
+                                if (d.targetBlock != null)
+                                {
+                                    if (d.targetBlock.currentBehavior.id == d.expectedBehavior)
                                     {
-                                        if (d.targetEdge.currentBehavior.id == d.expectedBehavior)
+                                        foreach (Behavior b in d.targetBlock.behaviors)
                                         {
-                                            foreach (Behavior b in d.targetEdge.behaviors)
+                                            if (b.id == d.targetBehavior)
                                             {
-                                                if (b.id == d.targetBehavior)
+                                                if (locked == false)
                                                 {
+                                                    SoundFX.ActivateSwitchStation();
+                                                    d.targetBlock.SetBehavior(b);
+                                                }
+                                                else
+                                                {
+                                                    SoundFX.ActivateSwitchStation();
+                                                    d.cooldown = d.maxCooldown;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (d.targetEdge != null)
+                                {
+                                    if (d.targetEdge.currentBehavior.id == d.expectedBehavior)
+                                    {
+                                        foreach (Behavior b in d.targetEdge.behaviors)
+                                        {
+                                            if (b.id == d.targetBehavior)
+                                            {
+                                                if (locked == false)
+                                                {
+                                                    SoundFX.ActivateSwitchStation();
                                                     d.targetEdge.SetBehavior(b);
+                                                }
+                                                else
+                                                {
+                                                    SoundFX.ActivateSwitchStation();
+                                                    d.cooldown = d.maxCooldown;
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
+                                
                             if (d.type == VL.DoodadType.WarpStation)
                             {
                                 Engine.state = EngineState.Map;
@@ -1895,7 +1949,7 @@ namespace VexedCore
             }
             if (state == State.Jump || state == State.BridgeJump || state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
             {
-                launchTime += gameTime.ElapsedGameTime.Milliseconds;
+                launchTime += gameTime;
                 if (launchTime > launchMaxTime)
                     launchTime = launchMaxTime;
                 jumpPosition = ((launchMaxTime - launchTime) * jumpSource + launchTime * (jumpDestination+.3f*jumpNormal)) / launchMaxTime;
@@ -1952,7 +2006,7 @@ namespace VexedCore
             }
             if (state == State.Spin)
             {
-                spinTime += gameTime.ElapsedGameTime.Milliseconds;
+                spinTime += gameTime;
                 center.position = (spinTime * jumpDestination + (spinMaxTime - spinTime) * jumpSource) / spinMaxTime;
                     
                 if (spinTime > spinMaxTime)

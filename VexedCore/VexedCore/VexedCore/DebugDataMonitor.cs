@@ -26,9 +26,9 @@ namespace VexedCore
             dataPoints = new Queue<int>(60);
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(int gameTime)
         {
-            //intervalTime += gameTime.ElapsedGameTime.Milliseconds;
+            //intervalTime += gameTime;
             //if (intervalTime > 1000)
             {
                 //intervalTime -= 1000;

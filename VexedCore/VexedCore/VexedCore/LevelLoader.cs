@@ -333,8 +333,9 @@ namespace VexedCore
                 }
                 int roomTunnelCount = 0;
                 foreach (Doodad d in r.doodads)
-                {
+                {                    
                     d.currentRoom = r;
+
                     if (r == Engine.player.currentRoom && d.id == Engine.player.upgradeStationDoodadId)
                     {
                         Engine.player.upgradeStationDoodad = d;
@@ -344,7 +345,7 @@ namespace VexedCore
                         float roomSize = Math.Abs(Vector3.Dot(r.size/2, d.position.normal));
                         float radiusMod = ((int)(roomTunnelCount / 2)) * .01f;
                         r.jumpRings.Add(new JumpRing(RingType.TunnelTube, d.position.position - (roomSize) * d.position.normal, d.position.direction, d.position.normal, (roomSize-.5f), 1.2f+radiusMod));
-                        r.jumpRings.Add(new JumpRing(RingType.TunnelRing, d.position.position - .5f * d.position.normal, d.position.direction, d.position.normal, .6f, 1.2f + radiusMod));
+                        r.jumpRings.Add(new JumpRing(RingType.TunnelRing, d.position.position - .49f * d.position.normal, d.position.direction, d.position.normal, .59f, 1.2f + radiusMod));
                         roomTunnelCount++;
                     }
                     if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation)
@@ -500,8 +501,11 @@ namespace VexedCore
 
                 foreach (Doodad d in r.doodads)
                 {
-                    
-                    d.Update(new GameTime(TimeSpan.Zero, TimeSpan.Zero));
+                    if (d.targetDoodad != null)
+                        d.doorState = d.targetDoodad.active == true || d.targetDoodad.available == false;                    
+                    d.Update(0);
+                    d.InitializePowerState();
+
                 }
                 foreach (Monster m in r.monsters)
                 {

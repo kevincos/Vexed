@@ -228,7 +228,7 @@ namespace VexedCore
             displayControlInfo = false;
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(int gameTime)
         {
             int optionBaseX = Game1.titleSafeRect.Center.X - 100;
             int optionBaseY = Game1.titleSafeRect.Center.Y - 80;
@@ -236,7 +236,7 @@ namespace VexedCore
             KeyboardState currentKeyboardState = Keyboard.GetState();
             MouseState currentMouseState = Mouse.GetState();
 
-            cooldown -= gameTime.ElapsedGameTime.Milliseconds;
+            cooldown -= gameTime;
             if (cooldown < 0)
                 cooldown = 0;
 

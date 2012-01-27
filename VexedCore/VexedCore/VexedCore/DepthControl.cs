@@ -70,10 +70,10 @@ namespace VexedCore
             }
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(int gameTime)
         {
             
-            oscillation += (int)(gameTime.ElapsedGameTime.Milliseconds * oscillationDir);
+            oscillation += (int)(gameTime * oscillationDir);
             if (oscillation > 3*maxOscillation/4) oscillationDir -= .05f * maxOscillationSpeed;
             if (oscillation < 1*maxOscillation/4) oscillationDir += .05f * maxOscillationSpeed;
             if (oscillation < 0)
@@ -88,7 +88,7 @@ namespace VexedCore
 
             if ((depthTrigger == false) && Engine.state == EngineState.Active)
             {
-                depthTimer += 3 * gameTime.ElapsedGameTime.Milliseconds;
+                depthTimer += 3 * gameTime;
                 if (depthTimer > maxDepthTimer)
                     depthTimer = maxDepthTimer;
             }
@@ -97,13 +97,13 @@ namespace VexedCore
                 int targetDepthValue = 2500 - 1900 * Engine.player.naturalShield.ammo / Engine.player.naturalShield.maxAmmo;
                 if (depthTimer < targetDepthValue)
                 {
-                    depthTimer += 3 * gameTime.ElapsedGameTime.Milliseconds;
+                    depthTimer += 3 * gameTime;
                     if (depthTimer > targetDepthValue) depthTimer = targetDepthValue;
                 }
                 if (depthTimer > targetDepthValue)
                 {
                     uiFade = false;
-                    depthTimer -= gameTime.ElapsedGameTime.Milliseconds;
+                    depthTimer -= gameTime;
                     if (depthTimer < targetDepthValue) depthTimer = targetDepthValue;
                 }
 

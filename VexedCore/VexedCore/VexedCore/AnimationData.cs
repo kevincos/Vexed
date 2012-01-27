@@ -140,10 +140,10 @@ namespace VexedCore
             }
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(int gameTime)
         {                        
 
-            animationTime += gameTime.ElapsedGameTime.Milliseconds;
+            animationTime += gameTime;
 
             if ((currentState == AnimationState.Idle || currentState == AnimationState.IdleLeft || currentState == AnimationState.IdleLeftFiring || currentState == AnimationState.IdleRightFiring || currentState == AnimationState.IdleRight) && (previousState != AnimationState.IdleRight && previousState != AnimationState.IdleLeft && previousState != AnimationState.Idle && previousState != AnimationState.IdleRightFiring && previousState != AnimationState.IdleLeftFiring))
                 SoundFX.PlayFootstep();

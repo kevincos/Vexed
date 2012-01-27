@@ -151,9 +151,9 @@ namespace VexedCore
             okTexCoords.Add(new Vector2(.5f, .5f));
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(int gameTime)
         {
-            mapRotate += gameTime.ElapsedGameTime.Milliseconds * .0003f;
+            mapRotate += gameTime * .0003f;
         }
 
         public void RenderMap()
