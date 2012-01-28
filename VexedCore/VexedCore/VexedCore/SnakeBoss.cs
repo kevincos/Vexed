@@ -67,7 +67,6 @@ namespace VexedCore
 
         public Vector3 GetWaypointTarget()
         {
-
             String targetDoodadId = "SnakeW" + nextWaypointIndex + "_";
 
             foreach (Doodad d in Engine.player.currentRoom.doodads)

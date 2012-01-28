@@ -123,10 +123,10 @@ namespace VexedCore
             engine.Init();
             Skybox.Init();
             AnimationControl.Init();
+            
 
             Monster.InitTexCoords();
-            Player.InitTexCoords();
-            Projectile.InitTexCoords();
+            Player.InitTexCoords();            
             Ability.InitTexCoords();
             Room.InitTexCoords();
             Doodad.InitTexCoords();
@@ -166,7 +166,11 @@ namespace VexedCore
             Monster.monsterTexture = Content.Load<Texture2D>("m_body");
             Monster.monsterTextureDetail = Content.Load<Texture2D>("m_body_detail");
             WorldMap.changeArrow = Content.Load<Texture2D>("screenchangearrow");
-            Projectile.projectileTexture = Content.Load<Texture2D>("projectiles");
+            Projectile.blastTexture = Content.Load<Texture2D>("Projectiles\\blast");
+            Projectile.plasmaTexture = Content.Load<Texture2D>("Projectiles\\plasma");
+            Projectile.laserTexture = Content.Load<Texture2D>("Projectiles\\laser");
+            Projectile.missileTexture = Content.Load<Texture2D>("Projectiles\\missile");
+            Monster.Init(Content);
             Block.wallTexture = Content.Load<Texture2D>("wall_texture");
             Block.circuitTexture = Content.Load<Texture2D>("circuit_wall");
             Block.crackedTexture = Content.Load<Texture2D>("cracked_wall");

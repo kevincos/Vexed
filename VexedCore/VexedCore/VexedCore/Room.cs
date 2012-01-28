@@ -101,6 +101,9 @@ namespace VexedCore
         public VertexPositionColorNormalTexture[] gearslotTriangleArray;
         public VertexPositionColorNormalTexture[] ringTriangleArray;
 
+        public List<VertexPositionColorNormalTexture>[] projectilesTriangles;
+        public List<VertexPositionColorNormalTexture> blastTriangles;
+        public List<VertexPositionColorNormalTexture>[] monsterTriangles;
         
         public bool refreshVertices = false;
 
@@ -1650,18 +1653,75 @@ namespace VexedCore
 
         public void DrawMonsters()
         {
+            if (monsterTriangles == null)
+            {
+                monsterTriangles = new List<VertexPositionColorNormalTexture>[Monster.textureCount];
+            }
+            for (int i = 0; i < Monster.textureCount; i++)
+            {
+                monsterTriangles[i] = new List<VertexPositionColorNormalTexture>();
+            }
             foreach (Monster m in monsters)
             {
                 m.Draw(this);
+            }
+            for (int i = 0; i < Monster.textureCount; i++)
+            {
+                if (monsterTriangles[i].Count > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Monster.monsterTextures[i];
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        monsterTriangles[i].ToArray(), 0, monsterTriangles[i].Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
             }
         }
 
         public void DrawProjectiles()
         {
+            if (projectilesTriangles == null)
+            {
+                projectilesTriangles = new List<VertexPositionColorNormalTexture>[3];                
+            }
+            projectilesTriangles[(int)ProjectileType.Laser] = new List<VertexPositionColorNormalTexture>();
+            projectilesTriangles[(int)ProjectileType.Plasma] = new List<VertexPositionColorNormalTexture>();
+            projectilesTriangles[(int)ProjectileType.Missile] = new List<VertexPositionColorNormalTexture>();
+            blastTriangles = new List<VertexPositionColorNormalTexture>();
+
             foreach (Projectile p in projectiles)
             {
                 p.Draw(this);
             }
+
+            if (projectilesTriangles[(int)ProjectileType.Laser].Count() > 0)
+            {
+                Engine.playerTextureEffect.Texture = Projectile.laserTexture;
+                Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    projectilesTriangles[(int)ProjectileType.Laser].ToArray(), 0, projectilesTriangles[(int)ProjectileType.Laser].Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
+            if (projectilesTriangles[(int)ProjectileType.Missile].Count() > 0)
+            {
+                Engine.playerTextureEffect.Texture = Projectile.missileTexture;
+                Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    projectilesTriangles[(int)ProjectileType.Missile].ToArray(), 0, projectilesTriangles[(int)ProjectileType.Missile].Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
+            if (projectilesTriangles[(int)ProjectileType.Plasma].Count() > 0)
+            {
+                Engine.playerTextureEffect.Texture = Projectile.plasmaTexture;
+                Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    projectilesTriangles[(int)ProjectileType.Plasma].ToArray(), 0, projectilesTriangles[(int)ProjectileType.Plasma].Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
+            if (blastTriangles.Count() > 0)
+            {
+                Engine.playerTextureEffect.Texture = Projectile.blastTexture;
+                Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    blastTriangles.ToArray(), 0, blastTriangles.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+            }
+
         }
 
         public void UpdateMonsters(int gameTime)

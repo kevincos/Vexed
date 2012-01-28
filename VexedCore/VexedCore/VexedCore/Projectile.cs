@@ -26,18 +26,16 @@ namespace VexedCore
 
     public class Projectile
     {
-        public static List<Vector2> plasmaTexCoords;
-        public static List<Vector2> missileTexCoords;
-        public static List<Vector2> laserTexCoords;
-        public static List<Vector2> bombTexCoords;
-        public static List<Vector2> blastTexCoords;
 
         public Vertex unfoldedPosition;
         public Vertex position;
         [XmlIgnore]public Projectile srcProjectile;
         public ProjectileType type;
 
-        public static Texture2D projectileTexture;
+        public static Texture2D laserTexture;
+        public static Texture2D missileTexture;
+        public static Texture2D plasmaTexture;
+        public static Texture2D blastTexture;
 
         public int lifeTime = 0;
         
@@ -429,14 +427,6 @@ namespace VexedCore
         }
 
 
-        public static void InitTexCoords()
-        {
-            plasmaTexCoords = LoadTexCoords(0, 0);
-            missileTexCoords = LoadTexCoords(0, 1);
-            laserTexCoords = LoadTexCoords(0, 2);
-            bombTexCoords = LoadTexCoords(0, 3);
-            blastTexCoords = LoadTexCoords(1, 0);
-        }
 
         public Projectile()
         {
@@ -576,48 +566,38 @@ namespace VexedCore
             {
                 if (exploding == true)
                 {
-                    r.AddTextureToTriangleList(blastVertexList, Color.GreenYellow, depth, textureTriangleList, blastTexCoords, true);
+                    r.AddTextureToTriangleList(blastVertexList, Color.GreenYellow, depth, r.blastTriangles, Room.plateTexCoords, true);
                 }
                 else
                 {
-                    r.AddTextureToTriangleList(rectVertexList, Color.GreenYellow, depth, textureTriangleList, plasmaTexCoords, true);
+                    //r.AddTextureToTriangleList(rectVertexList, Color.GreenYellow, depth, textureTriangleList, plasmaTexCoords, true);
+                    r.AddTextureToTriangleList(rectVertexList, Color.GreenYellow, depth, r.projectilesTriangles[(int)ProjectileType.Plasma], Room.plateTexCoords, true);
                 }
             }
             if (type == ProjectileType.Missile)
             {
                 if (exploding == true)
                 {
-                    r.AddTextureToTriangleList(blastVertexList, Color.Orange, depth, textureTriangleList, blastTexCoords, true);
+                    r.AddTextureToTriangleList(blastVertexList, Color.Orange, depth, r.blastTriangles, Room.plateTexCoords, true);
                 }
                 else
                 {
-                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, missileTexCoords, true);
-                }
-            }
-            if (type == ProjectileType.Bomb)
-            {
-                if (exploding == true)
-                {
-                    r.AddTextureToTriangleList(blastVertexList, Color.Orange, depth, textureTriangleList, blastTexCoords, true);
-                }
-                else
-                {
-                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, bombTexCoords, true);
+                    //r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, missileTexCoords, true);
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth, r.projectilesTriangles[(int)ProjectileType.Missile], Room.plateTexCoords, true);
                 }
             }
             if (type == ProjectileType.Laser)
             {
                 if (exploding == true)
                 {
-                    r.AddTextureToTriangleList(blastVertexList, Color.Blue, depth, textureTriangleList, blastTexCoords, true);
+                    r.AddTextureToTriangleList(blastVertexList, Color.Blue, depth, r.blastTriangles, Room.plateTexCoords, true);
                 }
-
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth, textureTriangleList, laserTexCoords, true);
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth, r.projectilesTriangles[(int)ProjectileType.Laser], Room.plateTexCoords, true);
             }
 
-            VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
+            /*VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);*/
         }
 
 

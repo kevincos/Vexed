@@ -52,7 +52,7 @@ namespace VexedCore
                     {
                         foreach (VL.Monster xmlMonster in xmlFace.monsters)
                         {
-                            if (xmlMonster.movement == VL.MovementType.RockBoss && xmlMonster.IDString.Contains("Snow"))
+                            if (xmlMonster.movement == VL.MovementType.RockBoss)
                             {
                                 newRoom.maxOrbs += 10;
                                 for (int i = 0; i < 10; i++)

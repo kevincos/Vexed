@@ -217,7 +217,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
             primaryAbility = new Ability(AbilityType.Laser);
-            secondaryAbility = new Ability(AbilityType.JetPack);
+            secondaryAbility = new Ability(AbilityType.SpinHook);
             naturalShield = new Ability(AbilityType.Shield);
 
             upgrades[(int)AbilityType.Laser] = true;
@@ -618,7 +618,7 @@ namespace VexedCore
                 else if (hookState == HookState.Out)
                     hookTime += gameTime;
                 else if (hookState == HookState.In)
-                    hookTime += gameTime;
+                    hookTime -= gameTime;
                 if (hookState == HookState.Out)
                 {
                     if (hookShotTarget != null)

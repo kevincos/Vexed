@@ -2,6 +2,18 @@
 <XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
   <Asset Type="Pipeline:BuildItemCollection">
     <Item>
+      <Source>decal_powerorb_10.png</Source>
+      <Name>decal_powerorb_10</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_10.xnb</Output>
+      <Time>2012-01-26T10:01:23.5001609-08:00</Time>
+    </Item>
+    <Item>
       <Source>dec_watertank.png</Source>
       <Name>dec_watertank</Name>
       <Importer>TextureImporter</Importer>
@@ -3869,6 +3881,750 @@
       <Time>2012-01-24T15:08:09.567119-08:00</Time>
     </Item>
     <Item>
+      <Source>decal_empty.png</Source>
+      <Name>decal_empty</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_empty.xnb</Output>
+      <Time>2012-01-25T11:55:44.9354785-08:00</Time>
+    </Item>
+    <Item>
+      <Source>decal_powerorb_0.png</Source>
+      <Name>decal_powerorb_0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_0.xnb</Output>
+      <Time>2012-01-26T09:57:37.6120601-08:00</Time>
+    </Item>
+    <Item>
+      <Source>decal_powerorb_1.png</Source>
+      <Name>decal_powerorb_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_1.xnb</Output>
+      <Time>2012-01-26T09:57:41.6362935-08:00</Time>
+    </Item>
+    <Item>
+      <Source>decal_powerorb_2.png</Source>
+      <Name>decal_powerorb_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_2.xnb</Output>
+      <Time>2012-01-26T09:57:28.0595061-08:00</Time>
+    </Item>
+    <Item>
+      <Source>decal_powerorb_3.png</Source>
+      <Name>decal_powerorb_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_3.xnb</Output>
+      <Time>2012-01-26T09:57:42.6133502-08:00</Time>
+    </Item>
+    <Item>
+      <Source>decal_powerorb_4.png</Source>
+      <Name>decal_powerorb_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_4.xnb</Output>
+      <Time>2012-01-26T09:57:39.3481608-08:00</Time>
+    </Item>
+    <Item>
+      <Source>decal_powerorb_5.png</Source>
+      <Name>decal_powerorb_5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_5.xnb</Output>
+      <Time>2012-01-26T09:57:26.4804145-08:00</Time>
+    </Item>
+    <Item>
+      <Source>decal_powerorb_6.png</Source>
+      <Name>decal_powerorb_6</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_6.xnb</Output>
+      <Time>2012-01-26T09:57:27.3004621-08:00</Time>
+    </Item>
+    <Item>
+      <Source>decal_powerorb_7.png</Source>
+      <Name>decal_powerorb_7</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_7.xnb</Output>
+      <Time>2012-01-26T09:57:23.5942471-08:00</Time>
+    </Item>
+    <Item>
+      <Source>decal_powerorb_8.png</Source>
+      <Name>decal_powerorb_8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_8.xnb</Output>
+      <Time>2012-01-26T09:57:40.6472362-08:00</Time>
+    </Item>
+    <Item>
+      <Source>decal_powerorb_9.png</Source>
+      <Name>decal_powerorb_9</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_9.xnb</Output>
+      <Time>2012-01-26T10:02:13.1290392-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Projectiles\laser.png</Source>
+      <Name>Projectiles\laser</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Projectiles\laser.xnb</Output>
+      <Time>2012-01-27T10:46:53.9353299-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Projectiles\missile.png</Source>
+      <Name>Projectiles\missile</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Projectiles\missile.xnb</Output>
+      <Time>2012-01-27T10:47:11.1063258-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Projectiles\plasma.png</Source>
+      <Name>Projectiles\plasma</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Projectiles\plasma.xnb</Output>
+      <Time>2012-01-27T10:29:28.3456893-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Projectiles\blast.png</Source>
+      <Name>Projectiles\blast</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Projectiles\blast.xnb</Output>
+      <Time>2012-01-27T10:29:04.4653043-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\basicBody.png</Source>
+      <Name>MonsterParts\basicBody</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\basicBody.xnb</Output>
+      <Time>2012-01-27T11:23:58.8833694-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\bossArmor.png</Source>
+      <Name>MonsterParts\bossArmor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\bossArmor.xnb</Output>
+      <Time>2012-01-27T14:46:23.9547427-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\eyes.png</Source>
+      <Name>MonsterParts\eyes</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\eyes.xnb</Output>
+      <Time>2012-01-27T11:26:42.6358665-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\faceAngryEye.png</Source>
+      <Name>MonsterParts\faceAngryEye</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\faceAngryEye.xnb</Output>
+      <Time>2012-01-27T11:39:05.7019619-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\faceNormalEye.png</Source>
+      <Name>MonsterParts\faceNormalEye</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\faceNormalEye.xnb</Output>
+      <Time>2012-01-27T11:38:36.5852732-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\facePlate.png</Source>
+      <Name>MonsterParts\facePlate</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\facePlate.xnb</Output>
+      <Time>2012-01-27T11:39:27.5542292-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\faceWhite.png</Source>
+      <Name>MonsterParts\faceWhite</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\faceWhite.xnb</Output>
+      <Time>2012-01-27T17:16:13.6331138-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\frontArmor.png</Source>
+      <Name>MonsterParts\frontArmor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\frontArmor.xnb</Output>
+      <Time>2012-01-27T11:26:15.1882747-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\frontSuperArmor.png</Source>
+      <Name>MonsterParts\frontSuperArmor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\frontSuperArmor.xnb</Output>
+      <Time>2012-01-27T11:30:06.9297149-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\fullArmor.png</Source>
+      <Name>MonsterParts\fullArmor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\fullArmor.xnb</Output>
+      <Time>2012-01-27T11:25:20.8781249-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\fullSuperArmor.png</Source>
+      <Name>MonsterParts\fullSuperArmor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\fullSuperArmor.xnb</Output>
+      <Time>2012-01-27T11:28:55.9135962-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\gun.png</Source>
+      <Name>MonsterParts\gun</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\gun.xnb</Output>
+      <Time>2012-01-27T11:27:06.4442473-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\iceSnake.png</Source>
+      <Name>MonsterParts\iceSnake</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\iceSnake.xnb</Output>
+      <Time>2012-01-27T11:37:00.4636985-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\iceSnakeCrack1.png</Source>
+      <Name>MonsterParts\iceSnakeCrack1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\iceSnakeCrack1.xnb</Output>
+      <Time>2012-01-27T11:37:27.0032377-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\iceSnakeCrack2.png</Source>
+      <Name>MonsterParts\iceSnakeCrack2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\iceSnakeCrack2.xnb</Output>
+      <Time>2012-01-27T11:37:47.2274106-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\iceTurret.png</Source>
+      <Name>MonsterParts\iceTurret</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\iceTurret.xnb</Output>
+      <Time>2012-01-27T11:38:03.2843419-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\jet.png</Source>
+      <Name>MonsterParts\jet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\jet.xnb</Output>
+      <Time>2012-01-27T11:36:31.0319915-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\legs1.png</Source>
+      <Name>MonsterParts\legs1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\legs1.xnb</Output>
+      <Time>2012-01-27T12:47:20.2114296-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\legs2.png</Source>
+      <Name>MonsterParts\legs2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\legs2.xnb</Output>
+      <Time>2012-01-27T11:27:54.7020461-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\legs3.png</Source>
+      <Name>MonsterParts\legs3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\legs3.xnb</Output>
+      <Time>2012-01-27T11:27:57.5232097-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\legs4.png</Source>
+      <Name>MonsterParts\legs4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\legs4.xnb</Output>
+      <Time>2012-01-27T11:27:48.0666613-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\m_body_detail.png</Source>
+      <Name>MonsterParts\m_body_detail</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\m_body_detail.xnb</Output>
+      <Time>2011-10-04T19:01:54.9087791-07:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\rockCracked.png</Source>
+      <Name>MonsterParts\rockCracked</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\rockCracked.xnb</Output>
+      <Time>2012-01-27T11:31:12.0104894-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\rockCrackedBreak.png</Source>
+      <Name>MonsterParts\rockCrackedBreak</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\rockCrackedBreak.xnb</Output>
+      <Time>2012-01-27T11:32:19.3683959-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\rockNormal.png</Source>
+      <Name>MonsterParts\rockNormal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\rockNormal.xnb</Output>
+      <Time>2012-01-27T11:30:47.3780608-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\rockNormalBreak.png</Source>
+      <Name>MonsterParts\rockNormalBreak</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\rockNormalBreak.xnb</Output>
+      <Time>2012-01-27T11:31:43.5673195-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\snowCracked.png</Source>
+      <Name>MonsterParts\snowCracked</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\snowCracked.xnb</Output>
+      <Time>2012-01-27T11:33:07.3771802-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\snowCrackedBreak.png</Source>
+      <Name>MonsterParts\snowCrackedBreak</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\snowCrackedBreak.xnb</Output>
+      <Time>2012-01-27T11:34:07.9166913-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\snowNormal.png</Source>
+      <Name>MonsterParts\snowNormal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\snowNormal.xnb</Output>
+      <Time>2012-01-27T11:32:51.5172604-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\snowNormalBreak.png</Source>
+      <Name>MonsterParts\snowNormalBreak</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\snowNormalBreak.xnb</Output>
+      <Time>2012-01-27T11:33:31.2575652-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\spikeFace.png</Source>
+      <Name>MonsterParts\spikeFace</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\spikeFace.xnb</Output>
+      <Time>2012-01-27T11:35:39.4269986-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\topArmor.png</Source>
+      <Name>MonsterParts\topArmor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\topArmor.xnb</Output>
+      <Time>2012-01-27T11:25:44.2354795-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\topSuperArmor.png</Source>
+      <Name>MonsterParts\topSuperArmor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\topSuperArmor.xnb</Output>
+      <Time>2012-01-27T11:29:14.8306933-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\treads1.png</Source>
+      <Name>MonsterParts\treads1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\treads1.xnb</Output>
+      <Time>2012-01-27T12:47:25.4087311-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\treads2.png</Source>
+      <Name>MonsterParts\treads2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\treads2.xnb</Output>
+      <Time>2012-01-27T11:28:30.5141231-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\treads3.png</Source>
+      <Name>MonsterParts\treads3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\treads3.xnb</Output>
+      <Time>2012-01-27T11:28:33.5572996-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\treads4.png</Source>
+      <Name>MonsterParts\treads4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\treads4.xnb</Output>
+      <Time>2012-01-27T11:28:23.9057398-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\flash.png</Source>
+      <Name>MonsterParts\flash</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\flash.xnb</Output>
+      <Time>2012-01-27T12:38:23.6023081-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\frontArmorBack.png</Source>
+      <Name>MonsterParts\frontArmorBack</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\frontArmorBack.xnb</Output>
+      <Time>2012-01-27T13:47:19.3731689-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\fullArmorBack.png</Source>
+      <Name>MonsterParts\fullArmorBack</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\fullArmorBack.xnb</Output>
+      <Time>2012-01-27T13:49:23.7833843-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\fullSuperArmorBack.png</Source>
+      <Name>MonsterParts\fullSuperArmorBack</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\fullSuperArmorBack.xnb</Output>
+      <Time>2012-01-27T13:52:25.7089354-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\topArmorBack.png</Source>
+      <Name>MonsterParts\topArmorBack</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\topArmorBack.xnb</Output>
+      <Time>2012-01-27T13:50:10.937119-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\topSuperArmorBack.png</Source>
+      <Name>MonsterParts\topSuperArmorBack</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\topSuperArmorBack.xnb</Output>
+      <Time>2012-01-27T13:52:06.7098335-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\frontSuperArmorBack.png</Source>
+      <Name>MonsterParts\frontSuperArmorBack</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\frontSuperArmorBack.xnb</Output>
+      <Time>2012-01-27T13:53:45.4565605-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\rockTurret.png</Source>
+      <Name>MonsterParts\rockTurret</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\rockTurret.xnb</Output>
+      <Time>2012-01-27T11:30:47.3780608-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\snowTurret.png</Source>
+      <Name>MonsterParts\snowTurret</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\snowTurret.xnb</Output>
+      <Time>2012-01-27T11:32:51.5172604-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\standardTurret.png</Source>
+      <Name>MonsterParts\standardTurret</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\standardTurret.xnb</Output>
+      <Time>2012-01-27T11:23:58.8833694-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\bossGun.png</Source>
+      <Name>MonsterParts\bossGun</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\bossGun.xnb</Output>
+      <Time>2012-01-27T11:27:06.4442473-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\bossEyes.png</Source>
+      <Name>MonsterParts\bossEyes</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\bossEyes.xnb</Output>
+      <Time>2012-01-27T11:26:42.6358665-08:00</Time>
+    </Item>
+    <Item>
+      <Source>MonsterParts\snakeBody.png</Source>
+      <Name>MonsterParts\snakeBody</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\snakeBody.xnb</Output>
+      <Time>2012-01-27T16:45:40.650807-08:00</Time>
+    </Item>
+    <Item>
       <Source>Font.spritefont</Source>
       <Name>Font</Name>
       <Importer>FontDescriptionImporter</Importer>
@@ -4047,156 +4803,6 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\Infernal.xnb</Output>
       <Time>2003-01-08T14:43:02-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\music_menu.mp3</Source>
-      <Name>Sounds\music_menu</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_menu.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_menu.wma</Extra>
-      <Time>2011-05-31T12:30:19.3825414-07:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\music_game.mp3</Source>
-      <Name>Sounds\music_game</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_game.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_game.wma</Extra>
-      <Time>2012-01-25T10:25:23.2560394-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\CommandMusic.mp3</Source>
-      <Name>Sounds\CommandMusic</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\CommandMusic.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\CommandMusic.wma</Extra>
-      <Time>2012-01-25T10:27:24.360063-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\CoreMusic.mp3</Source>
-      <Name>Sounds\CoreMusic</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\CoreMusic.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\CoreMusic.wma</Extra>
-      <Time>2012-01-25T10:27:24.8620921-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\EngineMusic.mp3</Source>
-      <Name>Sounds\EngineMusic</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\EngineMusic.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\EngineMusic.wma</Extra>
-      <Time>2012-01-25T10:27:24.9370965-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\GreenMusic.mp3</Source>
-      <Name>Sounds\GreenMusic</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\GreenMusic.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\GreenMusic.wma</Extra>
-      <Time>2012-01-25T10:27:25.0041003-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\HubMusic.mp3</Source>
-      <Name>Sounds\HubMusic</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\HubMusic.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\HubMusic.wma</Extra>
-      <Time>2012-01-25T10:27:25.0211013-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\StorageMusic.mp3</Source>
-      <Name>Sounds\StorageMusic</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\StorageMusic.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\StorageMusic.wma</Extra>
-      <Time>2012-01-25T10:27:25.0511031-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\BossMusic.mp3</Source>
-      <Name>Sounds\BossMusic</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\BossMusic.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\BossMusic.wma</Extra>
-      <Time>2012-01-25T10:47:50.776191-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\FinalBoss.mp3</Source>
-      <Name>Sounds\FinalBoss</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\FinalBoss.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\FinalBoss.wma</Extra>
-      <Time>2012-01-25T10:47:51.2892208-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\IntroMusic.mp3</Source>
-      <Name>Sounds\IntroMusic</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\IntroMusic.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\IntroMusic.wma</Extra>
-      <Time>2012-01-25T10:47:51.3232227-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\ItemRoomPreUpgrade.mp3</Source>
-      <Name>Sounds\ItemRoomPreUpgrade</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\ItemRoomPreUpgrade.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\ItemRoomPreUpgrade.wma</Extra>
-      <Time>2012-01-25T10:47:51.327223-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\UpgradeMusic.mp3</Source>
-      <Name>Sounds\UpgradeMusic</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\UpgradeMusic.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\UpgradeMusic.wma</Extra>
-      <Time>2012-01-25T10:47:51.3292231-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\FirstLoad.mp3</Source>
-      <Name>Sounds\FirstLoad</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\FirstLoad.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\FirstLoad.wma</Extra>
-      <Time>2012-01-25T10:48:28.5943843-08:00</Time>
-    </Item>
-    <Item>
-      <Source>Sounds\DeathMusic.mp3</Source>
-      <Name>Sounds\DeathMusic</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\DeathMusic.xnb</Output>
-      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\DeathMusic.wma</Extra>
-      <Time>2012-01-25T11:38:35.3227645-08:00</Time>
     </Item>
     <Item>
       <Source>Sounds\CannonPowder1.wav</Source>
@@ -4379,150 +4985,6 @@
       <Time>2007-02-09T10:24:54-08:00</Time>
     </Item>
     <Item>
-      <Source>decal_empty.png</Source>
-      <Name>decal_empty</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="GenerateMipmaps">True</Data>
-      </Parameters>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_empty.xnb</Output>
-      <Time>2012-01-25T11:55:44.9354785-08:00</Time>
-    </Item>
-    <Item>
-      <Source>decal_powerorb_0.png</Source>
-      <Name>decal_powerorb_0</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="GenerateMipmaps">True</Data>
-      </Parameters>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_0.xnb</Output>
-      <Time>2012-01-26T09:57:37.6120601-08:00</Time>
-    </Item>
-    <Item>
-      <Source>decal_powerorb_1.png</Source>
-      <Name>decal_powerorb_1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="GenerateMipmaps">True</Data>
-      </Parameters>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_1.xnb</Output>
-      <Time>2012-01-26T09:57:41.6362935-08:00</Time>
-    </Item>
-    <Item>
-      <Source>decal_powerorb_2.png</Source>
-      <Name>decal_powerorb_2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="GenerateMipmaps">True</Data>
-      </Parameters>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_2.xnb</Output>
-      <Time>2012-01-26T09:57:28.0595061-08:00</Time>
-    </Item>
-    <Item>
-      <Source>decal_powerorb_3.png</Source>
-      <Name>decal_powerorb_3</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="GenerateMipmaps">True</Data>
-      </Parameters>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_3.xnb</Output>
-      <Time>2012-01-26T09:57:42.6133502-08:00</Time>
-    </Item>
-    <Item>
-      <Source>decal_powerorb_4.png</Source>
-      <Name>decal_powerorb_4</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="GenerateMipmaps">True</Data>
-      </Parameters>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_4.xnb</Output>
-      <Time>2012-01-26T09:57:39.3481608-08:00</Time>
-    </Item>
-    <Item>
-      <Source>decal_powerorb_5.png</Source>
-      <Name>decal_powerorb_5</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="GenerateMipmaps">True</Data>
-      </Parameters>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_5.xnb</Output>
-      <Time>2012-01-26T09:57:26.4804145-08:00</Time>
-    </Item>
-    <Item>
-      <Source>decal_powerorb_6.png</Source>
-      <Name>decal_powerorb_6</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="GenerateMipmaps">True</Data>
-      </Parameters>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_6.xnb</Output>
-      <Time>2012-01-26T09:57:27.3004621-08:00</Time>
-    </Item>
-    <Item>
-      <Source>decal_powerorb_7.png</Source>
-      <Name>decal_powerorb_7</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="GenerateMipmaps">True</Data>
-      </Parameters>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_7.xnb</Output>
-      <Time>2012-01-26T09:57:23.5942471-08:00</Time>
-    </Item>
-    <Item>
-      <Source>decal_powerorb_8.png</Source>
-      <Name>decal_powerorb_8</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="GenerateMipmaps">True</Data>
-      </Parameters>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_8.xnb</Output>
-      <Time>2012-01-26T09:57:40.6472362-08:00</Time>
-    </Item>
-    <Item>
-      <Source>decal_powerorb_9.png</Source>
-      <Name>decal_powerorb_9</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="GenerateMipmaps">True</Data>
-      </Parameters>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_9.xnb</Output>
-      <Time>2012-01-26T10:02:13.1290392-08:00</Time>
-    </Item>
-    <Item>
-      <Source>decal_powerorb_10.png</Source>
-      <Name>decal_powerorb_10</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Parameters>
-        <Data Key="GenerateMipmaps">True</Data>
-      </Parameters>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\decal_powerorb_10.xnb</Output>
-      <Time>2012-01-26T10:01:23.5001609-08:00</Time>
-    </Item>
-    <Item>
       <Source>Sounds\Plantbomb1.wav</Source>
       <Name>Sounds\Plantbomb1</Name>
       <Importer>WavImporter</Importer>
@@ -4629,6 +5091,156 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\SlidingDoor2.xnb</Output>
       <Time>2003-01-08T15:57:42-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\music_menu.mp3</Source>
+      <Name>Sounds\music_menu</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_menu.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_menu.wma</Extra>
+      <Time>2011-05-31T12:30:19.3825414-07:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\music_game.mp3</Source>
+      <Name>Sounds\music_game</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_game.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\music_game.wma</Extra>
+      <Time>2012-01-25T10:25:23.2560394-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\CommandMusic.mp3</Source>
+      <Name>Sounds\CommandMusic</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\CommandMusic.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\CommandMusic.wma</Extra>
+      <Time>2012-01-25T10:27:24.360063-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\CoreMusic.mp3</Source>
+      <Name>Sounds\CoreMusic</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\CoreMusic.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\CoreMusic.wma</Extra>
+      <Time>2012-01-25T10:27:24.8620921-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\EngineMusic.mp3</Source>
+      <Name>Sounds\EngineMusic</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\EngineMusic.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\EngineMusic.wma</Extra>
+      <Time>2012-01-25T10:27:24.9370965-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\GreenMusic.mp3</Source>
+      <Name>Sounds\GreenMusic</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\GreenMusic.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\GreenMusic.wma</Extra>
+      <Time>2012-01-25T10:27:25.0041003-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\HubMusic.mp3</Source>
+      <Name>Sounds\HubMusic</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\HubMusic.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\HubMusic.wma</Extra>
+      <Time>2012-01-25T10:27:25.0211013-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\StorageMusic.mp3</Source>
+      <Name>Sounds\StorageMusic</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\StorageMusic.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\StorageMusic.wma</Extra>
+      <Time>2012-01-25T10:27:25.0511031-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\BossMusic.mp3</Source>
+      <Name>Sounds\BossMusic</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\BossMusic.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\BossMusic.wma</Extra>
+      <Time>2012-01-25T10:47:50.776191-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\FinalBoss.mp3</Source>
+      <Name>Sounds\FinalBoss</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\FinalBoss.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\FinalBoss.wma</Extra>
+      <Time>2012-01-25T10:47:51.2892208-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\IntroMusic.mp3</Source>
+      <Name>Sounds\IntroMusic</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\IntroMusic.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\IntroMusic.wma</Extra>
+      <Time>2012-01-25T10:47:51.3232227-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\ItemRoomPreUpgrade.mp3</Source>
+      <Name>Sounds\ItemRoomPreUpgrade</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\ItemRoomPreUpgrade.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\ItemRoomPreUpgrade.wma</Extra>
+      <Time>2012-01-25T10:47:51.327223-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\UpgradeMusic.mp3</Source>
+      <Name>Sounds\UpgradeMusic</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\UpgradeMusic.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\UpgradeMusic.wma</Extra>
+      <Time>2012-01-25T10:47:51.3292231-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\FirstLoad.mp3</Source>
+      <Name>Sounds\FirstLoad</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\FirstLoad.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\FirstLoad.wma</Extra>
+      <Time>2012-01-25T10:48:28.5943843-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\DeathMusic.mp3</Source>
+      <Name>Sounds\DeathMusic</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\DeathMusic.xnb</Output>
+      <Extra>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\DeathMusic.wma</Extra>
+      <Time>2012-01-25T11:38:35.3227645-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

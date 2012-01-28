@@ -671,6 +671,8 @@ namespace VexedCore
                             return decalTextures[(int)Decal.DoubleJump];
                         if (targetDoodad.abilityType == AbilityType.WallJump)
                             return decalTextures[(int)Decal.WallJump];
+                        if (targetDoodad.abilityType == AbilityType.SpinHook)
+                            return decalTextures[(int)Decal.HookTarget];
                         if (targetDoodad.abilityType == AbilityType.Missile)
                             return decalTextures[(int)Decal.Missile];
                         if (targetDoodad.abilityType == AbilityType.PermanentBoots)

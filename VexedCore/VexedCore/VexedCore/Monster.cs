@@ -26,11 +26,68 @@ namespace VexedCore
         Break
     }
 
+    public enum MonsterTextureId
+    {
+        Gun,
+        BasicBody,
+        SnakeBody,
+        Eyes,
+        FullArmor,
+        TopArmor,
+        FrontArmor,
+        FullArmorBack,
+        TopArmorBack,
+        FrontArmorBack,
+        LegsBase,
+        Legs2,
+        Legs3,
+        Legs4,
+        TreadsBase,
+        Treads2,
+        Treads3,
+        Treads4,
+        BossArmor,
+        BossGun,
+        StandardTurret,
+        FullSuperArmor,
+        TopSuperArmor,
+        FrontSuperArmor,
+        FullSuperArmorBack,
+        TopSuperArmorBack,
+        FrontSuperArmorBack,
+        RockNormal,
+        RockCracked,
+        RockNormalBreak,
+        RockCrackedBreak,
+        SnowNormal,
+        SnowCracked,
+        SnowNormalBreak,
+        SnowCrackedBreak,
+        BossEyes,
+        RockTurret,
+        SnowTurret,
+        SpikeFace,
+        Jet,
+        IceSnake,
+        IceSnakeCrack1,
+        IceSnakeCrack2,
+        IceTurret,
+        FacePlate,
+        FaceWhite,
+        FaceAngryEye,
+        FaceNormalEye,
+        Flash
+    }
+
     public class Monster
     {
+        public static int textureCount = 49;
+        
+
         public static Texture2D monsterTexture;
         public static Texture2D monsterTextureDetail;
 
+        public static Texture2D[] monsterTextures;
         public static List<Vector2> bodyTexCoords;
         public static List<Vector2> eyesTexCoords;
         public static List<Vector2> fullArmorTexCoords;
@@ -202,6 +259,60 @@ namespace VexedCore
             texCoords.Add(new Vector2((x + 1) * texWidth, (y + 1) * texWidth));
             
             return texCoords;
+        }
+
+        public static void Init(ContentManager content)
+        {
+            monsterTextures = new Texture2D[textureCount];
+            monsterTextures[(int)MonsterTextureId.BasicBody] = content.Load<Texture2D>("MonsterParts\\basicBody");
+            monsterTextures[(int)MonsterTextureId.SnakeBody] = content.Load<Texture2D>("MonsterParts\\snakeBody");
+            monsterTextures[(int)MonsterTextureId.BossArmor] = content.Load<Texture2D>("MonsterParts\\bossArmor");
+            monsterTextures[(int)MonsterTextureId.Eyes] = content.Load<Texture2D>("MonsterParts\\eyes");
+            monsterTextures[(int)MonsterTextureId.BossEyes] = content.Load<Texture2D>("MonsterParts\\bossEyes");
+            monsterTextures[(int)MonsterTextureId.FaceAngryEye] = content.Load<Texture2D>("MonsterParts\\faceAngryEye");
+            monsterTextures[(int)MonsterTextureId.FaceNormalEye] = content.Load<Texture2D>("MonsterParts\\faceNormalEye");
+            monsterTextures[(int)MonsterTextureId.FacePlate] = content.Load<Texture2D>("MonsterParts\\facePlate");
+            monsterTextures[(int)MonsterTextureId.FaceWhite] = content.Load<Texture2D>("MonsterParts\\faceWhite");
+            monsterTextures[(int)MonsterTextureId.FrontArmor] = content.Load<Texture2D>("MonsterParts\\frontArmor");
+            monsterTextures[(int)MonsterTextureId.FrontSuperArmor] = content.Load<Texture2D>("MonsterParts\\frontSuperArmor");
+            monsterTextures[(int)MonsterTextureId.FullArmor] = content.Load<Texture2D>("MonsterParts\\fullArmor");
+            monsterTextures[(int)MonsterTextureId.FullSuperArmor] = content.Load<Texture2D>("MonsterParts\\fullSuperArmor");
+            monsterTextures[(int)MonsterTextureId.FrontArmorBack] = content.Load<Texture2D>("MonsterParts\\frontArmorBack");
+            monsterTextures[(int)MonsterTextureId.FrontSuperArmorBack] = content.Load<Texture2D>("MonsterParts\\frontSuperArmorBack");
+            monsterTextures[(int)MonsterTextureId.FullArmorBack] = content.Load<Texture2D>("MonsterParts\\fullArmorBack");
+            monsterTextures[(int)MonsterTextureId.FullSuperArmorBack] = content.Load<Texture2D>("MonsterParts\\fullSuperArmorBack");
+            monsterTextures[(int)MonsterTextureId.Gun] = content.Load<Texture2D>("MonsterParts\\gun");
+            monsterTextures[(int)MonsterTextureId.IceSnake] = content.Load<Texture2D>("MonsterParts\\iceSnake");
+            monsterTextures[(int)MonsterTextureId.IceSnakeCrack1] = content.Load<Texture2D>("MonsterParts\\iceSnakeCrack1");
+            monsterTextures[(int)MonsterTextureId.IceSnakeCrack2] = content.Load<Texture2D>("MonsterParts\\iceSnakeCrack2");
+            monsterTextures[(int)MonsterTextureId.IceTurret] = content.Load<Texture2D>("MonsterParts\\iceTurret");
+            monsterTextures[(int)MonsterTextureId.Jet] = content.Load<Texture2D>("MonsterParts\\jet");
+            monsterTextures[(int)MonsterTextureId.Legs2] = content.Load<Texture2D>("MonsterParts\\legs2");
+            monsterTextures[(int)MonsterTextureId.Legs3] = content.Load<Texture2D>("MonsterParts\\legs3");
+            monsterTextures[(int)MonsterTextureId.Legs4] = content.Load<Texture2D>("MonsterParts\\legs4");
+            monsterTextures[(int)MonsterTextureId.LegsBase] = content.Load<Texture2D>("MonsterParts\\legs1");
+            monsterTextures[(int)MonsterTextureId.RockCracked] = content.Load<Texture2D>("MonsterParts\\rockCracked");
+            monsterTextures[(int)MonsterTextureId.RockCrackedBreak] = content.Load<Texture2D>("MonsterParts\\rockCrackedBreak");
+            monsterTextures[(int)MonsterTextureId.RockNormal] = content.Load<Texture2D>("MonsterParts\\rockNormal");
+            monsterTextures[(int)MonsterTextureId.RockNormalBreak] = content.Load<Texture2D>("MonsterParts\\rockNormalBreak");
+            monsterTextures[(int)MonsterTextureId.SnowCracked] = content.Load<Texture2D>("MonsterParts\\snowCracked");
+            monsterTextures[(int)MonsterTextureId.SnowCrackedBreak] = content.Load<Texture2D>("MonsterParts\\snowCrackedBreak");
+            monsterTextures[(int)MonsterTextureId.SnowNormal] = content.Load<Texture2D>("MonsterParts\\snowNormal");
+            monsterTextures[(int)MonsterTextureId.SnowNormalBreak] = content.Load<Texture2D>("MonsterParts\\snowNormalBreak");
+            monsterTextures[(int)MonsterTextureId.SpikeFace] = content.Load<Texture2D>("MonsterParts\\spikeFace");
+            monsterTextures[(int)MonsterTextureId.TopArmor] = content.Load<Texture2D>("MonsterParts\\topArmor");
+            monsterTextures[(int)MonsterTextureId.TopSuperArmor] = content.Load<Texture2D>("MonsterParts\\topSuperArmor");
+            monsterTextures[(int)MonsterTextureId.TopArmorBack] = content.Load<Texture2D>("MonsterParts\\topArmorBack");
+            monsterTextures[(int)MonsterTextureId.TopSuperArmorBack] = content.Load<Texture2D>("MonsterParts\\topSuperArmorBack");
+            monsterTextures[(int)MonsterTextureId.Treads2] = content.Load<Texture2D>("MonsterParts\\treads2");
+            monsterTextures[(int)MonsterTextureId.Treads3] = content.Load<Texture2D>("MonsterParts\\treads3");
+            monsterTextures[(int)MonsterTextureId.Treads4] = content.Load<Texture2D>("MonsterParts\\treads4");
+            monsterTextures[(int)MonsterTextureId.TreadsBase] = content.Load<Texture2D>("MonsterParts\\treads1");
+            monsterTextures[(int)MonsterTextureId.Flash] = content.Load<Texture2D>("MonsterParts\\flash");
+            monsterTextures[(int)MonsterTextureId.StandardTurret] = content.Load<Texture2D>("MonsterParts\\standardTurret");
+            monsterTextures[(int)MonsterTextureId.RockTurret] = content.Load<Texture2D>("MonsterParts\\rockTurret");
+            monsterTextures[(int)MonsterTextureId.SnowTurret] = content.Load<Texture2D>("MonsterParts\\snowTurret");
+            monsterTextures[(int)MonsterTextureId.BossGun] = content.Load<Texture2D>("MonsterParts\\bossGun");      
         }
 
         public static void InitTexCoords()
@@ -668,6 +779,9 @@ namespace VexedCore
 
         public void ApplyDamage(bool armor, ProjectileType gunType)
         {
+            if (dead == true)
+                return;
+
             if (flashCooldown != 0)
                 return;
             if (moveType == VL.MovementType.RockBoss && rockBoss.rockHits != 0)
@@ -679,6 +793,8 @@ namespace VexedCore
                 }
                 return;
             }
+            if(moveType == VL.MovementType.RockBoss && (rockBoss.state != RockBossState.Command_Battle1 && rockBoss.state != RockBossState.Command_Battle2 && rockBoss.state != RockBossState.Snow_Battle1 && rockBoss.state != RockBossState.Snow_Battle2))
+                return;
 
             if (armor == false)
             {
@@ -750,44 +866,51 @@ namespace VexedCore
                     Doodad bonusOrb3 = Engine.player.currentRoom.ActivateMonsterOrb();
                     Doodad bonusOrb4 = Engine.player.currentRoom.ActivateMonsterOrb();
                     Doodad bonusOrb5 = Engine.player.currentRoom.ActivateMonsterOrb();
-                    bonusOrb1.tracking = true;
-                    bonusOrb1.currentRoom = Engine.player.currentRoom;
-                    bonusOrb1.position.velocity += .3f * upUnit;
-                    bonusOrb1.position.position = position.position + .3f * upUnit;
-                    bonusOrb1.position.normal = position.normal;
-                    bonusOrb1.position.direction = position.direction;
+                    if (bonusOrb1 != null)
+                    {
+                        bonusOrb1.tracking = true;
+                        bonusOrb1.currentRoom = Engine.player.currentRoom;
+                        bonusOrb1.position.velocity += .3f * upUnit;
+                        bonusOrb1.position.position = position.position + .3f * upUnit;
+                        bonusOrb1.position.normal = position.normal;
+                        bonusOrb1.position.direction = position.direction;
+                    }
+                    if (bonusOrb2 != null)
+                    {
+                        bonusOrb2.tracking = true;
+                        bonusOrb2.currentRoom = Engine.player.currentRoom;
+                        bonusOrb2.position.velocity -= .3f * upUnit;
+                        bonusOrb2.position.position = position.position - .3f * upUnit;
+                        bonusOrb2.position.normal = position.normal;
+                        bonusOrb2.position.direction = position.direction; bonusOrb3.tracking = true;
+                    }
+                    if (bonusOrb3 != null)
+                    {
+                        bonusOrb3.tracking = true;
+                        bonusOrb3.currentRoom = Engine.player.currentRoom;
+                        bonusOrb3.position.position = position.position + .3f * rightUnit;
+                        bonusOrb3.position.velocity += .3f * rightUnit;
+                        bonusOrb3.position.normal = position.normal;
+                        bonusOrb3.position.direction = position.direction; bonusOrb3.position.position = position.position + .3f * rightUnit;
+                    }
+                    if (bonusOrb4 != null)
+                    {
+                        bonusOrb4.tracking = true;
+                        bonusOrb4.currentRoom = Engine.player.currentRoom;
+                        bonusOrb4.position.velocity -= .3f * rightUnit;
+                        bonusOrb4.position.position = position.position - .3f * rightUnit;
+                        bonusOrb4.position.normal = position.normal;
+                        bonusOrb4.position.direction = position.direction; bonusOrb5.tracking = true;
+                    }
+                    if (bonusOrb5 != null)
+                    {
+                        bonusOrb5.tracking = true;
+                        bonusOrb5.currentRoom = Engine.player.currentRoom;
+                        bonusOrb5.position.position = position.position;
+                        bonusOrb5.position.normal = position.normal;
+                        bonusOrb5.position.direction = position.direction;
+                    }
 
-                    bonusOrb2.tracking = true;
-                    bonusOrb2.currentRoom = Engine.player.currentRoom;
-                    bonusOrb2.position.velocity -= .3f * upUnit;
-                    bonusOrb2.position.position = position.position - .3f * upUnit;
-                    bonusOrb2.position.normal = position.normal;
-                    bonusOrb2.position.direction = position.direction; bonusOrb3.tracking = true;
-
-                    bonusOrb3.tracking = true;
-                    bonusOrb3.currentRoom = Engine.player.currentRoom;
-                    bonusOrb3.position.position = position.position + .3f * rightUnit;
-                    bonusOrb3.position.velocity += .3f * rightUnit;
-                    bonusOrb3.position.normal = position.normal;
-                    bonusOrb3.position.direction = position.direction; bonusOrb3.position.position = position.position + .3f * rightUnit;
-
-                    bonusOrb4.tracking = true;
-                    bonusOrb4.currentRoom = Engine.player.currentRoom;
-                    bonusOrb4.position.velocity -= .3f * rightUnit;
-                    bonusOrb4.position.position = position.position - .3f * rightUnit;
-                    bonusOrb4.position.normal = position.normal;
-                    bonusOrb4.position.direction = position.direction; bonusOrb5.tracking = true;
-
-                    bonusOrb5.tracking = true;
-                    bonusOrb5.currentRoom = Engine.player.currentRoom;
-                    bonusOrb5.position.position = position.position;
-                    bonusOrb5.position.normal = position.normal;
-                    bonusOrb5.position.direction = position.direction;
-                    /*Engine.player.currentRoom.doodads.Add(bonusOrb1);
-                    Engine.player.currentRoom.doodads.Add(bonusOrb2);
-                    Engine.player.currentRoom.doodads.Add(bonusOrb3);
-                    Engine.player.currentRoom.doodads.Add(bonusOrb4);
-                    Engine.player.currentRoom.doodads.Add(bonusOrb5);*/
                     if (moveType == VL.MovementType.RockBoss && !id.Contains("Snow") && rockBoss.state != RockBossState.Fight3)
                         hasOrbs = true;
                     else
@@ -1495,6 +1618,20 @@ namespace VexedCore
             return Vector3.Zero;
         }
 
+        public static float layer_gunNatural = 0f;
+        public static float layer_body = .001f;
+        public static float layer_eyes = .0015f;
+        public static float layer_armor = .0022f;
+        public static float layer_iceSnakeArmor = .02f;
+        public static float layer_bossEyes = .0025f;
+        public static float layer_legs = .1f;
+        public static float layer_innerGun = .0018f;
+        public static float layer_innerTurretOut = .002f;
+        public static float layer_innerTurretIn = .0016f;
+        public static float layer_outerGun = .0028f;
+        public static float layer_standardTurretOut = .003f;
+        public static float layer_standardTurretIn = .0026f;
+
         public void Draw(Room r)
         {
              if (deathTime == 0)
@@ -1513,7 +1650,7 @@ namespace VexedCore
 
             if (moveType == VL.MovementType.FaceBoss)
             {
-                faceBoss.Render();
+                //faceBoss.Render();
                 return;
             }
 
@@ -1545,87 +1682,61 @@ namespace VexedCore
                 v.Update(Engine.player.currentRoom, 1);
             }
 
-            float bossAdjustment = -.05f;
+            float bossAdjustment = .0f;
             if (snakeBoss.chainIndex % 3 == 1)
-                bossAdjustment = .0f;
+                bossAdjustment = .01f;
             if (snakeBoss.chainIndex % 3 == 2)
-                bossAdjustment = .05f;
+                bossAdjustment = .02f;
 
-            foreach (GunEmplacement g in guns)
-            {
-                List<Vertex> gunVertexList = new List<Vertex>();
-                gunVertexList.Add(new Vertex(g.position.position, g.position.normal, scale * (g.radius * g.gunNormal), g.position.direction));
-                gunVertexList.Add(new Vertex(g.position.position, g.position.normal, scale * (1.5f * g.radius * g.gunLine + g.radius * g.gunNormal), g.position.direction));
-                gunVertexList.Add(new Vertex(g.position.position, g.position.normal, scale * (1.5f * g.radius * g.gunLine - g.radius * g.gunNormal), g.position.direction));
-                gunVertexList.Add(new Vertex(g.position.position, g.position.normal, scale * (-g.radius * g.gunNormal), g.position.direction));
-
-                
-
-                foreach (Vertex v in gunVertexList)
-                {
-                    v.Update(Engine.player.currentRoom, 1);
-                }
-
-
-                r.AddTextureToTriangleList(gunVertexList, Color.White, depth + g.depthOffset + bossAdjustment, textureTriangleList, gunTexCoords, true);
-                if (g.baseType != BaseType.None)
-                {
-                    List<Vertex> gunBaseVertexList = new List<Vertex>();
-                    gunBaseVertexList.Add(new Vertex(position.position, position.normal, scale * (upUnit * (g.baseRadius-g.positionOffset.Y) + rightUnit * (g.baseRadius+g.positionOffset.X)), g.position.direction));
-                    gunBaseVertexList.Add(new Vertex(position.position, position.normal, scale * (upUnit * (g.baseRadius - g.positionOffset.Y) - rightUnit * (g.baseRadius - g.positionOffset.X)), g.position.direction));
-                    gunBaseVertexList.Add(new Vertex(position.position, position.normal, scale * (-upUnit * (g.baseRadius + g.positionOffset.Y) - rightUnit * (g.baseRadius - g.positionOffset.X)), g.position.direction));
-                    gunBaseVertexList.Add(new Vertex(position.position, position.normal, scale * (-upUnit * (g.baseRadius + g.positionOffset.Y) + rightUnit * (g.baseRadius + g.positionOffset.X)), g.position.direction));
-
-                    foreach (Vertex v in gunBaseVertexList)
-                    {
-                        v.Update(Engine.player.currentRoom, 1);
-                    }
-                    if (g.baseType == BaseType.Rock)
-                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + 1.5f * g.depthOffset + bossAdjustment, textureTriangleList, stoneSolidTexCoords, true);
-                    if (g.baseType == BaseType.Snow)
-                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + 1.5f * g.depthOffset + bossAdjustment, textureTriangleList, snowSolidTexCoords, true);
-                    if (g.baseType == BaseType.Ice)
-                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + 1.5f * g.depthOffset + bossAdjustment, textureTriangleList, iceTurretTexCoords, true);
-                    if (g.baseType == BaseType.Standard)
-                        r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + 1.5f * g.depthOffset + bossAdjustment, textureTriangleList, bodyTexCoords, true);
-                }
-            }
+            
 
             if (moveType == VL.MovementType.Tank)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, textureTriangleList, treadsTexCoords, rightFacing);
+            {
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_legs, r.monsterTriangles[(int)MonsterTextureId.TreadsBase], Room.plateTexCoords, rightFacing);
+            }
             else if (moveType == VL.MovementType.Spider)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, textureTriangleList, spiderTexCoords, rightFacing);
-            else if (moveType == VL.MovementType.Jump)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, textureTriangleList, legsTexCoords, rightFacing);
+            {
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_legs, r.monsterTriangles[(int)MonsterTextureId.LegsBase], Room.plateTexCoords, rightFacing);
+            }
 
+            if (moveType == VL.MovementType.SnakeBoss)
+            {
+                r.AddTextureToTriangleList(rectVertexList, monsterColor, depth + layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.SnakeBody], Room.plateTexCoords, rightFacing);
+                r.AddTextureToTriangleList(rectVertexList, monsterColor, depth - layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.SnakeBody], Room.plateTexCoords, rightFacing);
+            }
+            else
+            {
+                r.AddTextureToTriangleList(rectVertexList, monsterColor, depth + layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BasicBody], Room.plateTexCoords, rightFacing);
+                r.AddTextureToTriangleList(rectVertexList, monsterColor, depth - layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BasicBody], Room.plateTexCoords, rightFacing);
+            }
 
-            r.AddTextureToTriangleList(rectVertexList, monsterColor, depth + bossAdjustment, textureTriangleList, bodyTexCoords, rightFacing);
             if (flashCooldown != 0)
             {
                 Color flashColor = new Color(255, 255, 0, (Byte)(flashCooldown / maxFlashCooldown));
-                r.AddTextureToTriangleList(rectVertexList, flashColor, depth + bossAdjustment, textureTriangleList, flashTexCoords, rightFacing);
+                r.AddTextureToTriangleList(rectVertexList, flashColor, depth + layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.Flash], Room.plateTexCoords, rightFacing);
+                r.AddTextureToTriangleList(rectVertexList, flashColor, depth - layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.Flash], Room.plateTexCoords, rightFacing);
             }
             if (moveType == VL.MovementType.RockBoss && !id.Contains("Snow"))
             {
                 if(rockBoss.rockHits == 2 && rockBoss.rockHitCooldown == 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, textureTriangleList, stoneSolidTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.RockNormal], Room.plateTexCoords, rightFacing);
                 if (rockBoss.rockHits == 1 && rockBoss.rockHitCooldown == 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, textureTriangleList, stoneCrackTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.RockCracked], Room.plateTexCoords, rightFacing);
                 if (rockBoss.rockHits == 1 && rockBoss.rockHitCooldown != 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, textureTriangleList, stoneSolidBreakTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.RockNormalBreak], Room.plateTexCoords, rightFacing);
                 if (rockBoss.rockHits == 0 && rockBoss.rockHitCooldown != 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, textureTriangleList, stoneCrackBreakTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.RockCrackedBreak], Room.plateTexCoords, rightFacing);
             }
             if (moveType == VL.MovementType.RockBoss && id.Contains("Snow"))
             {
                 if (rockBoss.rockHits == 2 && rockBoss.rockHitCooldown == 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth+.001f, textureTriangleList, snowSolidTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.SnowNormal], Room.plateTexCoords, rightFacing);
                 if (rockBoss.rockHits == 1 && rockBoss.rockHitCooldown == 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, textureTriangleList, snowCrackTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.SnowCracked], Room.plateTexCoords, rightFacing);
                 if (rockBoss.rockHits == 1 && rockBoss.rockHitCooldown != 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, textureTriangleList, snowSolidBreakTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.SnowNormalBreak], Room.plateTexCoords, rightFacing);
                 if (rockBoss.rockHits == 0 && rockBoss.rockHitCooldown != 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, textureTriangleList, snowCrackBreakTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.SnowCrackedBreak], Room.plateTexCoords, rightFacing);
 
             }
             if (moveType == VL.MovementType.ChaseBoss || moveType == VL.MovementType.JetBoss || moveType == VL.MovementType.BattleBoss)
@@ -1643,10 +1754,17 @@ namespace VexedCore
                 {
                     v.Update(Engine.player.currentRoom, 1);
                 }
-                if(moveType == VL.MovementType.ChaseBoss)
-                    r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + .09f, textureTriangleList, spikeShieldTexCoords, rightFacing);
-                if(moveType == VL.MovementType.JetBoss || moveType == VL.MovementType.BattleBoss)
-                    r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + .09f, textureTriangleList, jetArmorTexCoords, rightFacing);
+                // CHASE BOSS
+                if (moveType == VL.MovementType.ChaseBoss)
+                {
+                    r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.SpikeFace], Room.plateTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.SpikeFace], Room.plateTexCoords, rightFacing);
+                }
+                if (moveType == VL.MovementType.JetBoss || moveType == VL.MovementType.BattleBoss)
+                {
+                    r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.Jet], Room.plateTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.Jet], Room.plateTexCoords, rightFacing);
+                }
 
             }
 
@@ -1654,78 +1772,163 @@ namespace VexedCore
             {
                 if (baseHP > 3)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment+.02f, textureTriangleList, iceShieldFullTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment-.02f, textureTriangleList, iceShieldFullTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment + layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnake], Room.plateTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment - layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnake], Room.plateTexCoords, rightFacing);
                 }
                 else if (baseHP > 2)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment+.02f, textureTriangleList, iceShieldMedTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment-.02f, textureTriangleList, iceShieldMedTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment + layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnakeCrack1], Room.plateTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment - layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnakeCrack1], Room.plateTexCoords, rightFacing);
                 }
                 else if (baseHP > 1)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment+.02f, textureTriangleList, iceShieldLowTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment-.02f, textureTriangleList, iceShieldLowTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment + layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnakeCrack2], Room.plateTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment - layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnakeCrack2], Room.plateTexCoords, rightFacing);
                 }
             }
 
+
+            // ARMORTRON ARMOR
             if (moveType == VL.MovementType.ArmorBoss)
             {
-                r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment, textureTriangleList, bossArmorTexCoords, rightFacing);
+                r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment + layer_armor, r.monsterTriangles[(int)MonsterTextureId.BossArmor], Room.plateTexCoords, rightFacing);
+                r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment - layer_armor, r.monsterTriangles[(int)MonsterTextureId.BossArmor], Room.plateTexCoords, rightFacing);
             }
 
+            // STANDARD ARMOR
             if (moveType != VL.MovementType.ChaseBoss && moveType != VL.MovementType.RockBoss && moveType != VL.MovementType.ArmorBoss && moveType != VL.MovementType.BattleBoss && moveType != VL.MovementType.JetBoss && moveType != VL.MovementType.ArmorBoss)
             {
-                List<Vector2> currentArmorTexCoords = new List<Vector2>();
                 if (armorType == VL.ArmorType.Full)
                 {
-                    currentArmorTexCoords = fullArmorTexCoords;
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.FullArmor], Room.plateTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.FullArmor], Room.plateTexCoords, rightFacing);
                 }
                 if (armorType == VL.ArmorType.Top)
                 {
-                    currentArmorTexCoords = topArmorTexCoords;
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.TopArmor], Room.plateTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.TopArmor], Room.plateTexCoords, rightFacing);
                 }
                 if (armorType == VL.ArmorType.Shield)
                 {
-                    currentArmorTexCoords = frontArmorTexCoords;                    
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.FrontArmor], Room.plateTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.FrontArmor], Room.plateTexCoords, rightFacing);
                 }
                 if (armorType == VL.ArmorType.FullSuper)
                 {
-                    currentArmorTexCoords = fullSuperArmorTexCoords;
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.FullSuperArmor], Room.plateTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.FullSuperArmor], Room.plateTexCoords, rightFacing);
                 }
                 if (armorType == VL.ArmorType.TopSuper)
                 {
-                    currentArmorTexCoords = topSuperArmorTexCoords;
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.TopSuperArmor], Room.plateTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.TopSuperArmor], Room.plateTexCoords, rightFacing);
                 }
                 if (armorType == VL.ArmorType.ShieldSuper)
                 {
-                    currentArmorTexCoords = frontSuperArmorTexCoords;
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.FrontSuperArmor], Room.plateTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.FrontSuperArmor], Room.plateTexCoords, rightFacing);
+                }
+            }
+
+            // EYES
+            if (moveType == VL.MovementType.RockBoss)
+            {
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + layer_bossEyes, r.monsterTriangles[(int)MonsterTextureId.BossEyes], Room.plateTexCoords, rightFacing);
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_bossEyes, r.monsterTriangles[(int)MonsterTextureId.BossEyes], Room.plateTexCoords, rightFacing);
+            }
+            else if (moveType != VL.MovementType.ChaseBoss && moveType != VL.MovementType.SnakeBoss && moveType != VL.MovementType.BattleBoss && moveType != VL.MovementType.JetBoss && moveType != VL.MovementType.ArmorBoss)
+            {
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + layer_eyes, r.monsterTriangles[(int)MonsterTextureId.Eyes], Room.plateTexCoords, rightFacing);
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_eyes, r.monsterTriangles[(int)MonsterTextureId.Eyes], Room.plateTexCoords, rightFacing);
+            }
+            else if (moveType == VL.MovementType.SnakeBoss && snakeBoss.chainIndex == 0)
+            {
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment + .021f, r.monsterTriangles[(int)MonsterTextureId.BossEyes], Room.plateTexCoords, rightFacing);
+            }
+
+            // FRONT LEGS
+            if (moveType == VL.MovementType.Tank)
+            {
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase], Room.plateTexCoords, rightFacing);
+            }
+            else if (moveType == VL.MovementType.Spider)
+            {
+                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + .1f, r.monsterTriangles[(int)MonsterTextureId.LegsBase], Room.plateTexCoords, rightFacing);
+            }
+
+
+            // GUN EMPLACEMENTS
+            foreach (GunEmplacement g in guns)
+            {
+                List<Vertex> gunVertexList = new List<Vertex>();
+                gunVertexList.Add(new Vertex(g.position.position, g.position.normal, scale * (g.radius * g.gunNormal), g.position.direction));
+                gunVertexList.Add(new Vertex(g.position.position, g.position.normal, scale * (1.5f * g.radius * g.gunLine + g.radius * g.gunNormal), g.position.direction));
+                gunVertexList.Add(new Vertex(g.position.position, g.position.normal, scale * (1.5f * g.radius * g.gunLine - g.radius * g.gunNormal), g.position.direction));
+                gunVertexList.Add(new Vertex(g.position.position, g.position.normal, scale * (-g.radius * g.gunNormal), g.position.direction));
+
+
+
+                foreach (Vertex v in gunVertexList)
+                {
+                    v.Update(Engine.player.currentRoom, 1);
                 }
 
-                if (currentArmorTexCoords.Count > 0)
+
+                // GUNS
+                if(g.baseType == BaseType.None)
+                    r.AddTextureToTriangleList(gunVertexList, Color.White, depth + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.Gun], Room.plateTexCoords, true);
+                else if (moveType == VL.MovementType.BattleBoss)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, textureTriangleList, currentArmorTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - .001f, textureTriangleList, currentArmorTexCoords, rightFacing);
+                    r.AddTextureToTriangleList(gunVertexList, Color.White, depth + layer_innerGun + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BossGun], Room.plateTexCoords, true);
+                }
+                else if (g.baseType == BaseType.Ice)
+                    r.AddTextureToTriangleList(gunVertexList, Color.White, depth + layer_innerGun + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BossGun], Room.plateTexCoords, true);
+                else if (g.baseType == BaseType.Standard || g.baseType == BaseType.Snow || g.baseType == BaseType.Rock)
+                    r.AddTextureToTriangleList(gunVertexList, Color.White, depth + layer_outerGun + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BossGun], Room.plateTexCoords, true);
+
+                
+                if (g.baseType != BaseType.None)
+                {
+                    List<Vertex> gunBaseVertexList = new List<Vertex>();
+                    gunBaseVertexList.Add(new Vertex(position.position, position.normal, scale * (upUnit * (g.baseRadius - g.positionOffset.Y) + rightUnit * (g.baseRadius + g.positionOffset.X)), g.position.direction));
+                    gunBaseVertexList.Add(new Vertex(position.position, position.normal, scale * (upUnit * (g.baseRadius - g.positionOffset.Y) - rightUnit * (g.baseRadius - g.positionOffset.X)), g.position.direction));
+                    gunBaseVertexList.Add(new Vertex(position.position, position.normal, scale * (-upUnit * (g.baseRadius + g.positionOffset.Y) - rightUnit * (g.baseRadius - g.positionOffset.X)), g.position.direction));
+                    gunBaseVertexList.Add(new Vertex(position.position, position.normal, scale * (-upUnit * (g.baseRadius + g.positionOffset.Y) + rightUnit * (g.baseRadius + g.positionOffset.X)), g.position.direction));
+
+                    foreach (Vertex v in gunBaseVertexList)
+                    {
+                        v.Update(Engine.player.currentRoom, 1);
+                    }
+
+                    // TURRETS
+                    if (g.baseType == BaseType.Rock)
+                    {
+                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + layer_standardTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.RockTurret], Room.plateTexCoords, true);
+                    }
+                    else if (g.baseType == BaseType.Snow)
+                    {
+                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + layer_standardTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.SnowTurret], Room.plateTexCoords, true);
+                    }
+                    else if (g.baseType == BaseType.Ice)
+                    {
+                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + layer_innerTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.IceTurret], Room.plateTexCoords, true);
+                    }
+                    else if (moveType == VL.MovementType.BattleBoss)
+                    {
+                        r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_innerTurretIn + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
+                        r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_innerTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
+                    }
+                    else if (g.baseType == BaseType.Standard)
+                    {
+                        r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_standardTurretIn + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
+                        r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_standardTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
+                    }
                 }
             }
             
-
-            if (moveType != VL.MovementType.ChaseBoss && moveType != VL.MovementType.SnakeBoss && moveType != VL.MovementType.BattleBoss && moveType != VL.MovementType.JetBoss && moveType != VL.MovementType.ArmorBoss)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth +.021f, textureTriangleList, eyesTexCoords, rightFacing);
-            if (moveType == VL.MovementType.SnakeBoss && snakeBoss.chainIndex == 0)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment+.021f, textureTriangleList, eyesTexCoords, rightFacing);
-
-            if(moveType == VL.MovementType.Tank)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth+.1f, textureTriangleList, treadsTexCoords, rightFacing);
-            else if (moveType == VL.MovementType.Spider)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth+.1f, textureTriangleList, spiderTexCoords, rightFacing);
-            else if (moveType == VL.MovementType.Jump)
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth+.1f, textureTriangleList, legsTexCoords, rightFacing);
-
-            
-            VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
+            /*VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);*/
         }
     }
 }

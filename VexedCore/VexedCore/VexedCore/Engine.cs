@@ -231,7 +231,6 @@ namespace VexedCore
         public void DrawScene(bool depthShader)
         {
             Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
-            Game1.graphicsDevice.BlendState = BlendState.Opaque;
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
             //if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector)
@@ -302,19 +301,11 @@ namespace VexedCore
                         spriteVertexArray, 0, spriteVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
-                Game1.graphicsDevice.BlendState = BlendState.Opaque;
+                //Game1.graphicsDevice.BlendState = BlendState.Opaque;
 
                 
-                if (detailTextures)
-                    playerTextureEffect.Texture = Monster.monsterTextureDetail;
-                else
-                    playerTextureEffect.Texture = Monster.monsterTexture;
-                playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                Engine.player.currentRoom.DrawMonsters();
+                
 
-                playerTextureEffect.Texture = Projectile.projectileTexture;
-                playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                Engine.player.currentRoom.DrawProjectiles();
 
                 Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
@@ -323,6 +314,14 @@ namespace VexedCore
                 {                    
                     r.Draw();
                 }
+                foreach (Monster m in Engine.player.currentRoom.monsters)
+                {
+                    if (m.moveType == VL.MovementType.FaceBoss)
+                    {
+                        m.faceBoss.Render();
+                    }
+                }
+
 
                 foreach (Room r in Engine.roomList)
                 {
@@ -330,6 +329,8 @@ namespace VexedCore
                         r.DrawDecorations();
                 }
                 player.currentRoom.DrawDecorations();
+                Engine.player.currentRoom.DrawMonsters();
+                player.currentRoom.DrawProjectiles();
 
                 Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
@@ -340,7 +341,7 @@ namespace VexedCore
                 {
                     if (Room.innerBlockMode > 0)
                     {
-
+                        
                         //if (staticObjectsInitialized == false || (Engine.player.state == State.Jump) || Engine.player.state == State.Tunnel || Engine.player.state == State.Phase || Engine.player.state == State.PhaseFail)
                         {
                             // Sort Triangles

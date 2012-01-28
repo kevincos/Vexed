@@ -21,8 +21,10 @@ namespace VexedCore
         Rebuilding
     }
 
+    
+
     public class FaceBoss
-    {
+    {        
         int armorExplodeTime = 0;
         int armorExplodeMaxTime = 500;
         int timer = 0;
@@ -140,20 +142,22 @@ namespace VexedCore
             up.Normalize();
             Vector3 right = Vector3.Cross(up, outDirection);
             VertexPositionColorNormalTexture[] eyeVertices = new VertexPositionColorNormalTexture[12];
-            eyeVertices[0] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right, Color.White, outDirection, Monster.faceNormalEyesTexCoords[2]);
-            eyeVertices[1] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + .2f * up, Color.White, outDirection, Monster.faceNormalEyesTexCoords[3]);
-            eyeVertices[2] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right + up, Color.White, outDirection, Monster.faceNormalEyesTexCoords[1]);
-            eyeVertices[3] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + .2f * up, Color.White, outDirection, Monster.faceNormalEyesTexCoords[3]);
-            eyeVertices[4] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right + up, Color.White, outDirection, Monster.faceNormalEyesTexCoords[1]);
-            eyeVertices[5] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + up, Color.White, outDirection, Monster.faceNormalEyesTexCoords[0]);
+            eyeVertices[0] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right, Color.White, outDirection, Room.plateTexCoords[2]);
+            eyeVertices[1] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + .2f * up, Color.White, outDirection, Room.plateTexCoords[3]);
+            eyeVertices[2] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right + up, Color.White, outDirection, Room.plateTexCoords[1]);
+            eyeVertices[3] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + .2f * up, Color.White, outDirection, Room.plateTexCoords[3]);
+            eyeVertices[4] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right + up, Color.White, outDirection, Room.plateTexCoords[1]);
+            eyeVertices[5] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + up, Color.White, outDirection, Room.plateTexCoords[0]);
 
-            eyeVertices[6] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 2 * right, Color.White, outDirection, Monster.faceNormalEyesTexCoords[2]);
-            eyeVertices[7] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 1 * right + .2f * up, Color.White, outDirection, Monster.faceNormalEyesTexCoords[3]);
-            eyeVertices[8] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 2f * right + up, Color.White, outDirection, Monster.faceNormalEyesTexCoords[1]);
+            eyeVertices[6] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 2 * right, Color.White, outDirection, Room.plateTexCoords[2]);
+            eyeVertices[7] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 1 * right + .2f * up, Color.White, outDirection, Room.plateTexCoords[3]);
+            eyeVertices[8] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 2f * right + up, Color.White, outDirection, Room.plateTexCoords[1]);
             eyeVertices[9] = eyeVertices[7];
             eyeVertices[10] = eyeVertices[8];
-            eyeVertices[11] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 1f * right + up, Color.White, outDirection, Monster.faceNormalEyesTexCoords[0]);
-            
+            eyeVertices[11] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 1f * right + up, Color.White, outDirection, Room.plateTexCoords[0]);
+
+            Engine.playerTextureEffect.Texture = Monster.monsterTextures[(int)MonsterTextureId.FaceNormalEye];
+            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                 eyeVertices, 0, eyeVertices.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
 
@@ -168,14 +172,17 @@ namespace VexedCore
             up.Normalize();
             Vector3 right = Vector3.Cross(up, outDirection);
             VertexPositionColorNormalTexture[] eyeVertices = new VertexPositionColorNormalTexture[6];
-            eyeVertices[0] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right, Color.White, outDirection, Monster.faceAngryEyesTexCoords[2]);
-            eyeVertices[1] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + .2f * up, Color.White, outDirection, Monster.faceAngryEyesTexCoords[3]);
-            eyeVertices[2] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right + up, Color.White, outDirection, Monster.faceAngryEyesTexCoords[1]);
+            eyeVertices[0] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right, Color.White, outDirection, Room.plateTexCoords[2]);
+            eyeVertices[1] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + .2f * up, Color.White, outDirection, Room.plateTexCoords[3]);
+            eyeVertices[2] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right + up, Color.White, outDirection, Room.plateTexCoords[1]);
 
-            eyeVertices[3] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 2 * right, Color.White, outDirection, Monster.faceAngryEyesTexCoords[2]);
-            eyeVertices[4] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 1 * right + .2f * up, Color.White, outDirection, Monster.faceAngryEyesTexCoords[3]);
-            eyeVertices[5] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 2f * right + up, Color.White, outDirection, Monster.faceAngryEyesTexCoords[1]);
+            eyeVertices[3] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 2 * right, Color.White, outDirection, Room.plateTexCoords[2]);
+            eyeVertices[4] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 1 * right + .2f * up, Color.White, outDirection, Room.plateTexCoords[3]);
+            eyeVertices[5] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 2f * right + up, Color.White, outDirection, Room.plateTexCoords[1]);
 
+            Engine.playerTextureEffect.Texture = Monster.monsterTextures[(int)MonsterTextureId.FaceAngryEye];
+            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                 eyeVertices, 0, eyeVertices.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
             
@@ -219,28 +226,38 @@ namespace VexedCore
 
                     if (armor == true)
                     {                        
-                        vertices[index] = new VertexPositionColorNormalTexture(position1 + offset, Color.White, position1 - Engine.player.currentRoom.center, Monster.facePlateTexCoords[0]);
-                        vertices[index+1] = new VertexPositionColorNormalTexture(position2 + offset, Color.White, position2 - Engine.player.currentRoom.center, Monster.facePlateTexCoords[1]);
-                        vertices[index+2] = new VertexPositionColorNormalTexture(position3 + offset, Color.White, position3 - Engine.player.currentRoom.center, Monster.facePlateTexCoords[3]);
-                        vertices[index+3] = new VertexPositionColorNormalTexture(position2 + offset, Color.White, position2 - Engine.player.currentRoom.center, Monster.facePlateTexCoords[1]);
-                        vertices[index+4] = new VertexPositionColorNormalTexture(position3 + offset, Color.White, position3 - Engine.player.currentRoom.center, Monster.facePlateTexCoords[3]);
-                        vertices[index+5] = new VertexPositionColorNormalTexture(position4 + offset, Color.White, position4 - Engine.player.currentRoom.center, Monster.facePlateTexCoords[2]);
+                        vertices[index] = new VertexPositionColorNormalTexture(position1 + offset, Color.White, position1 - Engine.player.currentRoom.center, Room.plateTexCoords[0]);
+                        vertices[index + 1] = new VertexPositionColorNormalTexture(position2 + offset, Color.White, position2 - Engine.player.currentRoom.center, Room.plateTexCoords[1]);
+                        vertices[index + 2] = new VertexPositionColorNormalTexture(position3 + offset, Color.White, position3 - Engine.player.currentRoom.center, Room.plateTexCoords[3]);
+                        vertices[index + 3] = new VertexPositionColorNormalTexture(position2 + offset, Color.White, position2 - Engine.player.currentRoom.center, Room.plateTexCoords[1]);
+                        vertices[index + 4] = new VertexPositionColorNormalTexture(position3 + offset, Color.White, position3 - Engine.player.currentRoom.center, Room.plateTexCoords[3]);
+                        vertices[index + 5] = new VertexPositionColorNormalTexture(position4 + offset, Color.White, position4 - Engine.player.currentRoom.center, Room.plateTexCoords[2]);
                     }
                     else
                     {
                         Color bodyColor = Color.Red;
                         bodyColor.G = (Byte)(damageCooldown * 255 / damageCooldownMax);
-                        
-                        vertices[index] = new VertexPositionColorNormalTexture(position1, bodyColor, position1 - Engine.player.currentRoom.center, Monster.faceBlankTexCoords[0]);
-                        vertices[index + 1] = new VertexPositionColorNormalTexture(position2, bodyColor, position2 - Engine.player.currentRoom.center, Monster.faceBlankTexCoords[1]);
-                        vertices[index + 2] = new VertexPositionColorNormalTexture(position3, bodyColor, position3 - Engine.player.currentRoom.center, Monster.faceBlankTexCoords[3]);
-                        vertices[index + 3] = new VertexPositionColorNormalTexture(position2, bodyColor, position2 - Engine.player.currentRoom.center, Monster.faceBlankTexCoords[1]);
-                        vertices[index + 4] = new VertexPositionColorNormalTexture(position3, bodyColor, position3 - Engine.player.currentRoom.center, Monster.faceBlankTexCoords[3]);
-                        vertices[index + 5] = new VertexPositionColorNormalTexture(position4, bodyColor, position4 - Engine.player.currentRoom.center, Monster.faceBlankTexCoords[2]);
+
+                        vertices[index] = new VertexPositionColorNormalTexture(position1, bodyColor, position1 - Engine.player.currentRoom.center, Room.plateTexCoords[0]);
+                        vertices[index + 1] = new VertexPositionColorNormalTexture(position2, bodyColor, position2 - Engine.player.currentRoom.center, Room.plateTexCoords[1]);
+                        vertices[index + 2] = new VertexPositionColorNormalTexture(position3, bodyColor, position3 - Engine.player.currentRoom.center, Room.plateTexCoords[3]);
+                        vertices[index + 3] = new VertexPositionColorNormalTexture(position2, bodyColor, position2 - Engine.player.currentRoom.center, Room.plateTexCoords[1]);
+                        vertices[index + 4] = new VertexPositionColorNormalTexture(position3, bodyColor, position3 - Engine.player.currentRoom.center, Room.plateTexCoords[3]);
+                        vertices[index + 5] = new VertexPositionColorNormalTexture(position4, bodyColor, position4 - Engine.player.currentRoom.center, Room.plateTexCoords[2]);
                     }
 
                     index+=6;
                 } 
+            }
+            if (armor == true)
+            {
+                Engine.playerTextureEffect.Texture = Monster.monsterTextures[(int)MonsterTextureId.FacePlate];
+                Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            }
+            else
+            {
+                Engine.playerTextureEffect.Texture = Monster.monsterTextures[(int)MonsterTextureId.FaceWhite];
+                Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
             }
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                vertices, 0, vertices.Count()/3, VertexPositionColorNormalTexture.VertexDeclaration);
