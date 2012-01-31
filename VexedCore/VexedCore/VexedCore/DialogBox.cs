@@ -17,10 +17,24 @@ namespace VexedCore
 {
 
 
+    public enum SpeakerId
+    {
+        OldMan,
+        ChaseBoss,
+        ArmorBoss,
+        System,
+        IceSnake,
+        SnowMan,
+        JetBoss,
+        FireBoss,
+        CommandBoss,
+        FinalBoss
+    }
+
     public class DialogChunk
     {
         public String id;
-        public String speaker;
+        public SpeakerId speaker;
         public List<String> textList;
         public bool pause;
 
@@ -29,7 +43,7 @@ namespace VexedCore
         {
         }
 
-        public DialogChunk(String id, String speaker, String text)
+        public DialogChunk(String id, SpeakerId speaker, String text)
         {
             this.id = id;
             this.speaker = speaker;
@@ -38,6 +52,8 @@ namespace VexedCore
             this.textList.Add("EXTRATEXT");
         }
     }
+
+
 
     public class DialogBox
     {
@@ -51,6 +67,7 @@ namespace VexedCore
         public static int stage = 0;
         public string dialogId = "Default";
         public static int maxLifeTime = 2000;
+        public int portraitIndex = 0;
 
         public static DialogChunk currentDialog;
 
@@ -71,29 +88,7 @@ namespace VexedCore
             {
                 Engine.spriteBatch.Draw(box, Vector2.Zero, Color.White);
 
-                int portraitIndex = 0;
-                if (currentDialog.speaker == "OldMan")
-                    portraitIndex = 0;
-                else if (currentDialog.speaker == "ChaseBoss")
-                    portraitIndex = 1;
-                else if (currentDialog.speaker == "ArmorBoss")
-                    portraitIndex = 2;
-                else if (currentDialog.speaker == "System")
-                    portraitIndex = 3;
-                else if (currentDialog.speaker == "IceSnake")
-                    portraitIndex = 4;
-                else if (currentDialog.speaker == "SnowMan")
-                    portraitIndex = 5;
-                else if (currentDialog.speaker == "JetBoss")
-                    portraitIndex = 6;
-                else if (currentDialog.speaker == "FireMan")
-                    portraitIndex = 7;
-                else if (currentDialog.speaker == "CommandBoss")
-                    portraitIndex = 8;
-                else if (currentDialog.speaker == "FinalBoss")
-                    portraitIndex = 9;
-                else
-                    portraitIndex = 0;
+                int portraitIndex = (int)currentDialog.speaker;
                 Engine.spriteBatch.Draw(portraits, new Rectangle(0,0,64,64), new Rectangle((portraitIndex % 8) * 64, (portraitIndex / 8) * 64, 64, 64), Color.White);
 
 
@@ -153,6 +148,19 @@ namespace VexedCore
             stage = 0;
             lifeTime = 0;
             
+        }
+
+        public static SpeakerId GetSpeaker(String id)
+        {
+            foreach (DialogChunk chunk in dialogLibrary)
+            {
+                if (chunk.id == id)
+                {
+                    return chunk.speaker;
+                }
+            }
+            return SpeakerId.OldMan;
+
         }
 
         public void Draw()

@@ -39,6 +39,7 @@ namespace VexedCore
         TopArmorBack,
         FrontArmorBack,
         LegsBase,
+        Legs1,
         Legs2,
         Legs3,
         Legs4,
@@ -81,7 +82,7 @@ namespace VexedCore
 
     public class Monster
     {
-        public static int textureCount = 49;
+        public static int textureCount = 50;
         
 
         public static Texture2D monsterTexture;
@@ -168,6 +169,10 @@ namespace VexedCore
         public int deathTime = maxDeathTime;
         public MonsterState state = MonsterState.Spawn;
         public ArmorState armorState = ArmorState.Normal;
+
+        public static int maxWalkAnimationTime = 300;
+        public int walkAnimationTime = 0;
+        public bool walking = false;
 
             
         [XmlIgnore]public Monster srcMonster;
@@ -287,10 +292,11 @@ namespace VexedCore
             monsterTextures[(int)MonsterTextureId.IceSnakeCrack2] = content.Load<Texture2D>("MonsterParts\\iceSnakeCrack2");
             monsterTextures[(int)MonsterTextureId.IceTurret] = content.Load<Texture2D>("MonsterParts\\iceTurret");
             monsterTextures[(int)MonsterTextureId.Jet] = content.Load<Texture2D>("MonsterParts\\jet");
+            monsterTextures[(int)MonsterTextureId.Legs1] = content.Load<Texture2D>("MonsterParts\\legs1");
             monsterTextures[(int)MonsterTextureId.Legs2] = content.Load<Texture2D>("MonsterParts\\legs2");
             monsterTextures[(int)MonsterTextureId.Legs3] = content.Load<Texture2D>("MonsterParts\\legs3");
             monsterTextures[(int)MonsterTextureId.Legs4] = content.Load<Texture2D>("MonsterParts\\legs4");
-            monsterTextures[(int)MonsterTextureId.LegsBase] = content.Load<Texture2D>("MonsterParts\\legs1");
+            monsterTextures[(int)MonsterTextureId.LegsBase] = content.Load<Texture2D>("MonsterParts\\legsBase");
             monsterTextures[(int)MonsterTextureId.RockCracked] = content.Load<Texture2D>("MonsterParts\\rockCracked");
             monsterTextures[(int)MonsterTextureId.RockCrackedBreak] = content.Load<Texture2D>("MonsterParts\\rockCrackedBreak");
             monsterTextures[(int)MonsterTextureId.RockNormal] = content.Load<Texture2D>("MonsterParts\\rockNormal");
@@ -936,6 +942,17 @@ namespace VexedCore
                 if (spawnTime > maxSpawnTime)
                     state = MonsterState.Normal;
                 return;
+            }
+            if (position.velocity.Length() >= .001f && groundProjection != Vector3.Zero)
+            {                
+                walking = true;
+                walkAnimationTime += gameTime;
+                if (walkAnimationTime >= maxWalkAnimationTime)
+                    walkAnimationTime = 0;
+            }
+            else
+            {
+                walking = false;
             }
 
             if (moveType == VL.MovementType.SnakeBoss)
@@ -1689,16 +1706,33 @@ namespace VexedCore
                 bossAdjustment = .02f;
 
             
-
+            // FRONT LEGS
             if (moveType == VL.MovementType.Tank)
             {
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_legs, r.monsterTriangles[(int)MonsterTextureId.TreadsBase], Room.plateTexCoords, rightFacing);
+                if (walking == false)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase], Room.plateTexCoords, rightFacing);
+                else
+                {
+                    int walkIndex = 4 * walkAnimationTime / maxWalkAnimationTime;
+                    walkIndex = (4 - walkIndex) % 4;
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase + walkIndex], Room.plateTexCoords, rightFacing);
+                }
             }
             else if (moveType == VL.MovementType.Spider)
             {
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_legs, r.monsterTriangles[(int)MonsterTextureId.LegsBase], Room.plateTexCoords, rightFacing);
+                if (walking == false)
+                {
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_legs, r.monsterTriangles[(int)MonsterTextureId.LegsBase], Room.plateTexCoords, rightFacing);
+                }
+                else
+                {
+                    int walkIndex = 4* walkAnimationTime / maxWalkAnimationTime;
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_legs, r.monsterTriangles[(int)MonsterTextureId.Legs1 + walkIndex], Room.plateTexCoords, rightFacing);
+                }
             }
 
+
+            // BODY
             if (moveType == VL.MovementType.SnakeBoss)
             {
                 r.AddTextureToTriangleList(rectVertexList, monsterColor, depth + layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.SnakeBody], Room.plateTexCoords, rightFacing);
@@ -1710,6 +1744,7 @@ namespace VexedCore
                 r.AddTextureToTriangleList(rectVertexList, monsterColor, depth - layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BasicBody], Room.plateTexCoords, rightFacing);
             }
 
+            // FLASH
             if (flashCooldown != 0)
             {
                 Color flashColor = new Color(255, 255, 0, (Byte)(flashCooldown / maxFlashCooldown));
@@ -1849,11 +1884,28 @@ namespace VexedCore
             // FRONT LEGS
             if (moveType == VL.MovementType.Tank)
             {
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase], Room.plateTexCoords, rightFacing);
+                if (walking == false)
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth + .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase], Room.plateTexCoords, rightFacing);
+                else
+                {
+                    int walkIndex = 4 * walkAnimationTime / maxWalkAnimationTime;
+                    walkIndex = (4-walkIndex)%4;
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth + .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase + walkIndex], Room.plateTexCoords, rightFacing);
+                }
             }
             else if (moveType == VL.MovementType.Spider)
             {
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + .1f, r.monsterTriangles[(int)MonsterTextureId.LegsBase], Room.plateTexCoords, rightFacing);
+                if (walking == false)
+                {
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth + layer_legs, r.monsterTriangles[(int)MonsterTextureId.LegsBase], Room.plateTexCoords, rightFacing);
+                }
+                else
+                {
+                    int walkIndex = 4 * walkAnimationTime / maxWalkAnimationTime;
+                    walkIndex += 2;
+                    walkIndex %= 4;
+                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth + layer_legs, r.monsterTriangles[(int)MonsterTextureId.Legs1 + walkIndex], Room.plateTexCoords, rightFacing);
+                }
             }
 
 

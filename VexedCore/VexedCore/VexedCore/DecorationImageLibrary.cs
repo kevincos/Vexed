@@ -20,12 +20,21 @@ namespace VexedCore
         public List<Texture2D> texture;
         public int frameCount = 1;
         public bool forceSpin = false;
+        public bool hologram = false;
 
         public DecorationTexture(string fileName, ContentManager Content)
         {
             this.fileName = fileName;
             this.texture = new List<Texture2D>();
-            texture.Add(Content.Load<Texture2D>(fileName));
+            texture.Add(Content.Load<Texture2D>("Decorations\\"+fileName));
+        }
+
+        public DecorationTexture(string fileName, ContentManager Content, bool hologram)
+        {
+            this.fileName = fileName;
+            this.texture = new List<Texture2D>();
+            texture.Add(Content.Load<Texture2D>("Decorations\\" + fileName));
+            this.hologram = hologram;
         }
 
         public DecorationTexture(string fileName, ContentManager Content, int frameCount)
@@ -35,7 +44,7 @@ namespace VexedCore
             this.texture = new List<Texture2D>();
             for (int i = 0; i < frameCount; i++)
             {
-                texture.Add(Content.Load<Texture2D>(fileName+"_"+i));
+                texture.Add(Content.Load<Texture2D>("Decorations\\" + fileName + "_" + i));
             }
         }
 
@@ -47,7 +56,7 @@ namespace VexedCore
             this.texture = new List<Texture2D>();
             for (int i = 0; i < frameCount; i++)
             {
-                texture.Add(Content.Load<Texture2D>(fileName + "_" + i));
+                texture.Add(Content.Load<Texture2D>("Decorations\\" + fileName + "_" + i));
             }
         }
     }
@@ -107,6 +116,8 @@ namespace VexedCore
             textureLibrary.Add(new DecorationTexture("dec_shortcargo", Content));
             textureLibrary.Add(new DecorationTexture("dec_starship", Content));
             textureLibrary.Add(new DecorationTexture("dec_damagedstarship", Content));
+            textureLibrary.Add(new DecorationTexture("holoprojector", Content));
+            textureLibrary.Add(new DecorationTexture("hologram_oldman", Content, true));
             textureLibrary.Add(new DecorationTexture("dec_clasp", Content));
             textureLibrary.Add(new DecorationTexture("dec_snowman", Content));
             textureLibrary.Add(new DecorationTexture("dec_gear", Content, 4));

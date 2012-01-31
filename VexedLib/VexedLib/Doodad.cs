@@ -37,7 +37,7 @@ namespace VL
         StationIcon = 26,
         LeftDoor = 27,
         RightDoor = 28,
-        NPC_OldMan = 29,
+        Holoprojector = 29,
         TunnelSide = 30,
         TunnelTop = 31,
         LeftTunnelDoor = 32,
@@ -55,7 +55,8 @@ namespace VL
         BluePowerStation = 44,
         RingTop = 45,
         RingSide = 46,
-        HealthStation = 47
+        HealthStation = 47,
+        HologramOldMan = 48
     }
 
     public enum AbilityType

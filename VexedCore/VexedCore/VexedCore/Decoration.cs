@@ -32,6 +32,7 @@ namespace VexedCore
         public bool freeSpin = false;
         public int spinTargetFrame = 0;
         public bool reverseAnimation = false;
+        public bool isHologram = false;
 
         public List<Texture2D> decorationTexture;
         public static Texture2D defaultTexture;
@@ -64,6 +65,7 @@ namespace VexedCore
             freeSpin = d.freeSpin;
             frame = d.frame;
             reverseAnimation = d.reverseAnimation;
+            isHologram = d.isHologram;
             
         }
 
@@ -112,6 +114,7 @@ namespace VexedCore
                     if (imageData.forceSpin)
                         freeSpin = true;
                     maxFrame = decorationTexture.Count;
+                    isHologram = imageData.hologram;
                 }
             }
         }
@@ -211,10 +214,21 @@ namespace VexedCore
 
         public void UpdateVertexData(Room currentRoom)
         {
-            if (decalList == null || Engine.staticDoodadsInitialized == false || dynamic == true || refreshVertexData == true)
+            if (decalList == null || Engine.staticDoodadsInitialized == false || dynamic == true || refreshVertexData == true || isHologram == true)
             {
                 refreshVertexData = false;
                 decalList = new List<VertexPositionColorNormalTexture>();
+
+                if (isHologram)
+                {
+                    float distance = (Engine.player.center.position - position.position).Length();
+                    color = Color.White;
+                    if (distance > 3f)
+                    {
+                        triangleArray = null;
+                        return;
+                    }
+                }
 
                 List<Vertex> vList = new List<Vertex>();
                 vList.Add(new Vertex(position, up + right));
@@ -308,14 +322,17 @@ namespace VexedCore
             if (shouldRender == true)
             {
                 UpdateVertexData(currentRoom);
-                
-                if (decorationTexture != null)
-                    Engine.playerTextureEffect.Texture = decorationTexture[frame];
-                else
-                    Engine.playerTextureEffect.Texture = defaultTexture;
-                Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                    triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+
+                if (triangleArray != null)
+                {
+                    if (decorationTexture != null)
+                        Engine.playerTextureEffect.Texture = decorationTexture[frame];
+                    else
+                        Engine.playerTextureEffect.Texture = defaultTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
 
             }
         }

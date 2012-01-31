@@ -40,7 +40,8 @@ namespace VexedCore
         WallLeftFiring = 23,
         FlyRightFiring = 24,
         FlyLeftFiring = 25,
-        JumpPad = 26
+        JumpPad = 26,
+        Phase = 27
     }
 
     public class AnimationData
@@ -64,11 +65,11 @@ namespace VexedCore
         {
             animationFrameQueue = new List<int>();
             animationData = new List<AnimationData>();
-            for (int i = 0; i < 27; i++)
+            for (int i = 0; i < 28; i++)
             {
                 animationData.Add(new AnimationData());
             }
-            for (int i = 0; i < 27; i++)
+            for (int i = 0; i < 28; i++)
             {
                 animationData[i].animation_base = 0;
                 animationData[i].animation_count = 4;
@@ -116,6 +117,9 @@ namespace VexedCore
             animationData[(int)AnimationState.FlyRightFiring].animation_count = 1;
             animationData[(int)AnimationState.FlyLeftFiring].animation_base = 43;
             animationData[(int)AnimationState.FlyLeftFiring].animation_count = 1;
+            animationData[(int)AnimationState.Phase].animation_base = 56;
+            animationData[(int)AnimationState.Phase].animation_count = 2;
+            
         }
 
         public static void SetState(AnimationState newState)

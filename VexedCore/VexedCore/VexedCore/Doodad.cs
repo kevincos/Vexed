@@ -84,6 +84,7 @@ namespace VexedCore
         public bool available = true;
         public bool tracking = false;
 
+        public SpeakerId speaker = SpeakerId.OldMan;
         public bool refreshVertexData = false;
         public string id = "";
         public string targetBehavior ="";
@@ -116,6 +117,11 @@ namespace VexedCore
         public bool idle = false;
         public bool doorState = false;
 
+        public int hologramTargetFade = 0;
+        public int hologramFade = 0;
+        public bool hologramOn = false;
+        public static int hologramMaxFade = 100;
+
         public int animationFrame = 0;
         public int animationTime = 0;
 
@@ -142,6 +148,8 @@ namespace VexedCore
         public static List<Texture2D> electric_beam_textures;
         public static List<List<Vector2>> texCoordList;
         public static List<Vector2> beamTexCoords;
+        public static Texture2D hologram_oldMan;
+        public static Texture2D hologram_finalBoss;
 
         public static List<Texture2D> decalTextures;
 
@@ -181,64 +189,64 @@ namespace VexedCore
             {
                 decalTextures.Add(null);
             }
-            decalTextures[(int)Decal.Save] = Content.Load<Texture2D>("decal_save");
-            decalTextures[(int)Decal.Health] = Content.Load<Texture2D>("decal_health");
-            decalTextures[(int)Decal.BlueKey] = Content.Load<Texture2D>("decal_bluekey");
-            decalTextures[(int)Decal.BlueLock] = Content.Load<Texture2D>("decal_bluelock");
-            decalTextures[(int)Decal.Booster] = Content.Load<Texture2D>("decal_booster");
-            decalTextures[(int)Decal.Boots] = Content.Load<Texture2D>("decal_boots");
-            decalTextures[(int)Decal.Cherry] = Content.Load<Texture2D>("decal_cherry");
-            decalTextures[(int)Decal.DoubleJump] = Content.Load<Texture2D>("decal_doublejump");
-            decalTextures[(int)Decal.HookTarget] = Content.Load<Texture2D>("decal_hooktarget");
-            decalTextures[(int)Decal.ImprovedJump] = Content.Load<Texture2D>("decal_improvedjump");
-            decalTextures[(int)Decal.JetPack] = Content.Load<Texture2D>("decal_jetpack");
-            decalTextures[(int)Decal.JumpPad] = Content.Load<Texture2D>("decal_jump");
-            decalTextures[(int)Decal.Laser] = Content.Load<Texture2D>("decal_laser");
-            decalTextures[(int)Decal.LaserSwitch] = Content.Load<Texture2D>("decal_laserswitch");
-            decalTextures[(int)Decal.Missile] = Content.Load<Texture2D>("decal_missile");
-            decalTextures[(int)Decal.Onion] = Content.Load<Texture2D>("decal_onion");
-            decalTextures[(int)Decal.BlueCodes] = Content.Load<Texture2D>("decal_permanantbluekey");
-            decalTextures[(int)Decal.PermanantBoots] = Content.Load<Texture2D>("decal_permanantboots");
-            decalTextures[(int)Decal.RedCodes] = Content.Load<Texture2D>("decal_permanantredkey");
-            decalTextures[(int)Decal.PermanantWallJump] = Content.Load<Texture2D>("decal_permanantwalljump");
-            decalTextures[(int)Decal.YellowCodes] = Content.Load<Texture2D>("decal_permanantyellowkey");
-            decalTextures[(int)Decal.Phase] = Content.Load<Texture2D>("decal_phase");
-            decalTextures[(int)Decal.Blaster] = Content.Load<Texture2D>("decal_plasma");
-            decalTextures[(int)Decal.PlugSlot] = Content.Load<Texture2D>("decal_plugslot");
-            decalTextures[(int)Decal.PowerOrb_0] = Content.Load<Texture2D>("decal_powerorb_0");
-            decalTextures[(int)Decal.PowerOrb_1] = Content.Load<Texture2D>("decal_powerorb_1");
-            decalTextures[(int)Decal.PowerOrb_2] = Content.Load<Texture2D>("decal_powerorb_2");
-            decalTextures[(int)Decal.PowerOrb_3] = Content.Load<Texture2D>("decal_powerorb_3");
-            decalTextures[(int)Decal.PowerOrb_4] = Content.Load<Texture2D>("decal_powerorb_4");
-            decalTextures[(int)Decal.PowerOrb_5] = Content.Load<Texture2D>("decal_powerorb_5");
-            decalTextures[(int)Decal.PowerOrb_6] = Content.Load<Texture2D>("decal_powerorb_6");
-            decalTextures[(int)Decal.PowerOrb_7] = Content.Load<Texture2D>("decal_powerorb_7");
-            decalTextures[(int)Decal.PowerOrb_8] = Content.Load<Texture2D>("decal_powerorb_8");
-            decalTextures[(int)Decal.PowerOrb_9] = Content.Load<Texture2D>("decal_powerorb_9");
-            decalTextures[(int)Decal.PowerOrb_10] = Content.Load<Texture2D>("decal_powerorb_10");
-            decalTextures[(int)Decal.PowerPlug] = Content.Load<Texture2D>("decal_powerplug");
-            decalTextures[(int)Decal.RainDrop] = Content.Load<Texture2D>("decal_raindrop");
-            decalTextures[(int)Decal.RedKey] = Content.Load<Texture2D>("decal_redkey");
-            decalTextures[(int)Decal.RedLock] = Content.Load<Texture2D>("decal_redlock");
-            decalTextures[(int)Decal.Station] = Content.Load<Texture2D>("decal_station");
-            decalTextures[(int)Decal.WallJump] = Content.Load<Texture2D>("decal_walljump");
-            decalTextures[(int)Decal.Warp] = Content.Load<Texture2D>("decal_warp");
-            decalTextures[(int)Decal.YellowKey] = Content.Load<Texture2D>("decal_yellowkey");
-            decalTextures[(int)Decal.YellowLock] = Content.Load<Texture2D>("decal_yellowlock");
-            decalTextures[(int)Decal.Lander] = Content.Load<Texture2D>("decal_lander");
-            decalTextures[(int)Decal.Skull] = Content.Load<Texture2D>("decal_skull");
-            decalTextures[(int)Decal.Switch] = Content.Load<Texture2D>("decal_switch");
-            decalTextures[(int)Decal.Empty] = Content.Load<Texture2D>("decal_empty");    
+            decalTextures[(int)Decal.Save] = Content.Load<Texture2D>("Decals\\decal_save");
+            decalTextures[(int)Decal.Health] = Content.Load<Texture2D>("Decals\\decal_health");
+            decalTextures[(int)Decal.BlueKey] = Content.Load<Texture2D>("Decals\\decal_bluekey");
+            decalTextures[(int)Decal.BlueLock] = Content.Load<Texture2D>("Decals\\decal_bluelock");
+            decalTextures[(int)Decal.Booster] = Content.Load<Texture2D>("Decals\\decal_booster");
+            decalTextures[(int)Decal.Boots] = Content.Load<Texture2D>("Decals\\decal_boots");
+            decalTextures[(int)Decal.Cherry] = Content.Load<Texture2D>("Decals\\decal_cherry");
+            decalTextures[(int)Decal.DoubleJump] = Content.Load<Texture2D>("Decals\\decal_doublejump");
+            decalTextures[(int)Decal.HookTarget] = Content.Load<Texture2D>("Decals\\decal_hooktarget");
+            decalTextures[(int)Decal.ImprovedJump] = Content.Load<Texture2D>("Decals\\decal_improvedjump");
+            decalTextures[(int)Decal.JetPack] = Content.Load<Texture2D>("Decals\\decal_jetpack");
+            decalTextures[(int)Decal.JumpPad] = Content.Load<Texture2D>("Decals\\decal_jump");
+            decalTextures[(int)Decal.Laser] = Content.Load<Texture2D>("Decals\\decal_laser");
+            decalTextures[(int)Decal.LaserSwitch] = Content.Load<Texture2D>("Decals\\decal_laserswitch");
+            decalTextures[(int)Decal.Missile] = Content.Load<Texture2D>("Decals\\decal_missile");
+            decalTextures[(int)Decal.Onion] = Content.Load<Texture2D>("Decals\\decal_onion");
+            decalTextures[(int)Decal.BlueCodes] = Content.Load<Texture2D>("Decals\\decal_permanantbluekey");
+            decalTextures[(int)Decal.PermanantBoots] = Content.Load<Texture2D>("Decals\\decal_permanantboots");
+            decalTextures[(int)Decal.RedCodes] = Content.Load<Texture2D>("Decals\\decal_permanantredkey");
+            decalTextures[(int)Decal.PermanantWallJump] = Content.Load<Texture2D>("Decals\\decal_permanantwalljump");
+            decalTextures[(int)Decal.YellowCodes] = Content.Load<Texture2D>("Decals\\decal_permanantyellowkey");
+            decalTextures[(int)Decal.Phase] = Content.Load<Texture2D>("Decals\\decal_phase");
+            decalTextures[(int)Decal.Blaster] = Content.Load<Texture2D>("Decals\\decal_plasma");
+            decalTextures[(int)Decal.PlugSlot] = Content.Load<Texture2D>("Decals\\decal_plugslot");
+            decalTextures[(int)Decal.PowerOrb_0] = Content.Load<Texture2D>("Decals\\decal_powerorb_0");
+            decalTextures[(int)Decal.PowerOrb_1] = Content.Load<Texture2D>("Decals\\decal_powerorb_1");
+            decalTextures[(int)Decal.PowerOrb_2] = Content.Load<Texture2D>("Decals\\decal_powerorb_2");
+            decalTextures[(int)Decal.PowerOrb_3] = Content.Load<Texture2D>("Decals\\decal_powerorb_3");
+            decalTextures[(int)Decal.PowerOrb_4] = Content.Load<Texture2D>("Decals\\decal_powerorb_4");
+            decalTextures[(int)Decal.PowerOrb_5] = Content.Load<Texture2D>("Decals\\decal_powerorb_5");
+            decalTextures[(int)Decal.PowerOrb_6] = Content.Load<Texture2D>("Decals\\decal_powerorb_6");
+            decalTextures[(int)Decal.PowerOrb_7] = Content.Load<Texture2D>("Decals\\decal_powerorb_7");
+            decalTextures[(int)Decal.PowerOrb_8] = Content.Load<Texture2D>("Decals\\decal_powerorb_8");
+            decalTextures[(int)Decal.PowerOrb_9] = Content.Load<Texture2D>("Decals\\decal_powerorb_9");
+            decalTextures[(int)Decal.PowerOrb_10] = Content.Load<Texture2D>("Decals\\decal_powerorb_10");
+            decalTextures[(int)Decal.PowerPlug] = Content.Load<Texture2D>("Decals\\decal_powerplug");
+            decalTextures[(int)Decal.RainDrop] = Content.Load<Texture2D>("Decals\\decal_raindrop");
+            decalTextures[(int)Decal.RedKey] = Content.Load<Texture2D>("Decals\\decal_redkey");
+            decalTextures[(int)Decal.RedLock] = Content.Load<Texture2D>("Decals\\decal_redlock");
+            decalTextures[(int)Decal.Station] = Content.Load<Texture2D>("Decals\\decal_station");
+            decalTextures[(int)Decal.WallJump] = Content.Load<Texture2D>("Decals\\decal_walljump");
+            decalTextures[(int)Decal.Warp] = Content.Load<Texture2D>("Decals\\decal_warp");
+            decalTextures[(int)Decal.YellowKey] = Content.Load<Texture2D>("Decals\\decal_yellowkey");
+            decalTextures[(int)Decal.YellowLock] = Content.Load<Texture2D>("Decals\\decal_yellowlock");
+            decalTextures[(int)Decal.Lander] = Content.Load<Texture2D>("Decals\\decal_lander");
+            decalTextures[(int)Decal.Skull] = Content.Load<Texture2D>("Decals\\decal_skull");
+            decalTextures[(int)Decal.Switch] = Content.Load<Texture2D>("Decals\\decal_switch");
+            decalTextures[(int)Decal.Empty] = Content.Load<Texture2D>("Decals\\decal_empty");    
         }
 
         public static void InitBeamTextures(ContentManager Content)
         {
             flame_beam_textures = new List<Texture2D>();
             electric_beam_textures = new List<Texture2D>();
-            flame_beam_textures.Add(Content.Load<Texture2D>("beam_flame_0"));
-            flame_beam_textures.Add(Content.Load<Texture2D>("beam_flame_1"));
-            electric_beam_textures.Add(Content.Load<Texture2D>("beam_electric_0"));
-            electric_beam_textures.Add(Content.Load<Texture2D>("beam_electric_1"));
+            flame_beam_textures.Add(Content.Load<Texture2D>("Decorations\\beam_flame_0"));
+            flame_beam_textures.Add(Content.Load<Texture2D>("Decorations\\beam_flame_1"));
+            electric_beam_textures.Add(Content.Load<Texture2D>("Decorations\\beam_electric_0"));
+            electric_beam_textures.Add(Content.Load<Texture2D>("Decorations\\beam_electric_1"));
             beamTexCoords = new List<Vector2>();
             beamTexCoords.Add(new Vector2(.75f, 0));
             beamTexCoords.Add(new Vector2(.25f, 0));
@@ -280,7 +288,7 @@ namespace VexedCore
             originalAbilityType = d.originalAbilityType;
             cooldown = d.cooldown;
             activationCost = d.activationCost;
-
+            speaker = d.speaker;
             targetDoodadId = d.targetDoodadId;
             if(d.targetDoodad != null)
                 targetDoodadId = d.targetDoodad.id;
@@ -848,7 +856,7 @@ namespace VexedCore
                     return .75f;
                 if (type == VL.DoodadType.Vortex)
                     return 1.3f;
-                if (type == VL.DoodadType.NPC_OldMan)
+                if (type == VL.DoodadType.Holoprojector)
                     return 1f;
                 if (type == VL.DoodadType.Checkpoint)
                     return 2f;
@@ -882,7 +890,7 @@ namespace VexedCore
                     return false;
                 if (type == VL.DoodadType.Beam || type == VL.DoodadType.LaserSwitch)
                     return false;
-                if (type == VL.DoodadType.NPC_OldMan || type == VL.DoodadType.HookTarget)
+                if (type == VL.DoodadType.Holoprojector || type == VL.DoodadType.HologramOldMan || type == VL.DoodadType.HookTarget)
                     return false;
                 if (type == VL.DoodadType.RightTunnelDoor || type == VL.DoodadType.LeftTunnelDoor || type == VL.DoodadType.RightDoor || type == VL.DoodadType.LeftDoor || type == VL.DoodadType.StationIcon || type == VL.DoodadType.TunnelTop || type == VL.DoodadType.TunnelSide || type == VL.DoodadType.RingSide || type == VL.DoodadType.RingTop)
                     return false;
@@ -1009,6 +1017,10 @@ namespace VexedCore
                 {
                     return -.3f - stateTransition * .2f;
                 }
+                if (type == VL.DoodadType.HologramOldMan)
+                {
+                    return -.5f + 2 * halfHeight;
+                }
                 return halfHeight;
             }
         }
@@ -1019,6 +1031,10 @@ namespace VexedCore
                 if (type == VL.DoodadType.Beam)
                 {
                     return -.3f;
+                }
+                if (type == VL.DoodadType.HologramOldMan)
+                {
+                    return -.5f;
                 }
                 return -halfHeight;
             }
@@ -1094,6 +1110,8 @@ namespace VexedCore
                     return .7f;
                 if (type == VL.DoodadType.LeftDoor || type == VL.DoodadType.RightDoor)
                     return .3f;
+                if (type == VL.DoodadType.HologramOldMan)
+                    return 1f;
                 if (type == VL.DoodadType.StationIcon)
                     return .4f;
                 if (type == VL.DoodadType.BridgeGate)
@@ -1121,6 +1139,8 @@ namespace VexedCore
             {
                 if (type == VL.DoodadType.LeftTunnelDoor || type == VL.DoodadType.RightTunnelDoor)
                     return .7f;
+                if (type == VL.DoodadType.HologramOldMan)
+                    return 1f;
                 if (type == VL.DoodadType.TunnelTop ||type == VL.DoodadType.RingTop)
                     return .1f;
                 if (type == VL.DoodadType.TunnelSide || type == VL.DoodadType.RingSide)
@@ -1150,8 +1170,8 @@ namespace VexedCore
                     return .02f;
                 if (type == VL.DoodadType.TunnelTop || type == VL.DoodadType.TunnelSide || type == VL.DoodadType.RingSide || type == VL.DoodadType.RingTop)
                     return .1f;
-                if (type == VL.DoodadType.NPC_OldMan)
-                    return 0f;
+                if (type == VL.DoodadType.HologramOldMan)
+                    return .1f;
                 if (type == VL.DoodadType.LeftDoor || type == VL.DoodadType.RightDoor)
                     return .15f;
                 if (type == VL.DoodadType.StationIcon)
@@ -1363,7 +1383,7 @@ namespace VexedCore
                         }
 
                     }
-                    else if ((isStation == true && type != VL.DoodadType.ItemStation) || type == VL.DoodadType.NPC_OldMan || type == VL.DoodadType.Vortex)
+                    else if ((isStation == true && type != VL.DoodadType.ItemStation) || type == VL.DoodadType.Holoprojector || type == VL.DoodadType.Vortex)
                     {
                         float size = ((float)(helpIconTime)) / helpIconMaxTime;
                         List<Vertex> BButtonList = new List<Vertex>();
@@ -1513,7 +1533,7 @@ namespace VexedCore
                     
                     
                 }
-                else if (type != VL.DoodadType.NPC_OldMan && type != VL.DoodadType.Beam && type != VL.DoodadType.PowerPlug)
+                else if (type != VL.DoodadType.Holoprojector && type != VL.DoodadType.HologramOldMan && type != VL.DoodadType.Beam && type != VL.DoodadType.PowerPlug)
                 {
                     if (active && type != VL.DoodadType.LaserSwitch)
                     {
@@ -1595,9 +1615,18 @@ namespace VexedCore
                     currentRoom.AddBlockFrontToTriangleList(vList, iconColor, depth + .01f, Room.plateTexCoords, decalList, true);
                 }
 
-                if (type == VL.DoodadType.NPC_OldMan)
+                if (type == VL.DoodadType.HologramOldMan)
                 {
-                    currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Ability.texCoordList[36], spriteList, true);
+                    if(hologramFade > 0)
+                    {
+                        Color hologram = Color.White;
+                        
+                        hologram.A = (Byte)(hologramFade * 255f / hologramMaxFade);
+                        hologram.B = (Byte)(hologramFade * 255f / hologramMaxFade);
+                        hologram.G = (Byte)(hologramFade * 255f / hologramMaxFade);
+                        hologram.R = (Byte)(hologramFade * 255f / hologramMaxFade);
+                        currentRoom.AddBlockFrontToTriangleList(vList, hologram, depth + .01f, Room.plateTexCoords, spriteList, true);
+                    }
                 }
                 if (type == VL.DoodadType.Beam)
                 {
@@ -1655,7 +1684,14 @@ namespace VexedCore
 
                 if (spriteList.Count > 0)
                 {
-                    Engine.playerTextureEffect.Texture = Ability.ability_textures;
+                    if (speaker == SpeakerId.FinalBoss)
+                    {
+                        Engine.playerTextureEffect.Texture = Doodad.hologram_finalBoss;
+                    }
+                    else
+                    {
+                        Engine.playerTextureEffect.Texture = Doodad.hologram_oldMan;
+                    }
                     Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         spriteArray, 0, spriteList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
@@ -1726,7 +1762,7 @@ namespace VexedCore
                 if (flashTime > maxFlashTime)
                     flashTime = 0;
             }
-            if (type == VL.DoodadType.NPC_OldMan || isStation == true)
+            if (type == VL.DoodadType.Holoprojector || isStation == true)
             {
                 if (helpIconTime != 0 && helpIconTime != helpIconMaxTime)
                     refreshVertexData = true;
@@ -1740,6 +1776,50 @@ namespace VexedCore
                     helpIconTime += gameTime;
                     if (helpIconTime > helpIconMaxTime) helpIconTime = helpIconMaxTime;
                     
+                }
+            }
+            if (type == VL.DoodadType.HologramOldMan)
+            {
+                bool oldOn = hologramOn;
+                if (hologramTargetFade == hologramMaxFade)
+                {
+                    hologramFade += gameTime;
+                    if (hologramFade > hologramMaxFade)
+                        hologramFade = hologramMaxFade;
+                }
+                else
+                {
+                    hologramFade -= gameTime;
+                    if (hologramFade < 0)
+                        hologramFade = 0;
+                }
+                float distance = (Engine.player.center.position - position.position).Length();
+                if (distance < 1)
+                {
+                    hologramTargetFade = hologramMaxFade;
+                }
+                else if (distance > 2)
+                {
+                    hologramTargetFade = 0;
+                }
+                else
+                {
+                    int random = ArmorBoss.r.Next(100);
+                    int thresh = (int)(200 - 100f * distance);
+                    if (random < thresh)
+                    {
+                        hologramTargetFade = hologramMaxFade;
+                    }
+                    else
+                        hologramTargetFade = 0;
+                }
+                if (hologramFade > 9 * hologramMaxFade / 10)
+                    hologramOn = true;
+                if (hologramFade < 1 * hologramMaxFade / 10)
+                    hologramOn = false;
+                if(oldOn != hologramOn)
+                {
+                    SoundFX.HologramFade();
                 }
             }
 

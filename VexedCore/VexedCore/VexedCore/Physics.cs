@@ -666,7 +666,7 @@ namespace VexedCore
                     if(Engine.player.state != State.Upgrade && Engine.player.state != State.Save)
                         d.ActivateDoodad(r, d.ActivationRange(p));
                 }
-                if (d.type == VL.DoodadType.NPC_OldMan)
+                if (d.type == VL.DoodadType.Holoprojector)
                 {
                     d.ActivateDoodad(r, d.ActivationRange(p));
                 }

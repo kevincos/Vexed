@@ -216,8 +216,8 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Laser);
-            secondaryAbility = new Ability(AbilityType.SpinHook);
+            primaryAbility = new Ability(AbilityType.JetPack);
+            secondaryAbility = new Ability(AbilityType.Phase);
             naturalShield = new Ability(AbilityType.Shield);
 
             upgrades[(int)AbilityType.Laser] = true;
@@ -971,9 +971,13 @@ namespace VexedCore
             {
                 AnimationControl.SetState(AnimationState.JumpPad);
             }
-            else if (state == State.Jump || state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
+            else if (state == State.Jump || state == State.Tunnel)
             {
                 AnimationControl.SetState(AnimationState.JumpPad);
+            }
+            else if (state == State.Phase || state == State.PhaseFail)
+            {
+                AnimationControl.SetState(AnimationState.Phase);
             }
             else if (lastFireTime > 1000)
             {
@@ -1010,8 +1014,10 @@ namespace VexedCore
                 {
                     if (faceDirection < 0)
                         AnimationControl.SetState(AnimationState.JumpLeft);
-                    if (faceDirection > 0)
+                    else if (faceDirection > 0)
                         AnimationControl.SetState(AnimationState.JumpRight);
+                    else
+                        AnimationControl.SetState(AnimationState.JumpPad);
                 }
                 else
                 {
@@ -1046,20 +1052,22 @@ namespace VexedCore
                     if (faceDirection > 0)
                         AnimationControl.SetState(AnimationState.RunRightFiring);
                 }
-                else if (grounded == false && leftWall == true && faceDirection < 0)
-                {
-                    AnimationControl.SetState(AnimationState.WallRightFiring);
-                }
                 else if (grounded == false && rightWall == true && faceDirection > 0)
                 {
                     AnimationControl.SetState(AnimationState.WallLeftFiring);
+                }
+                else if (grounded == false && leftWall == true && faceDirection < 0)
+                {
+                    AnimationControl.SetState(AnimationState.WallRightFiring);
                 }
                 else if (grounded == false)
                 {
                     if (faceDirection < 0)
                         AnimationControl.SetState(AnimationState.JumpLeftFiring);
-                    if (faceDirection > 0)
+                    else if (faceDirection > 0)
                         AnimationControl.SetState(AnimationState.JumpRightFiring);
+                    else
+                        AnimationControl.SetState(AnimationState.JumpPad);
                 }
                 else
                 {
@@ -1146,6 +1154,8 @@ namespace VexedCore
                     if (platformVelocity.Length() < .01f)
                         platformVelocity = Vector3.Zero;
                 }
+                if(jetPackThrust == false && (leftWall == true || rightWall == true))
+                    jetPacking = false;
                 
             }
             if (grounded == true)
@@ -1818,8 +1828,9 @@ namespace VexedCore
                                 d.active = false;
                                 jumpNormal = -center.normal;
                             }
-                            if (d.type == VL.DoodadType.NPC_OldMan)
-                            {                                
+                            if (d.type == VL.DoodadType.Holoprojector)
+                            {
+                                SoundFX.HologramUse();
                                 DialogBox.SetDialog(d.id);
                                 state = State.Dialog;
                                 
@@ -2168,7 +2179,7 @@ namespace VexedCore
                     hookArray, 0, hookArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
             }
 
-            if (primaryAbility.isBoots || secondaryAbility.isBoots)
+            if (primaryAbility.isBoots || secondaryAbility.isBoots || upgrades[(int)AbilityType.PermanentBoots] == true || upgrades[(int)AbilityType.PermanentWallJump] == true)
             {
                 playerEffect.Texture = Player.player_boots_textures;
                 playerEffect.CurrentTechnique.Passes[0].Apply();

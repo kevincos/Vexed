@@ -255,6 +255,17 @@ namespace VexedCore
                                     newRoom.decorations.Add(electricSrc);
                                 }
                             }
+                            if (newDoodad != null && newDoodad.type == VL.DoodadType.Holoprojector)
+                            {
+                                Decoration holoprojector = new Decoration(xmlDoodad.position, xmlFace.normal, xmlDoodad.up, "holoprojector", 60f);
+                                Doodad hologram = new Doodad(VL.DoodadType.HologramOldMan, xmlDoodad.position, xmlFace.normal, xmlDoodad.up);
+                                hologram.speaker = DialogBox.GetSpeaker(newDoodad.id);
+                                holoprojector.SetTexture();
+                                holoprojector.UpdateSizeData();
+                                newRoom.decorations.Add(holoprojector);
+                                newRoom.doodads.Add(hologram);
+                                
+                            }
 
                             if (xmlDoodad.type == VL.DoodadType.WarpStation)
                             {

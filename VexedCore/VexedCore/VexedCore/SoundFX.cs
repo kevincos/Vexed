@@ -53,6 +53,9 @@ namespace VexedCore
         public static SoundEffect electricOff;
         public static SoundEffect steam;
 
+        public static SoundEffect hologramFade;
+        public static SoundEffect hologramUse;
+
         public static SoundEffect platformMove;
         public static SoundEffect platformStop;
 
@@ -112,6 +115,8 @@ namespace VexedCore
             SoundFX.steam = content.Load<SoundEffect>("Sounds\\ZapBuzzy");
             SoundFX.platformMove = content.Load<SoundEffect>("Sounds\\SlidingDoor2");
             SoundFX.platformStop = content.Load<SoundEffect>("Sounds\\Click2");
+            SoundFX.hologramFade = content.Load<SoundEffect>("Sounds\\Throw4");
+            SoundFX.hologramUse = content.Load<SoundEffect>("Sounds\\Switch4");
 
             jetPackInstance = jetPack.CreateInstance();
             boosterInstance = jetPack.CreateInstance();
@@ -155,6 +160,18 @@ namespace VexedCore
         {
             if (Engine.soundEffectsEnabled)
                 bridge.Play();
+        }
+
+        public static void HologramFade()
+        {
+            if (Engine.soundEffectsEnabled)
+                hologramFade.Play(.2f,0f,0f);
+        }
+
+        public static void HologramUse()
+        {
+            if (Engine.soundEffectsEnabled)
+                hologramUse.Play();
         }
 
 

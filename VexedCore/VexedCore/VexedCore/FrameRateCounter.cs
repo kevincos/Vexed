@@ -34,7 +34,7 @@ namespace VexedCore
         protected override void LoadContent()
         {
                 spriteBatch = new SpriteBatch(GraphicsDevice);
-                spriteFont = content.Load<SpriteFont>("Font");
+                spriteFont = content.Load<SpriteFont>("Fonts\\Font");
                 
         }
 
