@@ -59,11 +59,15 @@ namespace VexedCore
         public static SoundEffect platformMove;
         public static SoundEffect platformStop;
 
+        public static SoundEffect dialogCharacter;
+        public static SoundEffect dialogExtend;
+
         public static SoundEffect activateSwitchStation;
         public static SoundEffect activateLaserSwitch;
         public static SoundEffect activatePlug;
         public static SoundEffect lockedSwitch;
         public static SoundEffect equipItem;
+        public static SoundEffect equipError;
         public static SoundEffect stationPowerUp;
 
         public static SoundEffect tunnel;
@@ -113,10 +117,13 @@ namespace VexedCore
             SoundFX.electricOn = content.Load<SoundEffect>("Sounds\\ZapTuned");
             SoundFX.electricOff = content.Load<SoundEffect>("Sounds\\ZapBuzzy");
             SoundFX.steam = content.Load<SoundEffect>("Sounds\\ZapBuzzy");
+            SoundFX.equipError = content.Load<SoundEffect>("Sounds\\ZapBuzzy");
             SoundFX.platformMove = content.Load<SoundEffect>("Sounds\\SlidingDoor2");
             SoundFX.platformStop = content.Load<SoundEffect>("Sounds\\Click2");
             SoundFX.hologramFade = content.Load<SoundEffect>("Sounds\\Throw4");
             SoundFX.hologramUse = content.Load<SoundEffect>("Sounds\\Switch4");
+            SoundFX.dialogExtend = content.Load<SoundEffect>("Sounds\\Throw4");
+            SoundFX.dialogCharacter = content.Load<SoundEffect>("Sounds\\TinyZap2");
 
             jetPackInstance = jetPack.CreateInstance();
             boosterInstance = jetPack.CreateInstance();
@@ -128,6 +135,25 @@ namespace VexedCore
             if (distance > 15f) return 0f;
             if (distance < 3f) return 1f;
             return (1f - (distance-3) / 12);
+        }
+
+        public static void EquipError()
+        {
+            if (Engine.soundEffectsEnabled)
+                equipError.Play();
+        }
+
+
+        public static void DialogCharacter()
+        {
+            if (Engine.soundEffectsEnabled)
+                dialogCharacter.Play(.1f, 0f,0f);
+        }
+
+        public static void DialogExtend()
+        {
+            if (Engine.soundEffectsEnabled)
+                dialogExtend.Play();
         }
 
         public static void ArmorHit()

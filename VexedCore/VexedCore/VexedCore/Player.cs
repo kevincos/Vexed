@@ -192,6 +192,7 @@ namespace VexedCore
         public float _baseCameraDistance = 12;
         public int orbsCollected = 0;
         public int redOrbsCollected = 0;
+        public int redOrbsGoal = 2;
 
         public Vector2 cameraAngle;
         public Vector2 targetCameraAngle;
@@ -266,6 +267,7 @@ namespace VexedCore
             rightWall = p.rightWall;
             jumpTime = p.jumpTime;
             redOrbsCollected = p.redOrbsCollected;
+            redOrbsGoal = p.redOrbsGoal;
             orbsCollected = p.orbsCollected;
             weaponSwitchCooldown = p.weaponSwitchCooldown;
             
@@ -1255,8 +1257,10 @@ namespace VexedCore
                         if (upgradeStationDoodad.orbsRemaining > 0)
                         {
                             redOrbsCollected += 1;
-                            if (redOrbsCollected % 5 == 0)
+                            if (redOrbsCollected % redOrbsGoal == 0)
                             {
+                                redOrbsCollected = 0;
+                                redOrbsGoal = redOrbsGoal + 1;
                                 naturalShield.maxAmmo = naturalShield.maxAmmo + 1;
                                 naturalShield.ammo = naturalShield.maxAmmo;
                             }
@@ -1320,7 +1324,7 @@ namespace VexedCore
                 //if (upgradeTime > upgradeWaitTime - 100)
                 if (upgradeTime < upgradeOutTime)
                 {
-                    if (Engine.justLoaded == false)
+                    if (Engine.justLoaded == false && DialogBox.state == BoxState.None)
                         DialogBox.SetDialog("Saving");
                 }
                 if (upgradeTime > upgradeWaitTime - 300)
@@ -1543,11 +1547,16 @@ namespace VexedCore
                     }
                     else if (itemStation != null)
                     {
-                        AbilityType swapAbilityType = primaryAbility.type;
-                        primaryAbility = new Ability(itemStation.abilityType);
-                        itemStation.abilityType = swapAbilityType;
+                        if (itemStation.abilityType != primaryAbility.type && itemStation.abilityType != secondaryAbility.type)
+                        {
+                            AbilityType swapAbilityType = primaryAbility.type;
+                            primaryAbility = new Ability(itemStation.abilityType);
+                            itemStation.abilityType = swapAbilityType;                            
+                            SoundFX.EquipItem();
+                        }
+                        else
+                            SoundFX.EquipError();
                         itemStation.cooldown = itemStation.maxCooldown;
-                        SoundFX.EquipItem();
                         Game1.controller.JumpInvalidate();
                     }
                 }
@@ -1593,11 +1602,16 @@ namespace VexedCore
                     }
                     else if (itemStation != null)
                     {
-                        AbilityType swapAbilityType = secondaryAbility.type;
-                        secondaryAbility = new Ability(itemStation.abilityType);
-                        itemStation.abilityType = swapAbilityType;
+                        if (itemStation.abilityType != primaryAbility.type && itemStation.abilityType != secondaryAbility.type)
+                        {
+                            AbilityType swapAbilityType = secondaryAbility.type;
+                            secondaryAbility = new Ability(itemStation.abilityType);
+                            itemStation.abilityType = swapAbilityType;                           
+                            SoundFX.EquipItem();
+                        }
+                        else
+                            SoundFX.EquipError();
                         itemStation.cooldown = itemStation.maxCooldown;
-                        SoundFX.EquipItem();
                         Game1.controller.JumpInvalidate();
                     }
                 }

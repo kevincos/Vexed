@@ -214,7 +214,7 @@ namespace VexedCore
 
         public void UpdateVertexData(Room currentRoom)
         {
-            if (decalList == null || Engine.staticDoodadsInitialized == false || dynamic == true || refreshVertexData == true || isHologram == true)
+            if (decalList == null || Engine.staticDoodadsInitialized == false || dynamic == true || refreshVertexData == true || isHologram == true || color == Color.Black)
             {
                 refreshVertexData = false;
                 decalList = new List<VertexPositionColorNormalTexture>();
@@ -242,9 +242,17 @@ namespace VexedCore
                         v.Update(currentRoom, 1);
                     }
                 }
-
-                currentRoom.AddTextureToTriangleList(vList, color, depth, decalList, fullTexCoords, false);
-                //currentRoom.AddBlockFrontToTriangleList(vList, color, depth, fullTexCoords, decalList, true);
+                if (color == Color.Black)
+                {
+                    Color average = Color.White;
+                    average.R = (Byte)((Color.White.R + currentRoom.currentColor.R) / 2);
+                    average.G = (Byte)((Color.White.G + currentRoom.currentColor.G) / 2);
+                    average.B = (Byte)((Color.White.B + currentRoom.currentColor.B) / 2);
+                    currentRoom.AddTextureToTriangleList(vList, average, depth, decalList, fullTexCoords, false);
+                }
+                else
+                    currentRoom.AddTextureToTriangleList(vList, color, depth, decalList, fullTexCoords, false);
+                
 
                 triangleArray = new VertexPositionColorNormalTexture[decalList.Count];
                 for (int i = 0; i < decalList.Count; i++)

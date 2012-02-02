@@ -182,11 +182,26 @@ namespace VexedCore
             Edge.magnetEdge = Content.Load<Texture2D>("Walls\\magnet_edge");
             Edge.lavaCoolEdge = Content.Load<Texture2D>("Walls\\lavacool_edge");
             Edge.lavaHotEdge = Content.Load<Texture2D>("Walls\\lavahot_edge");
+            Hud.hudBase = Content.Load<Texture2D>("UI\\hudbase");
+            Hud.healthmeter_bottom = Content.Load<Texture2D>("UI\\healthmeter_bottom");
+            Hud.healthmeter_color = Content.Load<Texture2D>("UI\\healthmeter_color");
+            Hud.healthmeter_mid = Content.Load<Texture2D>("UI\\healthmeter_mid");
+            Hud.healthmeter_top = Content.Load<Texture2D>("UI\\healthmeter_top");
+            Hud.healthmeter_slot = Content.Load<Texture2D>("UI\\healthmeter_slot");
+            Hud.expansion_back = Content.Load<Texture2D>("UI\\expansion_back");
+            Hud.expansion_front = Content.Load<Texture2D>("UI\\expansion_front");
+            Hud.expansion_top = Content.Load<Texture2D>("UI\\expansion_top");
+            Hud.expansion_red = Content.Load<Texture2D>("UI\\expansion_red");
+            Hud.expansion_bottom = Content.Load<Texture2D>("UI\\expansion_bottom");
             Skybox.LoadTextures(Content);
             DecorationImage.LoadTextures(Content);
             Engine.spriteFont = Content.Load<SpriteFont>("Fonts\\Font");
             Engine.loadFont = Content.Load<SpriteFont>("Fonts\\LoadFont");
             Engine.loadFontBold = Content.Load<SpriteFont>("Fonts\\LoadFontBold");
+            DialogBox.smallFont = Content.Load<SpriteFont>("Fonts\\DialogFontSmall");
+            DialogBox.largeFont = Content.Load<SpriteFont>("Fonts\\DialogFontLarge");
+            DialogBox.InitPortraits(Content);
+
             Doodad.InitBeamTextures(Content);
             SaveGameText.confirmOptions = Content.Load<Texture2D>("UI\\icon_confirm");
             SaveGameText.loadOptions = Content.Load<Texture2D>("UI\\icon_load");
@@ -197,7 +212,12 @@ namespace VexedCore
             Doodad.rightButton = Content.Load<Texture2D>("UI\\rightbutton");
             Doodad.hologram_oldMan = Content.Load<Texture2D>("Decorations\\hologram_oldMan");
             Doodad.hologram_finalBoss = Content.Load<Texture2D>("Decorations\\hologram_finalBoss");
-            
+
+            DialogBox.textArea = Content.Load<Texture2D>("UI\\dialogtextarea");
+            DialogBox.monitor = Content.Load<Texture2D>("UI\\dialogmonitor");
+            DialogBox.monitorFrame = Content.Load<Texture2D>("UI\\dialogmonitorframe");
+            DialogBox.rightEdge = Content.Load<Texture2D>("UI\\dialogrightedge");
+
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
 
             Engine.sceneRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,

@@ -63,7 +63,7 @@ namespace VexedCore
         public SaveGameText saveGameText;
 
         public static bool soundEffectsEnabled = true;
-        public static bool musicEnabled = true;
+        public static bool musicEnabled = false;
         public static bool justLoaded = false;
 
         
@@ -469,8 +469,7 @@ namespace VexedCore
         public void Draw(int gameTime)
         {
             saveGameText.RenderTextures();
-            DialogBox.RenderTextures();
-
+            
             Engine.mapShellObjects = new List<TrasnparentSquare>();
             if(Engine.detailVertexArray == null)
                 Engine.detailVertexArray = new VertexPositionColorNormalTexture[80000];
@@ -517,6 +516,7 @@ namespace VexedCore
             Engine.cameraUp = player.cameraUp;
             Engine.cameraTarget = player.cameraTarget;
 
+            Hud.hidden = false;
             if (Engine.player.currentRoom.id.Contains("MenuRoom"))
             {
                 Vector3 menuCameraTarget = cameraTarget;
@@ -530,6 +530,7 @@ namespace VexedCore
                     {
                         shift = 1f;
                         DepthControl.depthTrigger = false;
+                        Hud.hidden = true;
                     }
                     else
                     {
@@ -539,17 +540,21 @@ namespace VexedCore
                     menuCameraTarget = Engine.player.currentRoom.center;
                     menuCameraPos = Engine.player.currentRoom.center + 20 * Vector3.UnitY;
                     menuCameraUp = Vector3.UnitZ;
+                    
                 }
                 dist = (Engine.player.center.position - (Engine.player.currentRoom.center - 5 * Vector3.UnitZ - 18 * Vector3.UnitX)).Length();
                 if (dist < 10f && Engine.player.center.normal == -Vector3.UnitX)
                 {
                     if (dist < 6)
+                    {
                         shift = 1f;
+                        Hud.hidden = true;
+                    }
                     else
                         shift = (10 - dist) / 4f;
                     menuCameraTarget = Engine.player.currentRoom.center + 1.5f * Vector3.UnitZ;
                     menuCameraPos = Engine.player.currentRoom.center - 33f * Vector3.UnitX + 1.5f * Vector3.UnitZ;
-                    menuCameraUp = Vector3.UnitZ;
+                    menuCameraUp = Vector3.UnitZ;                    
                 }
                 cameraPos = shift * menuCameraPos + (1 - shift) * cameraPos;
                 cameraUp = shift * menuCameraUp + (1 - shift) * cameraUp;
@@ -728,10 +733,11 @@ namespace VexedCore
             Engine.debug_doodadVertexUpdateMonitor.AddData(Engine.debug_updateDoodadVertexData);
             Engine.debug_doodadVertexUpdateMonitor.Update(gameTime);
             Engine.debug_updateDoodadVertexData = 0;
-
+            
             if(Engine.player.currentRoom.id.Contains("Menu"))
                 IntroOverlay.Update(gameTime);
             PauseMenu.Update(gameTime);
+            Hud.Update(gameTime);
             if (PauseMenu.paused == true)
                 return;
             WorldMap.Update(gameTime);

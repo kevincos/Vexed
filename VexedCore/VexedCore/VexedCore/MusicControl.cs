@@ -43,8 +43,10 @@ namespace VexedCore
             if (Engine.player.state == State.Upgrade || (upgrading == true && Engine.player.state == State.Dialog))
             {
                 upgrading = true;
+                
                 return upgrade;
             }
+            upgrading = false;
 
             if (Engine.player.currentRoom.id.Contains("Menu"))
                 return intro;

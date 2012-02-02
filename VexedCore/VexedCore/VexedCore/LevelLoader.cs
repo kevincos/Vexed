@@ -262,6 +262,7 @@ namespace VexedCore
                                 hologram.speaker = DialogBox.GetSpeaker(newDoodad.id);
                                 holoprojector.SetTexture();
                                 holoprojector.UpdateSizeData();
+                                holoprojector.color = Color.Black;
                                 newRoom.decorations.Add(holoprojector);
                                 newRoom.doodads.Add(hologram);
                                 
@@ -687,6 +688,7 @@ namespace VexedCore
                 }
             }
             FixDoodads(Engine.roomList);
+            Hud.ResetHud();
             Engine.justLoaded = true;
         }
     }

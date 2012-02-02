@@ -63,6 +63,9 @@ namespace VexedCore
                 state = IntroState.MoveHelp;
                 Game1.controller.JumpInvalidate();
                 Engine.player.state = State.Normal;
+                DialogBox.state = BoxState.Close;
+                DialogBox.animationTime = 0;
+                SoundFX.DialogExtend();
             }
             if (state == IntroState.MoveHelp && introTime > moveHelpTime)
             {

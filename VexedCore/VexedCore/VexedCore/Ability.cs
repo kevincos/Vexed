@@ -323,6 +323,49 @@ namespace VexedCore
             }
         }
 
+        public static Texture2D GetDecal(AbilityType abilityType)
+        {
+            if (abilityType == AbilityType.RedKey)
+                return Doodad.decalTextures[(int)Decal.RedKey];
+            if (abilityType == AbilityType.BlueKey)
+                return Doodad.decalTextures[(int)Decal.BlueKey];
+            if (abilityType == AbilityType.YellowKey)
+                return Doodad.decalTextures[(int)Decal.YellowKey];
+            if (abilityType == AbilityType.Laser)
+                return Doodad.decalTextures[(int)Decal.Laser];
+            if (abilityType == AbilityType.Blaster)
+                return Doodad.decalTextures[(int)Decal.Blaster];
+            if (abilityType == AbilityType.Boots)
+                return Doodad.decalTextures[(int)Decal.Boots];
+            if (abilityType == AbilityType.JetPack)
+                return Doodad.decalTextures[(int)Decal.JetPack];
+            if (abilityType == AbilityType.Phase)
+                return Doodad.decalTextures[(int)Decal.Phase];
+            if (abilityType == AbilityType.Booster)
+                return Doodad.decalTextures[(int)Decal.Booster];
+            if (abilityType == AbilityType.DoubleJump)
+                return Doodad.decalTextures[(int)Decal.DoubleJump];
+            if (abilityType == AbilityType.WallJump)
+                return Doodad.decalTextures[(int)Decal.WallJump];
+            if (abilityType == AbilityType.SpinHook)
+                return Doodad.decalTextures[(int)Decal.HookTarget];
+            if (abilityType == AbilityType.Missile)
+                return Doodad.decalTextures[(int)Decal.Missile];
+            if (abilityType == AbilityType.PermanentBoots)
+                return Doodad.decalTextures[(int)Decal.PermanantBoots];
+            if (abilityType == AbilityType.PermanentWallJump)
+                return Doodad.decalTextures[(int)Decal.PermanantWallJump];
+            if (abilityType == AbilityType.ImprovedJump)
+                return Doodad.decalTextures[(int)Decal.ImprovedJump];
+            if (abilityType == AbilityType.PermanentRedKey)
+                return Doodad.decalTextures[(int)Decal.RedCodes];
+            if (abilityType == AbilityType.PermanentBlueKey)
+                return Doodad.decalTextures[(int)Decal.BlueCodes];
+            if (abilityType == AbilityType.PermanentYellowKey)
+                return Doodad.decalTextures[(int)Decal.YellowCodes];
+            return Doodad.decalTextures[(int)Decal.Empty];
+        }
+
         public void Draw(float xPercent, float yPercent)
         {
             Draw(xPercent, yPercent, type, ammo, maxAmmo, Color.White, .1f);

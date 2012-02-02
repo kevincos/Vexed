@@ -657,44 +657,7 @@ namespace VexedCore
                     }
                     if (targetDoodad.type == VL.DoodadType.UpgradeStation || targetDoodad.type == VL.DoodadType.ItemStation)
                     {
-                        if (targetDoodad.abilityType == AbilityType.RedKey)
-                            return decalTextures[(int)Decal.RedKey];
-                        if (targetDoodad.abilityType == AbilityType.BlueKey)
-                            return decalTextures[(int)Decal.BlueKey];
-                        if (targetDoodad.abilityType == AbilityType.YellowKey)
-                            return decalTextures[(int)Decal.YellowKey];
-                        if (targetDoodad.abilityType == AbilityType.Laser)
-                            return decalTextures[(int)Decal.Laser];
-                        if (targetDoodad.abilityType == AbilityType.Blaster)
-                            return decalTextures[(int)Decal.Blaster];
-                        if (targetDoodad.abilityType == AbilityType.Boots)
-                            return decalTextures[(int)Decal.Boots];
-                        if (targetDoodad.abilityType == AbilityType.JetPack)
-                            return decalTextures[(int)Decal.JetPack];
-                        if (targetDoodad.abilityType == AbilityType.Phase)
-                            return decalTextures[(int)Decal.Phase];
-                        if (targetDoodad.abilityType == AbilityType.Booster)
-                            return decalTextures[(int)Decal.Booster];
-                        if (targetDoodad.abilityType == AbilityType.DoubleJump)
-                            return decalTextures[(int)Decal.DoubleJump];
-                        if (targetDoodad.abilityType == AbilityType.WallJump)
-                            return decalTextures[(int)Decal.WallJump];
-                        if (targetDoodad.abilityType == AbilityType.SpinHook)
-                            return decalTextures[(int)Decal.HookTarget];
-                        if (targetDoodad.abilityType == AbilityType.Missile)
-                            return decalTextures[(int)Decal.Missile];
-                        if (targetDoodad.abilityType == AbilityType.PermanentBoots)
-                            return decalTextures[(int)Decal.PermanantBoots];
-                        if (targetDoodad.abilityType == AbilityType.PermanentWallJump)
-                            return decalTextures[(int)Decal.PermanantWallJump];
-                        if (targetDoodad.abilityType == AbilityType.ImprovedJump)
-                            return decalTextures[(int)Decal.ImprovedJump];
-                        if (targetDoodad.abilityType == AbilityType.PermanentRedKey)
-                            return decalTextures[(int)Decal.RedCodes];
-                        if (targetDoodad.abilityType == AbilityType.PermanentBlueKey)
-                            return decalTextures[(int)Decal.BlueCodes];
-                        if (targetDoodad.abilityType == AbilityType.PermanentYellowKey)
-                            return decalTextures[(int)Decal.YellowCodes];
+                        return Ability.GetDecal(targetDoodad.abilityType);                        
 
                     }                    
                 }
@@ -911,8 +874,6 @@ namespace VexedCore
                 if (idle == true)
                     return false;
                 if (type == VL.DoodadType.TriggerPoint)
-                    return false;
-                if (type == VL.DoodadType.Vortex)
                     return false;
                 if (type == VL.DoodadType.BridgeSide || type == VL.DoodadType.BridgeBack)
                     return false;
@@ -1533,7 +1494,7 @@ namespace VexedCore
                     
                     
                 }
-                else if (type != VL.DoodadType.Holoprojector && type != VL.DoodadType.HologramOldMan && type != VL.DoodadType.Beam && type != VL.DoodadType.PowerPlug)
+                else if (type != VL.DoodadType.Holoprojector && type != VL.DoodadType.HologramOldMan && type != VL.DoodadType.Beam && type != VL.DoodadType.PowerPlug && type != VL.DoodadType.Vortex)
                 {
                     if (active && type != VL.DoodadType.LaserSwitch)
                     {
@@ -1762,11 +1723,11 @@ namespace VexedCore
                 if (flashTime > maxFlashTime)
                     flashTime = 0;
             }
-            if (type == VL.DoodadType.Holoprojector || isStation == true)
+            if (type == VL.DoodadType.Holoprojector || isStation == true || type == VL.DoodadType.JumpPad || type == VL.DoodadType.Vortex)
             {
                 if (helpIconTime != 0 && helpIconTime != helpIconMaxTime)
                     refreshVertexData = true;
-                if (!ActivationRange(Engine.player) || Engine.player.state != State.Normal)
+                if (!ActivationRange(Engine.player) || Engine.player.state != State.Normal || (type == VL.DoodadType.Vortex && (position.position - Engine.player.center.position).Length() >= .3f))
                 {
                     helpIconTime -= gameTime;
                     if (helpIconTime < 0) helpIconTime = 0;
