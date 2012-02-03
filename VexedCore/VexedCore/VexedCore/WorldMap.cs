@@ -56,7 +56,7 @@ namespace VexedCore
         public static Vector3 inventoryCameraUp;
 
         public static int selectedInventory = 0;
-        public static List<int> inventoryIndexList;
+        
 
         public static bool warp = false;
         public static bool zoomToPlayer = false;
@@ -79,160 +79,16 @@ namespace VexedCore
         public static bool skipToInventory = false;
 
         public static List<DirectionalMapping> directionList;
-
-        public static Texture2D changeArrow;
+        
 
         public static void DrawMetaData()
         {
             if (Engine.state == EngineState.Active)
                 return;
-            Engine.spriteBatch.Begin();
+
             mousePos.X = Mouse.GetState().X-32;
             mousePos.Y = Mouse.GetState().Y;
 
-            float leftArrowScale = 1f;
-            int leftColorBase = 40;
-            float rightArrowScale = 1f;
-            int rightColorBase = 40;
-            if ((Mouse.GetState().X > Game1.titleSafeRect.Right - 50))                
-            {
-                rightArrowScale = 1.3f;
-                rightColorBase = 80;
-            }
-            if ((Mouse.GetState().X < Game1.titleSafeRect.Left + 50))
-            {
-                leftArrowScale = 1.3f;
-                leftColorBase = 80;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
-            {
-                Ability.Draw(.05f, .85f, AbilityType.CtrlKey, Color.Gray, .1f);
-            }
-            else
-            {
-                Ability.Draw(.05f, .85f, AbilityType.CtrlKey, Color.White, .1f);
-            }
-            if (warp == false)
-            {
-                if (state == ZoomState.Sector || state == ZoomState.Inventory)
-                {
-                    Engine.spriteBatch.Draw(changeArrow, new Vector2(Game1.titleSafeRect.Left + 25, Game1.titleSafeRect.Center.Y - 20), null, new Color(leftColorBase, leftColorBase, leftColorBase), 0, new Vector2(16, 64), leftArrowScale, SpriteEffects.None, 0);
-                }
-                if (state == ZoomState.Sector || state == ZoomState.World)
-                {
-                    Engine.spriteBatch.Draw(changeArrow, new Vector2(Game1.titleSafeRect.Right - 35, Game1.titleSafeRect.Center.Y - 20), null, new Color(rightColorBase, rightColorBase, rightColorBase), 0, new Vector2(16, 64), rightArrowScale, SpriteEffects.FlipHorizontally, 0);
-                }
-            }
-
-            if(Keyboard.GetState().IsKeyDown(Keys.LeftControl) == false && displayMouse == true)
-                Engine.spriteBatch.Draw(PauseMenu.mouseCursor, mousePos, Color.YellowGreen);
-            if (inventoryIndexList == null)
-            {
-                inventoryIndexList = new List<int>();
-                inventoryIndexList.Add(0);
-                inventoryIndexList.Add(0);
-                for (int i = 0; i < Engine.player.upgrades.Length; i++)
-                {
-                    Ability a = new Ability();
-                    a.type = (AbilityType)i;
-                    if (a.isItem)
-                        inventoryIndexList.Add(i);
-                }
-                for (int i = 0; i < Engine.player.upgrades.Length; i++)
-                {
-                    Ability a = new Ability();
-                    a.type = (AbilityType)i;
-                    if (a.isUpgrade)
-                        inventoryIndexList.Add(i);
-                }
-
-            }
-            inventoryIndexList[0] = (int)Engine.player.primaryAbility.type;
-            inventoryIndexList[1] = (int)Engine.player.secondaryAbility.type;
-            if (state == ZoomState.Inventory)
-            {                
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Inventory", new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top+ 90), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Primary   : ", new Vector2(Game1.titleSafeRect.Left + 130, Game1.titleSafeRect.Top + 110), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Secondary : ", new Vector2(Game1.titleSafeRect.Left + 130, Game1.titleSafeRect.Top + 130), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Suit Upgrades", new Vector2(Game1.titleSafeRect.Left + 130, Game1.titleSafeRect.Top + 430), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Items Unlocked", new Vector2(Game1.titleSafeRect.Left + 130, Game1.titleSafeRect.Top + 170), Color.YellowGreen);
-
-                int drawOffset = 0;
-                for(int i = 0; i < inventoryIndexList.Count; i++)
-                {
-                    Ability a = new Ability();
-                    a.type = (AbilityType)inventoryIndexList[i];
-                    if (selectedInventory == i)
-                    {
-                        Engine.spriteBatch.DrawString(Engine.spriteFont, "X", new Vector2(Game1.titleSafeRect.Left+ 100, 110 + 20 * drawOffset), Color.YellowGreen);
-
-                        if (Engine.player.upgrades[inventoryIndexList[i]] == true)
-                        {
-                            Engine.spriteBatch.DrawString(Engine.spriteFont, a.FriendlyName(), new Vector2(Game1.titleSafeRect.Left+ 350, Game1.titleSafeRect.Top + 200), Color.YellowGreen);
-                            Engine.spriteBatch.DrawString(Engine.spriteFont, a.Description(), new Vector2(Game1.titleSafeRect.Left+ 350, Game1.titleSafeRect.Top + 230), Color.YellowGreen);
-                        }
-
-                    }
-                    if (Engine.player.upgrades[inventoryIndexList[i]] == true)
-                    {
-                        if(i < 2)
-                            Engine.spriteBatch.DrawString(Engine.spriteFont, "  " + a.FriendlyName(), new Vector2(Game1.titleSafeRect.Left + 250, Game1.titleSafeRect.Top + 110 + 20 * drawOffset), Color.YellowGreen);
-                        else
-                            Engine.spriteBatch.DrawString(Engine.spriteFont, "  " + a.FriendlyName(), new Vector2(Game1.titleSafeRect.Left + 150, Game1.titleSafeRect.Top + 110 + 20 * drawOffset), Color.YellowGreen);
-                    }
-                    else
-                    {
-                        Engine.spriteBatch.DrawString(Engine.spriteFont, "  ???", new Vector2(Game1.titleSafeRect.Left + 150, Game1.titleSafeRect.Top + 110 + 20 * drawOffset), Color.YellowGreen);
-                    }
-                    drawOffset += 1;
-                    if (i == 1)
-                        drawOffset += 2;
-                    if (i == 11)
-                        drawOffset += 3;
-                }
-
-                // Selected Item Info
-                
-
-            }
-            if(state == ZoomState.Sector)
-            {
-                Room r = Engine.roomList[selectedRoomIndex];
-                Sector s = r.parentSector;
-                if (r.explored)
-                {
-                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Room: " + r.id, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
-                }
-                else
-                {
-                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Room: ???", new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
-                }
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: " + r.currentOrbs + " / " + r.maxOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 140), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Warp Cubes: " + r.currentBlueOrbs + " / " + r.maxBlueOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 160), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Health Cubes: " + r.currentRedOrbs + " / " + r.maxRedOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 180), Color.YellowGreen);
-
-                if (r.hasWarp == true)
-                {
-                    Engine.spriteBatch.DrawString(Engine.spriteFont, "Warp Access: " +  s.currentBlueOrbs + " / " + r.warpCost, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 210), Color.YellowGreen);
-                }
-            }
-            if (state == ZoomState.World)
-            {
-                
-                Sector s = Engine.sectorList[selectedSectorIndex];
-
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Sector: " + s.id, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Power Level: " + s.currentOrbs + " / " + s.maxOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 140), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Warp Level: " + s.currentBlueOrbs + " / " + s.maxBlueOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 160), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Red Cubes: " + s.currentRedOrbs + " / " + s.maxRedOrbs, new Vector2(Game1.titleSafeRect.Left + 90, Game1.titleSafeRect.Top + 180), Color.YellowGreen);                
-            }
-            if (state == ZoomState.Sector || state == ZoomState.World)
-            {
-                Engine.spriteBatch.DrawString(Engine.spriteFont, "Current Objective: " , new Vector2(Game1.titleSafeRect.Left + 350, Game1.titleSafeRect.Top + 120), Color.YellowGreen);
-                
-                Engine.spriteBatch.DrawString(Engine.spriteFont, ObjectiveControl.objectives[Engine.player.currentObjective].text, new Vector2(Game1.titleSafeRect.Left + 350, Game1.titleSafeRect.Top + 140), Color.YellowGreen);                
-            }
-            Engine.spriteBatch.End();
         }
 
         public static void SelectPlayerRoom()
@@ -503,6 +359,7 @@ namespace VexedCore
                 }
                 if (newSelectedIndex != -1 && newSelectedIndex != selectedRoomIndex)
                 {
+                    SoundFX.MapSelect();
                     Engine.roomList[selectedRoomIndex].roomHighlight = false;
                     selectedRoomIndex = newSelectedIndex;
                     Engine.roomList[selectedRoomIndex].roomHighlight = true;
@@ -543,6 +400,7 @@ namespace VexedCore
                 }
                 if (newSelect != selectedSectorIndex)
                 {
+                    SoundFX.MapSelect();
                     UnHightlightSector();
                     selectedSectorIndex = newSelect;
                     HightlightSector();
@@ -558,35 +416,43 @@ namespace VexedCore
             if (Mouse.GetState().X > Game1.titleSafeRect.Right - 50 && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 rightScreenChange = true;
+                
             }
 
             if (state == ZoomState.Inventory && (Keyboard.GetState().IsKeyDown(Keys.Down) || Controls.LeftStick().Y < -.1f))
             {
+                SoundFX.MapSelect();
                 resultCooldown = 100;
                 selectedInventory++;
-                selectedInventory %= inventoryIndexList.Count;
+                selectedInventory %= MapHud.inventoryIndexList.Count;
             }
             if (state == ZoomState.Inventory && (Keyboard.GetState().IsKeyDown(Keys.Up) || Controls.LeftStick().Y > .1f))
             {
+                SoundFX.MapSelect();
                 resultCooldown = 100;
                 selectedInventory--;
                 if (selectedInventory < 0)
-                    selectedInventory += inventoryIndexList.Count;
+                    selectedInventory += MapHud.inventoryIndexList.Count;
             }
             if (state == ZoomState.Inventory && (Mouse.GetState().LeftButton == ButtonState.Pressed))
             {
-                int drawOffset = 0;
-                for (int i = 0; i < inventoryIndexList.Count; i++)
+                int drawOffset = 5;
+                int increment = MapHud.inventoryListIncrement;
+                for (int i = 0; i < MapHud.inventoryIndexList.Count; i++)
                 {
-                    if (Math.Abs(Mouse.GetState().Y - (Game1.titleSafeRect.Top + drawOffset * 20 + 120)) < 10f && Mouse.GetState().X > Game1.titleSafeRect.Left + 110 && Mouse.GetState().X < Game1.titleSafeRect.Left + 400)
+                    if (Math.Abs(Mouse.GetState().Y - (MapHud.inventoryListTop + drawOffset * increment + increment/2)) < increment/2 && Mouse.GetState().X > MapHud.inventoryListLeft && Mouse.GetState().X < MapHud.inventoryListLeft + MapHud.inventoryListWidth)
                     {
-                        selectedInventory = i;
+                        if (selectedInventory != i)
+                        {
+                            selectedInventory = i;
+                            SoundFX.MapSelect();
+                        }
                     }
                     drawOffset += 1;
                     if (i == 1)
                         drawOffset += 2;
                     if (i == 11)
-                        drawOffset += 3;
+                        drawOffset += 2;
 
                     
                 }
@@ -606,6 +472,7 @@ namespace VexedCore
                     return 0;
                 warp = false;
                 Engine.player.Warp(Engine.roomList[selectedRoomIndex]);
+                SoundFX.MapWhoosh();
                 sectorCameraTarget = cameraTarget;
                 sectorCameraPosition = cameraPosition;
                 sectorCameraUp = cameraUp;
@@ -625,11 +492,13 @@ namespace VexedCore
                     sectorCameraUp = cameraUp;
                     playerCameraPosition = Engine.playerCameraPos;
                     playerCameraTarget = Engine.playerCameraTarget;
-                    playerCameraUp = Engine.playerCameraUp;                    
+                    playerCameraUp = Engine.playerCameraUp;
+                    SoundFX.MapWhoosh();
                 }
                 else
                 {
                     zoomToPlayer = true;
+                    SoundFX.MapWhoosh();
                     state = ZoomState.ZoomToWorld;
                     sectorCameraTarget = cameraTarget;
                     sectorCameraPosition = cameraPosition;
@@ -638,11 +507,13 @@ namespace VexedCore
             }
             else if (warp == false && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder) || rightScreenChange || Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets)) && WorldMap.state == ZoomState.Sector)
             {
+                SoundFX.InventoryWhoosh();
                 WorldMap.state = ZoomState.Inventory;
                 resultCooldown = 150;
             }
             else if (warp == false && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder) || leftSreenChange || Keyboard.GetState().IsKeyDown(Keys.OemOpenBrackets)) && WorldMap.state == ZoomState.Inventory)
             {
+                SoundFX.InventoryWhoosh();
                 WorldMap.state = ZoomState.Sector;
                 resultCooldown = 150;
 
@@ -654,6 +525,7 @@ namespace VexedCore
                     zoomToPlayer = true;
                     SelectPlayerRoom();
                 }
+                SoundFX.MapWhoosh();
                 state = ZoomState.ZoomFromWorld;
                 worldCameraTarget = cameraTarget;
                 worldCameraPosition = cameraPosition;
@@ -675,6 +547,7 @@ namespace VexedCore
             }
             else if (zoomOutCommand == true && WorldMap.state == ZoomState.None)
             {
+                SoundFX.MapWhoosh();
                 skipToInventory = false;
                 if (GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder))
                     skipToInventory = true;
@@ -683,6 +556,7 @@ namespace VexedCore
             }
             else if ((Keyboard.GetState().IsKeyDown(Keys.OemMinus) || Keyboard.GetState().IsKeyDown(Keys.OemOpenBrackets) || leftSreenChange || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder)) && WorldMap.state == ZoomState.Sector && warp == false)
             {
+                SoundFX.MapWhoosh();
                 state = ZoomState.ZoomToWorld;
                 sectorCameraTarget = cameraTarget;
                 sectorCameraPosition = cameraPosition;
@@ -706,6 +580,7 @@ namespace VexedCore
                         selectedRoomIndex++;
                         selectedRoomIndex %= Engine.roomList.Count;
                     }
+                    SoundFX.MapSelect();
                 }
                 else
                 {
@@ -718,6 +593,7 @@ namespace VexedCore
                         selectedRoomIndex += Engine.roomList.Count;                
                         selectedRoomIndex %= Engine.roomList.Count;
                     }
+                    SoundFX.MapSelect();
                 }
                 resultCooldown = 100;
 
@@ -734,6 +610,7 @@ namespace VexedCore
                         selectedRoomIndex++;
                         selectedRoomIndex %= Engine.roomList.Count;
                     }
+                    SoundFX.MapSelect();
                 }
                 else
                 {
@@ -746,6 +623,7 @@ namespace VexedCore
                         selectedRoomIndex += Engine.roomList.Count;
                         selectedRoomIndex %= Engine.roomList.Count;
                     }
+                    SoundFX.MapSelect();
                 }
                 resultCooldown = 100;
 
@@ -761,6 +639,7 @@ namespace VexedCore
                     Engine.reDraw = true;
                     resultCooldown = 150;
                     HightlightSector();
+                    SoundFX.MapSelect();
                 }
             }
             else if (Controls.IsLeftKeyDown() || Controls.IsDownKeyDown() || Controls.LeftStick().X < -.1f)
@@ -778,12 +657,8 @@ namespace VexedCore
                         selectedRoomIndex += Engine.roomList.Count();
                         selectedRoomIndex %= Engine.roomList.Count();
                     }
-                    /*while (Engine.roomList[selectedRoomIndex].hasWarp == false)
-                    {
-                        selectedRoomIndex--;
-                        selectedRoomIndex += Engine.roomList.Count();
-                        selectedRoomIndex %= Engine.roomList.Count();
-                    }*/
+
+                    SoundFX.MapSelect();
                     Engine.roomList[selectedRoomIndex].roomHighlight = true;
                     Engine.reDraw = true;
                     resultCooldown = 150;
@@ -794,7 +669,7 @@ namespace VexedCore
                     selectedSectorIndex--;
                     selectedSectorIndex += Engine.sectorList.Count();
                     selectedSectorIndex %= Engine.sectorList.Count();
-
+                    SoundFX.MapSelect();
                     Engine.reDraw = true;
                     resultCooldown = 150;
                     HightlightSector();

@@ -159,8 +159,8 @@ namespace VexedCore
             PauseMenu.gamePadHelp = Content.Load<Texture2D>("UI\\gamepadhelp");
             PauseMenu.keyboardOnlyHelp = Content.Load<Texture2D>("UI\\keyboardonlyhelp");
             Decoration.defaultTexture = Content.Load<Texture2D>("abilities");
-
-            WorldMap.changeArrow = Content.Load<Texture2D>("UI\\screenchangearrow");
+            Hud.fuelCover = Content.Load<Texture2D>("Decals\\decal_fuelcover");
+            Hud.fuelMeter = Content.Load<Texture2D>("Decals\\decal_fuelmeter");
             Projectile.blastTexture = Content.Load<Texture2D>("Projectiles\\blast");
             Projectile.plasmaTexture = Content.Load<Texture2D>("Projectiles\\plasma");
             Projectile.laserTexture = Content.Load<Texture2D>("Projectiles\\laser");
@@ -193,6 +193,16 @@ namespace VexedCore
             Hud.expansion_top = Content.Load<Texture2D>("UI\\expansion_top");
             Hud.expansion_red = Content.Load<Texture2D>("UI\\expansion_red");
             Hud.expansion_bottom = Content.Load<Texture2D>("UI\\expansion_bottom");
+            MapHud.hudLeft = Content.Load<Texture2D>("UI\\maphud_left");
+            MapHud.hudRight = Content.Load<Texture2D>("UI\\maphud_right");
+            MapHud.leftArrow = Content.Load<Texture2D>("UI\\hudarrowleft");
+            MapHud.rightArrow = Content.Load<Texture2D>("UI\\hudarrowright");
+            MapHud.inventoryDataMonitor = Content.Load<Texture2D>("UI\\maphud_inventorydata");
+            MapHud.inventoryListMonitor = Content.Load<Texture2D>("UI\\maphud_inventorylist");
+            MapHud.mapDataMonitor = Content.Load<Texture2D>("UI\\maphud_datamonitor");
+            MapHud.mapObjectiveMonitor = Content.Load<Texture2D>("UI\\maphud_objectivemonitor");
+            MapHud.smallFont = Content.Load<SpriteFont>("Fonts\\HudFontSmall");
+            MapHud.largeFont = Content.Load<SpriteFont>("Fonts\\HudFontLarge");
             Skybox.LoadTextures(Content);
             DecorationImage.LoadTextures(Content);
             Engine.spriteFont = Content.Load<SpriteFont>("Fonts\\Font");

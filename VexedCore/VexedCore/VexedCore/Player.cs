@@ -218,7 +218,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
             primaryAbility = new Ability(AbilityType.JetPack);
-            secondaryAbility = new Ability(AbilityType.Phase);
+            secondaryAbility = new Ability(AbilityType.Laser);
             naturalShield = new Ability(AbilityType.Shield);
 
             upgrades[(int)AbilityType.Laser] = true;

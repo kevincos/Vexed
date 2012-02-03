@@ -33,6 +33,9 @@ namespace VexedCore
         public static Texture2D expansion_back;
         public static Texture2D expansion_front;
 
+        public static Texture2D fuelMeter;
+        public static Texture2D fuelCover;
+
         public static int displayHP = 0;
         public static int displayHealthCubes = 0;
         public static int displayMaxHP = 3;
@@ -73,9 +76,21 @@ namespace VexedCore
             int iconYOffset = (int)(.15f * w);
             Engine.spriteBatch.Draw(Doodad.leftButton, new Rectangle(hudLeft + iconXOffset, topEdge + iconYOffset, iconSize, iconSize), Color.Blue);
             Engine.spriteBatch.Draw(Doodad.rightButton, new Rectangle(hudLeft + iconXOffset + iconSize, topEdge + iconYOffset, iconSize, iconSize), Color.Yellow);
-            Engine.spriteBatch.Draw(Ability.GetDecal(Engine.player.primaryAbility.type), new Rectangle(hudLeft + iconXOffset, topEdge + iconYOffset, iconSize, iconSize), Color.White);
+            if (Engine.player.primaryAbility.type == AbilityType.JetPack)
+            {
+                Engine.spriteBatch.Draw(fuelMeter, new Rectangle(hudLeft + iconXOffset, topEdge + iconYOffset, iconSize, iconSize), Color.White);
+                int coverSize = iconSize * Engine.player.primaryAbility.ammo / Engine.player.primaryAbility.maxAmmo;
+                Engine.spriteBatch.Draw(fuelCover, new Rectangle(hudLeft + iconXOffset, topEdge + iconYOffset + iconSize - coverSize, iconSize, coverSize), Color.White);                
+            }
+            if (Engine.player.secondaryAbility.type == AbilityType.JetPack)
+            {
+                Engine.spriteBatch.Draw(fuelMeter, new Rectangle(hudLeft + iconXOffset + iconSize, topEdge + iconYOffset, iconSize, iconSize), Color.White);
+                int coverSize = iconSize * Engine.player.secondaryAbility.ammo / Engine.player.secondaryAbility.maxAmmo;
+                Engine.spriteBatch.Draw(fuelCover, new Rectangle(hudLeft + iconXOffset + iconSize, topEdge + iconYOffset + iconSize - coverSize, iconSize, coverSize), Color.White);
+            }
+            Engine.spriteBatch.Draw(Ability.GetDecal(Engine.player.primaryAbility.type), new Rectangle(hudLeft + iconXOffset, topEdge + iconYOffset, iconSize, iconSize), Color.White);            
             Engine.spriteBatch.Draw(Ability.GetDecal(Engine.player.secondaryAbility.type), new Rectangle(hudLeft + iconXOffset + iconSize, topEdge + iconYOffset, iconSize, iconSize), Color.White);
-
+            
 
 
             int cubeSize = (int)(.13f * w);
@@ -249,110 +264,13 @@ namespace VexedCore
             Engine.spriteBatch.Draw(healthmeter_top, new Rectangle(hudLeft + healthXOffset, topEdge + healthYOffset, healthSize, healthSize), Color.White);
 
 
-
-            /*if (Engine.controlType == ControlType.GamePad)
-            {
-                if (Engine.player.secondaryAbility.isPassive == false)
-                    Ability.Draw(.825f, .02f, AbilityType.YButton);
-                else
-                    Ability.Draw(.825f, .02f, AbilityType.Passive);
-
-                if (Engine.player.primaryAbility.isPassive == false)
-                    Ability.Draw(.75f, .12f, AbilityType.XButton);
-                else
-                    Ability.Draw(.75f, .12f, AbilityType.Passive);
-                Ability.Draw(.825f, .22f, AbilityType.AButton);
-                Ability.Draw(.9f, .12f, AbilityType.BButton);
-
-                Engine.player.secondaryAbility.Draw(.825f, .02f);
-                Engine.player.primaryAbility.Draw(.75f, .12f);
-                Ability.Draw(.825f, .22f, AbilityType.NormalJump, Engine.player.naturalShield.ammo, Engine.player.naturalShield.maxAmmo);
-                Ability.Draw(.9f, .12f, AbilityType.Use);
-            }
-            if (Engine.controlType == ControlType.MouseAndKeyboard)
-            {
-                if (Engine.player.secondaryAbility.isPassive == false)
-                    Ability.Draw(.825f, .06f, AbilityType.RightMouse, Color.Yellow, .1f);
-                else
-                    Ability.Draw(.825f, .06f, AbilityType.RightMouse);
-
-                if (Engine.player.primaryAbility.isPassive == false)
-                    Ability.Draw(.75f, .06f, AbilityType.LeftMouse, Color.Blue, .1f);
-                else
-                    Ability.Draw(.75f, .06f, AbilityType.LeftMouse);
-                
-                Engine.player.secondaryAbility.Draw(.825f, .06f);
-                Engine.player.primaryAbility.Draw(.75f, .06f);
-
-                for (int i = 0; i < Engine.player.naturalShield.maxAmmo; i++)
-                {
-                    Color healthColor = Color.Yellow;
-                    if (Engine.player.naturalShield.maxAmmo - i > Engine.player.naturalShield.ammo)
-                        healthColor = Color.Red;
-
-                    Ability.Draw(.92f, .1f + i * .085f, AbilityType.YButton, healthColor, .05f);
-                }
-                for (int i = 0; i < 5; i++)
-                {
-                    Color healthColor = Color.White;
-                    if (Engine.player.redOrbsCollected % 5 > i)
-                        healthColor = Color.Red;
-
-                    Ability.Draw(.965f, .1f + i * .05f, AbilityType.PowerCube, healthColor, .04f);
-                }
-                
-            }
-
-            if (Engine.controlType == ControlType.KeyboardOnly)
-            {
-                if (Engine.player.secondaryAbility.isPassive == false)
-                {
-                    if(Engine.player.secondaryAbility.type != AbilityType.Empty)
-                        Ability.Draw(.85f, .06f, AbilityType.KeyGeneric, Color.Yellow, .1f);
-                    else
-                        Ability.Draw(.85f, .06f, AbilityType.ZKey, Color.Yellow, .1f);
-                }
-                else
-                {
-                    if (Engine.player.secondaryAbility.type != AbilityType.Empty)
-                        Ability.Draw(.85f, .06f, AbilityType.KeyGeneric, Color.White, .1f);
-                    else
-                        Ability.Draw(.85f, .06f, AbilityType.ZKey, Color.White, .1f);
-                }
-
-                if (Engine.player.primaryAbility.isPassive == false)
-                {
-                    if(Engine.player.primaryAbility.type != AbilityType.Empty)
-                        Ability.Draw(.75f, .06f, AbilityType.KeyGeneric, Color.Blue, .1f);
-                    else
-                        Ability.Draw(.75f, .06f, AbilityType.XKey, Color.Blue, .1f);
-                }
-                else
-                {
-                    if(Engine.player.primaryAbility.type != AbilityType.Empty)
-                        Ability.Draw(.75f, .06f, AbilityType.KeyGeneric, Color.White, .1f);
-                    else
-                        Ability.Draw(.75f, .06f, AbilityType.XKey, Color.White, .1f);
-                }
-
-                Engine.player.secondaryAbility.Draw(.85f, .06f);
-                Engine.player.primaryAbility.Draw(.75f, .06f);
-
-                for (int i = 0; i < Engine.player.naturalShield.maxAmmo; i++)
-                {
-                    Color healthColor = Color.Yellow;
-                    if (Engine.player.naturalShield.maxAmmo - i > Engine.player.naturalShield.ammo)
-                        healthColor = Color.Red;
-
-                    Ability.Draw(.9f, .2f + i * .085f, AbilityType.YButton, healthColor, .05f);
-                }
-
-            }*/
             Engine.spriteBatch.End();
         }
 
         public static void Update(int gameTime)
-        {            
+        {
+
+
             if (hidden && hiddenOffset < 1000)
             {
                 hiddenOffset += gameTime;

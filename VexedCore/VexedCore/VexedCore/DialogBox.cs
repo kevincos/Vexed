@@ -52,6 +52,26 @@ namespace VexedCore
             this.textList.Add("EXTRATEXT");
         }
 
+        public static String TextFit(String input, float boxLength, SpriteFont font)
+        {
+            // Purge of existing newline chars
+            String revisedText = "";
+            String currentLine = "";
+
+            String[] wordList = input.Split(new char[] { ' ', '\n' });
+            for (int j = 0; j < wordList.Length; j++)
+            {
+                if (font.MeasureString(currentLine + ' ' + wordList[j]).X > boxLength)
+                {
+                    revisedText += currentLine + "\n";
+                    currentLine = "";
+                }
+                currentLine += wordList[j] + " ";
+            }
+            revisedText += currentLine + "\n";
+            return revisedText;
+        }
+
         public void FitToBox()
         {
             if (DialogBox.currentFont == null) DialogBox.currentFont = DialogBox.newFont;
@@ -59,22 +79,7 @@ namespace VexedCore
             float boxLength = 6 * w;            
             for (int i = 0; i < textList.Count; i++)
             {
-                // Purge of existing newline chars
-                String revisedText = "";
-                String currentLine = "";
-
-                String[] wordList = textList[i].Split(new char[]{' ','\n'});
-                for (int j = 0; j < wordList.Length; j++)
-                {
-                    if (DialogBox.currentFont.MeasureString(currentLine + ' ' + wordList[j]).X > boxLength)
-                    {
-                        revisedText += currentLine + "\n";
-                        currentLine = "";
-                    }
-                    currentLine += wordList[j] + " ";                    
-                }
-                revisedText += currentLine + "\n";
-                textList[i] = revisedText;
+                textList[i] = DialogChunk.TextFit(textList[i], boxLength, DialogBox.currentFont);                
             }
             
             

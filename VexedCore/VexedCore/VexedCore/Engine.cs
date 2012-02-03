@@ -63,7 +63,7 @@ namespace VexedCore
         public SaveGameText saveGameText;
 
         public static bool soundEffectsEnabled = true;
-        public static bool musicEnabled = false;
+        public static bool musicEnabled = true;
         public static bool justLoaded = false;
 
         
@@ -516,7 +516,19 @@ namespace VexedCore
             Engine.cameraUp = player.cameraUp;
             Engine.cameraTarget = player.cameraTarget;
 
+
             Hud.hidden = false;
+            MapHud.hiddenFrame = true;
+            MapHud.hiddenMap = true;
+            
+            if (WorldMap.state != ZoomState.None)
+            {
+                Hud.hidden = true;
+                MapHud.hiddenFrame = false;
+                MapHud.hiddenMap = false;
+                
+            }
+            
             if (Engine.player.currentRoom.id.Contains("MenuRoom"))
             {
                 Vector3 menuCameraTarget = cameraTarget;
@@ -656,6 +668,7 @@ namespace VexedCore
             DepthControl.Draw();
 
             Hud.Draw();
+            MapHud.Draw();
 
             
             if (dialogBox == null)
@@ -733,11 +746,12 @@ namespace VexedCore
             Engine.debug_doodadVertexUpdateMonitor.AddData(Engine.debug_updateDoodadVertexData);
             Engine.debug_doodadVertexUpdateMonitor.Update(gameTime);
             Engine.debug_updateDoodadVertexData = 0;
-            
+
             if(Engine.player.currentRoom.id.Contains("Menu"))
                 IntroOverlay.Update(gameTime);
             PauseMenu.Update(gameTime);
             Hud.Update(gameTime);
+            MapHud.Update(gameTime);
             if (PauseMenu.paused == true)
                 return;
             WorldMap.Update(gameTime);

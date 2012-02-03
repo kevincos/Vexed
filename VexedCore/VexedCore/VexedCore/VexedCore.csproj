@@ -140,6 +140,7 @@
     <Compile Include="JetBoss.cs" />
     <Compile Include="JumpRing.cs" />
     <Compile Include="LevelLoader.cs" />
+    <Compile Include="MapHud.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="MusicControl.cs" />
     <Compile Include="NonPhotoRealisticSettings.cs" />

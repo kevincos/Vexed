@@ -684,3 +684,15 @@ E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\U
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\healthmeter_slot.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\healthmeter_top.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\healthmeter_color.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\maphud_datamonitor.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\maphud_left.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\maphud_objectivemonitor.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\maphud_right.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Fonts\HudFontLarge.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Fonts\HudFontSmall.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\maphud_inventorydata.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\maphud_inventorylist.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\hudarrowleft.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\hudarrowright.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decals\decal_fuelcover.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decals\decal_fuelmeter.xnb

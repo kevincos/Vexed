@@ -4853,7 +4853,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\mouse.xnb</Output>
-      <Time>2011-10-06T12:43:11.6051645-07:00</Time>
+      <Time>2012-02-02T16:08:51.6465133-08:00</Time>
     </Item>
     <Item>
       <Source>UI\mouseandkeyboard.png</Source>
@@ -5361,6 +5361,114 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\healthmeter_color.xnb</Output>
       <Time>2012-02-01T12:22:26.4683289-08:00</Time>
+    </Item>
+    <Item>
+      <Source>UI\maphud_datamonitor.png</Source>
+      <Name>UI\maphud_datamonitor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\maphud_datamonitor.xnb</Output>
+      <Time>2012-02-02T14:22:20.7398622-08:00</Time>
+    </Item>
+    <Item>
+      <Source>UI\maphud_left.png</Source>
+      <Name>UI\maphud_left</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\maphud_left.xnb</Output>
+      <Time>2012-02-02T14:07:05.1017582-08:00</Time>
+    </Item>
+    <Item>
+      <Source>UI\maphud_objectivemonitor.png</Source>
+      <Name>UI\maphud_objectivemonitor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\maphud_objectivemonitor.xnb</Output>
+      <Time>2012-02-02T14:17:05.2715661-08:00</Time>
+    </Item>
+    <Item>
+      <Source>UI\maphud_right.png</Source>
+      <Name>UI\maphud_right</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\maphud_right.xnb</Output>
+      <Time>2012-02-02T14:06:40.9713588-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Fonts\HudFontLarge.spritefont</Source>
+      <Name>Fonts\HudFontLarge</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Fonts\HudFontLarge.xnb</Output>
+      <Time>2012-02-02T15:27:21.1510729-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Fonts\HudFontSmall.spritefont</Source>
+      <Name>Fonts\HudFontSmall</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Fonts\HudFontSmall.xnb</Output>
+      <Time>2012-02-02T12:52:25.6689662-08:00</Time>
+    </Item>
+    <Item>
+      <Source>UI\maphud_inventorydata.png</Source>
+      <Name>UI\maphud_inventorydata</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\maphud_inventorydata.xnb</Output>
+      <Time>2012-02-02T15:39:30.7913896-08:00</Time>
+    </Item>
+    <Item>
+      <Source>UI\maphud_inventorylist.png</Source>
+      <Name>UI\maphud_inventorylist</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\maphud_inventorylist.xnb</Output>
+      <Time>2012-02-02T13:38:35.9926357-08:00</Time>
+    </Item>
+    <Item>
+      <Source>UI\hudarrowleft.png</Source>
+      <Name>UI\hudarrowleft</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\hudarrowleft.xnb</Output>
+      <Time>2012-02-02T16:19:39.2840741-08:00</Time>
+    </Item>
+    <Item>
+      <Source>UI\hudarrowright.png</Source>
+      <Name>UI\hudarrowright</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\hudarrowright.xnb</Output>
+      <Time>2012-02-02T16:19:30.2955528-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decals\decal_fuelcover.png</Source>
+      <Name>Decals\decal_fuelcover</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decals\decal_fuelcover.xnb</Output>
+      <Time>2012-02-02T16:50:08.8591833-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decals\decal_fuelmeter.png</Source>
+      <Name>Decals\decal_fuelmeter</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decals\decal_fuelmeter.xnb</Output>
+      <Time>2012-02-02T16:50:11.5423389-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

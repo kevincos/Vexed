@@ -70,6 +70,10 @@ namespace VexedCore
         public static SoundEffect equipError;
         public static SoundEffect stationPowerUp;
 
+        public static SoundEffect mapSelect;
+        public static SoundEffect inventoryWhoosh;
+        public static SoundEffect mapWhoosh;
+
         public static SoundEffect tunnel;
 
         public static void Init(ContentManager content)
@@ -125,6 +129,10 @@ namespace VexedCore
             SoundFX.dialogExtend = content.Load<SoundEffect>("Sounds\\Throw4");
             SoundFX.dialogCharacter = content.Load<SoundEffect>("Sounds\\TinyZap2");
 
+            SoundFX.mapSelect = content.Load<SoundEffect>("Sounds\\Switch3");
+            SoundFX.inventoryWhoosh = content.Load<SoundEffect>("Sounds\\DoorOpen");
+            SoundFX.mapWhoosh = content.Load<SoundEffect>("Sounds\\Throw2");
+
             jetPackInstance = jetPack.CreateInstance();
             boosterInstance = jetPack.CreateInstance();
         }
@@ -148,6 +156,24 @@ namespace VexedCore
         {
             if (Engine.soundEffectsEnabled)
                 dialogCharacter.Play(.1f, 0f,0f);
+        }
+
+        public static void MapSelect()
+        {
+            if (Engine.soundEffectsEnabled)
+                mapSelect.Play();
+        }
+
+        public static void InventoryWhoosh()
+        {
+            if (Engine.soundEffectsEnabled)
+                inventoryWhoosh.Play();
+        }
+
+        public static void MapWhoosh()
+        {
+            if (Engine.soundEffectsEnabled)
+                mapWhoosh.Play();
         }
 
         public static void DialogExtend()
