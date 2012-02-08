@@ -58,7 +58,7 @@ namespace VexedCore
                 state = IntroState.SpaceBar;
                 DialogBox.SetDialog("pressspacebar");                
             }
-            if (state == IntroState.SpaceBar && Keyboard.GetState().IsKeyDown(Keys.Space))
+            if (state == IntroState.SpaceBar && (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)))
             {
                 state = IntroState.MoveHelp;
                 Game1.controller.JumpInvalidate();
