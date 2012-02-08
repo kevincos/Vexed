@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Runtime.InteropServices;
+
 
 namespace VexedCore
 {  
@@ -27,10 +29,13 @@ namespace VexedCore
         public static Rectangle titleSafeRect;
         public static Engine engine;
         public static Controls controller;
+        public static GameWindow gameWindow;
 
         public static bool resetTimer = false;
 
         public static ContentManager contentManager;
+
+        
 
         public Game1()
         {
@@ -54,7 +59,7 @@ namespace VexedCore
             titleSafeRect = graphics.GraphicsDevice.Viewport.TitleSafeArea;
 
             engine = new Engine();
-            controller = new Controls(activePlayer);
+            controller = new Controls(activePlayer);            
             //bloom = new BloomComponent(this);
             Content.RootDirectory = "Content";
 
@@ -152,7 +157,13 @@ namespace VexedCore
             Player.player_boots_textures = Content.Load<Texture2D>("Player\\p_texture_boots");
             Player.player_jetpack_textures = Content.Load<Texture2D>("Player\\p_texture_jetpack");
             Player.player_booster_textures = Content.Load<Texture2D>("Player\\p_texture_booster");
-            Ability.ability_textures = Content.Load<Texture2D>("abilities");
+            Player.player_doublejump = Content.Load<Texture2D>("Player\\p_doublejump");
+            Player.player_boosterthrust = Content.Load<Texture2D>("Player\\p_boosterthrust");
+            Player.player_jetpackthrust = Content.Load<Texture2D>("Player\\p_jetpackthrust");
+            Player.player_spinhook = Content.Load<Texture2D>("Player\\p_spinhook");
+            Player.player_spinlink = Content.Load<Texture2D>("Player\\p_spinlink");
+            //Ability.ability_textures = Content.Load<Texture2D>("abilities");
+            Wormhole.wormholeTexture = Content.Load<Texture2D>("Decorations\\wormhole");
             PauseMenu.pauseBackground = Content.Load<Texture2D>("UI\\pausebackground");
             PauseMenu.mouseCursor = Content.Load<Texture2D>("UI\\mouse");
             PauseMenu.mouseAndKeyboardHelp = Content.Load<Texture2D>("UI\\mouseandkeyboard");
@@ -201,6 +212,7 @@ namespace VexedCore
             MapHud.inventoryListMonitor = Content.Load<Texture2D>("UI\\maphud_inventorylist");
             MapHud.mapDataMonitor = Content.Load<Texture2D>("UI\\maphud_datamonitor");
             MapHud.mapObjectiveMonitor = Content.Load<Texture2D>("UI\\maphud_objectivemonitor");
+            MapHud.mapFilterMonitor = Content.Load<Texture2D>("UI\\maphud_filter");
             MapHud.smallFont = Content.Load<SpriteFont>("Fonts\\HudFontSmall");
             MapHud.largeFont = Content.Load<SpriteFont>("Fonts\\HudFontLarge");
             Skybox.LoadTextures(Content);
@@ -293,6 +305,12 @@ namespace VexedCore
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            if (IsActive == false)
+            {
+                return;
+            }
+            gameWindow = this.Window;
+            
             
             // Allows the game to exit
             if (Engine.quit == true)

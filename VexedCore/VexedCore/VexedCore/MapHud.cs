@@ -20,6 +20,7 @@ namespace VexedCore
         public static Texture2D rightArrow;
         public static Texture2D mapDataMonitor;
         public static Texture2D mapObjectiveMonitor;
+        public static Texture2D mapFilterMonitor;
         public static Texture2D inventoryDataMonitor;
         public static Texture2D inventoryListMonitor;
 
@@ -34,16 +35,26 @@ namespace VexedCore
         public static int hiddenMapMaxOffsetTime = 1000;
         public static int hiddenInventoryOffsetTime = 1200;
         public static int hiddenInventoryMaxOffsetTime = 1200;
+        public static int filterCooldown;
 
         public static int inventoryListIncrement = 0;
         public static int inventoryListTop;
         public static int inventoryListBottom;
         public static int inventoryListLeft;
         public static int inventoryListWidth;
-        
+        public static int hudLeftSide;
+        public static int hudRightSide;
+        public static int hudSideWidth;
+        public static int filterMonitorWidth;
+        public static int filterMonitorHeight;
+        public static int filterMonitorTop;
+        public static int filterMonitorLeft;
+        public static Vector2 mousePos;
 
         public static SpriteFont smallFont;
         public static SpriteFont largeFont;
+
+        public static bool hudClick = false;
 
         public static SpriteFont currentFont
         {
@@ -61,10 +72,11 @@ namespace VexedCore
         {
             Engine.spriteBatch.Begin();
 
-
+            SpriteFont spriteFont = currentFont;
             // Map Monitors
             int w = Game1.titleSafeRect.Width;
-            int monitorTop = Game1.titleSafeRect.Top - hiddenMapOffsetTime;// +hiddenInventoryOffsetTime - hiddenInventoryMaxOffsetTime;
+            int h = Game1.titleSafeRect.Height;
+            int monitorTop = Game1.titleSafeRect.Top - hiddenMapOffsetTime;
             int objectiveTop = Game1.titleSafeRect.Top - hiddenMapOffsetTime;
             int objectiveLeft = Game1.titleSafeRect.Center.X;
             int monitorLeft = Game1.titleSafeRect.Center.X - w/2;
@@ -73,18 +85,47 @@ namespace VexedCore
             int rightEdge = Game1.titleSafeRect.Right;
             int topEdge = Game1.titleSafeRect.Top;
             int bottomEdge = Game1.titleSafeRect.Bottom;
-            int hudSideWidth = (int)(.1f * w);
-            int hudRightSide = Game1.titleSafeRect.Right - hudSideWidth + hiddenFrameOffsetTime;
-            int hudLeftSide = Game1.titleSafeRect.Left - hiddenFrameOffsetTime;
+            hudSideWidth = (int)(.1f * w);
+            hudRightSide = Game1.titleSafeRect.Right - hudSideWidth + hiddenFrameOffsetTime;
+            hudLeftSide = Game1.titleSafeRect.Left - hiddenFrameOffsetTime;
             int dataMonitorWidth = w / 2;
-            int dataMonitorHeight = w / 4;
-            int objectiveMonitorHeight = w / 8;
+            int dataMonitorHeight = h / 4;
+            int objectiveMonitorHeight = h / 6;
             int objectiveMonitorWidth = w / 2;
-
+            filterMonitorWidth = 3*w / 5;
+            filterMonitorHeight = h / 6;
+            int filterMonitorBottom  = bottomEdge + hiddenMapOffsetTime;
+            filterMonitorTop = filterMonitorBottom - filterMonitorHeight;
+            filterMonitorLeft = rightEdge - filterMonitorWidth;
 
             Engine.spriteBatch.Draw(mapDataMonitor, new Rectangle(monitorLeft, monitorTop, dataMonitorWidth, dataMonitorHeight), Color.White);
             Engine.spriteBatch.Draw(mapObjectiveMonitor, new Rectangle(objectiveLeft, objectiveTop, objectiveMonitorWidth, objectiveMonitorHeight), Color.White);
+            
+            // Filter Monitor
+            Engine.spriteBatch.Draw(mapFilterMonitor, new Rectangle(rightEdge - filterMonitorWidth, filterMonitorBottom - filterMonitorHeight, filterMonitorWidth, filterMonitorHeight), Color.White);
 
+            Color filterColor = Color.YellowGreen;
+
+            filterColor = Color.YellowGreen;
+
+            if (Engine.player.saveFilter)
+                filterColor = new Color(80, 80, 80);
+            Engine.spriteBatch.DrawString(spriteFont, "Save Stations", new Vector2(filterMonitorLeft + .057f * w, filterMonitorTop + .045f * h), filterColor);
+
+            filterColor = Color.YellowGreen;
+            if (Engine.player.itemFilter)
+                filterColor = new Color(80, 80, 80);
+            Engine.spriteBatch.DrawString(spriteFont, "Item Stations", new Vector2(filterMonitorLeft + .057f * w, filterMonitorTop + .085f * h), filterColor);
+
+            filterColor = Color.YellowGreen;
+            if (Engine.player.healthFilter)
+                filterColor = new Color(80, 80, 80);
+            Engine.spriteBatch.DrawString(spriteFont, "Health Stations", new Vector2(filterMonitorLeft + .28f * w, filterMonitorTop + .045f * h), filterColor);
+
+            filterColor = Color.YellowGreen;
+            if (Engine.player.warpFilter)
+                filterColor = new Color(80, 80, 80);
+            Engine.spriteBatch.DrawString(spriteFont, "Warp Nodes", new Vector2(filterMonitorLeft + .28f * w, filterMonitorTop + .085f * h), filterColor);
 
 
             // Inventory Monitors
@@ -101,8 +142,6 @@ namespace VexedCore
             
 
             // Sides
-
-
             Engine.spriteBatch.Draw(hudLeft, new Rectangle(hudLeftSide, topEdge, hudSideWidth, bottomEdge - topEdge), Color.White);
             Engine.spriteBatch.Draw(hudRight, new Rectangle(hudRightSide, topEdge, hudSideWidth, bottomEdge - topEdge), Color.White);
 
@@ -133,7 +172,7 @@ namespace VexedCore
             }
             
             
-            SpriteFont spriteFont = currentFont;
+            
 
 
 
@@ -165,8 +204,10 @@ namespace VexedCore
                     outputStringBase += "\nHealth Cubes: " + r.currentRedOrbs + " / " + r.maxRedOrbs;
                 }
 
-                Engine.spriteBatch.DrawString(spriteFont, outputStringTitle, new Vector2(monitorLeft + .137f * w, monitorTop + .027f * w), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(spriteFont, outputStringBase, new Vector2(monitorLeft + .167f * w, monitorTop + .062f * w), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(spriteFont, outputStringTitle, new Vector2(monitorLeft + .137f * w, monitorTop + .032f * h), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(spriteFont, outputStringBase, new Vector2(monitorLeft + .167f * w, monitorTop + .074f * h), Color.YellowGreen);
+
+                
             }
             if (WorldMap.state == ZoomState.World)
             {
@@ -179,8 +220,8 @@ namespace VexedCore
                 outputStringBase += "\nWarp Level: " + s.currentBlueOrbs + " / " + s.maxBlueOrbs;
                 outputStringBase += "\nRed Cubes: " + s.currentRedOrbs + " / " + s.maxRedOrbs;
 
-                Engine.spriteBatch.DrawString(spriteFont, outputStringTitle, new Vector2(monitorLeft + .137f * w, monitorTop + .027f * w), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(spriteFont, outputStringBase, new Vector2(monitorLeft + .167f * w, monitorTop + .062f * w), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(spriteFont, outputStringTitle, new Vector2(monitorLeft + .137f * w, monitorTop + .032f * h), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(spriteFont, outputStringBase, new Vector2(monitorLeft + .167f * w, monitorTop + .074f * h), Color.YellowGreen);
             }
             if (inventoryIndexList == null)
             {
@@ -227,8 +268,8 @@ namespace VexedCore
 
                         if (Engine.player.upgrades[inventoryIndexList[i]] == true)
                         {
-                            Engine.spriteBatch.DrawString(spriteFont, a.FriendlyName(), new Vector2(inventoryDataLeft + .01f * w, inventoryDataTop + .08f * w), Color.YellowGreen);
-                            Engine.spriteBatch.DrawString(spriteFont, DialogChunk.TextFit(a.Description(), inventoryDataRight - inventoryDataLeft - .08f * w, spriteFont), new Vector2(inventoryDataLeft + .01f * w, inventoryDataTop + .15f * w), Color.YellowGreen);
+                            Engine.spriteBatch.DrawString(spriteFont, a.FriendlyName(), new Vector2(inventoryDataLeft + .01f * w, inventoryDataTop + .12f * h), Color.YellowGreen);
+                            Engine.spriteBatch.DrawString(spriteFont, DialogChunk.TextFit(a.Description(), inventoryDataRight - inventoryDataLeft - .12f * h, spriteFont), new Vector2(inventoryDataLeft + .01f * w, inventoryDataTop + .15f * w), Color.YellowGreen);
                         }
 
                     }
@@ -251,13 +292,14 @@ namespace VexedCore
 
             if (WorldMap.state != ZoomState.None)
             {
-                Engine.spriteBatch.DrawString(spriteFont, "Current Objective: ", new Vector2(objectiveLeft + .037f * w, objectiveTop + .027f * w), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(spriteFont, "Current Objective: ", new Vector2(objectiveLeft + .037f * w, objectiveTop + .037f * h), Color.YellowGreen);
 
-                Engine.spriteBatch.DrawString(spriteFont, ObjectiveControl.objectives[Engine.player.currentObjective].text, new Vector2(objectiveLeft + .067f * w, objectiveTop + .062f * w), Color.YellowGreen);
+                Engine.spriteBatch.DrawString(spriteFont, ObjectiveControl.objectives[Engine.player.currentObjective].text, new Vector2(objectiveLeft + .067f * w, objectiveTop + .082f * h), Color.YellowGreen);
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.LeftControl) == false && WorldMap.state != ZoomState.None)
+            mousePos = new Vector2(Mouse.GetState().X - 32, Mouse.GetState().Y);
+            if (WorldMap.state != ZoomState.None)
             {
-                Vector2 mousePos = new Vector2(Mouse.GetState().X - 32, Mouse.GetState().Y);
+                
                 Engine.spriteBatch.Draw(PauseMenu.mouseCursor, mousePos, Color.YellowGreen);
             }
             Engine.spriteBatch.End();
@@ -304,6 +346,51 @@ namespace VexedCore
             {
                 hiddenFrameOffsetTime -= gameTime;
                 if (hiddenFrameOffsetTime < 0) hiddenFrameOffsetTime = 0;
+            }
+
+            filterCooldown -= gameTime;
+            if (filterCooldown < 0) filterCooldown = 0;
+            hudClick = false;
+            if ((WorldMap.state == ZoomState.Sector || WorldMap.state == ZoomState.World) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                
+                if (mousePos.X > filterMonitorLeft && mousePos.Y > filterMonitorTop)
+                {
+                    hudClick = true;
+                    if (filterCooldown == 0)
+                    {
+                        if (mousePos.X > filterMonitorTop + filterMonitorHeight / 2)
+                        {
+                            if (mousePos.Y > filterMonitorTop + filterMonitorHeight / 2)
+                            {
+                                Engine.player.warpFilter = !Engine.player.warpFilter;
+                                SoundFX.MapSelect();
+                                filterCooldown = 300;
+                            }
+                            else
+                            {
+                                Engine.player.healthFilter = !Engine.player.healthFilter;
+                                SoundFX.MapSelect();
+                                filterCooldown = 300;
+                            }
+                        }
+                        else
+                        {
+                            if (mousePos.Y > filterMonitorTop + filterMonitorHeight / 2)
+                            {
+                                Engine.player.itemFilter = !Engine.player.itemFilter;
+                                SoundFX.MapSelect();
+                                filterCooldown = 300;
+                            }
+                            else
+                            {
+                                Engine.player.saveFilter = !Engine.player.saveFilter;
+                                SoundFX.MapSelect();
+                                filterCooldown = 300;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

@@ -74,6 +74,11 @@ namespace VexedCore
         public static SoundEffect inventoryWhoosh;
         public static SoundEffect mapWhoosh;
 
+        public static SoundEffect flameAmbient;
+        public static SoundEffect zapAmbient;
+
+        public static SoundEffect brickBreak;
+
         public static SoundEffect tunnel;
 
         public static void Init(ContentManager content)
@@ -132,6 +137,10 @@ namespace VexedCore
             SoundFX.mapSelect = content.Load<SoundEffect>("Sounds\\Switch3");
             SoundFX.inventoryWhoosh = content.Load<SoundEffect>("Sounds\\DoorOpen");
             SoundFX.mapWhoosh = content.Load<SoundEffect>("Sounds\\Throw2");
+            SoundFX.brickBreak = content.Load<SoundEffect>("Sounds\\CannonPowder2");
+
+            SoundFX.flameAmbient = content.Load<SoundEffect>("Sounds\\Infernal");
+            SoundFX.zapAmbient = content.Load<SoundEffect>("Sounds\\BeamThin");
 
             jetPackInstance = jetPack.CreateInstance();
             boosterInstance = jetPack.CreateInstance();
@@ -141,9 +150,12 @@ namespace VexedCore
         {
             float distance = (source - Engine.player.center.position).Length();
             if (distance > 15f) return 0f;
-            if (distance < 3f) return 1f;
+            if (distance < 3f) 
+                return 1f;
             return (1f - (distance-3) / 12);
         }
+
+        
 
         public static void EquipError()
         {
@@ -163,6 +175,8 @@ namespace VexedCore
             if (Engine.soundEffectsEnabled)
                 mapSelect.Play();
         }
+
+
 
         public static void InventoryWhoosh()
         {
@@ -237,6 +251,12 @@ namespace VexedCore
         {
             if (Engine.soundEffectsEnabled)
                 steam.Play();
+        }
+
+        public static void BrickBreak(Vector3 location)
+        {
+            if (Engine.soundEffectsEnabled)
+                brickBreak.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void PlatformMove(Vector3 location)

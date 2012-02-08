@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ability.cs" />
+    <Compile Include="AmbientSound.cs" />
     <Compile Include="AnimationData.cs" />
     <Compile Include="ArmorBoss.cs" />
     <Compile Include="BattleBoss.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Vertex.cs" />
     <Compile Include="WorldMap.cs" />
     <Compile Include="WorldSave.cs" />
+    <Compile Include="Wormhole.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dialog.xml" />

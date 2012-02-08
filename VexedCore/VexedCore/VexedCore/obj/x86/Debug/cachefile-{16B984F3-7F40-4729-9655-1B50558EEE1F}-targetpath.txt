@@ -510,3 +510,15 @@ Content\UI\hudarrowleft.xnb
 Content\UI\hudarrowright.xnb
 Content\Decals\decal_fuelcover.xnb
 Content\Decals\decal_fuelmeter.xnb
+Content\Decals\decal_arrow.xnb
+Content\Decals\decal_objective.xnb
+Content\UI\maphud_filter.xnb
+Content\Decals\decal_maplabel.xnb
+Content\Sounds\CannonPowder2.xnb
+Content\Player\p_doublejump.xnb
+Content\Sounds\BeamThin.xnb
+Content\Player\p_boosterthrust.xnb
+Content\Player\p_jetpackthrust.xnb
+Content\Player\p_spinhook.xnb
+Content\Player\p_spinlink.xnb
+Content\Decorations\wormhole.xnb

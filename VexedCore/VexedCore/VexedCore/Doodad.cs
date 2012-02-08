@@ -71,7 +71,10 @@ namespace VexedCore
         Lander,
         Skull,
         Switch,
-        Empty
+        Empty,
+        Arrow,
+        Objective,
+        MapLabel
     }
    
     public class Doodad
@@ -99,6 +102,8 @@ namespace VexedCore
         public RoomStyle style = RoomStyle.Electric;
         public int orbsRemaining = 10;
 
+        public float distanceToTarget = 0;
+
         public int currentTime = 0;
         public bool nextBehavior = false;
         public bool behaviorStarted = false;
@@ -113,6 +118,9 @@ namespace VexedCore
         public string targetEdgeId;
         public string targetRoomId;
 
+        [XmlIgnore]
+        public AmbientSound sound = null;
+
         public Decal doorDecal = 0;
         public bool idle = false;
         public bool doorState = false;
@@ -122,6 +130,9 @@ namespace VexedCore
         public bool hologramOn = false;
         public static int hologramMaxFade = 100;
 
+        public int breakTime = 0;
+        public static int maxBreakTime = 300;
+        
         public int animationFrame = 0;
         public int animationTime = 0;
 
@@ -236,7 +247,10 @@ namespace VexedCore
             decalTextures[(int)Decal.Lander] = Content.Load<Texture2D>("Decals\\decal_lander");
             decalTextures[(int)Decal.Skull] = Content.Load<Texture2D>("Decals\\decal_skull");
             decalTextures[(int)Decal.Switch] = Content.Load<Texture2D>("Decals\\decal_switch");
-            decalTextures[(int)Decal.Empty] = Content.Load<Texture2D>("Decals\\decal_empty");    
+            decalTextures[(int)Decal.Empty] = Content.Load<Texture2D>("Decals\\decal_empty");
+            decalTextures[(int)Decal.Arrow] = Content.Load<Texture2D>("Decals\\decal_arrow");
+            decalTextures[(int)Decal.Objective] = Content.Load<Texture2D>("Decals\\decal_objective");
+            decalTextures[(int)Decal.MapLabel] = Content.Load<Texture2D>("Decals\\decal_maplabel");    
         }
 
         public static void InitBeamTextures(ContentManager Content)
@@ -255,6 +269,27 @@ namespace VexedCore
 
             
 
+        }
+
+        public void UpdateAmbientSounds(int gameTime)
+        {
+            if (sound == null)
+            {
+                if (type == VL.DoodadType.Beam)
+                {
+                    if(currentBehavior.secondaryValue == 1)
+                        sound = new AmbientSound(SoundFX.flameAmbient);
+                    else
+                        sound = new AmbientSound(SoundFX.zapAmbient);
+                }
+            }
+            if (sound != null)
+            {
+                if (type == VL.DoodadType.Beam)
+                {                    
+                    sound.Update(gameTime, position.position, stateTransition != 0f);                 
+                }
+            }
         }
 
         public Doodad(Doodad d)
@@ -282,6 +317,7 @@ namespace VexedCore
             doorDecal = d.doorDecal;
             currentTime = d.currentTime;
             nextBehavior = d.nextBehavior;
+            breakTime = d.breakTime;
             behaviorStarted = d.behaviorStarted;
             toggleOn = d.toggleOn;
             abilityType = d.abilityType;
@@ -468,6 +504,10 @@ namespace VexedCore
             {
                 SoundFX.WallSwitchOff(position.position);
             }
+            if (type == VL.DoodadType.Brick)
+            {
+                SoundFX.BrickBreak(position.position);
+            }
 
             if (type == VL.DoodadType.UpgradeStation && abilityType == AbilityType.Empty)
                 futureState = false;
@@ -477,7 +517,7 @@ namespace VexedCore
             if (futureState != active)
             {
                 refreshVertexData = true;
-            }
+            }            
 
             if(active != futureState)
                 active = futureState;
@@ -572,6 +612,8 @@ namespace VexedCore
             get
             {
                 if (stateTransition != 0 && stateTransition != 1)
+                    return true;
+                if (type == VL.DoodadType.Brick && active == true)
                     return true;
                 if (type == VL.DoodadType.Crate || type== VL.DoodadType.PowerPlug)                
                     return true;                
@@ -735,7 +777,7 @@ namespace VexedCore
                 }
                 if (type == VL.DoodadType.BridgeGate)
                     return Color.LightBlue;
-                if (type == VL.DoodadType.BridgeSide || type == VL.DoodadType.BridgeCover || type == VL.DoodadType.BridgeBack)
+                if (type == VL.DoodadType.BridgeSide || type == VL.DoodadType.SwitchPlate || type == VL.DoodadType.BridgeBack)
                     return Color.Gray;
                 if (type == VL.DoodadType.PowerOrb)
                     return Color.Gold;
@@ -751,6 +793,8 @@ namespace VexedCore
                     return Color.LightBlue;
                 if (type == VL.DoodadType.Checkpoint)
                     return Color.DarkBlue;
+                if (type == VL.DoodadType.WallSwitch)
+                    return new Color(170, 170, 170);
                 else
                     return Color.LightGray;
             }
@@ -796,7 +840,7 @@ namespace VexedCore
                     else
                         return new Color(210,150,150);
                 }
-                if (type == VL.DoodadType.BridgeSide || type == VL.DoodadType.BridgeCover || type == VL.DoodadType.BridgeBack)
+                if (type == VL.DoodadType.BridgeSide || type == VL.DoodadType.SwitchPlate || type == VL.DoodadType.BridgeBack)
                     return Color.Gray;
                 if (type == VL.DoodadType.BridgeGate)
                     return Color.LightBlue;
@@ -806,6 +850,8 @@ namespace VexedCore
                     return Color.Blue;
                 if (type == VL.DoodadType.RedCube)
                     return Color.Red;
+                if (type == VL.DoodadType.WallSwitch)
+                    return Color.Gray;
                 else
                     return Color.DarkGray;
             }
@@ -857,7 +903,7 @@ namespace VexedCore
                     return false;
                 if (type == VL.DoodadType.RightTunnelDoor || type == VL.DoodadType.LeftTunnelDoor || type == VL.DoodadType.RightDoor || type == VL.DoodadType.LeftDoor || type == VL.DoodadType.StationIcon || type == VL.DoodadType.TunnelTop || type == VL.DoodadType.TunnelSide || type == VL.DoodadType.RingSide || type == VL.DoodadType.RingTop)
                     return false;
-                if (type == VL.DoodadType.BridgeCover || type == VL.DoodadType.BridgeGate || type == VL.DoodadType.JumpPad || isStation)
+                if (type == VL.DoodadType.SwitchPlate || type == VL.DoodadType.BridgeGate || type == VL.DoodadType.JumpPad || isStation)
                     return false;
                 if (type == VL.DoodadType.Brick && active == true)
                     return false;
@@ -879,7 +925,7 @@ namespace VexedCore
                     return false;
                 if ((type == VL.DoodadType.Door || type == VL.DoodadType.Beam) && stateTransition == 0)
                     return false;
-                if (type == VL.DoodadType.Brick && active == true)
+                if (type == VL.DoodadType.Brick && breakTime == maxBreakTime)
                     return false;
                 if (type == VL.DoodadType.Waypoint)
                     return false;
@@ -976,7 +1022,11 @@ namespace VexedCore
                 }
                 if (type == VL.DoodadType.WallSwitch)
                 {
-                    return -.3f - stateTransition * .2f;
+                    return -.25f - stateTransition * .15f;
+                }
+                if (type == VL.DoodadType.SwitchPlate)
+                {
+                    return -.45f;
                 }
                 if (type == VL.DoodadType.HologramOldMan)
                 {
@@ -1081,15 +1131,19 @@ namespace VexedCore
                     return .25f;
                 if (type == VL.DoodadType.BridgeBack)
                     return 1.5f;
-                if (type == VL.DoodadType.BridgeCover)
-                    return 1.5f;
                 if (isOrb)
                     return .1f;
+                if (type == VL.DoodadType.Brick && active)
+                {
+                    return .25f;
+                }
                 if (type == VL.DoodadType.Door)
                     return .2f;
                 if (type == VL.DoodadType.Beam)
                     return .4f;
                 if (type == VL.DoodadType.WallSwitch)
+                    return .2f;
+                if (type == VL.DoodadType.SwitchPlate)
                     return .25f;
                 return .5f;
             }
@@ -1108,12 +1162,14 @@ namespace VexedCore
                     return .8f;
                 if (type == VL.DoodadType.LeftDoor || type == VL.DoodadType.RightDoor)
                     return .6f;
+                if (type == VL.DoodadType.Brick && active)
+                {
+                    return .25f;
+                }
                 if (type == VL.DoodadType.StationIcon)
                     return .4f;
                 if (type == VL.DoodadType.BridgeGate)
                     return .25f;
-                if (type == VL.DoodadType.BridgeCover)
-                    return 1f;
                 if (type == VL.DoodadType.BridgeBack)                
                     return .25f;
                 if (type == VL.DoodadType.BridgeSide)
@@ -1138,6 +1194,8 @@ namespace VexedCore
                 if (type == VL.DoodadType.StationIcon)
                     return .1f;
                 if (type == VL.DoodadType.WallSwitch)
+                    return .2f;
+                if (type == VL.DoodadType.SwitchPlate)
                     return .25f;
                 if (type == VL.DoodadType.Checkpoint || type == VL.DoodadType.PlugSlot || type == VL.DoodadType.LaserSwitch || type == VL.DoodadType.ItemBlock || isOrb || type == VL.DoodadType.HookTarget || type == VL.DoodadType.JumpPad || isStation)
                     return .1f;
@@ -1288,6 +1346,7 @@ namespace VexedCore
                 vList.Add(new Vertex(position, down + left));
                 vList.Add(new Vertex(position, down + right));
 
+                #region helpIcons
                 if (helpIconTime != 0)
                 {
                     if (type == VL.DoodadType.LoadStation)
@@ -1339,7 +1398,7 @@ namespace VexedCore
 
                             currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, SaveGameText.okTexCoords, loadButtonsList, true);
                             currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, SaveGameText.cancelTexCoords, loadButtonsList, true);
-                            if(SaveGameText.expertAvailable && SaveGameText.activeSaveSlot > -1 && SaveGameText.saveSummaryData[SaveGameText.activeSaveSlot].empty)
+                            if (SaveGameText.expertAvailable && SaveGameText.activeSaveSlot > -1 && SaveGameText.saveSummaryData[SaveGameText.activeSaveSlot].empty)
                                 currentRoom.AddBlockFrontToTriangleList(BButtonList, Color.Red, .55f, SaveGameText.extraTexCoords, loadButtonsList, true);
                         }
 
@@ -1387,32 +1446,28 @@ namespace VexedCore
                         if (Engine.controlType == ControlType.MouseAndKeyboard)
                         {
                             XButtonList = new List<Vertex>();
-                            XButtonList.Add(new Vertex(position, size * up + size * right + 2.5f * up + 1f * left));
-                            XButtonList.Add(new Vertex(position, size * up + size * left + 2.5f * up + 1f * left));
-                            XButtonList.Add(new Vertex(position, size * down + size * left + 2.5f * up + 1f * left));
-                            XButtonList.Add(new Vertex(position, size * down + size * right + 2.5f * up + 1f * left));
+                            XButtonList.Add(new Vertex(position, size * up + size * right + 2f * up + 2f * left));
+                            XButtonList.Add(new Vertex(position, size * up + size * left + 2f * up + 2f * left));
+                            XButtonList.Add(new Vertex(position, size * down + size * left + 2f * up + 2f * left));
+                            XButtonList.Add(new Vertex(position, size * down + size * right + 2f * up + 2f * left));
                             YButtonList = new List<Vertex>();
-                            YButtonList.Add(new Vertex(position, size * up + size * right + 2.5f * up + 1f * right));
-                            YButtonList.Add(new Vertex(position, size * up + size * left + 2.5f * up + 1f * right));
-                            YButtonList.Add(new Vertex(position, size * down + size * left + 2.5f * up + 1f * right));
-                            YButtonList.Add(new Vertex(position, size * down + size * right + 2.5f * up + 1f * right));
+                            YButtonList.Add(new Vertex(position, size * up + size * right + 2f * up + 2f * right));
+                            YButtonList.Add(new Vertex(position, size * up + size * left + 2f * up + 2f * right));
+                            YButtonList.Add(new Vertex(position, size * down + size * left + 2f * up + 2f * right));
+                            YButtonList.Add(new Vertex(position, size * down + size * right + 2f * up + 2f * right));
 
                             currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.Blue, .55f, Room.plateTexCoords, xEquipButtonList, true);
                             currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.Yellow, .55f, Room.plateTexCoords, yEquipButtonList, true);
+                            currentRoom.AddBlockFrontToTriangleList(XButtonList, Color.White, .55f, Room.plateTexCoords, xEquipButtonList, true);
+                            currentRoom.AddBlockFrontToTriangleList(YButtonList, Color.White, .55f, Room.plateTexCoords, yEquipButtonList, true);
                         }
 
                     }
                 }
+                #endregion
 
-
-                if (type == VL.DoodadType.BridgeCover)
-                {
-                    currentRoom.AddBlockToTriangleList(vList, baseColor, .5f, -.6f, Room.plateTexCoords, baseTriangleList);
-                    currentRoom.AddBlockToTriangleList(vList, baseColor, -.5f, .6f, Room.plateTexCoords, baseTriangleList);
-                    currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, .5f, -.6f, Room.plateTexCoords, baseTriangleList);
-                    currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, -.5f, .6f, Room.plateTexCoords, baseTriangleList);
-                }
-                else if (isPowerStation)
+                
+                if (isPowerStation)
                 {
                     if (orbsRemaining > 0)
                     {
@@ -1467,32 +1522,57 @@ namespace VexedCore
                         }
                     }
                 }
-                else if (type == VL.DoodadType.TunnelSide || type == VL.DoodadType.TunnelTop)
+                else if (type == VL.DoodadType.Brick)
                 {
-                    float roomSize = .5f*Math.Abs(Vector3.Dot(currentRoom.size, position.normal));
-                    currentRoom.AddBlockToTriangleList(vList, activeColor, depth, roomSize, Room.plateTexCoords, baseTriangleList,false);
-                    currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, roomSize, Room.plateTexCoords, baseTriangleList, false);
-
-                }
-                else if ((type == VL.DoodadType.RingSide || type == VL.DoodadType.RingTop) && targetDoodad.targetRoom != null)
-                {                    
-                    float nextRoomSize = .5f * Math.Abs(Vector3.Dot(targetDoodad.targetRoom.size, position.normal));
-                    float currentRoomSize = .5f * Math.Abs(Vector3.Dot(currentRoom.size, position.normal));
-                    float distanceToNextRoom = Math.Abs(Vector3.Dot(position.normal, (targetDoodad.targetRoom.center - currentRoom.center))) - nextRoomSize - currentRoomSize;
-
-                    float ringMod = 3f;
-                    for (; ringMod < Math.Min(20f, distanceToNextRoom / 2); ringMod += 4)
+                    if (active == true)
                     {
-                        currentRoom.AddBlockToTriangleList(vList, currentRoom.currentColor, ringMod,  -ringMod +.2f, Room.plateTexCoords, baseTriangleList,false);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, currentRoom.currentColor, ringMod, -ringMod + .2f, Room.plateTexCoords, baseTriangleList,false);                        
+                        Color breakColor = Color.Transparent;
+                        breakColor.R = (Byte)((breakTime * breakColor.R + (maxBreakTime - breakTime) * baseColor.R) / maxBreakTime);
+                        breakColor.G = (Byte)((breakTime * breakColor.G + (maxBreakTime - breakTime) * baseColor.G) / maxBreakTime);
+                        breakColor.B = (Byte)((breakTime * breakColor.B + (maxBreakTime - breakTime) * baseColor.B) / maxBreakTime);
+                        breakColor.A = (Byte)((breakTime * breakColor.A + (maxBreakTime - breakTime) * baseColor.A) / maxBreakTime);
+
+                        List<Vertex> chunkList = new List<Vertex>();
+                        Vector3 chunkOffset = (1f + (2f * breakTime) / maxBreakTime) * (up + right);
+                        chunkList.Add(new Vertex(position, up + right + chunkOffset));
+                        chunkList.Add(new Vertex(position, up + left + chunkOffset));
+                        chunkList.Add(new Vertex(position, down + left + chunkOffset));
+                        chunkList.Add(new Vertex(position, down + right + chunkOffset));
+                        currentRoom.BasicAddBlockSidesToTriangleList(chunkList, breakColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.AddBlockToTriangleList(chunkList, breakColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+
+                        chunkList = new List<Vertex>();
+                        chunkOffset = (1f + (2f * breakTime) / maxBreakTime) * (up + left);
+                        chunkList.Add(new Vertex(position, up + right + chunkOffset));
+                        chunkList.Add(new Vertex(position, up + left + chunkOffset));
+                        chunkList.Add(new Vertex(position, down + left + chunkOffset));
+                        chunkList.Add(new Vertex(position, down + right + chunkOffset));
+                        currentRoom.BasicAddBlockSidesToTriangleList(chunkList, breakColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.AddBlockToTriangleList(chunkList, breakColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+
+                        chunkList = new List<Vertex>();
+                        chunkOffset = (1f + (2f * breakTime) / maxBreakTime) * (down + right);
+                        chunkList.Add(new Vertex(position, up + right + chunkOffset));
+                        chunkList.Add(new Vertex(position, up + left + chunkOffset));
+                        chunkList.Add(new Vertex(position, down + left + chunkOffset));
+                        chunkList.Add(new Vertex(position, down + right + chunkOffset));
+                        currentRoom.BasicAddBlockSidesToTriangleList(chunkList, breakColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.AddBlockToTriangleList(chunkList, breakColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+
+                        chunkList = new List<Vertex>();
+                        chunkOffset = (1f + (2f * breakTime) / maxBreakTime) * (down + left);
+                        chunkList.Add(new Vertex(position, up + right + chunkOffset));
+                        chunkList.Add(new Vertex(position, up + left + chunkOffset));
+                        chunkList.Add(new Vertex(position, down + left + chunkOffset));
+                        chunkList.Add(new Vertex(position, down + right + chunkOffset));
+                        currentRoom.BasicAddBlockSidesToTriangleList(chunkList, breakColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.AddBlockToTriangleList(chunkList, breakColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                     }
-                    if (ringMod >= 10f && distanceToNextRoom / 2 - 20 > .2f)
+                    else
                     {
-                        currentRoom.AddBlockToTriangleList(vList, currentRoom.currentColor, 20f, -(distanceToNextRoom / 2), Room.plateTexCoords, baseTriangleList, false);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, currentRoom.currentColor, 20f, -(distanceToNextRoom / 2), Room.plateTexCoords, baseTriangleList, false);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                     }
-                    
-                    
                 }
                 else if (type != VL.DoodadType.Holoprojector && type != VL.DoodadType.HologramOldMan && type != VL.DoodadType.Beam && type != VL.DoodadType.PowerPlug && type != VL.DoodadType.Vortex)
                 {
@@ -1625,7 +1705,17 @@ namespace VexedCore
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         baseTriangleArray, 0, baseTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
+                //currentRoom.dynamicPlate.AddRange(baseTriangleList);
                 
+
+
+            }
+        }
+
+        public void DrawDecals(Room currentRoom)
+        {
+            if (shouldRender == true)
+            {
                 if (decalList.Count > 0)
                 {
                     Engine.playerTextureEffect.Texture = currentDecalTexture;
@@ -1633,7 +1723,6 @@ namespace VexedCore
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         decalArray, 0, decalList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
-
             }
         }
 
@@ -1700,7 +1789,12 @@ namespace VexedCore
 
                     Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        xEquipButtonList.ToArray(), 0, xEquipButtonList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        xEquipButtonList.ToArray(), 0, xEquipButtonList.Count() / 6, VertexPositionColorNormalTexture.VertexDeclaration);
+
+                    Engine.playerTextureEffect.Texture = Ability.GetDecal(Engine.player.primaryAbility.type);
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        xEquipButtonList.ToArray(), 6, xEquipButtonList.Count() / 6, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
 
@@ -1710,7 +1804,12 @@ namespace VexedCore
 
                     Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        yEquipButtonList.ToArray(), 0, yEquipButtonList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        yEquipButtonList.ToArray(), 0, yEquipButtonList.Count() / 6, VertexPositionColorNormalTexture.VertexDeclaration);
+
+                    Engine.playerTextureEffect.Texture = Ability.GetDecal(Engine.player.secondaryAbility.type);
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        yEquipButtonList.ToArray(), 6, yEquipButtonList.Count() / 6, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
             }
         }
@@ -1722,6 +1821,12 @@ namespace VexedCore
                 flashTime += gameTime;
                 if (flashTime > maxFlashTime)
                     flashTime = 0;
+            }
+            if (type == VL.DoodadType.Brick && active == true)
+            {
+                breakTime += gameTime;
+                if (breakTime > maxBreakTime)
+                    breakTime = maxBreakTime;
             }
             if (type == VL.DoodadType.Holoprojector || isStation == true || type == VL.DoodadType.JumpPad || type == VL.DoodadType.Vortex)
             {
@@ -1782,7 +1887,8 @@ namespace VexedCore
                 {
                     SoundFX.HologramFade();
                 }
-            }
+            }            
+
 
             //if (Animated)
             {

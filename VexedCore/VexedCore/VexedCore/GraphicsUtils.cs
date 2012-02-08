@@ -58,7 +58,7 @@ namespace VexedCore
 
     }
 
-    public class TrasnparentSquare
+    public class TransparentSquare
     {
         public VertexPositionColorNormalTexture v1;
         public VertexPositionColorNormalTexture v2;
@@ -69,7 +69,7 @@ namespace VexedCore
         
         public Vector3 averagePos;
 
-        public TrasnparentSquare(VertexPositionColorNormalTexture v1, VertexPositionColorNormalTexture v2, VertexPositionColorNormalTexture v3, VertexPositionColorNormalTexture v4, VertexPositionColorNormalTexture v5, VertexPositionColorNormalTexture v6)
+        public TransparentSquare(VertexPositionColorNormalTexture v1, VertexPositionColorNormalTexture v2, VertexPositionColorNormalTexture v3, VertexPositionColorNormalTexture v4, VertexPositionColorNormalTexture v5, VertexPositionColorNormalTexture v6)
         {
             this.v1 = v1;
             this.v2 = v2;
@@ -81,7 +81,7 @@ namespace VexedCore
         }
     }
 
-    public class FaceSorter : Comparer<TrasnparentSquare>
+    public class FaceSorter : Comparer<TransparentSquare>
     {
         Vector3 unit = Vector3.Zero;
         public FaceSorter(Vector3 unit)
@@ -90,7 +90,7 @@ namespace VexedCore
             this.unit.Normalize();
         }
         // Compares by Length, Height, and Width.
-        public override int Compare(TrasnparentSquare t1, TrasnparentSquare t2)
+        public override int Compare(TransparentSquare t1, TransparentSquare t2)
         {
             float t1Center = Vector3.Dot(t1.averagePos, unit);
             float t2Center = Vector3.Dot(t2.averagePos, unit);

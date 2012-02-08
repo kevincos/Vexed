@@ -212,8 +212,6 @@ namespace VexedCore
             gunLine.Normalize();
             gunNormal.Normalize();
 
-            //if (srcMonster.moveType == VL.MovementType.RockBoss && srcMonster.rockBoss.state != RockBossState.Fight1 && srcMonster.rockBoss.state != RockBossState.Fight2 && srcMonster.rockBoss.state != RockBossState.Fight3)
-                //return;
             if (srcMonster.moveType == VL.MovementType.RockBoss && (srcMonster.rockBoss.state == RockBossState.Snow_Flee1))
                 return;
 
@@ -223,6 +221,10 @@ namespace VexedCore
                 projectileVelocity.Normalize();
 
                 fireCooldown = fireTime;
+                if (srcMonster != null)
+                {
+                    fireCooldown += (ArmorBoss.r.Next(fireCooldown / 5) - fireCooldown / 10);
+                }
                 if (gunType == VL.GunType.Blaster || gunType == VL.GunType.Repeater)
                 {
                     SoundFX.FireBlaster(position.position);

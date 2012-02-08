@@ -4853,7 +4853,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\UI\mouse.xnb</Output>
-      <Time>2012-02-02T16:08:51.6465133-08:00</Time>
+      <Time>2012-02-03T17:52:24.3097362-08:00</Time>
     </Item>
     <Item>
       <Source>UI\mouseandkeyboard.png</Source>
@@ -5369,7 +5369,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\UI\maphud_datamonitor.xnb</Output>
-      <Time>2012-02-02T14:22:20.7398622-08:00</Time>
+      <Time>2012-02-03T10:33:06.9600986-08:00</Time>
     </Item>
     <Item>
       <Source>UI\maphud_left.png</Source>
@@ -5469,6 +5469,120 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_fuelmeter.xnb</Output>
       <Time>2012-02-02T16:50:11.5423389-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decals\decal_arrow.png</Source>
+      <Name>Decals\decal_arrow</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_arrow.xnb</Output>
+      <Time>2012-02-03T17:22:38.2391501-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decals\decal_objective.png</Source>
+      <Name>Decals\decal_objective</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_objective.xnb</Output>
+      <Time>2012-02-03T14:39:47.6344879-08:00</Time>
+    </Item>
+    <Item>
+      <Source>UI\maphud_filter.png</Source>
+      <Name>UI\maphud_filter</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\UI\maphud_filter.xnb</Output>
+      <Time>2012-02-03T15:22:55.0875515-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decals\decal_maplabel.png</Source>
+      <Name>Decals\decal_maplabel</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_maplabel.xnb</Output>
+      <Time>2012-02-03T17:25:36.885511-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\CannonPowder2.wav</Source>
+      <Name>Sounds\CannonPowder2</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\CannonPowder2.xnb</Output>
+      <Time>2007-02-09T10:23:40-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Player\p_doublejump.png</Source>
+      <Name>Player\p_doublejump</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Player\p_doublejump.xnb</Output>
+      <Time>2012-02-06T15:39:49.5720974-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\BeamThin.wav</Source>
+      <Name>Sounds\BeamThin</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Sounds\BeamThin.xnb</Output>
+      <Time>2007-02-09T10:47:42-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Player\p_boosterthrust.png</Source>
+      <Name>Player\p_boosterthrust</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Player\p_boosterthrust.xnb</Output>
+      <Time>2012-02-07T12:37:42.6341599-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Player\p_jetpackthrust.png</Source>
+      <Name>Player\p_jetpackthrust</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Player\p_jetpackthrust.xnb</Output>
+      <Time>2012-02-07T12:37:41.6581033-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Player\p_spinhook.png</Source>
+      <Name>Player\p_spinhook</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Player\p_spinhook.xnb</Output>
+      <Time>2012-02-07T12:56:04.441061-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Player\p_spinlink.png</Source>
+      <Name>Player\p_spinlink</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Player\p_spinlink.xnb</Output>
+      <Time>2012-02-07T13:12:30.3902427-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decorations\wormhole.png</Source>
+      <Name>Decorations\wormhole</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decorations\wormhole.xnb</Output>
+      <Time>2012-02-07T15:11:52.8479485-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

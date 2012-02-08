@@ -47,6 +47,11 @@ namespace VexedCore
         public static Texture2D player_boots_textures;
         public static Texture2D player_jetpack_textures;
         public static Texture2D player_booster_textures;
+        public static Texture2D player_doublejump;
+        public static Texture2D player_jetpackthrust;
+        public static Texture2D player_boosterthrust;
+        public static Texture2D player_spinhook;
+        public static Texture2D player_spinlink;
         public static List<List<Vector2>> texCoordList;
 
         public int totalGameTime = 0;
@@ -138,6 +143,8 @@ namespace VexedCore
         public Doodad upgradeStationDoodad = null;
         public String upgradeStationDoodadId = "";
         public int upgradeStage = 0;
+        public int doubleJumpTime = 0;
+        public static int doubleJumpFadeTime = 300;
 
         public HookState hookState = HookState.Waiting;
 
@@ -194,6 +201,12 @@ namespace VexedCore
         public int redOrbsCollected = 0;
         public int redOrbsGoal = 2;
 
+        public bool objectiveFilter = false;
+        public bool itemFilter = false;
+        public bool saveFilter = false;
+        public bool healthFilter = false;
+        public bool warpFilter = false;
+
         public Vector2 cameraAngle;
         public Vector2 targetCameraAngle;
 
@@ -218,7 +231,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
             primaryAbility = new Ability(AbilityType.JetPack);
-            secondaryAbility = new Ability(AbilityType.Laser);
+            secondaryAbility = new Ability(AbilityType.SpinHook);
             naturalShield = new Ability(AbilityType.Shield);
 
             upgrades[(int)AbilityType.Laser] = true;
@@ -270,7 +283,13 @@ namespace VexedCore
             redOrbsGoal = p.redOrbsGoal;
             orbsCollected = p.orbsCollected;
             weaponSwitchCooldown = p.weaponSwitchCooldown;
-            
+
+            healthFilter = p.healthFilter;
+            itemFilter = p.itemFilter;
+            saveFilter = p.saveFilter;
+            warpFilter = p.warpFilter;
+            objectiveFilter = p.objectiveFilter;
+
             gunType = p.gunType;
             currentRoomId = p.currentRoomId;
             upgradeStationDoodadId = p.upgradeStationDoodadId;
@@ -1139,6 +1158,15 @@ namespace VexedCore
             else
                 wallTime = 0;
 
+            if (doubleJumpTime > 0)
+            {
+                doubleJumpTime -= gameTime;
+                if (doubleJumpTime < 0)
+                    doubleJumpTime = 0;
+            }
+
+
+
             if (jetPackThrust == false)
             {
                 SoundFX.EndJetPack();
@@ -1668,6 +1696,7 @@ namespace VexedCore
                                 jumpRecovery = jumpRecoveryMax;
                                 primaryAbility.ammo--;
                                 SoundFX.RocketJump();
+                                doubleJumpTime = doubleJumpFadeTime;
                             }
                         }
                         else if (secondaryAbility.type == AbilityType.DoubleJump && secondaryAbility.ammo != 0)
@@ -1679,6 +1708,7 @@ namespace VexedCore
                                 jumpRecovery = jumpRecoveryMax;
                                 secondaryAbility.ammo--;
                                 SoundFX.RocketJump();
+                                doubleJumpTime = doubleJumpFadeTime;
                             }
                         }
                     }
@@ -2174,6 +2204,33 @@ namespace VexedCore
                 List<Vertex> hookVertexList = new List<Vertex>();
                 Vector3 hookUp = hookShot.direction;
                 Vector3 hookRight = Vector3.Cross(hookShot.direction, hookShot.normal);
+                VertexPositionColorNormalTexture[] hookArray = null;
+
+                for (int i = 1; i < 4; i++)
+                {
+
+                    hookVertexList.Add(new Vertex((i * hookShot.position + (5 - i) * (center.position + .5f * right * faceDirection + .2f * up)) / 5, hookShot.normal, +playerHalfHeight * hookUp + .5f * hookRight, hookShot.direction));
+                    hookVertexList.Add(new Vertex((i * hookShot.position + (5 - i) * (center.position + .5f * right * faceDirection + .2f * up)) / 5, hookShot.normal, +playerHalfHeight * hookUp - .5f * hookRight, hookShot.direction));
+                    hookVertexList.Add(new Vertex((i * hookShot.position + (5 - i) * (center.position + .5f * right * faceDirection + .2f * up)) / 5, hookShot.normal, -playerHalfHeight * hookUp - .5f * hookRight, hookShot.direction));
+                    hookVertexList.Add(new Vertex((i * hookShot.position + (5 - i) * (center.position + .5f * right * faceDirection + .2f * up)) / 5, hookShot.normal, -playerHalfHeight * hookUp + .5f * hookRight, hookShot.direction));
+                    foreach (Vertex v in hookVertexList)
+                        v.Update(currentRoom, 1);
+
+
+                    currentRoom.AddTextureToTriangleList(hookVertexList, Color.White, depth + .075f, hookTriangleList, Room.plateTexCoords, true);
+
+                    hookArray = hookTriangleList.ToArray();
+
+                    playerEffect.Texture = Player.player_spinlink;
+                    playerEffect.CurrentTechnique.Passes[0].Apply();
+
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        hookArray, 0, hookArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+
+                    hookVertexList = new List<Vertex>();
+                    hookTriangleList = new List<VertexPositionColorNormalTexture>();
+                }
+                
                 hookVertexList.Add(new Vertex(hookShot.position, hookShot.normal, +playerHalfHeight * hookUp + .5f * hookRight, hookShot.direction));
                 hookVertexList.Add(new Vertex(hookShot.position, hookShot.normal, +playerHalfHeight * hookUp - .5f * hookRight, hookShot.direction));
                 hookVertexList.Add(new Vertex(hookShot.position, hookShot.normal, -playerHalfHeight * hookUp - .5f * hookRight, hookShot.direction));
@@ -2182,11 +2239,11 @@ namespace VexedCore
                     v.Update(currentRoom, 1);
 
 
-                currentRoom.AddTextureToTriangleList(hookVertexList, Color.White, depth + .075f, hookTriangleList, Ability.texCoordList[7], true);
+                currentRoom.AddTextureToTriangleList(hookVertexList, Color.White, depth + .075f, hookTriangleList, Room.plateTexCoords, true);
 
-                VertexPositionColorNormalTexture[] hookArray = hookTriangleList.ToArray();
+                hookArray = hookTriangleList.ToArray();
 
-                playerEffect.Texture = Ability.ability_textures;
+                playerEffect.Texture = Player.player_spinhook;
                 playerEffect.CurrentTechnique.Passes[0].Apply();
 
                 Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
@@ -2221,8 +2278,8 @@ namespace VexedCore
                         {
                             v.Update(currentRoom, 1);
                         }
-                        currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Ability.texCoordList[33], true);
-                        playerEffect.Texture = Ability.ability_textures;
+                        currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Room.plateTexCoords, true);
+                        playerEffect.Texture = Player.player_boosterthrust;
                         playerEffect.CurrentTechnique.Passes[0].Apply();
                         Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                             jetFlameTriangleList.ToArray(), 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
@@ -2239,13 +2296,38 @@ namespace VexedCore
                         {
                             v.Update(currentRoom, 1);
                         }
-                        currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Ability.texCoordList[33], false);
-                        playerEffect.Texture = Ability.ability_textures;
+                        currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Room.plateTexCoords, false);
+                        playerEffect.Texture = Player.player_boosterthrust;
                         playerEffect.CurrentTechnique.Passes[0].Apply();
                         Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                             jetFlameTriangleList.ToArray(), 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                     }
                 }
+            }
+            if (doubleJumpTime > 0)
+            {
+                playerEffect.Texture = Player.player_doublejump;
+                playerEffect.CurrentTechnique.Passes[0].Apply();
+                List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();
+                List<Vertex> flameVertexList = new List<Vertex>();
+                float fade = 1f*doubleJumpTime / doubleJumpFadeTime;
+                flameVertexList.Add(new Vertex(center.position, center.normal, (fade-1.9f) * playerHalfHeight * up + .5f * right, center.direction));
+                flameVertexList.Add(new Vertex(center.position, center.normal, (fade-1.9f) * playerHalfHeight * up - .5f * right, center.direction));
+                flameVertexList.Add(new Vertex(center.position, center.normal, (fade-2.9f) * playerHalfHeight * up - .5f * right, center.direction));
+                flameVertexList.Add(new Vertex(center.position, center.normal, (fade-2.9f) * playerHalfHeight * up + .5f * right, center.direction));
+                foreach (Vertex v in flameVertexList)
+                {
+                    v.Update(currentRoom, 1);
+                }
+                List<VertexPositionColorNormalTexture> doubleJumpTriangleList = new List<VertexPositionColorNormalTexture>();
+                Color boostColor = Color.Transparent;
+                boostColor.R = (Byte)(fade * 255);
+                boostColor.G = (Byte)(fade * 255);
+                boostColor.B = (Byte)(fade * 255);
+                boostColor.A = (Byte)(fade * 255);
+                currentRoom.AddTextureToTriangleList(flameVertexList, boostColor, depth + .05f, doubleJumpTriangleList, Room.plateTexCoords, true);
+                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                    doubleJumpTriangleList.ToArray(), 0, doubleJumpTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
             }
             if (primaryAbility.type == AbilityType.JetPack || secondaryAbility.type == AbilityType.JetPack)
             {
@@ -2270,8 +2352,8 @@ namespace VexedCore
                         {
                             v.Update(currentRoom, 1);
                         }
-                        currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Ability.texCoordList[32], true);
-                        playerEffect.Texture = Ability.ability_textures;
+                        currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Room.plateTexCoords, true);
+                        playerEffect.Texture = Player.player_jetpackthrust;
                         playerEffect.CurrentTechnique.Passes[0].Apply();
                         Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                             jetFlameTriangleList.ToArray(), 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
@@ -2288,8 +2370,8 @@ namespace VexedCore
                         {
                             v.Update(currentRoom, 1);
                         }
-                        currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Ability.texCoordList[32], true);
-                        playerEffect.Texture = Ability.ability_textures;
+                        currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Room.plateTexCoords, true);
+                        playerEffect.Texture = Player.player_jetpackthrust;
                         playerEffect.CurrentTechnique.Passes[0].Apply();
                         Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                             jetFlameTriangleList.ToArray(), 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);

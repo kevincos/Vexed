@@ -174,11 +174,17 @@ namespace VexedCore
                                 newRoom.doodads.Add(new Doodad(VL.DoodadType.BridgeSide, xmlDoodad.position + 1.25f * right + .25f * xmlDoodad.up, xmlFace.normal, xmlDoodad.up));
                                 newRoom.doodads.Add(new Doodad(VL.DoodadType.BridgeSide, xmlDoodad.position - 1.25f * right + .25f * xmlDoodad.up, xmlFace.normal, xmlDoodad.up));                                
                             }
+                            else if (xmlDoodad.type == VL.DoodadType.WallSwitch)
+                            {
+                                newRoom.doodads.Add(new Doodad(xmlDoodad, xmlFace.normal));
+                                newRoom.doodads.Add(new Doodad(VL.DoodadType.SwitchPlate, xmlDoodad.position, xmlFace.normal, xmlDoodad.up));                                
+
+                            }
                             else if (xmlDoodad.type == VL.DoodadType.Vortex)
                             {
                                 Vector3 right = Vector3.Cross(xmlDoodad.up, xmlFace.normal);
                                 Doodad entrance = new Doodad(xmlDoodad, xmlFace.normal);
-                                Doodad exit = new Doodad(VL.DoodadType.Vortex, xmlDoodad.position + -1f*Math.Abs(Vector3.Dot(newRoom.size, xmlFace.normal))*xmlFace.normal, -xmlFace.normal, xmlDoodad.up);
+                                Doodad exit = new Doodad(VL.DoodadType.Vortex, xmlDoodad.position + -1f * Math.Abs(Vector3.Dot(newRoom.size, xmlFace.normal)) * xmlFace.normal, -xmlFace.normal, xmlDoodad.up);
                                 exit.activationCost = entrance.activationCost;
                                 exit.id = entrance.id + "_X";
                                 entrance.targetObject = exit.id;
@@ -201,7 +207,7 @@ namespace VexedCore
                                 Doodad bottomSide2 = new Doodad(VL.DoodadType.TunnelTop, exit.position.position - .8f * exit.position.direction, entrance.position.normal, exit.position.direction);
                                 leftDoor2.targetObject = exit.id;
                                 rightDoor2.targetObject = exit.id;
-                                
+
 
                                 newRoom.doodads.Add(entrance);
                                 newRoom.doodads.Add(exit);
@@ -217,7 +223,7 @@ namespace VexedCore
                                 //newRoom.doodads.Add(bottomSide2);
                                 newRoom.doodads.Add(leftDoor2);
                                 newRoom.doodads.Add(rightDoor2);
-                                
+
                             }
                             else if (xmlDoodad.type == VL.DoodadType.JumpStation || xmlDoodad.type == VL.DoodadType.HealthStation || xmlDoodad.type == VL.DoodadType.ItemStation || xmlDoodad.type == VL.DoodadType.SaveStation || xmlDoodad.type == VL.DoodadType.WarpStation || xmlDoodad.type == VL.DoodadType.SwitchStation || xmlDoodad.type == VL.DoodadType.UpgradeStation || xmlDoodad.type == VL.DoodadType.PowerStation || xmlDoodad.type == VL.DoodadType.LoadStation || xmlDoodad.type == VL.DoodadType.MenuStation || xmlDoodad.type == VL.DoodadType.RedPowerStation || xmlDoodad.type == VL.DoodadType.BluePowerStation)
                             {
@@ -232,7 +238,7 @@ namespace VexedCore
                                 newRoom.doodads.Add(station);
                                 newRoom.doodads.Add(icon);
                                 newRoom.doodads.Add(leftDoor);
-                                newRoom.doodads.Add(rightDoor);  
+                                newRoom.doodads.Add(rightDoor);
                             }
                             else
                             {
@@ -409,7 +415,7 @@ namespace VexedCore
                             float nextRoomSize = .5f * Math.Abs(Vector3.Dot(d.targetRoom.size, d.position.normal));
                             float currentRoomSize = .5f * Math.Abs(Vector3.Dot(r.size, d.position.normal));
                             float distanceToNextRoom = Math.Abs(Vector3.Dot(d.position.normal, (d.targetRoom.center - d.currentRoom.center))) - nextRoomSize - currentRoomSize;
-
+                            d.distanceToTarget = distanceToNextRoom;
                             float ringMod = 3f;
                             float lastRingMod = 0f;
                             //r.jumpRings.Add(new JumpRing(RingType.JumpRing, d.position.position -.08f * d.position.normal, d.position.direction, d.position.normal,.15f,1.3f));

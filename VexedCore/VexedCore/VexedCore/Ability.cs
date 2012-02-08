@@ -157,7 +157,7 @@ namespace VexedCore
             }
         }
 
-        public static Texture2D ability_textures;
+        //public static Texture2D ability_textures;
         public static List<List<Vector2>> texCoordList;
 
         public static int texGridCount = 8;
@@ -366,6 +366,7 @@ namespace VexedCore
             return Doodad.decalTextures[(int)Decal.Empty];
         }
 
+        /*
         public void Draw(float xPercent, float yPercent)
         {
             Draw(xPercent, yPercent, type, ammo, maxAmmo, Color.White, .1f);
@@ -391,6 +392,7 @@ namespace VexedCore
             Draw(xPercent, yPercent, type, ammo, maxAmmo, Color.White, .1f);
         }
 
+        
         public static void Draw(float xPercent, float yPercent, AbilityType type, int ammo, int maxAmmo, Color c, float iconSize)
         {
             float barWidth = .05f;
@@ -420,7 +422,7 @@ namespace VexedCore
                 Engine.spriteBatch.Draw(ability_textures, new Rectangle((int)(Game1.titleSafeRect.Left + (xPercent + .06) * Game1.titleSafeRect.Width), (int)(Game1.titleSafeRect.Top + yPercent * Game1.titleSafeRect.Height + (barHeight * Game1.titleSafeRect.Width - (int)((1f * ammo / maxAmmo) * barHeight * Game1.titleSafeRect.Width))), (int)(barWidth * Game1.titleSafeRect.Width), (int)((1f * ammo / maxAmmo) * barHeight * Game1.titleSafeRect.Width)), new Rectangle(128 * 6, 128 * 3, 128, 128), c);
 
             }            
-        }
+        }*/
 
         public String FriendlyName()
         {

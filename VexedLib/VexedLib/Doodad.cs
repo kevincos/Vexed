@@ -33,7 +33,7 @@ namespace VL
         Waypoint = 22,
         BridgeBack = 23,
         BridgeSide = 24,
-        BridgeCover = 25,
+        SwitchPlate = 25,
         StationIcon = 26,
         LeftDoor = 27,
         RightDoor = 28,

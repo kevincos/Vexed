@@ -45,6 +45,7 @@ namespace VexedCore
 
         public static int innerBlockMode = 2;
 
+
         public bool roomHighlight = false;
         public bool sectorHighlight = false;
         public bool adjacent = false;
@@ -87,7 +88,15 @@ namespace VexedCore
         public List<VertexPositionColorNormalTexture> staticCrystal;
         public List<VertexPositionColorNormalTexture> staticIce;
         public List<VertexPositionColorNormalTexture> staticGearslot;
-        public List<VertexPositionColorNormalTexture> staticRings;        
+        public List<VertexPositionColorNormalTexture> staticRings;
+
+        public List<VertexPositionColorNormalTexture> dynamicFancyPlate;
+        public List<VertexPositionColorNormalTexture> dynamicPlate;
+        public List<VertexPositionColorNormalTexture> dynamicBrick;
+
+        public VertexPositionColorNormalTexture[] dynamicFancyPlateTriangleArray;
+        public VertexPositionColorNormalTexture[] dynamicPlateTriangleArray;
+        public VertexPositionColorNormalTexture[] dynamicBrickTriangleArray;
 
         public VertexPositionColorNormalTexture[] fancyPlateTriangleArray;
         public VertexPositionColorNormalTexture[] plateTriangleArray;
@@ -322,7 +331,10 @@ namespace VexedCore
                 d.position = new Vertex(d.spawnPosition);
                 d.abilityType = d.originalAbilityType;
                 if (d.type == VL.DoodadType.Brick)
+                {
                     d.active = false;
+                    d.breakTime = 0;
+                }
                 if (d.type == VL.DoodadType.PowerPlug)
                     d.active = false;
             }
@@ -345,12 +357,14 @@ namespace VexedCore
 
         public void Update(int gameTime)
         {
+            
             if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || roomHighlight == true)
             {
                 //if ((center - Engine.player.currentRoom.center).Length() < Engine.drawDistance ||
                         //(Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)
                 if(this == Engine.player.currentRoom || adjacent == true)
                 {
+                    
                     beltAnimation += gameTime;
                     foreach (Block b in blocks)
                     {
@@ -364,6 +378,10 @@ namespace VexedCore
                             e.UpdateBehavior(gameTime);
                         }
                         //}
+                    }
+                    foreach (Doodad d in doodads)
+                    {
+                        d.UpdateAmbientSounds(gameTime);
                     }
                     
                     if (this == Engine.player.currentRoom)
@@ -1631,13 +1649,17 @@ namespace VexedCore
                         (Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)
                 {
 
-                    foreach (Decoration d in decorations)
+
+                    if (WorldMap.state == ZoomState.None || parentSector == Engine.sectorList[WorldMap.selectedSectorIndex])
                     {
-                        d.Draw(this);
-                    }
-                    foreach (Doodad d in doodads)
-                    {
-                        d.DrawSprites(this);
+                        foreach (Decoration d in decorations)
+                        {
+                            d.Draw(this);
+                        }
+                        foreach (Doodad d in doodads)
+                        {
+                            d.DrawSprites(this);
+                        }
                     }
                 }
             }
@@ -1746,26 +1768,23 @@ namespace VexedCore
             }
         }
 
-        public List<TrasnparentSquare> GetMapBlock(Vector3 adjustedSize, Color blockColor)
+        public List<TransparentSquare> GetMapBlock(Vector3 adjustedSize, Color blockColor)
         {
             return GetMapBlock(adjustedSize, blockColor, false);
         }
 
         VertexPositionColorNormalTexture[] mapDecalVertices = null;
 
-        public void MapDecalHelper(List<VertexPositionColorNormalTexture> mapDecalList, Vector3 cameraUp, Vector3 cameraRight, Vertex v, int decalIndex, bool objective)
+        public void DrawMapDecal(Vector3 cameraUp, Vector3 cameraRight, Texture2D decalTexture, Vertex v, bool objective, float decalSize, Color color)
         {
+            
             float iconDistance = 3f;
-            float iconSize = 2f;
+            float iconSize = decalSize;
             if (objective == true)
             {
                 iconDistance = 5f;
                 iconSize = 3f + ObjectiveControl.oscillate * 3f / ObjectiveControl.maxOscillate;
-            }
-            if (decalIndex == 44)
-            {
-                iconSize = 4f;
-            }
+            }            
             if (WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomFromWorld || WorldMap.state == ZoomState.ZoomToWorld)
             {
                 iconDistance *= (3 * WorldMap.worldZoomLevel);
@@ -1779,18 +1798,32 @@ namespace VexedCore
             Vector3 upperLeft = v.position + iconSize * -cameraRight + iconSize * cameraUp + v.normal * iconDistance;
             Vector3 upperRight = v.position + iconSize * cameraRight + iconSize * cameraUp + v.normal * iconDistance;
 
-            List<Vector2> iconTextureCoords = Ability.texCoordList[decalIndex];
+            VertexPositionColorNormalTexture[] mapDecalList = new VertexPositionColorNormalTexture[6];
 
-            mapDecalList.Add(new VertexPositionColorNormalTexture(lowerLeft, Color.White, v.normal, iconTextureCoords[2]));
-            mapDecalList.Add(new VertexPositionColorNormalTexture(lowerRight, Color.White, v.normal, iconTextureCoords[3]));
-            mapDecalList.Add(new VertexPositionColorNormalTexture(upperLeft, Color.White, v.normal, iconTextureCoords[1]));
+            mapDecalList[0] = (new VertexPositionColorNormalTexture(lowerLeft, color, v.normal, Room.plateTexCoords[2]));
+            mapDecalList[1] = (new VertexPositionColorNormalTexture(lowerRight, color, v.normal, Room.plateTexCoords[3]));
+            mapDecalList[2] = (new VertexPositionColorNormalTexture(upperLeft, color, v.normal, Room.plateTexCoords[1]));
 
-            mapDecalList.Add(new VertexPositionColorNormalTexture(lowerRight, Color.White, v.normal, iconTextureCoords[3]));
-            mapDecalList.Add(new VertexPositionColorNormalTexture(upperLeft, Color.White, v.normal, iconTextureCoords[1]));
-            mapDecalList.Add(new VertexPositionColorNormalTexture(upperRight, Color.White, v.normal, iconTextureCoords[0]));
+            mapDecalList[3] = (new VertexPositionColorNormalTexture(lowerRight, color, v.normal, Room.plateTexCoords[3]));
+            mapDecalList[4] = (new VertexPositionColorNormalTexture(upperLeft, color, v.normal, Room.plateTexCoords[1]));
+            mapDecalList[5] = (new VertexPositionColorNormalTexture(upperRight, color, v.normal, Room.plateTexCoords[0]));
+
+            Engine.playerTextureEffect.Texture = decalTexture;
+            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                mapDecalList, 0, mapDecalList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
         }
 
-        public void UpdateMapDecals()
+        public void DrawMapArrow()
+        {
+            List<VertexPositionColorNormalTexture> mapDecalList = new List<VertexPositionColorNormalTexture>();
+            Vector3 cameraUp = WorldMap.cameraUp;
+            Vector3 cameraRight = Vector3.Cross(cameraUp, WorldMap.cameraPosition - WorldMap.cameraTarget);
+            cameraRight.Normalize();
+            DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)Decal.Arrow], Engine.player.center, true, 4f, Color.White);
+        }
+
+        public void DrawMapIcons()
         {
             //if (mapDecalVertices == null)
             {
@@ -1799,30 +1832,48 @@ namespace VexedCore
                 Vector3 cameraRight = Vector3.Cross(cameraUp, WorldMap.cameraPosition - WorldMap.cameraTarget);
                 cameraRight.Normalize();
 
+                // Objectives
                 if (parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] || WorldMap.state == ZoomState.World)
                 {
                     if (Engine.player.currentRoom == this)
-                    {
-                        MapDecalHelper(mapDecalList, cameraUp, cameraRight, Engine.player.center, 44, true);
-                        foreach (Vertex v in ObjectiveControl.GetObjectiveLocations())
+                    {                        
+                        if (Engine.player.objectiveFilter == false)
                         {
-                            MapDecalHelper(mapDecalList, cameraUp, cameraRight, v, 45, true);
+                            foreach (Vertex v in ObjectiveControl.GetObjectiveLocations())
+                            {
+                                DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)Decal.Objective], v, true, 2f, Color.White);
+                            }
                         }
                     }
                 }
+                
 
                 if (explored == true && parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld))
                 {
                     foreach (Doodad d in doodads)
                     {
-                        if (d.type == VL.DoodadType.ItemStation || d.type == VL.DoodadType.WarpStation || d.type == VL.DoodadType.SaveStation)
+                        if (d.type == VL.DoodadType.ItemStation && Engine.player.itemFilter == false)
                         {
-                            int decalIndex = (int)(d.abilityType);
-                            if (d.type == VL.DoodadType.SaveStation)
-                                decalIndex = 43;
-                            if (d.type == VL.DoodadType.WarpStation)
-                                decalIndex = 39;
-                            MapDecalHelper(mapDecalList, cameraUp, cameraRight, d.position, decalIndex, false);
+                            if(Engine.player.upgrades[(int)d.abilityType] == true)
+                                DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)Decal.MapLabel], d.position, false, 4f, Color.LightGray);
+                            else
+                                DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)Decal.MapLabel], d.position, false, 4f, Color.PaleVioletRed);
+                            DrawMapDecal(cameraUp, cameraRight, Ability.GetDecal(d.abilityType), d.position, false, 4f, Color.White);
+                        }
+                        if (d.type == VL.DoodadType.HealthStation && Engine.player.healthFilter == false)
+                        {
+                            DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)Decal.MapLabel], d.position, false, 4f, Color.LightGreen);
+                            DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)Decal.Health], d.position, false, 4f, Color.White);
+                        }
+                        if (d.type == VL.DoodadType.WarpStation && Engine.player.warpFilter == false)
+                        {
+                            DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)Decal.MapLabel], d.position, false, 4f, Color.LightBlue);
+                            DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)Decal.Warp], d.position, false, 4f, Color.White);
+                        }
+                        if (d.type == VL.DoodadType.SaveStation && Engine.player.saveFilter == false)
+                        {
+                            DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)Decal.MapLabel], d.position, false, 4f, Color.LightYellow);
+                            DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)Decal.Save], d.position, false, 4f, Color.White);
                         }
                     }
                 }
@@ -1831,18 +1882,7 @@ namespace VexedCore
             
         }
 
-        public void DrawMapIcons()
-        {
-            UpdateMapDecals();
-
-            if (mapDecalVertices.Count() > 0)
-            {
-                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                    mapDecalVertices, 0, mapDecalVertices.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-            }
-        }
-
-        public List<TrasnparentSquare> GetMapBlockHelper(Vector3 adjustedSize, Color shellColor)
+        public List<TransparentSquare> GetMapBlockHelper(Vector3 adjustedSize, Color shellColor)
         {
             List<VertexPositionColorNormalTexture> translucentTriangleList = new List<VertexPositionColorNormalTexture>();
 
@@ -1896,14 +1936,17 @@ namespace VexedCore
             
             foreach (Doodad d in doodads)
             {
-
+                // Jump Gates
                 if ((d.type == VL.DoodadType.JumpStation || d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.BridgeGate) && d.targetRoom != null)
                 {
                     Vector3 startLowerLeft = d.position.position + d.left + d.down;
                     Vector3 startLowerRight = d.position.position + d.right + d.down;
                     Vector3 startUpperLeft = d.position.position + d.left + d.up;
                     Vector3 startUpperRight = d.position.position + d.right + d.up;
-                    float distanceToEnd = (d.position.position - d.targetRoom.center).Length() / 2;
+                    
+                    float roomSize = Math.Abs(Vector3.Dot(d.targetRoom.size / 2, d.position.normal));
+
+                    float distanceToEnd = ((d.position.position - d.targetRoom.center).Length() - roomSize) / 2;
                     Vector3 endLowerLeft = d.position.position + d.left + d.down + d.position.normal * distanceToEnd;
                     Vector3 endLowerRight = d.position.position + d.right + d.down + d.position.normal * distanceToEnd;
                     Vector3 endUpperLeft = d.position.position + d.left + d.up + d.position.normal * distanceToEnd;
@@ -1911,18 +1954,23 @@ namespace VexedCore
 
                     if (d.type == VL.DoodadType.BridgeGate)
                     {
-                        Vector3 bridgeDirection = d.targetDoodad.position.position - d.position.position;
-                        startLowerLeft = d.position.position + d.left - d.position.normal;
-                        startLowerRight = d.position.position + d.right - d.position.normal;
-                        startUpperLeft = d.position.position + d.left + d.position.normal;
-                        startUpperRight = d.position.position + d.right + d.position.normal;
+                        Vector3 bridgeSrcDirection = d.targetDoodad.position.position - d.position.position;
+                        bridgeSrcDirection.Normalize();
+
+                        Vector3 bridgeSrcLeft = .5f * Vector3.Cross(d.position.normal,bridgeSrcDirection);
+                        Vector3 bridgeSrcUp = .5f * Vector3.Cross(bridgeSrcDirection, bridgeSrcLeft);
+
+                        startLowerLeft = d.position.position + bridgeSrcLeft - bridgeSrcUp;
+                        startLowerRight = d.position.position - bridgeSrcLeft - bridgeSrcUp;
+                        startUpperLeft = d.position.position + bridgeSrcLeft + bridgeSrcUp;
+                        startUpperRight = d.position.position - bridgeSrcLeft + bridgeSrcUp;
 
                         distanceToEnd = (d.position.position - d.targetDoodad.position.position).Length() / 2;
 
-                        endLowerLeft = d.position.position + d.left - d.position.normal + d.position.direction * distanceToEnd;
-                        endLowerRight = d.position.position + d.right - d.position.normal + d.position.direction * distanceToEnd;
-                        endUpperLeft = d.position.position + d.left + d.position.normal + d.position.direction * distanceToEnd;
-                        endUpperRight = d.position.position + d.right + d.position.normal + d.position.direction * distanceToEnd;
+                        endLowerLeft = d.position.position + bridgeSrcLeft - bridgeSrcUp + bridgeSrcDirection * distanceToEnd;
+                        endLowerRight = d.position.position - bridgeSrcLeft - bridgeSrcUp + bridgeSrcDirection * distanceToEnd;
+                        endUpperLeft = d.position.position + bridgeSrcLeft + bridgeSrcUp + bridgeSrcDirection * distanceToEnd;
+                        endUpperRight = d.position.position - bridgeSrcLeft + bridgeSrcUp + bridgeSrcDirection * distanceToEnd;
                     }
 
                     translucentTriangleList.Add(new VertexPositionColorNormalTexture(startLowerLeft, shellColor, d.left, new Vector2(.5f, .5f)));
@@ -1960,23 +2008,23 @@ namespace VexedCore
                 }
             }
 
-            List<TrasnparentSquare> squareList = new List<TrasnparentSquare>();
+            List<TransparentSquare> squareList = new List<TransparentSquare>();
             for (int i = 0; i < translucentTriangleList.Count(); i += 6)
             {
-                TrasnparentSquare t = new TrasnparentSquare(translucentTriangleList[i], translucentTriangleList[i + 1], translucentTriangleList[i + 2], translucentTriangleList[i + 3], translucentTriangleList[i + 4], translucentTriangleList[i + 5]);
+                TransparentSquare t = new TransparentSquare(translucentTriangleList[i], translucentTriangleList[i + 1], translucentTriangleList[i + 2], translucentTriangleList[i + 3], translucentTriangleList[i + 4], translucentTriangleList[i + 5]);
                 squareList.Add(t);
             }
             return squareList;
         }
 
-        public List<TrasnparentSquare> GetMapBlock(Vector3 adjustedSize, Color blockColor, bool highlight)
+        public List<TransparentSquare> GetMapBlock(Vector3 adjustedSize, Color blockColor, bool highlight)
         {            
             if (WorldMap.state == ZoomState.None)
-                return new List<TrasnparentSquare>();
+                return new List<TransparentSquare>();
             Color shellColor = blockColor;
             if (parentSector != Engine.sectorList[WorldMap.selectedSectorIndex] && WorldMap.state != ZoomState.None && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld))
             {
-                return new List<TrasnparentSquare>();
+                return new List<TransparentSquare>();
             }
             else if (this.sectorHighlight == true)
             {
@@ -2039,8 +2087,56 @@ namespace VexedCore
             return null;
         }
 
+        public List<Wormhole> wormholeList;
+
+        public void DrawWormholes()
+        {
+            if (wormholeList != null)
+            {
+                foreach (Wormhole wormhole in wormholeList)
+                    wormhole.Draw();
+            }
+        }
+
+        public bool shouldRender
+        {
+            get
+            {
+                if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || (roomHighlight == true && explored == true))
+                {
+                    if ((center - Engine.player.currentRoom.center).Length() < Engine.drawDistance ||
+                            (Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)
+                    {
+                        if (WorldMap.state == ZoomState.None || parentSector == Engine.sectorList[WorldMap.selectedSectorIndex])
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
+        public void UpdateWormholes(int gameTime)
+        {
+            if (wormholeList == null || Engine.reDraw == true)
+            {
+                wormholeList = new List<Wormhole>();
+                foreach (Doodad d in doodads)
+                {
+                    if ((d.type == VL.DoodadType.JumpStation || d.type == VL.DoodadType.JumpPad) && d.distanceToTarget != 0 && (shouldRender) && (d.targetRoom.shouldRender == false))
+                    {
+                        wormholeList.Add(new Wormhole(d.position.position + d.distanceToTarget * d.position.normal / 2, d.position.direction, d.position.normal));
+                    }
+                }
+            }
+            foreach (Wormhole wormhole in wormholeList)
+                wormhole.Update(gameTime);
+        }
+
+
         List<VertexPositionColorNormalTexture> translucentBoxVertices;
-        List<TrasnparentSquare> transparentSquareList;
+        List<TransparentSquare> transparentSquareList;
 
         public void Draw()
         {
@@ -2114,10 +2210,10 @@ namespace VexedCore
                             translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
                             translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
 
-                            transparentSquareList = new List<TrasnparentSquare>();
+                            transparentSquareList = new List<TransparentSquare>();
                             for (int i = 0; i < translucentBoxVertices.Count(); i += 6)
                             {
-                                TrasnparentSquare t = new TrasnparentSquare(translucentBoxVertices[i], translucentBoxVertices[i + 1], translucentBoxVertices[i + 2], translucentBoxVertices[i + 3], translucentBoxVertices[i + 4], translucentBoxVertices[i + 5]);
+                                TransparentSquare t = new TransparentSquare(translucentBoxVertices[i], translucentBoxVertices[i + 1], translucentBoxVertices[i + 2], translucentBoxVertices[i + 3], translucentBoxVertices[i + 4], translucentBoxVertices[i + 5]);
                                 transparentSquareList.Add(t);
                             }
                         }
@@ -2273,9 +2369,41 @@ namespace VexedCore
 
 
                         #region Doodads
+
+                        dynamicFancyPlate = new List<VertexPositionColorNormalTexture>();
+                        dynamicBrick = new List<VertexPositionColorNormalTexture>();
+                        dynamicPlate = new List<VertexPositionColorNormalTexture>();
+
                         foreach (Doodad d in doodads)
                         {
                             d.DrawSolids(this);
+                        }
+
+                        /*if (dynamicFancyPlate.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.fancyPlateTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                dynamicFancyPlate.ToArray(), 0, dynamicFancyPlate.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                        if (dynamicPlate.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.wallTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                dynamicPlate.ToArray(), 0, dynamicPlate.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                        if (dynamicBrick.Count() > 0)
+                        {
+                            Engine.playerTextureEffect.Texture = Block.crackedTexture;
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                dynamicBrick.ToArray(), 0, dynamicBrick.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                        */
+                        foreach (Doodad d in doodads)
+                        {
+                            d.DrawDecals(this);
                         }
 
                         #endregion
