@@ -1645,8 +1645,7 @@ namespace VexedCore
         {                    
             if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || (roomHighlight == true && explored == true))
             {
-                if ((center - Engine.player.currentRoom.center).Length() < Engine.drawDistance ||
-                        (Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)
+                if (roomHighlight == true || adjacent == true)
                 {
 
 
@@ -2091,11 +2090,22 @@ namespace VexedCore
 
         public void DrawWormholes()
         {
-            if (wormholeList != null)
-            {
-                foreach (Wormhole wormhole in wormholeList)
-                    wormhole.Draw();
+            if (wormholeList == null || Engine.reDraw == true)
+            {                
+                wormholeList = new List<Wormhole>();
+                foreach (Doodad d in doodads)
+                {
+                    if ((d.type == VL.DoodadType.JumpStation || d.type == VL.DoodadType.JumpPad) && d.distanceToTarget != 0 && (shouldRender) && (d.targetRoom.shouldRender == false))
+                    {
+                        
+                        wormholeList.Add(new Wormhole(d.position.position + d.distanceToTarget * d.position.normal / 2, d.position.direction, d.position.normal));
+                    }
+                }
             }
+            
+            foreach (Wormhole wormhole in wormholeList)
+                wormhole.Draw();
+            
         }
 
         public bool shouldRender
@@ -2104,8 +2114,7 @@ namespace VexedCore
             {
                 if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || (roomHighlight == true && explored == true))
                 {
-                    if ((center - Engine.player.currentRoom.center).Length() < Engine.drawDistance ||
-                            (Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)
+                    if (roomHighlight == true || adjacent == true)
                     {
                         if (WorldMap.state == ZoomState.None || parentSector == Engine.sectorList[WorldMap.selectedSectorIndex])
                         {
@@ -2117,9 +2126,27 @@ namespace VexedCore
             }
         }
 
+        public void MarkAdjacentRooms(int depth)
+        {
+            adjacent = true;
+            if (depth == 0)
+                return;
+            else
+            {
+                foreach (Doodad d in doodads)
+                {
+                    if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation || d.type == VL.DoodadType.BridgeGate)
+                    {
+                        if (d.targetRoom != null)
+                            d.targetRoom.MarkAdjacentRooms(depth - 1);
+                    }
+                }
+            }        
+        }
+
         public void UpdateWormholes(int gameTime)
         {
-            if (wormholeList == null || Engine.reDraw == true)
+            /*if (wormholeList == null || Engine.reDraw == true)
             {
                 wormholeList = new List<Wormhole>();
                 foreach (Doodad d in doodads)
@@ -2129,9 +2156,12 @@ namespace VexedCore
                         wormholeList.Add(new Wormhole(d.position.position + d.distanceToTarget * d.position.normal / 2, d.position.direction, d.position.normal));
                     }
                 }
+            }*/
+            if (wormholeList != null)
+            {
+                foreach (Wormhole wormhole in wormholeList)
+                    wormhole.Update(gameTime);
             }
-            foreach (Wormhole wormhole in wormholeList)
-                wormhole.Update(gameTime);
         }
 
 
@@ -2143,8 +2173,7 @@ namespace VexedCore
             
             if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || (roomHighlight == true && explored == true))
             {                
-                if ((center - Engine.player.currentRoom.center).Length() < Engine.drawDistance ||
-                        (Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)
+                if (roomHighlight == true || adjacent == true)
                 {
                     if (WorldMap.state == ZoomState.None || parentSector == Engine.sectorList[WorldMap.selectedSectorIndex])
                     {

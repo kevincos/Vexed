@@ -1102,7 +1102,7 @@ namespace VexedCore
             }            
         }
 
-        public void ResetAdjacentRooms()
+        /*public void ResetAdjacentRooms()
         {
             foreach (Room r in Engine.roomList)
             {
@@ -1130,7 +1130,7 @@ namespace VexedCore
                     }
                 }
             }
-        }
+        }*/
 
         public void Update(int gameTime)
         {
@@ -1853,7 +1853,7 @@ namespace VexedCore
                                 SoundFX.RoomJump();
                                 jumpRoom = d.targetRoom;
                                 jumpRoom.Reset();
-                                ResetAdjacentRooms();
+                                //ResetAdjacentRooms();
                                 
                                 float roomSize = Math.Abs(Vector3.Dot(jumpRoom.size / 2, center.normal));
                                 jumpSource = center.position;
@@ -2052,9 +2052,7 @@ namespace VexedCore
                         }
                     }
                     Mouse.SetPosition(Game1.titleSafeRect.Center.X, Game1.titleSafeRect.Center.Y);
-                    jumpRoom = null;
-                    ResetAdjacentRooms();
-                    
+                    jumpRoom = null;                    
 
                 }
 

@@ -81,7 +81,8 @@ namespace VexedCore
         public static bool transparencyEnabled = false;
         public static int lightingLevel = 0;
         public static bool toonShadingEnabled = false;
-        public static float drawDistance = 70f;
+        //public static float drawDistance = 1f;
+        public static int drawDepth = 2;
         public static ControlType controlType = ControlType.MouseAndKeyboard;
         public int optionToggleCooldown = 0;
         public static bool reDraw = false;
@@ -331,6 +332,14 @@ namespace VexedCore
                 player.currentRoom.DrawDecorations();
                 Engine.player.currentRoom.DrawMonsters();
                 player.currentRoom.DrawProjectiles();
+
+                foreach (Room r in roomList)
+                {
+                    r.adjacent = false;
+                }
+                Engine.player.currentRoom.MarkAdjacentRooms(Engine.drawDepth);
+                if (Engine.player.jumpRoom != null)
+                    Engine.player.jumpRoom.MarkAdjacentRooms(Engine.drawDepth);
                 foreach (Room r in Engine.roomList)
                 {
                     r.UpdateWormholes(gameTime);
@@ -741,6 +750,8 @@ namespace VexedCore
 
         public void Update(int gameTime)
         {
+
+
             Engine.debug_doodadVertexUpdateMonitor.AddData(Engine.debug_updateDoodadVertexData);
             Engine.debug_doodadVertexUpdateMonitor.Update(gameTime);
             Engine.debug_updateDoodadVertexData = 0;
@@ -883,6 +894,8 @@ namespace VexedCore
                     }
                 }
             }
+
+
         }
     }
 }

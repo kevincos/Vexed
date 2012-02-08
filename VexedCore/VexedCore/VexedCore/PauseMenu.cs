@@ -204,7 +204,7 @@ namespace VexedCore
                         }
                         if (options[i].type == MenuItems.DrawDistance)
                         {
-                            extraData = Engine.drawDistance + "";
+                            extraData = Engine.drawDepth + "";
                         }
                         Engine.spriteBatch.DrawString(Engine.spriteFont, options[i].DisplayString(extraData), options[i].TextLocation, Color.YellowGreen);
 
@@ -360,8 +360,10 @@ namespace VexedCore
                         cooldown = maxCooldown;
                     }
                     if (result == MenuItems.DrawDistance)
-                    {
-                        Engine.drawDistance += 1;
+                    {                        
+                        Engine.drawDepth += 1;
+                        Engine.drawDepth %= 4;
+                            
                         Engine.reDraw = true;
                         cooldown = maxCooldown;
                     }
@@ -394,14 +396,15 @@ namespace VexedCore
             {
                 if (selectIndex == 7 && currentGamePadState.ThumbSticks.Left.X != 0)
                 {
-                    Engine.drawDistance += currentGamePadState.ThumbSticks.Left.X / 2;
+                    if (currentGamePadState.ThumbSticks.Left.X > 0)
+                        Engine.drawDepth++;
+                    else
+                        Engine.drawDepth--;
+                    
                     Engine.reDraw = true;
                 }
             }
-            if (Engine.drawDistance > 1000)
-                Engine.drawDistance = 1000;
-            if (Engine.drawDistance < 10)
-                Engine.drawDistance = 10;
+            Engine.drawDepth %= 4;
             prevGamePadState = currentGamePadState;
             prevKeyboardState = currentKeyboardState;
             prevMouseState = currentMouseState;
