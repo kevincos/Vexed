@@ -99,6 +99,8 @@ namespace VexedCore
         public String currentBehaviorId;
         [XmlIgnore]public Room currentRoom;
 
+        public static Texture2D powerCubeTexture;
+
         public RoomStyle style = RoomStyle.Electric;
         public int orbsRemaining = 10;
 
@@ -144,6 +146,9 @@ namespace VexedCore
 
         public int flashTime = 0;
         public static int maxFlashTime = 1000;
+
+        public int cacheOffset = 0;
+        public int cacheOffsetBrick = 0;     
 
         public AbilityType abilityType = AbilityType.Empty;
         public AbilityType originalAbilityType = AbilityType.Empty;
@@ -478,6 +483,30 @@ namespace VexedCore
                 boundingBoxBottom = y4;
         }
 
+        public int cacheSize
+        {
+            get
+            {
+                if (type == VL.DoodadType.Beam || type == VL.DoodadType.HologramOldMan || type == VL.DoodadType.Holoprojector || type == VL.DoodadType.TriggerPoint || type == VL.DoodadType.Vortex || type == VL.DoodadType.Waypoint)
+                {
+                    return 0;
+                }
+                return 36;
+            }
+        }
+
+        public int cacheSizeBrick
+        {
+            get
+            {
+                if(type == VL.DoodadType.Brick)
+                {
+                    return 36;
+                }
+                return 0;
+            }
+        }
+
         public bool ActivationRange(Player p)
         {
             if ((p.center.position - position.position).Length() < triggerDistance)
@@ -527,7 +556,7 @@ namespace VexedCore
         {
             get
             {
-                if (type == VL.DoodadType.Beam)
+                if (type == VL.DoodadType.Beam || type == VL.DoodadType.HologramOldMan)
                 {
                     return true;
                 }
@@ -929,8 +958,8 @@ namespace VexedCore
                     return false;
                 if (type == VL.DoodadType.Waypoint)
                     return false;
-                if(isOrb && active == false)
-                    return false;
+                //if(isOrb && active == false)
+                    //return false;
                 return true;
             }
         }
@@ -1231,6 +1260,12 @@ namespace VexedCore
             }
         }
 
+        public void RefreshPowerLevels()
+        {
+            if (currentRoom.currentOrbs >= activationCost || (targetDoodad != null && currentRoom.currentOrbs >= targetDoodad.activationCost))
+                refreshVertexData = true;
+        }
+
         public void AdjustVertex(Vector3 pos, Vector3 vel, Vector3 normal, Vector3 playerUp)
         {
             Vector3 playerRight = Vector3.Cross(playerUp, normal);
@@ -1309,6 +1344,10 @@ namespace VexedCore
         }
 
         public List<VertexPositionColorNormalTexture> baseTriangleList;
+
+        public List<VertexPositionColorNormalTexture> dynamicFancyTriangleList;
+        public List<VertexPositionColorNormalTexture> dynamicBrickTriangleList;
+
         public List<VertexPositionColorNormalTexture> decalList;
         public List<VertexPositionColorNormalTexture> loadButtonsList;
         public List<VertexPositionColorNormalTexture> useButtonList;
@@ -1325,12 +1364,14 @@ namespace VexedCore
 
         public void UpdateVertexData(Room currentRoom)
         {
+            
             if (baseTriangleList == null || dynamic == true || refreshVertexData == true)
             {
-
                 Engine.debug_updateDoodadVertexData++;
                 refreshVertexData = false;
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
+                dynamicFancyTriangleList = new List<VertexPositionColorNormalTexture>();
+                dynamicBrickTriangleList = new List<VertexPositionColorNormalTexture>();
                 decalList = new List<VertexPositionColorNormalTexture>();
                 confirmButtonsList = new List<VertexPositionColorNormalTexture>();
                 loadButtonsList = new List<VertexPositionColorNormalTexture>();
@@ -1471,13 +1512,13 @@ namespace VexedCore
                 {
                     if (orbsRemaining > 0)
                     {
-                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList, false);
                     }
                     else
                     {
-                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList, false);
                     }
                 }
                 else if (type == VL.DoodadType.SwitchStation)
@@ -1486,40 +1527,78 @@ namespace VexedCore
                     {
                         if (targetDoodad.currentBehavior.id == targetBehavior)
                         {
-                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                            currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList, false);
                         }
                         else
                         {
-                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                            currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList, false);
                         }
                     }
                     if (targetBlock != null)
                     {
                         if (targetBlock.currentBehavior.id == targetBehavior)
                         {
-                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                            currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList, false);
                         }
                         else
                         {
-                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                            currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList, false);
                         }
                     }
                     if (targetEdge != null)
                     {
                         if (targetEdge.currentBehavior.id == targetBehavior)
                         {
-                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                            currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                            currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList, false);
                         }
                         else
                         {
-                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                            currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList, false);
+                            currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                            currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList, false);
                         }
+                    }
+                }
+                else if (type == VL.DoodadType.JumpStation)
+                {
+                    float jumpVel = (Engine.player.jumpDestination - Engine.player.jumpSource).Length() / (1f * Player.launchMaxTime);
+                    float transitionTime = 1f / Math.Abs(stateTransitionVelocity);
+                    float maxExtend = jumpVel * transitionTime;
+
+                    if (active == true)
+                    {
+                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Room.plateTexCoords, decalList, true);
+                    }
+                    else
+                    {
+                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Room.plateTexCoords, decalList, true);
+                    }
+                }
+                else if (type == VL.DoodadType.JumpPad)
+                {
+                    float jumpVel = (Engine.player.jumpDestination - Engine.player.jumpSource).Length() / (1f * Player.launchMaxTime);
+                    float transitionTime = 1f / Math.Abs(stateTransitionVelocity);
+                    float maxExtend = jumpVel * transitionTime;
+
+                    if (active == true)
+                    {
+                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                        currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth + maxExtend * stateTransition + .01f, Room.plateTexCoords, decalList, true);
+                    }
+                    else
+                    {
+                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Room.plateTexCoords, decalList, true);
                     }
                 }
                 else if (type == VL.DoodadType.Brick)
@@ -1567,24 +1646,31 @@ namespace VexedCore
                         chunkList.Add(new Vertex(position, down + right + chunkOffset));
                         currentRoom.BasicAddBlockSidesToTriangleList(chunkList, breakColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                         currentRoom.AddBlockToTriangleList(chunkList, breakColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        if (position.position != Vector3.Zero)
+                        {
+                            for (int i = 0; i < 36; i++)
+                            {
+                                dynamicBrickTriangleList.Add(new VertexPositionColorNormalTexture(Vector3.Zero, Color.White, Vector3.Zero, Vector2.Zero));
+                            }    
+                        }
                     }
                     else
-                    {
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                    {                        
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicBrickTriangleList);
+                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicBrickTriangleList);
                     }
                 }
                 else if (type != VL.DoodadType.Holoprojector && type != VL.DoodadType.HologramOldMan && type != VL.DoodadType.Beam && type != VL.DoodadType.PowerPlug && type != VL.DoodadType.Vortex)
                 {
                     if (active && type != VL.DoodadType.LaserSwitch)
                     {
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList);
                     }
                     else
                     {
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList);
+                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicFancyTriangleList);
                     }
                 }
 
@@ -1592,59 +1678,17 @@ namespace VexedCore
                 {
                     currentRoom.AddBlockFrontToTriangleList(vList, Color.White, depth + .01f, Room.plateTexCoords, decalList, true);
                 }
-                if (type == VL.DoodadType.JumpStation)
-                {
-                    float jumpVel = (Engine.player.jumpDestination - Engine.player.jumpSource).Length() / (1f * Player.launchMaxTime);
-                    float transitionTime = 1f / Math.Abs(stateTransitionVelocity);
-                    float maxExtend = jumpVel * transitionTime;
 
-                    if (active == true)
-                    {
-                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Room.plateTexCoords, decalList, true);
-                    }
-                    else
-                    {
-                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Room.plateTexCoords, decalList, true);
-                    }
-                }
-                if (type == VL.DoodadType.JumpPad)
-                {
-                    float jumpVel = (Engine.player.jumpDestination - Engine.player.jumpSource).Length() / (1f * Player.launchMaxTime);
-                    float transitionTime = 1f / Math.Abs(stateTransitionVelocity);
-                    float maxExtend = jumpVel * transitionTime;
-
-                    if (active == true)
-                    {
-                        currentRoom.AddBlockToTriangleList(vList, activeColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth + maxExtend * stateTransition + .01f, Room.plateTexCoords, decalList, true);
-                    }
-                    else
-                    {                        
-                        currentRoom.AddBlockToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth + maxExtend * stateTransition, depth, Room.plateTexCoords, baseTriangleList);
-                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth + maxExtend * stateTransition + .01f, Room.plateTexCoords, decalList, true);
-                    }
-                }
                 if (type == VL.DoodadType.HookTarget)
                 {
-                    currentRoom.AddBlockToTriangleList(vList, activeColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                    currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                     currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth, Room.plateTexCoords, decalList, true);                
                 }
                 if (type == VL.DoodadType.PlugSlot)
                 {
-                    currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
-                    currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                     currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Room.plateTexCoords, decalList, true);
                 }
                 if (type == VL.DoodadType.LaserSwitch)
                 {
-                    currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, baseTriangleList);
                     if (active)
                         currentRoom.AddBlockFrontToTriangleList(vList, activeColor, depth, Room.plateTexCoords, decalList, true);
                     else
@@ -1656,6 +1700,7 @@ namespace VexedCore
                     currentRoom.AddBlockFrontToTriangleList(vList, iconColor, depth + .01f, Room.plateTexCoords, decalList, true);
                 }
 
+
                 if (type == VL.DoodadType.HologramOldMan)
                 {
                     if(hologramFade > 0)
@@ -1666,7 +1711,7 @@ namespace VexedCore
                         hologram.B = (Byte)(hologramFade * 255f / hologramMaxFade);
                         hologram.G = (Byte)(hologramFade * 255f / hologramMaxFade);
                         hologram.R = (Byte)(hologramFade * 255f / hologramMaxFade);
-                        currentRoom.AddBlockFrontToTriangleList(vList, hologram, depth + .01f, Room.plateTexCoords, spriteList, true);
+                        currentRoom.AddBlockFrontToTriangleList(vList, hologram, depth + .012f, Room.plateTexCoords, spriteList, true);
                     }
                 }
                 if (type == VL.DoodadType.Beam)
@@ -1680,6 +1725,23 @@ namespace VexedCore
                     else
                         currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Room.plateTexCoords, decalList, true);
                 }
+
+                
+                if(dynamicFancyTriangleList.Count > 0)
+                {
+                    for (int i = 0; i < dynamicFancyTriangleList.Count; i++)
+                    {
+                        currentRoom.dynamicFancyPlateTriangleArray[cacheOffset + i] = dynamicFancyTriangleList[i];
+                    }
+                }
+                if (dynamicBrickTriangleList.Count > 0)
+                {
+                    for (int i = 0; i < dynamicBrickTriangleList.Count; i++)
+                    {
+                        currentRoom.dynamicBrickTriangleArray[cacheOffsetBrick + i] = dynamicBrickTriangleList[i];
+                    }
+                }
+
 
                 baseTriangleArray = baseTriangleList.ToArray();
                 decalArray = decalList.ToArray();
@@ -1718,7 +1780,10 @@ namespace VexedCore
             {
                 if (decalList.Count > 0)
                 {
-                    Engine.playerTextureEffect.Texture = currentDecalTexture;
+                    if(type == VL.DoodadType.PowerOrb)
+                        Engine.playerTextureEffect.Texture = powerCubeTexture;
+                    else
+                        Engine.playerTextureEffect.Texture = currentDecalTexture;
                     Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         decalArray, 0, decalList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
@@ -1890,7 +1955,7 @@ namespace VexedCore
             }            
 
 
-            //if (Animated)
+            if (Animated)
             {
                 animationTime += gameTime;
                 if (animationTime > 100)
@@ -1901,6 +1966,11 @@ namespace VexedCore
                 }
             }
             animationFrame %= 2;
+            if (isOrb && tracking == true && active == false)
+            {
+                refreshVertexData = true;
+                tracking = false;
+            }
             if (isOrb && tracking == true && active == true)
             {
                 Vector3 dir = Engine.player.center.position - position.position;

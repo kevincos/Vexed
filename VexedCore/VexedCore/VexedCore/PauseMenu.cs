@@ -71,7 +71,7 @@ namespace VexedCore
     class PauseMenu
     {
         public static int cooldown = 0;
-        public static int maxCooldown = 100;
+        public static int maxCooldown = 200;
         public static bool paused = false;
         public static Texture2D pauseBackground;
         public static Texture2D mouseCursor;
@@ -107,13 +107,13 @@ namespace VexedCore
                     options.Add(new MenuOption("LOAD LAST SAVE", optionBaseX, optionBaseY+60, MenuItems.LoadLastSave));
                     options.Add(new MenuOption("RETURN TO MAIN MENU", optionBaseX, optionBaseY+80, MenuItems.MainMenu));
 
-                    options.Add(new MenuOption("CONTROLS:", optionBaseX, optionBaseY + 120, MenuItems.ControlScheme));
-                    options.Add(new MenuOption("MUSIC: ", optionBaseX, optionBaseY+140, MenuItems.Music));
-                    options.Add(new MenuOption("SOUND EFFECTS: ", optionBaseX, optionBaseY+160, MenuItems.SoundEffects));
-                    options.Add(new MenuOption("TRANSPARENCY: ", optionBaseX, optionBaseY+180, MenuItems.Transparency));
-                    options.Add(new MenuOption("DRAW DISTANCE: ", optionBaseX, optionBaseY + 200, MenuItems.DrawDistance));
-                    options.Add(new MenuOption("FULL SCREEN: ", optionBaseX, optionBaseY + 220, MenuItems.FullScreen));
-                    options.Add(new MenuOption("RESOLUTION: ", optionBaseX, optionBaseY + 240, MenuItems.Resolution));
+                    //options.Add(new MenuOption("CONTROLS:", optionBaseX, optionBaseY + 120, MenuItems.ControlScheme));
+                    options.Add(new MenuOption("MUSIC: ", optionBaseX, optionBaseY+120, MenuItems.Music));
+                    options.Add(new MenuOption("SOUND EFFECTS: ", optionBaseX, optionBaseY+140, MenuItems.SoundEffects));
+                    //options.Add(new MenuOption("TRANSPARENCY: ", optionBaseX, optionBaseY+180, MenuItems.Transparency));
+                    options.Add(new MenuOption("DRAW DISTANCE: ", optionBaseX, optionBaseY + 160, MenuItems.DrawDistance));
+                    options.Add(new MenuOption("FULL SCREEN: ", optionBaseX, optionBaseY + 180, MenuItems.FullScreen));
+                    options.Add(new MenuOption("RESOLUTION: ", optionBaseX, optionBaseY + 200, MenuItems.Resolution));
 
                     options.Add(new MenuOption("QUIT", optionBaseX, optionBaseY+280, MenuItems.Quit));
                 
@@ -142,7 +142,7 @@ namespace VexedCore
 
                     for (int i = 0; i < options.Count; i++)
                     {
-                        if (i == selectIndex)
+                        if ((int)options[i].type == selectIndex)
                             Engine.spriteBatch.DrawString(Engine.spriteFont, "X", options[i].XLocation, Color.YellowGreen);
                         String extraData = "";
                         if (options[i].type == MenuItems.SoundEffects)
@@ -204,7 +204,14 @@ namespace VexedCore
                         }
                         if (options[i].type == MenuItems.DrawDistance)
                         {
-                            extraData = Engine.drawDepth + "";
+                            if (Engine.drawDepth == 0)
+                                extraData = "Minimum";
+                            else if (Engine.drawDepth == 1)
+                                extraData = "Normal";
+                            else if (Engine.drawDepth == 2)
+                                extraData = "High";
+                            else
+                                extraData = "Maximum";                            
                         }
                         Engine.spriteBatch.DrawString(Engine.spriteFont, options[i].DisplayString(extraData), options[i].TextLocation, Color.YellowGreen);
 
@@ -247,7 +254,7 @@ namespace VexedCore
                 {
                     if (Math.Abs(mousePos.Y - 10 - options[i].TextLocation.Y) < 10)
                     {
-                        selectIndex = i;
+                        selectIndex = (int)(options[i].type);
                         mouseSelect = true;
                     }
                 }
@@ -291,6 +298,7 @@ namespace VexedCore
                     MenuItems result = (MenuItems)selectIndex;
                     if (result == MenuItems.Continue)
                     {
+                        SoundFX.MenuSelect();
                         Game1.controller.AButton.Invalidate();
                         Game1.controller.XButton.Invalidate();
                         Game1.controller.YButton.Invalidate();
@@ -298,6 +306,7 @@ namespace VexedCore
                     }
                     if (result == MenuItems.RestartRoom)
                     {
+                        SoundFX.MenuSelect();
                         Game1.controller.AButton.Invalidate();
                         Game1.controller.XButton.Invalidate();
                         Game1.controller.YButton.Invalidate();
@@ -308,6 +317,7 @@ namespace VexedCore
                     }
                     if (result == MenuItems.LoadLastSave)
                     {
+                        SoundFX.MenuSelect();
                         if (Engine.saveFileIndex != 0)
                         {
                             Game1.controller.AButton.Invalidate();
@@ -321,6 +331,7 @@ namespace VexedCore
                     }
                     if (result == MenuItems.MainMenu)
                     {
+                        SoundFX.MenuSelect();
                         Game1.controller.AButton.Invalidate();
                         Game1.controller.XButton.Invalidate();
                         Game1.controller.YButton.Invalidate();
@@ -334,6 +345,7 @@ namespace VexedCore
                     }
                     if (result == MenuItems.ControlScheme)
                     {
+                        SoundFX.MenuSelect();
                         int newControlType = (int)Engine.controlType + 1;
                         newControlType %= 3;
                         Engine.controlType = (ControlType)newControlType;
@@ -341,6 +353,7 @@ namespace VexedCore
                     }
                     if (result == MenuItems.Music)
                     {
+                        SoundFX.MenuSelect();
                         Engine.musicEnabled = !Engine.musicEnabled;
                         if (Engine.musicEnabled)
                             MusicControl.PlayGameMusic();
@@ -350,7 +363,9 @@ namespace VexedCore
                     }
                     if (result == MenuItems.SoundEffects)
                     {
+                        SoundFX.MenuSelect();
                         Engine.soundEffectsEnabled = !Engine.soundEffectsEnabled;
+                        SoundFX.MenuSelect();
                         cooldown = maxCooldown;
                     }
                     if (result == MenuItems.Transparency)
@@ -360,7 +375,8 @@ namespace VexedCore
                         cooldown = maxCooldown;
                     }
                     if (result == MenuItems.DrawDistance)
-                    {                        
+                    {
+                        SoundFX.MenuSelect();
                         Engine.drawDepth += 1;
                         Engine.drawDepth %= 4;
                             
@@ -369,11 +385,13 @@ namespace VexedCore
                     }
                     if (result == MenuItems.Quit)
                     {
+                        SoundFX.MenuSelect();
                         Engine.quit = true;
                         paused = false;
                     }
                     if (result == MenuItems.FullScreen)
                     {
+                        SoundFX.MenuSelect();
                         Engine.fullScreen = !Engine.fullScreen;
                         Game1.SetGraphicsSettings();
                         cooldown = maxCooldown;
@@ -381,6 +399,7 @@ namespace VexedCore
                     }
                     if (result == MenuItems.Resolution)
                     {
+                        SoundFX.MenuSelect();
                         if (Engine.res == ResolutionSettings.R_800x600)
                             Engine.res = ResolutionSettings.R_1920x1080;
                         else

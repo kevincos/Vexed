@@ -53,6 +53,7 @@ namespace VexedCore
         public static Vector3 worldCenter = Vector3.Zero;
         public static List<Room> roomList;
         public static List<Sector> sectorList;
+        public static List<Wormhole> wormholeList;
         
         public static Player player;
         public static DialogBox dialogBox;
@@ -81,7 +82,6 @@ namespace VexedCore
         public static bool transparencyEnabled = false;
         public static int lightingLevel = 0;
         public static bool toonShadingEnabled = false;
-        //public static float drawDistance = 1f;
         public static int drawDepth = 2;
         public static ControlType controlType = ControlType.MouseAndKeyboard;
         public int optionToggleCooldown = 0;
@@ -94,7 +94,7 @@ namespace VexedCore
         
 
 
-        public static VertexPositionColorNormalTexture[] detailVertexArray;
+        /*public static VertexPositionColorNormalTexture[] detailVertexArray;
         public static int detailVertexArrayCount = 0;
         public static VertexPositionColorNormalTexture[] doodadVertexArray;
         public static int doodadVertexArrayCount =0;
@@ -109,11 +109,11 @@ namespace VexedCore
         public static VertexPositionColorNormalTexture[] dynamicBlockVertexArray;
         public static int dynamicBlockVertexArrayCount = 0;
         public static VertexPositionColorNormalTexture[] translucentBlockVertexArray;
-        public static int translucentBlockVertexArrayCount = 0;
+        public static int translucentBlockVertexArrayCount = 0;*/
         
 
         public static List<TransparentSquare> staticTranslucentObjects;
-        List<VertexPositionColorNormalTexture> translucentList;
+        
         public static List<TransparentSquare> mapShellObjects;
         public static VertexBuffer staticObjectBuffer;
         public static bool staticObjectsInitialized = false;
@@ -191,13 +191,6 @@ namespace VexedCore
             loadMapEffect.LightingEnabled = true;
             loadMapEffect.DirectionalLight1.Enabled = true;
             loadMapEffect.DirectionalLight0.Enabled = true;
-            /*if (Engine.lightingLevel > 0)
-                mapEffect.LightingEnabled = true;
-            if (Engine.lightingLevel > 1)
-            {
-                mapEffect.DirectionalLight1.Enabled = true;
-                mapEffect.DirectionalLight0.Enabled = true;
-            }*/
 
             playerTextureEffect = new AlphaTestEffect(Game1.graphicsDevice);
             playerTextureEffect.VertexColorEnabled = true;
@@ -229,290 +222,189 @@ namespace VexedCore
             
         }
 
-        public void DrawScene(bool depthShader, int gameTime)
+        public void DrawScene(int gameTime)
         {
+
+            foreach (Room r in roomList)
+            {
+                r.adjacent = false;
+            }
+            Engine.player.currentRoom.MarkAdjacentRooms(Engine.drawDepth);
+            if (Engine.player.jumpRoom != null)
+                Engine.player.jumpRoom.MarkAdjacentRooms(Engine.drawDepth);
+
+
             Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
 
-            //if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector)
-            {
-                if (depthShader == false)
-                {
-                    worldTextureEffect.Texture = Room.blockTexture;
-                    worldTextureEffect.CurrentTechnique.Passes[0].Apply();
-                }
-                else
-                {
-
-                    cartoonEffect.CurrentTechnique = cartoonEffect.Techniques["NormalDepth"];
-                    cartoonEffect.CurrentTechnique.Passes[0].Apply();
-                }
-
-                if (doodadVertexArrayCount > 0)
-                {
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        doodadVertexArray, 0, doodadVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }
-
-                if (staticBlockVertexArrayCount > 0)
-                {                    
-                    if (staticObjectsInitialized == false)
-                    {
-                        staticObjectBuffer = new VertexBuffer(Game1.graphicsDevice, VertexPositionColorNormalTexture.VertexDeclaration, staticBlockVertexArray.Length, BufferUsage.WriteOnly);
-                        staticObjectBuffer.SetData<VertexPositionColorNormalTexture>(staticBlockVertexArray);                        
-
-                    }
-                    Game1.graphicsDevice.SetVertexBuffer(staticObjectBuffer);
-                    Game1.graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList,
-                        0, staticBlockVertexArrayCount / 3);
-                }
-                if (dynamicBlockVertexArrayCount > 0)
-                {
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        dynamicBlockVertexArray, 0, dynamicBlockVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }
-
-
-
-                Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
-                playerTextureEffect.Texture = Room.blockTexture;
-                playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-
-
-                if (detailVertexArrayCount > 0)
-                {
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        detailVertexArray, 0, detailVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }
-
-                /*playerTextureEffect.Texture = Ability.ability_textures;
-                playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-
-
-
-                if (decalVertexArrayCount > 0)
-                {
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        decalVertexArray, 0, decalVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }
-                
-                if (spriteVertexArrayCount > 0)
-                {
-                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                        spriteVertexArray, 0, spriteVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                }*/
-
-                //Game1.graphicsDevice.BlendState = BlendState.Opaque;
-
-                
-                
-
-
-                Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
-
-
-                foreach (Room r in roomList)
-                {                    
-                    r.Draw();
-                }
-                foreach (Monster m in Engine.player.currentRoom.monsters)
-                {
-                    if (m.moveType == VL.MovementType.FaceBoss)
-                    {
-                        m.faceBoss.Render();
-                    }
-                }
-
-
-                foreach (Room r in Engine.roomList)
-                {
-                    if(r != player.currentRoom)
-                        r.DrawDecorations();
-                }
-                player.currentRoom.DrawDecorations();
-                Engine.player.currentRoom.DrawMonsters();
-                player.currentRoom.DrawProjectiles();
-
-                foreach (Room r in roomList)
-                {
-                    r.adjacent = false;
-                }
-                Engine.player.currentRoom.MarkAdjacentRooms(Engine.drawDepth);
-                if (Engine.player.jumpRoom != null)
-                    Engine.player.jumpRoom.MarkAdjacentRooms(Engine.drawDepth);
-                foreach (Room r in Engine.roomList)
-                {
-                    r.UpdateWormholes(gameTime);
-                    r.DrawWormholes();
-                }
-
-                Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
-
-                if (player.insideBox == true)
-                    player.DrawTexture(playerTextureEffect);
-
-                if (depthShader == false && transparencyEnabled == true)
-                {
-                    if (Room.innerBlockMode > 0)
-                    {                                               
-                        // Sort Triangles
-                        staticTranslucentObjects.Sort(new FaceSorter(player.cameraTarget - player.cameraPos));
-
-                        translucentList = new List<VertexPositionColorNormalTexture>();
-                        Engine.translucentBlockVertexArrayCount = 0;
-                        for (int i = 0; i < staticTranslucentObjects.Count; i++)
-                        {
-                            translucentBlockVertexArray[Engine.translucentBlockVertexArrayCount] = staticTranslucentObjects[i].v1;
-                            translucentBlockVertexArray[Engine.translucentBlockVertexArrayCount+1] = staticTranslucentObjects[i].v2;
-                            translucentBlockVertexArray[Engine.translucentBlockVertexArrayCount+2] = staticTranslucentObjects[i].v3;
-                            translucentBlockVertexArray[Engine.translucentBlockVertexArrayCount+3] = staticTranslucentObjects[i].v4;
-                            translucentBlockVertexArray[Engine.translucentBlockVertexArrayCount+4] = staticTranslucentObjects[i].v5;
-                            translucentBlockVertexArray[Engine.translucentBlockVertexArrayCount+5] = staticTranslucentObjects[i].v6;
-                            Engine.translucentBlockVertexArrayCount += 6;
-                        }                        
-
-                        if (translucentBlockVertexArrayCount > 0)
-                        {
-                            translucentEffect.CurrentTechnique.Passes[0].Apply();
-                            
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                translucentBlockVertexArray, 0, translucentBlockVertexArrayCount / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-
-
-                    }
-                    Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
-                }
-                //Game1.graphicsDevice.BlendState = BlendState.Opaque;
-                if (player.insideBox == false)
-                    player.DrawTexture(playerTextureEffect);
-            }
-            Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
             
-            //if (transparencyEnabled == true)
+            worldTextureEffect.Texture = Room.blockTexture;
+            worldTextureEffect.CurrentTechnique.Passes[0].Apply();
+
+
+ 
+
+
+            Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
+
+            List<DepthIndex> depthIndexer = new List<DepthIndex>();
+            for(int i = 0; i < roomList.Count; i++)
             {
-                //Game1.graphicsDevice.DepthStencilState = DepthStencilState.None;
-                if (WorldMap.state != ZoomState.None)
-                {
-                    foreach (Room r in roomList)
-                    {
-                        r.DrawMapIcons();                       
-                    }
-
-                    if(depthShader == false)
-                        mapEffect.CurrentTechnique.Passes[0].Apply();
-                    else
-                    {
-                        cartoonEffect.CurrentTechnique = cartoonEffect.Techniques["NormalDepth"];
-                        cartoonEffect.CurrentTechnique.Passes[0].Apply();
-                    }
-                    //translucentEffect.CurrentTechnique.Passes[0].Apply();
-                    // Sort Triangles
-                    if (WorldMap.selectedRoomIndex != -1)
-                    {
-                        Room selectedRoom = roomList[WorldMap.selectedRoomIndex];
-                        Vector3 adjustedSize = adjustedSize = new Vector3(selectedRoom.size.X + 7f, selectedRoom.size.Y + 7f, selectedRoom.size.Z + 7f);
-                        List<TransparentSquare> selectedBlockList = selectedRoom.GetMapBlock(adjustedSize, Color.White, true);
-                        selectedBlockList.Sort(new FaceSorter(-(WorldMap.cameraPosition - WorldMap.cameraTarget)));
-                        mapShellObjects.AddRange(selectedBlockList);
-                    }
-
-                    mapShellObjects.Sort(new FaceSorter(-(WorldMap.cameraPosition-WorldMap.cameraTarget)));
-
-                    List<VertexPositionColorNormalTexture> translucentList = new List<VertexPositionColorNormalTexture>();
-                    for (int i = 0; i < mapShellObjects.Count; i++)
-                    {
-
-                        translucentList.Add(mapShellObjects[i].v1);
-                        translucentList.Add(mapShellObjects[i].v2);
-                        translucentList.Add(mapShellObjects[i].v3);
-                        translucentList.Add(mapShellObjects[i].v4);
-                        translucentList.Add(mapShellObjects[i].v5);
-                        translucentList.Add(mapShellObjects[i].v6);
-                    }
-                    if (WorldMap.selectedRoomIndex != -1)
-                    {
-                        Room selectedRoom = roomList[WorldMap.selectedRoomIndex];
-                        Vector3 adjustedSize = adjustedSize = new Vector3(selectedRoom.size.X + 7f, selectedRoom.size.Y + 7f, selectedRoom.size.Z + 7f);
-                        List<TransparentSquare> selectedBlockList = selectedRoom.GetMapBlock(adjustedSize, Color.White, true);
-                        selectedBlockList.Sort(new FaceSorter(-(WorldMap.cameraPosition - WorldMap.cameraTarget)));
-                        for (int i = 0; i < selectedBlockList.Count; i++)
-                        {
-
-                            translucentList.Add(selectedBlockList[i].v1);
-                            translucentList.Add(selectedBlockList[i].v2);
-                            translucentList.Add(selectedBlockList[i].v3);
-                            translucentList.Add(selectedBlockList[i].v4);
-                            translucentList.Add(selectedBlockList[i].v5);
-                            translucentList.Add(selectedBlockList[i].v6);
-                        }
-                    }
-
-                    if (translucentList.Count > 0 && DepthControl.depthCount > 0 && mapShellObjects.Count * 2 > 0)
-                    {                       
-                        Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                            translucentList.ToArray(), 0, mapShellObjects.Count * 2, VertexPositionColorNormalTexture.VertexDeclaration);
-                    }
-                    if (WorldMap.selectedRoomIndex != -1)
-                    {
-                        Game1.graphicsDevice.DepthStencilState = DepthStencilState.None;
-                        if (translucentList.Count > 0 && DepthControl.depthCount > 0 && translucentList.Count() / 3 - mapShellObjects.Count * 2 > 0)
-                        {
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                translucentList.ToArray(), mapShellObjects.Count * 6, translucentList.Count() / 3 - mapShellObjects.Count * 2, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        Engine.roomList[WorldMap.selectedRoomIndex].DrawMapIcons();
-                    }
-                    
-                    Engine.player.currentRoom.DrawMapArrow();
-                    
-                }
-                Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
+                if(roomList[i].shouldRender)
+                    depthIndexer.Add(new DepthIndex(roomList[i].center, i, DepthIndexType.Room));                
             }
+            
+            for (int i = 0; i < wormholeList.Count; i++)
+            {
+                if(wormholeList[i].shouldRender)
+                    depthIndexer.Add(new DepthIndex(wormholeList[i].position, i, DepthIndexType.Wormhole));
+            }
+            depthIndexer.Sort(new DepthIndexSorter(cameraTarget - cameraPos));
+            for (int i = 0; i < depthIndexer.Count; i++)
+            {
+                if (depthIndexer[i].type == DepthIndexType.Room)
+                {
+                    roomList[depthIndexer[i].index].Draw();
+                    roomList[depthIndexer[i].index].DrawDecorations();
+                    if (roomList[depthIndexer[i].index] == player.currentRoom)
+                    {
+                        player.currentRoom.DrawMonsters();
+                        player.currentRoom.DrawProjectiles();
+                        player.DrawTexture(playerTextureEffect);
+                    }
+
+                }
+                else if (depthIndexer[i].type == DepthIndexType.Wormhole)
+                    wormholeList[depthIndexer[i].index].Draw();
+
+            }
+
+
+
+            /*foreach (Room r in roomList)
+            {                    
+                r.Draw();
+            }*/
+            foreach (Monster m in Engine.player.currentRoom.monsters)
+            {
+                if (m.moveType == VL.MovementType.FaceBoss)
+                {
+                    m.faceBoss.Render();
+                }
+            }
+
+
+            /*foreach (Room r in Engine.roomList)
+            {
+                if(r != player.currentRoom)
+                    r.DrawDecorations();
+            }
+            player.currentRoom.DrawDecorations();
+            Engine.player.currentRoom.DrawMonsters();
+            player.currentRoom.DrawProjectiles();*/
+
+
+            
+            /*foreach (Wormhole w in wormholeList)
+            {
+                if(w.shouldRender)
+                    w.Draw();
+            }*/
+
+            Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
+
+            //if (player.insideBox == true)
+               // player.DrawTexture(playerTextureEffect);
+
+            
+
+            Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
+            
+            //Game1.graphicsDevice.BlendState = BlendState.Opaque;
+            //if (player.insideBox == false)
+              //  player.DrawTexture(playerTextureEffect);
+            
+            Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
+
+            if (WorldMap.state != ZoomState.None)
+            {
+                foreach (Room r in roomList)
+                {
+                    r.DrawMapIcons();                       
+                }
+
+                mapEffect.CurrentTechnique.Passes[0].Apply();
+                                    
+                // Sort Triangles
+                if (WorldMap.selectedRoomIndex != -1)
+                {
+                    Room selectedRoom = roomList[WorldMap.selectedRoomIndex];
+                    Vector3 adjustedSize = adjustedSize = new Vector3(selectedRoom.size.X + 7f, selectedRoom.size.Y + 7f, selectedRoom.size.Z + 7f);
+                    List<TransparentSquare> selectedBlockList = selectedRoom.GetMapBlock(adjustedSize, Color.White, true);
+                    selectedBlockList.Sort(new FaceSorter(-(WorldMap.cameraPosition - WorldMap.cameraTarget)));
+                    mapShellObjects.AddRange(selectedBlockList);
+                }
+
+                mapShellObjects.Sort(new FaceSorter(-(WorldMap.cameraPosition-WorldMap.cameraTarget)));
+
+                List<VertexPositionColorNormalTexture> translucentList = new List<VertexPositionColorNormalTexture>();
+                for (int i = 0; i < mapShellObjects.Count; i++)
+                {
+
+                    translucentList.Add(mapShellObjects[i].v1);
+                    translucentList.Add(mapShellObjects[i].v2);
+                    translucentList.Add(mapShellObjects[i].v3);
+                    translucentList.Add(mapShellObjects[i].v4);
+                    translucentList.Add(mapShellObjects[i].v5);
+                    translucentList.Add(mapShellObjects[i].v6);
+                }
+                if (WorldMap.selectedRoomIndex != -1)
+                {
+                    Room selectedRoom = roomList[WorldMap.selectedRoomIndex];
+                    Vector3 adjustedSize = adjustedSize = new Vector3(selectedRoom.size.X + 7f, selectedRoom.size.Y + 7f, selectedRoom.size.Z + 7f);
+                    List<TransparentSquare> selectedBlockList = selectedRoom.GetMapBlock(adjustedSize, Color.White, true);
+                    selectedBlockList.Sort(new FaceSorter(-(WorldMap.cameraPosition - WorldMap.cameraTarget)));
+                    for (int i = 0; i < selectedBlockList.Count; i++)
+                    {
+
+                        translucentList.Add(selectedBlockList[i].v1);
+                        translucentList.Add(selectedBlockList[i].v2);
+                        translucentList.Add(selectedBlockList[i].v3);
+                        translucentList.Add(selectedBlockList[i].v4);
+                        translucentList.Add(selectedBlockList[i].v5);
+                        translucentList.Add(selectedBlockList[i].v6);
+                    }
+                }
+
+                if (translucentList.Count > 0 && DepthControl.depthCount > 0 && mapShellObjects.Count * 2 > 0)
+                {                       
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        translucentList.ToArray(), 0, mapShellObjects.Count * 2, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (WorldMap.selectedRoomIndex != -1)
+                {
+                    Game1.graphicsDevice.DepthStencilState = DepthStencilState.None;
+                    if (translucentList.Count > 0 && DepthControl.depthCount > 0 && translucentList.Count() / 3 - mapShellObjects.Count * 2 > 0)
+                    {
+                        Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                            translucentList.ToArray(), mapShellObjects.Count * 6, translucentList.Count() / 3 - mapShellObjects.Count * 2, VertexPositionColorNormalTexture.VertexDeclaration);
+                    }
+                    Engine.roomList[WorldMap.selectedRoomIndex].DrawMapIcons();
+                }
+                    
+                Engine.player.currentRoom.DrawMapArrow();
+                    
+            }
+            Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
         }
+        
 
         public void Draw(int gameTime)
         {
             saveGameText.RenderTextures();
             
             Engine.mapShellObjects = new List<TransparentSquare>();
-            if(Engine.detailVertexArray == null)
-                Engine.detailVertexArray = new VertexPositionColorNormalTexture[80000];
-            detailVertexArrayCount = 0;
-            if (Engine.doodadVertexArray == null)
-                Engine.doodadVertexArray = new VertexPositionColorNormalTexture[150000];
-            doodadVertexArrayCount = 0;
-            if (Engine.decalVertexArray == null)
-                Engine.decalVertexArray = new VertexPositionColorNormalTexture[60000];
-            decalVertexArrayCount = 0;
-            if (Engine.spriteVertexArray == null)
-                Engine.spriteVertexArray = new VertexPositionColorNormalTexture[60000];
-            spriteVertexArrayCount = 0;
-            if (Engine.beamVertexArray == null)
-                Engine.beamVertexArray = new VertexPositionColorNormalTexture[60000];
-            beamVertexArrayCount = 0;
-            if (Engine.translucentBlockVertexArray == null)
-            {
-                Engine.translucentBlockVertexArray = new VertexPositionColorNormalTexture[2000];
-                translucentBlockVertexArrayCount = 0;
-            }
-
-            if (Engine.dynamicBlockVertexArray == null)
-                Engine.dynamicBlockVertexArray = new VertexPositionColorNormalTexture[60000];
-            dynamicBlockVertexArrayCount = 0;
-
-            /*if (Engine.staticBlockVertexArray == null || reDraw == true)
-            {
-                Engine.staticTranslucentObjects = new List<TrasnparentSquare>();
-                staticObjectsInitialized = false;
-                staticDoodadsInitialized = false;
-
-                if (Engine.staticBlockVertexArray == null)
-                    Engine.staticBlockVertexArray = new VertexPositionColorNormalTexture[300000];
-                staticBlockVertexArrayCount = 0;
-            }*/
-
-            //bloom.BeginDraw();            
+       
 
             // Set transform matrices.
             float aspect = Game1.graphicsDevice.Viewport.AspectRatio;
@@ -599,74 +491,32 @@ namespace VexedCore
 
             Matrix mapTranslation = Matrix.CreateTranslation(0, -WorldMap.zoomLevel * 5, 0);
 
-            translucentEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
-            translucentEffect.View = Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp) * mapTranslation;
-            translucentEffect.Projection = projectionMatrix;
             mapEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
             mapEffect.View = Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp)*mapTranslation;
             mapEffect.Projection = projectionMatrix;
-
-
 
             playerTextureEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
             playerTextureEffect.View = Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp) * mapTranslation;
             playerTextureEffect.Projection = projectionMatrix;
 
-            worldTextureEffect.World = Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch);
-            worldTextureEffect.View = Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp) * mapTranslation;
-            worldTextureEffect.Projection = projectionMatrix; 
             
-
-            cartoonEffect.Parameters["World"].SetValue(Matrix.CreateFromAxisAngle(new Vector3(0, 0, 1), currentRotate) * Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), currentPitch));
-            cartoonEffect.Parameters["View"].SetValue(Matrix.CreateLookAt(cameraPos, cameraTarget, cameraUp));
-            cartoonEffect.Parameters["Projection"].SetValue(projectionMatrix);
 
 
             // Set renderstates.
             Game1.graphicsDevice.RasterizerState = RasterizerState.CullNone;
             Game1.graphicsDevice.BlendState = BlendState.AlphaBlend;
             
-            
-            //foreach (Room r in roomList)
-            //{
-                //r.Draw(gameTime);
-            //}
 
 
 
-            if (toonShadingEnabled)
-            {
-                Game1.graphicsDevice.SetRenderTarget(normalDepthRenderTarget);
-
-                Game1.graphicsDevice.Clear(Color.Black);
-
-
-                DrawScene(true, gameTime);
-            }
-
-
-
-
-            if (toonShadingEnabled)
-                Game1.graphicsDevice.SetRenderTarget(sceneRenderTarget);
-            else
-                Game1.graphicsDevice.SetRenderTarget(null);
+            Game1.graphicsDevice.SetRenderTarget(null);
 
             Game1.graphicsDevice.Clear(Color.Black);
 
 
             Skybox.Draw(player);
-            DrawScene(false, gameTime);
-
-
-
-            // Run the postprocessing filter over the scene that we just rendered.
-            if (toonShadingEnabled)
-            {
-                Game1.graphicsDevice.SetRenderTarget(null);
-
-                ApplyPostprocess();
-            }            
+            DrawScene(gameTime);
+         
             
             Engine.staticObjectsInitialized = true;
             Engine.staticDoodadsInitialized = true;
@@ -691,62 +541,6 @@ namespace VexedCore
 
 
 
-        /// <summary>
-        /// Helper applies the edge detection and pencil sketch postprocess effect.
-        /// </summary>
-        void ApplyPostprocess()
-        {
-            EffectParameterCollection parameters = postprocessEffect.Parameters;
-            string effectTechniqueName;
-
-            // Set effect parameters controlling the pencil sketch effect.
-            if (Settings.EnableSketch)
-            {
-                parameters["SketchThreshold"].SetValue(Settings.SketchThreshold);
-                parameters["SketchBrightness"].SetValue(Settings.SketchBrightness);
-            }
-
-            // Set effect parameters controlling the edge detection effect.
-            if (Settings.EnableEdgeDetect)
-            {
-                Vector2 resolution = new Vector2(sceneRenderTarget.Width,
-                                                 sceneRenderTarget.Height);
-
-                Texture2D normalDepthTexture = normalDepthRenderTarget;
-
-                parameters["EdgeWidth"].SetValue(Settings.EdgeWidth);
-                parameters["EdgeIntensity"].SetValue(Settings.EdgeIntensity);
-                parameters["ScreenResolution"].SetValue(resolution);
-                parameters["NormalDepthTexture"].SetValue(normalDepthTexture);
-
-                // Choose which effect technique to use.
-                if (Settings.EnableSketch)
-                {
-                    if (Settings.SketchInColor)
-                        effectTechniqueName = "EdgeDetectColorSketch";
-                    else
-                        effectTechniqueName = "EdgeDetectMonoSketch";
-                }
-                else
-                    effectTechniqueName = "EdgeDetect";
-            }
-            else
-            {
-                // If edge detection is off, just pick one of the sketch techniques.
-                if (Settings.SketchInColor)
-                    effectTechniqueName = "ColorSketch";
-                else
-                    effectTechniqueName = "MonoSketch";
-            }
-
-            // Activate the appropriate effect technique.
-            postprocessEffect.CurrentTechnique = postprocessEffect.Techniques[effectTechniqueName];
-
-            // Draw a fullscreen sprite to apply the postprocessing effect.
-            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, postprocessEffect);
-            spriteBatch.Draw(sceneRenderTarget, Vector2.Zero, Color.White);
-            spriteBatch.End();
-        }
 
         public void Update(int gameTime)
         {
@@ -771,8 +565,21 @@ namespace VexedCore
             if (Keyboard.GetState().IsKeyDown(Keys.PageDown))
                 return;
 
+            if (wormholeList == null || justLoaded == true)
+            {
+                wormholeList = new List<Wormhole>();
+                foreach (Room r in roomList)
+                    r.BuildWormholes();
+            }
+
+            foreach (Wormhole w in wormholeList)
+            {
+                w.Update(gameTime);
+            }
+
             if (player.state == State.Normal)
                 justLoaded = false;
+
             
 
             optionToggleCooldown -= gameTime;

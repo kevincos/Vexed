@@ -96,7 +96,45 @@ namespace VexedCore
             float t2Center = Vector3.Dot(t2.averagePos, unit);
             return -t1Center.CompareTo(t2Center);            
         }
+    }
 
+    public enum DepthIndexType
+    {
+        Room,
+        Wormhole,
+        Decoration,
+        DoodadSprite
+    }
+
+    public class DepthIndex
+    {
+        public Vector3 position;
+        public int index;
+        public DepthIndexType type;
+
+        public DepthIndex(Vector3 position, int index, DepthIndexType type)
+        {
+            this.type = type;
+            this.position = position;
+            this.index = index;
+        }
+    }
+
+    public class DepthIndexSorter : Comparer<DepthIndex>
+    {
+        Vector3 unit = Vector3.Zero;
+        public DepthIndexSorter(Vector3 unit)
+        {
+            this.unit = unit;
+            this.unit.Normalize();
+        }
+        // Compares by Length, Height, and Width.
+        public override int Compare(DepthIndex d1, DepthIndex d2)
+        {
+            float d1Center = Vector3.Dot(d1.position, unit);
+            float d2Center = Vector3.Dot(d2.position, unit);
+            return -d1Center.CompareTo(d2Center);
+        }
     }
 
     public class FakeShader

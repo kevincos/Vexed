@@ -169,8 +169,8 @@
     <Compile Include="Wormhole.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dialog.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Dialog\dialog.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Game.ico" />

@@ -217,6 +217,7 @@ namespace VexedCore
             MapHud.largeFont = Content.Load<SpriteFont>("Fonts\\HudFontLarge");
             Skybox.LoadTextures(Content);
             DecorationImage.LoadTextures(Content);
+            Doodad.powerCubeTexture = Content.Load<Texture2D>("Decorations\\powercube");
             Engine.spriteFont = Content.Load<SpriteFont>("Fonts\\Font");
             Engine.loadFont = Content.Load<SpriteFont>("Fonts\\LoadFont");
             Engine.loadFontBold = Content.Load<SpriteFont>("Fonts\\LoadFontBold");

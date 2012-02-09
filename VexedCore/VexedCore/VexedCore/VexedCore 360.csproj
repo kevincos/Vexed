@@ -124,7 +124,9 @@
     <Compile Include="Wormhole.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dialog.xml" />
+    <Content Include="Dialog\dialog.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
@@ -162,7 +164,9 @@
     </None>
     <None Include="LevelData\blarg" />
     <None Include="LevelData\debug" />
-    <None Include="LevelData\menu" />
+    <None Include="LevelData\menu">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="LevelData\movingplatform">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -173,7 +177,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="LevelData\spiral2" />
-    <None Include="LevelData\world" />
+    <None Include="LevelData\world">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework">

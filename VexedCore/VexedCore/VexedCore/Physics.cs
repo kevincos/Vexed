@@ -672,7 +672,7 @@ namespace VexedCore
                 }
                 if( (d.position.position - p.center.position).Length() < 3f*d.triggerDistance)
                 {
-                    if (d.isOrb)
+                    if (d.isOrb && d.active)
                     {
                         d.tracking = true;
                     }
@@ -684,6 +684,12 @@ namespace VexedCore
                         if(d.active == true)
                         {
                             d.ActivateDoodad(r, false);
+                            d.position.direction = Vector3.Zero;
+                            d.position.normal = Vector3.Zero;
+                            d.position.position = Vector3.Zero;
+                            d.refreshVertexData = true;
+                            foreach (Doodad powerup in d.currentRoom.doodads)
+                                powerup.RefreshPowerLevels();
                             r.currentOrbs++;
                             r.parentSector.currentOrbs++;
                             r.refreshVertices = true;

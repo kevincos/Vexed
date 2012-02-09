@@ -74,6 +74,8 @@ namespace VexedCore
         public static SoundEffect inventoryWhoosh;
         public static SoundEffect mapWhoosh;
 
+        public static SoundEffect menuSelect;
+
         public static SoundEffect flameAmbient;
         public static SoundEffect zapAmbient;
 
@@ -133,6 +135,7 @@ namespace VexedCore
             SoundFX.hologramUse = content.Load<SoundEffect>("Sounds\\Switch4");
             SoundFX.dialogExtend = content.Load<SoundEffect>("Sounds\\Throw4");
             SoundFX.dialogCharacter = content.Load<SoundEffect>("Sounds\\TinyZap2");
+            SoundFX.menuSelect = content.Load<SoundEffect>("Sounds\\LaserShortHard");
 
             SoundFX.mapSelect = content.Load<SoundEffect>("Sounds\\Switch3");
             SoundFX.inventoryWhoosh = content.Load<SoundEffect>("Sounds\\DoorOpen");
@@ -240,6 +243,11 @@ namespace VexedCore
                 hologramUse.Play();
         }
 
+        public static void MenuSelect()
+        {
+            if (Engine.soundEffectsEnabled)
+                menuSelect.Play();
+        }
 
         public static void WallSwitch()
         {

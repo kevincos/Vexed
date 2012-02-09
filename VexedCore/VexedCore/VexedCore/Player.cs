@@ -230,8 +230,8 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.JetPack);
-            secondaryAbility = new Ability(AbilityType.SpinHook);
+            primaryAbility = new Ability(AbilityType.Laser);
+            secondaryAbility = new Ability(AbilityType.Missile);
             naturalShield = new Ability(AbilityType.Shield);
 
             upgrades[(int)AbilityType.Laser] = true;
@@ -1788,6 +1788,8 @@ namespace VexedCore
                                     currentRoom.parentSector.currentOrbs++;
                                     //Engine.reDraw = true;
                                     currentRoom.refreshVertices = true;
+                                    foreach (Doodad powerup in d.currentRoom.doodads)
+                                        powerup.RefreshPowerLevels();
                                 }
                             }
                             if (d.type == VL.DoodadType.RedPowerStation)

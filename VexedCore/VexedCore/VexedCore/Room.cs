@@ -144,15 +144,8 @@ namespace VexedCore
                 doodads.Add(new Doodad(d));
             }
             jumpRings = new List<JumpRing>();
-            /*foreach (JumpRing j in r.jumpRings)
-            {
-                jumpRings.Add(new JumpRing(j));
-            }*/
             tunnels = new List<Tunnel>();
-            /*foreach (Tunnel t in r.tunnels)
-            {
-                tunnels.Add(new Tunnel(t));
-            }*/
+
             monsters = new List<Monster>();
             foreach (Monster m in r.monsters)
             {
@@ -360,16 +353,12 @@ namespace VexedCore
             
             if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || roomHighlight == true)
             {
-                //if ((center - Engine.player.currentRoom.center).Length() < Engine.drawDistance ||
-                        //(Engine.player.jumpRoom != null && (center - Engine.player.jumpRoom.center).Length() < Engine.drawDistance) || roomHighlight == true || adjacent == true)
                 if(this == Engine.player.currentRoom || adjacent == true)
                 {
                     
                     beltAnimation += gameTime;
                     foreach (Block b in blocks)
                     {
-                        //if (b.staticObject == false)
-                        //{
                         int blockUpdateTime = b.UpdateBehavior(gameTime);
                         foreach (Edge e in b.edges)
                         {
@@ -377,7 +366,6 @@ namespace VexedCore
                             e.end.Update(this, blockUpdateTime);
                             e.UpdateBehavior(gameTime);
                         }
-                        //}
                     }
                     foreach (Doodad d in doodads)
                     {
@@ -1643,23 +1631,25 @@ namespace VexedCore
 
         public void DrawDecorations()
         {                    
-            if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || (roomHighlight == true && explored == true))
+            if(shouldRender)
             {
-                if (roomHighlight == true || adjacent == true)
+                List<DepthIndex> decorationIndexer = new List<DepthIndex>();
+                for(int i = 0; i < decorations.Count; i++)
                 {
-
-
-                    if (WorldMap.state == ZoomState.None || parentSector == Engine.sectorList[WorldMap.selectedSectorIndex])
-                    {
-                        foreach (Decoration d in decorations)
-                        {
-                            d.Draw(this);
-                        }
-                        foreach (Doodad d in doodads)
-                        {
-                            d.DrawSprites(this);
-                        }
-                    }
+                    decorationIndexer.Add(new DepthIndex(decorations[i].position.position + decorations[i].depth * decorations[i].position.normal, i, DepthIndexType.Decoration));
+                }
+                for(int i = 0; i < doodads.Count; i++)
+                {
+                    decorationIndexer.Add(new DepthIndex(doodads[i].position.position + doodads[i].depth * doodads[i].position.normal, i, DepthIndexType.DoodadSprite));                    
+                }
+                //decorationIndexer.Sort(new DepthIndexSorter(Engine.cameraTarget - Engine.cameraPos));
+                decorationIndexer.Sort(new DepthIndexSorter(-Engine.player.center.normal));
+                foreach (DepthIndex d in decorationIndexer)
+                {
+                    if (d.type == DepthIndexType.Decoration)
+                        decorations[d.index].Draw(this);
+                    else if (d.type == DepthIndexType.DoodadSprite)
+                        doodads[d.index].DrawSprites(this);
                 }
             }
         }
@@ -2088,25 +2078,6 @@ namespace VexedCore
 
         public List<Wormhole> wormholeList;
 
-        public void DrawWormholes()
-        {
-            if (wormholeList == null || Engine.reDraw == true)
-            {                
-                wormholeList = new List<Wormhole>();
-                foreach (Doodad d in doodads)
-                {
-                    if ((d.type == VL.DoodadType.JumpStation || d.type == VL.DoodadType.JumpPad) && d.distanceToTarget != 0 && (shouldRender) && (d.targetRoom.shouldRender == false))
-                    {
-                        
-                        wormholeList.Add(new Wormhole(d.position.position + d.distanceToTarget * d.position.normal / 2, d.position.direction, d.position.normal));
-                    }
-                }
-            }
-            
-            foreach (Wormhole wormhole in wormholeList)
-                wormhole.Draw();
-            
-        }
 
         public bool shouldRender
         {
@@ -2144,23 +2115,14 @@ namespace VexedCore
             }        
         }
 
-        public void UpdateWormholes(int gameTime)
+        public void BuildWormholes()
         {
-            /*if (wormholeList == null || Engine.reDraw == true)
+            foreach (Doodad d in doodads)
             {
-                wormholeList = new List<Wormhole>();
-                foreach (Doodad d in doodads)
+                if ((d.type == VL.DoodadType.JumpStation || d.type == VL.DoodadType.JumpPad) && d.distanceToTarget != 0)
                 {
-                    if ((d.type == VL.DoodadType.JumpStation || d.type == VL.DoodadType.JumpPad) && d.distanceToTarget != 0 && (shouldRender) && (d.targetRoom.shouldRender == false))
-                    {
-                        wormholeList.Add(new Wormhole(d.position.position + d.distanceToTarget * d.position.normal / 2, d.position.direction, d.position.normal));
-                    }
+                    Engine.wormholeList.Add(new Wormhole(d.position.position + d.distanceToTarget * d.position.normal / 2, d.position.direction, d.position.normal, this, d.targetRoom));
                 }
-            }*/
-            if (wormholeList != null)
-            {
-                foreach (Wormhole wormhole in wormholeList)
-                    wormhole.Update(gameTime);
             }
         }
 
@@ -2171,274 +2133,307 @@ namespace VexedCore
         public void Draw()
         {
             
-            if (WorldMap.state == ZoomState.None || WorldMap.state == ZoomState.ZoomFromSector || WorldMap.state == ZoomState.ZoomToSector || Engine.player.currentRoom == this || (roomHighlight == true && explored == true))
-            {                
-                if (roomHighlight == true || adjacent == true)
+            if (shouldRender)
+            {
+                if (dynamicFancyPlateTriangleArray == null)
                 {
-                    if (WorldMap.state == ZoomState.None || parentSector == Engine.sectorList[WorldMap.selectedSectorIndex])
+                    int fancyPlateCount = 0;
+                    foreach (Doodad d in doodads)
+                    {                        
+                        d.cacheOffset = fancyPlateCount;                            
+                        fancyPlateCount += d.cacheSize;                        
+                    }
+                    dynamicFancyPlateTriangleArray = new VertexPositionColorNormalTexture[fancyPlateCount];
+                }
+                if (dynamicBrickTriangleArray == null)
+                {
+                    int fancyBrickCount = 0;
+                    foreach (Doodad d in doodads)
+                    {                        
+                        d.cacheOffsetBrick = fancyBrickCount;
+                        fancyBrickCount += d.cacheSizeBrick;
+                    }
+                    dynamicBrickTriangleArray = new VertexPositionColorNormalTexture[fancyBrickCount];
+                }
+
+                float cameraLineDistance = Vector3.Dot(center - Engine.player.center.position, Vector3.Normalize(Engine.player.cameraTarget - Engine.player.cameraPos));
+
+
+                Color interiorColor = new Color(20, 20, 20);
+
+                if (innerBlockMode == 2)
+                    interiorColor.A = 90;
+
+
+                #region innerBlock
+                Vector3 adjustedSize = new Vector3(size.X - .1f, size.Y - .1f, size.Z - .1f);
+                if (translucentBoxVertices == null)
+                {
+                    translucentBoxVertices = new List<VertexPositionColorNormalTexture>();
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
+
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
+
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
+
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
+
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
+
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
+
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
+
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
+
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
+
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
+
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
+                    translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
+
+                    transparentSquareList = new List<TransparentSquare>();
+                    for (int i = 0; i < translucentBoxVertices.Count(); i += 6)
                     {
-                        float cameraLineDistance = Vector3.Dot(center - Engine.player.center.position, Vector3.Normalize(Engine.player.cameraTarget - Engine.player.cameraPos));
+                        TransparentSquare t = new TransparentSquare(translucentBoxVertices[i], translucentBoxVertices[i + 1], translucentBoxVertices[i + 2], translucentBoxVertices[i + 3], translucentBoxVertices[i + 4], translucentBoxVertices[i + 5]);
+                        transparentSquareList.Add(t);
+                    }
+                }
+                if (Engine.staticObjectsInitialized == false)
+                {
+                    for (int i = 0; i < transparentSquareList.Count(); i++)
+                    {
+                        Engine.staticTranslucentObjects.Add(transparentSquareList[i]);
+                    }
+                }
+
+                #endregion
 
 
-                        Color interiorColor = new Color(20, 20, 20);
+                #region Blocks
+                if (staticFancyPlate == null || refreshVertices == true)
+                {
+                    staticFancyPlate = new List<VertexPositionColorNormalTexture>();
+                    staticCircuit = new List<VertexPositionColorNormalTexture>();
+                    staticVines = new List<VertexPositionColorNormalTexture>();
+                    staticPlate = new List<VertexPositionColorNormalTexture>();
+                    staticCrate = new List<VertexPositionColorNormalTexture>();
+                    staticCargo = new List<VertexPositionColorNormalTexture>();
+                    staticCrystal = new List<VertexPositionColorNormalTexture>();
+                    staticIce = new List<VertexPositionColorNormalTexture>();
+                    staticCobblestone = new List<VertexPositionColorNormalTexture>();
+                    staticGearslot = new List<VertexPositionColorNormalTexture>();
+                    staticRings = new List<VertexPositionColorNormalTexture>();
+                }
+                foreach (Block b in blocks)
+                {
+                    List<Vertex> vList = new List<Vertex>();
+                    vList.Add(b.edges[0].start);
+                    vList.Add(b.edges[1].start);
+                    vList.Add(b.edges[2].start);
+                    vList.Add(b.edges[3].start);
 
-                        if (innerBlockMode == 2)
-                            interiorColor.A = 90;
+                    b.UpdateVertexData(this);
+                    b.Draw(this);
 
-
-                        #region innerBlock
-                        Vector3 adjustedSize = new Vector3(size.X - .1f, size.Y - .1f, size.Z - .1f);
-                        if (translucentBoxVertices == null)
-                        {
-                            translucentBoxVertices = new List<VertexPositionColorNormalTexture>();
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
-
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitX, -.5f));
-
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
-
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitX, -.5f));
-
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
-
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitY, -.5f));
-
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
-
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitY, -.5f));
-
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
-
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, Vector3.UnitZ, -.5f));
-
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
-
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
-                            translucentBoxVertices.Add(GenerateTexturedVertex(center + new Vector3(-adjustedSize.X / 2, -adjustedSize.Y / 2, -adjustedSize.Z / 2), new Vector2(.5f, .5f), interiorColor, -Vector3.UnitZ, -.5f));
-
-                            transparentSquareList = new List<TransparentSquare>();
-                            for (int i = 0; i < translucentBoxVertices.Count(); i += 6)
-                            {
-                                TransparentSquare t = new TransparentSquare(translucentBoxVertices[i], translucentBoxVertices[i + 1], translucentBoxVertices[i + 2], translucentBoxVertices[i + 3], translucentBoxVertices[i + 4], translucentBoxVertices[i + 5]);
-                                transparentSquareList.Add(t);
-                            }
-                        }
-                        if (Engine.staticObjectsInitialized == false)
-                        {
-                            for (int i = 0; i < transparentSquareList.Count(); i++)
-                            {
-                                Engine.staticTranslucentObjects.Add(transparentSquareList[i]);
-                            }
-                        }
-
-                        #endregion
-
-
-                        #region Blocks
-                        if (staticFancyPlate == null || refreshVertices == true)
-                        {
-                            staticFancyPlate = new List<VertexPositionColorNormalTexture>();
-                            staticCircuit = new List<VertexPositionColorNormalTexture>();
-                            staticVines = new List<VertexPositionColorNormalTexture>();
-                            staticPlate = new List<VertexPositionColorNormalTexture>();
-                            staticCrate = new List<VertexPositionColorNormalTexture>();
-                            staticCargo = new List<VertexPositionColorNormalTexture>();
-                            staticCrystal = new List<VertexPositionColorNormalTexture>();
-                            staticIce = new List<VertexPositionColorNormalTexture>();
-                            staticCobblestone = new List<VertexPositionColorNormalTexture>();
-                            staticGearslot = new List<VertexPositionColorNormalTexture>();
-                            staticRings = new List<VertexPositionColorNormalTexture>();
-                        }
-                        foreach (Block b in blocks)
-                        {
-                            List<Vertex> vList = new List<Vertex>();
-                            vList.Add(b.edges[0].start);
-                            vList.Add(b.edges[1].start);
-                            vList.Add(b.edges[2].start);
-                            vList.Add(b.edges[3].start);
-
-                            b.UpdateVertexData(this);
-                            b.Draw(this);
-
-                        }
-                        foreach (JumpRing j in jumpRings)
-                        {
-                            j.Draw(this);
-                        }
-                        foreach (Tunnel t in tunnels)
-                        {
-                            t.Draw(this);
-                        }
+                }
+                foreach (JumpRing j in jumpRings)
+                {
+                    j.Draw(this);
+                }
+                foreach (Tunnel t in tunnels)
+                {
+                    t.Draw(this);
+                }
                         
-                        if (fancyPlateTriangleArray == null || refreshVertices == true)
-                        {
-                            fancyPlateTriangleArray = staticFancyPlate.ToArray();
-                            circuitTriangleArray = staticCircuit.ToArray();
-                            vinesTriangleArray = staticVines.ToArray();
-                            plateTriangleArray = staticPlate.ToArray();
-                            cargoTriangleArray = staticCargo.ToArray();
-                            crateTriangleArray = staticCrate.ToArray();
-                            gearslotTriangleArray = staticGearslot.ToArray();
-                            crystalTriangleArray = staticCrystal.ToArray();
-                            cobblestoneTriangleArray = staticCobblestone.ToArray();
-                            iceTriangleArray = staticIce.ToArray();
-                            ringTriangleArray = staticRings.ToArray();
-                        }
-                        if (ringTriangleArray.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.fancyPlateTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                ringTriangleArray, 0, ringTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        if (fancyPlateTriangleArray.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.fancyPlateTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                fancyPlateTriangleArray, 0, fancyPlateTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        if (vinesTriangleArray.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.vineTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                vinesTriangleArray, 0, vinesTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        if (plateTriangleArray.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.wallTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                plateTriangleArray, 0, plateTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        if (circuitTriangleArray.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.circuitTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                circuitTriangleArray, 0, circuitTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        if (cargoTriangleArray.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.cargoTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                cargoTriangleArray, 0, cargoTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        if (cobblestoneTriangleArray.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.cobblestoneTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                cobblestoneTriangleArray, 0, cobblestoneTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        if (gearslotTriangleArray.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.gearslotTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                gearslotTriangleArray, 0, gearslotTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        if (crateTriangleArray.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.crateTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                crateTriangleArray, 0, crateTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        if (iceTriangleArray.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.iceTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                iceTriangleArray, 0, iceTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        if (crystalTriangleArray.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.crystalTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                crystalTriangleArray, 0, crystalTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
+                if (fancyPlateTriangleArray == null || refreshVertices == true)
+                {
+                    fancyPlateTriangleArray = staticFancyPlate.ToArray();
+                    circuitTriangleArray = staticCircuit.ToArray();
+                    vinesTriangleArray = staticVines.ToArray();
+                    plateTriangleArray = staticPlate.ToArray();
+                    cargoTriangleArray = staticCargo.ToArray();
+                    crateTriangleArray = staticCrate.ToArray();
+                    gearslotTriangleArray = staticGearslot.ToArray();
+                    crystalTriangleArray = staticCrystal.ToArray();
+                    cobblestoneTriangleArray = staticCobblestone.ToArray();
+                    iceTriangleArray = staticIce.ToArray();
+                    ringTriangleArray = staticRings.ToArray();
+                }
+                if (ringTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.fancyPlateTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        ringTriangleArray, 0, ringTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
 
-                        foreach (Block b in blocks)
-                        {                           
-                            foreach (Edge e in b.edges)
-                            {
-                                e.UpdateVertexData(this, !b.staticObject);
-                                e.Draw(this);
-                            }
+                if (fancyPlateTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.fancyPlateTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        fancyPlateTriangleArray, 0, fancyPlateTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (vinesTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.vineTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        vinesTriangleArray, 0, vinesTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (plateTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.wallTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        plateTriangleArray, 0, plateTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (circuitTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.circuitTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        circuitTriangleArray, 0, circuitTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (cargoTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.cargoTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        cargoTriangleArray, 0, cargoTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (cobblestoneTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.cobblestoneTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        cobblestoneTriangleArray, 0, cobblestoneTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (gearslotTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.gearslotTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        gearslotTriangleArray, 0, gearslotTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (crateTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.crateTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        crateTriangleArray, 0, crateTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (iceTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.iceTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        iceTriangleArray, 0, iceTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (crystalTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.crystalTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        crystalTriangleArray, 0, crystalTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
 
-                        }
-                        #endregion
-
-
-                        #region Doodads
-
-                        dynamicFancyPlate = new List<VertexPositionColorNormalTexture>();
-                        dynamicBrick = new List<VertexPositionColorNormalTexture>();
-                        dynamicPlate = new List<VertexPositionColorNormalTexture>();
-
-                        foreach (Doodad d in doodads)
-                        {
-                            d.DrawSolids(this);
-                        }
-
-                        /*if (dynamicFancyPlate.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.fancyPlateTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                dynamicFancyPlate.ToArray(), 0, dynamicFancyPlate.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        if (dynamicPlate.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.wallTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                dynamicPlate.ToArray(), 0, dynamicPlate.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        if (dynamicBrick.Count() > 0)
-                        {
-                            Engine.playerTextureEffect.Texture = Block.crackedTexture;
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                dynamicBrick.ToArray(), 0, dynamicBrick.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
-                        */
-                        foreach (Doodad d in doodads)
-                        {
-                            d.DrawDecals(this);
-                        }
-
-                        #endregion
+                foreach (Block b in blocks)
+                {                           
+                    foreach (Edge e in b.edges)
+                    {
+                        e.UpdateVertexData(this, !b.staticObject);
+                        e.Draw(this);
                     }
 
                 }
+                #endregion
+
+
+                #region Doodads
+
+                dynamicFancyPlate = new List<VertexPositionColorNormalTexture>();
+                dynamicBrick = new List<VertexPositionColorNormalTexture>();
+                dynamicPlate = new List<VertexPositionColorNormalTexture>();
+
+                foreach (Doodad d in doodads)
+                {
+                    d.DrawSolids(this);
+                }
+
+                /*if (dynamicFancyPlate.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.fancyPlateTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        dynamicFancyPlate.ToArray(), 0, dynamicFancyPlate.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (dynamicPlate.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.wallTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        dynamicPlate.ToArray(), 0, dynamicPlate.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (dynamicBrick.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.crackedTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        dynamicBrick.ToArray(), 0, dynamicBrick.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                */
+
+
+                if (dynamicFancyPlateTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.fancyPlateTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        dynamicFancyPlateTriangleArray, 0, dynamicFancyPlateTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+                if (dynamicBrickTriangleArray.Count() > 0)
+                {
+                    Engine.playerTextureEffect.Texture = Block.crackedTexture;
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        dynamicBrickTriangleArray, 0, dynamicBrickTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
+
+                foreach (Doodad d in doodads)
+                {
+                    d.DrawDecals(this);
+                }
+
+                #endregion
+
             }
             #region outerBlock
 

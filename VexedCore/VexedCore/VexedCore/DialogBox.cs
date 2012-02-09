@@ -171,7 +171,8 @@ namespace VexedCore
         static DialogBox()
         {
             dialogLibrary = new List<DialogChunk>();
-            Stream stream = new FileStream("dialog.xml", FileMode.Open, FileAccess.ReadWrite);
+            Stream stream = TitleContainer.OpenStream("Dialog\\dialog.xml");
+            //Stream stream = new FileStream("dialog.xml", FileMode.Open, FileAccess.ReadWrite);
             XmlSerializer serializer = new XmlSerializer(typeof(List<DialogChunk>));
             dialogLibrary = (List<DialogChunk>)serializer.Deserialize(stream);
         }

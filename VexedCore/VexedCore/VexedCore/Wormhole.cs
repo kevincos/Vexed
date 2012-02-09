@@ -14,7 +14,7 @@ namespace VexedCore
 {
     public class Wormhole
     {
-        Vector3 position;
+        public Vector3 position;
         Vector3 up;
         Vector3 right;
         Vector3 normal;
@@ -22,6 +22,9 @@ namespace VexedCore
         public int time = 0;
         public int maxSegmentTime = 500;
         public int currentIndex = 0;
+
+        public Room srcRoom;
+        public Room destRoom;
 
         public static Texture2D wormholeTexture;
 
@@ -39,12 +42,22 @@ namespace VexedCore
             }
         }
 
-        public Wormhole(Vector3 position, Vector3 up, Vector3 normal)
+        public Wormhole(Vector3 position, Vector3 up, Vector3 normal, Room src, Room dest)
         {
+            this.srcRoom = src;
+            this.destRoom = dest;
             this.position = position;
             this.up = up;
             this.normal = normal;
             this.right = Vector3.Cross(normal, up);
+        }
+
+        public bool shouldRender
+        {
+            get
+            {
+                return srcRoom.shouldRender && !destRoom.shouldRender;
+            }
         }
 
         public void Update(int gameTime)
