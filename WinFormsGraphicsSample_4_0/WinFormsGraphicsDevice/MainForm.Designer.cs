@@ -68,6 +68,8 @@ namespace WinFormsGraphicsDevice
             this.roomNewButton = new System.Windows.Forms.Button();
             this.roomDropdown = new System.Windows.Forms.ComboBox();
             this.roomNameField = new System.Windows.Forms.TextBox();
+            this.roomFriendlyNameField = new System.Windows.Forms.TextBox();
+            this.roomDecalDropdown = new System.Windows.Forms.ComboBox();
             this.roomCenterX = new System.Windows.Forms.TextBox();
             this.roomCenterY = new System.Windows.Forms.TextBox();
             this.roomCenterZ = new System.Windows.Forms.TextBox();
@@ -771,6 +773,8 @@ namespace WinFormsGraphicsDevice
             this.roomGroup.Controls.Add(this.roomNewButton);
             this.roomGroup.Controls.Add(this.roomDropdown);
             this.roomGroup.Controls.Add(this.roomNameField);
+            this.roomGroup.Controls.Add(this.roomFriendlyNameField);
+            this.roomGroup.Controls.Add(this.roomDecalDropdown);
             this.roomGroup.Controls.Add(this.roomCenterX);
             this.roomGroup.Controls.Add(this.roomCenterY);
             this.roomGroup.Controls.Add(this.roomCenterZ);
@@ -835,17 +839,37 @@ namespace WinFormsGraphicsDevice
             // 
             this.roomNameField.Location = new System.Drawing.Point(10, 45);
             this.roomNameField.Name = "roomNameField";
-            this.roomNameField.Size = new System.Drawing.Size(160, 20);
+            this.roomNameField.Size = new System.Drawing.Size(100, 20);
             this.roomNameField.TabIndex = 4;
             this.roomNameField.Text = "New Sector";
             this.roomNameField.TextChanged += new System.EventHandler(world_rename);
+            // 
+            // roomFriendlyNameField
+            // 
+            this.roomFriendlyNameField.Location = new System.Drawing.Point(110, 45);
+            this.roomFriendlyNameField.Name = "roomFriendlyField";
+            this.roomFriendlyNameField.Size = new System.Drawing.Size(100, 20);
+            this.roomFriendlyNameField.TabIndex = 5;
+            this.roomFriendlyNameField.Text = "Friendly Name";
+            this.roomFriendlyNameField.TextChanged += new System.EventHandler(world_rename);
+
+            // 
+            // roomDecalDropdown
+            // 
+            this.roomFriendlyNameField.Location = new System.Drawing.Point(150, 45);
+            this.roomFriendlyNameField.Name = "roomDecalDropdown";
+            this.roomFriendlyNameField.Size = new System.Drawing.Size(100, 20);
+            this.roomFriendlyNameField.TabIndex = 6;
+            this.roomFriendlyNameField.Text = "DecalDropdown";
+            this.roomFriendlyNameField.TextChanged += new System.EventHandler(world_rename);
+
             // 
             // roomCenterX
             // 
             this.roomCenterX.Location = new System.Drawing.Point(30, 70);
             this.roomCenterX.Name = "roomCenterX";
             this.roomCenterX.Size = new System.Drawing.Size(50, 20);
-            this.roomCenterX.TabIndex = 5;
+            this.roomCenterX.TabIndex = 7;
             this.roomCenterX.Text = "0";
             this.roomCenterX.TextChanged += new System.EventHandler(this.world_data_change);
             // 
@@ -854,7 +878,7 @@ namespace WinFormsGraphicsDevice
             this.roomCenterY.Location = new System.Drawing.Point(120, 70);
             this.roomCenterY.Name = "roomCenterY";
             this.roomCenterY.Size = new System.Drawing.Size(50, 20);
-            this.roomCenterY.TabIndex = 6;
+            this.roomCenterY.TabIndex = 8;
             this.roomCenterY.Text = "0";
             this.roomCenterY.TextChanged += new System.EventHandler(this.world_data_change);
             // 
@@ -863,7 +887,7 @@ namespace WinFormsGraphicsDevice
             this.roomCenterZ.Location = new System.Drawing.Point(210, 70);
             this.roomCenterZ.Name = "roomCenterZ";
             this.roomCenterZ.Size = new System.Drawing.Size(50, 20);
-            this.roomCenterZ.TabIndex = 7;
+            this.roomCenterZ.TabIndex = 9;
             this.roomCenterZ.Text = "0";
             this.roomCenterZ.TextChanged += new System.EventHandler(this.world_data_change);
             // 
@@ -872,7 +896,7 @@ namespace WinFormsGraphicsDevice
             this.roomSizeX.Location = new System.Drawing.Point(30, 90);
             this.roomSizeX.Name = "roomSizeX";
             this.roomSizeX.Size = new System.Drawing.Size(50, 20);
-            this.roomSizeX.TabIndex = 8;
+            this.roomSizeX.TabIndex = 10;
             this.roomSizeX.Text = "10";
             this.roomSizeX.TextChanged += new System.EventHandler(this.world_data_change);
             // 
@@ -881,7 +905,7 @@ namespace WinFormsGraphicsDevice
             this.roomSizeY.Location = new System.Drawing.Point(120, 90);
             this.roomSizeY.Name = "roomSizeY";
             this.roomSizeY.Size = new System.Drawing.Size(50, 20);
-            this.roomSizeY.TabIndex = 9;
+            this.roomSizeY.TabIndex = 11;
             this.roomSizeY.Text = "10";
             this.roomSizeY.TextChanged += new System.EventHandler(this.world_data_change);
             // 
@@ -890,7 +914,7 @@ namespace WinFormsGraphicsDevice
             this.roomSizeZ.Location = new System.Drawing.Point(210, 90);
             this.roomSizeZ.Name = "roomSizeZ";
             this.roomSizeZ.Size = new System.Drawing.Size(50, 20);
-            this.roomSizeZ.TabIndex = 10;
+            this.roomSizeZ.TabIndex = 12;
             this.roomSizeZ.Text = "10";
             this.roomSizeZ.TextChanged += new System.EventHandler(this.world_data_change);
             // 
@@ -899,7 +923,7 @@ namespace WinFormsGraphicsDevice
             this.roomColorR.Location = new System.Drawing.Point(30, 110);
             this.roomColorR.Name = "roomColorR";
             this.roomColorR.Size = new System.Drawing.Size(50, 20);
-            this.roomColorR.TabIndex = 11;
+            this.roomColorR.TabIndex = 13;
             this.roomColorR.Text = "10";
             this.roomColorR.TextChanged += new System.EventHandler(this.world_data_change);
             // 
@@ -908,7 +932,7 @@ namespace WinFormsGraphicsDevice
             this.roomColorG.Location = new System.Drawing.Point(120, 110);
             this.roomColorG.Name = "roomColorG";
             this.roomColorG.Size = new System.Drawing.Size(50, 20);
-            this.roomColorG.TabIndex = 12;
+            this.roomColorG.TabIndex = 14;
             this.roomColorG.Text = "10";
             this.roomColorG.TextChanged += new System.EventHandler(this.world_data_change);
             // 
@@ -917,7 +941,7 @@ namespace WinFormsGraphicsDevice
             this.roomColorB.Location = new System.Drawing.Point(210, 110);
             this.roomColorB.Name = "roomColorB";
             this.roomColorB.Size = new System.Drawing.Size(50, 20);
-            this.roomColorB.TabIndex = 13;
+            this.roomColorB.TabIndex = 15;
             this.roomColorB.Text = "10";
             this.roomColorB.TextChanged += new System.EventHandler(this.world_data_change);
             // 
@@ -926,7 +950,7 @@ namespace WinFormsGraphicsDevice
             this.roomColorRUp.Location = new System.Drawing.Point(80, 110);
             this.roomColorRUp.Name = "roomColorRUp";
             this.roomColorRUp.Size = new System.Drawing.Size(20, 20);
-            this.roomColorRUp.TabIndex = 14;
+            this.roomColorRUp.TabIndex = 16;
             this.roomColorRUp.Text = "+";
             this.roomColorRUp.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -935,7 +959,7 @@ namespace WinFormsGraphicsDevice
             this.roomColorRDown.Location = new System.Drawing.Point(10, 110);
             this.roomColorRDown.Name = "roomColorRDown";
             this.roomColorRDown.Size = new System.Drawing.Size(20, 20);
-            this.roomColorRDown.TabIndex = 15;
+            this.roomColorRDown.TabIndex = 17;
             this.roomColorRDown.Text = "-";
             this.roomColorRDown.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -944,7 +968,7 @@ namespace WinFormsGraphicsDevice
             this.roomColorGUp.Location = new System.Drawing.Point(170, 110);
             this.roomColorGUp.Name = "roomColorGUp";
             this.roomColorGUp.Size = new System.Drawing.Size(20, 20);
-            this.roomColorGUp.TabIndex = 16;
+            this.roomColorGUp.TabIndex = 18;
             this.roomColorGUp.Text = "+";
             this.roomColorGUp.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -953,7 +977,7 @@ namespace WinFormsGraphicsDevice
             this.roomColorGDown.Location = new System.Drawing.Point(100, 110);
             this.roomColorGDown.Name = "roomColorGDown";
             this.roomColorGDown.Size = new System.Drawing.Size(20, 20);
-            this.roomColorGDown.TabIndex = 17;
+            this.roomColorGDown.TabIndex = 19;
             this.roomColorGDown.Text = "-";
             this.roomColorGDown.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -962,7 +986,7 @@ namespace WinFormsGraphicsDevice
             this.roomColorBUp.Location = new System.Drawing.Point(260, 110);
             this.roomColorBUp.Name = "roomColorBUp";
             this.roomColorBUp.Size = new System.Drawing.Size(20, 20);
-            this.roomColorBUp.TabIndex = 18;
+            this.roomColorBUp.TabIndex = 20;
             this.roomColorBUp.Text = "+";
             this.roomColorBUp.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -971,7 +995,7 @@ namespace WinFormsGraphicsDevice
             this.roomColorBDown.Location = new System.Drawing.Point(190, 110);
             this.roomColorBDown.Name = "roomColorBDown";
             this.roomColorBDown.Size = new System.Drawing.Size(20, 20);
-            this.roomColorBDown.TabIndex = 19;
+            this.roomColorBDown.TabIndex = 21;
             this.roomColorBDown.Text = "-";
             this.roomColorBDown.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -980,7 +1004,7 @@ namespace WinFormsGraphicsDevice
             this.roomCenterXUp.Location = new System.Drawing.Point(80, 70);
             this.roomCenterXUp.Name = "roomCenterXUp";
             this.roomCenterXUp.Size = new System.Drawing.Size(20, 20);
-            this.roomCenterXUp.TabIndex = 20;
+            this.roomCenterXUp.TabIndex = 22;
             this.roomCenterXUp.Text = "+";
             this.roomCenterXUp.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -989,7 +1013,7 @@ namespace WinFormsGraphicsDevice
             this.roomCenterXDown.Location = new System.Drawing.Point(10, 70);
             this.roomCenterXDown.Name = "roomCenterXDown";
             this.roomCenterXDown.Size = new System.Drawing.Size(20, 20);
-            this.roomCenterXDown.TabIndex = 21;
+            this.roomCenterXDown.TabIndex = 23;
             this.roomCenterXDown.Text = "-";
             this.roomCenterXDown.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -998,7 +1022,7 @@ namespace WinFormsGraphicsDevice
             this.roomCenterYUp.Location = new System.Drawing.Point(170, 70);
             this.roomCenterYUp.Name = "roomCenterYUp";
             this.roomCenterYUp.Size = new System.Drawing.Size(20, 20);
-            this.roomCenterYUp.TabIndex = 22;
+            this.roomCenterYUp.TabIndex = 24;
             this.roomCenterYUp.Text = "+";
             this.roomCenterYUp.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -1007,7 +1031,7 @@ namespace WinFormsGraphicsDevice
             this.roomCenterYDown.Location = new System.Drawing.Point(100, 70);
             this.roomCenterYDown.Name = "roomCenterYDown";
             this.roomCenterYDown.Size = new System.Drawing.Size(20, 20);
-            this.roomCenterYDown.TabIndex = 23;
+            this.roomCenterYDown.TabIndex = 25;
             this.roomCenterYDown.Text = "-";
             this.roomCenterYDown.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -1016,7 +1040,7 @@ namespace WinFormsGraphicsDevice
             this.roomCenterZUp.Location = new System.Drawing.Point(260, 70);
             this.roomCenterZUp.Name = "roomCenterZUp";
             this.roomCenterZUp.Size = new System.Drawing.Size(20, 20);
-            this.roomCenterZUp.TabIndex = 24;
+            this.roomCenterZUp.TabIndex = 26;
             this.roomCenterZUp.Text = "+";
             this.roomCenterZUp.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -1025,7 +1049,7 @@ namespace WinFormsGraphicsDevice
             this.roomCenterZDown.Location = new System.Drawing.Point(190, 70);
             this.roomCenterZDown.Name = "roomCenterZDown";
             this.roomCenterZDown.Size = new System.Drawing.Size(20, 20);
-            this.roomCenterZDown.TabIndex = 25;
+            this.roomCenterZDown.TabIndex = 27;
             this.roomCenterZDown.Text = "-";
             this.roomCenterZDown.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -1034,7 +1058,7 @@ namespace WinFormsGraphicsDevice
             this.roomSizeXUp.Location = new System.Drawing.Point(80, 90);
             this.roomSizeXUp.Name = "roomSizeXUp";
             this.roomSizeXUp.Size = new System.Drawing.Size(20, 20);
-            this.roomSizeXUp.TabIndex = 26;
+            this.roomSizeXUp.TabIndex = 28;
             this.roomSizeXUp.Text = "+";
             this.roomSizeXUp.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -1043,7 +1067,7 @@ namespace WinFormsGraphicsDevice
             this.roomSizeXDown.Location = new System.Drawing.Point(10, 90);
             this.roomSizeXDown.Name = "roomSizeXDown";
             this.roomSizeXDown.Size = new System.Drawing.Size(20, 20);
-            this.roomSizeXDown.TabIndex = 27;
+            this.roomSizeXDown.TabIndex = 29;
             this.roomSizeXDown.Text = "-";
             this.roomSizeXDown.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -1052,7 +1076,7 @@ namespace WinFormsGraphicsDevice
             this.roomSizeYUp.Location = new System.Drawing.Point(170, 90);
             this.roomSizeYUp.Name = "roomSizeYUp";
             this.roomSizeYUp.Size = new System.Drawing.Size(20, 20);
-            this.roomSizeYUp.TabIndex = 28;
+            this.roomSizeYUp.TabIndex = 30;
             this.roomSizeYUp.Text = "+";
             this.roomSizeYUp.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -1061,7 +1085,7 @@ namespace WinFormsGraphicsDevice
             this.roomSizeYDown.Location = new System.Drawing.Point(100, 90);
             this.roomSizeYDown.Name = "roomSizeYDown";
             this.roomSizeYDown.Size = new System.Drawing.Size(20, 20);
-            this.roomSizeYDown.TabIndex = 29;
+            this.roomSizeYDown.TabIndex = 31;
             this.roomSizeYDown.Text = "-";
             this.roomSizeYDown.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -1070,7 +1094,7 @@ namespace WinFormsGraphicsDevice
             this.roomSizeZUp.Location = new System.Drawing.Point(260, 90);
             this.roomSizeZUp.Name = "roomSizeZUp";
             this.roomSizeZUp.Size = new System.Drawing.Size(20, 20);
-            this.roomSizeZUp.TabIndex = 30;
+            this.roomSizeZUp.TabIndex = 32;
             this.roomSizeZUp.Text = "+";
             this.roomSizeZUp.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -1079,7 +1103,7 @@ namespace WinFormsGraphicsDevice
             this.roomSizeZDown.Location = new System.Drawing.Point(190, 90);
             this.roomSizeZDown.Name = "roomSizeZDown";
             this.roomSizeZDown.Size = new System.Drawing.Size(20, 20);
-            this.roomSizeZDown.TabIndex = 31;
+            this.roomSizeZDown.TabIndex = 33;
             this.roomSizeZDown.Text = "-";
             this.roomSizeZDown.Click += new System.EventHandler(this.world_value_increment);
             // 
@@ -1088,7 +1112,7 @@ namespace WinFormsGraphicsDevice
             this.roomEdit.Location = new System.Drawing.Point(210, 140);
             this.roomEdit.Name = "roomEdit";
             this.roomEdit.Size = new System.Drawing.Size(80, 25);
-            this.roomEdit.TabIndex = 32;
+            this.roomEdit.TabIndex = 34;
             this.roomEdit.Text = "Edit";
             this.roomEdit.Click += new System.EventHandler(this.world_zoom);
             // 
@@ -1097,7 +1121,7 @@ namespace WinFormsGraphicsDevice
             this.roomDelete.Location = new System.Drawing.Point(10, 140);
             this.roomDelete.Name = "roomDelete";
             this.roomDelete.Size = new System.Drawing.Size(60, 25);
-            this.roomDelete.TabIndex = 33;
+            this.roomDelete.TabIndex = 35;
             this.roomDelete.Text = "Delete";
             this.roomDelete.Click += new System.EventHandler(this.world_delete);
             #endregion
@@ -1325,6 +1349,8 @@ namespace WinFormsGraphicsDevice
         private System.Windows.Forms.ComboBox roomDropdown;
         private System.Windows.Forms.Button roomNewButton;
         private System.Windows.Forms.TextBox roomNameField;
+        private System.Windows.Forms.TextBox roomFriendlyNameField;
+        private System.Windows.Forms.ComboBox roomDecalDropdown;
         private System.Windows.Forms.TextBox roomColorR, roomColorG, roomColorB;
         private System.Windows.Forms.Button roomColorRUp, roomColorRDown, roomColorGUp, roomColorGDown, roomColorBUp, roomColorBDown;
         private System.Windows.Forms.Button roomCenterXUp, roomCenterXDown, roomCenterYUp, roomCenterYDown, roomCenterZUp, roomCenterZDown;

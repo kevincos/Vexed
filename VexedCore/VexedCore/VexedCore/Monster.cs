@@ -1649,10 +1649,15 @@ namespace VexedCore
         public static float layer_standardTurretOut = .003f;
         public static float layer_standardTurretIn = .0026f;
 
+        public List<MonsterTextureSlice> textureSlices;
+
         public void Draw(Room r)
         {
-             if (deathTime == 0)
+            if (deathTime == 0)
+            {
+                textureSlices = new List<MonsterTextureSlice>();
                 return;
+            }
 
             float scale = (1f * spawnTime) / (1f * maxSpawnTime);
             float armorScale = scale;
@@ -1671,7 +1676,7 @@ namespace VexedCore
                 return;
             }
 
-
+            textureSlices = new List<MonsterTextureSlice>();
 
             List<VertexPositionColorNormal> triangleList = new List<VertexPositionColorNormal>();
             List<VertexPositionColorNormalTexture> textureTriangleList = new List<VertexPositionColorNormalTexture>();
@@ -1709,25 +1714,34 @@ namespace VexedCore
             // FRONT LEGS
             if (moveType == VL.MovementType.Tank)
             {
+
+
+
                 if (walking == false)
-                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase], Room.plateTexCoords, rightFacing);
+                {
+                    //r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - .1f, MonsterTextureId.TreadsBase, rightFacing));
+                }
                 else
                 {
                     int walkIndex = 4 * walkAnimationTime / maxWalkAnimationTime;
                     walkIndex = (4 - walkIndex) % 4;
-                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase + walkIndex], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(rectVertexList, Color.White, depth - .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase + walkIndex], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - .1f, MonsterTextureId.TreadsBase + walkIndex, rightFacing));
                 }
             }
             else if (moveType == VL.MovementType.Spider)
             {
                 if (walking == false)
                 {
-                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_legs, r.monsterTriangles[(int)MonsterTextureId.LegsBase], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_legs, r.monsterTriangles[(int)MonsterTextureId.LegsBase], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - layer_legs, MonsterTextureId.LegsBase, rightFacing));
                 }
                 else
                 {
                     int walkIndex = 4* walkAnimationTime / maxWalkAnimationTime;
-                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_legs, r.monsterTriangles[(int)MonsterTextureId.Legs1 + walkIndex], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_legs, r.monsterTriangles[(int)MonsterTextureId.Legs1 + walkIndex], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - layer_legs, MonsterTextureId.Legs1 + walkIndex, rightFacing));
                 }
             }
 
@@ -1735,43 +1749,73 @@ namespace VexedCore
             // BODY
             if (moveType == VL.MovementType.SnakeBoss)
             {
-                r.AddTextureToTriangleList(rectVertexList, monsterColor, depth + layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.SnakeBody], Room.plateTexCoords, rightFacing);
-                r.AddTextureToTriangleList(rectVertexList, monsterColor, depth - layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.SnakeBody], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(rectVertexList, monsterColor, depth + layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.SnakeBody], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(rectVertexList, monsterColor, depth - layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.SnakeBody], Room.plateTexCoords, rightFacing);
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, monsterColor, depth + layer_body + bossAdjustment, MonsterTextureId.SnakeBody, rightFacing));
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, monsterColor, depth - layer_body + bossAdjustment, MonsterTextureId.SnakeBody, rightFacing));
             }
             else
             {
-                r.AddTextureToTriangleList(rectVertexList, monsterColor, depth + layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BasicBody], Room.plateTexCoords, rightFacing);
-                r.AddTextureToTriangleList(rectVertexList, monsterColor, depth - layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BasicBody], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(rectVertexList, monsterColor, depth + layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BasicBody], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(rectVertexList, monsterColor, depth - layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BasicBody], Room.plateTexCoords, rightFacing);
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, monsterColor, depth + layer_body + bossAdjustment, MonsterTextureId.BasicBody, rightFacing));
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, monsterColor, depth - layer_body + bossAdjustment, MonsterTextureId.BasicBody, rightFacing));
             }
 
             // FLASH
             if (flashCooldown != 0)
             {
                 Color flashColor = new Color(255, 255, 0, (Byte)(flashCooldown / maxFlashCooldown));
-                r.AddTextureToTriangleList(rectVertexList, flashColor, depth + layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.Flash], Room.plateTexCoords, rightFacing);
-                r.AddTextureToTriangleList(rectVertexList, flashColor, depth - layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.Flash], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(rectVertexList, flashColor, depth + layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.Flash], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(rectVertexList, flashColor, depth - layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.Flash], Room.plateTexCoords, rightFacing);
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, flashColor, depth + layer_body + bossAdjustment, MonsterTextureId.Flash, rightFacing));
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, flashColor, depth - layer_body + bossAdjustment, MonsterTextureId.Flash, rightFacing));
             }
             if (moveType == VL.MovementType.RockBoss && !id.Contains("Snow"))
             {
-                if(rockBoss.rockHits == 2 && rockBoss.rockHitCooldown == 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.RockNormal], Room.plateTexCoords, rightFacing);
+                if (rockBoss.rockHits == 2 && rockBoss.rockHitCooldown == 0)
+                {
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.RockNormal], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + .001f, MonsterTextureId.RockNormal, rightFacing));
+                }
                 if (rockBoss.rockHits == 1 && rockBoss.rockHitCooldown == 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.RockCracked], Room.plateTexCoords, rightFacing);
+                {
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.RockCracked], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + .001f, MonsterTextureId.RockCracked, rightFacing));
+                }
                 if (rockBoss.rockHits == 1 && rockBoss.rockHitCooldown != 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.RockNormalBreak], Room.plateTexCoords, rightFacing);
+                {
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.RockNormalBreak], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + .001f, MonsterTextureId.RockNormalBreak, rightFacing));
+                }
                 if (rockBoss.rockHits == 0 && rockBoss.rockHitCooldown != 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.RockCrackedBreak], Room.plateTexCoords, rightFacing);
+                {
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.RockCrackedBreak], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + .001f, MonsterTextureId.RockCrackedBreak, rightFacing));
+                }
             }
             if (moveType == VL.MovementType.RockBoss && id.Contains("Snow"))
             {
                 if (rockBoss.rockHits == 2 && rockBoss.rockHitCooldown == 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.SnowNormal], Room.plateTexCoords, rightFacing);
+                {
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.SnowNormal], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + .001f, MonsterTextureId.SnowNormal, rightFacing));
+                }
                 if (rockBoss.rockHits == 1 && rockBoss.rockHitCooldown == 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.SnowCracked], Room.plateTexCoords, rightFacing);
+                {
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.SnowCracked], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + .001f, MonsterTextureId.SnowCracked, rightFacing));
+                }
                 if (rockBoss.rockHits == 1 && rockBoss.rockHitCooldown != 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.SnowNormalBreak], Room.plateTexCoords, rightFacing);
+                {
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.SnowNormalBreak], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + .001f, MonsterTextureId.SnowNormalBreak, rightFacing));
+                }
                 if (rockBoss.rockHits == 0 && rockBoss.rockHitCooldown != 0)
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.SnowCrackedBreak], Room.plateTexCoords, rightFacing);
+                {
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + .001f, r.monsterTriangles[(int)MonsterTextureId.SnowCrackedBreak], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + .001f, MonsterTextureId.SnowCrackedBreak, rightFacing));
+                }
 
             }
             if (moveType == VL.MovementType.ChaseBoss || moveType == VL.MovementType.JetBoss || moveType == VL.MovementType.BattleBoss)
@@ -1792,13 +1836,17 @@ namespace VexedCore
                 // CHASE BOSS
                 if (moveType == VL.MovementType.ChaseBoss)
                 {
-                    r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.SpikeFace], Room.plateTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.SpikeFace], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.SpikeFace], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.SpikeFace], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + layer_armor, MonsterTextureId.SpikeFace, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - layer_armor, MonsterTextureId.SpikeFace, rightFacing));
                 }
                 if (moveType == VL.MovementType.JetBoss || moveType == VL.MovementType.BattleBoss)
                 {
-                    r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.Jet], Room.plateTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.Jet], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.Jet], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.Jet], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + layer_armor, MonsterTextureId.Jet, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - layer_armor, MonsterTextureId.Jet, rightFacing));
                 }
 
             }
@@ -1807,18 +1855,24 @@ namespace VexedCore
             {
                 if (baseHP > 3)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment + layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnake], Room.plateTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment - layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnake], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment + layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnake], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment - layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnake], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + bossAdjustment + layer_iceSnakeArmor, MonsterTextureId.IceSnake, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + bossAdjustment - layer_iceSnakeArmor, MonsterTextureId.IceSnake, rightFacing));
                 }
                 else if (baseHP > 2)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment + layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnakeCrack1], Room.plateTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment - layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnakeCrack1], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment + layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnakeCrack1], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment - layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnakeCrack1], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + bossAdjustment + layer_iceSnakeArmor, MonsterTextureId.IceSnakeCrack1, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + bossAdjustment - layer_iceSnakeArmor, MonsterTextureId.IceSnakeCrack1, rightFacing));
                 }
                 else if (baseHP > 1)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment + layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnakeCrack2], Room.plateTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment - layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnakeCrack2], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment + layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnakeCrack2], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment - layer_iceSnakeArmor, r.monsterTriangles[(int)MonsterTextureId.IceSnakeCrack2], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + bossAdjustment + layer_iceSnakeArmor, MonsterTextureId.IceSnakeCrack2, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + bossAdjustment - layer_iceSnakeArmor, MonsterTextureId.IceSnakeCrack2, rightFacing));
                 }
             }
 
@@ -1826,8 +1880,10 @@ namespace VexedCore
             // ARMORTRON ARMOR
             if (moveType == VL.MovementType.ArmorBoss)
             {
-                r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment + layer_armor, r.monsterTriangles[(int)MonsterTextureId.BossArmor], Room.plateTexCoords, rightFacing);
-                r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment - layer_armor, r.monsterTriangles[(int)MonsterTextureId.BossArmor], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment + layer_armor, r.monsterTriangles[(int)MonsterTextureId.BossArmor], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + bossAdjustment - layer_armor, r.monsterTriangles[(int)MonsterTextureId.BossArmor], Room.plateTexCoords, rightFacing);
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + bossAdjustment + layer_armor, MonsterTextureId.BossArmor, rightFacing));
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + bossAdjustment - layer_armor, MonsterTextureId.BossArmor, rightFacing));
             }
 
             // STANDARD ARMOR
@@ -1835,76 +1891,100 @@ namespace VexedCore
             {
                 if (armorType == VL.ArmorType.Full)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.FullArmor], Room.plateTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.FullArmor], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.FullArmor], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.FullArmor], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + layer_armor, MonsterTextureId.FullArmor, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - layer_armor, MonsterTextureId.FullArmor, rightFacing));
                 }
                 if (armorType == VL.ArmorType.Top)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.TopArmor], Room.plateTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.TopArmor], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.TopArmor], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.TopArmor], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + layer_armor, MonsterTextureId.TopArmor, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - layer_armor, MonsterTextureId.TopArmor, rightFacing));
                 }
                 if (armorType == VL.ArmorType.Shield)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.FrontArmor], Room.plateTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.FrontArmor], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.FrontArmor], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.FrontArmor], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + layer_armor, MonsterTextureId.FrontArmor, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - layer_armor, MonsterTextureId.FrontArmor, rightFacing));
                 }
                 if (armorType == VL.ArmorType.FullSuper)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.FullSuperArmor], Room.plateTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.FullSuperArmor], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.FullSuperArmor], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.FullSuperArmor], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth  + layer_armor, MonsterTextureId.FullSuperArmor, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth  - layer_armor, MonsterTextureId.FullSuperArmor, rightFacing));
                 }
                 if (armorType == VL.ArmorType.TopSuper)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.TopSuperArmor], Room.plateTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.TopSuperArmor], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.TopSuperArmor], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.TopSuperArmor], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth  + layer_armor, MonsterTextureId.TopSuperArmor, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth  - layer_armor, MonsterTextureId.TopSuperArmor, rightFacing));
                 }
                 if (armorType == VL.ArmorType.ShieldSuper)
                 {
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.FrontSuperArmor], Room.plateTexCoords, rightFacing);
-                    r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.FrontSuperArmor], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.FrontSuperArmor], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(armorRectVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.FrontSuperArmor], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + layer_armor, MonsterTextureId.FrontSuperArmor, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - layer_armor, MonsterTextureId.FrontSuperArmor, rightFacing));
                 }
             }
 
             // EYES
             if (moveType == VL.MovementType.RockBoss)
             {
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + layer_bossEyes, r.monsterTriangles[(int)MonsterTextureId.BossEyes], Room.plateTexCoords, rightFacing);
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_bossEyes, r.monsterTriangles[(int)MonsterTextureId.BossEyes], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(rectVertexList, Color.White, depth + layer_bossEyes, r.monsterTriangles[(int)MonsterTextureId.BossEyes], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_bossEyes, r.monsterTriangles[(int)MonsterTextureId.BossEyes], Room.plateTexCoords, rightFacing);
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + layer_bossEyes, MonsterTextureId.BossEyes, rightFacing));
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - layer_bossEyes, MonsterTextureId.BossEyes, rightFacing));
+
             }
             else if (moveType != VL.MovementType.ChaseBoss && moveType != VL.MovementType.SnakeBoss && moveType != VL.MovementType.BattleBoss && moveType != VL.MovementType.JetBoss && moveType != VL.MovementType.ArmorBoss)
             {
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + layer_eyes, r.monsterTriangles[(int)MonsterTextureId.Eyes], Room.plateTexCoords, rightFacing);
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_eyes, r.monsterTriangles[(int)MonsterTextureId.Eyes], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(rectVertexList, Color.White, depth + layer_eyes, r.monsterTriangles[(int)MonsterTextureId.Eyes], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(rectVertexList, Color.White, depth - layer_eyes, r.monsterTriangles[(int)MonsterTextureId.Eyes], Room.plateTexCoords, rightFacing);
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + layer_eyes, MonsterTextureId.Eyes, rightFacing));
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - layer_eyes, MonsterTextureId.Eyes, rightFacing));
             }
             else if (moveType == VL.MovementType.SnakeBoss && snakeBoss.chainIndex == 0)
             {
-                r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment + .021f, r.monsterTriangles[(int)MonsterTextureId.BossEyes], Room.plateTexCoords, rightFacing);
+                //r.AddTextureToTriangleList(rectVertexList, Color.White, depth + bossAdjustment + .021f, r.monsterTriangles[(int)MonsterTextureId.BossEyes], Room.plateTexCoords, rightFacing);
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + bossAdjustment + .021f, MonsterTextureId.BossEyes, rightFacing));
             }
 
             // FRONT LEGS
             if (moveType == VL.MovementType.Tank)
             {
                 if (walking == false)
-                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth + .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase], Room.plateTexCoords, rightFacing);
+                {
+                    //r.AddTextureToTriangleList(rectVertexList, Color.White, depth + .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + .1f, MonsterTextureId.TreadsBase, rightFacing));
+                }
                 else
                 {
                     int walkIndex = 4 * walkAnimationTime / maxWalkAnimationTime;
                     walkIndex = (4-walkIndex)%4;
-                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth + .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase + walkIndex], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(rectVertexList, Color.White, depth + .1f, r.monsterTriangles[(int)MonsterTextureId.TreadsBase + walkIndex], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + .1f, MonsterTextureId.TreadsBase + walkIndex, rightFacing));
                 }
             }
             else if (moveType == VL.MovementType.Spider)
             {
                 if (walking == false)
                 {
-                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth + layer_legs, r.monsterTriangles[(int)MonsterTextureId.LegsBase], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(rectVertexList, Color.White, depth + layer_legs, r.monsterTriangles[(int)MonsterTextureId.LegsBase], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + layer_legs, MonsterTextureId.LegsBase, rightFacing));
                 }
                 else
                 {
                     int walkIndex = 4 * walkAnimationTime / maxWalkAnimationTime;
                     walkIndex += 2;
                     walkIndex %= 4;
-                    r.AddTextureToTriangleList(rectVertexList, Color.White, depth + layer_legs, r.monsterTriangles[(int)MonsterTextureId.Legs1 + walkIndex], Room.plateTexCoords, rightFacing);
+                    //r.AddTextureToTriangleList(rectVertexList, Color.White, depth + layer_legs, r.monsterTriangles[(int)MonsterTextureId.Legs1 + walkIndex], Room.plateTexCoords, rightFacing);
+                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + layer_legs, MonsterTextureId.Legs1 + walkIndex, rightFacing));
                 }
             }
 
@@ -1927,16 +2007,26 @@ namespace VexedCore
 
 
                 // GUNS
-                if(g.baseType == BaseType.None)
-                    r.AddTextureToTriangleList(gunVertexList, Color.White, depth + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.Gun], Room.plateTexCoords, true);
+                if (g.baseType == BaseType.None)
+                {
+                    //r.AddTextureToTriangleList(gunVertexList, Color.White, depth + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.Gun], Room.plateTexCoords, true);
+                    textureSlices.Add(new MonsterTextureSlice(r, gunVertexList, Color.White, depth + bossAdjustment, MonsterTextureId.Gun, true));
+                }
                 else if (moveType == VL.MovementType.BattleBoss)
                 {
-                    r.AddTextureToTriangleList(gunVertexList, Color.White, depth + layer_innerGun + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BossGun], Room.plateTexCoords, true);
+                    //r.AddTextureToTriangleList(gunVertexList, Color.White, depth + layer_innerGun + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BossGun], Room.plateTexCoords, true);
+                    textureSlices.Add(new MonsterTextureSlice(r, gunVertexList, Color.White, depth + layer_innerGun + bossAdjustment, MonsterTextureId.BossGun, true));
                 }
                 else if (g.baseType == BaseType.Ice)
-                    r.AddTextureToTriangleList(gunVertexList, Color.White, depth + layer_innerGun + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BossGun], Room.plateTexCoords, true);
+                {
+                    //r.AddTextureToTriangleList(gunVertexList, Color.White, depth + layer_innerGun + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BossGun], Room.plateTexCoords, true);
+                    textureSlices.Add(new MonsterTextureSlice(r, gunVertexList, Color.White, depth + layer_innerGun + bossAdjustment, MonsterTextureId.BossGun, true));
+                }
                 else if (g.baseType == BaseType.Standard || g.baseType == BaseType.Snow || g.baseType == BaseType.Rock)
-                    r.AddTextureToTriangleList(gunVertexList, Color.White, depth + layer_outerGun + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BossGun], Room.plateTexCoords, true);
+                {
+                    //r.AddTextureToTriangleList(gunVertexList, Color.White, depth + layer_outerGun + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.BossGun], Room.plateTexCoords, true);
+                    textureSlices.Add(new MonsterTextureSlice(r, gunVertexList, Color.White, depth + layer_outerGun + bossAdjustment, MonsterTextureId.BossGun, true));
+                }
 
                 
                 if (g.baseType != BaseType.None)
@@ -1955,25 +2045,32 @@ namespace VexedCore
                     // TURRETS
                     if (g.baseType == BaseType.Rock)
                     {
-                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + layer_standardTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.RockTurret], Room.plateTexCoords, true);
+                        //r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + layer_standardTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.RockTurret], Room.plateTexCoords, true);
+                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.White, depth + layer_standardTurretOut + bossAdjustment, MonsterTextureId.RockTurret, true));
                     }
                     else if (g.baseType == BaseType.Snow)
                     {
-                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + layer_standardTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.SnowTurret], Room.plateTexCoords, true);
+                        //r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + layer_standardTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.SnowTurret], Room.plateTexCoords, true);
+                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.White, depth + layer_standardTurretOut + bossAdjustment, MonsterTextureId.SnowTurret, true));
                     }
                     else if (g.baseType == BaseType.Ice)
                     {
-                        r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + layer_innerTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.IceTurret], Room.plateTexCoords, true);
+                        //r.AddTextureToTriangleList(gunBaseVertexList, Color.White, depth + layer_innerTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.IceTurret], Room.plateTexCoords, true);
+                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.White, depth + layer_innerTurretOut + bossAdjustment, MonsterTextureId.IceTurret, true));
                     }
                     else if (moveType == VL.MovementType.BattleBoss)
                     {
-                        r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_innerTurretIn + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
-                        r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_innerTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
+                        //r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_innerTurretIn + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
+                        //r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_innerTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
+                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.White, depth + layer_innerTurretIn + bossAdjustment, MonsterTextureId.StandardTurret, true));
+                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.White, depth + layer_innerTurretOut + bossAdjustment, MonsterTextureId.StandardTurret, true));
                     }
                     else if (g.baseType == BaseType.Standard)
                     {
-                        r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_standardTurretIn + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
-                        r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_standardTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
+                        //r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_standardTurretIn + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
+                        //r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_standardTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
+                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.White, depth + layer_standardTurretIn + bossAdjustment, MonsterTextureId.StandardTurret, true));
+                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.White, depth + layer_standardTurretOut + bossAdjustment, MonsterTextureId.StandardTurret, true));
                     }
                 }
             }
@@ -1981,6 +2078,34 @@ namespace VexedCore
             /*VertexPositionColorNormalTexture[] triangleArray = textureTriangleList.ToArray();
             Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                 triangleArray, 0, triangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);*/
+            textureSlices.Sort(new MonsterTextureSliceSorter());
+        }
+    }
+
+    public class MonsterTextureSlice
+    {
+        public List<VertexPositionColorNormalTexture> vertexList;        
+        public float depth;
+        public MonsterTextureId textureId;        
+
+        public MonsterTextureSlice(Room currentRoom, List<Vertex> vertices, Color color, float depth, MonsterTextureId textureId, bool rightFacing)
+        {
+            this.depth = depth;
+            this.textureId = textureId;
+            vertexList = new List<VertexPositionColorNormalTexture>();
+            currentRoom.AddTextureToTriangleList(vertices, color, depth, vertexList, Room.plateTexCoords, rightFacing);
+        }
+
+    }
+
+    public class MonsterTextureSliceSorter : Comparer<MonsterTextureSlice>
+    {
+        // Compares by Length, Height, and Width.
+        public override int Compare(MonsterTextureSlice m1, MonsterTextureSlice m2)
+        {
+            
+            return m1.depth.CompareTo(m2.depth);
         }
     }
 }
+

@@ -1226,6 +1226,8 @@ namespace VexedCore
                     return .2f;
                 if (type == VL.DoodadType.SwitchPlate)
                     return .25f;
+                if (type == VL.DoodadType.Door)
+                    return .35f;
                 if (type == VL.DoodadType.Checkpoint || type == VL.DoodadType.PlugSlot || type == VL.DoodadType.LaserSwitch || type == VL.DoodadType.ItemBlock || isOrb || type == VL.DoodadType.HookTarget || type == VL.DoodadType.JumpPad || isStation)
                     return .1f;
                 if (type == VL.DoodadType.PowerPlug)

@@ -140,10 +140,17 @@ namespace VexedCore
         float currentRotate = 0;
         float currentPitch = 0;
 
+        public int[] maxRoomDraw;
+
         public Engine()
         {
             staticTranslucentObjects = new List<TransparentSquare>();
             mapShellObjects = new List<TransparentSquare>();
+            maxRoomDraw = new int[4];
+            maxRoomDraw[0] = 1;
+            maxRoomDraw[1] = 10;
+            maxRoomDraw[2] = 12;
+            maxRoomDraw[3] = 18;
           
         }
 
@@ -229,9 +236,21 @@ namespace VexedCore
             {
                 r.adjacent = false;
             }
-            Engine.player.currentRoom.MarkAdjacentRooms(Engine.drawDepth);
+
+            int currentAdjacentCount = Engine.player.currentRoom.CountAdjacentRooms(Engine.drawDepth);
+            int jumpAdjacentCount = 0;
+            if(Engine.player.jumpRoom != null)
+                jumpAdjacentCount = Engine.player.currentRoom.CountAdjacentRooms(Engine.drawDepth);
+
+            int effectiveCurrentDrawDepth = Engine.drawDepth;
+            int effectiveJumpDrawDepth = Engine.drawDepth;
+            if (currentAdjacentCount > maxRoomDraw[Engine.drawDepth])
+                effectiveCurrentDrawDepth--;
+            if (jumpAdjacentCount > maxRoomDraw[Engine.drawDepth])
+                effectiveJumpDrawDepth--;
+            Engine.player.currentRoom.MarkAdjacentRooms(effectiveCurrentDrawDepth);
             if (Engine.player.jumpRoom != null)
-                Engine.player.jumpRoom.MarkAdjacentRooms(Engine.drawDepth);
+                Engine.player.jumpRoom.MarkAdjacentRooms(effectiveJumpDrawDepth);
 
 
             Game1.graphicsDevice.DepthStencilState = DepthStencilState.Default;
@@ -265,13 +284,14 @@ namespace VexedCore
                 if (depthIndexer[i].type == DepthIndexType.Room)
                 {
                     roomList[depthIndexer[i].index].Draw();
-                    roomList[depthIndexer[i].index].DrawDecorations();
+                    roomList[depthIndexer[i].index].DrawSortedSprites();
+                    /*roomList[depthIndexer[i].index].DrawDecorations();
                     if (roomList[depthIndexer[i].index] == player.currentRoom)
                     {
                         player.currentRoom.DrawMonsters();
                         player.currentRoom.DrawProjectiles();
                         player.DrawTexture(playerTextureEffect);
-                    }
+                    }*/
 
                 }
                 else if (depthIndexer[i].type == DepthIndexType.Wormhole)

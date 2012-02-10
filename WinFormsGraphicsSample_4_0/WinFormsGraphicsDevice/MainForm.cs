@@ -326,6 +326,8 @@ namespace WinFormsGraphicsDevice
                 Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
                 Room r = s.FindRoomByIDString((string)this.roomDropdown.Items[this.roomDropdown.SelectedIndex]);
                 this.roomNameField.Text = r.IDString;
+                this.roomFriendlyNameField.Text = "Friendly Name";
+                this.roomDropdown.SelectedIndex = 0;
                 this.roomCenterX.Text = r.centerX.ToString();
                 this.roomCenterY.Text = r.centerY.ToString();
                 this.roomCenterZ.Text = r.centerZ.ToString();
@@ -970,6 +972,19 @@ namespace WinFormsGraphicsDevice
                 Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
                 s._name = this.sectorNameField.Text;
                 this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex] = s.IDString;
+            }
+            if (sender == this.roomNameField)
+            {
+                Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
+                Room r = s.FindRoomByIDString((string)this.roomDropdown.Items[this.roomDropdown.SelectedIndex]);
+                r._name = this.roomNameField.Text;
+                this.roomDropdown.Items[this.roomDropdown.SelectedIndex] = r.IDString;
+            }
+            if (sender == this.roomFriendlyNameField)
+            {
+                //Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
+                //Room r = s.FindRoomByIDString((string)this.roomDropdown.Items[this.roomDropdown.SelectedIndex]);
+                //r._name = this.roomFriendlyNameField.Text;                
             }
             if (sender == this.roomNameField)
             {

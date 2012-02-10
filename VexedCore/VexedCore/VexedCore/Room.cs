@@ -1627,8 +1627,58 @@ namespace VexedCore
             }
 
         }
-        
 
+        public void DrawSortedSprites()
+        {
+            if (shouldRender)
+            {
+                List<DepthIndex> decorationIndexer = new List<DepthIndex>();
+                for (int i = 0; i < decorations.Count; i++)
+                {
+                    decorationIndexer.Add(new DepthIndex(decorations[i].position.position + decorations[i].depth * decorations[i].position.normal, i, DepthIndexType.Decoration));
+                }
+                for (int i = 0; i < doodads.Count; i++)
+                {
+                    decorationIndexer.Add(new DepthIndex(doodads[i].position.position + doodads[i].depth * doodads[i].position.normal, i, DepthIndexType.DoodadSprite));
+                }
+                for (int i = 0; i < monsters.Count; i++)
+                {
+                    decorationIndexer.Add(new DepthIndex(monsters[i].position.position + monsters[i].depth * monsters[i].position.normal, i, DepthIndexType.Monster));
+                }
+                for (int i = 0; i < projectiles.Count; i++)
+                {
+                    decorationIndexer.Add(new DepthIndex(projectiles[i].position.position + projectiles[i].depth * projectiles[i].position.normal, i, DepthIndexType.Projectile));
+                }
+                decorationIndexer.Add(new DepthIndex(Engine.player.center.position + Engine.player.depth * Engine.player.center.normal, 0, DepthIndexType.Player));
+                //decorationIndexer.Sort(new DepthIndexSorter(Engine.cameraTarget - Engine.cameraPos));
+                decorationIndexer.Sort(new DepthIndexSorter(-Engine.player.center.normal));
+                foreach (DepthIndex d in decorationIndexer)
+                {
+                    if (d.type == DepthIndexType.Decoration)
+                        decorations[d.index].Draw(this);
+                    else if (d.type == DepthIndexType.DoodadSprite)
+                        doodads[d.index].DrawSprites(this);
+                    else if (d.type == DepthIndexType.Projectile && this == Engine.player.currentRoom)
+                        projectiles[d.index].Draw(this);
+                    else if (d.type == DepthIndexType.Player && this == Engine.player.currentRoom)
+                        Engine.player.DrawTexture(Engine.playerTextureEffect);
+                    else if (d.type == DepthIndexType.Monster && this == Engine.player.currentRoom)
+                    {
+                        monsters[d.index].Draw(this);
+                        for (int i = 0; i < monsters[d.index].textureSlices.Count; i++)
+                        {
+                            int index = i;
+                            if (Vector3.Dot(monsters[d.index].position.normal, Engine.cameraTarget - Engine.cameraPos) >= 0)
+                                index = monsters[d.index].textureSlices.Count - i - 1;
+                            Engine.playerTextureEffect.Texture = Monster.monsterTextures[(int)monsters[d.index].textureSlices[index].textureId];
+                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                monsters[d.index].textureSlices[index].vertexList.ToArray(), 0, monsters[d.index].textureSlices[index].vertexList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                        }
+                    }
+                }
+            }
+        }
         public void DrawDecorations()
         {                    
             if(shouldRender)
@@ -1675,8 +1725,18 @@ namespace VexedCore
             foreach (Monster m in monsters)
             {
                 m.Draw(this);
+                for(int i = 0; i < m.textureSlices.Count; i++)
+                {
+                    int index = i;
+                    if(Vector3.Dot(m.position.normal, Engine.cameraTarget - Engine.cameraPos)>= 0)
+                        index = m.textureSlices.Count - i - 1;
+                    Engine.playerTextureEffect.Texture = Monster.monsterTextures[(int)m.textureSlices[index].textureId];
+                    Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                    Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                        m.textureSlices[index].vertexList.ToArray(), 0, m.textureSlices[index].vertexList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }
             }
-            for (int i = 0; i < Monster.textureCount; i++)
+            /*for (int i = 0; i < Monster.textureCount; i++)
             {
                 if (monsterTriangles[i].Count > 0)
                 {
@@ -1685,7 +1745,7 @@ namespace VexedCore
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         monsterTriangles[i].ToArray(), 0, monsterTriangles[i].Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
-            }
+            }*/
         }
 
         public void DrawProjectiles()
@@ -2095,6 +2155,29 @@ namespace VexedCore
                 }
                 return false;
             }
+        }
+
+        public int[] adjacencyLevel;
+
+        public void ComputeAdjacentRoomCount()
+        {
+            adjacencyLevel = new int[4];
+            adjacencyLevel[0] = 1;
+
+        }
+
+        public int CountAdjacentRooms(int depth)
+        {
+            int count = 1;
+            if(depth > 0)
+            {                
+                foreach (Doodad d in doodads)
+                {
+                    if ((d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation || d.type == VL.DoodadType.BridgeGate) && d.targetRoom != null)
+                        count += d.targetRoom.CountAdjacentRooms(depth - 1);
+                }
+            }
+            return count;
         }
 
         public void MarkAdjacentRooms(int depth)

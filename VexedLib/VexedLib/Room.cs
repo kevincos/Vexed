@@ -12,7 +12,7 @@ namespace VL
     {
         public int id;
         //public String name;
-        public String _name;
+        public String _name;        
         public int centerX, centerY, centerZ;
         public int sizeX, sizeY, sizeZ;
         public Color color;

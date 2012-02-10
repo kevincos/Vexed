@@ -304,8 +304,12 @@ namespace VexedCore
         {
             if (currentDialog == null)
             {
-                state = BoxState.Close;
-                SoundFX.DialogExtend();
+                if (state != BoxState.Close)
+                {
+                    state = BoxState.Close;
+                    if(IntroOverlay.state != IntroState.FadeIn)
+                        SoundFX.DialogExtend();
+                }
                 animationTime = 0;
                 return false;
             }

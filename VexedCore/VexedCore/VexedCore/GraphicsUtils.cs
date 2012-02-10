@@ -103,7 +103,10 @@ namespace VexedCore
         Room,
         Wormhole,
         Decoration,
-        DoodadSprite
+        DoodadSprite,
+        Player,
+        Monster,
+        Projectile
     }
 
     public class DepthIndex
