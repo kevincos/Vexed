@@ -7,12 +7,70 @@ using System.Runtime.Serialization;
 
 namespace VL
 {
+    public enum Decal
+    {
+        Save = 0,
+        Health = 1,
+        BlueKey,
+        BlueLock,
+        Booster,
+        Boots,
+        Cherry,
+        DoubleJump,
+        HookTarget,
+        ImprovedJump,
+        JetPack,
+        JumpPad,
+        Laser,
+        LaserSwitch,
+        Missile,
+        Onion,
+        BlueCodes,
+        PermanantBoots,
+        RedCodes,
+        PermanantWallJump,
+        YellowCodes,
+        Phase,
+        Blaster,
+        PlugSlot,
+        PowerOrb_0,
+        PowerOrb_1,
+        PowerOrb_2,
+        PowerOrb_3,
+        PowerOrb_4,
+        PowerOrb_5,
+        PowerOrb_6,
+        PowerOrb_7,
+        PowerOrb_8,
+        PowerOrb_9,
+        PowerOrb_10,
+        PowerPlug,
+        RainDrop,
+        RedKey,
+        RedLock,
+        Station,
+        WallJump,
+        Warp,
+        YellowKey,
+        YellowLock,
+        Leaf,
+        Lander,
+        Skull,
+        Switch,
+        Empty,
+        Arrow,
+        Objective,
+        MapLabel
+    }
+
     //[Serializable]
     public class Room
     {
         public int id;
         //public String name;
-        public String _name;        
+        public String _name;
+        public String friendlyName;
+        public Decal decal = Decal.Empty;
         public int centerX, centerY, centerZ;
         public int sizeX, sizeY, sizeZ;
         public Color color;

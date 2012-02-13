@@ -202,6 +202,7 @@ namespace VexedCore
         public int redOrbsGoal = 2;
 
         public bool objectiveFilter = false;
+        public bool stationFilter = false;
         public bool itemFilter = false;
         public bool saveFilter = false;
         public bool healthFilter = false;

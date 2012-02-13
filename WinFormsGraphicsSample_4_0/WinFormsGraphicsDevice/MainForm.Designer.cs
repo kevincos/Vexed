@@ -839,14 +839,14 @@ namespace WinFormsGraphicsDevice
             // 
             this.roomNameField.Location = new System.Drawing.Point(10, 45);
             this.roomNameField.Name = "roomNameField";
-            this.roomNameField.Size = new System.Drawing.Size(100, 20);
+            this.roomNameField.Size = new System.Drawing.Size(80, 20);
             this.roomNameField.TabIndex = 4;
             this.roomNameField.Text = "New Sector";
             this.roomNameField.TextChanged += new System.EventHandler(world_rename);
             // 
             // roomFriendlyNameField
             // 
-            this.roomFriendlyNameField.Location = new System.Drawing.Point(110, 45);
+            this.roomFriendlyNameField.Location = new System.Drawing.Point(90, 45);
             this.roomFriendlyNameField.Name = "roomFriendlyField";
             this.roomFriendlyNameField.Size = new System.Drawing.Size(100, 20);
             this.roomFriendlyNameField.TabIndex = 5;
@@ -856,12 +856,17 @@ namespace WinFormsGraphicsDevice
             // 
             // roomDecalDropdown
             // 
-            this.roomFriendlyNameField.Location = new System.Drawing.Point(150, 45);
-            this.roomFriendlyNameField.Name = "roomDecalDropdown";
-            this.roomFriendlyNameField.Size = new System.Drawing.Size(100, 20);
-            this.roomFriendlyNameField.TabIndex = 6;
-            this.roomFriendlyNameField.Text = "DecalDropdown";
-            this.roomFriendlyNameField.TextChanged += new System.EventHandler(world_rename);
+            this.roomDecalDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 52; i++)
+            {
+                this.roomDecalDropdown.Items.Add((Decal)i);
+            }
+            this.roomDecalDropdown.Location = new System.Drawing.Point(200, 45);
+            this.roomDecalDropdown.Size = new System.Drawing.Size(80, 20);
+            this.roomDecalDropdown.TabIndex = 6;
+            this.roomDecalDropdown.SelectedIndex = (int)Decal.Empty;
+            this.roomDecalDropdown.SelectedIndexChanged += new System.EventHandler(this.world_rename);
+            
 
             // 
             // roomCenterX

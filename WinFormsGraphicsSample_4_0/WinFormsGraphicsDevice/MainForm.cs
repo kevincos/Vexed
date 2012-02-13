@@ -326,8 +326,8 @@ namespace WinFormsGraphicsDevice
                 Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
                 Room r = s.FindRoomByIDString((string)this.roomDropdown.Items[this.roomDropdown.SelectedIndex]);
                 this.roomNameField.Text = r.IDString;
-                this.roomFriendlyNameField.Text = "Friendly Name";
-                this.roomDropdown.SelectedIndex = 0;
+                this.roomFriendlyNameField.Text = r.friendlyName;
+                this.roomDecalDropdown.SelectedIndex = (int)r.decal;
                 this.roomCenterX.Text = r.centerX.ToString();
                 this.roomCenterY.Text = r.centerY.ToString();
                 this.roomCenterZ.Text = r.centerZ.ToString();
@@ -982,16 +982,15 @@ namespace WinFormsGraphicsDevice
             }
             if (sender == this.roomFriendlyNameField)
             {
-                //Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
-                //Room r = s.FindRoomByIDString((string)this.roomDropdown.Items[this.roomDropdown.SelectedIndex]);
-                //r._name = this.roomFriendlyNameField.Text;                
+                Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
+                Room r = s.FindRoomByIDString((string)this.roomDropdown.Items[this.roomDropdown.SelectedIndex]);
+                r.friendlyName = this.roomFriendlyNameField.Text;                
             }
-            if (sender == this.roomNameField)
+            if (sender == this.roomDecalDropdown)
             {
                 Sector s = world.FindSectorByIDString((string)this.sectorDropdown.Items[this.sectorDropdown.SelectedIndex]);
                 Room r = s.FindRoomByIDString((string)this.roomDropdown.Items[this.roomDropdown.SelectedIndex]);
-                r._name = this.roomNameField.Text;
-                this.roomDropdown.Items[this.roomDropdown.SelectedIndex] = r.IDString;
+                r.decal = (Decal)this.roomDecalDropdown.SelectedIndex;
             }
             if (sender == this.elementNameField)
             {

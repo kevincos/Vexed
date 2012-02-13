@@ -49,6 +49,10 @@ namespace VexedCore
         public static int filterMonitorHeight;
         public static int filterMonitorTop;
         public static int filterMonitorLeft;
+        public static int filterMonitorMax;
+        public static int filterMonitor3;
+        public static int filterMonitor2;
+        public static int filterMonitor1;
         public static Vector2 mousePos;
 
         public static SpriteFont smallFont;
@@ -92,11 +96,15 @@ namespace VexedCore
             int dataMonitorHeight = h / 4;
             int objectiveMonitorHeight = h / 6;
             int objectiveMonitorWidth = w / 2;
-            filterMonitorWidth = 3*w / 5;
+            filterMonitorWidth = 4*w / 5;
             filterMonitorHeight = h / 6;
             int filterMonitorBottom  = bottomEdge + hiddenMapOffsetTime;
             filterMonitorTop = filterMonitorBottom - filterMonitorHeight;
             filterMonitorLeft = rightEdge - filterMonitorWidth;
+            filterMonitor1 = (int)(filterMonitorLeft + .08f * filterMonitorWidth);
+            filterMonitor2 = (int)(filterMonitorLeft + .32f * filterMonitorWidth);
+            filterMonitor3 = (int)(filterMonitorLeft + .6f * filterMonitorWidth);
+            filterMonitorMax = (int)(filterMonitorLeft + .9f * filterMonitorWidth);
 
             Engine.spriteBatch.Draw(mapDataMonitor, new Rectangle(monitorLeft, monitorTop, dataMonitorWidth, dataMonitorHeight), Color.White);
             Engine.spriteBatch.Draw(mapObjectiveMonitor, new Rectangle(objectiveLeft, objectiveTop, objectiveMonitorWidth, objectiveMonitorHeight), Color.White);
@@ -107,25 +115,34 @@ namespace VexedCore
             Color filterColor = Color.YellowGreen;
 
             filterColor = Color.YellowGreen;
+            if (Engine.player.objectiveFilter)
+                filterColor = new Color(80, 80, 80);
+            Engine.spriteBatch.DrawString(spriteFont, "Objectives", new Vector2(filterMonitor1, filterMonitorTop + .045f * h), filterColor);
 
+            filterColor = Color.YellowGreen;
+            if (Engine.player.stationFilter)
+                filterColor = new Color(80, 80, 80);
+            Engine.spriteBatch.DrawString(spriteFont, "Waypoints", new Vector2(filterMonitor1, filterMonitorTop + .085f * h), filterColor);
+
+            filterColor = Color.YellowGreen;
             if (Engine.player.saveFilter)
                 filterColor = new Color(80, 80, 80);
-            Engine.spriteBatch.DrawString(spriteFont, "Save Stations", new Vector2(filterMonitorLeft + .057f * w, filterMonitorTop + .045f * h), filterColor);
+            Engine.spriteBatch.DrawString(spriteFont, "Save Stations", new Vector2(filterMonitor2, filterMonitorTop + .045f * h), filterColor);
 
             filterColor = Color.YellowGreen;
             if (Engine.player.itemFilter)
                 filterColor = new Color(80, 80, 80);
-            Engine.spriteBatch.DrawString(spriteFont, "Item Stations", new Vector2(filterMonitorLeft + .057f * w, filterMonitorTop + .085f * h), filterColor);
+            Engine.spriteBatch.DrawString(spriteFont, "Item Stations", new Vector2(filterMonitor2, filterMonitorTop + .085f * h), filterColor);
 
             filterColor = Color.YellowGreen;
             if (Engine.player.healthFilter)
                 filterColor = new Color(80, 80, 80);
-            Engine.spriteBatch.DrawString(spriteFont, "Health Stations", new Vector2(filterMonitorLeft + .28f * w, filterMonitorTop + .045f * h), filterColor);
+            Engine.spriteBatch.DrawString(spriteFont, "Health Stations", new Vector2(filterMonitor3, filterMonitorTop + .045f * h), filterColor);
 
             filterColor = Color.YellowGreen;
             if (Engine.player.warpFilter)
                 filterColor = new Color(80, 80, 80);
-            Engine.spriteBatch.DrawString(spriteFont, "Warp Nodes", new Vector2(filterMonitorLeft + .28f * w, filterMonitorTop + .085f * h), filterColor);
+            Engine.spriteBatch.DrawString(spriteFont, "Warp Nodes", new Vector2(filterMonitor3, filterMonitorTop + .085f * h), filterColor);
 
 
             // Inventory Monitors
@@ -185,7 +202,7 @@ namespace VexedCore
                 String outputStringBase = "";
                 if (r.explored)
                 {
-                    outputStringTitle += r.id;
+                    outputStringTitle += r.friendlyName;
                 }
                 else
                 {
@@ -357,9 +374,9 @@ namespace VexedCore
                 if (mousePos.X > filterMonitorLeft && mousePos.Y > filterMonitorTop)
                 {
                     hudClick = true;
-                    if (filterCooldown == 0)
+                    if (filterCooldown == 0 && mousePos.X < filterMonitorMax && mousePos.X > filterMonitor1)
                     {
-                        if (mousePos.X > filterMonitorTop + filterMonitorHeight / 2)
+                        if (mousePos.X > filterMonitor3)
                         {
                             if (mousePos.Y > filterMonitorTop + filterMonitorHeight / 2)
                             {
@@ -374,7 +391,7 @@ namespace VexedCore
                                 filterCooldown = 300;
                             }
                         }
-                        else
+                        else if (mousePos.X > filterMonitor2)
                         {
                             if (mousePos.Y > filterMonitorTop + filterMonitorHeight / 2)
                             {
@@ -385,6 +402,21 @@ namespace VexedCore
                             else
                             {
                                 Engine.player.saveFilter = !Engine.player.saveFilter;
+                                SoundFX.MapSelect();
+                                filterCooldown = 300;
+                            }
+                        }
+                        else
+                        {
+                            if (mousePos.Y > filterMonitorTop + filterMonitorHeight / 2)
+                            {
+                                Engine.player.stationFilter = !Engine.player.stationFilter;
+                                SoundFX.MapSelect();
+                                filterCooldown = 300;
+                            }
+                            else
+                            {
+                                Engine.player.objectiveFilter = !Engine.player.objectiveFilter;
                                 SoundFX.MapSelect();
                                 filterCooldown = 300;
                             }

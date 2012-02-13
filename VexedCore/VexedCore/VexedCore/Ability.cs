@@ -326,44 +326,44 @@ namespace VexedCore
         public static Texture2D GetDecal(AbilityType abilityType)
         {
             if (abilityType == AbilityType.RedKey)
-                return Doodad.decalTextures[(int)Decal.RedKey];
+                return Doodad.decalTextures[(int)VL.Decal.RedKey];
             if (abilityType == AbilityType.BlueKey)
-                return Doodad.decalTextures[(int)Decal.BlueKey];
+                return Doodad.decalTextures[(int)VL.Decal.BlueKey];
             if (abilityType == AbilityType.YellowKey)
-                return Doodad.decalTextures[(int)Decal.YellowKey];
+                return Doodad.decalTextures[(int)VL.Decal.YellowKey];
             if (abilityType == AbilityType.Laser)
-                return Doodad.decalTextures[(int)Decal.Laser];
+                return Doodad.decalTextures[(int)VL.Decal.Laser];
             if (abilityType == AbilityType.Blaster)
-                return Doodad.decalTextures[(int)Decal.Blaster];
+                return Doodad.decalTextures[(int)VL.Decal.Blaster];
             if (abilityType == AbilityType.Boots)
-                return Doodad.decalTextures[(int)Decal.Boots];
+                return Doodad.decalTextures[(int)VL.Decal.Boots];
             if (abilityType == AbilityType.JetPack)
-                return Doodad.decalTextures[(int)Decal.JetPack];
+                return Doodad.decalTextures[(int)VL.Decal.JetPack];
             if (abilityType == AbilityType.Phase)
-                return Doodad.decalTextures[(int)Decal.Phase];
+                return Doodad.decalTextures[(int)VL.Decal.Phase];
             if (abilityType == AbilityType.Booster)
-                return Doodad.decalTextures[(int)Decal.Booster];
+                return Doodad.decalTextures[(int)VL.Decal.Booster];
             if (abilityType == AbilityType.DoubleJump)
-                return Doodad.decalTextures[(int)Decal.DoubleJump];
+                return Doodad.decalTextures[(int)VL.Decal.DoubleJump];
             if (abilityType == AbilityType.WallJump)
-                return Doodad.decalTextures[(int)Decal.WallJump];
+                return Doodad.decalTextures[(int)VL.Decal.WallJump];
             if (abilityType == AbilityType.SpinHook)
-                return Doodad.decalTextures[(int)Decal.HookTarget];
+                return Doodad.decalTextures[(int)VL.Decal.HookTarget];
             if (abilityType == AbilityType.Missile)
-                return Doodad.decalTextures[(int)Decal.Missile];
+                return Doodad.decalTextures[(int)VL.Decal.Missile];
             if (abilityType == AbilityType.PermanentBoots)
-                return Doodad.decalTextures[(int)Decal.PermanantBoots];
+                return Doodad.decalTextures[(int)VL.Decal.PermanantBoots];
             if (abilityType == AbilityType.PermanentWallJump)
-                return Doodad.decalTextures[(int)Decal.PermanantWallJump];
+                return Doodad.decalTextures[(int)VL.Decal.PermanantWallJump];
             if (abilityType == AbilityType.ImprovedJump)
-                return Doodad.decalTextures[(int)Decal.ImprovedJump];
+                return Doodad.decalTextures[(int)VL.Decal.ImprovedJump];
             if (abilityType == AbilityType.PermanentRedKey)
-                return Doodad.decalTextures[(int)Decal.RedCodes];
+                return Doodad.decalTextures[(int)VL.Decal.RedCodes];
             if (abilityType == AbilityType.PermanentBlueKey)
-                return Doodad.decalTextures[(int)Decal.BlueCodes];
+                return Doodad.decalTextures[(int)VL.Decal.BlueCodes];
             if (abilityType == AbilityType.PermanentYellowKey)
-                return Doodad.decalTextures[(int)Decal.YellowCodes];
-            return Doodad.decalTextures[(int)Decal.Empty];
+                return Doodad.decalTextures[(int)VL.Decal.YellowCodes];
+            return Doodad.decalTextures[(int)VL.Decal.Empty];
         }
 
         /*

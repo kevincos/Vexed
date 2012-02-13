@@ -21,61 +21,6 @@ namespace VexedCore
         Blade
     }
 
-    public enum Decal
-    {
-        Save = 0,
-        Health = 1,
-        BlueKey,
-        BlueLock,
-        Booster,
-        Boots,
-        Cherry,
-        DoubleJump,
-        HookTarget,
-        ImprovedJump,
-        JetPack,
-        JumpPad,
-        Laser,
-        LaserSwitch,
-        Missile,
-        Onion,
-        BlueCodes,
-        PermanantBoots,
-        RedCodes,
-        PermanantWallJump,
-        YellowCodes,
-        Phase,
-        Blaster,
-        PlugSlot,
-        PowerOrb_0,
-        PowerOrb_1,
-        PowerOrb_2,
-        PowerOrb_3,
-        PowerOrb_4,
-        PowerOrb_5,
-        PowerOrb_6,
-        PowerOrb_7,
-        PowerOrb_8,
-        PowerOrb_9,
-        PowerOrb_10,
-        PowerPlug,
-        RainDrop,
-        RedKey,
-        RedLock,
-        Station,
-        WallJump,
-        Warp,
-        YellowKey,
-        YellowLock,
-        Leaf,
-        Lander,
-        Skull,
-        Switch,
-        Empty,
-        Arrow,
-        Objective,
-        MapLabel
-    }
    
     public class Doodad
     {
@@ -123,7 +68,7 @@ namespace VexedCore
         [XmlIgnore]
         public AmbientSound sound = null;
 
-        public Decal doorDecal = 0;
+        public VL.Decal doorDecal = 0;
         public bool idle = false;
         public bool doorState = false;
 
@@ -205,57 +150,57 @@ namespace VexedCore
             {
                 decalTextures.Add(null);
             }
-            decalTextures[(int)Decal.Save] = Content.Load<Texture2D>("Decals\\decal_save");
-            decalTextures[(int)Decal.Health] = Content.Load<Texture2D>("Decals\\decal_health");
-            decalTextures[(int)Decal.BlueKey] = Content.Load<Texture2D>("Decals\\decal_bluekey");
-            decalTextures[(int)Decal.BlueLock] = Content.Load<Texture2D>("Decals\\decal_bluelock");
-            decalTextures[(int)Decal.Booster] = Content.Load<Texture2D>("Decals\\decal_booster");
-            decalTextures[(int)Decal.Boots] = Content.Load<Texture2D>("Decals\\decal_boots");
-            decalTextures[(int)Decal.Cherry] = Content.Load<Texture2D>("Decals\\decal_cherry");
-            decalTextures[(int)Decal.DoubleJump] = Content.Load<Texture2D>("Decals\\decal_doublejump");
-            decalTextures[(int)Decal.HookTarget] = Content.Load<Texture2D>("Decals\\decal_hooktarget");
-            decalTextures[(int)Decal.ImprovedJump] = Content.Load<Texture2D>("Decals\\decal_improvedjump");
-            decalTextures[(int)Decal.JetPack] = Content.Load<Texture2D>("Decals\\decal_jetpack");
-            decalTextures[(int)Decal.JumpPad] = Content.Load<Texture2D>("Decals\\decal_jump");
-            decalTextures[(int)Decal.Laser] = Content.Load<Texture2D>("Decals\\decal_laser");
-            decalTextures[(int)Decal.LaserSwitch] = Content.Load<Texture2D>("Decals\\decal_laserswitch");
-            decalTextures[(int)Decal.Missile] = Content.Load<Texture2D>("Decals\\decal_missile");
-            decalTextures[(int)Decal.Onion] = Content.Load<Texture2D>("Decals\\decal_onion");
-            decalTextures[(int)Decal.BlueCodes] = Content.Load<Texture2D>("Decals\\decal_permanantbluekey");
-            decalTextures[(int)Decal.PermanantBoots] = Content.Load<Texture2D>("Decals\\decal_permanantboots");
-            decalTextures[(int)Decal.RedCodes] = Content.Load<Texture2D>("Decals\\decal_permanantredkey");
-            decalTextures[(int)Decal.PermanantWallJump] = Content.Load<Texture2D>("Decals\\decal_permanantwalljump");
-            decalTextures[(int)Decal.YellowCodes] = Content.Load<Texture2D>("Decals\\decal_permanantyellowkey");
-            decalTextures[(int)Decal.Phase] = Content.Load<Texture2D>("Decals\\decal_phase");
-            decalTextures[(int)Decal.Blaster] = Content.Load<Texture2D>("Decals\\decal_plasma");
-            decalTextures[(int)Decal.PlugSlot] = Content.Load<Texture2D>("Decals\\decal_plugslot");
-            decalTextures[(int)Decal.PowerOrb_0] = Content.Load<Texture2D>("Decals\\decal_powerorb_0");
-            decalTextures[(int)Decal.PowerOrb_1] = Content.Load<Texture2D>("Decals\\decal_powerorb_1");
-            decalTextures[(int)Decal.PowerOrb_2] = Content.Load<Texture2D>("Decals\\decal_powerorb_2");
-            decalTextures[(int)Decal.PowerOrb_3] = Content.Load<Texture2D>("Decals\\decal_powerorb_3");
-            decalTextures[(int)Decal.PowerOrb_4] = Content.Load<Texture2D>("Decals\\decal_powerorb_4");
-            decalTextures[(int)Decal.PowerOrb_5] = Content.Load<Texture2D>("Decals\\decal_powerorb_5");
-            decalTextures[(int)Decal.PowerOrb_6] = Content.Load<Texture2D>("Decals\\decal_powerorb_6");
-            decalTextures[(int)Decal.PowerOrb_7] = Content.Load<Texture2D>("Decals\\decal_powerorb_7");
-            decalTextures[(int)Decal.PowerOrb_8] = Content.Load<Texture2D>("Decals\\decal_powerorb_8");
-            decalTextures[(int)Decal.PowerOrb_9] = Content.Load<Texture2D>("Decals\\decal_powerorb_9");
-            decalTextures[(int)Decal.PowerOrb_10] = Content.Load<Texture2D>("Decals\\decal_powerorb_10");
-            decalTextures[(int)Decal.PowerPlug] = Content.Load<Texture2D>("Decals\\decal_powerplug");
-            decalTextures[(int)Decal.RainDrop] = Content.Load<Texture2D>("Decals\\decal_raindrop");
-            decalTextures[(int)Decal.RedKey] = Content.Load<Texture2D>("Decals\\decal_redkey");
-            decalTextures[(int)Decal.RedLock] = Content.Load<Texture2D>("Decals\\decal_redlock");
-            decalTextures[(int)Decal.Station] = Content.Load<Texture2D>("Decals\\decal_station");
-            decalTextures[(int)Decal.WallJump] = Content.Load<Texture2D>("Decals\\decal_walljump");
-            decalTextures[(int)Decal.Warp] = Content.Load<Texture2D>("Decals\\decal_warp");
-            decalTextures[(int)Decal.YellowKey] = Content.Load<Texture2D>("Decals\\decal_yellowkey");
-            decalTextures[(int)Decal.YellowLock] = Content.Load<Texture2D>("Decals\\decal_yellowlock");
-            decalTextures[(int)Decal.Lander] = Content.Load<Texture2D>("Decals\\decal_lander");
-            decalTextures[(int)Decal.Skull] = Content.Load<Texture2D>("Decals\\decal_skull");
-            decalTextures[(int)Decal.Switch] = Content.Load<Texture2D>("Decals\\decal_switch");
-            decalTextures[(int)Decal.Empty] = Content.Load<Texture2D>("Decals\\decal_empty");
-            decalTextures[(int)Decal.Arrow] = Content.Load<Texture2D>("Decals\\decal_arrow");
-            decalTextures[(int)Decal.Objective] = Content.Load<Texture2D>("Decals\\decal_objective");
-            decalTextures[(int)Decal.MapLabel] = Content.Load<Texture2D>("Decals\\decal_maplabel");    
+            decalTextures[(int)VL.Decal.Save] = Content.Load<Texture2D>("Decals\\decal_save");
+            decalTextures[(int)VL.Decal.Health] = Content.Load<Texture2D>("Decals\\decal_health");
+            decalTextures[(int)VL.Decal.BlueKey] = Content.Load<Texture2D>("Decals\\decal_bluekey");
+            decalTextures[(int)VL.Decal.BlueLock] = Content.Load<Texture2D>("Decals\\decal_bluelock");
+            decalTextures[(int)VL.Decal.Booster] = Content.Load<Texture2D>("Decals\\decal_booster");
+            decalTextures[(int)VL.Decal.Boots] = Content.Load<Texture2D>("Decals\\decal_boots");
+            decalTextures[(int)VL.Decal.Cherry] = Content.Load<Texture2D>("Decals\\decal_cherry");
+            decalTextures[(int)VL.Decal.DoubleJump] = Content.Load<Texture2D>("Decals\\decal_doublejump");
+            decalTextures[(int)VL.Decal.HookTarget] = Content.Load<Texture2D>("Decals\\decal_hooktarget");
+            decalTextures[(int)VL.Decal.ImprovedJump] = Content.Load<Texture2D>("Decals\\decal_improvedjump");
+            decalTextures[(int)VL.Decal.JetPack] = Content.Load<Texture2D>("Decals\\decal_jetpack");
+            decalTextures[(int)VL.Decal.JumpPad] = Content.Load<Texture2D>("Decals\\decal_jump");
+            decalTextures[(int)VL.Decal.Laser] = Content.Load<Texture2D>("Decals\\decal_laser");
+            decalTextures[(int)VL.Decal.LaserSwitch] = Content.Load<Texture2D>("Decals\\decal_laserswitch");
+            decalTextures[(int)VL.Decal.Missile] = Content.Load<Texture2D>("Decals\\decal_missile");
+            decalTextures[(int)VL.Decal.Onion] = Content.Load<Texture2D>("Decals\\decal_onion");
+            decalTextures[(int)VL.Decal.BlueCodes] = Content.Load<Texture2D>("Decals\\decal_permanantbluekey");
+            decalTextures[(int)VL.Decal.PermanantBoots] = Content.Load<Texture2D>("Decals\\decal_permanantboots");
+            decalTextures[(int)VL.Decal.RedCodes] = Content.Load<Texture2D>("Decals\\decal_permanantredkey");
+            decalTextures[(int)VL.Decal.PermanantWallJump] = Content.Load<Texture2D>("Decals\\decal_permanantwalljump");
+            decalTextures[(int)VL.Decal.YellowCodes] = Content.Load<Texture2D>("Decals\\decal_permanantyellowkey");
+            decalTextures[(int)VL.Decal.Phase] = Content.Load<Texture2D>("Decals\\decal_phase");
+            decalTextures[(int)VL.Decal.Blaster] = Content.Load<Texture2D>("Decals\\decal_plasma");
+            decalTextures[(int)VL.Decal.PlugSlot] = Content.Load<Texture2D>("Decals\\decal_plugslot");
+            decalTextures[(int)VL.Decal.PowerOrb_0] = Content.Load<Texture2D>("Decals\\decal_powerorb_0");
+            decalTextures[(int)VL.Decal.PowerOrb_1] = Content.Load<Texture2D>("Decals\\decal_powerorb_1");
+            decalTextures[(int)VL.Decal.PowerOrb_2] = Content.Load<Texture2D>("Decals\\decal_powerorb_2");
+            decalTextures[(int)VL.Decal.PowerOrb_3] = Content.Load<Texture2D>("Decals\\decal_powerorb_3");
+            decalTextures[(int)VL.Decal.PowerOrb_4] = Content.Load<Texture2D>("Decals\\decal_powerorb_4");
+            decalTextures[(int)VL.Decal.PowerOrb_5] = Content.Load<Texture2D>("Decals\\decal_powerorb_5");
+            decalTextures[(int)VL.Decal.PowerOrb_6] = Content.Load<Texture2D>("Decals\\decal_powerorb_6");
+            decalTextures[(int)VL.Decal.PowerOrb_7] = Content.Load<Texture2D>("Decals\\decal_powerorb_7");
+            decalTextures[(int)VL.Decal.PowerOrb_8] = Content.Load<Texture2D>("Decals\\decal_powerorb_8");
+            decalTextures[(int)VL.Decal.PowerOrb_9] = Content.Load<Texture2D>("Decals\\decal_powerorb_9");
+            decalTextures[(int)VL.Decal.PowerOrb_10] = Content.Load<Texture2D>("Decals\\decal_powerorb_10");
+            decalTextures[(int)VL.Decal.PowerPlug] = Content.Load<Texture2D>("Decals\\decal_powerplug");
+            decalTextures[(int)VL.Decal.RainDrop] = Content.Load<Texture2D>("Decals\\decal_raindrop");
+            decalTextures[(int)VL.Decal.RedKey] = Content.Load<Texture2D>("Decals\\decal_redkey");
+            decalTextures[(int)VL.Decal.RedLock] = Content.Load<Texture2D>("Decals\\decal_redlock");
+            decalTextures[(int)VL.Decal.Station] = Content.Load<Texture2D>("Decals\\decal_station");
+            decalTextures[(int)VL.Decal.WallJump] = Content.Load<Texture2D>("Decals\\decal_walljump");
+            decalTextures[(int)VL.Decal.Warp] = Content.Load<Texture2D>("Decals\\decal_warp");
+            decalTextures[(int)VL.Decal.YellowKey] = Content.Load<Texture2D>("Decals\\decal_yellowkey");
+            decalTextures[(int)VL.Decal.YellowLock] = Content.Load<Texture2D>("Decals\\decal_yellowlock");
+            decalTextures[(int)VL.Decal.Lander] = Content.Load<Texture2D>("Decals\\decal_lander");
+            decalTextures[(int)VL.Decal.Skull] = Content.Load<Texture2D>("Decals\\decal_skull");
+            decalTextures[(int)VL.Decal.Switch] = Content.Load<Texture2D>("Decals\\decal_switch");
+            decalTextures[(int)VL.Decal.Empty] = Content.Load<Texture2D>("Decals\\decal_empty");
+            decalTextures[(int)VL.Decal.Arrow] = Content.Load<Texture2D>("Decals\\decal_arrow");
+            decalTextures[(int)VL.Decal.Objective] = Content.Load<Texture2D>("Decals\\decal_objective");
+            decalTextures[(int)VL.Decal.MapLabel] = Content.Load<Texture2D>("Decals\\decal_maplabel");    
         }
 
         public static void InitBeamTextures(ContentManager Content)
@@ -675,27 +620,27 @@ namespace VexedCore
             {
                 if (isStation)
                 {
-                    return decalTextures[(int)Decal.Station];
+                    return decalTextures[(int)VL.Decal.Station];
                 }
                 if (type == VL.DoodadType.HookTarget)
                 {
-                    return decalTextures[(int)Decal.HookTarget];
+                    return decalTextures[(int)VL.Decal.HookTarget];
                 }
                 if (type == VL.DoodadType.PlugSlot)
                 {
-                    return decalTextures[(int)Decal.PlugSlot];
+                    return decalTextures[(int)VL.Decal.PlugSlot];
                 }
                 if (type == VL.DoodadType.PowerPlug)
                 {
-                    return decalTextures[(int)Decal.PowerPlug];
+                    return decalTextures[(int)VL.Decal.PowerPlug];
                 }
                 if (type == VL.DoodadType.LaserSwitch)
                 {
-                    return decalTextures[(int)Decal.LaserSwitch];
+                    return decalTextures[(int)VL.Decal.LaserSwitch];
                 }
                 if (type == VL.DoodadType.JumpPad)
                 {
-                    return decalTextures[(int)Decal.JumpPad];
+                    return decalTextures[(int)VL.Decal.JumpPad];
                 }
                 if (type == VL.DoodadType.StationIcon)
                 {
@@ -704,27 +649,27 @@ namespace VexedCore
                         return decalTextures[(int)targetDoodad.doorDecal];
                     }
                     if (targetDoodad.type == VL.DoodadType.LoadStation || targetDoodad.type == VL.DoodadType.SaveStation)
-                        return decalTextures[(int)Decal.Save];
+                        return decalTextures[(int)VL.Decal.Save];
 
                     if (targetDoodad.type == VL.DoodadType.HealthStation)
-                        return decalTextures[(int)Decal.Health];
+                        return decalTextures[(int)VL.Decal.Health];
                     if (targetDoodad.type == VL.DoodadType.RedPowerStation || targetDoodad.type == VL.DoodadType.BluePowerStation)
-                        return decalTextures[(int)Decal.PowerOrb_0];
+                        return decalTextures[(int)VL.Decal.PowerOrb_0];
                     if (targetDoodad.type == VL.DoodadType.PowerStation)
                     {
-                        return decalTextures[(int)Decal.PowerOrb_0 + (10-targetDoodad.orbsRemaining)];
+                        return decalTextures[(int)VL.Decal.PowerOrb_0 + (10 - targetDoodad.orbsRemaining)];
                     }
                     if (targetDoodad.type == VL.DoodadType.WarpStation)
-                        return decalTextures[(int)Decal.Warp];
+                        return decalTextures[(int)VL.Decal.Warp];
                     if (targetDoodad.type == VL.DoodadType.SwitchStation)
                     {
                         if (targetDoodad.abilityType == AbilityType.RedKey)
-                            return decalTextures[(int)Decal.RedLock];
+                            return decalTextures[(int)VL.Decal.RedLock];
                         if (targetDoodad.abilityType == AbilityType.BlueKey)
-                            return decalTextures[(int)Decal.BlueLock];
+                            return decalTextures[(int)VL.Decal.BlueLock];
                         if (targetDoodad.abilityType == AbilityType.YellowKey)
-                            return decalTextures[(int)Decal.YellowLock];
-                        return decalTextures[(int)Decal.Switch];
+                            return decalTextures[(int)VL.Decal.YellowLock];
+                        return decalTextures[(int)VL.Decal.Switch];
                     }
                     if (targetDoodad.type == VL.DoodadType.UpgradeStation || targetDoodad.type == VL.DoodadType.ItemStation)
                     {
@@ -732,7 +677,7 @@ namespace VexedCore
 
                     }                    
                 }
-                return decalTextures[(int)Decal.Empty];
+                return decalTextures[(int)VL.Decal.Empty];
             }
         }
         

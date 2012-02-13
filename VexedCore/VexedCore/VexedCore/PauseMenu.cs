@@ -124,7 +124,7 @@ namespace VexedCore
                 Color transparentBlack = new Color(0, 0, 0, 128);
 
                 Engine.spriteBatch.Draw(pauseBackground, new Rectangle(Game1.graphicsDevice.Viewport.X, Game1.graphicsDevice.Viewport.Y, Game1.graphicsDevice.Viewport.Width, Game1.graphicsDevice.Viewport.Height), transparentBlack);
-                Engine.spriteBatch.Draw(mouseCursor, mousePos, Color.YellowGreen);
+                
 
                 if (displayControlInfo == true)
                 {
@@ -217,7 +217,7 @@ namespace VexedCore
 
                     }
                 }
-                                                
+                Engine.spriteBatch.Draw(mouseCursor, mousePos, Color.YellowGreen);                                
 
                 Engine.spriteBatch.End();
             }

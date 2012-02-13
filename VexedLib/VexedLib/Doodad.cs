@@ -93,6 +93,7 @@ namespace VL
         Ultima = 23,        
     }
 
+
     //[Serializable]
     public class Doodad
     {

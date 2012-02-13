@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Xml.Serialization;
-//using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
 
 
@@ -88,8 +88,8 @@ namespace VexedCore
 
         public static Vector2 lastMousePos = Vector2.Zero;
 
-        //[DllImport("user32.dll")]
-        //static extern bool ClipCursor(Rectangle[] lpRect);
+        [DllImport("user32.dll")]
+        static extern bool ClipCursor(Rectangle[] lpRect);
 
         public List<GameButton> buttons;
         public GameButton BackButton
@@ -356,13 +356,13 @@ namespace VexedCore
                     Mouse.SetPosition(Mouse.GetState().X, Game1.titleSafeRect.Bottom);
 
                 Rectangle[] window = new Rectangle[1] { new Rectangle(Game1.gameWindow.ClientBounds.Left, Game1.gameWindow.ClientBounds.Top, Game1.gameWindow.ClientBounds.Right, Game1.gameWindow.ClientBounds.Bottom) };
-                //ClipCursor(window);
+                ClipCursor(window);
 
             }
             else
             {
-                //Rectangle[] window = null;
-                //ClipCursor(window);
+                Rectangle[] window = null;
+                ClipCursor(window);
             }
 
             

@@ -48,6 +48,8 @@ namespace VexedCore
                 {
                     Room newRoom = new Room(xmlRoom);
                     newRoom.sectorID = newSector.id;
+                    newRoom.friendlyName = xmlRoom.friendlyName;
+                    newRoom.stationDecal = xmlRoom.decal;
                     foreach (VL.Face xmlFace in xmlRoom.faceList)
                     {
                         foreach (VL.Monster xmlMonster in xmlFace.monsters)
@@ -369,19 +371,19 @@ namespace VexedCore
                     if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation)
                     {
                         if (d.id.Contains("Cherry"))
-                            d.doorDecal = Decal.Cherry;
+                            d.doorDecal = VL.Decal.Cherry;
                         else if (d.id.Contains("RainDrop"))
-                            d.doorDecal = Decal.RainDrop;
+                            d.doorDecal = VL.Decal.RainDrop;
                         else if (d.id.Contains("Onion"))
-                            d.doorDecal = Decal.Onion;
+                            d.doorDecal = VL.Decal.Onion;
                         else if (d.id.Contains("Leaf"))
-                            d.doorDecal = Decal.Leaf;
+                            d.doorDecal = VL.Decal.Leaf;
                         else if (d.id.Contains("Lander"))
-                            d.doorDecal = Decal.Lander;
+                            d.doorDecal = VL.Decal.Lander;
                         else if (d.id.Contains("Skull"))
-                            d.doorDecal = Decal.Skull;
+                            d.doorDecal = VL.Decal.Skull;
                         else
-                            d.doorDecal = Decal.JumpPad;
+                            d.doorDecal = VL.Decal.JumpPad;
                         float baseLineValue = Vector3.Dot(d.position.position, d.position.normal);
                         float minPosValue = 0;
                         foreach (Room destinationRoom in roomList)
