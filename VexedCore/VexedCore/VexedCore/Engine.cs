@@ -63,8 +63,8 @@ namespace VexedCore
 
         public SaveGameText saveGameText;
 
-        public static bool soundEffectsEnabled = true;
-        public static bool musicEnabled = true;
+        public static bool soundEffectsEnabled = false;
+        public static bool musicEnabled = false;
         public static bool justLoaded = false;
 
         
@@ -238,10 +238,17 @@ namespace VexedCore
             }
 
             int currentAdjacentCount = Engine.player.currentRoom.CountAdjacentRooms(Engine.drawDepth);
+            foreach (Room r in roomList)
+            {
+                r.adjacent = false;
+            }
             int jumpAdjacentCount = 0;
             if(Engine.player.jumpRoom != null)
                 jumpAdjacentCount = Engine.player.currentRoom.CountAdjacentRooms(Engine.drawDepth);
-
+            foreach (Room r in roomList)
+            {
+                r.adjacent = false;
+            }
             int effectiveCurrentDrawDepth = Engine.drawDepth;
             int effectiveJumpDrawDepth = Engine.drawDepth;
             if (currentAdjacentCount > maxRoomDraw[Engine.drawDepth])

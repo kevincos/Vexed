@@ -40,7 +40,7 @@ namespace VexedCore
         {
             get
             {
-                if (id.Contains("Green"))
+                if (id.Contains("Conservatory"))
                     return SkyBoxType.Green;
                 if (id.Contains("Storage"))
                     return SkyBoxType.Blue;

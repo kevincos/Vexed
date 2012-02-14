@@ -65,7 +65,7 @@ namespace VexedCore
                     return itemRoom;
             }
 
-            if (Engine.player.currentRoom.sectorID.Contains("Green"))
+            if (Engine.player.currentRoom.sectorID.Contains("Conservatory"))
                 return greenSector;
 
             if (Engine.player.currentRoom.sectorID.Contains("Hub"))

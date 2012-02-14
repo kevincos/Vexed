@@ -2188,7 +2188,11 @@ namespace VexedCore
 
         public int CountAdjacentRooms(int depth)
         {
-            int count = 1;
+            
+            int count = 0;
+            if (adjacent == false)
+                count++;
+            adjacent = true;
             if(depth > 0)
             {                
                 foreach (Doodad d in doodads)

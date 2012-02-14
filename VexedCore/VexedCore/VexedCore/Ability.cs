@@ -78,7 +78,7 @@ namespace VexedCore
         {
             get
             {
-                return type == AbilityType.WallJump || type == AbilityType.DoubleJump;
+                return type == AbilityType.WallJump || type == AbilityType.DoubleJump || type == AbilityType.Empty;
             }
         }
 

@@ -1162,7 +1162,7 @@ namespace VexedCore
                 if (type == VL.DoodadType.TunnelTop || type == VL.DoodadType.TunnelSide || type == VL.DoodadType.RingSide || type == VL.DoodadType.RingTop)
                     return .1f;
                 if (type == VL.DoodadType.HologramOldMan)
-                    return .1f;
+                    return .11f;
                 if (type == VL.DoodadType.LeftDoor || type == VL.DoodadType.RightDoor)
                     return .15f;
                 if (type == VL.DoodadType.StationIcon)
@@ -1606,6 +1606,13 @@ namespace VexedCore
                         currentRoom.BasicAddBlockSidesToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicBrickTriangleList);
                         currentRoom.AddBlockToTriangleList(vList, baseColor, depth, depth, Room.plateTexCoords, dynamicBrickTriangleList);
                     }
+                }
+                else if (type == VL.DoodadType.PowerOrb && tracking == false && active == false)
+                {                    
+                    for (int i = 0; i < 36; i++)
+                    {
+                        dynamicFancyTriangleList.Add(new VertexPositionColorNormalTexture(Vector3.Zero, Color.White, Vector3.Zero, Vector2.Zero));
+                    }                    
                 }
                 else if (type != VL.DoodadType.Holoprojector && type != VL.DoodadType.HologramOldMan && type != VL.DoodadType.Beam && type != VL.DoodadType.PowerPlug && type != VL.DoodadType.Vortex)
                 {
