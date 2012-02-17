@@ -63,6 +63,10 @@ namespace VexedCore
         public static Texture2D iceTexture;
         public static Texture2D crystalTexture;
         public static Texture2D gearslotTexture;
+        public static Texture2D[] masterTextureList;
+        public static int maxWallTextureTypes = 11;
+
+        public int[] cacheOffset = new int[11];        
 
         public Block()
         {
@@ -408,7 +412,7 @@ namespace VexedCore
         public void UpdateVertexData(Room currentRoom)
         {
             
-            if (baseTriangleList == null || staticObject == false || currentRoom.refreshVertices == true)
+            if (baseTriangleList == null || staticObject == false)
             {
                 Engine.debug_blocksGenerated++;
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
@@ -429,7 +433,9 @@ namespace VexedCore
                     }
                     else
                     {
-                        if (wallType == VL.WallType.FancyPlate)
+                        currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, baseTriangleList);
+                        currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, sideTriangleList);
+                        /*if (wallType == VL.WallType.FancyPlate)
                         {
                             currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, currentRoom.staticFancyPlate);
                             currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticFancyPlate);
@@ -483,7 +489,7 @@ namespace VexedCore
                         {
                             currentRoom.AddBlockToTriangleList2(vList, powerUpColor, depth, baseTriangleList);
                             currentRoom.AddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, sideTriangleList);
-                        }
+                        }*/
                     }
                 }
                 else
@@ -495,7 +501,9 @@ namespace VexedCore
                     }
                     else
                     {
-                        if (wallType == VL.WallType.FancyPlate)
+                        currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, baseTriangleList);
+                        currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, sideTriangleList);
+                        /*if (wallType == VL.WallType.FancyPlate)
                         {
                             currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticFancyPlate);
                             currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, currentRoom.staticFancyPlate);
@@ -549,18 +557,89 @@ namespace VexedCore
                         {
                             currentRoom.AddBlockToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, baseTriangleList);
                             currentRoom.BasicAddBlockSidesToTriangleList(vList, powerUpColor, depth, Room.plateTexCoords, sideTriangleList);
-                        }                        
+                        }     */                   
                     }
                 }
                 if (staticObject == false)
                 {
                     baseTriangleArray = baseTriangleList.ToArray();
                     sideTriangleArray = sideTriangleList.ToArray();
-                }                                
+                }
+                else
+                {
+                    if (wallType == VL.WallType.Plate || wallType == VL.WallType.Cargo || wallType == VL.WallType.Crate)
+                    {
+                        for (int i = 0; i < baseTriangleList.Count(); i++)
+                        {
+                            int index = (int)wallType;
+                            currentRoom.masterBlockArray[(int)wallType][cacheOffset[(int)wallType] + i] = baseTriangleList[i];
+                        }
+                        for (int i = 0; i < sideTriangleList.Count(); i++)
+                        {
+                            currentRoom.masterBlockArray[(int)VL.WallType.FancyPlate][cacheOffset[(int)VL.WallType.FancyPlate] + i] = sideTriangleList[i];
+                        }
+                    }
+                    else if (wallType == VL.WallType.Gearslot)
+                    {
+                        for (int i = 0; i < baseTriangleList.Count(); i++)
+                        {
+                            currentRoom.masterBlockArray[(int)VL.WallType.FancyPlate][cacheOffset[(int)VL.WallType.FancyPlate] + i] = baseTriangleList[i];
+                        }
+                        for (int i = 0; i < sideTriangleList.Count(); i++)
+                        {
+                            currentRoom.masterBlockArray[(int)wallType][cacheOffset[(int)wallType] + i] = sideTriangleList[i];
+                        }
+                    }
+                    else
+                    {
+                        for(int i = 0; i < baseTriangleList.Count(); i++)
+                        {                                
+                            currentRoom.masterBlockArray[(int)wallType][cacheOffset[(int)wallType] + i] = baseTriangleList[i];
+                        }
+                        for (int i = 0; i < sideTriangleList.Count(); i++)
+                        {
+                            currentRoom.masterBlockArray[(int)wallType][cacheOffset[(int)wallType] + baseTriangleList.Count() + i] = sideTriangleList[i];
+                        }                            
+                    }
+                }
             }
             if (currentRoom.refreshVertices == true && staticObject == true)
             {
-                List<VertexPositionColorNormalTexture> newColorsBase = new List<VertexPositionColorNormalTexture>();
+                Color powerUpColor = GetCurrentColor(currentRoom);
+                if (wallType == VL.WallType.Plate || wallType == VL.WallType.Cargo || wallType == VL.WallType.Crate)
+                {
+                    for (int i = 0; i < baseTriangleList.Count(); i++)
+                    {                        
+                        currentRoom.masterBlockArray[(int)wallType][cacheOffset[(int)wallType] + i].Color = FakeShader.Shade(powerUpColor,baseTriangleList[i].Normal);
+                    }
+                    for (int i = 0; i < sideTriangleList.Count(); i++)
+                    {
+                        currentRoom.masterBlockArray[(int)VL.WallType.FancyPlate][cacheOffset[(int)VL.WallType.FancyPlate] + i].Color = FakeShader.Shade(powerUpColor, sideTriangleList[i].Normal);
+                    }
+                }
+                else if (wallType == VL.WallType.Gearslot)
+                {
+                    for (int i = 0; i < baseTriangleList.Count(); i++)
+                    {
+                        currentRoom.masterBlockArray[(int)VL.WallType.FancyPlate][cacheOffset[(int)VL.WallType.FancyPlate] + i].Color = FakeShader.Shade(powerUpColor, baseTriangleList[i].Normal);
+                    }
+                    for (int i = 0; i < sideTriangleList.Count(); i++)
+                    {
+                        currentRoom.masterBlockArray[(int)wallType][cacheOffset[(int)wallType] + i].Color = FakeShader.Shade(powerUpColor, sideTriangleList[i].Normal);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < baseTriangleList.Count(); i++)
+                    {
+                        currentRoom.masterBlockArray[(int)wallType][cacheOffset[(int)wallType] + i].Color = FakeShader.Shade(powerUpColor, baseTriangleList[i].Normal);
+                    }
+                    for (int i = 0; i < sideTriangleList.Count(); i++)
+                    {
+                        currentRoom.masterBlockArray[(int)wallType][cacheOffset[(int)wallType] + baseTriangleList.Count() + i].Color = FakeShader.Shade(powerUpColor, sideTriangleList[i].Normal);
+                    }
+                }
+                /*List<VertexPositionColorNormalTexture> newColorsBase = new List<VertexPositionColorNormalTexture>();
                 List<VertexPositionColorNormalTexture> newColorsSide = new List<VertexPositionColorNormalTexture>();
                 Color powerUpColor = GetCurrentColor(currentRoom);
 
@@ -578,7 +657,7 @@ namespace VexedCore
                 sideTriangleList.Clear();
                 sideTriangleList = newColorsSide;
                 sideTriangleArray = sideTriangleList.ToArray();
-                Engine.reDraw = true;
+                Engine.reDraw = true;*/
             }
         }
 

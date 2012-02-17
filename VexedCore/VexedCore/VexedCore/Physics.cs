@@ -36,7 +36,7 @@ namespace VexedCore
             foreach (Doodad d in r.doodads)
             {
                 d.UpdateUnfoldedDoodad(r, normal, up);
-                d.UpdateBoundingBox(Engine.player.up, Engine.player.right);
+                d.UpdateBoundingBox(Engine.player.up, Engine.player.right, refresh);
             }
             foreach (Monster m in r.monsters)
             {

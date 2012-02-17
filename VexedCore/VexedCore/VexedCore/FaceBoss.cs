@@ -93,7 +93,7 @@ namespace VexedCore
                         state = FaceState.Rebuilding;
                         foreach (Monster m in Engine.player.currentRoom.monsters)
                         {
-                            if (m.id.Contains("Guardian"))
+                            if (m.id.Contains("Guardian") && m.state == MonsterState.Death)
                             {
                                 m.baseHP = m.startingBaseHP;
                                 m.dead = false;
@@ -133,9 +133,9 @@ namespace VexedCore
 
         }
 
-        public void DrawNormalEyes()
+        public void DrawNormalEyes(Room currentRoom)
         {
-            Vector3 center = Engine.player.currentRoom.center;
+            Vector3 center = currentRoom.center;
             Vector3 outDirection = Engine.player.center.position - center;
             Vector3 up = Engine.player.cameraUp;
             outDirection.Normalize();
@@ -163,9 +163,9 @@ namespace VexedCore
 
         }
 
-        public void DrawAngryEyes()
+        public void DrawAngryEyes(Room currentRoom)
         {
-            Vector3 center = Engine.player.currentRoom.center;
+            Vector3 center = currentRoom.center;
             Vector3 outDirection = Engine.player.center.position - center;
             Vector3 up = Engine.player.cameraUp;
             outDirection.Normalize();
@@ -188,7 +188,7 @@ namespace VexedCore
             
         }
 
-        public void DrawSphere(bool armor)
+        public void DrawSphere(Room currentRoom, bool armor)
         {
             int numThetaSides = 10;
             int numPhiSides = 8;
@@ -216,34 +216,34 @@ namespace VexedCore
                     float z2_b = (float)(Math.Sin(phi_b) * Math.Sin(theta2)) * horizontalRadius;
                     float y_b = (float)Math.Cos(phi_b) * verticalRadius; 
                     
-                    Vector3 position1 = Engine.player.currentRoom.center + new Vector3(x1_a, y_a, z1_a);
-                    Vector3 position2 = Engine.player.currentRoom.center + new Vector3(x2_a, y_a, z2_a);
-                    Vector3 position3 = Engine.player.currentRoom.center + new Vector3(x1_b, y_b, z1_b);
-                    Vector3 position4 = Engine.player.currentRoom.center + new Vector3(x2_b, y_b, z2_b);
-                    Vector3 offset = (position1 + position2 + position3 + position4)/4 - Engine.player.currentRoom.center;
+                    Vector3 position1 = currentRoom.center + new Vector3(x1_a, y_a, z1_a);
+                    Vector3 position2 = currentRoom.center + new Vector3(x2_a, y_a, z2_a);
+                    Vector3 position3 = currentRoom.center + new Vector3(x1_b, y_b, z1_b);
+                    Vector3 position4 = currentRoom.center + new Vector3(x2_b, y_b, z2_b);
+                    Vector3 offset = (position1 + position2 + position3 + position4)/4 - currentRoom.center;
                     offset.Normalize();
                     offset *= 20f * armorExplodeTime / armorExplodeMaxTime;
 
                     if (armor == true)
                     {                        
-                        vertices[index] = new VertexPositionColorNormalTexture(position1 + offset, Color.White, position1 - Engine.player.currentRoom.center, Room.plateTexCoords[0]);
-                        vertices[index + 1] = new VertexPositionColorNormalTexture(position2 + offset, Color.White, position2 - Engine.player.currentRoom.center, Room.plateTexCoords[1]);
-                        vertices[index + 2] = new VertexPositionColorNormalTexture(position3 + offset, Color.White, position3 - Engine.player.currentRoom.center, Room.plateTexCoords[3]);
-                        vertices[index + 3] = new VertexPositionColorNormalTexture(position2 + offset, Color.White, position2 - Engine.player.currentRoom.center, Room.plateTexCoords[1]);
-                        vertices[index + 4] = new VertexPositionColorNormalTexture(position3 + offset, Color.White, position3 - Engine.player.currentRoom.center, Room.plateTexCoords[3]);
-                        vertices[index + 5] = new VertexPositionColorNormalTexture(position4 + offset, Color.White, position4 - Engine.player.currentRoom.center, Room.plateTexCoords[2]);
+                        vertices[index] = new VertexPositionColorNormalTexture(position1 + offset, Color.White, position1 - currentRoom.center, Room.plateTexCoords[0]);
+                        vertices[index + 1] = new VertexPositionColorNormalTexture(position2 + offset, Color.White, position2 - currentRoom.center, Room.plateTexCoords[1]);
+                        vertices[index + 2] = new VertexPositionColorNormalTexture(position3 + offset, Color.White, position3 - currentRoom.center, Room.plateTexCoords[3]);
+                        vertices[index + 3] = new VertexPositionColorNormalTexture(position2 + offset, Color.White, position2 - currentRoom.center, Room.plateTexCoords[1]);
+                        vertices[index + 4] = new VertexPositionColorNormalTexture(position3 + offset, Color.White, position3 - currentRoom.center, Room.plateTexCoords[3]);
+                        vertices[index + 5] = new VertexPositionColorNormalTexture(position4 + offset, Color.White, position4 - currentRoom.center, Room.plateTexCoords[2]);
                     }
                     else
                     {
                         Color bodyColor = Color.Red;
                         bodyColor.G = (Byte)(damageCooldown * 255 / damageCooldownMax);
 
-                        vertices[index] = new VertexPositionColorNormalTexture(position1, bodyColor, position1 - Engine.player.currentRoom.center, Room.plateTexCoords[0]);
-                        vertices[index + 1] = new VertexPositionColorNormalTexture(position2, bodyColor, position2 - Engine.player.currentRoom.center, Room.plateTexCoords[1]);
-                        vertices[index + 2] = new VertexPositionColorNormalTexture(position3, bodyColor, position3 - Engine.player.currentRoom.center, Room.plateTexCoords[3]);
-                        vertices[index + 3] = new VertexPositionColorNormalTexture(position2, bodyColor, position2 - Engine.player.currentRoom.center, Room.plateTexCoords[1]);
-                        vertices[index + 4] = new VertexPositionColorNormalTexture(position3, bodyColor, position3 - Engine.player.currentRoom.center, Room.plateTexCoords[3]);
-                        vertices[index + 5] = new VertexPositionColorNormalTexture(position4, bodyColor, position4 - Engine.player.currentRoom.center, Room.plateTexCoords[2]);
+                        vertices[index] = new VertexPositionColorNormalTexture(position1, bodyColor, position1 - currentRoom.center, Room.plateTexCoords[0]);
+                        vertices[index + 1] = new VertexPositionColorNormalTexture(position2, bodyColor, position2 - currentRoom.center, Room.plateTexCoords[1]);
+                        vertices[index + 2] = new VertexPositionColorNormalTexture(position3, bodyColor, position3 - currentRoom.center, Room.plateTexCoords[3]);
+                        vertices[index + 3] = new VertexPositionColorNormalTexture(position2, bodyColor, position2 - currentRoom.center, Room.plateTexCoords[1]);
+                        vertices[index + 4] = new VertexPositionColorNormalTexture(position3, bodyColor, position3 - currentRoom.center, Room.plateTexCoords[3]);
+                        vertices[index + 5] = new VertexPositionColorNormalTexture(position4, bodyColor, position4 - currentRoom.center, Room.plateTexCoords[2]);
                     }
 
                     index+=6;
@@ -263,14 +263,14 @@ namespace VexedCore
                vertices, 0, vertices.Count()/3, VertexPositionColorNormalTexture.VertexDeclaration);
         }
 
-        public void Render()
+        public void Render(Room currentRoom)
         {
-            DrawSphere(false);
-            DrawSphere(true);
+            DrawSphere(currentRoom,false);
+            DrawSphere(currentRoom, true);
             if(state == FaceState.Armored)
-                DrawNormalEyes();
+                DrawNormalEyes(currentRoom);
             else
-                DrawAngryEyes();
+                DrawAngryEyes(currentRoom);
         }
     }
 }

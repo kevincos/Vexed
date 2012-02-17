@@ -33,7 +33,8 @@ namespace VexedCore
         public bool nextBehavior = false;
         public bool behaviorStarted = false;
         public bool toggleOn = true;
-        public string id;        
+        public string id;
+        public float edgeMod = -1f;
 
         public bool refreshVertices = false;
 
@@ -70,7 +71,7 @@ namespace VexedCore
             foreach (Behavior b in e.behaviors)
             {
                 behaviors.Add(new Behavior(b));
-            }
+            }            
         }
 
         public Edge(VL.Edge xmlEdge, Vector3 normal)
@@ -209,12 +210,30 @@ namespace VexedCore
         {
             if (Engine.staticObjectsInitialized == false || baseTriangleList == null || refreshVertices == true || dynamic == true || properties.type == VL.EdgeType.ConveyorBelt)
             {
+                if (edgeMod < 0f)
+                {
+                    Vector3 edgeDir = start.position - end.position;
+                    edgeDir.Normalize();
+                    Vector3 edgeOutDir = Vector3.Cross(edgeDir, end.normal);
+                    edgeOutDir.Normalize();                    
+                    if (Vector3.Dot(edgeOutDir, Vector3.UnitX) > .75f || Vector3.Dot(edgeOutDir, Vector3.UnitX) < -.75f)
+                    {
+                        edgeMod = .001f;
+                    }
+                    else if (Vector3.Dot(edgeOutDir, Vector3.UnitZ) > .75f || Vector3.Dot(edgeOutDir, Vector3.UnitZ) < -.75f)
+                    {
+                        edgeMod = .002f;
+                    }
+                    else
+                        edgeMod = 0f;
+                }
+
                 baseTriangleList = new List<VertexPositionColorNormalTexture>();
             
                 if (properties.type == VL.EdgeType.Spikes)
                     currentRoom.AddSpikesToTriangleList(this, .5f, baseTriangleList);
                 else if (properties.type != VL.EdgeType.Normal)
-                    currentRoom.AddStripToTriangleList2(this, .5f, baseTriangleList);
+                    currentRoom.AddStripToTriangleList2(this, .5f + edgeMod, baseTriangleList);
 
                 baseTriangleArray = baseTriangleList.ToArray();
             }
@@ -225,6 +244,7 @@ namespace VexedCore
         {
             if (baseTriangleArray.Length > 0)
             {
+
                 if(properties.type == VL.EdgeType.Spikes)
                     Engine.playerTextureEffect.Texture = Edge.spikeEdge;
                 if(properties.type == VL.EdgeType.Ice)

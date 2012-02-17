@@ -797,7 +797,7 @@
       </Parameters>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\MonsterParts\spikeFace.xnb</Output>
-      <Time>2012-01-27T11:35:39.4269986-08:00</Time>
+      <Time>2012-02-14T14:46:54.50639-08:00</Time>
     </Item>
     <Item>
       <Source>MonsterParts\topArmor.png</Source>
@@ -1238,7 +1238,7 @@
       </Parameters>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Walls\lavahot_edge.xnb</Output>
-      <Time>2012-01-18T15:08:21.8237252-08:00</Time>
+      <Time>2012-02-16T11:54:01.2162233-08:00</Time>
     </Item>
     <Item>
       <Source>Walls\magnet_edge.png</Source>
@@ -5601,6 +5601,27 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decorations\wormhole.xnb</Output>
       <Time>2012-02-07T15:11:52.8479485-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decals\decal_apple.png</Source>
+      <Name>Decals\decal_apple</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decals\decal_apple.xnb</Output>
+      <Time>2012-02-14T14:13:54.1595366-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decorations\dec_appletree.png</Source>
+      <Name>Decorations\dec_appletree</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decorations\dec_appletree.xnb</Output>
+      <Time>2012-02-14T14:14:23.3622302-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

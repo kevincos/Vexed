@@ -139,6 +139,7 @@ namespace VexedCore
             return -d1Center.CompareTo(d2Center);
         }
     }
+   
 
     public class FakeShader
     {
@@ -157,7 +158,7 @@ namespace VexedCore
                 g += 2 * alt / 3;
                 b += 2 * alt / 3;
             }
-            if (Vector3.Dot(n,Vector3.UnitZ) > .95f || Vector3.Dot(n, -Vector3.UnitZ) < -.95f)
+            if (Vector3.Dot(n,Vector3.UnitZ) > .95f || Vector3.Dot(n, Vector3.UnitZ) < -.95f)
             {
                 r -= alt;
                 b -= alt;

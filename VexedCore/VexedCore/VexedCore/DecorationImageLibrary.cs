@@ -76,6 +76,7 @@ namespace VexedCore
 
             textureLibrary.Add(new DecorationTexture("dec_arrow", Content));
             textureLibrary.Add(new DecorationTexture("dec_tree", Content));
+            textureLibrary.Add(new DecorationTexture("dec_appletree", Content));
             textureLibrary.Add(new DecorationTexture("dec_watermeter", Content));
             
             textureLibrary.Add(new DecorationTexture("dec_waterpipes", Content));

@@ -60,7 +60,8 @@ namespace VL
         Empty,
         Arrow,
         Objective,
-        MapLabel
+        MapLabel,
+        Apple
     }
 
     //[Serializable]

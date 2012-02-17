@@ -63,7 +63,7 @@ namespace VexedCore
 
         public SaveGameText saveGameText;
 
-        public static bool soundEffectsEnabled = false;
+        public static bool soundEffectsEnabled = true;
         public static bool musicEnabled = false;
         public static bool justLoaded = false;
 
@@ -148,9 +148,9 @@ namespace VexedCore
             mapShellObjects = new List<TransparentSquare>();
             maxRoomDraw = new int[4];
             maxRoomDraw[0] = 1;
-            maxRoomDraw[1] = 10;
-            maxRoomDraw[2] = 12;
-            maxRoomDraw[3] = 18;
+            maxRoomDraw[1] = 6;
+            maxRoomDraw[2] = 9;
+            maxRoomDraw[3] = 14;
           
         }
 
@@ -238,23 +238,30 @@ namespace VexedCore
             }
 
             int currentAdjacentCount = Engine.player.currentRoom.CountAdjacentRooms(Engine.drawDepth);
+            
             foreach (Room r in roomList)
             {
                 r.adjacent = false;
             }
             int jumpAdjacentCount = 0;
             if(Engine.player.jumpRoom != null)
-                jumpAdjacentCount = Engine.player.currentRoom.CountAdjacentRooms(Engine.drawDepth);
+                jumpAdjacentCount = Engine.player.jumpRoom.CountAdjacentRooms(Engine.drawDepth);
             foreach (Room r in roomList)
             {
                 r.adjacent = false;
             }
             int effectiveCurrentDrawDepth = Engine.drawDepth;
             int effectiveJumpDrawDepth = Engine.drawDepth;
+
+
             if (currentAdjacentCount > maxRoomDraw[Engine.drawDepth])
                 effectiveCurrentDrawDepth--;
             if (jumpAdjacentCount > maxRoomDraw[Engine.drawDepth])
                 effectiveJumpDrawDepth--;
+            //if (Engine.player.jumpRoom == null)
+              //  effectiveJumpDrawDepth = 0;
+
+            int effectiveDrawDepth = Math.Min(effectiveCurrentDrawDepth, effectiveJumpDrawDepth);
             Engine.player.currentRoom.MarkAdjacentRooms(effectiveCurrentDrawDepth);
             if (Engine.player.jumpRoom != null)
                 Engine.player.jumpRoom.MarkAdjacentRooms(effectiveJumpDrawDepth);
@@ -312,13 +319,7 @@ namespace VexedCore
             {                    
                 r.Draw();
             }*/
-            foreach (Monster m in Engine.player.currentRoom.monsters)
-            {
-                if (m.moveType == VL.MovementType.FaceBoss)
-                {
-                    m.faceBoss.Render();
-                }
-            }
+            
 
 
             /*foreach (Room r in Engine.roomList)

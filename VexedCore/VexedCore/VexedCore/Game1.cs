@@ -188,6 +188,20 @@ namespace VexedCore
             Block.iceTexture = Content.Load<Texture2D>("Walls\\ice_wall");
             Block.crystalTexture = Content.Load<Texture2D>("Walls\\crystal_wall");
             Block.gearslotTexture = Content.Load<Texture2D>("Walls\\gearslot_wall");
+
+            Block.masterTextureList = new Texture2D[Block.maxWallTextureTypes];
+            Block.masterTextureList[(int)VL.WallType.Cargo] = Content.Load<Texture2D>("Walls\\cargo_wall");
+            Block.masterTextureList[(int)VL.WallType.Plate] = Content.Load<Texture2D>("Walls\\wall_texture");
+            Block.masterTextureList[(int)VL.WallType.Circuit] = Content.Load<Texture2D>("Walls\\circuit_wall");
+            Block.masterTextureList[(int)VL.WallType.Rock] = Content.Load<Texture2D>("Walls\\cracked_wall");
+            Block.masterTextureList[(int)VL.WallType.Vines] = Content.Load<Texture2D>("Walls\\vine_wall");
+            Block.masterTextureList[(int)VL.WallType.Cobblestone] = Content.Load<Texture2D>("Walls\\cobblestone_wall");
+            Block.masterTextureList[(int)VL.WallType.FancyPlate] = Content.Load<Texture2D>("Walls\\fancyPlate_wall");
+            Block.masterTextureList[(int)VL.WallType.Crate] = Content.Load<Texture2D>("Walls\\crate_wall");
+            Block.masterTextureList[(int)VL.WallType.Ice] = Content.Load<Texture2D>("Walls\\ice_wall");           
+            Block.masterTextureList[(int)VL.WallType.Crystal] = Content.Load<Texture2D>("Walls\\crystal_wall");
+            Block.masterTextureList[(int)VL.WallType.Gearslot] = Content.Load<Texture2D>("Walls\\gearslot_wall");
+            
             Edge.iceEdge = Content.Load<Texture2D>("Walls\\ice_edge");
             Edge.spikeEdge = Content.Load<Texture2D>("Walls\\spike_edge");
             Edge.magnetEdge = Content.Load<Texture2D>("Walls\\magnet_edge");

@@ -721,3 +721,5 @@ E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Player
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decorations\wormhole.xnb
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Dialog\dialog.xml
 E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decorations\powercube.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_apple.xnb
+E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decorations\dec_appletree.xnb

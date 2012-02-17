@@ -445,7 +445,7 @@ taking up an inventory slot.</string>
     <pause>true</pause>
 </DialogChunk>
 <DialogChunk>
-    <id>YouGotBlueey</id>
+    <id>YouGotBlueKey</id>
     <speaker>OldMan</speaker>
     <textList>
       <string>You got the Blue Access Codes!  </string>

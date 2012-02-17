@@ -231,11 +231,11 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Empty);
-            secondaryAbility = new Ability(AbilityType.Empty);
+            primaryAbility = new Ability(AbilityType.Laser);
+            secondaryAbility = new Ability(AbilityType.Booster);
             naturalShield = new Ability(AbilityType.Shield);
 
-            /*upgrades[(int)AbilityType.Laser] = true;
+            upgrades[(int)AbilityType.Laser] = true;
             upgrades[(int)AbilityType.Boots] = true;
             upgrades[(int)AbilityType.Empty] = true;
             upgrades[(int)AbilityType.WallJump] = true;
@@ -252,7 +252,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.Phase] = true;
             upgrades[(int)AbilityType.PermanentBlueKey] = true;
             upgrades[(int)AbilityType.PermanentRedKey] = true;
-            upgrades[(int)AbilityType.PermanentYellowKey] = true;*/
+            upgrades[(int)AbilityType.PermanentYellowKey] = true;
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }
@@ -1279,7 +1279,7 @@ namespace VexedCore
                                 upgrades[i] = true;
                         }
                         upgrades[(int)upgradeStationDoodad.abilityType] = true;
-                        upgradeStationDoodad.abilityType = AbilityType.Empty;
+                        upgradeStationDoodad.abilityType = AbilityType.Empty;                        
                     }
                     if (upgradeStationDoodad.type == VL.DoodadType.RedPowerStation)
                     {
@@ -1318,8 +1318,12 @@ namespace VexedCore
                 {
                     state = State.Normal;
                     upgradeTime = 0;
-                    if(upgradeStationDoodad.type == VL.DoodadType.UpgradeStation)
+                    if (upgradeStationDoodad.type == VL.DoodadType.UpgradeStation)
+                    {
                         DialogBox.SetDialog((new Ability(upgradeStationDoodad.originalAbilityType)).GetDialogId());
+                        upgradeStationDoodad.originalAbilityType = AbilityType.Empty;
+                        upgradeStationDoodad.alreadyUsed = true;
+                    }
                     if (upgradeStationDoodad.type == VL.DoodadType.RedPowerStation)
                         DialogBox.SetDialog("RedPowerStation");
                     if (upgradeStationDoodad.type == VL.DoodadType.BluePowerStation)
@@ -2246,7 +2250,13 @@ namespace VexedCore
 
                 playerEffect.Texture = Player.player_spinhook;
                 playerEffect.CurrentTechnique.Passes[0].Apply();
-
+                if (state == State.Jump || state == State.BridgeJump || state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
+                {
+                    for (int i = 0; i < textureTriangleList.Count(); i++)
+                    {
+                        hookArray[i].Position += jumpPosition - center.position;
+                    }
+                }
                 Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                     hookArray, 0, hookArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
             }
@@ -2271,6 +2281,7 @@ namespace VexedCore
                     {
                         List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();
                         List<Vertex> flameVertexList = new List<Vertex>();
+                        VertexPositionColorNormalTexture[] flameArray = null;
                         flameVertexList.Add(new Vertex(center.position, center.normal, +.8f*playerHalfHeight * up + 1.3f * right, center.direction));
                         flameVertexList.Add(new Vertex(center.position, center.normal, +.8f* playerHalfHeight * up - .1f * right, center.direction));
                         flameVertexList.Add(new Vertex(center.position, center.normal, -.6f * playerHalfHeight * up - .1f * right, center.direction));
@@ -2279,16 +2290,27 @@ namespace VexedCore
                         {
                             v.Update(currentRoom, 1);
                         }
+
                         currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Room.plateTexCoords, true);
+                        flameArray = jetFlameTriangleList.ToArray();
+                        if (state == State.Jump || state == State.BridgeJump || state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
+                        {
+                            for (int i = 0; i < textureTriangleList.Count(); i++)
+                            {
+                                flameArray[i].Position += jumpPosition - center.position;
+                            }
+                        }
+
                         playerEffect.Texture = Player.player_boosterthrust;
                         playerEffect.CurrentTechnique.Passes[0].Apply();
                         Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                            jetFlameTriangleList.ToArray(), 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                            flameArray, 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                     }
                     if (faceDirection > 0)
                     {
                         List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();
                         List<Vertex> flameVertexList = new List<Vertex>();
+                        VertexPositionColorNormalTexture[] flameArray = null;
                         flameVertexList.Add(new Vertex(center.position, center.normal, +.8f * playerHalfHeight * up + .1f * right, center.direction));
                         flameVertexList.Add(new Vertex(center.position, center.normal, +.8f * playerHalfHeight * up - 1.3f * right, center.direction));
                         flameVertexList.Add(new Vertex(center.position, center.normal, -.6f * playerHalfHeight * up - 1.3f * right, center.direction));
@@ -2298,10 +2320,20 @@ namespace VexedCore
                             v.Update(currentRoom, 1);
                         }
                         currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Room.plateTexCoords, false);
+
+                        flameArray = jetFlameTriangleList.ToArray();
+                        if (state == State.Jump || state == State.BridgeJump || state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
+                        {
+                            for (int i = 0; i < textureTriangleList.Count(); i++)
+                            {
+                                flameArray[i].Position += jumpPosition - center.position;
+                            }
+                        }
+
                         playerEffect.Texture = Player.player_boosterthrust;
                         playerEffect.CurrentTechnique.Passes[0].Apply();
                         Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                            jetFlameTriangleList.ToArray(), 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                            flameArray, 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                     }
                 }
             }
@@ -2345,6 +2377,7 @@ namespace VexedCore
                     {
                         List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();
                         List<Vertex> flameVertexList = new List<Vertex>();
+                        VertexPositionColorNormalTexture[] flameArray = null;
                         flameVertexList.Add(new Vertex(center.position, center.normal, -.3f * playerHalfHeight * up + .43f * right, center.direction));
                         flameVertexList.Add(new Vertex(center.position, center.normal, -.3f * playerHalfHeight * up - .17f * right, center.direction));
                         flameVertexList.Add(new Vertex(center.position, center.normal, -1.3f * playerHalfHeight * up - .17f * right, center.direction));
@@ -2354,15 +2387,25 @@ namespace VexedCore
                             v.Update(currentRoom, 1);
                         }
                         currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Room.plateTexCoords, true);
+
+                        flameArray = jetFlameTriangleList.ToArray();
+                        if (state == State.Jump || state == State.BridgeJump || state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
+                        {
+                            for (int i = 0; i < textureTriangleList.Count(); i++)
+                            {
+                                flameArray[i].Position += jumpPosition - center.position;
+                            }
+                        }
                         playerEffect.Texture = Player.player_jetpackthrust;
                         playerEffect.CurrentTechnique.Passes[0].Apply();
                         Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                            jetFlameTriangleList.ToArray(), 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                            flameArray, 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                     }
                     if (faceDirection >= 0)
                     {
                         List<VertexPositionColorNormalTexture> jetFlameTriangleList = new List<VertexPositionColorNormalTexture>();
                         List<Vertex> flameVertexList = new List<Vertex>();
+                        VertexPositionColorNormalTexture[] flameArray = null;
                         flameVertexList.Add(new Vertex(center.position, center.normal,-.3f * playerHalfHeight * up + .17f * right, center.direction));
                         flameVertexList.Add(new Vertex(center.position, center.normal, -.3f * playerHalfHeight * up - .43f * right, center.direction));
                         flameVertexList.Add(new Vertex(center.position, center.normal, -1.3f*playerHalfHeight * up -.43f * right, center.direction));
@@ -2372,10 +2415,19 @@ namespace VexedCore
                             v.Update(currentRoom, 1);
                         }
                         currentRoom.AddTextureToTriangleList(flameVertexList, Color.White, flameDepth, jetFlameTriangleList, Room.plateTexCoords, true);
+
+                        flameArray = jetFlameTriangleList.ToArray();
+                        if (state == State.Jump || state == State.BridgeJump || state == State.Tunnel || state == State.Phase || state == State.PhaseFail)
+                        {
+                            for (int i = 0; i < textureTriangleList.Count(); i++)
+                            {
+                                flameArray[i].Position += jumpPosition - center.position;
+                            }
+                        }
                         playerEffect.Texture = Player.player_jetpackthrust;
                         playerEffect.CurrentTechnique.Passes[0].Apply();
                         Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                            jetFlameTriangleList.ToArray(), 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                            flameArray, 0, jetFlameTriangleList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                     }
                 }
             }

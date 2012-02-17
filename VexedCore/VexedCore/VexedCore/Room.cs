@@ -95,11 +95,12 @@ namespace VexedCore
 
         public List<VertexPositionColorNormalTexture> dynamicFancyPlate;
         public List<VertexPositionColorNormalTexture> dynamicPlate;
-        public List<VertexPositionColorNormalTexture> dynamicBrick;
-
+        public List<VertexPositionColorNormalTexture> dynamicBrick;        
         public VertexPositionColorNormalTexture[] dynamicFancyPlateTriangleArray;
         public VertexPositionColorNormalTexture[] dynamicPlateTriangleArray;
         public VertexPositionColorNormalTexture[] dynamicBrickTriangleArray;
+        public List<VertexPositionColorNormalTexture> []masterBlockTextures = new List<VertexPositionColorNormalTexture>[11];
+        public VertexPositionColorNormalTexture[][] masterBlockArray;
 
         public VertexPositionColorNormalTexture[] fancyPlateTriangleArray;
         public VertexPositionColorNormalTexture[] plateTriangleArray;
@@ -332,6 +333,7 @@ namespace VexedCore
                 {
                     d.active = false;
                     d.breakTime = 0;
+                    d.refreshVertexData = true;
                 }
                 if (d.type == VL.DoodadType.PowerPlug)
                     d.active = false;
@@ -384,6 +386,7 @@ namespace VexedCore
                             if (d.freeMotion)
                             {
                                 d.position.Update(this, gameTime);
+                                d.refreshBoundingBox = true;
                                 Vector3 gravityDirection = Engine.player.center.direction;
                                 if (d.position.normal == Engine.player.center.direction)
                                 {
@@ -401,7 +404,7 @@ namespace VexedCore
 
                                 float upMagnitude = Vector3.Dot(up, d.position.velocity);
                                 float rightMagnitude = Vector3.Dot(right, d.position.velocity);
-                                float maxSpeed = Engine.player.maxVertSpeed / 2;
+                                float maxSpeed = .009f;
                                 if (upMagnitude > maxSpeed)
                                 {
                                     d.position.velocity -= (upMagnitude - maxSpeed) * up;
@@ -1050,12 +1053,12 @@ namespace VexedCore
             
             Color spikeColor = new Color(180,180,180);
 
-            if (e.start.velocity != Vector3.Zero)
-            {
-                AddStripToTriangleList(e, depth, triangeList);
-            }
-            else
-            {
+            //if (e.start.velocity != Vector3.Zero)
+            //{
+              //  AddStripToTriangleList(e, depth, triangeList);
+            //}
+            //else
+            //{
                 Color shadedColor = Color.Blue;
                 for (int i = 0; i < numSpikes; i++)
                 {
@@ -1110,7 +1113,7 @@ namespace VexedCore
                         triangeList.Add(GenerateTexturedVertex(spikePoint, blankTexCoords[2], shadedColor, -edgeDir, -depth / 2));
                     }
                 }
-            }
+            //}
         }
 
         public void AddSingleBlockSideToTriangleList(Vertex v1, Vertex v2, Color c, float depth, List<Vector2> texCoords, List<VertexPositionColorNormalTexture> triangleList)
@@ -1637,6 +1640,17 @@ namespace VexedCore
         {
             if (fullRender)
             {
+                if (this == Engine.player.currentRoom || this == Engine.player.jumpRoom)
+                {
+                    foreach (Monster m in monsters)
+                    {
+                        if (m.moveType == VL.MovementType.FaceBoss)
+                        {
+                            m.Draw(this);
+                            m.faceBoss.Render(this);
+                        }
+                    }
+                }
                 List<DepthIndex> decorationIndexer = new List<DepthIndex>();
                 for (int i = 0; i < decorations.Count; i++)
                 {
@@ -1670,16 +1684,19 @@ namespace VexedCore
                     else if (d.type == DepthIndexType.Monster && this == Engine.player.currentRoom)
                     {
                         monsters[d.index].Draw(this);
-                        for (int i = 0; i < monsters[d.index].textureSlices.Count; i++)
+                        if (monsters[d.index].textureSlices != null)
                         {
-                            int index = i;
-                            if (Vector3.Dot(monsters[d.index].position.normal, Engine.cameraTarget - Engine.cameraPos) >= 0)
-                                index = monsters[d.index].textureSlices.Count - i - 1;
-                            Engine.playerTextureEffect.Texture = Monster.monsterTextures[(int)monsters[d.index].textureSlices[index].textureId];
-                            Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
-                            Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-                                monsters[d.index].textureSlices[index].vertexList.ToArray(), 0, monsters[d.index].textureSlices[index].vertexList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
-                        }
+                            for (int i = 0; i < monsters[d.index].textureSlices.Count; i++)
+                            {
+                                int index = i;
+                                if (Vector3.Dot(monsters[d.index].position.normal, Engine.cameraTarget - Engine.cameraPos) >= 0)
+                                    index = monsters[d.index].textureSlices.Count - i - 1;
+                                Engine.playerTextureEffect.Texture = Monster.monsterTextures[(int)monsters[d.index].textureSlices[index].textureId];
+                                Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                                Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                                    monsters[d.index].textureSlices[index].vertexList.ToArray(), 0, monsters[d.index].textureSlices[index].vertexList.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                            }
+                        }                        
                     }
                 }
             }
@@ -1901,7 +1918,7 @@ namespace VexedCore
                     }
                 }
 
-                if (Engine.player.stationFilter == false)
+                if (Engine.player.stationFilter == false && parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld))
                 {
                     if (stationDecal != VL.Decal.Empty)
                     {
@@ -2263,6 +2280,68 @@ namespace VexedCore
                     }
                     dynamicBrickTriangleArray = new VertexPositionColorNormalTexture[fancyBrickCount];
                 }
+                if (masterBlockArray == null)
+                {
+                    int[] arraySizes = new int[Block.maxWallTextureTypes];
+                    foreach (Block b in blocks)
+                    {
+                        if (b.scales)
+                        {
+                            // 54 per face, 18 per side, 180 per block
+                            if (b.wallType == VL.WallType.Plate || b.wallType == VL.WallType.Crate || b.wallType == VL.WallType.Cargo)
+                            {
+                                b.cacheOffset[(int)VL.WallType.Plate] = arraySizes[(int)b.wallType];
+                                b.cacheOffset[(int)VL.WallType.FancyPlate] = arraySizes[(int)VL.WallType.FancyPlate];
+                                arraySizes[(int)VL.WallType.Plate] += 108;
+                                arraySizes[(int)VL.WallType.FancyPlate] += 72;
+                                
+                            }
+                            else if (b.wallType == VL.WallType.Gearslot)
+                            {
+                                b.cacheOffset[(int)VL.WallType.FancyPlate] = arraySizes[(int)VL.WallType.FancyPlate];
+                                b.cacheOffset[(int)VL.WallType.Gearslot] = arraySizes[(int)VL.WallType.Gearslot];
+                                arraySizes[(int)VL.WallType.FancyPlate] += 108;
+                                arraySizes[(int)VL.WallType.Gearslot] += 72;
+                                
+                            }
+                            else
+                            {
+                                b.cacheOffset[(int)b.wallType] = arraySizes[(int)b.wallType];
+                                arraySizes[(int)b.wallType] += 180;
+                                
+                            }
+                        }
+                        else
+                        {
+                            if (b.wallType == VL.WallType.Plate || b.wallType == VL.WallType.Crate || b.wallType == VL.WallType.Cargo)
+                            {
+
+                                b.cacheOffset[(int)b.wallType] = arraySizes[(int)b.wallType];
+                                b.cacheOffset[(int)VL.WallType.FancyPlate] = arraySizes[(int)VL.WallType.FancyPlate];
+                                arraySizes[(int)b.wallType] += 12;
+                                arraySizes[(int)VL.WallType.FancyPlate] += 24;
+                            }
+                            else if (b.wallType == VL.WallType.Gearslot)
+                            {                                
+                                b.cacheOffset[(int)VL.WallType.FancyPlate] = arraySizes[(int)VL.WallType.FancyPlate];
+                                b.cacheOffset[(int)b.wallType] = arraySizes[(int)b.wallType];
+                                arraySizes[(int)VL.WallType.FancyPlate] += 12;
+                                arraySizes[(int)b.wallType] += 24;
+                            }
+                            else
+                            {                                
+                                b.cacheOffset[(int)b.wallType] = arraySizes[(int)b.wallType];
+                                arraySizes[(int)b.wallType] += 36;
+                            }
+                        }
+                    }
+                    masterBlockArray = new VertexPositionColorNormalTexture[Block.maxWallTextureTypes][];
+                    for (int i = 0; i < Block.maxWallTextureTypes; i++)
+                    {
+                        masterBlockArray[i] = new VertexPositionColorNormalTexture[arraySizes[i]];
+                    }
+                }
+                
 
                 float cameraLineDistance = Vector3.Dot(center - Engine.player.center.position, Vector3.Normalize(Engine.player.cameraTarget - Engine.player.cameraPos));
 
@@ -2330,7 +2409,7 @@ namespace VexedCore
                         ringTriangleArray, 0, ringTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
 
-                if (fancyPlateTriangleArray.Count() > 0)
+                /*if (fancyPlateTriangleArray.Count() > 0)
                 {
                     Engine.playerTextureEffect.Texture = Block.fancyPlateTexture;
                     Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
@@ -2399,7 +2478,18 @@ namespace VexedCore
                     Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         crystalTriangleArray, 0, crystalTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                }*/
+                for (int i = 0; i < Block.maxWallTextureTypes; i++)
+                {
+                    if (masterBlockArray[i].Count() > 0)
+                    {
+                        Engine.playerTextureEffect.Texture = Block.masterTextureList[i];
+                        Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();
+                        Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
+                            masterBlockArray[i], 0, masterBlockArray[i].Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
+                    }
                 }
+
 
                 foreach (Block b in blocks)
                 {
@@ -2440,6 +2530,7 @@ namespace VexedCore
                     Game1.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
                         dynamicBrickTriangleArray, 0, dynamicBrickTriangleArray.Count() / 3, VertexPositionColorNormalTexture.VertexDeclaration);
                 }
+
 
                 foreach (Doodad d in doodads)
                 {

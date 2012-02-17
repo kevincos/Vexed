@@ -157,7 +157,8 @@ namespace VexedCore
                 Fill();
                 if ((currentState == AnimationState.RunLeft || currentState == AnimationState.RunRight || currentState == AnimationState.RunRightFiring || currentState == AnimationState.RunLeftFiring) && ((animationFrameQueue[0] - animationData[(int)currentState].animation_base) %2== 1))
                 {
-                    SoundFX.PlayFootstep();
+                    if(WorldMap.state == ZoomState.None)
+                        SoundFX.PlayFootstep();
                 }
 
                 animationFrameQueue.RemoveAt(0);

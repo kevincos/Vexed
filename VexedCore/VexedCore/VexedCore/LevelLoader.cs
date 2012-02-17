@@ -50,6 +50,8 @@ namespace VexedCore
                     newRoom.sectorID = newSector.id;
                     newRoom.friendlyName = xmlRoom.friendlyName;
                     newRoom.stationDecal = xmlRoom.decal;
+
+                    newRoom.explored = true;
                     foreach (VL.Face xmlFace in xmlRoom.faceList)
                     {
                         foreach (VL.Monster xmlMonster in xmlFace.monsters)
@@ -356,6 +358,10 @@ namespace VexedCore
                 {                    
                     d.currentRoom = r;
 
+                    if (d.type == VL.DoodadType.UpgradeStation && Engine.player.upgrades[(int)d.originalAbilityType] == true)
+                    {
+                        d.originalAbilityType = AbilityType.Empty;                        
+                    }
                     if (r == Engine.player.currentRoom && d.id == Engine.player.upgradeStationDoodadId)
                     {
                         Engine.player.upgradeStationDoodad = d;

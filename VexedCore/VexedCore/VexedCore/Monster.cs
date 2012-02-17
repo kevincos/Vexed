@@ -1821,14 +1821,14 @@ namespace VexedCore
             if (moveType == VL.MovementType.ChaseBoss || moveType == VL.MovementType.JetBoss || moveType == VL.MovementType.BattleBoss)
             {
                 List<Vertex> spikeShieldVertexList = new List<Vertex>();
-                Vector3 forward = Vector3.Cross(position.direction, position.normal);
-                float shieldOffset = halfWidth / 4f;
+                Vector3 forward = right / right.Length();
+                float shieldOffset = .25f * halfWidth;
                 if (rightFacing == false)
                     shieldOffset = -shieldOffset;
-                spikeShieldVertexList.Add(new Vertex(position.position, position.normal, armorScale*(up + right + shieldOffset * forward), position.direction));
-                spikeShieldVertexList.Add(new Vertex(position.position, position.normal, armorScale*(up + left + shieldOffset * forward), position.direction));
-                spikeShieldVertexList.Add(new Vertex(position.position, position.normal, armorScale*(down + left + shieldOffset * forward), position.direction));
-                spikeShieldVertexList.Add(new Vertex(position.position, position.normal, armorScale*(down + right + shieldOffset * forward), position.direction));
+                spikeShieldVertexList.Add(new Vertex(position.position, position.normal, armorScale * (up + right + shieldOffset * forward), position.direction));
+                spikeShieldVertexList.Add(new Vertex(position.position, position.normal, armorScale * (up + left + shieldOffset * forward), position.direction));
+                spikeShieldVertexList.Add(new Vertex(position.position, position.normal, armorScale * (down + left + shieldOffset * forward), position.direction));
+                spikeShieldVertexList.Add(new Vertex(position.position, position.normal, armorScale * (down + right + shieldOffset * forward), position.direction));
                 foreach (Vertex v in spikeShieldVertexList)
                 {
                     v.Update(Engine.player.currentRoom, 1);
@@ -1838,15 +1838,15 @@ namespace VexedCore
                 {
                     //r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.SpikeFace], Room.plateTexCoords, rightFacing);
                     //r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.SpikeFace], Room.plateTexCoords, rightFacing);
-                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + layer_armor, MonsterTextureId.SpikeFace, rightFacing));
-                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - layer_armor, MonsterTextureId.SpikeFace, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, spikeShieldVertexList, Color.White, depth + layer_armor, MonsterTextureId.SpikeFace, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, spikeShieldVertexList, Color.White, depth - layer_armor, MonsterTextureId.SpikeFace, rightFacing));
                 }
                 if (moveType == VL.MovementType.JetBoss || moveType == VL.MovementType.BattleBoss)
                 {
                     //r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth + layer_armor, r.monsterTriangles[(int)MonsterTextureId.Jet], Room.plateTexCoords, rightFacing);
                     //r.AddTextureToTriangleList(spikeShieldVertexList, Color.White, depth - layer_armor, r.monsterTriangles[(int)MonsterTextureId.Jet], Room.plateTexCoords, rightFacing);
-                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth + layer_armor, MonsterTextureId.Jet, rightFacing));
-                    textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, Color.White, depth - layer_armor, MonsterTextureId.Jet, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, spikeShieldVertexList, Color.White, depth + layer_armor, MonsterTextureId.Jet, rightFacing));
+                    textureSlices.Add(new MonsterTextureSlice(r, spikeShieldVertexList, Color.White, depth - layer_armor, MonsterTextureId.Jet, rightFacing));
                 }
 
             }
@@ -2062,15 +2062,15 @@ namespace VexedCore
                     {
                         //r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_innerTurretIn + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
                         //r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_innerTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
-                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.White, depth + layer_innerTurretIn + bossAdjustment, MonsterTextureId.StandardTurret, true));
-                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.White, depth + layer_innerTurretOut + bossAdjustment, MonsterTextureId.StandardTurret, true));
+                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.Gray, depth + layer_innerTurretIn + bossAdjustment, MonsterTextureId.StandardTurret, true));
+                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.Gray, depth + layer_innerTurretOut + bossAdjustment, MonsterTextureId.StandardTurret, true));
                     }
                     else if (g.baseType == BaseType.Standard)
                     {
                         //r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_standardTurretIn + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
                         //r.AddTextureToTriangleList(gunBaseVertexList, Color.Gray, depth + layer_standardTurretOut + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.StandardTurret], Room.plateTexCoords, true);
-                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.White, depth + layer_standardTurretIn + bossAdjustment, MonsterTextureId.StandardTurret, true));
-                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.White, depth + layer_standardTurretOut + bossAdjustment, MonsterTextureId.StandardTurret, true));
+                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.Gray, depth + layer_standardTurretIn + bossAdjustment, MonsterTextureId.StandardTurret, true));
+                        textureSlices.Add(new MonsterTextureSlice(r, gunBaseVertexList, Color.Gray, depth + layer_standardTurretOut + bossAdjustment, MonsterTextureId.StandardTurret, true));
                     }
                 }
             }

@@ -523,3 +523,5 @@ Content\Decorations\dec_winebarrels.xnb
 Content\Decorations\dec_winerack.xnb
 Content\Decorations\hologram_finalboss.xnb
 Content\Decorations\wormhole.xnb
+Content\Decals\decal_apple.xnb
+Content\Decorations\dec_appletree.xnb
