@@ -216,9 +216,25 @@ namespace VexedCore
             stage = 0;
             lifeTime = 0;
             animationTime = 0;
+            state = BoxState.Appear;                        
+        }
+
+        public static void SetCustomDialog(String message)
+        {
+            currentDialog = new DialogChunk();
+            currentDialog.pause = false;
+            currentDialog.textList = new List<string>();
+            currentDialog.textList.Add(message);
+            currentDialog.FitToBox();
+            currentDialog.speaker = SpeakerId.OldMan;
+            currentDialog.id = "Custom";
+            if (currentDialog.pause == true)
+                Engine.player.state = State.Dialog;
+
+            stage = 0;
+            lifeTime = 0;
+            animationTime = 0;
             state = BoxState.Appear;
-            
-            
         }
 
         public static SpeakerId GetSpeaker(String id)

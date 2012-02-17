@@ -284,6 +284,7 @@ namespace VexedCore
             MusicControl.intro = Content.Load<Song>("Music\\IntroMusic");
             MusicControl.death = Content.Load<Song>("Music\\DeathMusic");
 
+            ObjectiveControl.InitObjectiveControl();
 
             LevelLoader.Load("LevelData\\world");
             LevelLoader.QuickSave(true);

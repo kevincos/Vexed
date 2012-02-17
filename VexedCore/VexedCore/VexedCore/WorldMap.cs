@@ -21,7 +21,8 @@ namespace VexedCore
         ZoomToWorld,
         ZoomFromWorld,
         World,
-        Inventory
+        Inventory,
+        Objectives
     }
 
     public class DirectionalMapping
@@ -54,12 +55,11 @@ namespace VexedCore
         public static Vector3 sectorCameraUp;
         public static Vector3 playerCameraTarget;
         public static Vector3 playerCameraUp;
-        public static Vector3 inventoryCameraTarget;
-        public static Vector3 inventoryCameraUp;
-
+        
         public static float roomZoomThreshold = 240f;
 
         public static int selectedInventory = 0;
+        public static int selectedObjective = 0;
         
 
         public static bool warp = false;
@@ -487,6 +487,40 @@ namespace VexedCore
                 }
                 
             }
+
+            if (state == ZoomState.Objectives && (Keyboard.GetState().IsKeyDown(Keys.Down) || Controls.LeftStick().Y < -.1f))
+            {
+                SoundFX.MapSelect();
+                resultCooldown = 100;
+                selectedObjective++;
+                selectedObjective %= ObjectiveControl.objectives.Count;
+            }
+            if (state == ZoomState.Objectives && (Keyboard.GetState().IsKeyDown(Keys.Up) || Controls.LeftStick().Y > .1f))
+            {
+                SoundFX.MapSelect();
+                resultCooldown = 100;
+                selectedObjective--;
+                if (selectedObjective < 0)
+                    selectedObjective += ObjectiveControl.objectives.Count;
+            }
+            if (state == ZoomState.Objectives && (Mouse.GetState().LeftButton == ButtonState.Pressed))
+            {
+                int drawOffset = 5;
+                int increment = MapHud.objectiveListIncrement;
+                for (int i = 0; i < ObjectiveControl.objectives.Count; i++)
+                {
+                    if (Math.Abs(Mouse.GetState().Y - (MapHud.objectiveListTop + drawOffset * increment + increment / 2)) < increment / 2 && Mouse.GetState().X > MapHud.objectiveListLeft && Mouse.GetState().X < MapHud.objectiveListLeft + MapHud.objectiveListWidth)
+                    {
+                        if (selectedObjective != i)
+                        {
+                            selectedObjective = i;
+                            SoundFX.MapSelect();
+                        }
+                    }
+                    drawOffset += 1;
+                }
+
+            }
             if (warp == true && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || Keyboard.GetState().IsKeyDown(Keys.M) || Keyboard.GetState().IsKeyDown(Keys.Space) || Keyboard.GetState().IsKeyDown(Keys.Enter) ||  GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && WorldMap.state == ZoomState.Sector)
             {
                 bool validWarpTarget = false;
@@ -545,9 +579,21 @@ namespace VexedCore
                 SoundFX.InventoryWhoosh();
                 WorldMap.state = ZoomState.Sector;
                 resultCooldown = 150;
-
             }
-            else if ((zoomToPlayer == true || Keyboard.GetState().IsKeyDown(Keys.Space) || Keyboard.GetState().IsKeyDown(Keys.M) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A) || Keyboard.GetState().IsKeyDown(Keys.OemPlus) || rightScreenChange || Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder)) && WorldMap.state == ZoomState.World)
+            else if (warp == false && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder) || rightScreenChange || Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets)) && WorldMap.state == ZoomState.Objectives)
+            {
+                SoundFX.InventoryWhoosh();
+                WorldMap.state = ZoomState.World;
+                resultCooldown = 150;
+            }
+            else if (warp == false && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.LeftShoulder) || leftSreenChange || Keyboard.GetState().IsKeyDown(Keys.OemOpenBrackets)) && WorldMap.state == ZoomState.World)
+            {
+                SoundFX.InventoryWhoosh();
+                WorldMap.state = ZoomState.Objectives;
+                resultCooldown = 150;
+            }
+
+            else if ((zoomToPlayer == true || Keyboard.GetState().IsKeyDown(Keys.Space) || Keyboard.GetState().IsKeyDown(Keys.M) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A) || Keyboard.GetState().IsKeyDown(Keys.OemPlus) || rightScreenChange || Keyboard.GetState().IsKeyDown(Keys.OemCloseBrackets) || GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.RightShoulder)) && (WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.Objectives))
             {
                 if(Keyboard.GetState().IsKeyDown(Keys.M) || zoomToPlayer == true)
                 {

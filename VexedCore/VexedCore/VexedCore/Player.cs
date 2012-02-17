@@ -203,10 +203,10 @@ namespace VexedCore
 
         public bool objectiveFilter = false;
         public bool stationFilter = false;
-        public bool itemFilter = false;
+        public bool itemFilter = true;
         public bool saveFilter = false;
-        public bool healthFilter = false;
-        public bool warpFilter = false;
+        public bool healthFilter = true;
+        public bool warpFilter = true;
 
         public Vector2 cameraAngle;
         public Vector2 targetCameraAngle;
@@ -231,11 +231,11 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Laser);
-            secondaryAbility = new Ability(AbilityType.Booster);
+            primaryAbility = new Ability(AbilityType.Empty);
+            secondaryAbility = new Ability(AbilityType.Empty);
             naturalShield = new Ability(AbilityType.Shield);
 
-            upgrades[(int)AbilityType.Laser] = true;
+            /*upgrades[(int)AbilityType.Laser] = true;
             upgrades[(int)AbilityType.Boots] = true;
             upgrades[(int)AbilityType.Empty] = true;
             upgrades[(int)AbilityType.WallJump] = true;
@@ -252,7 +252,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.Phase] = true;
             upgrades[(int)AbilityType.PermanentBlueKey] = true;
             upgrades[(int)AbilityType.PermanentRedKey] = true;
-            upgrades[(int)AbilityType.PermanentYellowKey] = true;
+            upgrades[(int)AbilityType.PermanentYellowKey] = true;*/
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }
@@ -284,6 +284,7 @@ namespace VexedCore
             redOrbsGoal = p.redOrbsGoal;
             orbsCollected = p.orbsCollected;
             weaponSwitchCooldown = p.weaponSwitchCooldown;
+            currentObjective = p.currentObjective;
 
             healthFilter = p.healthFilter;
             itemFilter = p.itemFilter;
@@ -1325,7 +1326,12 @@ namespace VexedCore
                         upgradeStationDoodad.alreadyUsed = true;
                     }
                     if (upgradeStationDoodad.type == VL.DoodadType.RedPowerStation)
-                        DialogBox.SetDialog("RedPowerStation");
+                    {
+                        if(redOrbsCollected!=0)
+                            DialogBox.SetDialog("RedPowerStation");
+                        else
+                            DialogBox.SetDialog("RedPowerStationFull");
+                    }
                     if (upgradeStationDoodad.type == VL.DoodadType.BluePowerStation)
                         DialogBox.SetDialog("BluePowerStation");
                     
@@ -1568,6 +1574,11 @@ namespace VexedCore
                             {
                                 itemStation = d;
                             }
+                            else if (Game1.controller.XButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == false)
+                            {
+                                SoundFX.EquipError();
+                                d.cooldown = d.maxCooldown;
+                            }
                             stationPresent = true;
                         }
                     }
@@ -1623,6 +1634,11 @@ namespace VexedCore
                             if (Game1.controller.YButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == true)
                             {
                                 itemStation = d;
+                            }
+                            else if (Game1.controller.YButton.NewPressed && d.cooldown == 0 && upgrades[(int)d.abilityType] == false)
+                            {
+                                SoundFX.EquipError();
+                                d.cooldown = d.maxCooldown;
                             }
                             stationPresent = true;
                         }

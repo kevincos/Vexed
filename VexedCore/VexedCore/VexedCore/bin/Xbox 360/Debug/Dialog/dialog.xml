@@ -56,6 +56,20 @@ several of these to increase your health.</string>
   </DialogChunk>
 
   <DialogChunk>
+    <id>RedPowerStationFull</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>
+        You've collected enough Health Cubes to increase your health bar.
+      </string>
+      <string>
+        Collect more to increase your health even more.
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
+  <DialogChunk>
     <id>BluePowerStation</id>
     <speaker>OldMan</speaker>
     <textList>
@@ -875,6 +889,8 @@ laser-proof armor!</string>
     </textList>
     <pause>false</pause>
   </DialogChunk>
+
+ 
 
 
 

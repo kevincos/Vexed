@@ -153,6 +153,8 @@ namespace VexedCore
                     return 0;
                 if (type == AbilityType.SpinHook)
                     return 100;
+                if (type == AbilityType.Missile)
+                    return 400;
                 return 200;
             }
         }

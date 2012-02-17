@@ -336,7 +336,7 @@ namespace VexedCore
             #endregion
 
             FixDoodads(Engine.roomList);
-
+            ObjectiveControl.InitObjectiveControl();
             QuickSave();
         }
 
@@ -703,6 +703,7 @@ namespace VexedCore
             }
             FixDoodads(Engine.roomList);
             Hud.ResetHud();
+            ObjectiveControl.InitObjectiveControl();
             Engine.justLoaded = true;
         }
     }

@@ -25,16 +25,20 @@ namespace VexedCore
         public static Texture2D inventoryListMonitor;
 
         public static List<int> inventoryIndexList;
+        public static List<int> objectiveIndexList;
 
         public static bool hiddenFrame = true;
         public static bool hiddenMap = true;
         public static bool hiddenInventory = true;
+        public static bool hiddenObjective = true;
         public static int hiddenFrameOffsetTime = 0;
         public static int hiddenFrameMaxOffsetTime = 1000; 
         public static int hiddenMapOffsetTime = 0;
         public static int hiddenMapMaxOffsetTime = 1000;
         public static int hiddenInventoryOffsetTime = 1200;
         public static int hiddenInventoryMaxOffsetTime = 1200;
+        public static int hiddenObjectiveOffsetTime = 1200;
+        public static int hiddenObjectiveMaxOffsetTime = 1200;
         public static int filterCooldown;
 
         public static int inventoryListIncrement = 0;
@@ -42,6 +46,14 @@ namespace VexedCore
         public static int inventoryListBottom;
         public static int inventoryListLeft;
         public static int inventoryListWidth;
+
+        public static int objectiveListIncrement = 0;
+        public static int objectiveListTop;
+        public static int objectiveListBottom;
+        public static int objectiveListLeft;
+        public static int objectiveListWidth;
+
+
         public static int hudLeftSide;
         public static int hudRightSide;
         public static int hudSideWidth;
@@ -155,6 +167,18 @@ namespace VexedCore
             int inventoryDataBottom = Game1.titleSafeRect.Bottom + hiddenInventoryOffsetTime;
             int inventoryDataLeft = objectiveLeft;
             int inventoryDataRight = rightEdge;
+            
+            // Objective Monitors
+            objectiveListTop = Game1.titleSafeRect.Top + hiddenObjectiveOffsetTime;
+            objectiveListBottom = Game1.titleSafeRect.Bottom + hiddenObjectiveOffsetTime;
+            objectiveListLeft = Game1.titleSafeRect.Center.X - w / 2 - hudSideWidth;
+            objectiveListWidth = w / 2 + hudSideWidth;
+
+            int objectiveDataTop = Game1.titleSafeRect.Top + objectiveMonitorHeight + hiddenObjectiveOffsetTime;
+            int objectiveDataBottom = Game1.titleSafeRect.Bottom + hiddenObjectiveOffsetTime;
+            int objectiveDataLeft = objectiveLeft;
+            int objectiveDataRight = rightEdge - hudSideWidth;
+
 
             
 
@@ -162,8 +186,12 @@ namespace VexedCore
             Engine.spriteBatch.Draw(hudLeft, new Rectangle(hudLeftSide, topEdge, hudSideWidth, bottomEdge - topEdge), Color.White);
             Engine.spriteBatch.Draw(hudRight, new Rectangle(hudRightSide, topEdge, hudSideWidth, bottomEdge - topEdge), Color.White);
 
+
             Engine.spriteBatch.Draw(inventoryListMonitor, new Rectangle(inventoryListLeft, inventoryListTop, inventoryListWidth, inventoryListBottom - inventoryListTop), Color.White);
             Engine.spriteBatch.Draw(inventoryDataMonitor, new Rectangle(inventoryDataLeft, inventoryDataTop, inventoryDataRight - inventoryDataLeft, inventoryDataBottom - inventoryDataTop), Color.White);
+
+            Engine.spriteBatch.Draw(inventoryListMonitor, new Rectangle(objectiveListLeft, objectiveListTop, objectiveListWidth, objectiveListBottom - objectiveListTop), Color.White);
+            Engine.spriteBatch.Draw(inventoryDataMonitor, new Rectangle(objectiveDataLeft, objectiveDataTop, objectiveDataRight - objectiveDataLeft, objectiveDataBottom - objectiveDataTop), Color.White);
 
 
             if (WorldMap.warp == false)
@@ -178,11 +206,11 @@ namespace VexedCore
                 {
                     leftArrowColor = Color.Yellow;
                 }
-                if (WorldMap.state == ZoomState.Sector || WorldMap.state == ZoomState.Inventory)
+                if (WorldMap.state == ZoomState.Sector || WorldMap.state == ZoomState.Inventory || WorldMap.state == ZoomState.World)
                 {
                     Engine.spriteBatch.Draw(leftArrow, new Rectangle(hudLeftSide, topEdge, hudSideWidth, bottomEdge - topEdge), leftArrowColor);
                 }
-                if (WorldMap.state == ZoomState.Sector || WorldMap.state == ZoomState.World)
+                if (WorldMap.state == ZoomState.Sector || WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.Objectives)
                 {
                     Engine.spriteBatch.Draw(rightArrow, new Rectangle(hudRightSide, topEdge, hudSideWidth, bottomEdge - topEdge), rightArrowColor);
                 }
@@ -307,6 +335,40 @@ namespace VexedCore
 
             }
 
+            if (WorldMap.state == ZoomState.Objectives)
+            {
+                int drawOffset = 5;
+                objectiveListIncrement = (objectiveListBottom - objectiveListTop) / (28);
+                int increment = objectiveListIncrement;
+
+                Engine.spriteBatch.DrawString(spriteFont, "Objectives", new Vector2(objectiveListLeft + .167f * w, objectiveListTop + 4 * increment), Color.YellowGreen);
+
+                for (int i = 0; i < ObjectiveControl.objectives.Count; i++)
+                {
+                    if (WorldMap.selectedObjective == i)
+                    {
+                        Engine.spriteBatch.DrawString(spriteFont, "X", new Vector2(objectiveListLeft + .167f * w, objectiveListTop + increment * drawOffset), Color.YellowGreen);
+
+                        if(Engine.player.currentObjective >= i)
+                        {
+                            Engine.spriteBatch.DrawString(spriteFont, ObjectiveControl.objectives[i].shorttext, new Vector2(objectiveDataLeft + .01f * w, objectiveDataTop + .12f * h), Color.YellowGreen);
+                            Engine.spriteBatch.DrawString(spriteFont, DialogChunk.TextFit(ObjectiveControl.objectives[i].longtext, objectiveDataRight - objectiveDataLeft - .12f * h, spriteFont), new Vector2(objectiveDataLeft + .01f * w, objectiveDataTop + .15f * w), Color.YellowGreen);
+                        }
+
+                    }
+                    if (i <= Engine.player.currentObjective == true)
+                    {
+                        Engine.spriteBatch.DrawString(spriteFont, "  " + ObjectiveControl.objectives[i].shorttext, new Vector2(objectiveListLeft + .180f * w, objectiveListTop + increment * drawOffset), Color.YellowGreen);
+                    }
+                    else
+                    {
+                        Engine.spriteBatch.DrawString(spriteFont, "  ???", new Vector2(objectiveListLeft + .180f * w, objectiveListTop + increment * drawOffset), Color.YellowGreen);
+                    }
+                    drawOffset++;
+                }
+
+            }
+
             if (WorldMap.state != ZoomState.None)
             {
                 Engine.spriteBatch.DrawString(spriteFont, "Current Objective: ", new Vector2(objectiveLeft + .037f * w, objectiveTop + .037f * h), Color.YellowGreen);
@@ -332,6 +394,16 @@ namespace VexedCore
             {
                 hiddenInventory = true;
             }
+            if (WorldMap.state == ZoomState.Objectives)
+            {
+                hiddenObjective = false;
+            }
+            else
+            {
+                hiddenObjective = true;
+            }
+
+
             if (hiddenMap && hiddenMapOffsetTime < hiddenMapMaxOffsetTime)
             {
                 hiddenMapOffsetTime += gameTime;
@@ -352,6 +424,17 @@ namespace VexedCore
             {
                 hiddenInventoryOffsetTime -= gameTime;
                 if (hiddenInventoryOffsetTime < 0) hiddenInventoryOffsetTime = 0;
+            }
+
+            if (hiddenObjective && hiddenObjectiveOffsetTime < hiddenObjectiveMaxOffsetTime)
+            {
+                hiddenObjectiveOffsetTime += gameTime;
+                if (hiddenObjectiveOffsetTime > hiddenObjectiveMaxOffsetTime) hiddenObjectiveOffsetTime = hiddenObjectiveMaxOffsetTime;
+            }
+            if (hiddenObjective == false && hiddenObjectiveOffsetTime > 0)
+            {
+                hiddenObjectiveOffsetTime -= gameTime;
+                if (hiddenObjectiveOffsetTime < 0) hiddenObjectiveOffsetTime = 0;
             }
 
             if (hiddenFrame && hiddenFrameOffsetTime < hiddenFrameMaxOffsetTime)

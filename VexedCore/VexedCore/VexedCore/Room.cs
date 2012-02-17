@@ -1856,7 +1856,7 @@ namespace VexedCore
                 iconDistance = 5f;
                 iconSize = 3f + ObjectiveControl.oscillate * 3f / ObjectiveControl.maxOscillate;
             }            
-            if (WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomFromWorld || WorldMap.state == ZoomState.ZoomToWorld)
+            if (WorldMap.state == ZoomState.Objectives || WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomFromWorld || WorldMap.state == ZoomState.ZoomToWorld)
             {
                 iconDistance *= 1f * (3 * WorldMap.worldZoomLevel);
                 iconSize *= 1f + (2 * WorldMap.worldZoomLevel);
@@ -1904,7 +1904,7 @@ namespace VexedCore
                 cameraRight.Normalize();
 
                 // Objectives
-                if (parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] || WorldMap.state == ZoomState.World)
+                if (parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] || WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.Objectives)
                 {
                     if (Engine.player.currentRoom == this)
                     {
@@ -1918,7 +1918,7 @@ namespace VexedCore
                     }
                 }
 
-                if (Engine.player.stationFilter == false && parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld))
+                if (Engine.player.stationFilter == false && parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld || WorldMap.state == ZoomState.Objectives))
                 {
                     if (stationDecal != VL.Decal.Empty)
                     {
@@ -1926,7 +1926,7 @@ namespace VexedCore
                         DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)stationDecal], new Vertex(center + size/2, Engine.player.center.normal, Vector3.Zero, cameraUp), false, 5f, Color.White);
                     }
                 }
-                if (explored == true && parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld))
+                if (explored == true && parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld || WorldMap.state == ZoomState.Objectives))
                 {
                     foreach (Doodad d in doodads)
                     {
@@ -2100,7 +2100,7 @@ namespace VexedCore
             if (WorldMap.state == ZoomState.None)
                 return new List<TransparentSquare>();
             Color shellColor = blockColor;
-            if (parentSector != Engine.sectorList[WorldMap.selectedSectorIndex] && WorldMap.state != ZoomState.None && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld))
+            if (parentSector != Engine.sectorList[WorldMap.selectedSectorIndex] && WorldMap.state != ZoomState.None && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld || WorldMap.state == ZoomState.Objectives))
             {
                 return new List<TransparentSquare>();
             }
@@ -2112,7 +2112,7 @@ namespace VexedCore
                 shellColor.G = (Byte)(shellColor.G * WorldMap.zoomLevel);
                 shellColor.B = (Byte)(shellColor.B * WorldMap.zoomLevel);
             }
-            else if (highlight == true && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld))
+            else if (highlight == true && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld || WorldMap.state == ZoomState.Objectives))
             {
                 shellColor.A = (Byte)(200 * WorldMap.zoomLevel / 3);
                 shellColor.R = (Byte)(shellColor.R * WorldMap.zoomLevel / 3);
