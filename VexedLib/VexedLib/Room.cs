@@ -88,7 +88,9 @@ namespace VL
         Ice,
         Magnet,
         Furnace,
-        Oil
+        Oil,
+        Lava,
+        Radiation
     }
 
     //[Serializable]

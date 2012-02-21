@@ -5964,9 +5964,36 @@
       <Name>Decals\decal_oil</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decals\decal_oil.xnb</Output>
       <Time>2012-02-21T10:02:36.4651593-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decals\decal_lava.png</Source>
+      <Name>Decals\decal_lava</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decals\decal_lava.xnb</Output>
+      <Time>2012-02-21T10:18:58.3461051-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decals\decal_radiation.png</Source>
+      <Name>Decals\decal_radiation</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decals\decal_radiation.xnb</Output>
+      <Time>2012-02-21T13:26:59.0603486-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

@@ -117,7 +117,7 @@ namespace VexedCore
                 properties.primaryValue = currentBehavior.primaryValue;
                 properties.secondaryValue = currentBehavior.secondaryValue;
                 refreshVertices = true;
-                currentTime = gameTime;
+                currentTime -= currentBehavior.offSet;
                 behaviorStarted = true;
                 nextBehavior = false;
             }
@@ -134,8 +134,7 @@ namespace VexedCore
                 }
                 properties.primaryValue = currentBehavior.primaryValue;
                 properties.secondaryValue = currentBehavior.secondaryValue;
-                refreshVertices = true;
-                currentTime = 0;
+                refreshVertices = true;                
                 nextBehavior = false;
                 return gameTime;
             }
@@ -144,12 +143,13 @@ namespace VexedCore
             {
                 if (currentBehavior.duration != 0 && currentTime > currentBehavior.duration)
                 {
+                    currentTime -= currentBehavior.duration;
                     nextBehavior = true;
                     return currentBehavior.duration - (currentTime - gameTime);
                 }
                 if (currentBehavior.period != 0 && currentTime > currentBehavior.period)
                 {
-                    currentTime = 0;
+                    currentTime -= currentBehavior.period;
                     toggleOn = !toggleOn;
                     if (!toggleOn)
                     {

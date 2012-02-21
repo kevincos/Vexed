@@ -148,7 +148,7 @@ namespace VexedCore
         public static void InitDecalTextures(ContentManager Content)
         {
             decalTextures = new List<Texture2D>();
-            for (int i = 0; i < 80; i++)
+            for (int i = 0; i < 82; i++)
             {
                 decalTextures.Add(null);
             }
@@ -232,6 +232,8 @@ namespace VexedCore
             decalTextures[(int)VL.Decal.Magnet] = Content.Load<Texture2D>("Decals\\decal_magnet");
             decalTextures[(int)VL.Decal.Furnace] = Content.Load<Texture2D>("Decals\\decal_furnace");
             decalTextures[(int)VL.Decal.Oil] = Content.Load<Texture2D>("Decals\\decal_oil");
+            decalTextures[(int)VL.Decal.Lava] = Content.Load<Texture2D>("Decals\\decal_lava");
+            decalTextures[(int)VL.Decal.Radiation] = Content.Load<Texture2D>("Decals\\decal_radiation");
 
         }
 
@@ -2296,6 +2298,7 @@ namespace VexedCore
         {
             if (currentBehavior == null)
                 return 0;
+            currentTime += gameTime;
             if (behaviorStarted == false && currentTime > currentBehavior.offSet)
             {
                 //properties.primaryValue = currentBehavior.primaryValue;
@@ -2304,7 +2307,7 @@ namespace VexedCore
                     Activate();
                 else
                     Deactivate();
-                currentTime = gameTime;
+                currentTime -= currentBehavior.offSet;
                 behaviorStarted = true;
                 nextBehavior = false;
             }
@@ -2327,22 +2330,21 @@ namespace VexedCore
                     Activate();
                 else
                     Deactivate();
-
-                currentTime = 0;
+                
                 nextBehavior = false;
                 return gameTime;
-            }
-            currentTime += gameTime;
+            }            
             if (behaviorStarted)
             {
                 if (currentBehavior.duration != 0 && currentTime > currentBehavior.duration)
                 {
                     nextBehavior = true;
+                    currentTime -= currentBehavior.duration;
                     return currentBehavior.duration - (currentTime - gameTime);
                 }
                 if (currentBehavior.period != 0 && currentTime > currentBehavior.period)
                 {
-                    currentTime = 0;
+                    currentTime -= currentBehavior.period;
                     if (toggleOn)                    
                         Deactivate();                    
                     else

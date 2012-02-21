@@ -290,6 +290,7 @@ namespace VexedCore
             averagePosition = averagePosition / 4;
             if (currentBehavior == null)
                 return 0;
+            currentTime += gameTime;
             if (nextBehavior == true)
             {
 
@@ -322,16 +323,17 @@ namespace VexedCore
                         e.start.velocity = Vector3.Zero;
                         e.end.velocity = Vector3.Zero;
                     }
-                }
-                currentTime = gameTime;
+                }                
                 nextBehavior = false;
                 return gameTime;
-            }
-            currentTime += gameTime;
+            }            
             if (currentTime > currentBehavior.duration)
             {                
                 nextBehavior = true;
-                return currentBehavior.duration - (currentTime - gameTime);
+                int returnTime = currentBehavior.duration - (currentTime - gameTime);
+                currentTime -= currentBehavior.duration;
+
+                return returnTime;
             }
             return gameTime;
         }
