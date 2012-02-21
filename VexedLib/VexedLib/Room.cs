@@ -86,7 +86,9 @@ namespace VL
         CPU,
         Ember,
         Ice,
-        Magnet
+        Magnet,
+        Furnace,
+        Oil
     }
 
     //[Serializable]

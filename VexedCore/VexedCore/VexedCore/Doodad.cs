@@ -148,7 +148,7 @@ namespace VexedCore
         public static void InitDecalTextures(ContentManager Content)
         {
             decalTextures = new List<Texture2D>();
-            for (int i = 0; i < 78; i++)
+            for (int i = 0; i < 80; i++)
             {
                 decalTextures.Add(null);
             }
@@ -230,6 +230,8 @@ namespace VexedCore
             decalTextures[(int)VL.Decal.Ember] = Content.Load<Texture2D>("Decals\\decal_ember");
             decalTextures[(int)VL.Decal.Ice] = Content.Load<Texture2D>("Decals\\decal_ice");
             decalTextures[(int)VL.Decal.Magnet] = Content.Load<Texture2D>("Decals\\decal_magnet");
+            decalTextures[(int)VL.Decal.Furnace] = Content.Load<Texture2D>("Decals\\decal_furnace");
+            decalTextures[(int)VL.Decal.Oil] = Content.Load<Texture2D>("Decals\\decal_oil");
 
         }
 
