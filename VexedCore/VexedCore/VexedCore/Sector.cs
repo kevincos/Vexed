@@ -65,6 +65,8 @@ namespace VexedCore
         public Sector(Sector s)
         {
             maxOrbs = s.maxOrbs;
+            maxBlueOrbs = s.maxBlueOrbs;
+            maxRedOrbs = s.maxRedOrbs;
             currentOrbs = s.currentOrbs;
             id = s.id;
             center = s.center;

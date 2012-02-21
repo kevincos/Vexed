@@ -9,7 +9,7 @@ namespace VL
 {
     public enum Decal
     {
-        Save = 0,
+        Empty = 0,
         Health = 1,
         BlueKey,
         BlueLock,
@@ -57,11 +57,33 @@ namespace VL
         Lander,
         Skull,
         Switch,
-        Empty,
+        Save,
         Arrow,
         Objective,
         MapLabel,
-        Apple
+        Apple,
+        Wine,
+        Garbage,
+        Rose,
+        Crate,
+        Flame,
+        Globe,
+        Reactor,
+        Icicle,
+        Snowflake,
+        Armory,
+        Cargo,
+        Pulley,
+        Engine,
+        Thruster,
+        Gear,
+        Fuel,
+        Starship,
+        Rocket,
+        Cube,
+        BlueChip,
+        RedChip,
+        CPU
     }
 
     //[Serializable]

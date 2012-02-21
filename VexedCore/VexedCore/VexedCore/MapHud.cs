@@ -239,7 +239,7 @@ namespace VexedCore
                 outputStringBase += "Power Level: " + r.currentOrbs + " / " + r.maxOrbs;
 
 
-                if (r.hasWarp == true)
+                if (r.hasWarp == true && WorldMap.warp == true)
                 {
                     outputStringBase += "\nWarp Access: " + s.currentBlueOrbs + " / " + r.warpCost;
                 }

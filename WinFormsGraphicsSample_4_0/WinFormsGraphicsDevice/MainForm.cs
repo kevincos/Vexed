@@ -600,6 +600,7 @@ namespace WinFormsGraphicsDevice
                 this.behaviorNameField.Text = selectedDoodad.FindBehaviorByIDString((string)this.elementBehaviorDropdown.Items[this.elementBehaviorDropdown.SelectedIndex]).IDString;
 
                 this.doodadAbilityDropdown.SelectedIndex = (int)selectedDoodad.ability;
+                this.doodadDecalDropdown.SelectedIndex = (int)selectedDoodad.decal;
                 this.doodadTypeDropdown.SelectedIndex = (int)selectedDoodad.type;
                 this.doodadFixed.Checked = selectedDoodad.fixedPosition;
                 this.doodadTarget.Text = selectedDoodad.targetObject;
@@ -944,6 +945,10 @@ namespace WinFormsGraphicsDevice
                 if (sender == this.doodadAbilityDropdown)
                 {
                     selectedDoodad.ability = (AbilityType)this.doodadAbilityDropdown.SelectedIndex;
+                }
+                if (sender == this.doodadDecalDropdown)
+                {
+                    selectedDoodad.decal = (VL.Decal)this.doodadDecalDropdown.SelectedIndex;
                 }
                 if (sender == this.doodadActivationCost)
                 {

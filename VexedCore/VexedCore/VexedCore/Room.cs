@@ -137,7 +137,7 @@ namespace VexedCore
             explored = r.explored;
             bossCleared = r.bossCleared;
             stationDecal = r.stationDecal;
-            friendlyName = r.friendlyName;
+            friendlyName = r.friendlyName;            
 
             blocks = new List<Block>();
             foreach (Block b in r.blocks)
@@ -2118,6 +2118,34 @@ namespace VexedCore
                 shellColor.R = (Byte)(shellColor.R * WorldMap.zoomLevel / 3);
                 shellColor.G = (Byte)(shellColor.G * WorldMap.zoomLevel / 3);
                 shellColor.B = (Byte)(shellColor.B * WorldMap.zoomLevel / 3);
+            }
+            else if (WorldMap.warp == true && hasWarp == true && explored == false)
+            {
+                shellColor.A = (Byte)(110);
+                shellColor.R = (Byte)(20);
+                shellColor.G = (Byte)(20);
+                shellColor.B = (Byte)(50);
+            }
+            else if (WorldMap.warp == true && hasWarp == true && Engine.player.currentRoom.parentSector.currentBlueOrbs > warpCost)
+            {
+                shellColor.A = (Byte)(110);
+                shellColor.R = (Byte)(80);
+                shellColor.G = (Byte)(80);
+                shellColor.B = (Byte)(170);
+            }
+            else if (WorldMap.warp == true && hasWarp == true)
+            {
+                shellColor.A = (Byte)(110);
+                shellColor.R = (Byte)(30);
+                shellColor.G = (Byte)(30);
+                shellColor.B = (Byte)(100);
+            }
+            else if (WorldMap.warp == true && hasWarp == false)
+            {
+                shellColor.A = (Byte)(110);
+                shellColor.R = (Byte)(30);
+                shellColor.G = (Byte)(30);
+                shellColor.B = (Byte)(30);
             }
             else if (explored == false && parentSector == Engine.sectorList[WorldMap.selectedSectorIndex])
             {

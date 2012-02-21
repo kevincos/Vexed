@@ -587,6 +587,7 @@ namespace VexedCore
 
         public void Warp(Room targetRoom)
         {
+            bool warpSuccess = false;
             foreach (Doodad d in targetRoom.doodads)
             {
                 if (d.type == VL.DoodadType.WarpStation)
@@ -596,7 +597,19 @@ namespace VexedCore
                     Engine.reDraw = true;
                     center = new Vertex(d.position.position, d.position.normal, Vector3.Zero, d.position.direction);
                     state = State.Normal;
+                    warpSuccess = true;
                 }
+            }
+            if (warpSuccess == false)
+            {
+                currentRoom = targetRoom;
+                Physics.refresh = true;
+                Engine.reDraw = true;
+                center = new Vertex(new Vector3(-5.5f, 10f, 1.3f), Vector3.UnitY, Vector3.Zero, Vector3.UnitZ);
+                Engine.playerCameraPos = cameraPos;
+                Engine.playerCameraUp = cameraUp;
+                Engine.playerCameraTarget = cameraTarget;
+                state = State.Normal;
             }
         }
 
@@ -1980,17 +1993,26 @@ namespace VexedCore
                                 }
                             }
                                 
-                            if (d.type == VL.DoodadType.WarpStation)
+                            if (d.type == VL.DoodadType.WarpStation && d.cooldown == 0)
                             {
-                                Engine.state = EngineState.Map;
-                                WorldMap.state = ZoomState.ZoomToSector;
-                                WorldMap.warp = true;
-                                WorldMap.ZoomToSector();
-                                
-                                for (int i = 0; i < Engine.roomList.Count(); i++)
+                                if (currentRoom.parentSector.currentBlueOrbs > currentRoom.warpCost)
                                 {
-                                    if (Engine.roomList[i] == currentRoom)
-                                        WorldMap.selectedRoomIndex = i;
+                                    
+                                    Engine.state = EngineState.Map;
+                                    WorldMap.state = ZoomState.ZoomToSector;
+                                    WorldMap.warp = true;
+                                    WorldMap.ZoomToSector();
+
+                                    for (int i = 0; i < Engine.roomList.Count(); i++)
+                                    {
+                                        if (Engine.roomList[i] == currentRoom)
+                                            WorldMap.selectedRoomIndex = i;
+                                    }
+                                }
+                                else
+                                {
+                                    SoundFX.EquipError();
+                                    d.cooldown = d.maxCooldown;
                                 }
                             }
                         }

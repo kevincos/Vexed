@@ -281,7 +281,7 @@ namespace VexedCore
                             if (xmlDoodad.type == VL.DoodadType.WarpStation)
                             {
                                 newRoom.hasWarp = true;
-                                newRoom.warpCost = xmlDoodad.activationCost;
+                                newRoom.warpCost = xmlDoodad.activationCost;                                
                             }
                             
                             if (newDoodad != null)

@@ -376,7 +376,7 @@ namespace VexedCore
                         if ((Engine.roomList[i].mapPosition2D - mousePos).Length() < 60)
                         {
                             float distance = (Engine.roomList[i].center - cameraPosition).Length();
-                            if (distance < bestDistance)
+                            if (distance < bestDistance && (warp == false || (Engine.roomList[i].hasWarp == true && Engine.roomList[i].explored == true)))
                             {
                                 bestDistance = distance;
 

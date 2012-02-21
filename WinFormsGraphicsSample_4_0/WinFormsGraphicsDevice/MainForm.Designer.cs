@@ -147,6 +147,7 @@ namespace WinFormsGraphicsDevice
 
             this.doodadPropertiesGroup = new System.Windows.Forms.GroupBox();
             this.doodadFixed = new System.Windows.Forms.CheckBox();
+            this.doodadDecalDropdown = new System.Windows.Forms.ComboBox();
             this.doodadAbilityDropdown = new System.Windows.Forms.ComboBox();
             this.doodadActivationCost = new System.Windows.Forms.TextBox();
             this.doodadActivationCostLabel = new System.Windows.Forms.Label();
@@ -629,6 +630,7 @@ namespace WinFormsGraphicsDevice
             this.doodadPropertiesGroup.Size = new System.Drawing.Size(300, 300);
             this.doodadPropertiesGroup.Visible = false;
             this.doodadPropertiesGroup.Controls.Add(this.doodadAbilityDropdown);
+            this.doodadPropertiesGroup.Controls.Add(this.doodadDecalDropdown);
             this.doodadPropertiesGroup.Controls.Add(this.doodadTypeDropdown);
             this.doodadPropertiesGroup.Controls.Add(this.doodadActivationCost);
             this.doodadPropertiesGroup.Controls.Add(this.doodadActivationCostLabel);
@@ -656,9 +658,20 @@ namespace WinFormsGraphicsDevice
                 this.doodadAbilityDropdown.Items.Add((AbilityType)i);
             }
             this.doodadAbilityDropdown.Location = new System.Drawing.Point(10, 40);
-            this.doodadAbilityDropdown.Size = new System.Drawing.Size(180, 20);
+            this.doodadAbilityDropdown.Size = new System.Drawing.Size(100, 20);
             this.doodadAbilityDropdown.SelectedIndex = (int)AbilityType.DoubleJump;
             this.doodadAbilityDropdown.SelectedIndexChanged += new System.EventHandler(this.doodad_change);
+
+
+            this.doodadDecalDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            for (int i = 0; i < 75; i++)
+            {
+                this.doodadDecalDropdown.Items.Add((Decal)i);
+            }
+            this.doodadDecalDropdown.Location = new System.Drawing.Point(110, 40);
+            this.doodadDecalDropdown.Size = new System.Drawing.Size(60, 20);
+            this.doodadDecalDropdown.SelectedIndex = (int)VL.Decal.Empty;
+            this.doodadDecalDropdown.SelectedIndexChanged += new System.EventHandler(this.doodad_change);
 
             this.doodadActivationCost.Location = new System.Drawing.Point(50, 65);
             this.doodadActivationCost.Size = new System.Drawing.Size(80, 20);
@@ -857,7 +870,7 @@ namespace WinFormsGraphicsDevice
             // roomDecalDropdown
             // 
             this.roomDecalDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 53; i++)
+            for (int i = 0; i < 75; i++)
             {
                 this.roomDecalDropdown.Items.Add((Decal)i);
             }
@@ -1290,6 +1303,7 @@ namespace WinFormsGraphicsDevice
 
         private System.Windows.Forms.GroupBox doodadPropertiesGroup;
         private System.Windows.Forms.ComboBox doodadTypeDropdown;
+        private System.Windows.Forms.ComboBox doodadDecalDropdown;
         private System.Windows.Forms.ComboBox doodadAbilityDropdown;
         private System.Windows.Forms.CheckBox doodadFixed;
         private System.Windows.Forms.TextBox doodadActivationCost;

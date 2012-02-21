@@ -109,6 +109,7 @@ namespace VL
         public bool fixedPosition;
         public DoodadType type;
         public AbilityType ability;
+        public Decal decal;
         public List<Behavior> behaviors;
 
         public Doodad()

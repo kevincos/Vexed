@@ -311,6 +311,8 @@ namespace VexedCore
                         Game1.controller.XButton.Invalidate();
                         Game1.controller.YButton.Invalidate();
                         Engine.player.Respawn();
+                        Engine.player.Warp(Engine.player.currentRoom);
+                        WorldMap.zoomToPlayer = true;
                         Physics.refresh = true;
                         Engine.reDraw = true;
                         paused = false;
@@ -324,6 +326,8 @@ namespace VexedCore
                             Game1.controller.XButton.Invalidate();
                             Game1.controller.YButton.Invalidate();
                             LevelLoader.LoadFromDisk(Engine.saveFileIndex);
+                            Engine.player.Warp(Engine.player.currentRoom);
+                            WorldMap.zoomToPlayer = true;
                             Physics.refresh = true;
                             Engine.reDraw = true;
                             paused = false;
@@ -337,6 +341,9 @@ namespace VexedCore
                         Game1.controller.YButton.Invalidate();
                         SaveGameText.GenerateSummaries();
                         LevelLoader.Load("LevelData\\menu");
+                        Engine.player.Warp(Engine.player.currentRoom);
+                        WorldMap.zoomToPlayer = true;
+                        WorldMap.warp = false;
                         WorldMap.selectedRoomIndex = 0;
                         WorldMap.selectedSectorIndex = 0;
                         Physics.refresh = true;

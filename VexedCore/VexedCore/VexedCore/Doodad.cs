@@ -83,6 +83,7 @@ namespace VexedCore
         
         public int animationFrame = 0;
         public int animationTime = 0;
+        public bool warpActive = false;
 
         public int helpIconTime = 0;
         public int helpIconMaxTime = 100;
@@ -147,7 +148,7 @@ namespace VexedCore
         public static void InitDecalTextures(ContentManager Content)
         {
             decalTextures = new List<Texture2D>();
-            for (int i = 0; i < 60; i++)
+            for (int i = 0; i < 75; i++)
             {
                 decalTextures.Add(null);
             }
@@ -202,7 +203,29 @@ namespace VexedCore
             decalTextures[(int)VL.Decal.Arrow] = Content.Load<Texture2D>("Decals\\decal_arrow");
             decalTextures[(int)VL.Decal.Objective] = Content.Load<Texture2D>("Decals\\decal_objective");
             decalTextures[(int)VL.Decal.MapLabel] = Content.Load<Texture2D>("Decals\\decal_maplabel");
-            decalTextures[(int)VL.Decal.Apple] = Content.Load<Texture2D>("Decals\\decal_apple");    
+            decalTextures[(int)VL.Decal.Apple] = Content.Load<Texture2D>("Decals\\decal_apple");
+            decalTextures[(int)VL.Decal.Wine] = Content.Load<Texture2D>("Decals\\decal_wine");
+            decalTextures[(int)VL.Decal.Garbage] = Content.Load<Texture2D>("Decals\\decal_garbage");
+            decalTextures[(int)VL.Decal.Rose] = Content.Load<Texture2D>("Decals\\decal_rose");
+            decalTextures[(int)VL.Decal.Crate] = Content.Load<Texture2D>("Decals\\decal_crate");
+            decalTextures[(int)VL.Decal.Flame] = Content.Load<Texture2D>("Decals\\decal_flame");
+            decalTextures[(int)VL.Decal.Globe] = Content.Load<Texture2D>("Decals\\decal_earth");
+            decalTextures[(int)VL.Decal.Reactor] = Content.Load<Texture2D>("Decals\\decal_atom");
+            decalTextures[(int)VL.Decal.Icicle] = Content.Load<Texture2D>("Decals\\decal_icicle");
+            decalTextures[(int)VL.Decal.Snowflake] = Content.Load<Texture2D>("Decals\\decal_snowflake");
+            decalTextures[(int)VL.Decal.Cargo] = Content.Load<Texture2D>("Decals\\decal_cargo");
+            decalTextures[(int)VL.Decal.Pulley] = Content.Load<Texture2D>("Decals\\decal_pulley");
+            decalTextures[(int)VL.Decal.Engine] = Content.Load<Texture2D>("Decals\\decal_engine");
+            decalTextures[(int)VL.Decal.Thruster] = Content.Load<Texture2D>("Decals\\decal_thruster");
+            decalTextures[(int)VL.Decal.Gear] = Content.Load<Texture2D>("Decals\\decal_gear");
+            decalTextures[(int)VL.Decal.Fuel] = Content.Load<Texture2D>("Decals\\decal_fuel");
+            decalTextures[(int)VL.Decal.Starship] = Content.Load<Texture2D>("Decals\\decal_starship");
+            decalTextures[(int)VL.Decal.Rocket] = Content.Load<Texture2D>("Decals\\decal_rocket");
+            decalTextures[(int)VL.Decal.Cube] = Content.Load<Texture2D>("Decals\\decal_commandcube");
+            decalTextures[(int)VL.Decal.RedChip] = Content.Load<Texture2D>("Decals\\decal_redchip");
+            decalTextures[(int)VL.Decal.BlueChip] = Content.Load<Texture2D>("Decals\\decal_bluechip");
+            decalTextures[(int)VL.Decal.CPU] = Content.Load<Texture2D>("Decals\\decal_cpu");
+
         }
 
         public static void InitBeamTextures(ContentManager Content)
@@ -524,7 +547,7 @@ namespace VexedCore
         {
             if (type == VL.DoodadType.WarpStation)
             {
-                if (currentRoom.parentSector.currentBlueOrbs >= activationCost)                
+                if (currentRoom.parentSector.currentBlueOrbs > activationCost)                
                     _powered = true;                 
             }
             else
@@ -546,8 +569,8 @@ namespace VexedCore
                         {
                             if(Engine.justLoaded == false)
                                 SoundFX.StationPowerUp();
-                            _powered = true;                            
-                            refreshVertexData = true;
+                            _powered = true;
+                            warpActive = true;
                         }
                         return true;
                     }
@@ -1888,6 +1911,11 @@ namespace VexedCore
                     
                 }
             }
+            if (targetDoodad != null && targetDoodad.warpActive)
+            {
+                refreshVertexData = true;
+                targetDoodad.warpActive = false;
+            }
             if (type == VL.DoodadType.HologramOldMan)
             {
                 bool oldOn = hologramOn;
@@ -1990,7 +2018,7 @@ namespace VexedCore
                         targetDoodad.available = false;
                         available = false;
                         refreshVertexData = true;
-                    }
+                    }                    
                 }
                 if (targetDoodad.type == VL.DoodadType.SwitchStation)
                 {
