@@ -664,7 +664,7 @@ namespace WinFormsGraphicsDevice
 
 
             this.doodadDecalDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 75; i++)
+            for (int i = 0; i < 80; i++)
             {
                 this.doodadDecalDropdown.Items.Add((Decal)i);
             }
@@ -870,7 +870,7 @@ namespace WinFormsGraphicsDevice
             // roomDecalDropdown
             // 
             this.roomDecalDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            for (int i = 0; i < 75; i++)
+            for (int i = 0; i < 80; i++)
             {
                 this.roomDecalDropdown.Items.Add((Decal)i);
             }

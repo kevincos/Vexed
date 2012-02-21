@@ -233,6 +233,7 @@ namespace VexedCore
                             {
                                 Vector3 right = Vector3.Cross(xmlDoodad.up, xmlFace.normal);
                                 Doodad station = new Doodad(xmlDoodad, xmlFace.normal);
+                                station.doorDecal = xmlDoodad.decal;
                                 Doodad icon = new Doodad(VL.DoodadType.StationIcon, xmlDoodad.position + .9f * xmlDoodad.up, xmlFace.normal, xmlDoodad.up);
                                 icon.targetObject = station.id;
                                 Doodad leftDoor = new Doodad(VL.DoodadType.LeftDoor, xmlDoodad.position - .3f * right, xmlFace.normal, xmlDoodad.up);
@@ -376,7 +377,7 @@ namespace VexedCore
                     }
                     if (d.type == VL.DoodadType.JumpPad || d.type == VL.DoodadType.JumpStation)
                     {
-                        if (d.id.Contains("Cherry"))
+                        /*if (d.id.Contains("Cherry"))
                             d.doorDecal = VL.Decal.Cherry;
                         else if (d.id.Contains("RainDrop"))
                             d.doorDecal = VL.Decal.RainDrop;
@@ -389,7 +390,7 @@ namespace VexedCore
                         else if (d.id.Contains("Skull"))
                             d.doorDecal = VL.Decal.Skull;
                         else
-                            d.doorDecal = VL.Decal.JumpPad;
+                            d.doorDecal = VL.Decal.JumpPad;*/
                         float baseLineValue = Vector3.Dot(d.position.position, d.position.normal);
                         float minPosValue = 0;
                         foreach (Room destinationRoom in roomList)

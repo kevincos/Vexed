@@ -83,7 +83,10 @@ namespace VL
         Cube,
         BlueChip,
         RedChip,
-        CPU
+        CPU,
+        Ember,
+        Ice,
+        Magnet
     }
 
     //[Serializable]

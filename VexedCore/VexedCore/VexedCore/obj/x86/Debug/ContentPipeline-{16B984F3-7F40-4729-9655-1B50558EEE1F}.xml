@@ -5911,6 +5911,42 @@
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_wine.xnb</Output>
       <Time>2012-02-20T13:40:24.6941633-08:00</Time>
     </Item>
+    <Item>
+      <Source>Decals\decal_ember.png</Source>
+      <Name>Decals\decal_ember</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_ember.xnb</Output>
+      <Time>2012-02-20T16:50:35.2279358-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decals\decal_ice.png</Source>
+      <Name>Decals\decal_ice</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_ice.xnb</Output>
+      <Time>2012-02-20T16:53:00.8793831-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decals\decal_magnet.png</Source>
+      <Name>Decals\decal_magnet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_magnet.xnb</Output>
+      <Time>2012-02-20T17:16:55.5325882-08:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{16B984F3-7F40-4729-9655-1B50558EEE1F}</ContentProjectGUID>

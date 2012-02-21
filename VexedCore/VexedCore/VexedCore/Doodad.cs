@@ -148,7 +148,7 @@ namespace VexedCore
         public static void InitDecalTextures(ContentManager Content)
         {
             decalTextures = new List<Texture2D>();
-            for (int i = 0; i < 75; i++)
+            for (int i = 0; i < 78; i++)
             {
                 decalTextures.Add(null);
             }
@@ -207,11 +207,13 @@ namespace VexedCore
             decalTextures[(int)VL.Decal.Wine] = Content.Load<Texture2D>("Decals\\decal_wine");
             decalTextures[(int)VL.Decal.Garbage] = Content.Load<Texture2D>("Decals\\decal_garbage");
             decalTextures[(int)VL.Decal.Rose] = Content.Load<Texture2D>("Decals\\decal_rose");
+            decalTextures[(int)VL.Decal.Leaf] = Content.Load<Texture2D>("Decals\\decal_leaf");
             decalTextures[(int)VL.Decal.Crate] = Content.Load<Texture2D>("Decals\\decal_crate");
             decalTextures[(int)VL.Decal.Flame] = Content.Load<Texture2D>("Decals\\decal_flame");
             decalTextures[(int)VL.Decal.Globe] = Content.Load<Texture2D>("Decals\\decal_earth");
             decalTextures[(int)VL.Decal.Reactor] = Content.Load<Texture2D>("Decals\\decal_atom");
             decalTextures[(int)VL.Decal.Icicle] = Content.Load<Texture2D>("Decals\\decal_icicle");
+            decalTextures[(int)VL.Decal.Armory] = Content.Load<Texture2D>("Decals\\decal_armory");
             decalTextures[(int)VL.Decal.Snowflake] = Content.Load<Texture2D>("Decals\\decal_snowflake");
             decalTextures[(int)VL.Decal.Cargo] = Content.Load<Texture2D>("Decals\\decal_cargo");
             decalTextures[(int)VL.Decal.Pulley] = Content.Load<Texture2D>("Decals\\decal_pulley");
@@ -225,6 +227,9 @@ namespace VexedCore
             decalTextures[(int)VL.Decal.RedChip] = Content.Load<Texture2D>("Decals\\decal_redchip");
             decalTextures[(int)VL.Decal.BlueChip] = Content.Load<Texture2D>("Decals\\decal_bluechip");
             decalTextures[(int)VL.Decal.CPU] = Content.Load<Texture2D>("Decals\\decal_cpu");
+            decalTextures[(int)VL.Decal.Ember] = Content.Load<Texture2D>("Decals\\decal_ember");
+            decalTextures[(int)VL.Decal.Ice] = Content.Load<Texture2D>("Decals\\decal_ice");
+            decalTextures[(int)VL.Decal.Magnet] = Content.Load<Texture2D>("Decals\\decal_magnet");
 
         }
 
