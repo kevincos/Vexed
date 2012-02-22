@@ -890,6 +890,15 @@ laser-proof armor!</string>
     <pause>false</pause>
   </DialogChunk>
 
+  <DialogChunk>
+    <id>TriggerText</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Testing...</string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
  
 
 

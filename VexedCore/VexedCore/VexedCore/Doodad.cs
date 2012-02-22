@@ -572,7 +572,7 @@ namespace VexedCore
         {
             get
             {
-                if (type == VL.DoodadType.WarpStation)
+                if (type == VL.DoodadType.WarpStation || (type == VL.DoodadType.SwitchStation && abilityType == AbilityType.PermanentBlueKey))
                 {
                     if (currentRoom.parentSector.currentBlueOrbs >= activationCost)
                     {
@@ -761,6 +761,8 @@ namespace VexedCore
                         else
                             return new Color(80, 80, 80);
                     }
+                    if (targetDoodad.type == VL.DoodadType.SwitchStation && targetDoodad.abilityType == AbilityType.PermanentBlueKey)
+                        return new Color(80, 80, 130);
                     return new Color(80, 130, 80);
                 }
 
@@ -838,6 +840,8 @@ namespace VexedCore
                         else
                             return new Color(80, 80, 80);
                     }
+                    if (targetDoodad.type == VL.DoodadType.SwitchStation && targetDoodad.abilityType == AbilityType.PermanentBlueKey)
+                        return new Color(50, 50, 200);
                     return new Color(50, 200, 50);
                 }
                 if (type == VL.DoodadType.RightDoor || type == VL.DoodadType.LeftDoor)
@@ -934,6 +938,8 @@ namespace VexedCore
         {
             get
             {
+                if(id.Contains("Hidden") || (targetDoodad!= null && targetDoodad.id.Contains("Hidden")))
+                    return false;
                 if (idle == true)
                     return false;
                 if (type == VL.DoodadType.TriggerPoint)

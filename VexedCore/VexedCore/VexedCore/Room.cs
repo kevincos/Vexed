@@ -1922,8 +1922,9 @@ namespace VexedCore
                 {
                     if (stationDecal != VL.Decal.Empty)
                     {
-                        DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)VL.Decal.MapLabel], new Vertex(center + size/2, Engine.player.center.normal, Vector3.Zero, cameraUp), false, 5f, Color.LightGray);
-                        DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)stationDecal], new Vertex(center + size/2, Engine.player.center.normal, Vector3.Zero, cameraUp), false, 5f, Color.White);
+                        Vector3 decalOffset = (size.Length() / 2 + 1) * Engine.player.center.normal;
+                        DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)VL.Decal.MapLabel], new Vertex(center + decalOffset, Engine.player.center.normal, Vector3.Zero, cameraUp), false, 6f, Color.LightGray);
+                        DrawMapDecal(cameraUp, cameraRight, Doodad.decalTextures[(int)stationDecal], new Vertex(center + decalOffset, Engine.player.center.normal, Vector3.Zero, cameraUp), false, 6f, Color.White);
                     }
                 }
                 if (explored == true && parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] && !(WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.ZoomToWorld || WorldMap.state == ZoomState.ZoomFromWorld || WorldMap.state == ZoomState.Objectives))

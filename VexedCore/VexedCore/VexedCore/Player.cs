@@ -1762,7 +1762,21 @@ namespace VexedCore
                     {
                         if (d.powered == false && d.ActivationRange(this) && d.activationCost != 0)
                         {
-                            DialogBox.SetDialog("PowerUp");
+                            //DialogBox.SetDialog("PowerUp");
+                            if (d.type == VL.DoodadType.WarpStation || (d.type == VL.DoodadType.SwitchStation && d.abilityType == AbilityType.PermanentBlueKey))
+                            {
+                                if (d.activationCost - currentRoom.currentBlueOrbs > 1)
+                                    DialogBox.SetCustomDialog("Insufficient Power. Collect " + (d.activationCost - currentRoom.currentBlueOrbs) + " more blue cubes.");
+                                else
+                                    DialogBox.SetCustomDialog("Insufficient Power. Collect 1 more blue cube.");
+                            }
+                            else
+                            {
+                                if (d.activationCost - currentRoom.currentOrbs > 1)
+                                    DialogBox.SetCustomDialog("Insufficient Power. Collect " + (d.activationCost - currentRoom.currentOrbs) + " more power cubes.");
+                                else
+                                    DialogBox.SetCustomDialog("Insufficient Power. Collect 1 more power cube.");
+                            }
                         }
                         if (d.active)
                         {

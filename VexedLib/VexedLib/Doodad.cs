@@ -56,7 +56,8 @@ namespace VL
         RingTop = 45,
         RingSide = 46,
         HealthStation = 47,
-        HologramOldMan = 48
+        HologramOldMan = 48,
+        DialogPoint = 49
     }
 
     public enum AbilityType
