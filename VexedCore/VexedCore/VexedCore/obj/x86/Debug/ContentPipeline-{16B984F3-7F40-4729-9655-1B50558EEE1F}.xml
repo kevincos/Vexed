@@ -5995,6 +5995,30 @@
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_radiation.xnb</Output>
       <Time>2012-02-21T13:26:59.0603486-08:00</Time>
     </Item>
+    <Item>
+      <Source>Decals\decal_computer.png</Source>
+      <Name>Decals\decal_computer</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_computer.xnb</Output>
+      <Time>2012-02-21T16:33:14.922511-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decals\decal_motherboard.png</Source>
+      <Name>Decals\decal_motherboard</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_motherboard.xnb</Output>
+      <Time>2012-02-21T16:31:26.1642034-08:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{16B984F3-7F40-4729-9655-1B50558EEE1F}</ContentProjectGUID>

@@ -555,3 +555,5 @@ Content\Decals\decal_furnace.xnb
 Content\Decals\decal_oil.xnb
 Content\Decals\decal_lava.xnb
 Content\Decals\decal_radiation.xnb
+Content\Decals\decal_computer.xnb
+Content\Decals\decal_motherboard.xnb

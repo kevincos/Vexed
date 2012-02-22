@@ -90,7 +90,9 @@ namespace VL
         Furnace,
         Oil,
         Lava,
-        Radiation
+        Radiation,
+        Motherboard,
+        Computer
     }
 
     //[Serializable]
