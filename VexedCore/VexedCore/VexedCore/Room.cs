@@ -366,7 +366,11 @@ namespace VexedCore
                     beltAnimation += gameTime;
                     foreach (Block b in blocks)
                     {
-                        int blockUpdateTime = b.UpdateBehavior(gameTime);
+                        int blockBaseUpdateTime = b.UpdateBehavior(gameTime);
+                        int blockUpdateTime = blockBaseUpdateTime + b.spillTime;
+                        b.spillTime = gameTime - blockBaseUpdateTime;
+                  
+                        
                         foreach (Edge e in b.edges)
                         {
                             e.start.Update(this, blockUpdateTime);
@@ -1904,7 +1908,8 @@ namespace VexedCore
                 cameraRight.Normalize();
 
                 // Objectives
-                if (parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] || WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.Objectives)
+                //if (parentSector == Engine.sectorList[WorldMap.selectedSectorIndex] || WorldMap.state == ZoomState.World || WorldMap.state == ZoomState.Objectives)
+                if (WorldMap.state != ZoomState.None)
                 {
                     if (Engine.player.currentRoom == this)
                     {

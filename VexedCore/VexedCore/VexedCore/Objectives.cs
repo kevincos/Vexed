@@ -118,7 +118,7 @@ namespace VexedCore
             Objective enterCPU = new Objective(ObjectiveType.Upgrade, "Locate CPU Access Chamber", "CPU Lock");
             enterCPU.locationTriggers.Add("EnterCPU");
 
-            Objective armorCousins = new Objective(ObjectiveType.Upgrade, "Defeat Amrortron Counsins", "Armortron Counsins");
+            Objective armorCousins = new Objective(ObjectiveType.Upgrade, "Acquire Phase Technology", "Phase Belt");
             armorCousins.upgradeGoals.Add(AbilityType.Phase);
 
             Objective access = new Objective(ObjectiveType.Location, "Obtain Core Access Codes", "Core Access");

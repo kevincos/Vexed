@@ -169,7 +169,7 @@ seeking missiles?</string>
     <id>IceSnake1</id>
     <speaker>IceSnake</speaker>
     <textList>
-      <string>Muahaha. There's a totally sweet item in the
+      <string>Muahaha. There's a sweet item in the
 next room. But you'll never live to see it!
       </string>
       <string>
@@ -899,8 +899,50 @@ laser-proof armor!</string>
     <pause>true</pause>
   </DialogChunk>
 
- 
+  <DialogChunk>
+    <id>keychamberinfo</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>The Central Processing Unit is protected by a tight security
+      system.</string>
+      <string>
+        All three colored key codes are required to enter.
+      </string>
+      <string>
+        You'll find an upgrade to use yellow key codes in the Rocket Launch Tube.
+      </string>
+      <string>
+        You'll find the Launch Tube through the Hangar Bay.
+      </string>
+      <string>
+        You can find red and blue access codes inside the command cube.
+      </string>
+      <string>
+        If you bring them back to this room one at a time, you can unlock the stations below. 
+      </string>
+      <string>
+        Then you can come back for the codes whenever you want.
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
 
+  <DialogChunk>
+    <id>primarystoragehelp</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>
+        You'll need to move these cargo containers out of the way to proceed.
+      </string>
+      <string>
+        Look for different ways to enter this room.
+      </string>
+      <string>
+        Once you've moved all three containers, you should be able to continue.
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
 
 
 </ArrayOfDialogChunk>

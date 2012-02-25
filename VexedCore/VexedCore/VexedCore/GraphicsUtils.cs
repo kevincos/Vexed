@@ -176,14 +176,15 @@ namespace VexedCore
             shadedColor.G = (byte)g;
             shadedColor.B = (byte)b;
             return shadedColor;
-        }
+        }        
 
         public static Color RearShade(Color c)
-        {            
+        {                        
             Color shadedColor = c;
             shadedColor.R = (byte)(3*c.R/4);
             shadedColor.G = (byte)(3*c.G/4);
             shadedColor.B = (byte)(3*c.B/4);
+            shadedColor.A = 254;
             return shadedColor;
         }
 

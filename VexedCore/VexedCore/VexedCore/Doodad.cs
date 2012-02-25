@@ -385,6 +385,7 @@ namespace VexedCore
 
         public void Load(Dd d)
         {
+            nextBehavior = d.nb;
             stateTransition = d.st;
             orbsRemaining = d.or;
             alreadyUsed = d.au;
@@ -430,6 +431,7 @@ namespace VexedCore
         {
             if (refreshBoundingBox == false && forceRefresh == false)
                 return;
+
             float x1, x2, x3, x4 = 0;
             float y1, y2, y3, y4 = 0;
             x1 = Vector3.Dot(playerRight, unfoldedPosition.position + unfolded_up);
@@ -475,7 +477,7 @@ namespace VexedCore
         {
             get
             {
-                if (type == VL.DoodadType.Beam || type == VL.DoodadType.HologramOldMan || type == VL.DoodadType.Holoprojector || type == VL.DoodadType.TriggerPoint || type == VL.DoodadType.Vortex || type == VL.DoodadType.Waypoint)
+                if (type == VL.DoodadType.Beam || type == VL.DoodadType.HologramOldMan || type == VL.DoodadType.Holoprojector || type == VL.DoodadType.TriggerPoint || type == VL.DoodadType.DialogPoint || type == VL.DoodadType.Vortex || type == VL.DoodadType.Waypoint)
                 {
                     return 0;
                 }
@@ -884,6 +886,8 @@ namespace VexedCore
             {
                 if (type == VL.DoodadType.TriggerPoint)
                     return .75f;
+                if (type == VL.DoodadType.DialogPoint)
+                    return 2f;
                 if (type == VL.DoodadType.Vortex)
                     return 1.3f;
                 if (type == VL.DoodadType.Holoprojector)
@@ -914,7 +918,7 @@ namespace VexedCore
         {
             get
             {
-                if (type == VL.DoodadType.TriggerPoint)
+                if (type == VL.DoodadType.TriggerPoint || type == VL.DoodadType.DialogPoint)
                     return false;
                 if (type == VL.DoodadType.PlugSlot)
                     return false;
@@ -942,7 +946,7 @@ namespace VexedCore
                     return false;
                 if (idle == true)
                     return false;
-                if (type == VL.DoodadType.TriggerPoint)
+                if (type == VL.DoodadType.TriggerPoint || type== VL.DoodadType.DialogPoint)
                     return false;
                 if (type == VL.DoodadType.BridgeSide || type == VL.DoodadType.BridgeBack)
                     return false;
@@ -1691,6 +1695,7 @@ namespace VexedCore
                 if (type == VL.DoodadType.PlugSlot)
                 {
                     currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Room.plateTexCoords, decalList, true);
+                    currentRoom.AddBlockFrontToTriangleList(vList, baseColor, -depth, Room.plateTexCoords, decalList, true);
                 }
                 if (type == VL.DoodadType.LaserSwitch)
                 {
@@ -1739,7 +1744,7 @@ namespace VexedCore
                     else
                     {
                         currentRoom.AddBlockFrontToTriangleList(vList, baseColor, depth, Room.plateTexCoords, decalList, true);
-                        currentRoom.AddBlockFrontToTriangleList(vList, baseColor, -depth, Room.plateTexCoords, decalList, true);
+                        //currentRoom.AddBlockFrontToTriangleList(vList, baseColor, -depth, Room.plateTexCoords, decalList, true);
                     }
                 }
 
@@ -2129,6 +2134,8 @@ namespace VexedCore
             if (cooldown < 0) cooldown = 0;
 
             stateTransition += gameTime * stateTransitionDir * stateTransitionVelocity;
+            if (stateTransitionVelocity != 0)
+                refreshBoundingBox = true;
             if (stateTransitionDir == 1 && stateTransition > 1)
             {
                 toggleOn = true;

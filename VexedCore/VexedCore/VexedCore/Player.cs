@@ -1753,6 +1753,16 @@ namespace VexedCore
                     currentRoom.currentOrbs++;
                     currentRoom.refreshVertices = true;
                 }
+                if (Keyboard.GetState().IsKeyDown(Keys.J))
+                {
+                    primaryAbility = new Ability(AbilityType.JetPack);
+                    secondaryAbility = new Ability(AbilityType.Phase);
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.B))
+                {
+                    primaryAbility = new Ability(AbilityType.Boots);
+                    secondaryAbility = new Ability(AbilityType.WallJump);
+                }
 
                 #region BButton
                 if (Game1.controller.BButton.Pressed)

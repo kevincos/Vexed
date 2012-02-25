@@ -51,7 +51,7 @@ namespace VexedCore
                     newRoom.friendlyName = xmlRoom.friendlyName;
                     newRoom.stationDecal = xmlRoom.decal;
 
-                    newRoom.explored = true;
+                    //newRoom.explored = true;
                     foreach (VL.Face xmlFace in xmlRoom.faceList)
                     {
                         foreach (VL.Monster xmlMonster in xmlFace.monsters)
@@ -569,6 +569,14 @@ namespace VexedCore
             }
 
             Engine.worldCenter = Engine.worldCenter / roomList.Count;
+
+            // Generate current player data
+            foreach (Room r in roomList)
+            {
+                r.parentSector.currentOrbs += r.currentOrbs;
+                r.parentSector.currentBlueOrbs += r.currentBlueOrbs;
+                r.parentSector.currentRedOrbs += r.currentRedOrbs;
+            }
         }
 
         public static void QuickSave()

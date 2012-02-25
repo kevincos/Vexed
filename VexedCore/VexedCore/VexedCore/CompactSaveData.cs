@@ -64,6 +64,7 @@ namespace VexedCore
         public int ct; // current time
         public bool bs; // behaviorstarted
         public bool i; // idle
+        public bool nb; // next behavior
 
         public Dd()
         {
@@ -80,6 +81,7 @@ namespace VexedCore
             ac = d.active;
             ct = d.currentTime;
             i = d.idle;
+            nb = d.nextBehavior;
         }
     }
 
@@ -101,10 +103,12 @@ namespace VexedCore
     {
         public string cbi; //current behavior id
         public int ct; //current time
+        public int st; //spill time
         public Ed e1; //edge 1
         public Ed e2; //edge 2
         public Ed e3; //edge 3
         public Ed e4; //edge 4
+        public bool nb; // next behavior
 
         public Bl()
         {
@@ -112,12 +116,14 @@ namespace VexedCore
 
         public Bl(Block b)
         {
+            st = b.spillTime;
             cbi = b.currentBehaviorId;
             ct = b.currentTime;            
             e1 = new Ed(b.edges[0]);
             e2 = new Ed(b.edges[1]);
             e3 = new Ed(b.edges[2]);
             e4 = new Ed(b.edges[3]);
+            nb = b.nextBehavior;
         }
     }
 
@@ -130,7 +136,8 @@ namespace VexedCore
         public int pv; //primary value;
         public int sv; //secondary value;
         public bool to; // toggle on;
-        public bool bs;
+        public bool bs; // behaviorstarted
+        public bool nb; // next behavior
 
         public Ed()
         {
@@ -146,6 +153,7 @@ namespace VexedCore
             pv = e.properties.primaryValue;
             sv = e.properties.secondaryValue;
             to = e.toggleOn;
+            nb = e.nextBehavior;
         }
     }
 

@@ -647,6 +647,14 @@ namespace VexedCore
 
             foreach (Doodad d in r.doodads)
             {
+                if (d.type == VL.DoodadType.DialogPoint)
+                {
+                    if (d.active == false && d.ActivationRange(p))
+                    {
+                        DialogBox.SetDialog(d.targetObject);
+                        d.active = true;
+                    }
+                }
                 if (d.type == VL.DoodadType.TriggerPoint)
                 {
                     if (d.active == false && d.id.Contains("Dialog") && d.ActivationRange(p))

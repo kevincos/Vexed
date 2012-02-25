@@ -67,7 +67,9 @@ namespace VexedCore
             maxOrbs = s.maxOrbs;
             maxBlueOrbs = s.maxBlueOrbs;
             maxRedOrbs = s.maxRedOrbs;
-            currentOrbs = s.currentOrbs;
+            //currentOrbs = s.currentOrbs;
+            //currentBlueOrbs = s.currentBlueOrbs;
+            //currentRedOrbs = s.currentRedOrbs;
             id = s.id;
             center = s.center;
             roomList = new List<Room>();
