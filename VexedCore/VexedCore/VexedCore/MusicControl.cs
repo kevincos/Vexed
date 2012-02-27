@@ -104,7 +104,7 @@ namespace VexedCore
             if (Engine.musicEnabled)
             {
                 Song expectedTrack = GetCurrentRoomTrack();
-                if (currentTrack != expectedTrack)
+                if (currentTrack != expectedTrack || MediaPlayer.State != MediaState.Playing)
                 {
                     if (expectedTrack != upgrade && expectedTrack != death && expectedTrack != firstLoad)
                         MediaPlayer.IsRepeating = true;

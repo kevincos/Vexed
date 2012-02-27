@@ -58,9 +58,10 @@ namespace VexedCore
             String revisedText = "";
             String currentLine = "";
 
+            
             String[] wordList = input.Split(new char[] { ' ', '\n' });
             for (int j = 0; j < wordList.Length; j++)
-            {
+            {                
                 if (wordList[j].Length == 0)
                     continue;
                 if (font.MeasureString(currentLine + ' ' + wordList[j]).X > boxLength)

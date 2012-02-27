@@ -83,6 +83,38 @@ namespace VexedCore
 
         public static SoundEffect tunnel;
 
+        public static bool playSoundEnabled
+        {
+            get
+            {
+                return Engine.soundEffectsEnabled && WorldMap.state == ZoomState.None && PauseMenu.paused == false;
+            }
+        }
+
+        public static bool mapSoundEnabled
+        {
+            get
+            {
+                return Engine.soundEffectsEnabled && WorldMap.state != ZoomState.None && PauseMenu.paused == false;
+            }
+        }
+
+        public static bool activeSoundEnabled
+        {
+            get
+            {
+                return Engine.soundEffectsEnabled && PauseMenu.paused == false;
+            }
+        }
+
+        public static bool menuSoundEnabled
+        {
+            get
+            {
+                return Engine.soundEffectsEnabled;
+            }
+        }
+
         public static void Init(ContentManager content)
         {
             activateSwitchStation = content.Load<SoundEffect>("Sounds\\PlasmaHollow");
@@ -162,20 +194,20 @@ namespace VexedCore
 
         public static void EquipError()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 equipError.Play();
         }
 
 
         public static void DialogCharacter()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 dialogCharacter.Play(.1f, 0f,0f);
         }
 
         public static void MapSelect()
         {
-            if (Engine.soundEffectsEnabled)
+            if (mapSoundEnabled)
                 mapSelect.Play();
         }
 
@@ -183,37 +215,37 @@ namespace VexedCore
 
         public static void InventoryWhoosh()
         {
-            if (Engine.soundEffectsEnabled)
+            if (mapSoundEnabled)
                 inventoryWhoosh.Play();
         }
 
         public static void MapWhoosh()
         {
-            if (Engine.soundEffectsEnabled)
+            if (activeSoundEnabled)
                 mapWhoosh.Play();
         }
 
         public static void DialogExtend()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 dialogExtend.Play();
         }
 
         public static void ArmorHit()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 armorDink.Play();            
         }
 
         public static void ArmorBreak()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 armorBreak.Play();
         }
 
         public static void PlayerHit()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 playerHit.Play();
         }
 
@@ -221,77 +253,83 @@ namespace VexedCore
 
         public static void MonsterHit()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 monsterHit.Play();
         }
 
         public static void BridgeWarp()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 bridge.Play();
         }
 
         public static void HologramFade()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 hologramFade.Play(.2f,0f,0f);
         }
 
         public static void HologramUse()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 hologramUse.Play();
         }
 
         public static void MenuSelect()
         {
-            if (Engine.soundEffectsEnabled)
+            if (mapSoundEnabled)
+                menuSelect.Play();
+        }
+
+        public static void PauseMenuSelect()
+        {
+            if (menuSoundEnabled)
                 menuSelect.Play();
         }
 
         public static void WallSwitch()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 wallSwitch.Play();
         }
 
         public static void Steam()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 steam.Play();
         }
 
         public static void BrickBreak(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 brickBreak.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void PlatformMove(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 platformMove.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void PlatformStop(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 platformStop.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void FlameOn(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 flameOn.Play(ComputeVolume(location),0,0);
         }
         public static void FlameOff(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 flameOff.Play(ComputeVolume(location), 0, 0);
         }
         public static void ElectricOn(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 electricOn.Play(ComputeVolume(location), 0, 0);
         }
         public static void ElectricOff(Vector3 location)
@@ -302,31 +340,31 @@ namespace VexedCore
 
         public static void WallSwitchOff(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 wallSwitchClick.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void MonsterDeath()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 monsterDeath.Play();
         }
 
         public static void PlayMove()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 soundSwoosh.Play();            
         }
 
         public static void Land()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 soundThud.Play();
         }
 
         public static void StartJetPack()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
             {
                 jetPackInstance.Play();
             }
@@ -334,7 +372,7 @@ namespace VexedCore
 
         public static void EndJetPack()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
             {
                 jetPackInstance.Stop();
             }
@@ -343,49 +381,49 @@ namespace VexedCore
 
         public static void Heal()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 heal.Play();
         }
 
         public static void StationPowerUp()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 stationPowerUp.Play();
         }
 
         public static void ActivateSwitchStation()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 activateLaserSwitch.Play();
         }
 
         public static void ActivateLaserSwitch()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 activateSwitchStation.Play();
         }
 
         public static void ActivatePlug()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 activatePlug.Play();
         }
 
         public static void LockedSwitch()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 lockedSwitch.Play();
         }
 
         public static void EquipItem()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 equipItem.Play();
         }
 
         public static void StartBooster()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
             {
                 boosterInstance.Play();
             }
@@ -393,7 +431,7 @@ namespace VexedCore
 
         public static void EndBooster()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
             {
                 boosterInstance.Stop();
             }
@@ -401,128 +439,128 @@ namespace VexedCore
 
         public static void CollectOrb()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 soundBloop.Play();
         }
 
         public static void RoomJump()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 soundSwoosh.Play();
         }
 
 
         public static void JumpSound()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 jump.Play();
         }
 
         public static void RocketJump()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 doubleJump.Play();
         }
 
         public static void BootSpin()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 bootSpin.Play();
         }
 
         public static void Phase()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 phase.Play();
         }
 
         public static void FireLaser(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 laserShot.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void LaunchHook()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 hookLaunch.Play();
         }
 
         public static void HookLock()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 hookLock.Play();
         }
 
         public static void TunnelWoosh()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 tunnel.Play();
         }
 
         public static void OpenDoor(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 doorOpen.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void CloseDoor(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 doorClose.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void FireBlaster(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 blasterShot.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void FireMissile(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 missileShot.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void MissileExplode(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 missileExplosion.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void BlasterExplode(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 laserHit.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void LaserExplode(Vector3 location)
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 laserHit.Play(ComputeVolume(location), 0, 0);
         }
 
         public static void PlayScore()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 soundBloop.Play();
         }
 
         public static void PlayClick()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 soundClick.Play();
         }
 
         public static void PlayAlert()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 soundBeep.Play();
         }
 
         public static void PlayFootstep()
         {
-            if (Engine.soundEffectsEnabled)
+            if (playSoundEnabled)
                 footstep.Play();
         }
     }

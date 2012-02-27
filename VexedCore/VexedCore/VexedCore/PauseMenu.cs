@@ -298,7 +298,7 @@ namespace VexedCore
                     MenuItems result = (MenuItems)selectIndex;
                     if (result == MenuItems.Continue)
                     {
-                        SoundFX.MenuSelect();
+                        SoundFX.PauseMenuSelect();
                         Game1.controller.AButton.Invalidate();
                         Game1.controller.XButton.Invalidate();
                         Game1.controller.YButton.Invalidate();
@@ -306,7 +306,7 @@ namespace VexedCore
                     }
                     if (result == MenuItems.RestartRoom)
                     {
-                        SoundFX.MenuSelect();
+                        SoundFX.PauseMenuSelect();
                         Game1.controller.AButton.Invalidate();
                         Game1.controller.XButton.Invalidate();
                         Game1.controller.YButton.Invalidate();
@@ -319,23 +319,23 @@ namespace VexedCore
                     }
                     if (result == MenuItems.LoadLastSave)
                     {
-                        SoundFX.MenuSelect();
+                        SoundFX.PauseMenuSelect();
                         if (Engine.saveFileIndex != 0)
                         {
                             Game1.controller.AButton.Invalidate();
                             Game1.controller.XButton.Invalidate();
                             Game1.controller.YButton.Invalidate();
-                            LevelLoader.LoadFromDisk(Engine.saveFileIndex);
-                            Engine.player.Warp(Engine.player.currentRoom);
+                            LevelLoader.LoadFromDisk(Engine.saveFileIndex);                            
                             WorldMap.zoomToPlayer = true;
                             Physics.refresh = true;
                             Engine.reDraw = true;
                             paused = false;
+                            cooldown = maxCooldown;
                         }
                     }
                     if (result == MenuItems.MainMenu)
                     {
-                        SoundFX.MenuSelect();
+                        SoundFX.PauseMenuSelect();
                         Game1.controller.AButton.Invalidate();
                         Game1.controller.XButton.Invalidate();
                         Game1.controller.YButton.Invalidate();
@@ -352,7 +352,7 @@ namespace VexedCore
                     }
                     if (result == MenuItems.ControlScheme)
                     {
-                        SoundFX.MenuSelect();
+                        SoundFX.PauseMenuSelect();
                         int newControlType = (int)Engine.controlType + 1;
                         newControlType %= 3;
                         Engine.controlType = (ControlType)newControlType;
@@ -360,7 +360,7 @@ namespace VexedCore
                     }
                     if (result == MenuItems.Music)
                     {
-                        SoundFX.MenuSelect();
+                        SoundFX.PauseMenuSelect();
                         Engine.musicEnabled = !Engine.musicEnabled;
                         if (Engine.musicEnabled)
                             MusicControl.PlayGameMusic();
@@ -370,9 +370,9 @@ namespace VexedCore
                     }
                     if (result == MenuItems.SoundEffects)
                     {
-                        SoundFX.MenuSelect();
+                        SoundFX.PauseMenuSelect();
                         Engine.soundEffectsEnabled = !Engine.soundEffectsEnabled;
-                        SoundFX.MenuSelect();
+                        SoundFX.PauseMenuSelect();
                         cooldown = maxCooldown;
                     }
                     if (result == MenuItems.Transparency)
@@ -383,7 +383,7 @@ namespace VexedCore
                     }
                     if (result == MenuItems.DrawDistance)
                     {
-                        SoundFX.MenuSelect();
+                        SoundFX.PauseMenuSelect();
                         Engine.drawDepth += 1;
                         Engine.drawDepth %= 4;
                             
@@ -392,13 +392,13 @@ namespace VexedCore
                     }
                     if (result == MenuItems.Quit)
                     {
-                        SoundFX.MenuSelect();
+                        SoundFX.PauseMenuSelect();
                         Engine.quit = true;
                         paused = false;
                     }
                     if (result == MenuItems.FullScreen)
                     {
-                        SoundFX.MenuSelect();
+                        SoundFX.PauseMenuSelect();
                         Engine.fullScreen = !Engine.fullScreen;
                         Game1.SetGraphicsSettings();
                         cooldown = maxCooldown;
@@ -406,7 +406,7 @@ namespace VexedCore
                     }
                     if (result == MenuItems.Resolution)
                     {
-                        SoundFX.MenuSelect();
+                        SoundFX.PauseMenuSelect();
                         if (Engine.res == ResolutionSettings.R_800x600)
                             Engine.res = ResolutionSettings.R_1920x1080;
                         else

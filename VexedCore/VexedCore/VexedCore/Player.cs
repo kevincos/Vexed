@@ -199,7 +199,7 @@ namespace VexedCore
         public float _baseCameraDistance = 12;
         public int orbsCollected = 0;
         public int redOrbsCollected = 0;
-        public int redOrbsGoal = 2;
+        public int redOrbsGoal = 4;
 
         public bool objectiveFilter = false;
         public bool stationFilter = false;
@@ -231,8 +231,8 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Empty);
-            secondaryAbility = new Ability(AbilityType.Empty);
+            primaryAbility = new Ability(AbilityType.SpinHook);
+            secondaryAbility = new Ability(AbilityType.JetPack);
             naturalShield = new Ability(AbilityType.Shield);
 
             /*upgrades[(int)AbilityType.Laser] = true;
@@ -842,7 +842,10 @@ namespace VexedCore
         {
             if (crushing == true)
             {
-                crushCount += 2;
+                if (state != State.HookSpin && state != State.Spin)
+                {
+                    crushCount += 2;
+                }
                 if (crushCount < maxCrushCount)
                     return;
             }
@@ -1303,7 +1306,7 @@ namespace VexedCore
                             if (redOrbsCollected % redOrbsGoal == 0)
                             {
                                 redOrbsCollected = 0;
-                                redOrbsGoal = redOrbsGoal + 1;
+                                redOrbsGoal = redOrbsGoal + 2;
                                 naturalShield.maxAmmo = naturalShield.maxAmmo + 1;
                                 naturalShield.ammo = naturalShield.maxAmmo;
                             }
@@ -1776,7 +1779,7 @@ namespace VexedCore
                             if (d.type == VL.DoodadType.WarpStation || (d.type == VL.DoodadType.SwitchStation && d.abilityType == AbilityType.PermanentBlueKey))
                             {
                                 if (d.activationCost - currentRoom.currentBlueOrbs > 1)
-                                    DialogBox.SetCustomDialog("Insufficient Power. Collect " + (d.activationCost - currentRoom.currentBlueOrbs) + " more blue cubes.");
+                                    DialogBox.SetCustomDialog("Insufficient Power. Collect " + (d.activationCost - currentRoom.parentSector.currentBlueOrbs) + " more blue cubes.");
                                 else
                                     DialogBox.SetCustomDialog("Insufficient Power. Collect 1 more blue cube.");
                             }

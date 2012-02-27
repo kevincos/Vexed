@@ -557,3 +557,4 @@ Content\Decals\decal_lava.xnb
 Content\Decals\decal_radiation.xnb
 Content\Decals\decal_computer.xnb
 Content\Decals\decal_motherboard.xnb
+Content\UI\hudbaseinfo.xnb

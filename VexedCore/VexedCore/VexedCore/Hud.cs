@@ -22,6 +22,7 @@ namespace VexedCore
     public class Hud
     {
         public static Texture2D hudBase;
+        public static Texture2D hudBaseInfo;
         public static Texture2D healthmeter_top;
         public static Texture2D healthmeter_bottom;
         public static Texture2D healthmeter_mid;
@@ -39,7 +40,7 @@ namespace VexedCore
         public static int displayHP = 0;
         public static int displayHealthCubes = 0;
         public static int displayMaxHP = 3;
-        public static int displayMaxHealthCubes = 2;
+        public static int displayMaxHealthCubes = 4;
         public static int HPanimateTime = 0;
         public static int maxHPAnimateTime = 100;
         public static int cubeAnimateTime = 0;
@@ -70,6 +71,7 @@ namespace VexedCore
             int hudLeft = Game1.titleSafeRect.Right - w + hiddenOffset;
             int topEdge = Game1.titleSafeRect.Top;
             Engine.spriteBatch.Draw(hudBase, new Rectangle(hudLeft, topEdge, w, w), Color.White);
+            Engine.spriteBatch.Draw(hudBaseInfo, new Rectangle(hudLeft, topEdge, w, w), Color.White);
 
             int iconSize = (int)(.14f * w);
             int iconXOffset = (int)(.45f * w);

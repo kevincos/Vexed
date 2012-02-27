@@ -208,6 +208,7 @@ namespace VexedCore
             Edge.lavaCoolEdge = Content.Load<Texture2D>("Walls\\lavacool_edge");
             Edge.lavaHotEdge = Content.Load<Texture2D>("Walls\\lavahot_edge");
             Hud.hudBase = Content.Load<Texture2D>("UI\\hudbase");
+            Hud.hudBaseInfo = Content.Load<Texture2D>("UI\\hudbaseinfo");
             Hud.healthmeter_bottom = Content.Load<Texture2D>("UI\\healthmeter_bottom");
             Hud.healthmeter_color = Content.Load<Texture2D>("UI\\healthmeter_color");
             Hud.healthmeter_mid = Content.Load<Texture2D>("UI\\healthmeter_mid");

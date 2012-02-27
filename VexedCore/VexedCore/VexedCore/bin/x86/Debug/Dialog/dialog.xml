@@ -944,5 +944,36 @@ laser-proof armor!</string>
     <pause>true</pause>
   </DialogChunk>
 
+  <DialogChunk>
+    <id>tutorial_warp</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>
+        Vex. This is a warp station. You can use it for fast travel around the sector.
+      </string>
+      <string>
+        Each sector's warp network is powered by blue power cubes.
+      </string>
+      <string>
+        Blue cubes can be found in special power stations hidden throughout the station.
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
+  <DialogChunk>
+    <id>tutorial_rotate</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>
+        You'll need to oriented the right way to use these stations.
+      </string>
+      <string>
+        If you're stuck, maybe try approaching the problem from a different direction.
+      </string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+
 
 </ArrayOfDialogChunk>

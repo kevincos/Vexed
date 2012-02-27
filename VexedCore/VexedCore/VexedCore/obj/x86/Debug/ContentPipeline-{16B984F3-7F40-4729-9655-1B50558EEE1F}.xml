@@ -6019,6 +6019,15 @@
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\Decals\decal_motherboard.xnb</Output>
       <Time>2012-02-21T16:31:26.1642034-08:00</Time>
     </Item>
+    <Item>
+      <Source>UI\hudbaseinfo.png</Source>
+      <Name>UI\hudbaseinfo</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\x86\Debug\Content\UI\hudbaseinfo.xnb</Output>
+      <Time>2012-02-27T11:14:00.4586281-08:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{16B984F3-7F40-4729-9655-1B50558EEE1F}</ContentProjectGUID>
