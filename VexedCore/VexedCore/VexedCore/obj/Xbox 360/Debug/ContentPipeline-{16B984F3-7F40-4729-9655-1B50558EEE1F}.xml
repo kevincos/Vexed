@@ -2753,15 +2753,6 @@
       <Time>2003-01-08T15:57:42-08:00</Time>
     </Item>
     <Item>
-      <Source>Sounds\Throw4.wav</Source>
-      <Name>Sounds\Throw4</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\Throw4.xnb</Output>
-      <Time>2003-01-08T14:51:40-08:00</Time>
-    </Item>
-    <Item>
       <Source>Sounds\Xap.wav</Source>
       <Name>Sounds\Xap</Name>
       <Importer>WavImporter</Importer>
@@ -2981,7 +2972,7 @@
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Fonts\DialogFontLarge.xnb</Output>
-      <Time>2012-01-31T14:59:24.8530834-08:00</Time>
+      <Time>2012-02-27T14:55:49.5615113-08:00</Time>
     </Item>
     <Item>
       <Source>Fonts\DialogFontSmall.spritefont</Source>
@@ -2990,7 +2981,7 @@
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Fonts\DialogFontSmall.xnb</Output>
-      <Time>2012-01-31T14:57:57.961044-08:00</Time>
+      <Time>2012-02-27T14:55:49.5545109-08:00</Time>
     </Item>
     <Item>
       <Source>Fonts\HudFontLarge.spritefont</Source>
@@ -6027,6 +6018,15 @@
       <Options>None</Options>
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\UI\hudbaseinfo.xnb</Output>
       <Time>2012-02-27T11:14:00.4586281-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Sounds\Throw4.wav</Source>
+      <Name>Sounds\Throw4</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\Throw4.xnb</Output>
+      <Time>2003-01-08T14:51:40-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

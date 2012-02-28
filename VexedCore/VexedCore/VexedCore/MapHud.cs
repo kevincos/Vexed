@@ -24,8 +24,7 @@ namespace VexedCore
         public static Texture2D inventoryDataMonitor;
         public static Texture2D inventoryListMonitor;
 
-        public static List<int> inventoryIndexList;
-        public static List<int> objectiveIndexList;
+        public static List<int> inventoryIndexList;        
 
         public static bool hiddenFrame = true;
         public static bool hiddenMap = true;
@@ -129,32 +128,33 @@ namespace VexedCore
             filterColor = Color.YellowGreen;
             if (Engine.player.objectiveFilter)
                 filterColor = new Color(80, 80, 80);
-            Engine.spriteBatch.DrawString(spriteFont, "Objectives", new Vector2(filterMonitor1, filterMonitorTop + .045f * h), filterColor);
+            //Engine.spriteBatch.DrawString(spriteFont, "Objectives", new Vector2(filterMonitor1, filterMonitorTop + .045f * h), filterColor);
+            SpriteUtil.DrawString(Engine.spriteBatch, "Objectives", new Vector2(filterMonitor1, filterMonitorTop + .045f * h), filterColor);
 
             filterColor = Color.YellowGreen;
             if (Engine.player.stationFilter)
                 filterColor = new Color(80, 80, 80);
-            Engine.spriteBatch.DrawString(spriteFont, "Waypoints", new Vector2(filterMonitor1, filterMonitorTop + .085f * h), filterColor);
+            SpriteUtil.DrawString(Engine.spriteBatch, "Waypoints", new Vector2(filterMonitor1, filterMonitorTop + .085f * h), filterColor);
 
             filterColor = Color.YellowGreen;
             if (Engine.player.saveFilter)
                 filterColor = new Color(80, 80, 80);
-            Engine.spriteBatch.DrawString(spriteFont, "Save Stations", new Vector2(filterMonitor2, filterMonitorTop + .045f * h), filterColor);
+            SpriteUtil.DrawString(Engine.spriteBatch, "Save Stations", new Vector2(filterMonitor2, filterMonitorTop + .045f * h), filterColor);
 
             filterColor = Color.YellowGreen;
             if (Engine.player.itemFilter)
                 filterColor = new Color(80, 80, 80);
-            Engine.spriteBatch.DrawString(spriteFont, "Item Stations", new Vector2(filterMonitor2, filterMonitorTop + .085f * h), filterColor);
+            SpriteUtil.DrawString(Engine.spriteBatch, "Item Stations", new Vector2(filterMonitor2, filterMonitorTop + .085f * h), filterColor);
 
             filterColor = Color.YellowGreen;
             if (Engine.player.healthFilter)
                 filterColor = new Color(80, 80, 80);
-            Engine.spriteBatch.DrawString(spriteFont, "Health Stations", new Vector2(filterMonitor3, filterMonitorTop + .045f * h), filterColor);
+            SpriteUtil.DrawString(Engine.spriteBatch, "Health Stations", new Vector2(filterMonitor3, filterMonitorTop + .045f * h), filterColor);
 
             filterColor = Color.YellowGreen;
             if (Engine.player.warpFilter)
                 filterColor = new Color(80, 80, 80);
-            Engine.spriteBatch.DrawString(spriteFont, "Warp Nodes", new Vector2(filterMonitor3, filterMonitorTop + .085f * h), filterColor);
+            SpriteUtil.DrawString(Engine.spriteBatch, "Warp Nodes", new Vector2(filterMonitor3, filterMonitorTop + .085f * h), filterColor);
 
 
             // Inventory Monitors
@@ -249,8 +249,8 @@ namespace VexedCore
                     outputStringBase += "\nHealth Cubes: " + r.currentRedOrbs + " / " + r.maxRedOrbs;
                 }
 
-                Engine.spriteBatch.DrawString(spriteFont, outputStringTitle, new Vector2(monitorLeft + .137f * w, monitorTop + .032f * h), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(spriteFont, outputStringBase, new Vector2(monitorLeft + .167f * w, monitorTop + .074f * h), Color.YellowGreen);
+                SpriteUtil.DrawString(Engine.spriteBatch, outputStringTitle, new Vector2(monitorLeft + .137f * w, monitorTop + .032f * h), Color.YellowGreen);
+                SpriteUtil.DrawString(Engine.spriteBatch, outputStringBase, new Vector2(monitorLeft + .167f * w, monitorTop + .074f * h), Color.YellowGreen);
 
                 
             }
@@ -265,8 +265,8 @@ namespace VexedCore
                 outputStringBase += "\nWarp Level: " + s.currentBlueOrbs + " / " + s.maxBlueOrbs;
                 outputStringBase += "\nRed Cubes: " + s.currentRedOrbs + " / " + s.maxRedOrbs;
 
-                Engine.spriteBatch.DrawString(spriteFont, outputStringTitle, new Vector2(monitorLeft + .137f * w, monitorTop + .032f * h), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(spriteFont, outputStringBase, new Vector2(monitorLeft + .167f * w, monitorTop + .074f * h), Color.YellowGreen);
+                SpriteUtil.DrawString(Engine.spriteBatch, outputStringTitle, new Vector2(monitorLeft + .137f * w, monitorTop + .032f * h), Color.YellowGreen);
+                SpriteUtil.DrawString(Engine.spriteBatch, outputStringBase, new Vector2(monitorLeft + .167f * w, monitorTop + .074f * h), Color.YellowGreen);
             }
             if (inventoryIndexList == null)
             {
@@ -297,11 +297,11 @@ namespace VexedCore
                 inventoryListIncrement = (inventoryListBottom - inventoryListTop) / (28);
                 int increment = inventoryListIncrement;
 
-                Engine.spriteBatch.DrawString(spriteFont, "Inventory", new Vector2(monitorLeft + .127f * w, inventoryListTop + 4 * increment), Color.YellowGreen);                
+                SpriteUtil.DrawString(Engine.spriteBatch, "Inventory", new Vector2(monitorLeft + .127f * w, inventoryListTop + 4 * increment), Color.YellowGreen);                
 
 
-                Engine.spriteBatch.DrawString(spriteFont, "Items Unlocked", new Vector2(inventoryListLeft + .127f * w, inventoryListTop + 8 * increment), Color.YellowGreen);
-                Engine.spriteBatch.DrawString(spriteFont, "Suit Upgrades", new Vector2(inventoryListLeft + .127f * w, inventoryListTop + 20 * increment), Color.YellowGreen);
+                SpriteUtil.DrawString(Engine.spriteBatch, "Items Unlocked", new Vector2(inventoryListLeft + .127f * w, inventoryListTop + 8 * increment), Color.YellowGreen);
+                SpriteUtil.DrawString(Engine.spriteBatch, "Suit Upgrades", new Vector2(inventoryListLeft + .127f * w, inventoryListTop + 20 * increment), Color.YellowGreen);
 
                 for (int i = 0; i < inventoryIndexList.Count; i++)
                 {
@@ -309,22 +309,22 @@ namespace VexedCore
                     a.type = (AbilityType)inventoryIndexList[i];
                     if (WorldMap.selectedInventory == i)
                     {
-                        Engine.spriteBatch.DrawString(spriteFont, "X", new Vector2(inventoryListLeft + .127f * w, inventoryListTop + increment * drawOffset), Color.YellowGreen);
+                        SpriteUtil.DrawString(Engine.spriteBatch, "X", new Vector2(inventoryListLeft + .127f * w, inventoryListTop + increment * drawOffset), Color.YellowGreen);
 
                         if (Engine.player.upgrades[inventoryIndexList[i]] == true)
                         {
-                            Engine.spriteBatch.DrawString(spriteFont, a.FriendlyName(), new Vector2(inventoryDataLeft + .01f * w, inventoryDataTop + .12f * h), Color.YellowGreen);
-                            Engine.spriteBatch.DrawString(spriteFont, DialogChunk.TextFit(a.Description(), inventoryDataRight - inventoryDataLeft - .12f * h, spriteFont), new Vector2(inventoryDataLeft + .01f * w, inventoryDataTop + .15f * w), Color.YellowGreen);
+                            SpriteUtil.DrawString(Engine.spriteBatch, a.FriendlyName(), new Vector2(inventoryDataLeft + .01f * w, inventoryDataTop + .12f * h), Color.YellowGreen);
+                            SpriteUtil.DrawString(Engine.spriteBatch, SpriteUtil.TextFit(a.Description(), inventoryDataRight - inventoryDataLeft - .12f * h), new Vector2(inventoryDataLeft + .01f * w, inventoryDataTop + .15f * w), Color.YellowGreen);
                         }
 
                     }
                     if (Engine.player.upgrades[inventoryIndexList[i]] == true)
                     {
-                        Engine.spriteBatch.DrawString(spriteFont, "  " + a.FriendlyName(), new Vector2(inventoryListLeft + .140f * w, inventoryListTop + increment * drawOffset), Color.YellowGreen);
+                        SpriteUtil.DrawString(Engine.spriteBatch, "  " + a.FriendlyName(), new Vector2(inventoryListLeft + .140f * w, inventoryListTop + increment * drawOffset), Color.YellowGreen);
                     }
                     else
                     {
-                        Engine.spriteBatch.DrawString(spriteFont, "  ???", new Vector2(inventoryListLeft + .140f * w, inventoryListTop + increment * drawOffset), Color.YellowGreen);
+                        SpriteUtil.DrawString(Engine.spriteBatch, "  ???", new Vector2(inventoryListLeft + .140f * w, inventoryListTop + increment * drawOffset), Color.YellowGreen);
                     }
                     drawOffset += 1;
                     if (i == 1)
@@ -341,28 +341,28 @@ namespace VexedCore
                 objectiveListIncrement = (objectiveListBottom - objectiveListTop) / (28);
                 int increment = objectiveListIncrement;
 
-                Engine.spriteBatch.DrawString(spriteFont, "Objectives", new Vector2(objectiveListLeft + .167f * w, objectiveListTop + 4 * increment), Color.YellowGreen);
+                SpriteUtil.DrawString(Engine.spriteBatch, "Objectives", new Vector2(objectiveListLeft + .167f * w, objectiveListTop + 4 * increment), Color.YellowGreen);
 
                 for (int i = 0; i < ObjectiveControl.objectives.Count; i++)
                 {
                     if (WorldMap.selectedObjective == i)
                     {
-                        Engine.spriteBatch.DrawString(spriteFont, "X", new Vector2(objectiveListLeft + .167f * w, objectiveListTop + increment * drawOffset), Color.YellowGreen);
+                        SpriteUtil.DrawString(Engine.spriteBatch, "X", new Vector2(objectiveListLeft + .167f * w, objectiveListTop + increment * drawOffset), Color.YellowGreen);
 
                         if(Engine.player.currentObjective >= i)
                         {
-                            Engine.spriteBatch.DrawString(spriteFont, ObjectiveControl.objectives[i].shorttext, new Vector2(objectiveDataLeft + .01f * w, objectiveDataTop + .12f * h), Color.YellowGreen);
-                            Engine.spriteBatch.DrawString(spriteFont, DialogChunk.TextFit(ObjectiveControl.objectives[i].longtext, objectiveDataRight - objectiveDataLeft - .12f * h, spriteFont), new Vector2(objectiveDataLeft + .01f * w, objectiveDataTop + .15f * w), Color.YellowGreen);
+                            SpriteUtil.DrawString(Engine.spriteBatch, ObjectiveControl.objectives[i].shorttext, new Vector2(objectiveDataLeft + .01f * w, objectiveDataTop + .12f * h), Color.YellowGreen);
+                            SpriteUtil.DrawString(Engine.spriteBatch, SpriteUtil.TextFit(ObjectiveControl.objectives[i].longtext, objectiveDataRight - objectiveDataLeft - .12f * h), new Vector2(objectiveDataLeft + .01f * w, objectiveDataTop + .15f * w), Color.YellowGreen);
                         }
 
                     }
                     if (i <= Engine.player.currentObjective == true)
                     {
-                        Engine.spriteBatch.DrawString(spriteFont, "  " + ObjectiveControl.objectives[i].shorttext, new Vector2(objectiveListLeft + .180f * w, objectiveListTop + increment * drawOffset), Color.YellowGreen);
+                        SpriteUtil.DrawString(Engine.spriteBatch, "  " + ObjectiveControl.objectives[i].shorttext, new Vector2(objectiveListLeft + .180f * w, objectiveListTop + increment * drawOffset), Color.YellowGreen);
                     }
                     else
                     {
-                        Engine.spriteBatch.DrawString(spriteFont, "  ???", new Vector2(objectiveListLeft + .180f * w, objectiveListTop + increment * drawOffset), Color.YellowGreen);
+                        SpriteUtil.DrawString(Engine.spriteBatch, "  ???", new Vector2(objectiveListLeft + .180f * w, objectiveListTop + increment * drawOffset), Color.YellowGreen);
                     }
                     drawOffset++;
                 }
@@ -371,9 +371,9 @@ namespace VexedCore
 
             if (WorldMap.state != ZoomState.None)
             {
-                Engine.spriteBatch.DrawString(spriteFont, "Current Objective: ", new Vector2(objectiveLeft + .037f * w, objectiveTop + .037f * h), Color.YellowGreen);
+                SpriteUtil.DrawString(Engine.spriteBatch, "Current Objective: ", new Vector2(objectiveLeft + .037f * w, objectiveTop + .037f * h), Color.YellowGreen);
 
-                Engine.spriteBatch.DrawString(spriteFont, ObjectiveControl.objectives[Engine.player.currentObjective].text, new Vector2(objectiveLeft + .067f * w, objectiveTop + .082f * h), Color.YellowGreen);
+                SpriteUtil.DrawString(Engine.spriteBatch, ObjectiveControl.objectives[Engine.player.currentObjective].text, new Vector2(objectiveLeft + .067f * w, objectiveTop + .082f * h), Color.YellowGreen);
             }
             mousePos = new Vector2(Mouse.GetState().X - 32, Mouse.GetState().Y);
             if (WorldMap.state != ZoomState.None)

@@ -245,7 +245,6 @@ Content\Music\StorageMusic.xnb
 Content\Music\UpgradeMusic.xnb
 Content\Decorations\hologram_oldman.xnb
 Content\Decorations\holoprojector.xnb
-Content\Sounds\Throw4.xnb
 Content\UI\dialogmonitor.xnb
 Content\UI\dialogrightedge.xnb
 Content\UI\dialogtextarea.xnb
@@ -543,6 +542,7 @@ Content\Decals\decal_radiation.xnb
 Content\Decals\decal_computer.xnb
 Content\Decals\decal_motherboard.xnb
 Content\UI\hudbaseinfo.xnb
+Content\Sounds\Throw4.xnb
 Content\Music\BossMusic.wma
 Content\Music\CommandMusic.wma
 Content\Music\CoreMusic.wma

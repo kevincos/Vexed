@@ -27,6 +27,7 @@ namespace VexedCore
         Resolution,
         Quit
     }
+    
 
     public class MenuOption
     {
@@ -90,7 +91,46 @@ namespace VexedCore
 
         public static List<MenuOption> options;
 
+        public static List<Vector2> resolutionOptions;
+
         public static ControlType oldControlType;
+
+        public static void UpdateResolution()
+        {
+            if (Game1.titleSafeRect.Width != resolutionOptions[Engine.resIndex].X || Game1.titleSafeRect.Height != resolutionOptions[Engine.resIndex].Y)
+            {
+                Game1.SetGraphicsSettings();
+                SpriteUtil.SetBestFont();
+                options = null;
+                ResetMenuOptions();
+            }
+        }
+
+        public static void ResetMenuOptions()
+        {
+            int optionBaseX = Game1.titleSafeRect.Center.X - 100;
+            int optionBaseY = Game1.titleSafeRect.Center.Y - 80;
+            if (options == null)
+            {
+                options = new List<MenuOption>();
+                options.Add(new MenuOption("CONTINUE", optionBaseX, optionBaseY + 0, MenuItems.Continue));
+
+                options.Add(new MenuOption("RESTART ROOM", optionBaseX, optionBaseY + 40, MenuItems.RestartRoom));
+                options.Add(new MenuOption("LOAD LAST SAVE", optionBaseX, optionBaseY + 60, MenuItems.LoadLastSave));
+                options.Add(new MenuOption("RETURN TO MAIN MENU", optionBaseX, optionBaseY + 80, MenuItems.MainMenu));
+
+                //options.Add(new MenuOption("CONTROLS:", optionBaseX, optionBaseY + 120, MenuItems.ControlScheme));
+                options.Add(new MenuOption("MUSIC: ", optionBaseX, optionBaseY + 120, MenuItems.Music));
+                options.Add(new MenuOption("SOUND EFFECTS: ", optionBaseX, optionBaseY + 140, MenuItems.SoundEffects));
+                //options.Add(new MenuOption("TRANSPARENCY: ", optionBaseX, optionBaseY+180, MenuItems.Transparency));
+                options.Add(new MenuOption("DRAW DISTANCE: ", optionBaseX, optionBaseY + 160, MenuItems.DrawDistance));
+                options.Add(new MenuOption("FULL SCREEN: ", optionBaseX, optionBaseY + 180, MenuItems.FullScreen));
+                options.Add(new MenuOption("RESOLUTION: ", optionBaseX, optionBaseY + 200, MenuItems.Resolution));
+
+                options.Add(new MenuOption("QUIT", optionBaseX, optionBaseY + 280, MenuItems.Quit));
+
+            }
+        }
 
         public static void Draw()
         {
@@ -98,26 +138,8 @@ namespace VexedCore
             int optionBaseY = Game1.titleSafeRect.Center.Y - 80;
             if (paused == true)
             {                
-                if (options == null)
-                {
-                    options = new List<MenuOption>();
-                    options.Add(new MenuOption("CONTINUE", optionBaseX, optionBaseY+0, MenuItems.Continue));
-
-                    options.Add(new MenuOption("RESTART ROOM", optionBaseX, optionBaseY+40, MenuItems.RestartRoom));
-                    options.Add(new MenuOption("LOAD LAST SAVE", optionBaseX, optionBaseY+60, MenuItems.LoadLastSave));
-                    options.Add(new MenuOption("RETURN TO MAIN MENU", optionBaseX, optionBaseY+80, MenuItems.MainMenu));
-
-                    //options.Add(new MenuOption("CONTROLS:", optionBaseX, optionBaseY + 120, MenuItems.ControlScheme));
-                    options.Add(new MenuOption("MUSIC: ", optionBaseX, optionBaseY+120, MenuItems.Music));
-                    options.Add(new MenuOption("SOUND EFFECTS: ", optionBaseX, optionBaseY+140, MenuItems.SoundEffects));
-                    //options.Add(new MenuOption("TRANSPARENCY: ", optionBaseX, optionBaseY+180, MenuItems.Transparency));
-                    options.Add(new MenuOption("DRAW DISTANCE: ", optionBaseX, optionBaseY + 160, MenuItems.DrawDistance));
-                    options.Add(new MenuOption("FULL SCREEN: ", optionBaseX, optionBaseY + 180, MenuItems.FullScreen));
-                    options.Add(new MenuOption("RESOLUTION: ", optionBaseX, optionBaseY + 200, MenuItems.Resolution));
-
-                    options.Add(new MenuOption("QUIT", optionBaseX, optionBaseY+280, MenuItems.Quit));
+                ResetMenuOptions();
                 
-                }
                 mousePos.X = Mouse.GetState().X-32;
                 mousePos.Y = Mouse.GetState().Y;
                 Engine.spriteBatch.Begin();
@@ -196,11 +218,8 @@ namespace VexedCore
                                 extraData = "Off";
                         }
                         if (options[i].type == MenuItems.Resolution)
-                        {
-                            if (Engine.res == ResolutionSettings.R_800x600)
-                                extraData = "800x600";
-                            if (Engine.res == ResolutionSettings.R_1920x1080)
-                                extraData = "1920x1080";
+                        {                            
+                            extraData = "" + PauseMenu.resolutionOptions[Engine.resIndex].X + "x" + PauseMenu.resolutionOptions[Engine.resIndex].Y;                            
                         }
                         if (options[i].type == MenuItems.DrawDistance)
                         {
@@ -270,6 +289,7 @@ namespace VexedCore
                 {
                     cooldown = maxCooldown;
                     paused = false;
+                    UpdateResolution();
                 }
             }
             else if (cooldown == 0 && paused == true)
@@ -278,6 +298,7 @@ namespace VexedCore
                 {
                     cooldown = maxCooldown;
                     paused = false;
+                    UpdateResolution();
                 }
                 if (GamePad.GetState(Game1.activePlayer).ThumbSticks.Left.Y < -.5f || currentKeyboardState.IsKeyDown(Keys.Down) || currentKeyboardState.IsKeyDown(Keys.S))
                 {
@@ -303,6 +324,7 @@ namespace VexedCore
                         Game1.controller.XButton.Invalidate();
                         Game1.controller.YButton.Invalidate();
                         paused = false;
+                        UpdateResolution();
                     }
                     if (result == MenuItems.RestartRoom)
                     {
@@ -316,6 +338,7 @@ namespace VexedCore
                         Physics.refresh = true;
                         Engine.reDraw = true;
                         paused = false;
+                        UpdateResolution();
                     }
                     if (result == MenuItems.LoadLastSave)
                     {
@@ -330,6 +353,7 @@ namespace VexedCore
                             Physics.refresh = true;
                             Engine.reDraw = true;
                             paused = false;
+                            UpdateResolution();
                             cooldown = maxCooldown;
                         }
                     }
@@ -349,6 +373,7 @@ namespace VexedCore
                         Physics.refresh = true;
                         Engine.reDraw = true;
                         paused = false;
+                        UpdateResolution();
                     }
                     if (result == MenuItems.ControlScheme)
                     {
@@ -393,13 +418,14 @@ namespace VexedCore
                     if (result == MenuItems.Quit)
                     {
                         SoundFX.PauseMenuSelect();
-                        Engine.quit = true;
+                        Engine.quit = true;                        
                         paused = false;
                     }
                     if (result == MenuItems.FullScreen)
                     {
                         SoundFX.PauseMenuSelect();
                         Engine.fullScreen = !Engine.fullScreen;
+                        UpdateResolution();
                         Game1.SetGraphicsSettings();
                         cooldown = maxCooldown;
 
@@ -407,12 +433,8 @@ namespace VexedCore
                     if (result == MenuItems.Resolution)
                     {
                         SoundFX.PauseMenuSelect();
-                        if (Engine.res == ResolutionSettings.R_800x600)
-                            Engine.res = ResolutionSettings.R_1920x1080;
-                        else
-                            Engine.res = ResolutionSettings.R_800x600;
-                        Game1.SetGraphicsSettings();
-                        options = null;
+                        Engine.resIndex++;
+                        Engine.resIndex %= PauseMenu.resolutionOptions.Count;                        
                         cooldown = maxCooldown;
                     }
                 }

@@ -263,7 +263,6 @@ Content\Sounds\Switch2.xnb
 Content\Sounds\Switch3.xnb
 Content\Sounds\Switch1.xnb
 Content\Sounds\SlidingDoor2.xnb
-Content\Sounds\Throw4.xnb
 Content\Sounds\Xap.xnb
 Content\Sounds\Tinyzap1.xnb
 Content\Sounds\Tinyzap2.xnb
@@ -543,6 +542,7 @@ Content\Decals\decal_radiation.xnb
 Content\Decals\decal_computer.xnb
 Content\Decals\decal_motherboard.xnb
 Content\UI\hudbaseinfo.xnb
+Content\Sounds\Throw4.xnb
 Content\Music\BossMusic.wma
 Content\Music\CommandMusic.wma
 Content\Music\CoreMusic.wma

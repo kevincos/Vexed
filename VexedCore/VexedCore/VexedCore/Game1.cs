@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -39,10 +41,36 @@ namespace VexedCore
 
         public Game1()
         {
+
             
+
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferMultiSampling = true;
             graphics.SynchronizeWithVerticalRetrace = true;
+
+            PauseMenu.resolutionOptions = new List<Vector2>();
+            foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
+            {
+                // Use display mode as required...
+                PauseMenu.resolutionOptions.Add(new Vector2(mode.Width, mode.Height));                
+            }
+            Engine.resIndex = 0;
+
+            try
+            {                
+                Stream stream = new FileStream("settings", FileMode.Open, FileAccess.ReadWrite);
+                XmlSerializer serializer = new XmlSerializer(typeof(Settings));
+                Settings s = (Settings)serializer.Deserialize(stream);
+                stream.Close();
+                Engine.fullScreen = s.fullscreen;
+                Engine.resIndex = s.resIndex;
+                Engine.soundEffectsEnabled = s.soundeffects;
+                Engine.musicEnabled = s.music;
+                Engine.drawDepth = s.drawDistance;
+                if (Engine.resIndex >= PauseMenu.resolutionOptions.Count) Engine.resIndex = 0;
+            }
+            catch (Exception) { }
+
 
             Engine.res = ResolutionSettings.R_800x600;
             Engine.fullScreen = false;
@@ -55,8 +83,8 @@ namespace VexedCore
             Engine.fullScreen = false;
 
             SetGraphicsSettings();
-
             titleSafeRect = graphics.GraphicsDevice.Viewport.TitleSafeArea;
+            
 
             engine = new Engine();
             controller = new Controls(activePlayer);            
@@ -69,31 +97,8 @@ namespace VexedCore
 
         public static void SetGraphicsSettings()
         {
-            if (Engine.res == ResolutionSettings.R_800x600)
-            {
-                Engine.resWidth = 800;
-                Engine.resHeight = 600;
-            }
-            if (Engine.res == ResolutionSettings.R_1024x768)
-            {
-                Engine.resWidth = 1024;
-                Engine.resHeight = 768;
-            }
-            if (Engine.res == ResolutionSettings.R_1920x1080)
-            {
-                Engine.resWidth = 1920;
-                Engine.resHeight = 1080;
-            }
-            if (Engine.res == ResolutionSettings.R_1280x720)
-            {
-                Engine.resWidth = 1280;
-                Engine.resHeight = 720;
-            }
-            if (Engine.res == ResolutionSettings.R_400x300)
-            {
-                Engine.resWidth = 400;
-                Engine.resHeight = 300;
-            }
+            Engine.resWidth = (int)(PauseMenu.resolutionOptions[Engine.resIndex].X);
+            Engine.resHeight = (int)(PauseMenu.resolutionOptions[Engine.resIndex].Y);
 
             graphics.IsFullScreen = Engine.fullScreen;
             graphics.PreferredBackBufferWidth = Engine.resWidth;
@@ -103,6 +108,7 @@ namespace VexedCore
             graphics.ApplyChanges();
 
             titleSafeRect = graphics.GraphicsDevice.Viewport.TitleSafeArea;
+            
         }
 
         /// <summary>
@@ -292,6 +298,8 @@ namespace VexedCore
             
             //LevelLoader.Load("LevelData\\spikeelevator");
             LevelLoader.Load("LevelData\\menu");
+
+            SpriteUtil.SetBestFont();            
             
             // TODO: use this.Content to load your game content here
         }
@@ -331,7 +339,22 @@ namespace VexedCore
             
             // Allows the game to exit
             if (Engine.quit == true)
+            {
+                // Save settings
+                Settings s = new Settings();
+                s.drawDistance = Engine.drawDepth;
+                s.resIndex = Engine.resIndex;
+                s.music = Engine.musicEnabled;
+                s.soundeffects = Engine.soundEffectsEnabled;
+                s.fullscreen = Engine.fullScreen;
+
+                Stream stream = new FileStream("settings", FileMode.Create, FileAccess.ReadWrite);
+                XmlSerializer serializer = new XmlSerializer(typeof(Settings));
+                
+                serializer.Serialize(stream, s);
+                stream.Close();
                 this.Exit();
+            }
             
 
             int elapsedTime = gameTime.ElapsedGameTime.Milliseconds;

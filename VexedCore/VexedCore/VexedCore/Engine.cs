@@ -91,6 +91,7 @@ namespace VexedCore
         public static int resWidth = 1920;
         public static int resHeight = 1280;
         public static ResolutionSettings res = ResolutionSettings.R_800x600;
+        public static int resIndex = 0;
         
 
 

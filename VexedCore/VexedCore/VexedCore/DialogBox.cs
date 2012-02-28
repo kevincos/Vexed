@@ -52,28 +52,7 @@ namespace VexedCore
             this.textList.Add("EXTRATEXT");
         }
 
-        public static String TextFit(String input, float boxLength, SpriteFont font)
-        {
-            // Purge of existing newline chars
-            String revisedText = "";
-            String currentLine = "";
-
-            
-            String[] wordList = input.Split(new char[] { ' ', '\n' });
-            for (int j = 0; j < wordList.Length; j++)
-            {                
-                if (wordList[j].Length == 0)
-                    continue;
-                if (font.MeasureString(currentLine + ' ' + wordList[j]).X > boxLength)
-                {
-                    revisedText += currentLine + "\n";
-                    currentLine = "";
-                }
-                currentLine += wordList[j] + " ";
-            }
-            revisedText += currentLine + "\n";
-            return revisedText;
-        }
+        
 
         public void FitToBox()
         {
@@ -82,7 +61,7 @@ namespace VexedCore
             float boxLength = 6 * w;            
             for (int i = 0; i < textList.Count; i++)
             {
-                textList[i] = DialogChunk.TextFit(textList[i], boxLength, DialogBox.currentFont);                
+                textList[i] = SpriteUtil.TextFit(textList[i], boxLength);                
             }
             
             
@@ -311,7 +290,8 @@ namespace VexedCore
 
                 if (state == BoxState.Text || state == BoxState.Wait)
                 {
-                    Engine.spriteBatch.DrawString(currentFont, currentText, new Vector2(dialogLeft + 1.15f*w, dialogTop + .15f*w), Color.YellowGreen);
+                    //Engine.spriteBatch.DrawString(currentFont, currentText, new Vector2(dialogLeft + 1.15f*w, dialogTop + .15f*w), Color.YellowGreen);
+                    SpriteUtil.DrawString(Engine.spriteBatch, currentText, new Vector2(dialogLeft + 1.15f * w, dialogTop + .15f * w), Color.YellowGreen);
                     
                 }
 
