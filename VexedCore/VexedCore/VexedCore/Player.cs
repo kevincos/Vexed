@@ -114,6 +114,8 @@ namespace VexedCore
         public int jumpTime = 0;
         public int deathTime = 0;
         public int lastFireTime = 0;
+        public int bootsSpinCooldown = 0;
+        public int bootsSpinCooldownMax = 100;
         public int hookTime = 0;
         public int hookHangTime = 0;
         public int upgradeTime = 0;
@@ -231,8 +233,8 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.SpinHook);
-            secondaryAbility = new Ability(AbilityType.JetPack);
+            primaryAbility = new Ability(AbilityType.Empty);
+            secondaryAbility = new Ability(AbilityType.Empty);
             naturalShield = new Ability(AbilityType.Shield);
 
             /*upgrades[(int)AbilityType.Laser] = true;
@@ -903,7 +905,7 @@ namespace VexedCore
 
         public void Spin(Vector3 newUp)
         {
-            if (upgrades[(int)AbilityType.PermanentBoots]==true || primaryAbility.type == AbilityType.Boots || secondaryAbility.type == AbilityType.Boots)
+            if ((upgrades[(int)AbilityType.PermanentBoots]==true || primaryAbility.type == AbilityType.Boots || secondaryAbility.type == AbilityType.Boots) && bootsSpinCooldown == 0)
             {
                 jumpSource = center.position;
                 jumpDestination = center.position;
@@ -912,6 +914,7 @@ namespace VexedCore
                 state = State.Spin;
                 spinUp = newUp;
                 boosting = false;
+                bootsSpinCooldown = bootsSpinCooldownMax;
             }
         }
 
@@ -999,12 +1002,12 @@ namespace VexedCore
         {            
             if (state == State.Dialog)
             {
-                if (faceDirection < 0)
+                /*if (faceDirection < 0)
                     AnimationControl.SetState(AnimationState.IdleLeft);
                 if (faceDirection > 0)
                     AnimationControl.SetState(AnimationState.IdleRight);
                 if (faceDirection == 0)
-                    AnimationControl.SetState(AnimationState.Idle);
+                    AnimationControl.SetState(AnimationState.Idle);*/
             }
             else if (state == State.Death)
             {
@@ -1161,6 +1164,9 @@ namespace VexedCore
                 if (spinRecovery < 0)
                     spinRecovery = 0;
             }
+
+            bootsSpinCooldown -= gameTime;
+            if (bootsSpinCooldown < 0) bootsSpinCooldown = 0;
             currentRoom.explored = true;
             crushCount--;
             if (crushCount < 0)
@@ -1359,6 +1365,7 @@ namespace VexedCore
                 if (upgradeTime < upgradeWalkTime)
                 {
                     center.position = ((upgradeWalkTime - upgradeTime) * jumpSource + upgradeTime * upgradeStationDoodad.position.position) / upgradeWalkTime;
+                    center.velocity = Vector3.Zero;
                     upgradeStage = 0;
                 }
                 if (Vector3.Dot(right, upgradeStationDoodad.position.position - center.position) > 0)
@@ -1388,7 +1395,7 @@ namespace VexedCore
                     {
                         SaveGame();
                         Game1.resetTimer = true;
-
+                        center.velocity = Vector3.Zero;
                         saveComplete = true;
                         upgradeTime = upgradeWaitTime - 300;
                     }
@@ -1404,6 +1411,7 @@ namespace VexedCore
                 {                    
                     state = State.Normal;
                     upgradeTime = 0;
+                    center.velocity = Vector3.Zero;
                     if(Engine.justLoaded == false)
                         DialogBox.SetDialog("SaveComplete");
 

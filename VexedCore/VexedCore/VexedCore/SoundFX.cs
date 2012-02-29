@@ -198,6 +198,12 @@ namespace VexedCore
                 equipError.Play();
         }
 
+        public static void MapError()
+        {
+            if (mapSoundEnabled)
+                equipError.Play();
+        }
+
 
         public static void DialogCharacter()
         {

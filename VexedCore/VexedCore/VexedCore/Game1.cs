@@ -49,12 +49,22 @@ namespace VexedCore
             graphics.SynchronizeWithVerticalRetrace = true;
 
             PauseMenu.resolutionOptions = new List<Vector2>();
-            foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
-            {
-                // Use display mode as required...
-                PauseMenu.resolutionOptions.Add(new Vector2(mode.Width, mode.Height));                
-            }
+
+            int i = 0;
             Engine.resIndex = 0;
+            foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
+            {                
+                // Use display mode as required...
+                PauseMenu.resolutionOptions.Add(new Vector2(mode.Width, mode.Height));
+                if (mode.Width == GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width && mode.Height ==
+                    GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
+                {
+                    Engine.resIndex = i;
+                }
+                i++;
+                
+            }
+            
 
             try
             {                

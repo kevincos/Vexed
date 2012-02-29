@@ -60,7 +60,8 @@ namespace VexedCore
 
         public static int selectedInventory = 0;
         public static int selectedObjective = 0;
-        
+
+        public static int buzzCooldown = 0;
 
         public static bool warp = false;
         public static bool zoomToPlayer = false;
@@ -122,7 +123,10 @@ namespace VexedCore
         }
 
         public static ZoomState Update(int gameTime)
-        {            
+        {
+            buzzCooldown -= gameTime;
+            if (buzzCooldown < 0)
+                buzzCooldown = 0;
             if (state == ZoomState.None)
             {
                 SelectPlayerRoom();             
@@ -376,7 +380,7 @@ namespace VexedCore
                         if ((Engine.roomList[i].mapPosition2D - mousePos).Length() < 60)
                         {
                             float distance = (Engine.roomList[i].center - cameraPosition).Length();
-                            if (distance < bestDistance && (warp == false || (Engine.roomList[i].hasWarp == true && Engine.roomList[i].explored == true)))
+                            if (distance < bestDistance && (warp == false || (Engine.roomList[i].hasWarp == true)))
                             {
                                 bestDistance = distance;
 
@@ -526,13 +530,20 @@ namespace VexedCore
                 bool validWarpTarget = false;
                 foreach (Doodad d in Engine.roomList[selectedRoomIndex].doodads)
                 {
-                    if (d.type == VL.DoodadType.WarpStation && d.powered == true)
+                    if (d.type == VL.DoodadType.WarpStation && d.powered == true && d.currentRoom.explored == true)
                     {
                         validWarpTarget = true;
                     }
                 }
                 if (validWarpTarget == false)
+                {
+                    if (buzzCooldown == 0)
+                    {
+                        SoundFX.MapError();
+                        buzzCooldown = 200;
+                    }
                     return 0;
+                }
                 warp = false;
                 Engine.player.Warp(Engine.roomList[selectedRoomIndex]);
                 SoundFX.MapWhoosh();
@@ -545,7 +556,7 @@ namespace VexedCore
                 state = ZoomState.ZoomFromSector;
                 SelectPlayerRoom();
             }
-            else if (warp == false && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || Keyboard.GetState().IsKeyDown(Keys.M) || zoomToPlayer == true ||  GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && (WorldMap.state == ZoomState.Sector || WorldMap.state == ZoomState.Inventory))
+            else if (warp == false && (Keyboard.GetState().IsKeyDown(Keys.OemPlus) || Keyboard.GetState().IsKeyDown(Keys.M) || Keyboard.GetState().IsKeyDown(Keys.Space) || zoomToPlayer == true ||  GamePad.GetState(Game1.activePlayer).IsButtonDown(Buttons.A)) && (WorldMap.state == ZoomState.Sector || WorldMap.state == ZoomState.Inventory))
             {
                 if (Engine.player.currentRoom.parentSector == Engine.sectorList[selectedSectorIndex])
                 {

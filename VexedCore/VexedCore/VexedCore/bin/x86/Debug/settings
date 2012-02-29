@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <fullscreen>false</fullscreen>
-  <resIndex>33</resIndex>
-  <music>true</music>
+  <resIndex>16</resIndex>
+  <music>false</music>
   <soundeffects>true</soundeffects>
   <drawDistance>2</drawDistance>
 </Settings>

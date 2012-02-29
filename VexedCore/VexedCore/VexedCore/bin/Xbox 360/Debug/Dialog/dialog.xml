@@ -975,5 +975,22 @@ laser-proof armor!</string>
     <pause>false</pause>
   </DialogChunk>
 
+  <DialogChunk>
+    <id>tutorial_key</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>
+        Here's a blue key card that you can use to activate certain switches.
+      </string>
+      <string>
+        Key cards take up slots in your inventory just like other items.
+      </string>
+      <string>
+        Try equipping the key to your second inventory slot.
+      </string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+
 
 </ArrayOfDialogChunk>

@@ -39,6 +39,7 @@ namespace VexedCore
         public static int hiddenObjectiveOffsetTime = 1200;
         public static int hiddenObjectiveMaxOffsetTime = 1200;
         public static int filterCooldown;
+       
 
         public static int inventoryListIncrement = 0;
         public static int inventoryListTop;
@@ -402,6 +403,8 @@ namespace VexedCore
             {
                 hiddenObjective = true;
             }
+
+            
 
 
             if (hiddenMap && hiddenMapOffsetTime < hiddenMapMaxOffsetTime)

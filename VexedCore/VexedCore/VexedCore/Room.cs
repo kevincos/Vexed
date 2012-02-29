@@ -137,7 +137,8 @@ namespace VexedCore
             explored = r.explored;
             bossCleared = r.bossCleared;
             stationDecal = r.stationDecal;
-            friendlyName = r.friendlyName;            
+            friendlyName = r.friendlyName;
+            warpCost = r.warpCost;
 
             blocks = new List<Block>();
             foreach (Block b in r.blocks)
