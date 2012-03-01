@@ -656,6 +656,7 @@ namespace VexedCore
             QuickSave();
             QuickLoad();
             Engine.reDraw = true;
+            PauseMenu.pauseWait = 200;
 
 
             

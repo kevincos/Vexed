@@ -66,7 +66,8 @@ namespace VexedCore
         public static void Draw()
         {
             Engine.spriteBatch.Begin();
-            int w = (int)(Game1.titleSafeRect.Width *.45f);
+            //int w = (int)(Game1.titleSafeRect.Width *.45f);
+            int w = (int)(Game1.titleSafeRect.Height * .5f);
             int rightEdge = Game1.titleSafeRect.Right;
             int hudLeft = Game1.titleSafeRect.Right - w + hiddenOffset;
             int topEdge = Game1.titleSafeRect.Top;

@@ -6028,6 +6028,42 @@
       <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Sounds\Throw4.xnb</Output>
       <Time>2003-01-08T14:51:40-08:00</Time>
     </Item>
+    <Item>
+      <Source>Decorations\dec_oildrum.png</Source>
+      <Name>Decorations\dec_oildrum</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decorations\dec_oildrum.xnb</Output>
+      <Time>2012-02-29T13:13:22.3816637-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decorations\dec_wastedrum.png</Source>
+      <Name>Decorations\dec_wastedrum</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decorations\dec_wastedrum.xnb</Output>
+      <Time>2012-02-29T13:05:56.1167819-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Decorations\dec_wasteleak.png</Source>
+      <Name>Decorations\dec_wasteleak</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="GenerateMipmaps">True</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\git_projects\Vexed\VexedCore\VexedCore\VexedCore\bin\Xbox 360\Debug\Content\Decorations\dec_wasteleak.xnb</Output>
+      <Time>2012-02-29T13:33:38.956221-08:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{16B984F3-7F40-4729-9655-1B50558EEE1F}</ContentProjectGUID>

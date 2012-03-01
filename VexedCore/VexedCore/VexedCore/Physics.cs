@@ -419,7 +419,7 @@ namespace VexedCore
                 List<Vector3> pVertexList = p.GetCollisionRect();
                 foreach (Projectile s in r.projectiles)
                 {
-                    if (s.active == true && s.exploding == false)
+                    if (s.active == true && s.exploding == false && (s.type != ProjectileType.EyeLaser || Math.Abs(s.depth - p.depth) < .5f))
                     {
                         if (s.srcMonster == null && (s.type == ProjectileType.Missile || s.type == ProjectileType.Bomb))
                             continue;
@@ -997,6 +997,8 @@ namespace VexedCore
 
                 foreach (Projectile s in r.projectiles)
                 {
+                    if (s.type == ProjectileType.EyeLaser)
+                        continue;
                     if (s.type == ProjectileType.Missile && s.srcMonster == null && (s.position.position - m.position.position).Length() < 7f)
                     {
                         s.SetTarget(m.position.position);
@@ -1096,6 +1098,8 @@ namespace VexedCore
             #region projectile-collisions
             foreach (Projectile s in r.projectiles)
             {
+                if (s.type == ProjectileType.EyeLaser)
+                    continue;
                 frictionAdjustment = Vector3.Zero;
 
                 List<Vector3> projectionList = new List<Vector3>();

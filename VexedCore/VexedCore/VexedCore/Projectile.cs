@@ -21,7 +21,8 @@ namespace VexedCore
         Player,
         Bomb,
         Spikes,
-        Impact
+        Impact,
+        EyeLaser
     }
 
     public class Projectile
@@ -52,6 +53,8 @@ namespace VexedCore
         public bool stopped = false;
         public bool exploding = false;
         public int explodeTime = 0;
+        public float laserDepth = 0;
+        public static float eyeLaserVel = .02f;
 
         public Projectile(Projectile p)
         {
@@ -66,6 +69,7 @@ namespace VexedCore
             stopped = p.stopped;
             exploding = p.exploding;
             explodeTime = p.explodeTime;
+            laserDepth = p.laserDepth;
 
         }
 
@@ -133,11 +137,13 @@ namespace VexedCore
                     return 300;
                 else if (type == ProjectileType.Plasma)
                     return 1800;
-                else if (type == ProjectileType.Missile)                
+                else if (type == ProjectileType.Missile)
                     return 8000;
                 else if (type == ProjectileType.Laser)
                     return 500;
                 else if (type == ProjectileType.Bomb)
+                    return 2000;
+                else if (type == ProjectileType.EyeLaser)
                     return 2000;
                 else
                     return 0;
@@ -148,6 +154,9 @@ namespace VexedCore
         {
             get
             {
+               // if (type == ProjectileType.EyeLaser)
+               //     return 100f;
+
                 if (type == ProjectileType.Plasma)
                     return .005f;
                 else if (type == ProjectileType.Player)
@@ -374,6 +383,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == ProjectileType.EyeLaser)
+                    return .3f;
                 if (type == ProjectileType.Missile || type == ProjectileType.Laser)
                 {
                     if (exploding == true)
@@ -396,6 +407,8 @@ namespace VexedCore
         {
             get
             {
+                if (type == ProjectileType.EyeLaser)
+                    return .3f;
                 if (type == ProjectileType.Laser)
                 {
                     return 1.5f;
@@ -421,6 +434,10 @@ namespace VexedCore
             {
                 if(playerProjectile==true)
                     return 0.28f;
+                if (type == ProjectileType.EyeLaser)
+                {
+                    return laserDepth;
+                }
                 //return -.06f;
                 return .06f;
             }
@@ -445,7 +462,24 @@ namespace VexedCore
             this.position.velocity += Vector3.Dot(velocity, direction) * direction;
             this.position.velocity += Engine.player.platformVelocity;
             this.referenceFrameSpeed = this.position.velocity.Length();
-            
+            this.laserDepth = -5f;
+        }
+
+        public Projectile(Monster srcMonster, ProjectileType type, Vector3 position, Vector3 velocity, Vector3 normal, Vector3 direction, float depth)
+        {
+            this.srcMonster = srcMonster;
+            if (srcMonster == null)
+                playerProjectile = true;
+            this.type = type;
+            this.position = new Vertex(position - Engine.player.platformVelocity, normal, Vector3.Zero, direction);
+            this.position.velocity = velocity;
+            //Vector3 extraVelocity = direction;
+            //extraVelocity.Normalize();
+            //this.position.velocity += extraVelocity * this.initVelocity;
+            //this.position.velocity += Vector3.Dot(velocity, direction) * direction;
+            //this.position.velocity += Engine.player.platformVelocity;
+            this.referenceFrameSpeed = this.position.velocity.Length();
+            this.laserDepth = depth;
         }
 
         public Projectile(Projectile p, Room r, Vector3 n, Vector3 u)
@@ -478,6 +512,13 @@ namespace VexedCore
                 explodeTime += gameTime;
                 if (explodeTime > maxExplodeTime)
                     exploded = true;
+            }
+            laserDepth += eyeLaserVel * gameTime;
+            if (type == ProjectileType.EyeLaser && laserDepth > 2.5f)
+            {
+                Detonate();
+
+                position.velocity = Vector3.Zero;
             }
             lifeTime += gameTime;
             if (lifeTime > maxLife)
@@ -589,6 +630,10 @@ namespace VexedCore
                     //r.AddTextureToTriangleList(rectVertexList, Color.White, depth, r.projectilesTriangles[(int)ProjectileType.Missile], Room.plateTexCoords, true);
                 }
             }
+            if (type == ProjectileType.EyeLaser)
+            {
+                r.AddTextureToTriangleList(rectVertexList, Color.Red, depth, textureTriangleList, Room.plateTexCoords, true);
+            }
             if (type == ProjectileType.Laser)
             {
                 if (exploding == true)
@@ -613,6 +658,8 @@ namespace VexedCore
                     Engine.playerTextureEffect.Texture = Projectile.missileTexture;
                 else if(type == ProjectileType.Laser)
                     Engine.playerTextureEffect.Texture = Projectile.laserTexture;
+                else if (type == ProjectileType.EyeLaser)
+                    Engine.playerTextureEffect.Texture = Projectile.blastTexture;
                 else
                     Engine.playerTextureEffect.Texture = Projectile.plasmaTexture;
                 Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();

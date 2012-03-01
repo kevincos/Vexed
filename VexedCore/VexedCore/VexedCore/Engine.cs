@@ -149,9 +149,9 @@ namespace VexedCore
             mapShellObjects = new List<TransparentSquare>();
             maxRoomDraw = new int[4];
             maxRoomDraw[0] = 1;
-            maxRoomDraw[1] = 5;
-            maxRoomDraw[2] = 8;
-            maxRoomDraw[3] = 11;
+            maxRoomDraw[1] = 4;
+            maxRoomDraw[2] = 7;
+            maxRoomDraw[3] = 10;
           
         }
 

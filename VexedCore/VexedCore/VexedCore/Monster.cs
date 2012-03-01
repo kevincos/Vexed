@@ -514,6 +514,10 @@ namespace VexedCore
         {
             get
             {
+                if (id.Contains("Guardian"))
+                {
+                    return new Color(60, 60, 60);
+                }
                 if (moveType == VL.MovementType.SnakeBoss)
                 {
                     if (baseHP > 0)
@@ -1637,6 +1641,7 @@ namespace VexedCore
 
         public static float layer_gunNatural = 0f;
         public static float layer_body = .001f;
+        public static float layer_flash = .0013f;
         public static float layer_eyes = .0015f;
         public static float layer_armor = .0022f;
         public static float layer_iceSnakeArmor = .02f;
@@ -1768,8 +1773,8 @@ namespace VexedCore
                 Color flashColor = new Color(255, 255, 0, (Byte)(flashCooldown / maxFlashCooldown));
                 //r.AddTextureToTriangleList(rectVertexList, flashColor, depth + layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.Flash], Room.plateTexCoords, rightFacing);
                 //r.AddTextureToTriangleList(rectVertexList, flashColor, depth - layer_body + bossAdjustment, r.monsterTriangles[(int)MonsterTextureId.Flash], Room.plateTexCoords, rightFacing);
-                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, flashColor, depth + layer_body + bossAdjustment, MonsterTextureId.Flash, rightFacing));
-                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, flashColor, depth - layer_body + bossAdjustment, MonsterTextureId.Flash, rightFacing));
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, flashColor, depth + layer_flash + bossAdjustment, MonsterTextureId.Flash, rightFacing));
+                textureSlices.Add(new MonsterTextureSlice(r, rectVertexList, flashColor, depth - layer_flash + bossAdjustment, MonsterTextureId.Flash, rightFacing));
             }
             if (moveType == VL.MovementType.RockBoss && !id.Contains("Snow"))
             {

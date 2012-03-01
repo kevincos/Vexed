@@ -81,7 +81,10 @@ namespace VexedCore
             
             textureLibrary.Add(new DecorationTexture("dec_waterpipes", Content));
             textureLibrary.Add(new DecorationTexture("dec_shuttle", Content));
-            
+
+            textureLibrary.Add(new DecorationTexture("dec_wastedrum", Content));
+            textureLibrary.Add(new DecorationTexture("dec_wasteleak", Content));
+            textureLibrary.Add(new DecorationTexture("dec_oildrum", Content));
             textureLibrary.Add(new DecorationTexture("dec_shuttle_open", Content));
             textureLibrary.Add(new DecorationTexture("dec_thornwall", Content));
             textureLibrary.Add(new DecorationTexture("dec_grapevine", Content));

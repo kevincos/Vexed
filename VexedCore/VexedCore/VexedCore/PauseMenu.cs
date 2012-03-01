@@ -91,12 +91,15 @@ namespace VexedCore
 
         public static List<MenuOption> options;
 
+        public static int pauseWait = 0;
+
         public static List<Vector2> resolutionOptions;
 
         public static ControlType oldControlType;
 
         public static void UpdateResolution()
         {
+            pauseWait = 300;
             if (Game1.titleSafeRect.Width != resolutionOptions[Engine.resIndex].X || Game1.titleSafeRect.Height != resolutionOptions[Engine.resIndex].Y)
             {
                 Game1.SetGraphicsSettings();
@@ -266,6 +269,10 @@ namespace VexedCore
             if (cooldown < 0)
                 cooldown = 0;
 
+            pauseWait -= gameTime;
+            if (pauseWait < 0)
+                pauseWait = 0;
+
             mouseSelect = false;
             if (mousePos.X > optionBaseX - 20 && mousePos.X < optionBaseX + 250 && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
@@ -289,6 +296,9 @@ namespace VexedCore
                 {
                     cooldown = maxCooldown;
                     paused = false;
+                    Game1.controller.AButton.Invalidate();
+                    Game1.controller.XButton.Invalidate();
+                    Game1.controller.YButton.Invalidate();
                     UpdateResolution();
                 }
             }
@@ -298,6 +308,9 @@ namespace VexedCore
                 {
                     cooldown = maxCooldown;
                     paused = false;
+                    Game1.controller.AButton.Invalidate();
+                    Game1.controller.XButton.Invalidate();
+                    Game1.controller.YButton.Invalidate();
                     UpdateResolution();
                 }
                 if (GamePad.GetState(Game1.activePlayer).ThumbSticks.Left.Y < -.5f || currentKeyboardState.IsKeyDown(Keys.Down) || currentKeyboardState.IsKeyDown(Keys.S))
@@ -323,6 +336,7 @@ namespace VexedCore
                         Game1.controller.AButton.Invalidate();
                         Game1.controller.XButton.Invalidate();
                         Game1.controller.YButton.Invalidate();
+                        
                         paused = false;
                         UpdateResolution();
                     }
@@ -418,7 +432,10 @@ namespace VexedCore
                     if (result == MenuItems.Quit)
                     {
                         SoundFX.PauseMenuSelect();
-                        Engine.quit = true;                        
+                        Engine.quit = true;
+                        Game1.controller.AButton.Invalidate();
+                        Game1.controller.XButton.Invalidate();
+                        Game1.controller.YButton.Invalidate();
                         paused = false;
                     }
                     if (result == MenuItems.FullScreen)

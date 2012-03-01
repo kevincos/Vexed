@@ -477,7 +477,7 @@ namespace VexedCore
         public static void Phase()
         {
             if (playSoundEnabled)
-                phase.Play();
+                bootSpin.Play();
         }
 
         public static void FireLaser(Vector3 location)

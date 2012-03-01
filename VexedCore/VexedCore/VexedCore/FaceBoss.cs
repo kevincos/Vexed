@@ -29,9 +29,19 @@ namespace VexedCore
         int armorExplodeMaxTime = 500;
         int timer = 0;
         int timerMax = 2000;
+        bool forceRebuild = false;
 
         int damageCooldown = 0;
         int damageCooldownMax = 500;
+
+        public static int fireCooldownMax = 200;
+        int fireCooldown = fireCooldownMax;
+        public static int fireCountMax = 6;
+        int fireCount = fireCountMax;
+
+
+        public static int salvoCooldownMax = 3000;
+        int salvoCooldown = salvoCooldownMax;
 
         public int dialogState = 0;
 
@@ -45,17 +55,75 @@ namespace VexedCore
 
         public void Update(int time, Monster srcMonster)
         {
-            if (dialogState == 0 && Engine.player.state == State.Normal && state == FaceState.Rebuilding)
+            if (state == FaceState.Armored)
+            {
+                if (salvoCooldown == 0)
+                {
+                    fireCooldown -= time;
+                    if (fireCooldown < 0) fireCooldown = 0;
+                }
+                else
+                {
+                    salvoCooldown -= time;
+                    if (salvoCooldown < 0) salvoCooldown = 0;
+                }
+            }
+            if (fireCooldown == 0)
+            {
+                fireCooldown = fireCooldownMax;
+                fireCount--;
+                if (fireCount == 0)
+                {
+                    fireCount = fireCountMax;
+                    salvoCooldown = salvoCooldownMax;
+                }
+
+                Vector3 center = Engine.player.currentRoom.center;
+                Vector3 outDirection = Engine.player.center.position - center;
+                Vector3 up = Engine.player.cameraUp;
+                outDirection.Normalize();
+                up.Normalize();
+                Vector3 right = Vector3.Cross(up, outDirection);
+                Vector3 eye1 = center + outDirection * 6 + 1.5f * right +.5f * up;
+                Vector3 eye2 = center + outDirection * 6 - 1.5f * right + .5f * up;
+
+                Vector3 eye1Dif = Engine.player.center.position - eye1;
+                Vector3 eye2Dif = Engine.player.center.position - eye2;
+
+
+                float eye1Depth = -Vector3.Dot(eye1Dif, Engine.player.center.normal);
+                float eye2Depth = -Vector3.Dot(eye2Dif, Engine.player.center.normal);
+
+                Vector3 eye1Pos = eye1 - eye1Depth * Engine.player.center.normal;
+                Vector3 eye2Pos = eye2 - eye2Depth * Engine.player.center.normal;
+
+                float eye1Time = (Engine.player.depth - eye1Depth) / Projectile.eyeLaserVel;
+                float eye2Time = (Engine.player.depth - eye2Depth) / Projectile.eyeLaserVel;
+
+                Vector3 eye1GameDistance = Engine.player.center.position - eye1Pos;
+                Vector3 eye2GameDistance = Engine.player.center.position - eye2Pos;
+
+                Vector3 eye1Vel = eye1GameDistance / eye1Time;
+                Vector3 eye2Vel = eye2GameDistance / eye2Time;
+
+                Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.EyeLaser, eye1Pos, eye1Vel, Engine.player.center.normal, Engine.player.center.direction, eye1Depth));
+                Engine.player.currentRoom.projectiles.Add(new Projectile(srcMonster, ProjectileType.EyeLaser, eye2Pos, eye2Vel, Engine.player.center.normal, Engine.player.center.direction, eye2Depth));
+                SoundFX.FireLaser(Engine.player.currentRoom.center);
+            }
+
+            if (dialogState == 0 && Engine.player.state == State.Normal && state == FaceState.Rebuilding && Engine.player.state != State.Tunnel)
             {
                 DialogBox.SetDialog("FinalBoss1");
                 dialogState++;
             }
-            if (dialogState == 1 && srcMonster.baseHP != srcMonster.startingBaseHP && damageCooldown == 0)
+            if (dialogState == 1 && srcMonster.baseHP != srcMonster.startingBaseHP && damageCooldown == 0 && Engine.player.state != State.Tunnel)
             {
                 DialogBox.SetDialog("FinalBoss2");
+                state = FaceState.Rebuilding;
+                forceRebuild = true;
                 dialogState++;
             }
-            if (dialogState == 2 && srcMonster.baseHP ==0)
+            if (dialogState == 2 && srcMonster.baseHP ==0 && Engine.player.state != State.Tunnel)
             {
                 DialogBox.SetDialog("FinalBoss3");
                 dialogState++;
@@ -82,10 +150,11 @@ namespace VexedCore
                     state = FaceState.Armored;
                 }
             }
-            else if (state == FaceState.Angry)
+            else if (state == FaceState.Angry || forceRebuild)
             {
+                forceRebuild = false;
                 timer -= time;
-                if (dialogState < 3)
+                if (dialogState < 3 && srcMonster.baseHP > 0)
                 {
                     if (timer < 0)
                     {
@@ -142,19 +211,25 @@ namespace VexedCore
             up.Normalize();
             Vector3 right = Vector3.Cross(up, outDirection);
             VertexPositionColorNormalTexture[] eyeVertices = new VertexPositionColorNormalTexture[12];
-            eyeVertices[0] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right, Color.White, outDirection, Room.plateTexCoords[2]);
-            eyeVertices[1] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + .2f * up, Color.White, outDirection, Room.plateTexCoords[3]);
-            eyeVertices[2] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right + up, Color.White, outDirection, Room.plateTexCoords[1]);
-            eyeVertices[3] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + .2f * up, Color.White, outDirection, Room.plateTexCoords[3]);
-            eyeVertices[4] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right + up, Color.White, outDirection, Room.plateTexCoords[1]);
-            eyeVertices[5] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + up, Color.White, outDirection, Room.plateTexCoords[0]);
+            Color eyeColor = Color.White;
+            if (salvoCooldown < 800)
+            {
+                eyeColor.G = (Byte)(255f - (800f - 1f*salvoCooldown) / 800f * 150f);
+                eyeColor.B = (Byte)(255f - (800f - 1f*salvoCooldown) / 800f * 150f);
+            }
+            eyeVertices[0] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right, eyeColor, outDirection, Room.plateTexCoords[2]);
+            eyeVertices[1] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + .2f * up, eyeColor, outDirection, Room.plateTexCoords[3]);
+            eyeVertices[2] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right + up, eyeColor, outDirection, Room.plateTexCoords[1]);
+            eyeVertices[3] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + .2f * up, eyeColor, outDirection, Room.plateTexCoords[3]);
+            eyeVertices[4] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 2f * right + up, eyeColor, outDirection, Room.plateTexCoords[1]);
+            eyeVertices[5] = new VertexPositionColorNormalTexture(center + outDirection * 6 + 1f * right + up, eyeColor, outDirection, Room.plateTexCoords[0]);
 
-            eyeVertices[6] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 2 * right, Color.White, outDirection, Room.plateTexCoords[2]);
-            eyeVertices[7] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 1 * right + .2f * up, Color.White, outDirection, Room.plateTexCoords[3]);
-            eyeVertices[8] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 2f * right + up, Color.White, outDirection, Room.plateTexCoords[1]);
+            eyeVertices[6] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 2 * right, eyeColor, outDirection, Room.plateTexCoords[2]);
+            eyeVertices[7] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 1 * right + .2f * up, eyeColor, outDirection, Room.plateTexCoords[3]);
+            eyeVertices[8] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 2f * right + up, eyeColor, outDirection, Room.plateTexCoords[1]);
             eyeVertices[9] = eyeVertices[7];
             eyeVertices[10] = eyeVertices[8];
-            eyeVertices[11] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 1f * right + up, Color.White, outDirection, Room.plateTexCoords[0]);
+            eyeVertices[11] = new VertexPositionColorNormalTexture(center + outDirection * 6 - 1f * right + up, eyeColor, outDirection, Room.plateTexCoords[0]);
 
             Engine.playerTextureEffect.Texture = Monster.monsterTextures[(int)MonsterTextureId.FaceNormalEye];
             Engine.playerTextureEffect.CurrentTechnique.Passes[0].Apply();

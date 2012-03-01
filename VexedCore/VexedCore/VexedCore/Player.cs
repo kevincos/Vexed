@@ -147,7 +147,7 @@ namespace VexedCore
         public int upgradeStage = 0;
         public int doubleJumpTime = 0;
         public static int doubleJumpFadeTime = 300;
-
+        public int spikeCount = 0;
         public HookState hookState = HookState.Waiting;
 
         public float playerHalfWidth = .35f;
@@ -197,6 +197,8 @@ namespace VexedCore
         private bool _grounded = false;
         public int groundTolerance = 100;
         public int groundCounter = 0;
+        public int landedTolerance = 300;
+        public int landedCounter = 0;
         public int faceDirection = -1;
         public float _baseCameraDistance = 12;
         public int orbsCollected = 0;
@@ -233,11 +235,11 @@ namespace VexedCore
             upgrades[(int)AbilityType.RedKey] = true;
             upgrades[(int)AbilityType.BlueKey] = true;
             upgrades[(int)AbilityType.YellowKey] = true;
-            primaryAbility = new Ability(AbilityType.Empty);
-            secondaryAbility = new Ability(AbilityType.Empty);
+            primaryAbility = new Ability(AbilityType.Phase);
+            secondaryAbility = new Ability(AbilityType.Laser);
             naturalShield = new Ability(AbilityType.Shield);
 
-            /*upgrades[(int)AbilityType.Laser] = true;
+            upgrades[(int)AbilityType.Laser] = true;
             upgrades[(int)AbilityType.Boots] = true;
             upgrades[(int)AbilityType.Empty] = true;
             upgrades[(int)AbilityType.WallJump] = true;
@@ -254,7 +256,7 @@ namespace VexedCore
             upgrades[(int)AbilityType.Phase] = true;
             upgrades[(int)AbilityType.PermanentBlueKey] = true;
             upgrades[(int)AbilityType.PermanentRedKey] = true;
-            upgrades[(int)AbilityType.PermanentYellowKey] = true;*/
+            upgrades[(int)AbilityType.PermanentYellowKey] = true;
             //for (int i = 8; i < 19; i++)
                 //upgrades[i] = true;            
         }
@@ -856,6 +858,17 @@ namespace VexedCore
             if (state == State.Death)
                 return;
             center.velocity += 1.5f*maxHorizSpeed * Vector3.Normalize(projection);
+
+            Vector3 projectionUnit = projection / projection.Length();
+            if (safeLanding == false && Math.Abs(Vector3.Dot(projectionUnit, Engine.player.up)) > .5f)
+            {
+                spikeCount++;
+            }
+            else
+            {
+                spikeCount = 0;
+            }
+
             safeLanding = false;
 
             if (crushing == true)
@@ -890,7 +903,11 @@ namespace VexedCore
                 else if (naturalShield.ammo != 0)
                 {
                     SoundFX.PlayerHit();
-                    naturalShield.DepleteAmmo(1);
+                    for (int i = 0; i < spikeCount + 1; i++)
+                    {
+                        if(naturalShield.ammo != 0)
+                            naturalShield.DepleteAmmo(1);
+                    }
                     flashTime = flashMaxTime;
                 }
                 else
@@ -1164,6 +1181,14 @@ namespace VexedCore
                 if (spinRecovery < 0)
                     spinRecovery = 0;
             }
+
+            if (grounded == true)
+            {
+                landedCounter += gameTime;
+                if (landedCounter > landedTolerance) landedCounter = landedTolerance;
+            }
+            else
+                landedCounter = 0;
 
             bootsSpinCooldown -= gameTime;
             if (bootsSpinCooldown < 0) bootsSpinCooldown = 0;
@@ -2154,7 +2179,7 @@ namespace VexedCore
                     }
                 }
             }
-            if(safeLanding == false)
+            if(landedCounter == landedTolerance)
                 safeLanding = true;
         }
 

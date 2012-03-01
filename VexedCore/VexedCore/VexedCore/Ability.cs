@@ -258,7 +258,7 @@ namespace VexedCore
 
         public void Do(int gameTime)
         {
-            if (cooldown == 0)
+            if (cooldown == 0 && PauseMenu.pauseWait == 0)
             {
                 if (Engine.player.faceDirection == 0)
                     Engine.player.faceDirection = 1;

@@ -543,6 +543,9 @@ Content\Decals\decal_computer.xnb
 Content\Decals\decal_motherboard.xnb
 Content\UI\hudbaseinfo.xnb
 Content\Sounds\Throw4.xnb
+Content\Decorations\dec_oildrum.xnb
+Content\Decorations\dec_wastedrum.xnb
+Content\Decorations\dec_wasteleak.xnb
 Content\Music\BossMusic.wma
 Content\Music\CommandMusic.wma
 Content\Music\CoreMusic.wma
