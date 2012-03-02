@@ -56,6 +56,20 @@ several of these to increase your health.</string>
   </DialogChunk>
 
   <DialogChunk>
+    <id>RedPowerStationFull</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>
+        You've collected enough Health Cubes to increase your health bar.
+      </string>
+      <string>
+        Collect more to increase your health even more.
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
+  <DialogChunk>
     <id>BluePowerStation</id>
     <speaker>OldMan</speaker>
     <textList>
@@ -155,7 +169,7 @@ seeking missiles?</string>
     <id>IceSnake1</id>
     <speaker>IceSnake</speaker>
     <textList>
-      <string>Muahaha. There's a totally sweet item in the
+      <string>Muahaha. There's a sweet item in the
 next room. But you'll never live to see it!
       </string>
       <string>
@@ -445,7 +459,7 @@ taking up an inventory slot.</string>
     <pause>true</pause>
 </DialogChunk>
 <DialogChunk>
-    <id>YouGotBlueey</id>
+    <id>YouGotBlueKey</id>
     <speaker>OldMan</speaker>
     <textList>
       <string>You got the Blue Access Codes!  </string>
@@ -876,6 +890,119 @@ laser-proof armor!</string>
     <pause>false</pause>
   </DialogChunk>
 
+  <DialogChunk>
+    <id>TriggerText</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>Testing...</string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
+  <DialogChunk>
+    <id>keychamberinfo</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>The Central Processing Unit is protected by a tight security
+      system.</string>
+      <string>
+        All three colored key codes are required to enter.
+      </string>
+      <string>
+        You'll find an upgrade to use yellow key codes in the Rocket Launch Tube.
+      </string>
+      <string>
+        You'll find the Launch Tube through the Hangar Bay.
+      </string>
+      <string>
+        You can find red and blue access codes inside the command cube.
+      </string>
+      <string>
+        If you bring them back to this room one at a time, you can unlock the stations below. 
+      </string>
+      <string>
+        Then you can come back for the codes whenever you want.
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
+  <DialogChunk>
+    <id>primarystoragehelp</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>
+        You'll need to move these cargo containers out of the way to proceed.
+      </string>
+      <string>
+        Look for different ways to enter this room.
+      </string>
+      <string>
+        Once you've moved all three containers, you should be able to continue.
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
+  <DialogChunk>
+    <id>tutorial_warp</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>
+        Vex. This is a warp station. You can use it for fast travel around the sector.
+      </string>
+      <string>
+        Each sector's warp network is powered by blue power cubes.
+      </string>
+      <string>
+        Blue cubes can be found in special power stations hidden throughout the station.
+      </string>
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
+  <DialogChunk>
+    <id>tutorial_rotate</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>
+        You'll need to oriented the right way to use these stations.
+      </string>
+      <string>
+        If you're stuck, maybe try approaching the problem from a different direction.
+      </string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+
+  <DialogChunk>
+    <id>tutorial_key</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>
+        Here's a blue key card that you can use to activate certain switches.
+      </string>
+      <string>
+        Key cards take up slots in your inventory just like other items.
+      </string>
+      <string>
+        Try equipping the key to your second inventory slot.
+      </string>
+    </textList>
+    <pause>false</pause>
+  </DialogChunk>
+
+
+  <DialogChunk>
+    <id>tutorial_start</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>
+        Welcome, Vex! Walk up to the holoprojector and hit the 'E' key.
+      </string>      
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
 
 
 </ArrayOfDialogChunk>

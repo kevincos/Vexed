@@ -4,11 +4,13 @@
   <sectors>
     <Sector>
       <id>2</id>
-      <_name>Sector_5</_name>
+      <_name>Vertigo One</_name>
       <rooms>
         <Room>
           <id>3</id>
           <_name>MenuRoom</_name>
+          <friendlyName>Vertigo One</friendlyName>
+          <decal>Empty</decal>
           <centerX>0</centerX>
           <centerY>0</centerY>
           <centerZ>0</centerZ>
@@ -1646,43 +1648,7 @@
                   <depth>0.3</depth>
                 </Block>
               </blocks>
-              <doodads>
-                <Doodad>
-                  <id>580</id>
-                  <_name>Doodad_57</_name>
-                  <position>
-                    <X>19</X>
-                    <Y>-2.5</Y>
-                    <Z>5.5</Z>
-                  </position>
-                  <up>
-                    <X>0</X>
-                    <Y>0</Y>
-                    <Z>1</Z>
-                  </up>
-                  <activationCost>0</activationCost>
-                  <fixedPosition>false</fixedPosition>
-                  <type>JumpStation</type>
-                  <ability>WallJump</ability>
-                  <behaviors>
-                    <Behavior>
-                      <id>581</id>
-                      <_name>Behavior_27477</_name>
-                      <offset>0</offset>
-                      <duration>0</duration>
-                      <period>0</period>
-                      <destination>
-                        <X>0</X>
-                        <Y>0</Y>
-                        <Z>0</Z>
-                      </destination>
-                      <primaryValue>0</primaryValue>
-                      <secondaryValue>0</secondaryValue>
-                      <toggle>false</toggle>
-                    </Behavior>
-                  </behaviors>
-                </Doodad>
-              </doodads>
+              <doodads />
               <monsters />
               <decorations />
               <vertices>
@@ -5302,6 +5268,7 @@
                   <fixedPosition>false</fixedPosition>
                   <type>LoadStation</type>
                   <ability>WallJump</ability>
+                  <decal>Empty</decal>
                   <behaviors>
                     <Behavior>
                       <id>247</id>
@@ -5338,6 +5305,7 @@
                   <fixedPosition>false</fixedPosition>
                   <type>LoadStation</type>
                   <ability>WallJump</ability>
+                  <decal>Empty</decal>
                   <behaviors>
                     <Behavior>
                       <id>249</id>
@@ -5373,6 +5341,7 @@
                   <fixedPosition>false</fixedPosition>
                   <type>LoadStation</type>
                   <ability>WallJump</ability>
+                  <decal>Empty</decal>
                   <behaviors>
                     <Behavior>
                       <id>251</id>
@@ -5408,6 +5377,7 @@
                   <fixedPosition>false</fixedPosition>
                   <type>LoadStation</type>
                   <ability>WallJump</ability>
+                  <decal>Empty</decal>
                   <behaviors>
                     <Behavior>
                       <id>253</id>
@@ -10154,6 +10124,7 @@
                   <fixedPosition>false</fixedPosition>
                   <type>PlayerSpawn</type>
                   <ability>WallJump</ability>
+                  <decal>Empty</decal>
                   <behaviors>
                     <Behavior>
                       <id>245</id>

@@ -993,4 +993,16 @@ laser-proof armor!</string>
   </DialogChunk>
 
 
+  <DialogChunk>
+    <id>tutorial_start</id>
+    <speaker>OldMan</speaker>
+    <textList>
+      <string>
+        Welcome, Vex! Walk up to the holoprojector and hit the 'E' key.
+      </string>      
+    </textList>
+    <pause>true</pause>
+  </DialogChunk>
+
+
 </ArrayOfDialogChunk>

@@ -64,6 +64,7 @@ namespace VexedCore
                 i++;
                 
             }
+            Engine.fullScreen = true;
             
 
             try
@@ -81,16 +82,6 @@ namespace VexedCore
             }
             catch (Exception) { }
 
-
-            Engine.res = ResolutionSettings.R_800x600;
-            Engine.fullScreen = false;
-            
-#if XBOX
-            Engine.res = ResolutionSettings.R_1280x720;
-#endif
-
-            Engine.res = ResolutionSettings.R_800x600; 
-            Engine.fullScreen = false;
 
             SetGraphicsSettings();
             titleSafeRect = graphics.GraphicsDevice.Viewport.TitleSafeArea;
@@ -254,6 +245,7 @@ namespace VexedCore
             Engine.loadFontBold = Content.Load<SpriteFont>("Fonts\\LoadFontBold");
             DialogBox.smallFont = Content.Load<SpriteFont>("Fonts\\DialogFontSmall");
             DialogBox.largeFont = Content.Load<SpriteFont>("Fonts\\DialogFontLarge");
+            DialogBox.spaceBar = Content.Load<Texture2D>("UI\\spacekey");
             DialogBox.InitPortraits(Content);
 
             Doodad.InitBeamTextures(Content);

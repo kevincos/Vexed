@@ -51,7 +51,8 @@ namespace VexedCore
             }
             if (state != IntroState.SpaceBar)
             {
-                introTime += gameTime;
+                if(introTime < moveHelpTime || Hud.hidden == false)
+                    introTime += gameTime;
             }
             if (state == IntroState.FadeIn && introTime > fadeTime)
             {
@@ -72,11 +73,11 @@ namespace VexedCore
                 state = IntroState.LookHelp;
                 DialogBox.SetDialog("intromovehelp");
             }
-            /*if (state == IntroState.LookHelp && introTime > moveHelpTime)
+            if (state == IntroState.LookHelp && introTime > lookHelpTime)
             {
                 state = IntroState.LoadHelp;
                 DialogBox.SetDialog("introlookhelp");
-            }*/
+            }
             if (state == IntroState.LoadHelp && introTime > useHelpTime)
             {
                 state = IntroState.Play;

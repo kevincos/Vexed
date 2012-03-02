@@ -261,13 +261,13 @@ namespace VexedCore
 
                 String outputStringTitle = "";
                 String outputStringBase = "";
-                outputStringTitle+= "Sector: " + s.id;
+                outputStringTitle+= s.id;
                 outputStringBase += "Power Level: " + s.currentOrbs + " / " + s.maxOrbs;
                 outputStringBase += "\nWarp Level: " + s.currentBlueOrbs + " / " + s.maxBlueOrbs;
                 outputStringBase += "\nRed Cubes: " + s.currentRedOrbs + " / " + s.maxRedOrbs;
 
                 SpriteUtil.DrawString(Engine.spriteBatch, outputStringTitle, new Vector2(monitorLeft + .137f * w, monitorTop + .032f * h), Color.YellowGreen);
-                SpriteUtil.DrawString(Engine.spriteBatch, outputStringBase, new Vector2(monitorLeft + .167f * w, monitorTop + .074f * h), Color.YellowGreen);
+                SpriteUtil.DrawString(Engine.spriteBatch, outputStringBase, new Vector2(monitorLeft + .15f * w, monitorTop + .074f * h), Color.YellowGreen);
             }
             if (inventoryIndexList == null)
             {

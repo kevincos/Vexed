@@ -96,6 +96,7 @@ namespace VexedCore
         public static Texture2D monitorFrame;
         public static Texture2D rightEdge;
         public static Texture2D textArea;
+        public static Texture2D spaceBar;
 
         public static int lifeTime = 0;
         int cooldown = 0;
@@ -291,9 +292,10 @@ namespace VexedCore
                 if (state == BoxState.Text || state == BoxState.Wait)
                 {
                     //Engine.spriteBatch.DrawString(currentFont, currentText, new Vector2(dialogLeft + 1.15f*w, dialogTop + .15f*w), Color.YellowGreen);
-                    SpriteUtil.DrawString(Engine.spriteBatch, currentText, new Vector2(dialogLeft + 1.15f * w, dialogTop + .15f * w), Color.YellowGreen);
-                    
+                    SpriteUtil.DrawString(Engine.spriteBatch, currentText, new Vector2(dialogLeft + 1.15f * w, dialogTop + .15f * w), Color.YellowGreen);                    
                 }
+                if(state == BoxState.Wait && currentDialog.pause == true)
+                    Engine.spriteBatch.Draw(spaceBar, new Rectangle((int)(dialogLeft + w / 2 + 6.21 * w), dialogTop, (int)(.8f * w), w), Color.White);
 
                 Engine.spriteBatch.End();
             }
