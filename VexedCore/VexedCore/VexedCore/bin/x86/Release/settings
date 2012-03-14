@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <fullscreen>true</fullscreen>
-  <resIndex>5</resIndex>
+  <resIndex>6</resIndex>
   <music>false</music>
   <soundeffects>true</soundeffects>
   <drawDistance>2</drawDistance>

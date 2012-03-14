@@ -101,6 +101,7 @@ namespace VexedCore
 
         public static void PlayGameMusic()
         {
+            
             if (Engine.musicEnabled)
             {
                 Song expectedTrack = GetCurrentRoomTrack();
@@ -111,6 +112,7 @@ namespace VexedCore
                     else
                         MediaPlayer.IsRepeating = false;
                     MediaPlayer.Play(expectedTrack);
+                    
                     currentTrack = expectedTrack;
                 }
             }
